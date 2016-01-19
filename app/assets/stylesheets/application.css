@@ -13,3 +13,44 @@
  *= require_tree .
  *= require_self
  */
+
+
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {text-decoration:none;}
+a:active {text-decoration:none;}
+img{border:none;}  
+
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #CCC; 
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #CCC; 
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #CCC;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #CCC;
+}
+
+.round_button{
+	margin:0; 
+	width:100%; 
+	-webkit-box-sizing: border-box; 
+	box-sizing: border-box; 
+	border-radius:4px; 
+	-moz-border-radius:4px; 
+	-webkit-border-radius:4px; 
+	border:1px solid #c9cbcc; 
+	padding:10px; 
+	color:#666; 
+	font-size:13px; 
+	line-height:15px; 
+	background-color:#FFF;
+	margin-top:12px;
+}
+
+
+#flash  { -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; background-color:#1c99e8; color:#FFFFFF; font-weight:bold; padding:20px 10px; position:fixed; top:50%; left:50%; margin-left:-110px; margin-top:-30px; text-align:center; width:200px; z-index:990000; opacity:0.8; filter:alpha(opacity=60); font-size:16px; }
+.loading { -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; background-color:#1c99e8; color:#FFFFFF; font-weight:bold; padding:20px 10px; position:fixed; top:50%; left:50%; margin-left:-110px; margin-top:-30px; text-align:center; width:200px; z-index:990000; opacity:0.8; filter:alpha(opacity=60); font-size:16px; }

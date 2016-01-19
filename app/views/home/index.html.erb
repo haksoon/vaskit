@@ -1,0 +1,19 @@
+<div style="color:#555; font-size:14px; line-height:22px; text-align:left; padding:20px; ">
+	<h2>로그인 완료되었습니다.</h2> 
+	
+	<br />
+	
+	유저 정보 
+	
+	id : <%= current_user.id %> <br />
+	email : <%= current_user.email %><br />
+	name : <%= current_user.name %><br />
+	string_id : <%= current_user.string_id %> <br />
+	birthday : <%= current_user.birthday %> <br />
+	gender : <%= current_user.gender ? '남자' : '여자' %><br />
+
+	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="background-color:#ccc;">
+		로그아웃
+	</a>
+
+</div>

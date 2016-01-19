@@ -1,0 +1,191 @@
+<p style="margin:0; text-align:left; background-color:#e6b621; color:#fff; font-size:16px;padding:4px 0 4px 10px;">
+	지금 가입하고 더 경험해 보세요.
+</p>
+
+<p style="margin:0; text-align:left;color:#555; font-size:16px; padding:10px;">
+나의 고민에 대한 질문을 올려보고 싶으신가요?<br />
+투표 결과를 분석하거나, 남겨진 의견을 읽어보고 싶은가요?<br />
+당신만의 히스토리를 남겨 언제든 다시 뒤져볼 수도 있습니다
+</p>
+<img src="/images/users/background_sub.png" style="width:100%;">
+<!-- 로그인 form. 회원가입 form과 겹치기 때문에 display:none 시켜놓고 submit할때만 사용 -->
+<div style="display:none;">
+	<%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:id => "sign_in_form"} ) do |f| %>
+		<%= devise_error_messages! %>
+	  	<div class="field">
+	    	<%= f.email_field :email, :id => "sign_in_email" %>
+	  	</div>
+	
+	  	<div class="field">
+	    	<%= f.password_field :password, :id => "sign_in_password" %>
+	  	</div>
+	
+	  	<div class="field">
+		  	<%= f.check_box :remember_me, :id => "sign_in_remember_me" %>
+		</div>
+	<% end %>
+</div>
+<!-- 로그인 form -->
+
+
+<!-- 회원가입 form -->
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:id => "sign_up_form"}) do |f| %>
+  	<%= devise_error_messages! %>
+	<div style="padding:0 20px; text-align:left;">
+		<%= f.email_field :email, :placeholder => "이메일주소", :class => "round_button" %>
+		<% if !resource.facebook_id.blank? %>
+ 	 		<%= f.hidden_field :password, :placeholder => "비밀번호", autocomplete: "off", :class => "round_button" %>
+ 	 	<% else %>
+ 	 		<%= f.password_field :password, :placeholder => "비밀번호", autocomplete: "off", :class => "round_button" %>
+ 	 		
+ 	 		<p style="margin:20px 0 0 0; font-size:14px;">
+ 	 			<%= f.check_box :remember_me %> 로그인 기억하기
+ 	 		</p>
+ 	 		
+ 	 		<a href="#" onclick="sign_in_submit(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0; text-align:center;">
+				로그인하기
+			</a>
+ 	 		
+		<% end %>
+ 		<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
+ 			생일
+ 		</p>
+		<%= f.date_select :birthday, :start_year => 2005, :end_year => 1960, :prompt => {:year => '', :month => '월', :day => '' }, :style => "width: 60px;" %> 	 		
+		<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
+ 			성별 &nbsp;&nbsp;&nbsp;
+ 			<a id="gender_male" href="#" onclick="select_gender(1); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == true ? "#37DBDC" : "#E4E1E0" %>; color:#FFF;">
+				남성
+			</a>
+			<a id ="gender_female" href="#" onclick="select_gender(0); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == false ? "#FF92A2" : "#E4E1E0" %>; color:#FFF;">
+				여성
+			</a> 
+ 		</p>
+ 		
+ 		
+ 		<p style="margin:20px 0 0 0; font-size:14px;">
+			<%= f.check_box :agree_access_term %> VASKIT의 회원약관에 동의합니다.
+		</p>
+		
+ 		<%= f.hidden_field :facebook_id %>
+ 		<%= f.hidden_field :name %>
+ 		<%= f.hidden_field :gender %>
+		<a href="#" onclick="sign_up_submit(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0 40px 0; text-align:center;">
+			회원가입하기
+		</a>
+	</div>
+<% end %>
+<!-- 회원가입 form -->
+
+<style>
+	#user_birthday_1i, #user_birthday_2i, #user_birthday_3i{
+	  font-size:14px;
+	  height:24px;
+	  margin:0;
+	}
+	<% if session[:view] == 'standard' %>
+	#user_birthday_1i{
+	  width:32%;	
+	} 
+	#user_birthday_2i{
+	  width:32%;
+	} 
+	#user_birthday_3i{
+	  width:32%;
+	}
+	<% else %>
+	#user_birthday_1i{
+	  width:32%;
+	} 
+	#user_birthday_2i{
+	  width:29%;
+	} 
+	#user_birthday_3i{
+	  width:29%;
+	}
+	<% end %>
+</style>
+
+<script>
+
+	<% if flash[:alert] != nil %>
+  		alert("이메일/아이디 또는 비밀번호가 다릅니다. \n다시한번 확인해 주세요.") 
+	<% end %>
+
+	//select박스에 년 붙여줌
+	$.each($("#user_birthday_1i option"), function( index, value ) {
+		value.text = value.text+"년";
+	});
+	
+	//select박스에 일 붙여줌
+	$.each($("#user_birthday_3i option"), function( index, value ) {
+		value.text = value.text+"일";
+	});
+
+	function select_gender(gender_no){
+		if(gender_no == 1){
+			$("#gender_female").css("background-color", "#E4E1E0");
+			$("#gender_male").css("background-color", "#37DBDC");
+			$("#user_gender").val("t");
+		}else{
+			$("#gender_male").css("background-color", "#E4E1E0");
+			$("#gender_female").css("background-color", "#FF92A2");
+			$("#user_gender").val("f");
+		}
+	}
+	
+	
+	function sign_in_submit(){
+		if ($("#user_email").val() == ""){
+			notify('이메일을 입력해 주세요.');
+			return;
+		}
+		
+		<% unless resource.facebook_id %>
+			if ($("#user_password").val() == ""){
+				notify('비밀번호를 입력해 주세요.');
+				return;
+			}
+		<% end %>
+		$("#sign_in_email").val($("#user_email").val());
+		$("#sign_in_password").val($("#user_password").val());
+		
+		if ( $("#user_remember_me").is(":checked") ){
+			$("#sign_in_remember_me").attr("checked", true);
+		}else{
+			$("#sign_in_remember_me").attr("checked", false);
+		}
+		
+		$("#sign_in_form").submit();
+	}
+	
+	function sign_up_submit(){ //submit 전에 value 체크
+		if ($("#user_email").val() == ""){
+			notify('이메일을 입력해 주세요.');
+			return;
+		}
+		
+		<% unless resource.facebook_id %>
+			if ($("#user_password").val() == ""){
+				notify('비밀번호를 입력해 주세요.');
+				return;
+			}
+		<% end %>
+		
+		if ($("#user_birthday_1i").val() == "" || $("#user_birthday_2i").val() == "" || $("#user_birthday_3i").val() == ""){
+			notify('생일을 입력해주세요');
+			return;
+		} 
+		if ($("#user_gender").val() == ""){
+			notify('성별을 입력해주세요');
+			return;
+		}
+		if ( !$("#user_agree_access_term").is(":checked") ){
+			notify('회원약관에 동의해주세요');
+			return;
+		}
+		
+		$("#sign_up_form").submit();
+	}
+	
+</script>
+

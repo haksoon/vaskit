@@ -1,0 +1,180 @@
+ko:
+  errors:
+    messages:
+      not_saved: ""
+  devise:
+    sessions:
+      user:
+        signed_in: ""
+  views:
+    pagination:
+      first: "&laquo; 처음"
+      last: "끝&raquo;"
+      previous: "&lsaquo; 이전"
+      next: "다음 &rsaquo;"
+      truncate: "..."
+  datetime:
+    distance_in_words:
+      half_a_minute: "30초"
+      less_than_x_seconds:
+        one:   "일초 이하"
+        other: "%{count}초 이하"
+      x_seconds:
+        one:   "일초"
+        other: "%{count}초"
+      less_than_x_minutes:
+        one:   "일분 이하"
+        other: "%{count}분 이하"
+      x_minutes:
+        one:   "일분"
+        other: "%{count}분"
+      about_x_hours:
+        one:   "약 한시간전"
+        other: "약 %{count}시간"
+      x_days:
+        one:   "하루"
+        other: "%{count}일"
+      about_x_months:
+        one:   "약 한달"
+        other: "약 %{count}달"
+      x_months:
+        one:   "한달"
+        other: "%{count}달"
+      about_x_years:
+        one:   "약 일년"
+        other: "약 %{count}년"
+      over_x_years:
+        one:   "일년 이상"
+        other: "%{count}년 이상"
+    prompts:
+      year:   "년"
+      month:  "월"
+      day:    "일"
+      hour:   "시"
+      minute: "분"
+      second: "초"
+  date:
+    abbr_day_names:
+    - 일
+    - 월
+    - 화
+    - 수
+    - 목
+    - 금
+    - 토
+    abbr_month_names:
+    -
+    - 1월
+    - 2월
+    - 3월
+    - 4월
+    - 5월
+    - 6월
+    - 7월
+    - 8월
+    - 9월
+    - 10월
+    - 11월
+    - 12월
+    day_names:
+    - 일
+    - 월
+    - 화
+    - 수
+    - 목
+    - 금
+    - 토
+    formats:
+      default: ! '%Y/%m/%d'
+      long: ! '%Y년 %m월 %d일 (%a)'
+      short: ! '%m/%d'
+    month_names:
+    -
+    - 1월
+    - 2월
+    - 3월
+    - 4월
+    - 5월
+    - 6월
+    - 7월
+    - 8월
+    - 9월
+    - 10월
+    - 11월
+    - 12월
+    order:
+    - :year
+    - :month
+    - :day 
+  activerecord:
+    attributes:
+      user:
+        email:  ""
+        screen_phone: "본인 휴대폰 번호"
+        password: "비밀번호"
+        password_confirmation:  "비밀번호 확인"
+        remember_me:  "자동 로그인"
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              invalid: "정확한 이메일 형식을 맞춰주세요."
+              blank: "필수 항목입니다."
+              taken: "이미 있는 이메일입니다."
+            screen_phone:
+              blank: "필수 항목입니다."
+              taken: "이미 등록된 번호입니다."
+            password:
+              blank: "필수 항목입니다."
+              too_short: "항목을 8자리 이상으로 해주세요."
+              too_long: "항목을 12자리 이하로 해주세요."
+            password_confirmation:
+              confirmation: "비밀번호가 일치하지 않습니다."
+  label:
+    user:
+      login:  "로그인"
+      logout: "로그 아웃"
+      user_logout: "로그아웃"
+      new:  "회원 가입"
+    wedding_hall:
+      new:  "웨딩홀 추가"
+      index: "웨딩홀 리스트"
+      edit: "웨딩홀 정보 변경"
+    marriage:
+      new:  "결혼식 추가"
+      index: "결혼식 리스트"
+      edit: "결혼식 정보 변경"
+      marriage_date: "예식일"
+      marriage_time: "예식 시간"
+      wedding_search: "결혼식 찾기"
+    talk:
+      new: "메세지 추가"
+      index: "메세지 리스트"
+      edit: "메세지 정보 변경"
+  message:
+    talk:
+      select_wedding_hall:  "예식장을 선택해 주세요."
+      select_hall:  "홀을 선택해 주세요."
+    user:
+      forgot_your_password: "패스워드 찾기"
+      did_not_receive_unlock_instructions: "Didn't receive unlock instructions?"
+      login: "로그인 하셨습니다."
+    wedding_hall:
+      destroy: "삭제 하시겠습니까?"
+    marriage:
+      destroy: "삭제 하시겠습니까?"
+  action:
+    show: "상세보기"
+    edit: "수정"
+    destroy: "삭제"
+    back: "뒤로가기"
+    logout: "로그아웃"
+    
+    wedding_hall:
+      new_wedding_hall: "웨딩홀 추가"  
+    marriage:
+      new_marriage: "예식 추가"
+    talk:
+      new_talk: "메세지 추가"
+      

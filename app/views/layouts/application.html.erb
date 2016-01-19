@@ -6,9 +6,25 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<body>
 
-<%= yield %>
+<% if session[:view] == 'standard' %>
+	<body style="margin:0 auto; padding:40px 0; text-align:center; background-color:#FFF;">
+		<div id="flash" class="flash_html" style="display:none;" ></div>
+		<div class="loading" style="display:none;">
+	    	<div>Loading...</div>
+	  	</div>
+		<div style="width:500px; background-color:#fff; margin:0 auto; min-height:500px; border:6px solid white; box-shadow:0px 0px 10px rgba(99, 99, 99, 0.6); -webkit-box-shadow:0px 0px 10px rgba(99, 99, 99, 0.6); ">
+			<%= yield %>
+		</div>
+	</body>
+<% else %>
+	<body style="margin:0 auto; padding:0; text-align:center; background-color:#EBEAE9;">
+		<div id="flash" class="flash_html" style="display:none;" ></div>
+		<div class="loading" style="display:none;">
+	    	<div>Loading...</div>
+	  	</div>
+		<%= yield %>
+	</body>
+<% end %>
 
-</body>
 </html>
