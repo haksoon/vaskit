@@ -9,6 +9,10 @@ class ApplicationController < ActionController::Base
     render :template => "/etc/rending" unless current_user 
   end
   
+  def auth_admin
+    render  :template => "/admin/not_auth" unless current_user.email == "admin@vaskit.com" 
+  end
+  
   def detect_browser
     if params[:view]
       if params[:view] == 'mobile'

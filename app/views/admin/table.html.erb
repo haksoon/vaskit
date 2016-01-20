@@ -17,6 +17,7 @@
 	      <% @record_names.each do |name| %>
 	      	<th><%=name%></th>
 	      <% end %>
+	      <th></th>
 	    </tr>
 	  </thead>
 	
@@ -26,6 +27,15 @@
 				<% @record_names.each do |name| %>
 			    	<td><%=record[name]%></td>
 			    <% end %>
+			    
+			    <td>
+			    <% if record.class == User %>
+			    	<%= link_to '삭제', "/users/"+record.id.to_s, method: :delete, data: { confirm: '정말 삭제하시겠습니까?' } %>
+			    <% else %>
+			    	<%= link_to '삭제', record, method: :delete, data: { confirm: '정말 삭제하시겠습니까?' } %>
+			    <% end %>
+			    </td>
+			    
 	       	</tr>
 	    <% end %>
 	  </tbody>

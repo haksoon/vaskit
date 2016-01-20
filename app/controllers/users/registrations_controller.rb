@@ -1,6 +1,8 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_filter :configure_permitted_parameters
   skip_before_filter :auth_user
+  before_filter :auth_admin, :only => ["destroy"]
+  
   
   def new
     build_resource({:email => params[:email], :name => params[:name], :facebook_id => params[:facebook_id], :gender => params[:gender], :birthday => params[:birthday] })
@@ -25,19 +27,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def edit
   end
   
-  def update
-    unless params[:user][:gender].blank? 
-      params[:user][:gender] = ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:user][:gender])
-    end
-    super
-  end
-  
-  # DELETE /users/delete_photo.json 
-  def delete_photo
-    SquarePreviewPhoto.where(:parent_type => "user", :parent_id => current_user.id).destroy_all
-    current_user.photo.destroy
-    current_user.save
-    render :json => {:status => "success"}
+  def destroy
+    user = User.find_by_id(params[:id])
+    user.delete
+    redirect_to(:back)
   end
   
   
