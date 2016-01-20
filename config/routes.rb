@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   
   devise_scope :user do
     get 'users/facebook', :to => "users/facebook#auth"
+    get 'users/check_email', :to => "users/sessions#check_email"
   end
   
   resources :admin

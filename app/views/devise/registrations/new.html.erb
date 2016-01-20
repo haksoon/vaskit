@@ -32,46 +32,92 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:id => "sign_up_form"}) do |f| %>
   	<%= devise_error_messages! %>
 	<div style="padding:0 20px; text-align:left;">
-		<%= f.email_field :email, :placeholder => "이메일주소", :class => "round_button" %>
-		<% if !resource.facebook_id.blank? %>
- 	 		<%= f.hidden_field :password, :placeholder => "비밀번호", autocomplete: "off", :class => "round_button" %>
- 	 	<% else %>
- 	 		<%= f.password_field :password, :placeholder => "비밀번호", autocomplete: "off", :class => "round_button" %>
- 	 		
- 	 		<p style="margin:20px 0 0 0; font-size:14px;">
+		
+		<% if resource.facebook_id.blank? %>
+			<%= f.email_field :email, :placeholder => "이메일주소", :class => "round_button" %>
+			<%= f.password_field :password, :placeholder => "비밀번호", :class => "round_button" %>
+			<p style="margin:20px 0 0 0; font-size:14px;">
  	 			<%= f.check_box :remember_me %> 로그인 기억하기
  	 		</p>
  	 		
- 	 		<a href="#" onclick="sign_in_submit(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0; text-align:center;">
+ 	 		<a id="sign_in_btn" href="#" onclick="sign_in_submit(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0; text-align:center;">
 				로그인하기
 			</a>
- 	 		
-		<% end %>
- 		<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
- 			생일
- 		</p>
-		<%= f.date_select :birthday, :start_year => 2005, :end_year => 1960, :prompt => {:year => '', :month => '월', :day => '' }, :style => "width: 60px;" %> 	 		
-		<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
- 			성별 &nbsp;&nbsp;&nbsp;
- 			<a id="gender_male" href="#" onclick="select_gender(1); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == true ? "#37DBDC" : "#E4E1E0" %>; color:#FFF;">
-				남성
+			<div id="new_user_div" style="display:none;">
+				<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
+		 			생일
+		 		</p>
+				<%= f.date_select :birthday, :start_year => 2005, :end_year => 1960, :prompt => {:year => '', :month => '월', :day => '' }, :style => "width: 60px;" %>
+				
+				<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
+		 			
+		 			성별 &nbsp;&nbsp;&nbsp;
+		 			
+		 			<a id="gender_male" href="#" onclick="select_gender(1); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == true ? "#37DBDC" : "#E4E1E0" %>; color:#FFF;">
+						남성
+					</a>
+					
+					<a id ="gender_female" href="#" onclick="select_gender(0); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == false ? "#FF92A2" : "#E4E1E0" %>; color:#FFF;">
+						여성
+					</a>
+		 		</p>
+		 		
+		 		<p style="margin:20px 0 0 0; font-size:14px;">
+					<%= f.check_box :agree_access_term %> VASKIT의 회원약관에 동의합니다.
+				</p>
+				
+				<a href="#" onclick="sign_up_submit(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0 40px 0; text-align:center;">
+					회원가입하기
+				</a>
+				
+			</div>
+			
+		<% else %>
+			<% if resource.email.blank? %>
+				<%= f.email_field :email, :placeholder => "이메일주소", :class => "round_button" %>
+			<% else %>
+				<%= f.hidden_field :email %>
+			<% end %>
+			<%= f.hidden_field :password, :placeholder => "비밀번호", :class => "round_button" %>
+		
+		
+			<% if resource.birthday.blank? %>
+				<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
+		 			생일
+		 		</p>
+				<%= f.date_select :birthday, :start_year => 2005, :end_year => 1960, :prompt => {:year => '', :month => '월', :day => '' }, :style => "width: 60px;" %>
+			<% else %>
+				<%= f.hidden_field :birthday %>
+			<% end %>
+			
+			<% if resource.gender.blank? %>
+				<p style="margin:20px 0 12px 0; text-align:left; font-size:14px; color:#555; font-weight:bold; padding-left:10px;">
+		 			
+		 			성별 &nbsp;&nbsp;&nbsp;
+		 			
+		 			<a id="gender_male" href="#" onclick="select_gender(1); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == true ? "#37DBDC" : "#E4E1E0" %>; color:#FFF;">
+						남성
+					</a>
+					
+					<a id ="gender_female" href="#" onclick="select_gender(0); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == false ? "#FF92A2" : "#E4E1E0" %>; color:#FFF;">
+						여성
+					</a>
+		 		</p>
+	 		<% end %>
+	 		<p style="margin:20px 0 0 0; font-size:14px;">
+				<%= f.check_box :agree_access_term %> VASKIT의 회원약관에 동의합니다.
+			</p>
+			
+			<a href="#" onclick="sign_up_submit(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0 40px 0; text-align:center;">
+				회원가입하기
 			</a>
-			<a id ="gender_female" href="#" onclick="select_gender(0); return false;" style="text-align:center; display:inline-block; font-size:15px; border-radius:6px; -webkit-border-radius:6px; width:90px; line-height:30px; height:30px; background-color:<%= resource.gender == false ? "#FF92A2" : "#E4E1E0" %>; color:#FFF;">
-				여성
-			</a> 
- 		</p>
- 		
- 		
- 		<p style="margin:20px 0 0 0; font-size:14px;">
-			<%= f.check_box :agree_access_term %> VASKIT의 회원약관에 동의합니다.
-		</p>
+	 		
+ 		<% end %>
 		
  		<%= f.hidden_field :facebook_id %>
  		<%= f.hidden_field :name %>
  		<%= f.hidden_field :gender %>
-		<a href="#" onclick="sign_up_submit(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0 40px 0; text-align:center;">
-			회원가입하기
-		</a>
+		
 	</div>
 <% end %>
 <!-- 회원가입 form -->
@@ -119,6 +165,28 @@
 	//select박스에 일 붙여줌
 	$.each($("#user_birthday_3i option"), function( index, value ) {
 		value.text = value.text+"일";
+	});
+	
+	
+	$("#user_email").focusout(function() {
+		$.ajax({
+	        url: "/users/check_email.json",
+	        type: 'GET',
+	        data: {'email': $("#user_email").val() },
+	        dataType: 'json',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	if (data.is_new_email){
+	        		$("#sign_in_btn").hide();
+	        		$("#new_user_div").show();
+	        	}else{
+	        		$("#sign_in_btn").show();
+	        		$("#new_user_div").hide();
+	        	}
+	        }
+		});
 	});
 
 	function select_gender(gender_no){
