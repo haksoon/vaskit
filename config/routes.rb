@@ -11,6 +11,16 @@ Rails.application.routes.draw do
     delete 'users/:id', :to => "users/registrations#destroy"
   end
   
+  resources :asks
+  resources :preview_images
+  
+  resources :deals do
+    collection do
+      get 'get_naver_deals'
+      post 'create_by_naver'
+    end
+  end
+  
   resources :admin
   get "/admin/table/:table_name", :to => "admin#table"
   

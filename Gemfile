@@ -30,6 +30,12 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'devise'
 gem "koala", "~> 2.0"
 
+gem "paperclip"
+gem 'rmagick'
+gem 'kaminari'
+
+gem "nokogiri"
+
 # Use Unicorn as the app server
 gem 'unicorn'
 

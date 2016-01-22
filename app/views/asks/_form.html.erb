@@ -1,0 +1,287 @@
+
+<div style="text-align:left; background:#fff; margin:10px 0; border:1px solid #ddd; border-radius:3px; -webkit-border-radius:3px; padding:10px;">
+
+	<%= form_for(@ask) do |f| %>
+	
+	
+		<div class="field">
+			관심사 선택 <%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }), { include_blank: true } %> <br /><br />
+			
+			내용  <%= f.text_area :message %> 
+		 	<br /><br />
+			CARD A 찾기 <%= text_field_tag :left_deal_keyword, nil, :placeholder => "Card A 제품 검색" %> <a href="#" onclick="deal_search(true); return false;">찾기</a><br /><br />
+			<%= hidden_field_tag 'left_deal[link]' %>
+			<%= hidden_field_tag 'left_deal[deal_id]' %>
+			CARD B 찾기 <%= text_field_tag :right_deal_keyword, nil, :placeholder => "Card B 제품 검색" %> <a href="#" onclick="deal_search(false); return false;">찾기</a><br /><br />
+			<%= hidden_field_tag 'right_deal[link]' %>
+			<%= hidden_field_tag 'right_deal[deal_id]' %>
+			
+			<table id="naver_deals" cellspacing="0" cellpadding="2" style="width:100%;"></table>
+			
+			<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; border-collapse:collapse;" class="border_ababab">
+				<tr>
+					<td style="border-right:1px solid #ababab; height:140px;">
+						<%= file_field_tag 'left_deal[image]', :accept => 'image/*', :multiple => false, :style => "visibility:hidden; width:1px; display:inline;" %>
+						<%= hidden_field_tag 'left_deal[image_id]' %>
+				  		<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;">
+				  			<img style="display:block; margin:0 auto; width:180px;">
+				  			CARD A 이미지 업로드
+				  		</a>
+					</td>
+					<td>
+						<%= file_field_tag 'right_deal[image]', :accept => 'image/*', :multiple => false, :style => "visibility:hidden; width:1px; display:inline;" %>
+						<%= hidden_field_tag 'right_deal[image_id]' %>
+						<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;">
+							<img style="display:block; margin:0 auto; width:180px;">
+							CARD B 이미지 업로드
+						</a>
+					</td>
+				</tr>
+			</table>
+			
+			<br />
+			
+			<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; border-collapse:collapse;" class="border_ababab">
+				<tr>
+					<td style="text-align:left;">
+						<%= text_field_tag 'left_deal[title]', nil, :placeholder => "제품명" %>
+					</td>
+					<td>
+						제품명*
+					</td>
+					<td style="text-align:right;">
+						<%= text_field_tag 'right_deal[title]', nil, :placeholder => "제품명" %>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">
+						<%= text_field_tag 'left_deal[brand]', nil, :placeholder => "브랜드" %>
+					</td>
+					<td>
+						브랜드*
+					</td>
+					<td style="text-align:right;">
+						<%= text_field_tag 'right_deal[brand]', nil, :placeholder => "브랜드" %>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">
+						<%= text_field_tag 'left_deal[price]', nil, :placeholder => "판매가격" %>
+					</td>
+					<td>
+						판매가격*
+					</td>
+					<td style="text-align:right;">
+						<%= text_field_tag 'right_deal[price]', nil, :placeholder => "판매가격" %>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">
+						<%= text_field_tag 'left_deal[spec1]', nil, :placeholder => "추가스펙1" %>
+					</td>
+					<td>
+						추가스펙1*
+					</td>
+					<td style="text-align:right;">
+						<%= text_field_tag 'right_deal[spec1]', nil, :placeholder => "추가스펙1" %>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">
+						<%= text_field_tag 'left_deal[spec2]', nil, :placeholder => "추가스펙2" %>
+					</td>
+					<td>
+						추가스펙2*
+					</td>
+					<td style="text-align:right;">
+						<%= text_field_tag 'right_deal[spec2]', nil, :placeholder => "추가스펙2" %>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align:left;">
+						<%= text_field_tag 'left_deal[spec3]', nil, :placeholder => "추가스펙3" %>
+					</td>
+					<td>
+						추가스펙3*
+					</td>
+					<td style="text-align:right;">
+						<%= text_field_tag 'right_deal[spec3]', nil, :placeholder => "추가스펙3" %>
+					</td>
+				</tr>
+			</table>
+			<br />
+		</div>
+	    <a href="#" onclick="submit_form(); return false;" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0 40px 0; text-align:center;">
+			등록
+		</a>
+	<% end %>
+</div>
+
+<script type="text/template" id="naver-deal-template">
+	<tr>
+		<td style="width:70px;">
+			<a href="#" onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;">
+				<img style="width:60px; border:1px solid black; float:left; " src="{{= item.image }}">
+			</a>
+		</td>
+		<td style="font-size:11px;">
+			title : {{= item.title }}<br />
+	   		가격 : {{= item.lprice }}<br />
+	   		쇼핑몰 : {{= item.mallName}} <br />
+		</td>
+	</tr>
+</script>
+
+<script>
+	var items;
+	function select_deal(product_id, is_left){
+		item = $.grep(items, function(obj) { return obj.productId === product_id; })[0];
+		
+		$.ajax({
+	        url: '/deals/create_by_naver.json',
+	        type: 'POST',
+	        data: {item: item},
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	deal = data.deal;
+	        	if (is_left){
+	        		$("#left_deal_image_btn img").attr("src", get_image_url(deal, "deals", "normal") );
+	        		$("#left_deal_title").val(deal.title);
+	        		$("#left_deal_brand").val(deal.brand);
+	        		$("#left_deal_price").val(deal.price);
+	        		$("#left_deal_deal_id").val(deal.id);
+	        	}else{
+	        		$("#right_deal_image_btn img").attr("src", get_image_url(deal, "deals", "normal") );
+	        		$("#right_deal_title").val(deal.title);
+	        		$("#right_deal_brand").val(deal.brand);
+	        		$("#right_deal_price").val(deal.price);
+	        		$("#right_deal_deal_id").val(deal.id);
+	        	}
+	        	$("#naver_deals").html("");
+	        },
+	        beforeSend: function(){
+            },
+            complete: function(){
+            }
+		});
+		
+	}
+
+	function deal_search(is_left){
+		var keyword = ""
+		if(is_left){
+			keyword = $("#left_deal_keyword").val();
+		}else{
+			keyword = $("#right_deal_keyword").val();
+		}
+		$.ajax({
+	        url: '/deals/get_naver_deals/?keyword='+keyword,
+	        type: 'GET',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	items = data.result.rss.channel.item;
+	        	
+	        	var html_str;
+	        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
+				for(var i=0; i < items.length; i++) {
+					var item = items[i]
+			        html_str += naverDealTemplate({item: item, is_left: is_left});
+			    }
+			    $('#naver_deals').html(html_str);
+	        	
+	        },
+	        beforeSend: function(){
+            },
+            complete: function(){
+            }
+		});
+	}
+	
+	function left_deal_image_upload(){
+		$("#left_deal_image").click();
+	}
+	
+	$("#left_deal_image").change(function(){
+		$.each( $("#left_deal_image")[0].files, function( i, file ) {
+			var formData = new FormData();
+		    formData.append('File', file);
+		    
+		    $.ajax({
+		       type: "POST",
+		       url: "/preview_images.json",
+		       data: formData,
+		       contentType: false,
+		       processData: false,
+		       success: function (data) {
+		       		$("#left_deal_image_btn img").attr("src",data.image_url);
+					$("#left_deal_image_id").val(data.id);
+		       },
+			   beforeSend: function(){
+	           		$(".loading").show();
+	           },
+	           complete: function(){
+	            	$(".loading").hide();
+	           }
+		    }).fail(function (data) {}).done(function () {});
+		});
+	});
+	
+	
+	function right_deal_image_upload(){
+		$("#right_deal_image").click();
+	}
+	
+	$("#right_deal_image").change(function(){
+		$.each( $("#right_deal_image")[0].files, function( i, file ) {
+			var formData = new FormData();
+		    formData.append('File', file);
+		    
+		    $.ajax({
+		       type: "POST",
+		       url: "/preview_images.json",
+		       data: formData,
+		       contentType: false,
+		       processData: false,
+		       success: function (data) {
+		       		$("#right_deal_image_btn img").attr("src",data.image_url);
+					$("#right_deal_image_id").val(data.id);
+		       },
+			   beforeSend: function(){
+	           		$(".loading").show();
+	           },
+	           complete: function(){
+	            	$(".loading").hide();
+	           }
+		    }).fail(function (data) {}).done(function () {});
+		});
+	});
+	
+	function submit_form(){
+		if ( $("#left_deal_image_btn img").attr("src") == null){
+			notify('CARD A 이미지를 추가해주세요.');
+			return;
+		}
+		
+		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
+			notify('CARD A 제품명을 입력해주세요.');
+			return;
+		}
+		
+		if ( $("#right_deal_image_btn img").attr("src") == null){
+			notify('CARD B 이미지를 추가해주세요.');
+			return;
+		}
+		
+		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
+			notify('CARD B 제품명을 입력해주세요.');
+			return;
+		}
+		$("#new_ask").submit();
+	}
+	
+
+</script>

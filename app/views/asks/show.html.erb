@@ -1,0 +1,188 @@
+<%= render :partial => "common_partial/header_1", :locals => {:title => @post["content"].truncate(16)} %>
+<a id="photo_bg" href="#" onclick="hide_photo(); return false;" style="display:block; position:fixed;left:0; top:0; width:100%; height:100%; background-color:black; z-index:12; opacity:0.85; display:none;">
+</a>
+<a id="photo" href="#" onclick="hide_photo(); return false;" style="z-index:13; position:relative; position:fixed; left:50%; top:50%; display:none;<%= session[:view] == 'standard' ? "width:512px;" : "width:100%;" %> ">
+</a>
+
+
+<div id="post"></div>
+<div id="comments"></div>
+
+<%= render :partial => "common_partial/comments" %>
+<%= render :partial => "common_partial/post_photos" %>
+<%= render :partial => "common_partial/outlink_page" %>
+
+<% if @post["comment_count"] == Comment::COMMENT_PER %>
+	<p id="endless_loading" style="margin-top:30px;">
+		<img style="width:90px; margin-bottom:-7px;" src="/images/common/loading.gif" />
+	</p>
+<% elsif @post["comment_count"] < 6 && session[:view] == "mobile" %>
+	<div style="height:300px;"></div>
+<% end %>
+
+
+<script type="text/template" id="post-show-template">
+	<div id="post_{{=post.id}}" style="margin-bottom:25px;">
+		<table cellspacing="0" cellpadding="0" style="background:#fff; width:100%;">
+			<tr>
+				<td style="text-align:center; padding:12px;">
+					{{ user = post.user }}
+					{{ user_photo_url = "/images/common/profile_photo_s.png" }}
+					{{ if(user.photo_file_name != null){ }}
+						{{ user_photo_url = get_photo_url(user, "users", "normal") }} 
+					{{ } }}
+					
+					<img src="{{=user_photo_url}}" style="width:36px; height:36px; -webkit-border-radius:50%; border-radius:50%; display:block;">
+				</td>
+				<td style="width:100%; text-align:left;">
+					<a href="/{{=user.string_id}}" style="display:block; margin:6px 0 0 0; font-size:13px; font-weight:bold; color:#2c64c1; line-height:18px;">{{=user.nickname}}</a>
+					{{ var date = new Date(post.created_at) }}
+					{{ var yyyy = date.getFullYear().toString() }} 
+				    {{ var mm = (date.getMonth()+1).toString(); }}         
+				    {{ var dd  = date.getDate().toString(); }}
+				    {{ var time_string = yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]); }}
+					<p style="margin:0 auto; font-size:11px; color:#aaaaaa; line-height:16px;">{{=time_string }}</p>
+				</td>
+				<td style="text-align:right;">
+				</td>
+			</tr>
+			<tr>
+				<td colspan="3" style="border-bottom:1px solid #ccc;">
+					<div style="padding:6px 12px 12px 12px; background:#fff; text-align:left; color:#333; font-size:14px; line-height:20px; word-break:break-all;">
+						{{ var content = post.content }}
+						{{ content = youtube_replace(content) }}
+						{{ content = content.replace(new RegExp('\r?\n', 'g'), '<br />') }}
+						{{ content = Autolinker.link( content, { truncate: 45, stripPrefix: false, className: "auto_link"} ) }}
+						{{=content}}
+						
+						{{ var outlink_page_template = _.template($('#outlink_page_template').html()) }}
+						{{= outlink_page_template ({outlink_page:post.outlink_page, is_form: false})  }}
+					</div>
+					{{ var postPhotoTemplate = _.template($('#post-photo-template').html()) }}
+	        		{{= postPhotoTemplate({post: post}) }}
+				</td>
+			</tr>
+			<tr>
+				<td class="hover_pointer" onclick="share_katalk(); return false;" style="text-align:center; padding:12px;">
+					<img style="display:block; width:34px; height:34px;" src="/images/share/share_kakaotalk_medium.png"></a>
+				</td>
+				<td class="hover_pointer" onclick="share_katalk(); return false;" style="text-align:left; font-weight:bold; color:#333; font-size:14px; line-height:20px;">
+					지인에게 보내주기
+				</td>
+				<td class="hover_pointer" onclick="share_katalk(); return false;" style="text-align:center; padding:12px;">
+				</td>
+			</tr>
+		</table>
+	</div>
+</script>
+
+<script>
+	var post = <%= raw @post.to_json(:methods => [:comments]) %>;
+	var visitor = <%= raw @visitor.to_json %>;
+	
+	var postTemplate = _.template( $('#post-show-template').html() );
+    $('#post').html( postTemplate ({post:post } ));
+    $('.post-photos-container-'+ post.id).magnificPopup({
+	  delegate: 'a',
+	  gallery: {enabled: true},
+	  type: 'image'
+	  // other options
+	});
+    
+    
+    var commentsTemplate = _.template($('#comments-template').html());
+    $('#comments').html(commentsTemplate({post: post, visitor: visitor}));
+    
+    $('#add_comment_input').keypress(function(e) {
+      if (e.keyCode == '13') {
+         e.preventDefault();
+         add_comment(post.id);
+       }
+    });
+    
+    
+    
+    function share_katalk() {
+		share_log("katalk", "post_"+post.id);
+		
+		var image_url = "http://tr.nubo.us/images/common/today_report_logo2.png";
+		var content = post.content.substring(0, 850) + "\n\n내용이 더 있지만 카톡에서는 1000자까지만 보낼 수 있습니다.ㅠ\n\n앱으로 매일 편하게 받아보세요.\n\n내용 더보기\n<%=CONFIG['host']%>/posts/<%=@post['id']%>";
+		
+		<% if session[:browser] == "android" %>
+			TodayReport.shareKatalk( content, image_url);
+		<% else %>
+			Kakao.Link.sendTalkLink({
+		      	label: content,
+		      	image: {
+		        	src:  image_url,
+		        	width: '1024',
+		        	height: '500'
+		      	},
+		      	appButton: {
+		        	text: "오늘의리포트"
+		      	}
+		    });
+		<% end %>
+	}
+	
+	<% if session[:browser] == "iphone" %>
+		setTimeout(function(){ window.location="jscall://removeNoti"; }, 1000);
+	<% end %>
+	
+	var ready = function() {
+		try {
+			<% if session[:browser] == "android" %>
+		    	TodayReport.removeNoti("<%=request.original_url%>");
+		    <% end %>
+		    if (post.comment_count == <%= Comment::COMMENT_PER %>){
+				setInterval("checkScroll()", 1000);
+			}
+			Kakao.init("<%=CONFIG['katalk_app_id']%>");
+		}catch(err) {
+		}
+	};
+	
+	
+	$(document).ready(ready);
+	$(document).on('page:load', ready);
+	
+	var currentPage = 1
+	var is_more_comments = true;
+	function checkScroll() {
+	  if (window.location.pathname.indexOf("/posts/") != -1 && nearBottomOfPage() && is_more_comments) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
+	    currentPage ++;
+	    
+	    $.ajax({
+	        url: '/comments/more_comments.json?post_id='+post.id+'&page=' + currentPage,
+	        type: 'GET',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	var more_comments = data.comments;
+	        	if( more_comments.length == 0 ){
+	        		is_more_comments = false;
+	        		$("#endless_loading").hide();
+	        	}else{
+	        		if( more_comments.length < <%= Comment::COMMENT_PER %> ){
+	        			is_more_comments = false;
+	        			$("#endless_loading").hide();
+	        		}
+	        		
+	        		var comments_div = $("#post_"+post.id+"_comments");
+	        		for(var i=0; i < more_comments.length; i++) {
+						var comment = more_comments[i]
+						var commentTemplate = _.template($('#comment-template').html());
+				       comments_div.append(commentTemplate({comment: comment, visitor:visitor}));
+					}
+	        	}
+	        },
+	        beforeSend: function(){
+            },
+            complete: function(){
+            }
+		});
+	  }
+	}
+    
+</script>

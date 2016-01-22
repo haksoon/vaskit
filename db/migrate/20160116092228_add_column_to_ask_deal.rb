@@ -1,6 +1,6 @@
 class AddColumnToAskDeal < ActiveRecord::Migration
   def change
-    add_column :ask_deals, :content, :string
+    add_column :ask_deals, :title, :string
     add_column :ask_deals, :brand, :string
     add_column :ask_deals, :price, :integer
     add_column :ask_deals, :link, :string

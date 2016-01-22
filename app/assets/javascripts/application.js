@@ -16,15 +16,15 @@
 //= require_tree .
 
 
-function get_photo_url(data, model_name, extention){
-	var photo_url = "http://dur3dypb2y9ha.cloudfront.net"; //static url
-	photo_url = "http://dur3dypb2y9ha.cloudfront.net/assets/"+model_name+"/"+data.id+"/"+extention+"/";
-	var photo_file_name = data.photo_file_name;
-	if(photo_file_name.indexOf(".") == -1){
-		photo_file_name = photo_file_name + ".";
+function get_image_url(data, model_name, extention){
+	var image_url = ""; //static url
+	image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+	var image_file_name = data.image_file_name;
+	if(image_file_name.indexOf(".") == -1){
+		image_file_name = image_file_name + ".";
 	} 
-  	photo_url += photo_file_name;
-  	return photo_url;
+  	image_url += image_file_name;
+  	return image_url;
 }
 
 function notify(flash_message){
@@ -54,9 +54,10 @@ function back_button(){
 }
 
 
-// $(function() {
-    // FastClick.attach(document.body);
-// });
+_.templateSettings = {
+    interpolate: /\{\{\=(.+?)\}\}/g,
+    evaluate: /\{\{(.+?)\}\}/g
+};
 
 
 $( document ).ready(function() {
