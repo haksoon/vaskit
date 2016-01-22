@@ -2,6 +2,13 @@
 class AsksController < ApplicationController
   before_action :set_ask, only: [:show, :edit, :update, :destroy, :vote]
 
+  before_filter :auth_admin, :only => ["destroy"]
+  
+  def destroy
+    Ask.find_by_id(params[:id]).delete
+    redirect_to(:back)
+  end
+  
   # GET /posts/new
   def new
     @ask = Ask.new

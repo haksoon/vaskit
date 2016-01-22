@@ -1,25 +1,33 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => {
-    :sessions => 'users/sessions',
-    :registrations => 'users/registrations',
-    :passwords => 'users/passwords'
-  }
-  
-  devise_scope :user do
-    get 'users/facebook', :to => "users/facebook#auth"
-    get 'users/check_email', :to => "users/sessions#check_email"
-    delete 'users/:id', :to => "users/registrations#destroy"
-  end
-  
   resources :asks
-  resources :preview_images
-  
+  resources :ask_deals
+  resources :categories
+  resources :comments 
   resources :deals do
     collection do
       get 'get_naver_deals'
       post 'create_by_naver'
     end
   end
+  resources :hash_tags
+  resources :mail_logs
+  resources :preview_images
+  resources :share_logs
+  devise_for :users, :controllers => {
+    :sessions => 'users/sessions',
+    :registrations => 'users/registrations',
+    :passwords => 'users/passwords'
+  }
+  devise_scope :user do
+    get 'users/facebook', :to => "users/facebook#auth"
+    get 'users/check_email', :to => "users/sessions#check_email"
+    delete 'users/:id', :to => "users/registrations#destroy"
+  end
+  resources :visitors
+  resources :votes
+  
+  
+  
   
   resources :admin
   get "/admin/table/:table_name", :to => "admin#table"
