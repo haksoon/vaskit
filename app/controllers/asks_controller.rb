@@ -23,6 +23,7 @@ class AsksController < ApplicationController
   def create
     left_deal_params = params[:left_deal]
     left_image = nil
+    left_deal_is_modify = false
     
     left_preview_image = PreviewImage.find_by_id(left_deal_params[:image_id]) 
     if left_preview_image
@@ -33,14 +34,23 @@ class AsksController < ApplicationController
       left_deal = Deal.create(:title => left_deal_params[:title], :brand => left_deal_params[:brand], :price => left_deal_params[:price], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3], :image => left_image)
     else
       left_deal = Deal.find(left_deal_params[:deal_id])
-      left_image = left_deal.image if left_image.blank?
+      if left_image.blank?
+        left_image = left_deal.image
+      else
+        left_deal_is_modify = true
+      end
+      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
+        left_deal_is_modify = true
+      end  
     end
     
     left_ask_deal = AskDeal.create(:deal_id => left_deal.id, :user_id => current_user.id, :title => left_deal_params[:title], :brand => left_deal_params[:brand], 
-                                    :price => left_deal_params[:price], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3], :image => left_image)
+                                    :price => left_deal_params[:price], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3], 
+                                    :image => left_image, :is_modify => left_deal_is_modify)
                                     
     right_deal_params = params[:right_deal]
     right_image = nil
+    right_deal_is_modify = false
     
     right_preview_image = PreviewImage.find_by_id(right_deal_params[:image_id]) 
     if right_preview_image
@@ -51,11 +61,20 @@ class AsksController < ApplicationController
       right_deal = Deal.create(:title => right_deal_params[:title], :brand => right_deal_params[:brand], :price => right_deal_params[:price], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3], :image => right_image)
     else
       right_deal = Deal.find(right_deal_params[:deal_id])
-      right_image = right_deal.image if right_image.blank?
+      if right_image.blank?
+        right_image = right_deal.image
+      else
+        right_deal_is_modify = true
+      end
+      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
+        right_deal_is_modify = true
+      end  
+      
     end
     
     right_ask_deal = AskDeal.create(:deal_id => right_deal.id, :user_id => current_user.id, :title => right_deal_params[:title], :brand => right_deal_params[:brand], 
-                                    :price => right_deal_params[:price], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3], :image => right_image)
+                                    :price => right_deal_params[:price], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3], 
+                                    :image => right_image, :is_modify => right_deal_is_modify)
     
     params[:ask][:user_id] = current_user.id
     params[:ask][:left_ask_deal_id] = left_ask_deal.id

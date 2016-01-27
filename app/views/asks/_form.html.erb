@@ -16,6 +16,7 @@
 			<%= hidden_field_tag 'right_deal[link]' %>
 			<%= hidden_field_tag 'right_deal[deal_id]' %>
 			
+			<div id="naver_images" style="width:100%;"></div>
 			<table id="naver_deals" cellspacing="0" cellpadding="2" style="width:100%;"></table>
 			
 			<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; border-collapse:collapse;" class="border_ababab">
@@ -132,8 +133,17 @@
 	</tr>
 </script>
 
+<script type="text/template" id="naver-image-template">
+	<a href="#" onclick="select_image('{{= item.thumbnail }}', {{= is_left }}); return false;">
+		<img src="{{= item.thumbnail }}" />
+	</a>
+</script>
+
+
 <script>
 	var items;
+	var image_items;
+	
 	function select_deal(product_id, is_left){
 		item = $.grep(items, function(obj) { return obj.productId === product_id; })[0];
 		
@@ -152,13 +162,18 @@
 	        		$("#left_deal_brand").val(deal.brand);
 	        		$("#left_deal_price").val(deal.price);
 	        		$("#left_deal_deal_id").val(deal.id);
+	        		
+	        		$("#left_deal_image_id").val("");
 	        	}else{
 	        		$("#right_deal_image_btn img").attr("src", get_image_url(deal, "deals", "normal") );
 	        		$("#right_deal_title").val(deal.title);
 	        		$("#right_deal_brand").val(deal.brand);
 	        		$("#right_deal_price").val(deal.price);
 	        		$("#right_deal_deal_id").val(deal.id);
+	        		
+	        		$("#right_deal_image_id").val("");
 	        	}
+	        	$("#naver_images").html("");
 	        	$("#naver_deals").html("");
 	        },
 	        beforeSend: function(){
@@ -166,8 +181,34 @@
             complete: function(){
             }
 		});
-		
 	}
+	
+	function select_image(image_url, is_left){
+		$.ajax({
+	        url: '/preview_images/create_by_naver.json',
+	        type: 'POST',
+	        data: {image_url: image_url},
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	if (is_left){
+	        		$("#left_deal_image_btn img").attr("src", data.image_url );
+	        		$("#left_deal_image_id").val(data.id);
+	        	}else{
+	        		$("#right_deal_image_btn img").attr("src", data.image_url );
+	        		$("#right_deal_image_id").val(data.id);
+	        	}
+	        	$("#naver_images").html("");
+	        	$("#naver_deals").html("");
+	        },
+	        beforeSend: function(){
+            },
+            complete: function(){
+            }
+		});
+	}
+
 
 	function deal_search(is_left){
 		var keyword = ""
@@ -183,16 +224,31 @@
 	            return false;
 	        },
 	        success: function(data){
-	        	items = data.result.rss.channel.item;
+	        	image_items = data.image_result.rss.channel.item;
+			    if (image_items != null ){
+	        		var image_item_str = "이미지 선택 <br />";
+		        	var naverImageTemplate = _.template( $('#naver-image-template').html() );
+					for(var i=0; i < image_items.length; i++) {
+						var item = image_items[i]
+				        image_item_str += naverImageTemplate({item: item, is_left: is_left});
+				    }
+				    $('#naver_images').html(image_item_str);
+	        	}else{
+	        		$('#naver_images').html("이미지 결과가 없습니다.");
+	        	}
 	        	
-	        	var html_str;
-	        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
-				for(var i=0; i < items.length; i++) {
-					var item = items[i]
-			        html_str += naverDealTemplate({item: item, is_left: is_left});
-			    }
-			    $('#naver_deals').html(html_str);
-	        	
+	        	items = data.shop_result.rss.channel.item;
+	        	if (items != null ){
+	        		var item_str = "<br />상품 선택 <br />";
+		        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
+					for(var i=0; i < items.length; i++) {
+						var item = items[i]
+				        item_str += naverDealTemplate({item: item, is_left: is_left});
+				    }
+				    $('#naver_deals').html(item_str);
+	        	}else{
+	        		$('#naver_deals').html("상품 결과가 없습니다.");
+	        	}
 	        },
 	        beforeSend: function(){
             },

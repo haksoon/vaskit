@@ -11,7 +11,11 @@ Rails.application.routes.draw do
   end
   resources :hash_tags
   resources :mail_logs
-  resources :preview_images
+  resources :preview_images do
+    collection do
+      post 'create_by_naver'
+    end
+  end
   resources :share_logs
   devise_for :users, :controllers => {
     :sessions => 'users/sessions',
