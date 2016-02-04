@@ -1,0 +1,59 @@
+/*!
+ * Bootstrap Responsive v2.0.2
+ *
+ * Copyright 2012 Twitter, Inc
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world @twitter by @mdo and @fat.
+ */
+.clearfix {
+  *zoom: 1;
+}
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: "";
+}
+.clearfix:after {
+  clear: both;
+}
+@media (max-width: 500px) {
+	#wrap{
+		width:100%;
+	}
+	.home-float-btn{
+		position:fixed; 
+		 right:0; 
+		 bottom:30px;
+	}
+	.home-float-btn img{
+		width:40px;
+	}
+	.vote-result-td{
+		 width:40%;
+	}
+}
+
+@media (min-width: 501px) {
+	#wrap{
+		width:500px;
+		box-shadow:0px 0px 10px rgba(99, 99, 99, 0.4); 
+		-webkit-box-shadow:0px 0px 10px rgba(99, 99, 99, 0.4);
+	}
+	.home-float-btn{
+		 position:fixed; 
+		 right:50%; 
+		 margin-right:-250px; 
+		 bottom:30px;
+	}
+	
+	.home-float-btn img{
+		width:50px;
+	}
+	.vote-result-td{
+		 width:46%;
+	}
+}
+
+

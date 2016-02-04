@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  before_filter :detect_browser, :auth_user
+  before_filter :detect_browser, :auth_user, :set_visitor
   
   MOBILE_BROWSERS = ["android", "iphone", "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;", "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2","pocket","kindle", "mobile","pda","psp","treo"]
   def auth_user
@@ -11,6 +11,16 @@ class ApplicationController < ActionController::Base
   
   def auth_admin
     render  :template => "/admin/not_auth" unless current_user.email == "admin@vaskit.com" 
+  end
+  
+  def set_visitor
+    @uniq_key = cookies["uniq_key"]
+    @visitor = Visitor.find_by_uniq_key( Digest::MD5.hexdigest(@uniq_key ) ) unless @uniq_key.blank?
+    if @visitor.blank?
+      @uniq_key = Time.now.to_f.to_s + rand(1000000).to_s if @uniq_key.blank?
+      hash_uniq_key = Digest::MD5.hexdigest(@uniq_key)
+      @visitor = Visitor.create(:uniq_key => hash_uniq_key, :remote_ip => get_remote_ip)
+    end
   end
   
   def detect_browser

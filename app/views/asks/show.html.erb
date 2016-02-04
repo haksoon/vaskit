@@ -1,188 +1,330 @@
-<%= render :partial => "common_partial/header_1", :locals => {:title => @post["content"].truncate(16)} %>
-<a id="photo_bg" href="#" onclick="hide_photo(); return false;" style="display:block; position:fixed;left:0; top:0; width:100%; height:100%; background-color:black; z-index:12; opacity:0.85; display:none;">
-</a>
-<a id="photo" href="#" onclick="hide_photo(); return false;" style="z-index:13; position:relative; position:fixed; left:50%; top:50%; display:none;<%= session[:view] == 'standard' ? "width:512px;" : "width:100%;" %> ">
-</a>
+<%= render :partial => "common_partial/header" %>
+<div id="asks" style="padding:10px 12px;"></div>
 
-
-<div id="post"></div>
-<div id="comments"></div>
-
-<%= render :partial => "common_partial/comments" %>
-<%= render :partial => "common_partial/post_photos" %>
-<%= render :partial => "common_partial/outlink_page" %>
-
-<% if @post["comment_count"] == Comment::COMMENT_PER %>
-	<p id="endless_loading" style="margin-top:30px;">
-		<img style="width:90px; margin-bottom:-7px;" src="/images/common/loading.gif" />
-	</p>
-<% elsif @post["comment_count"] < 6 && session[:view] == "mobile" %>
-	<div style="height:300px;"></div>
-<% end %>
-
-
-<script type="text/template" id="post-show-template">
-	<div id="post_{{=post.id}}" style="margin-bottom:25px;">
-		<table cellspacing="0" cellpadding="0" style="background:#fff; width:100%;">
-			<tr>
-				<td style="text-align:center; padding:12px;">
-					{{ user = post.user }}
-					{{ user_photo_url = "/images/common/profile_photo_s.png" }}
-					{{ if(user.photo_file_name != null){ }}
-						{{ user_photo_url = get_photo_url(user, "users", "normal") }} 
-					{{ } }}
-					
-					<img src="{{=user_photo_url}}" style="width:36px; height:36px; -webkit-border-radius:50%; border-radius:50%; display:block;">
-				</td>
-				<td style="width:100%; text-align:left;">
-					<a href="/{{=user.string_id}}" style="display:block; margin:6px 0 0 0; font-size:13px; font-weight:bold; color:#2c64c1; line-height:18px;">{{=user.nickname}}</a>
-					{{ var date = new Date(post.created_at) }}
-					{{ var yyyy = date.getFullYear().toString() }} 
-				    {{ var mm = (date.getMonth()+1).toString(); }}         
-				    {{ var dd  = date.getDate().toString(); }}
-				    {{ var time_string = yyyy + '-' + (mm[1]?mm:"0"+mm[0]) + '-' + (dd[1]?dd:"0"+dd[0]); }}
-					<p style="margin:0 auto; font-size:11px; color:#aaaaaa; line-height:16px;">{{=time_string }}</p>
-				</td>
-				<td style="text-align:right;">
-				</td>
-			</tr>
-			<tr>
-				<td colspan="3" style="border-bottom:1px solid #ccc;">
-					<div style="padding:6px 12px 12px 12px; background:#fff; text-align:left; color:#333; font-size:14px; line-height:20px; word-break:break-all;">
-						{{ var content = post.content }}
-						{{ content = youtube_replace(content) }}
-						{{ content = content.replace(new RegExp('\r?\n', 'g'), '<br />') }}
-						{{ content = Autolinker.link( content, { truncate: 45, stripPrefix: false, className: "auto_link"} ) }}
-						{{=content}}
-						
-						{{ var outlink_page_template = _.template($('#outlink_page_template').html()) }}
-						{{= outlink_page_template ({outlink_page:post.outlink_page, is_form: false})  }}
+<script type="text/template" id="ask-template">
+	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:12px; position:relative;">
+		{{ if( ask.category){ }}
+		<div style="text-align:left;  padding:14px 12px 0 12px;">
+			<span class="category">{{= ask.category.name }}</span>
+		</div>
+		{{ } }}
+		<span style="position:absolute; right:10px; top:14px; color:#9e9fa3; font-size:11px;">
+			<img src="/images/home/vote.png" style="width:10px;" /> 4.2k 
+			<img src="/images/home/money.png" style="width:10px; margin-left:2px;" /> 20만 
+			<img src="/images/home/hour.png" style="width:10px; margin-left:2px;" /> 15h
+		</span>
+		<div style="text-align:left; padding:12px 60px 12px 12px; position:relative;">
+			{{ if( ask.user){ }}
+				<p style="margin:0; color:#998675; font-size:13px;">@{{= ask.user.string_id }}</p>
+			{{ } }}
+			<p style="margin:4px 0 0 0; color:#383838; font-size:12px;">
+				{{ if( ask.message){ }}
+					{{= ask.message }}
+				{{ }else{ }}
+					둘중 하나를 골라주세요.
+				{{ } }}
+			</p>
+			<span style="position:absolute; right:10px; top:31px; color:#9e9fa3; font-size:11px;">
+				<a href="#"><img src="/images/home/share.png" style="width:20px;" /></a> 
+				<a href="#"><img src="/images/home/more.png" style="width:20px; margin-left:8px;" /></a> 
+			</span>
+		</div>
+		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
+			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
+	        {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
+		</div>
+		<a href="/asks/{{=ask.id}}" style="padding:12px 12px 8px 12px; display:block;">
+			<span style="float:left; font-size:12px; color:#9b9fa2"><img src="/images/home/comment_l.png" style="width:14px; margin:0 4px -1px 0;">{{= ask.left_ask_deal.comment_count}}</span>
+			<img style="width:70px; margin-top:-1px;" src="/images/home/details_off.png" />
+			<span style="float:right; font-size:12px; color:#9b9fa2">{{= ask.right_ask_deal.comment_count}}<img src="/images/home/comment_r.png" style="width:14px; margin:0 0 -1px 4px;"></span>
+		</a>
+		<div style="padding:0 12px;">
+			<table cellspacing="0" cellpadding="0" style="width:100%; border-spacing:2px 0;">
+				<tr>
+					<th style="width:50%; background-color:#4b3d3d; font-size:13px; color:#fff; padding:2px 0;">
+						CARD A
+					</th>
+					<th style="width:50%; background-color:#4b3d3d; font-size:13px; color:#fff; padding:2px 0;">
+						CARD B
+					</th>
+				</tr>
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
+						&nbsp;
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
+						&nbsp;
+					</td>
+				</tr>
+				{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.left_ask_deal.title }}
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.right_ask_deal.title }}
+					</td>
+				</tr>
+				{{ } }}
+				{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.left_ask_deal.brand }}
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.right_ask_deal.brand }}
+					</td>
+				</tr>
+				{{ } }}
+				{{ if (ask.left_ask_deal.price != "" && ask.right_ask_deal.price != "" ){ }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; color:#ee6e01; font-size:13px; padding:4px 8px;">
+						{{= ask.left_ask_deal.price }}
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; color:#ee6e01; font-size:13px; padding:4px 8px;">
+						{{= ask.right_ask_deal.price }}
+					</td>
+				</tr>
+				{{ } }}
+				{{ if (ask.left_ask_deal.link != null && ask.right_ask_deal.link != null ){ }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; color:#9e9fa1; font-size:13px; padding:4px 8px;">
+						{{= ask.left_ask_deal.link }}
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; color:#9e9fa1; font-size:13px; padding:4px 8px;">
+						{{= ask.right_ask_deal.link }}
+					</td>
+				</tr>
+				{{ } }}
+				{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.left_ask_deal.spec1 }}
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.right_ask_deal.spec1 }}
+					</td>
+				</tr>
+				{{ } }}
+				{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.left_ask_deal.spec2 }}
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.right_ask_deal.spec2 }}
+					</td>
+				</tr>
+				{{ } }}
+				{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.left_ask_deal.spec3 }}
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:4px 8px;">
+						{{= ask.right_ask_deal.spec3 }}
+					</td>
+				</tr>
+				{{ } }}
+				<tr>
+					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
+						&nbsp;
+					</td>
+					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
+						&nbsp;
+					</td>
+				</tr>
+			</table>
+			<div>
+				<p style="text-align:center; background-color:#4b3d3d; font-size:13px; color:#fff; padding:2px 0; margin:0 auto;">
+					의견 펼쳐보기
+				</p>
+				{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+				
+				
+				{{ if(already_vote.length == 0){ }}
+					<img src="/images/test.png" style="width:100%;" />
+				{{ }else{ }}
+					<div id="ask_comment" style="background-color:#f4f4f4;">
+						{{ for(var i=0; i < ask.comments.length; i++) {  }}
+							{{ comment = ask.comments[i] }}
+							{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
+					        {{= askCommentTemplate({ask:ask, comment: comment}) }}
+						{{ } }}
 					</div>
-					{{ var postPhotoTemplate = _.template($('#post-photo-template').html()) }}
-	        		{{= postPhotoTemplate({post: post}) }}
-				</td>
-			</tr>
-			<tr>
-				<td class="hover_pointer" onclick="share_katalk(); return false;" style="text-align:center; padding:12px;">
-					<img style="display:block; width:34px; height:34px;" src="/images/share/share_kakaotalk_medium.png"></a>
-				</td>
-				<td class="hover_pointer" onclick="share_katalk(); return false;" style="text-align:left; font-weight:bold; color:#333; font-size:14px; line-height:20px;">
-					지인에게 보내주기
-				</td>
-				<td class="hover_pointer" onclick="share_katalk(); return false;" style="text-align:center; padding:12px;">
-				</td>
-			</tr>
-		</table>
+					<table cellspacing="0" cellpadding="0" style="width:100%; border:1px solid #dbdbdb; background-color:#fff; margin-bottom:16px;">
+						{{ if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+							{{ ask_deal_id = ask.left_ask_deal_id }}
+							{{ ask_deal_text = "A" }}
+						{{ }else{ }}
+							{{ ask_deal_id = ask.right_ask_deal_id }}
+							{{ ask_deal_text = "B" }}
+						{{ } }}
+						<tbody>
+							<tr>
+								<td style="padding:7px 7px 7px 12px;">
+									<a href="#" style="width:30px; height:34px; line-height:34px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
+								</td>
+								<td style="width:100%;">
+									<input type="text" class="comment_box" placeholder="의견을 입력해주세요." style="" />
+								</td>
+								<td style="padding-right:12px;">
+									<a href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:36px; line-height:36px; background-color:#ee6e01; display:inline-block; color:#fff; font-size:14px;">입력</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				{{ } }}
+				
+			</div>
+			
+		</div>
 	</div>
 </script>
 
-<script>
-	var post = <%= raw @post.to_json(:methods => [:comments]) %>;
-	var visitor = <%= raw @visitor.to_json %>;
+<script type="text/template" id="ask-deal-template">
+	{{ left_ask_deal = ask.left_ask_deal }}
+	{{ right_ask_deal = ask.right_ask_deal }}
+	{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+	<table cellspacing="0" cellpadding="0" style="width:100%;">
+		<tr>
+			<td style="width:50%; position:relative;">
+		  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+		  		{{ if( already_vote.length == 0 ){ }}
+		  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+		  		{{ } }}
+			</td>
+			<td style="width:50%; position:relative;">
+				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+				{{ if( already_vote.length == 0 ){ }}
+				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+				{{ } }}
+			</td>
+		</tr>
+	</table>
+	{{ if( already_vote.length != 0 ){ }}
+		{{ if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+			<div style="background:url('/images/home/vote_result_l.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
+		{{ }else{ }}
+			<div style="background:url('/images/home/vote_result_r.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
+		{{ } }}
+		
+		{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
+		{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
+		{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+		
+		{{left_background = "#fff"}}
+		{{right_background = "#fff"}}
+		{{ if (left_ratio > right_ratio){ }}
+			{{left_background = "#ee6e01"}}
+		{{ }else if(left_ratio < right_ratio){ }}
+			{{right_background = "#ee6e01"}}
+		{{ } }}
+		<table cellspacing="0" cellpadding="0" style="position:absolute; bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:11px; height:32px;">
+			<tr>
+				<td class="vote-result-td" style="text-align:right;">
+					<span style="float:left; margin-left:10px;">{{= left_ratio }}%</span>
+					<span style="display:inline-block; width:{{= Math.round(left_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
+				</td>
+				<td style="min-width:56px;">
+					투표 결과
+				</td>
+				<td class="vote-result-td" style="text-align:left;">
+					<span style="float:right; margin-right:10px;">{{= right_ratio }}%</span>
+					<span style="display:inline-block; width:{{= Math.round(right_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
+				</td>
+			</tr>
+		</table>
+	{{ } }}
+</script>
+
+<script type="text/template" id="ask-comment-template">
 	
-	var postTemplate = _.template( $('#post-show-template').html() );
-    $('#post').html( postTemplate ({post:post } ));
-    $('.post-photos-container-'+ post.id).magnificPopup({
-	  delegate: 'a',
-	  gallery: {enabled: true},
-	  type: 'image'
-	  // other options
-	});
-    
-    
-    var commentsTemplate = _.template($('#comments-template').html());
-    $('#comments').html(commentsTemplate({post: post, visitor: visitor}));
-    
-    $('#add_comment_input').keypress(function(e) {
-      if (e.keyCode == '13') {
-         e.preventDefault();
-         add_comment(post.id);
-       }
-    });
-    
-    
-    
-    function share_katalk() {
-		share_log("katalk", "post_"+post.id);
-		
-		var image_url = "http://tr.nubo.us/images/common/today_report_logo2.png";
-		var content = post.content.substring(0, 850) + "\n\n내용이 더 있지만 카톡에서는 1000자까지만 보낼 수 있습니다.ㅠ\n\n앱으로 매일 편하게 받아보세요.\n\n내용 더보기\n<%=CONFIG['host']%>/posts/<%=@post['id']%>";
-		
-		<% if session[:browser] == "android" %>
-			TodayReport.shareKatalk( content, image_url);
-		<% else %>
-			Kakao.Link.sendTalkLink({
-		      	label: content,
-		      	image: {
-		        	src:  image_url,
-		        	width: '1024',
-		        	height: '500'
-		      	},
-		      	appButton: {
-		        	text: "오늘의리포트"
-		      	}
-		    });
-		<% end %>
+	{{ if (ask.left_ask_deal_id == comment.ask_deal_id ){ }}
+		<div style="width:100%; text-align:left;">
+			<div style="position:relative; margin:8px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#FFF; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
+				<span style="word-break:break-all;">{{=comment.content}}</span>
+			</div>
+			<p style="margin:0; padding:6px 0 6px 14px; font-size:12px; color:#9e9fa1;">@{{=comment.user.string_id}} &nbsp;16.01.28</p>
+		</div>
+	{{ }else{ }}
+		<div style="width:100%; text-align:right;">
+			<div style="position:relative; margin:8px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#FFF; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
+				<span style="word-break:break-all;">{{=comment.content}}</span>
+			</div>
+			<p style="margin:0; padding:6px 14px 6px 0; font-size:12px; color:#9e9fa1;">16.01.28 &nbsp;@{{=comment.user.string_id}}</p>
+		</div>
+	{{ } }} 
+</script>
+
+
+<script> 
+
+	var asks = <%= raw @asks.to_json %>;
+	var my_votes = <%= raw @my_votes.to_json %>;
+	var askTemplate = _.template( $('#ask-template').html() );
+	for(var i=0; i < asks.length; i++) {
+		var ask = asks[i]
+        $('#asks').append(askTemplate({ask: ask}));
 	}
-	
-	<% if session[:browser] == "iphone" %>
-		setTimeout(function(){ window.location="jscall://removeNoti"; }, 1000);
-	<% end %>
-	
-	var ready = function() {
-		try {
-			<% if session[:browser] == "android" %>
-		    	TodayReport.removeNoti("<%=request.original_url%>");
-		    <% end %>
-		    if (post.comment_count == <%= Comment::COMMENT_PER %>){
-				setInterval("checkScroll()", 1000);
-			}
-			Kakao.init("<%=CONFIG['katalk_app_id']%>");
-		}catch(err) {
-		}
-	};
-	
-	
-	$(document).ready(ready);
-	$(document).on('page:load', ready);
-	
-	var currentPage = 1
-	var is_more_comments = true;
-	function checkScroll() {
-	  if (window.location.pathname.indexOf("/posts/") != -1 && nearBottomOfPage() && is_more_comments) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
-	    currentPage ++;
-	    
-	    $.ajax({
-	        url: '/comments/more_comments.json?post_id='+post.id+'&page=' + currentPage,
-	        type: 'GET',
+	function vote_ask_deal(ask_deal_id, is_left){
+		$.ajax({
+	        url: "/votes.json",
+	        type: 'POST',
+	        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
+	        dataType: 'json',
 	        error: function(){
 	            return false;
 	        },
 	        success: function(data){
-	        	var more_comments = data.comments;
-	        	if( more_comments.length == 0 ){
-	        		is_more_comments = false;
-	        		$("#endless_loading").hide();
-	        	}else{
-	        		if( more_comments.length < <%= Comment::COMMENT_PER %> ){
-	        			is_more_comments = false;
-	        			$("#endless_loading").hide();
-	        		}
-	        		
-	        		var comments_div = $("#post_"+post.id+"_comments");
-	        		for(var i=0; i < more_comments.length; i++) {
-						var comment = more_comments[i]
-						var commentTemplate = _.template($('#comment-template').html());
-				       comments_div.append(commentTemplate({comment: comment, visitor:visitor}));
-					}
-	        	}
+	        	my_votes.push(data.vote);
+		        $('#asks').html(askTemplate({ask: data.ask}));
+        		notify("투표 완료");
 	        },
 	        beforeSend: function(){
-            },
-            complete: function(){
-            }
+	       		$(".loading").show();
+	        },
+	        complete: function(){
+	        	$(".loading").hide();
+	        }
 		});
-	  }
 	}
-    
+	
+	function send_comment(ask_id, ask_deal_id){
+		var content = $(".comment_box").val();
+		if( content == "" || content == null ){
+			notify('내용을 입력해주세요.');
+			return;
+		}
+		$.ajax({
+	        url: "/comments.json",
+	        type: 'POST',
+	        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id },
+	        dataType: 'json',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	if (data.message = "success"){
+	        		var comment = data.comment;
+	        		var askCommentTemplate = _.template($('#ask-comment-template').html());
+	        		$("#ask_comment").append(askCommentTemplate({ask:ask, comment: comment}));
+	        		notify("작성 완료");
+	        		$(".comment_box").val("");
+	        	}else{
+	        		notify("댓글은 회원만 작성 가능합니다");
+	        	}
+	        	
+	        },
+	        beforeSend: function(){
+	       		$(".loading").show();
+	        },
+	        complete: function(){
+	        	$(".loading").hide();
+	        }
+		});
+	}
+	
+	
 </script>
+

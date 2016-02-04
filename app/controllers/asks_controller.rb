@@ -4,6 +4,16 @@ class AsksController < ApplicationController
 
   before_filter :auth_admin, :only => ["destroy"]
   
+  def show
+    @asks = Ask.where(:id => @ask.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
+    
+    if current_user
+      @my_votes = Vote.where(:user_id => current_user.id, :ask_id => @ask.id)
+    elsif @visitor
+      @my_votes = Vote.where(:visitor_id => @visitor.id, :ask_id => @ask.id)  
+    end
+  end
+  
   def destroy
     Ask.find_by_id(params[:id]).delete
     redirect_to(:back)

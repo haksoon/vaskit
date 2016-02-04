@@ -30,9 +30,6 @@ Rails.application.routes.draw do
   resources :visitors
   resources :votes
   
-  
-  
-  
   resources :admin
   get "/admin/table/:table_name", :to => "admin#table"
   

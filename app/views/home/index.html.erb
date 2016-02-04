@@ -1,57 +1,148 @@
+<%= render :partial => "common_partial/header" %>
+<div id="asks" style="padding:10px 12px;"></div>
+<div class="home-float-btn">
+	<a href="/asks/new"><img src="/images/home/writing.png"></a>
+	<a href="#"><img src="/images/home/up.png"></a>
+</div>
 <div style="color:#555; font-size:14px; line-height:22px; text-align:left; padding:20px; ">
 	로그인 완료. 유저 이메일 : <%= current_user.email %>
 	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="background-color:#ccc;">
 		로그아웃
 	</a> 
-	
 	<br />
-	
-	<a href="/asks/new" class="round_button" style="display:block; background-color:#e6b621; color:#fff; font-weight:bold; border:none; margin:20px 0 40px 0; text-align:center;">
-		질문 새로 만들기
-	</a>
-	
-	<div id="asks"></div>
-	
 </div>
 
 <script type="text/template" id="ask-template">
+	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:12px; position:relative;">
+		{{ if( ask.category){ }}
+		<div style="text-align:left;  padding:14px 12px 0 12px;">
+			<span class="category">{{= ask.category.name }}</span>
+		</div>
+		{{ } }}
+		<span style="position:absolute; right:10px; top:14px; color:#9e9fa3; font-size:11px;">
+			<img src="/images/home/vote.png" style="width:10px;" /> 4.2k 
+			<img src="/images/home/money.png" style="width:10px; margin-left:2px;" /> 20만 
+			<img src="/images/home/hour.png" style="width:10px; margin-left:2px;" /> 15h
+		</span>
+		<div style="text-align:left; padding:12px 60px 12px 12px; position:relative;">
+			{{ if( ask.user){ }}
+				<p style="margin:0; color:#998675; font-size:13px;">@{{= ask.user.string_id }}</p>
+			{{ } }}
+			<p style="margin:4px 0 0 0; color:#383838; font-size:12px;">
+				{{ if( ask.message){ }}
+					{{= ask.message }}
+				{{ }else{ }}
+					둘중 하나를 골라주세요.
+				{{ } }}
+			</p>
+			<span style="position:absolute; right:10px; top:31px; color:#9e9fa3; font-size:11px;">
+				<a href="#"><img src="/images/home/share.png" style="width:20px;" /></a> 
+				<a href="#"><img src="/images/home/more.png" style="width:20px; margin-left:8px;" /></a> 
+			</span>
+		</div>
+		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
+			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
+	        {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
+		</div>
+		<a href="/asks/{{=ask.id}}" style="padding:12px; display:block;">
+			<span style="float:left; font-size:12px; color:#9b9fa2"><img src="/images/home/comment_l.png" style="width:14px; margin:0 4px -1px 0;">{{=ask.left_ask_deal.comment_count}}</span>
+			<img style="width:70px; margin-top:-1px;" src="/images/home/details_on.png" />
+			<span style="float:right; font-size:12px; color:#9b9fa2">{{=ask.right_ask_deal.comment_count}}<img src="/images/home/comment_r.png" style="width:14px; margin:0 0 -1px 4px;"></span>
+		</a>
+	</div>
+</script>
+
+<script type="text/template" id="ask-deal-template">
 	{{ left_ask_deal = ask.left_ask_deal }}
 	{{ right_ask_deal = ask.right_ask_deal }}
-	<div style="border-top:1px solid #ff0000; padding-top:10px; margin-top:20px;">
-		{{ if( ask.category){ }}
-			{{= ask.category.name }} <br />
+	{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+	<table cellspacing="0" cellpadding="0" style="width:100%;">
+		<tr>
+			<td style="width:50%; position:relative;">
+		  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+		  		{{ if( already_vote.length == 0 ){ }}
+		  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+		  		{{ } }}
+			</td>
+			<td style="width:50%; position:relative;">
+				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+				{{ if( already_vote.length == 0 ){ }}
+				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+				{{ } }}
+			</td>
+		</tr>
+	</table>
+	{{ if( already_vote.length != 0 ){ }}
+		{{ if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+			<div style="background:url('/images/home/vote_result_l.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
+		{{ }else{ }}
+			<div style="background:url('/images/home/vote_result_r.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
 		{{ } }}
-		{{ if( ask.user){ }}
-			@{{= ask.user.string_id }} <br />
+		
+		{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
+		{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
+		{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+		
+		{{left_background = "#fff"}}
+		{{right_background = "#fff"}}
+		{{ if (left_ratio > right_ratio){ }}
+			{{left_background = "#ee6e01"}}
+		{{ }else if(left_ratio < right_ratio){ }}
+			{{right_background = "#ee6e01"}}
 		{{ } }}
-		{{= ask.message }} <br />
-		<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; border-collapse:collapse;" class="border_ababab">
+		<table cellspacing="0" cellpadding="0" style="position:absolute; bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:11px; height:32px;">
 			<tr>
-				<td style="width:50%;">
-			  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%;" />
+				<td class="vote-result-td" style="text-align:right;">
+					<span style="float:left; margin-left:10px;">{{= left_ratio }}%</span>
+					<span style="display:inline-block; width:{{= Math.round(left_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
 				</td>
-				<td style="width:50%;">
-					<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%;" />
+				<td style="min-width:56px;">
+					투표 결과
+				</td>
+				<td class="vote-result-td" style="text-align:left;">
+					<span style="float:right; margin-right:10px;">{{= right_ratio }}%</span>
+					<span style="display:inline-block; width:{{= Math.round(right_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
 				</td>
 			</tr>
-			<tr><td>{{= left_ask_deal.title }}</td><td>{{= right_ask_deal.title }}</td></tr>
-			<tr><td>{{= left_ask_deal.brand }}</td><td>{{= right_ask_deal.brand }}</td></tr>
-			<tr><td>{{= left_ask_deal.price }}</td><td>{{= right_ask_deal.price }}</td></tr>
-			<tr><td>{{= left_ask_deal.spec1 }}</td><td>{{= right_ask_deal.spec1 }}</td></tr>
-			<tr><td>{{= left_ask_deal.spec2 }}</td><td>{{= right_ask_deal.spec2 }}</td></tr>
-			<tr><td>{{= left_ask_deal.spec3 }}</td><td>{{= right_ask_deal.spec3 }}</td></tr>
 		</table>
-	</div>
+	{{ } }}
 </script>
 
 
 <script> 
 
 	var asks = <%= raw @asks.to_json %>;
+	var my_votes = <%= raw @my_votes.to_json %>;
 	var askTemplate = _.template( $('#ask-template').html() );
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
         $('#asks').append(askTemplate({ask: ask}));
 	}
+	var k;
+	function vote_ask_deal(ask_deal_id, is_left){
+		$.ajax({
+	        url: "/votes.json",
+	        type: 'POST',
+	        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
+	        dataType: 'json',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	k = data;
+	        	my_votes.push(data.vote);
+	        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
+	        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
+        		notify("투표 완료");
+	        },
+	        beforeSend: function(){
+	       		$(".loading").show();
+	        },
+	        complete: function(){
+	        	$(".loading").hide();
+	        }
+		});
+	}
+	
 </script>
 
