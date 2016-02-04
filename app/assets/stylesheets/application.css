@@ -21,6 +21,17 @@ a:hover {text-decoration:none;}
 a:active {text-decoration:none;}
 img{border:none;}  
 
+body {
+  font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
+  // font-family: verdana, arial, helvetica, sans-serif;
+}
+
+p, ol, ul, td {
+  font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
+  // font-family: verdana, arial, helvetica, sans-serif;
+}
+
+
 ::-webkit-input-placeholder { /* WebKit browsers */
     color:    #CCC; 
 }
