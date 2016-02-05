@@ -149,7 +149,7 @@
 				{{ if(already_vote.length == 0){ }}
 					<img src="/images/deal_detail/comment_blur.png" style="width:100%;" />
 				{{ }else{ }}
-					<div id="ask_comment" style="background-color:#f4f4f4;">
+					<div id="ask_comment" style="background-color:#f4f4f4; padding:4px 0;">
 						{{ for(var i=0; i < ask.comments.length; i++) {  }}
 							{{ comment = ask.comments[i] }}
 							{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
@@ -246,7 +246,7 @@
 	
 	{{ if (ask.left_ask_deal_id == comment.ask_deal_id ){ }}
 		<div style="width:100%; text-align:left;">
-			<div style="position:relative; margin:8px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#FFF; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
+			<div style="position:relative; margin:4px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#FFF; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
 				<span style="word-break:break-all;">{{=comment.content}}</span>
 				<div style="position: absolute; top:1px; left:-8px;">			
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">		
@@ -256,7 +256,7 @@
 		</div>
 	{{ }else{ }}
 		<div style="width:100%; text-align:right;">
-			<div style="position:relative; margin:8px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#FFF; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
+			<div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#FFF; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
 				<span style="word-break:break-all;">{{=comment.content}}</span>
 				<div style="position: absolute; top:1px; right:-8px;">			
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_r.png">		
