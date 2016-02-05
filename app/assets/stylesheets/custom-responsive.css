@@ -18,7 +18,7 @@
 .clearfix:after {
   clear: both;
 }
-@media (max-width: 500px) {
+@media (max-width: 640px) {
 	#wrap{
 		width:100%;
 	}
@@ -28,28 +28,29 @@
 		 bottom:30px;
 	}
 	.home-float-btn img{
-		width:40px;
+		width:48px;
 	}
 	.vote-result-td{
-		 width:40%;
+		 width:42%;
 	}
 }
 
-@media (min-width: 501px) {
+@media (min-width: 641px) {
 	#wrap{
-		width:500px;
-		box-shadow:0px 0px 10px rgba(99, 99, 99, 0.4); 
-		-webkit-box-shadow:0px 0px 10px rgba(99, 99, 99, 0.4);
+		width:640px;
+		
+		box-shadow:0px 0px 10px rgba(166,180,188,0.8); 
+		-webkit-box-shadow:0px 0px 10px rgba(166,180,188,0.8);
 	}
 	.home-float-btn{
 		 position:fixed; 
 		 right:50%; 
-		 margin-right:-250px; 
+		 margin-right:-320px; 
 		 bottom:30px;
 	}
 	
 	.home-float-btn img{
-		width:50px;
+		width:60px;
 	}
 	.vote-result-td{
 		 width:46%;

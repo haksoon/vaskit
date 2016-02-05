@@ -1,5 +1,5 @@
 <%= render :partial => "common_partial/header" %>
-<div id="asks" style="padding:10px 12px;"></div>
+<div id="asks" style="padding:9px 12px;"></div>
 <div class="home-float-btn">
 	<a href="/asks/new"><img src="/images/home/writing.png"></a>
 	<a href="#"><img src="/images/home/up.png"></a>
@@ -13,41 +13,45 @@
 </div>
 
 <script type="text/template" id="ask-template">
-	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:12px; position:relative;">
+	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:9px; position:relative;">
 		{{ if( ask.category){ }}
-		<div style="text-align:left;  padding:14px 12px 0 12px;">
+		<div style="text-align:left;  padding:12px 12px 0 12px;">
 			<span class="category">{{= ask.category.name }}</span>
 		</div>
+		{{ }else{ }}
+		<div style="text-align:left;  padding:12px 12px 0 12px;">
+			<span class="category_none">관심사 미설정	</span>
+		</div>
 		{{ } }}
-		<span style="position:absolute; right:10px; top:14px; color:#9e9fa3; font-size:11px;">
-			<img src="/images/home/vote.png" style="width:10px;" /> 4.2k 
-			<img src="/images/home/money.png" style="width:10px; margin-left:2px;" /> 20만 
-			<img src="/images/home/hour.png" style="width:10px; margin-left:2px;" /> 15h
+		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
+			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" />4.2k 
+			<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />20만 
+			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />15h
 		</span>
-		<div style="text-align:left; padding:12px 60px 12px 12px; position:relative;">
+		<div style="text-align:left; padding:9px 80px 9px 12px; position:relative;">
 			{{ if( ask.user){ }}
-				<p style="margin:0; color:#998675; font-size:13px;">@{{= ask.user.string_id }}</p>
+				<p style="margin:0; color:#998675; font-size:17px;">@{{= ask.user.string_id }}</p>
 			{{ } }}
-			<p style="margin:4px 0 0 0; color:#383838; font-size:12px;">
+			<p style="margin:2px 0 0 0; color:#383838; font-size:13px;">
 				{{ if( ask.message){ }}
 					{{= ask.message }}
 				{{ }else{ }}
 					둘중 하나를 골라주세요.
 				{{ } }}
 			</p>
-			<span style="position:absolute; right:10px; top:31px; color:#9e9fa3; font-size:11px;">
-				<a href="#"><img src="/images/home/share.png" style="width:20px;" /></a> 
-				<a href="#"><img src="/images/home/more.png" style="width:20px; margin-left:8px;" /></a> 
+			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
+				<a href="#"><img src="/images/home/share.png" style="width:24px;" /></a> 
+				<a href="#"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a> 
 			</span>
 		</div>
 		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	        {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-		<a href="/asks/{{=ask.id}}" style="padding:12px; display:block;">
-			<span style="float:left; font-size:12px; color:#9b9fa2"><img src="/images/home/comment_l.png" style="width:14px; margin:0 4px -1px 0;">{{=ask.left_ask_deal.comment_count}}</span>
-			<img style="width:70px; margin-top:-1px;" src="/images/home/details_on.png" />
-			<span style="float:right; font-size:12px; color:#9b9fa2">{{=ask.right_ask_deal.comment_count}}<img src="/images/home/comment_r.png" style="width:14px; margin:0 0 -1px 4px;"></span>
+		<a href="/asks/{{=ask.id}}" style="padding:12px 12px 6px 12px; display:block;">
+			<span style="float:left; font-size:13px; color:#9b9fa2"><img src="/images/home/comment_l.png" style="width:16px; margin:0 4px -2px 0;">{{=ask.left_ask_deal.comment_count}}</span>
+			<img style="width:76px; margin-top:-1px;" src="/images/home/details_on.png" />
+			<span style="float:right; font-size:13px; color:#9b9fa2">{{=ask.right_ask_deal.comment_count}}<img src="/images/home/comment_r.png" style="width:16px; margin:0 0 -2px 4px;"></span>
 		</a>
 	</div>
 </script>
@@ -90,18 +94,18 @@
 		{{ }else if(left_ratio < right_ratio){ }}
 			{{right_background = "#ee6e01"}}
 		{{ } }}
-		<table cellspacing="0" cellpadding="0" style="position:absolute; bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:11px; height:32px;">
+		<table cellspacing="0" cellpadding="0" style="position:absolute; bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:32px;">
 			<tr>
-				<td class="vote-result-td" style="text-align:right;">
+				<td class="vote-result-td" style="text-align:right; padding:6px 0 4px 0px;">
 					<span style="float:left; margin-left:10px;">{{= left_ratio }}%</span>
-					<span style="display:inline-block; width:{{= Math.round(left_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
+					<span style="float:right; margin-top:4px; width:{{= Math.round(left_ratio * 0.6) + 2 }}%; height:5px; background-color:{{=left_background}};">&nbsp;</span>
 				</td>
-				<td style="min-width:56px;">
+				<td style="min-width:56px; padding:6px 0 4px 0px;">
 					투표 결과
 				</td>
-				<td class="vote-result-td" style="text-align:left;">
+				<td class="vote-result-td" style="text-align:left; padding:6px 0 4px 0px;">
 					<span style="float:right; margin-right:10px;">{{= right_ratio }}%</span>
-					<span style="display:inline-block; width:{{= Math.round(right_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
+					<span style="float:left; margin-top:4px; width:{{= Math.round(right_ratio * 0.6) + 2 }}%; height:5px; background-color:{{=right_background}};">&nbsp;</span>
 				</td>
 			</tr>
 		</table>

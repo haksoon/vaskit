@@ -1,40 +1,33 @@
 <div style="width:100%;">
-	<table cellspacing="0" cellpadding="0" style="background-color:#4b3d3d; width:100%; overflow:visible; height:42px;">
+	<table class="main_header" cellspacing="0" cellpadding="0" style="background-color:#4b3d3d; width:100%; overflow:visible; height:42px;">
 		<tr>
 			<td style="width:40px;">
-				<a href="/etc/menu"><img style="width:20px; padding:6px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_on.png" /></a>
+				<a href="/etc/menu"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_on.png" /></a>
 			</td>
 			<td style="text-align:center;">
-				<p style="font-size:18px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">VASKIT</p>	
+				<p style="font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">VASKIT</p>	
 			</td>
 			<td style="width:40px;">
 				<% if current_user %>
-					<a href="/<%=current_user.string_id%>"><img style="width:36px; padding:0 4px; margin-bottom:-1px;" src="/images/header/my.png" /></a>
+					<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; margin-bottom:-1px;" src="/images/header/my.png" /></a>
 				<% else %>
-					<a href="/"><img style="width:40px; padding:6px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
+					<a href="/"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
 				<% end %>
 			</td>
 		</tr>
 	</table>
-	<table cellspacing="0" cellpadding="0" style="width:100%;">
+	<table cellspacing="0" cellpadding="0" style="width:100%; margin-top:2px;">
 		<tr>
 			<td style="">
 				<a href="#"><img style="width:20px; padding:10px 6px 10px 12px; margin-bottom:-5px;" src="/images/header/interest_on.png"></a>
 			</td>
-			<td style="width:100%; position:relative; padding:8px 10px 8px 0;">
+			<td style="width:100%; position:relative; padding:8px 10px 9px 0;">
 				<input type="text" style="" class="search_input" />
 				<a href="#" style="position:absolute; right:10px; top:9px;"><img style="width:20px; padding:6px;" src="/images/header/search.png"></a>
 			</td>
 		</tr>
 	</table>
-	<% if flash[:custom_notice] == nil %>
-		<div style="padding:5px 10px; color:#9d9ea0; font-size:12px; text-align:left;">
-			이미지를 클릭해 투표에 참여해보세요!
-		</div>
-	<% else %>
-		<div style="padding:5px 10px; background-color:#ee6e01; color:#fff; font-size:12px; text-align:left;">
-			<%= flash[:custom_notice] %>
-			<a href="#" style="float:right;"><img style="width:15px;" src="/images/header/close.png"></a>
-		</div>
-	<% end %>
+	<div style="padding:0 10px; color:#9d9ea0; font-size:13px; text-align:left;">
+		이미지를 클릭해 투표에 참여해보세요!
+	</div>
 </div>

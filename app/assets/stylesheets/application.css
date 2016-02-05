@@ -14,7 +14,6 @@
  *= require_self
  */
 
-body{background-color:#f4f4f4; margin:0 auto;}
 a:link {text-decoration:none;}
 a:visited {text-decoration:none;}
 a:hover {text-decoration:none;}
@@ -22,13 +21,14 @@ a:active {text-decoration:none;}
 img{border:none;}  
 
 body {
-  font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
-  // font-family: verdana, arial, helvetica, sans-serif;
+	background-color:#f3f4f5; margin:0 auto;
+    font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
+    // font-family: verdana, arial, helvetica, sans-serif;
 }
 
 p, ol, ul, td {
-  font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
-  // font-family: verdana, arial, helvetica, sans-serif;
+    font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
+    // font-family: verdana, arial, helvetica, sans-serif;
 }
 
 
@@ -53,6 +53,13 @@ p, ol, ul, td {
 	background-color: #f4f4f4;
 }
 
+.main_header{
+	-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+	-moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+	box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+   	border-radius: 1px;
+}
+
 .search_input{
 	width:100%; 
     height:34px; 
@@ -63,6 +70,8 @@ p, ol, ul, td {
     font-size:14px; 
     line-height:15px;
     border:1px solid #dbdbdb;
+    -webkit-appearance: none;
+  	border-radius:0;
 }
 
 .category{
@@ -77,22 +86,44 @@ p, ol, ul, td {
 	border-radius:3px;
 }
 
+.category_none{
+	background-color:#fff; 
+	display:inline-block;
+	border:1px solid #dbdbdb;
+	padding:3px 7px; 
+	color:#9d9ea0; 
+	font-weight:bold; 
+	font-size:12px; 
+	-moz-border-radius:3px; 
+	-webkit-border-radius:3px; 
+	border-radius:3px;
+}
+
 .home-float-btn img{
 	display:block; float:right;
 }
 
 .comment_box{
-	border:1px solid #dbdbdb; 
-	color:#4b3d3d; 
-	width:100%; 
-	padding:8px; 
-	height:36px; 
-	font-size:15px; 
-	line-height:17px; 
+	width:100%;
+	height:34px;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box; 
+	border:1px solid #dbdbdb;
+	padding:3px 6px 3px 6px;  
+	color:#666;
+	font-size:14px; 
+    line-height:15px;
 	border:1px solid #dbdbdb; 
-	border-right:none;
+	border-right:none; 
+	-webkit-appearance: none;
+  	border-radius:0; 
+}
+
+.deal_detail td{
+	max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #flash  { -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; background-color:#1c99e8; color:#FFFFFF; font-weight:bold; padding:20px 10px; position:fixed; top:50%; left:50%; margin-left:-110px; margin-top:-30px; text-align:center; width:200px; z-index:990000; opacity:0.8; filter:alpha(opacity=60); font-size:16px; }
