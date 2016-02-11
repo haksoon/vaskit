@@ -1,4 +1,4 @@
-<%= render :partial => "common_partial/header" %>
+<%= render :partial => "common_partial/header_1", :locals => {:title => "투표 결과 상세"} %>
 <div id="asks" style="padding:10px 12px;"></div>
 
 <script type="text/template" id="ask-template">
@@ -12,10 +12,23 @@
 			<span class="category_none">관심사 미설정</span>
 		</div>
 		{{ } }}
+		{{ price = 0 }}
+		{{ if (ask.left_ask_deal.price != null){ }}
+			{{ price = price + ask.left_ask_deal.price}}
+		{{ } }}
+		{{ if (ask.right_ask_deal.price != null){ }}
+			{{ price = price + ask.right_ask_deal.price}}
+		{{ } }}
+		{{ price = price/2 }}
+		{{ if (price > 10000){ }}
+			{{ price = Math.round(price/10000) + "만" }}
+		{{ } }}
 		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
-			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" />4.2k 
-			<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />20만 
-			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />15h
+			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" />{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}
+			{{ if (price != 0){ }}
+				<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />{{= price }}
+			{{ } }}
+			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />{{= get_past_time(ask.created_at) }}
 		</span>
 		<div style="text-align:left; padding:9px 80px 9px 12px; position:relative;">
 			{{ if( ask.user){ }}
@@ -43,99 +56,139 @@
 			<span style="float:right; font-size:13px; color:#9b9fa2">{{=ask.right_ask_deal.comment_count}}<img src="/images/home/comment_r.png" style="width:16px; margin:0 0 -2px 4px;"></span>
 		</span>
 		<div style="padding:0 12px;">
-			<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-spacing:2px 0;">
+			<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 				<tr>
-					<th style="width:50%; background-color:#4b3d3d; font-size:12px; color:#fff; padding:2px 0;">
-						CARD A
+					<th style="width:50%;">
+						<p style="margin:0 1px 0 0; background-color:#4b3d3d; font-size:12px; color:#fff; padding:2px 0 2px 12px; text-align:left;">
+							CARD A
+						</p>
+						
 					</th>
-					<th style="width:50%; background-color:#4b3d3d; font-size:12px; color:#fff; padding:2px 0;">
-						CARD B
+					<th style="width:50%;">
+						<p style="margin:0 0 0 1px; background-color:#4b3d3d; font-size:12px; color:#fff; padding:2px 12px 2px 0; text-align:right;">
+							CARD B
+						</p>
 					</th>
 				</tr>
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
-						&nbsp;
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; line-height:12px;">
+							&nbsp;
+						</p>
+						
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
-						&nbsp;
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; line-height:12px;">
+							&nbsp;
+						</p>
 					</td>
 				</tr>
 				{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
-						{{= ask.left_ask_deal.title }}
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+							{{= ask.left_ask_deal.title }}
+						</p>
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
-						{{= ask.right_ask_deal.title }}
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+							{{= ask.right_ask_deal.title }}
+						</p>
 					</td>
 				</tr>
 				{{ } }}
 				{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.left_ask_deal.brand }}
+						</p>
 					</td>
 					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.brand }}
 					</td>
 				</tr>
 				{{ } }}
-				{{ if (ask.left_ask_deal.price != "" && ask.right_ask_deal.price != "" ){ }}
+				{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; color:#ee6e01; font-size:13px; padding:2px 8px;">
-						{{= ask.left_ask_deal.price }}원
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#ee6e01; font-size:13px; padding:2px 8px;">
+						{{= ask.left_ask_deal.price.toLocaleString() }}원
+						</p>
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; color:#ee6e01; font-size:13px; padding:2px 8px;">
-						{{= ask.right_ask_deal.price }}원
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+						{{= ask.right_ask_deal.price.toLocaleString() }}원
+						</p>
 					</td>
 				</tr>
 				{{ } }}
 				{{ if (ask.left_ask_deal.link != null || ask.right_ask_deal.link != null ){ }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; color:#9e9fa1; font-size:13px; padding:2px 8px;">
-						{{= ask.left_ask_deal.link }}
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+						{{= ask.left_ask_deal.link }}&nbsp;
+						</p>
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; color:#9e9fa1; font-size:13px; padding:2px 8px;">
-						{{= ask.right_ask_deal.link }}
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+						{{= ask.right_ask_deal.link }}&nbsp;
+						</p>
 					</td>
 				</tr>
 				{{ } }}
 				{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:12px; padding:2px 8px;">
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.left_ask_deal.spec1 }}
+						</p>
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:12px; padding:2px 8px;">
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.spec1 }}
+						</p>
 					</td>
 				</tr>
 				{{ } }}
 				{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:12px; padding:2px 8px;">
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.left_ask_deal.spec2 }}
+						</p>
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:12px; padding:2px 8px;">
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.spec2 }}
+						</p>
 					</td>
 				</tr>
 				{{ } }}
 				{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:12px; padding:2px 8px;">
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.left_ask_deal.spec3 }}
+						</p>
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; color:#383838; font-size:12px; padding:2px 8px;">
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.spec3 }}
+						</p>
 					</td>
 				</tr>
 				{{ } }}
 				<tr>
-					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
+					<td style="width:50%;">
+						<p style="margin:0 1px 0 0; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						&nbsp;
+						</p>
 					</td>
-					<td style="width:50%; background-color:#f4f4f4; line-height:12px;">
+					<td style="width:50%;">
+						<p style="margin:0 0 0 1px; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						&nbsp;
+						</p>
 					</td>
 				</tr>
 			</table>
@@ -252,7 +305,7 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">		
 				</div>
 			</div>
-			<p style="margin:0; padding:2px 0 6px 14px; font-size:12px; color:#9e9fa1;">@{{=comment.user.string_id}} &nbsp;16.01.28</p>
+			<p style="margin:0; padding:2px 0 6px 14px; font-size:12px; color:#9e9fa1;">@{{=comment.user.string_id}} &nbsp;{{= get_past_time(comment.created_at) }}</p>
 		</div>
 	{{ }else{ }}
 		<div style="width:100%; text-align:right;">
@@ -262,7 +315,7 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_r.png">		
 				</div>
 			</div>
-			<p style="margin:0; padding:2px 14px 6px 0; font-size:12px; color:#9e9fa1;">16.01.28 &nbsp;@{{=comment.user.string_id}}</p>
+			<p style="margin:0; padding:2px 14px 6px 0; font-size:12px; color:#9e9fa1;">{{= get_past_time(comment.created_at) }} &nbsp;@{{=comment.user.string_id}}</p>
 		</div>
 	{{ } }} 
 </script>

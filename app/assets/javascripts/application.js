@@ -59,6 +59,26 @@ _.templateSettings = {
     evaluate: /\{\{(.+?)\}\}/g
 };
 
+function get_past_time(time){
+	var start = new Date(time),
+    end   = new Date(),
+    diff  = new Date(end - start),
+    month  = Math.floor(diff/1000/60/60/24/30),
+    day  = Math.floor(diff/1000/60/60/24),
+    hour = Math.floor(diff/1000/60/60);
+    ret = 0;
+    
+    if (month != 0){
+    	return month + "개월 전";
+    }else if(day != 0){
+    	return day + "d";
+    }else if(hour != 0){
+    	return hour + "h";
+    }else{
+    	return "방금 전";
+    }
+}
+
 
 $( document ).ready(function() {
 	//ie 에서 placeholder 

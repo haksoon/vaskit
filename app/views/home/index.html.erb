@@ -24,10 +24,23 @@
 			<span class="category_none">관심사 미설정	</span>
 		</div>
 		{{ } }}
+		{{ price = 0 }}
+		{{ if (ask.left_ask_deal.price != null){ }}
+			{{ price = price + ask.left_ask_deal.price}}
+		{{ } }}
+		{{ if (ask.right_ask_deal.price != null){ }}
+			{{ price = price + ask.right_ask_deal.price}}
+		{{ } }}
+		{{ price = price/2 }}
+		{{ if (price > 10000){ }}
+			{{ price = Math.round(price/10000) + "만" }}
+		{{ } }}
 		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
-			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" />4.2k 
-			<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />20만 
-			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />15h
+			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" />{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}
+			{{ if (price != 0){ }}
+				<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />{{= price }}
+			{{ } }}
+			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />{{= get_past_time(ask.created_at) }}
 		</span>
 		<div style="text-align:left; padding:9px 80px 9px 12px; position:relative;">
 			{{ if( ask.user){ }}
