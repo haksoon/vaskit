@@ -29,6 +29,11 @@ Rails.application.routes.draw do
   end
   resources :visitors
   resources :votes
+  resources :search do
+    collection do
+      get 'get_keyword'
+    end
+  end
   
   resources :admin
   get "/admin/table/:table_name", :to => "admin#table"

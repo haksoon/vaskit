@@ -22,3 +22,4 @@ Gemfile.lock
 !/log/.keep
 /tmp
 /public/paperclip/*
+/public/assets/*

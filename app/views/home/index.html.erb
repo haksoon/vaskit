@@ -1,4 +1,5 @@
 <%= render :partial => "common_partial/header" %>
+<%= render :partial => "common_partial/search" %>
 <div id="asks" style="padding:9px 12px;"></div>
 <div class="home-float-btn">
 	<a href="/asks/new"><img src="/images/home/writing.png"></a>
@@ -122,7 +123,6 @@
 		var ask = asks[i]
         $('#asks').append(askTemplate({ask: ask}));
 	}
-	var k;
 	function vote_ask_deal(ask_deal_id, is_left){
 		$.ajax({
 	        url: "/votes.json",
@@ -133,7 +133,6 @@
 	            return false;
 	        },
 	        success: function(data){
-	        	k = data;
 	        	my_votes.push(data.vote);
 	        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 	        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));

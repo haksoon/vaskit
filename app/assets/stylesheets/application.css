@@ -51,6 +51,7 @@ p, ol, ul, td {
 	padding:0; 
 	text-align:center;
 	background-color: #f4f4f4;
+	position:relative;
 }
 
 .main_header{
@@ -69,7 +70,7 @@ p, ol, ul, td {
     color:#666; 
     font-size:14px; 
     line-height:15px;
-    border:1px solid #dbdbdb;
+    border:1px solid #ee6e01;
     -webkit-appearance: none;
   	border-radius:0;
 }
@@ -124,6 +125,10 @@ p, ol, ul, td {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.highlight {
+    color: #ee6e01;
 }
 
 #flash  { -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; background-color:#1c99e8; color:#FFFFFF; font-weight:bold; padding:20px 10px; position:fixed; top:50%; left:50%; margin-left:-110px; margin-top:-30px; text-align:center; width:200px; z-index:990000; opacity:0.8; filter:alpha(opacity=60); font-size:16px; }

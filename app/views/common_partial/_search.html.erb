@@ -1,0 +1,111 @@
+<div id="search_bg" onclick="search_input_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:1; opacity:0.6; display:none;"></div>
+<div id="search_overlay" style="width:inherit; position:fixed;top:0; z-index:2; display:none; background:#f4f4f4;">
+	<table class="main_header" cellspacing="0" cellpadding="0" style="background-color:#4b3d3d; width:100%; overflow:visible; height:42px;">
+		<tr>
+			<td style="width:40px;">
+				<a href="/etc/menu"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_on.png" /></a>
+			</td>
+			<td style="text-align:center;">
+				<p style="font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">VASKIT</p>	
+			</td>
+			<td style="width:40px;">
+				<% if current_user %>
+					<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; margin-bottom:-1px;" src="/images/header/my.png" /></a>
+				<% else %>
+					<a href="/"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
+				<% end %>
+			</td>
+		</tr>
+	</table>
+	<table cellspacing="0" cellpadding="0" style="width:100%; margin-top:2px;">
+		<tr>
+			<td style="">
+				<a href="#" onclick="search_input_off(); return false;"><img style="width:16px; padding:10px 10px 10px 12px; margin-bottom:-5px;" src="/images/common/back_on.png"></a>
+			</td>
+			<td style="width:100%; position:relative; padding:8px 14px 9px 0;">
+				<input id="search_input" type="text" style="" class="search_input" />
+				<span style="position:absolute; right:14px; top:9px;"><img style="width:20px; padding:6px;" src="/images/common/search_on.png"></span>
+				<a href="#" onclick="keyword_reset(); return false;" style="position:absolute; right:38px; top:10px;"><img style="width:18px; padding:6px;" src="/images/common/close_btn.png"></a>
+			</td>
+		</tr>
+	</table>
+	<div id="search_result" style="width:100%; background:#fff; border-top:1px solid #9e9fa1; text-align:left; max-height:200px; overflow-y: auto;"></div>
+</div>
+
+<script type="text/template" id="search-result-template">
+		{{ if(type == "user"){ }}
+			<a href="/?keyword={{=id}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
+				@ {{= keyword }}
+			</a>
+		{{ }else if(type == "hash_tag"){ }}
+			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
+				# {{= keyword }}
+			</a>
+		{{ }else if(type == "ask_deal"){ }}
+			<a href="/?keyword={{=id}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
+				ⓟ {{= keyword }}
+			</a>
+		{{ }else if(type == "brand"){ }}
+			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
+				ⓑ {{= keyword }}
+			</a>
+		{{ } }} 
+</script>
+
+<script>
+
+	function search_input_on(){
+		$("#search_overlay").show();
+		$("#search_bg").show();
+		$('#search_input').focus().select();
+		
+	}
+	
+	function search_input_off(){
+		$("#search_overlay").hide();
+		$("#search_bg").hide();
+		$('#search_input').val("");
+	}
+	
+	function keyword_reset(){
+		$('#search_input').val("");
+		$('#search_result').html("");
+	}
+	
+	$('#search_input').keyup(function() {
+		$.ajax({
+	        url: "/search/get_keyword.json",
+	        type: 'GET',
+	        data: {'keyword': $('#search_input').val() },
+	        dataType: 'json',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	$('#search_result').html("");
+	        	var searchResultTemplate = _.template( $('#search-result-template').html() );
+	        	
+	        	$.each(data.users, function( index, user ) {
+	        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: user.id}));
+				});
+				
+				$.each(data.hash_tags, function( index, value ) {
+					$('#search_result').append(searchResultTemplate({keyword: 'hash_tag', type: 'hash_tag', id: null}));
+				});
+				
+				$.each(data.ask_deals, function( index, ask_deal ) {
+					$('#search_result').append(searchResultTemplate({keyword: ask_deal.title, type: 'ask_deal', id: ask_deal.id}));
+				});
+				
+				if (data.brand){
+					$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
+				}
+				$("#search_result").highlight($('#search_input').val());
+	        },
+	        beforeSend: function(){
+	        },
+	        complete: function(){
+	        }
+		});
+	});
+</script>
