@@ -31,7 +31,6 @@ class AsksController < ApplicationController
   # POST /asks
   # POST /asks.json
   def create
-    debugger
     left_deal_params = params[:left_deal]
     left_image = nil
     left_deal_is_modify = false
