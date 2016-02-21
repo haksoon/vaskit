@@ -14,6 +14,11 @@
  *= require_self
  */
 
+html{
+	height: 100%;
+    min-height: 100%;
+}
+
 a:link {text-decoration:none;}
 a:visited {text-decoration:none;}
 a:hover {text-decoration:none;}
@@ -22,6 +27,8 @@ a:active {text-decoration:none;}
 img{border:none;}
 
 body {
+	height: 100%;
+    min-height: 100%;
 	background-color:#f3f4f5; margin:0 auto;
     font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
     // font-family: verdana, arial, helvetica, sans-serif;
