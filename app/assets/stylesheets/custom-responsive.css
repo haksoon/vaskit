@@ -25,7 +25,7 @@
 	.home-float-btn{
 		position:fixed; 
 		 right:0; 
-		 bottom:30px;
+		 bottom:0px;
 	}
 	.home-float-btn img{
 		width:48px;
@@ -45,8 +45,8 @@
 	.home-float-btn{
 		 position:fixed; 
 		 right:50%; 
-		 margin-right:-320px; 
-		 bottom:30px;
+		 margin-right:-440px; 
+		 bottom:0px;
 	}
 	
 	.home-float-btn img{

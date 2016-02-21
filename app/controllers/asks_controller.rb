@@ -26,6 +26,8 @@ class AsksController < ApplicationController
 
   # GET /asks/1/edit
   def edit
+    @left_ask_deal = @ask.left_ask_deal
+    @right_ask_deal = @ask.right_ask_deal
   end
   
   # POST /asks
@@ -79,7 +81,6 @@ class AsksController < ApplicationController
       unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
         right_deal_is_modify = true
       end  
-      
     end
     
     right_ask_deal = AskDeal.create(:deal_id => right_deal.id, :user_id => current_user.id, :title => right_deal_params[:title], :brand => right_deal_params[:brand], :link => right_deal.link, 
@@ -92,13 +93,93 @@ class AsksController < ApplicationController
     
     @ask = Ask.create(ask_params)
     
+    hash_tags = @ask.message.scan(/#\S+/)
+    hash_tags.each do |hash_tag|
+      hash_tag = hash_tag.tr("#","").tr(",","")
+      HashTag.create(:ask_id => @ask.id, :keyword => hash_tag)
+    end
+    
     redirect_to root_path
   end
 
   # PATCH/PUT /asks/1
   # PATCH/PUT /asks/1.json
   def update
+    
+    
+    left_deal_params = params[:left_deal]
+    left_image = nil
+    left_deal_is_modify = false
+    
+    left_preview_image = PreviewImage.find_by_id(left_deal_params[:image_id]) 
+    if left_preview_image
+      left_image = left_preview_image.image
+      @ask.left_ask_deal.update(:image => left_image)
+    end
+    
+    if left_deal_params[:deal_id].blank?
+      left_deal_params.except!("deal_id")
+      left_deal_params.except!("link")
+      left_deal_params[:is_modify] = true
+    else
+      left_deal = Deal.find(left_deal_params[:deal_id])
+      if left_image.blank?
+        left_image = left_deal.image
+      else
+        left_deal_is_modify = true
+      end
+      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
+        left_deal_is_modify = true
+      end
+      @ask.left_ask_deal.update(:image => left_image)
+      left_deal_params[:image] = left_image 
+    end
+    left_deal_params.except!("image_id")
+    left_deal_params.except!("image")
+    unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(left_deal_params)
+    @ask.left_ask_deal.update(unlocked_params)
+    
+    
+    right_deal_params = params[:right_deal]
+    right_image = nil
+    right_deal_is_modify = false
+    
+    right_preview_image = PreviewImage.find_by_id(right_deal_params[:image_id]) 
+    if right_preview_image
+      right_image = right_preview_image.image
+      @ask.right_ask_deal.update(:image => right_image)
+    end
+    
+    if right_deal_params[:deal_id].blank?
+      right_deal_params.except!("deal_id")
+      right_deal_params.except!("link")
+      right_deal_params[:is_modify] = true
+    else
+      right_deal = Deal.find(right_deal_params[:deal_id])
+      if right_image.blank?
+        right_image = right_deal.image
+      else
+        right_deal_is_modify = true
+      end
+      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
+        right_deal_is_modify = true
+      end
+      @ask.right_ask_deal.update(:image => right_image)
+      right_deal_params[:image] = right_image 
+    end
+    right_deal_params.except!("image_id")
+    right_deal_params.except!("image")
+    unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(right_deal_params)
+    @ask.right_ask_deal.update(unlocked_params)
+    
+    
+    
     @ask.update(ask_params)
+    hash_tags = @ask.message.scan(/#\S+/)
+    hash_tags.each do |hash_tag|
+      hash_tag = hash_tag.tr("#","").tr(",","")
+      HashTag.create(:ask_id => @ask.id, :keyword => hash_tag) if HashTag.where(:ask_id => @ask.id, :keyword => hash_tag).blank? 
+    end
     
     redirect_to "/asks/#{@ask.id}"
   end

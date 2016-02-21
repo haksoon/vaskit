@@ -10,4 +10,9 @@ class EtcController < ApplicationController
   def personal_information
   end
   
+  
+  def user
+    
+  end
+  
 end

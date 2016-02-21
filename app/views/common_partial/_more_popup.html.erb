@@ -1,0 +1,115 @@
+<a id="more_popup_bg" href="#" onclick="hide_more_popup(); return false;" style="display:block; position:fixed;left:0; top:0; width:100%; height:100%; background-color:black; z-index:12; opacity:0.6; display:none;"></a>
+<div id='more_popup' style='width:240px; z-index:13; position:fixed; left:50%; top:50%; margin-left:-120px; margin-top:-110px; overflow-y:hidden; overflow-x:hidden; display:none;'>
+	<a href="#" onclick="hide_more_popup(); return false;" style="position:absolute; right:11px; top:11px;"><img style="width:18px;" src="/images/header/menu_off.png" /></a>
+	<p id="more_title" style="background-color:#4b3d3d; font-size:15px; color:#FFF; font-weight:bold; height:40px; line-height:40px; margin:0;">더보기</p>
+	<div id="more_popup_sub">
+		<a id="ask_edit_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">수정하기</a>
+		<a href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">신고하기</a>
+		<a href="#" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; font-size:15px;">질문 종료하기</a>
+	</div>
+	<div id="more_popup_report" style="text-align:left; display:none;">
+		<a id="report_btn_1" href="#"  onclick="set_report_type(1); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px;">
+			<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 12px" /> 구매결정과는 무관한 내용이군요
+		</a>
+		<a id="report_btn_2" href="#" onclick="set_report_type(2); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px;">
+			<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 12px" /> 광고성, 홍보성이 짙은 내용이군요
+		</a>
+		<a id="report_btn_3" href="#"  onclick="set_report_type(3); return false;" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; border-bottom:1px solid #dbdbdb; font-size:13px;">
+			<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 12px" /> 비윤리적인 내용은 보고싶지 않아요
+		</a>
+ 		<div style="background:#f4f4f4; line-height:20px; padding:12px 12px 8px 12px;">
+			<a id="report_btn_4" href="#" onclick="set_report_type(4); return false;" style="display:block; color:#383838; font-size:13px;">
+				<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 0px" /> 직접 입력하겠어요
+			</a>
+			<textarea placeholder="선택 후 입력 가능합니다." class="ask_message_input" name="ask[report]" id="ask_report_message"></textarea>
+		</div>
+		<a id="report_submit_btn" href="#" onclick="submit_report(); return false;" style="display:block; background:#fff; line-height:40px; color:#383838; border-top:1px solid #dbdbdb; text-align:center; font-size:13px;">
+			<img src="/images/common/submit_btn.png" style="width:16px; margin:0 2px -2px 0;"/> 신고
+		</a>
+	</div>
+	
+</div>
+
+<script>
+
+	var report_type;
+	function show_more_popup(ask_id){
+		$("#ask_edit_btn").attr("href","/asks/"+ask_id+"/edit");
+		$("#report_submit_btn").attr("onclick", "submit_report("+ask_id+"); return false;");
+		$("#more_popup_bg").show();
+		$("#more_popup").show();
+	}
+	
+	function hide_more_popup(){
+		$("#more_popup_sub").show();
+		$("#more_popup_report").hide();
+		$("#more_popup_bg").hide();
+		$("#more_popup").hide();
+		$("#more_title").html("더보기");
+		$("#more_popup").css("margin-top", "-110px");
+		report_type_reset()
+	}
+	
+	function show_report_popup(){
+		$("#more_popup_sub").hide();
+		$("#more_popup_report").show();
+		$("#more_title").html("신고하기");
+		$("#more_popup").css("margin-top", "-190px");
+	}
+	
+	function set_report_type(report_type_id){
+		if(report_type_id != 4){
+			$("#ask_report_message").val("");
+			$('#ask_report_message').prop('disabled',true);
+		}else{
+			$('#ask_report_message').prop('disabled',false)
+		}
+		report_type_reset();
+		report_type = report_type_id;
+		$("#report_btn_"+report_type_id+" img").attr("src","/images/home/check_on.png");
+	}
+	
+	function report_type_reset(){
+		report_type = null;
+		$("#report_btn_1 img").attr("src","/images/home/check_off.png");
+		$("#report_btn_2 img").attr("src","/images/home/check_off.png");
+		$("#report_btn_3 img").attr("src","/images/home/check_off.png");
+		$("#report_btn_4 img").attr("src","/images/home/check_off.png");
+	}
+	
+	function submit_report(ask_id){
+		var report_message = $("#ask_report_message").val();
+		if (report_type == null){
+			notify("신고 항목을 선택해주세요");
+			return;
+		}else if(report_type == 4 && report_message == ""){
+			notify("신고 내용을 입력해주세요");
+			return;
+		}
+		$.ajax({
+	        url: "/reports.json",
+	        type: 'POST',
+	        data: {'traget': "ask", 'target_id':ask_id, 'report_type':report_type, 'message':$("#ask_report_message").val() },
+	        dataType: 'json',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	hide_more_popup();
+	        	if (data.already_report){
+	        		notify("이미 신고한 질문입니다");
+	        	}else{
+	        		notify("신고 완료되었습니다");
+	        	}
+	        },
+	        beforeSend: function(){
+	       		$(".loading").show();
+	        },
+	        complete: function(){
+	        	$(".loading").hide();
+	        }
+		});
+		
+	}
+	
+</script>

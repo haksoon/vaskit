@@ -34,9 +34,17 @@ Rails.application.routes.draw do
       get 'get_keyword'
     end
   end
+  resources :home do
+    collection do
+      get 'set_category'
+    end
+  end
   
+  resources :reports
   resources :admin
   get "/admin/table/:table_name", :to => "admin#table"
+  
+  get "/:string_id", :to => "etc#user"
   
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

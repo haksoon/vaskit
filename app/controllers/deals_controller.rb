@@ -12,9 +12,9 @@ class DealsController < ApplicationController
   
   #GET /deals/get_naver_deals.json
   def get_naver_deals
-    shop_doc  = Nokogiri::XML(open(URI.encode("http://openapi.naver.com/search?key=fd787e8dbbd5217bd4b704d8c1b85e56&query=#{params[:keyword]}&display=7&start=1&target=shop&sort=sim")).read)
+    shop_doc  = Nokogiri::XML(open(URI.encode("http://openapi.naver.com/search?key=fd787e8dbbd5217bd4b704d8c1b85e56&query=#{params[:keyword]}&display=30&start=1&target=shop&sort=sim")).read)
     shop_result = Hash.from_xml(shop_doc.to_s)
-    image_doc  = Nokogiri::XML(open(URI.encode("http://openapi.naver.com/search?key=fd787e8dbbd5217bd4b704d8c1b85e56&query=#{params[:keyword]}&display=7&start=1&target=image&sort=sim")).read)
+    image_doc  = Nokogiri::XML(open(URI.encode("http://openapi.naver.com/search?key=fd787e8dbbd5217bd4b704d8c1b85e56&query=#{params[:keyword]}&display=51&start=1&target=image&sort=sim")).read)
     image_result = Hash.from_xml(image_doc.to_s) 
     render :json => {:shop_result => shop_result, :image_result => image_result}
   end

@@ -1,4 +1,5 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "투표 결과 상세"} %>
+<%= render :partial => "common_partial/more_popup" %>
 <div id="asks" style="padding:10px 12px;"></div>
 
 <script type="text/template" id="ask-template">
@@ -34,7 +35,7 @@
 			{{ if( ask.user){ }}
 				<p style="margin:0; color:#998675; font-size:17px;">@{{= ask.user.string_id }}</p>
 			{{ } }}
-			<p style="margin:2px 0 0 0; color:#383838; font-size:13px;">
+			<p id="ask_{{=ask.id}}_message" style="margin:2px 0 0 0; color:#383838; font-size:13px;">
 				{{ if( ask.message){ }}
 					{{= ask.message }}
 				{{ }else{ }}
@@ -43,7 +44,7 @@
 			</p>
 			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
 				<a href="#"><img src="/images/home/share.png" style="width:24px;" /></a> 
-				<a href="#"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a> 
+				<a href="#" onclick="show_more_popup({{=ask.id}});"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a> 
 			</span>
 		</div>
 		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
@@ -117,7 +118,7 @@
 						</p>
 					</td>
 					<td style="width:50%;">
-						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#ee6e01; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.price.toLocaleString() }}원
 						</p>
 					</td>
@@ -329,7 +330,15 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
         $('#asks').append(askTemplate({ask: ask}));
+        var hash_tags = ask.message.match(/#(\S+)/g);
+        $.each(hash_tags, function( index, hash_tag ) {
+		  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+		  	hash_tag = hash_tag.replace('#', '').replace("?","")
+			$("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
+		});
 	}
+	
+	
 	function vote_ask_deal(ask_deal_id, is_left){
 		$.ajax({
 	        url: "/votes.json",

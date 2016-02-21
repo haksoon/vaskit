@@ -1,27 +1,24 @@
-<div style="width:100%;">
-	<table class="main_header header_shadow" cellspacing="0" cellpadding="0" style="background-color:#4b3d3d; width:100%; overflow:visible; height:47px;">
+<table class="main_header header_shadow" cellspacing="0" cellpadding="0" style="position:fixed; top:0; background-color:#4b3d3d; width:inherit; overflow:visible; height:47px; z-index:1;">
+	<tr>
+		<td style="width:60px;">
+			<a href="#" onclick="category_on(); return false;"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_on.png" /></a>
+		</td>
+		<td style="text-align:center;">
+			<a href="/" style="display:block; font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">VASKIT</a>	
+		</td>
+		<td style="width:60px;">
+			<% if current_user %>
+				<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; margin-bottom:-1px;" src="/images/header/my.png" /></a>
+			<% else %>
+				<a href="/"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
+			<% end %>
+		</td>
+	</tr>
+</table>
+<div style="width:100%; margin-top:47px;">
+	<table cellspacing="0" cellpadding="0" style="width:100%;">
 		<tr>
-			<td style="width:40px;">
-				<a href="/etc/menu"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_on.png" /></a>
-			</td>
-			<td style="text-align:center;">
-				<a href="/" style="display:block; font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">VASKIT</a>	
-			</td>
-			<td style="width:40px;">
-				<% if current_user %>
-					<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; margin-bottom:-1px;" src="/images/header/my.png" /></a>
-				<% else %>
-					<a href="/"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
-				<% end %>
-			</td>
-		</tr>
-	</table>
-	<table cellspacing="0" cellpadding="0" style="width:100%; margin-top:2px;">
-		<tr>
-			<td style="">
-				<a href="#"><img style="width:20px; padding:10px 6px 10px 12px; margin-bottom:-5px;" src="/images/header/interest_on.png"></a>
-			</td>
-			<td onclick="search_input_on(); return false;" style="width:100%; position:relative; padding:8px 14px 9px 0;">
+			<td onclick="search_input_on(); return false;" style="width:100%; position:relative; padding:8px 14px 9px 14px;">
 				<p style="margin:0; width:100%; height:32px; background-color:#fff; border:1px solid #dbdbdb"></p>
 				<span style="position:absolute; right:14px; top:9px;"><img style="width:20px; padding:6px;" src="/images/header/search.png"></span>
 			</td>
