@@ -34,7 +34,7 @@
 			<tr>
 				<td style="text-align:left; width:35%;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명(8자 이내)", :class => "ask_text_field" %>
+						<%= text_field_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field" %>
 					</div>
 				</td>
 				<td style="width:30%;">
@@ -44,14 +44,14 @@
 				</td>
 				<td style="text-align:right; width:35%;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명(8자 이내)", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field" %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드(8자 이내)", :class => "ask_text_field" %>
+						<%= text_field_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field" %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
@@ -61,24 +61,24 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드(8자 이내)", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field" %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격(8자 이내)", :class => "ask_text_field" %>
+						<%= text_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 2px; font-size:13px; color:#383838; padding:4px;">
-						브랜드
+						판매가격
 					</div>
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격(8자 이내)", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
 					</div>
 				</td>
 			</tr>
@@ -161,7 +161,7 @@
 				<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff;">
 					<tr>
 						<td style="width:100%;">
-							<input id="deal_search_keyword" type="text" class="comment_box" placeholder="검색어를 입력해주세요." style="" />
+							<input id="deal_search_keyword" type="text" class="comment_box" placeholder="제품명을 입력해주세요." style="" />
 						</td>
 						<td>
 							<a id="deal_search_btn" href="#" style="width:50px; height:34px; line-height:34px; background-color:#ee6e01; display:inline-block; color:#fff; font-size:14px;">입력</a>
@@ -183,7 +183,7 @@
 							</td>
 						</tr>
 					</table>
-					<div style="background-color:#fff; border:1px solid #dbdbdb; border-top:none; overflow-y:auto; min-height:150px; max-height:340px;">
+					<div id="search_result_div" style="background-color:#fff; border:1px solid #dbdbdb; border-top:none; overflow-y:auto; min-height:150px; max-height:340px;">
 						<div id="naver_deals"></div>
 						<div id="naver_images" style="display:none;"></div>
 					</div>
@@ -197,25 +197,26 @@
 <table cellspacing="0" cellpadding="0" style="position:fixed; bottom:0; width:inherit; overflow:visible; z-index:1; background-color:#fff; border-top:1px solid #dbdbdb;">
 	<tr>
 		<td style="width:50%;">
-			<a href="#" onclick="back_button(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px;">
-				<img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/common/backward_btn.png" />
+			<a href="#" onclick="back_button(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px; border-right:1px solid #dbdbdb;">
+				<img src="/images/common/cancel_btn.png" style="width:14px; margin-bottom:-1px;" />
 				취소
 			</a>
 		</td>
 		<td style="width:50%;">
 			<% if @ask.id %>
 				<a href="#" onclick="edit_form(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px;">
+					<img src="/images/common/submit_btn.png" style="width:16px;" />
 					수정하기
 				</a>
 			<% else %>
 				<a href="#" onclick="submit_form(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px;">
+					<img src="/images/common/submit_btn.png" style="width:16px;" />
 					질문 제출하기
 				</a>
 			<% end %>
 		</td>
 	</tr>
 </table>
-
 
 <script type="text/template" id="naver-deal-template">
 	<table cellspacing="0" cellpadding="0" style="width:100%;">
@@ -296,6 +297,7 @@
 	}
 	
 	function show_naver_deals(){
+		$("#search_result_div").scrollTop(0);
 		$("#naver_deals").show();
 		$("#naver_images").hide();
 		$("#naver_images_btn").css("border-bottom","1px solid #dbdbdb");
@@ -307,6 +309,7 @@
 	}
 	
 	function show_naver_images(){
+		$("#search_result_div").scrollTop(0);
 		$("#naver_deals").hide();
 		$("#naver_images").show();
 		$("#naver_deals_btn").css("border-bottom","1px solid #dbdbdb");
@@ -332,7 +335,7 @@
 		        	var naverImageTemplate = _.template( $('#naver-image-template').html() );
 				    $('#naver_images').html(naverImageTemplate({image_items: image_items, is_left: is_left}));
 	        	}else{
-	        		$('#naver_images').html("<p style='line-height:150px; color:#383838;'>이미지 결과가 없습니다.</p>");
+	        		$('#naver_images').html("<p style='line-height:150px; color:#383838;'>이미지 검색결과가 없습니다.</p>");
 	        	}
 	        	
 	        	items = data.shop_result.rss.channel.item;
@@ -340,12 +343,15 @@
 		        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
 				    $('#naver_deals').html( naverDealTemplate({item: items, is_left: is_left}) );
 	        	}else{
-	        		$('#naver_deals').html("<p style='line-height:150px; color:#383838;'>상품 결과가 없습니다.</p>");
+	        		$('#naver_deals').html("<p style='line-height:150px; color:#383838;'>상품 검색결과가 없습니다.</p>");
 	        	}
+	        	show_naver_deals();
 	        },
 	        beforeSend: function(){
+	        	$(".loading").show();
             },
             complete: function(){
+            	$(".loading").hide();
             }
 		});
 	}
@@ -386,8 +392,10 @@
 	        	hide_search_deal_popup();
 	        },
 	        beforeSend: function(){
+	        	$(".loading").show();
             },
             complete: function(){
+            	$(".loading").hide();
             }
 		});
 	}
@@ -419,8 +427,10 @@
 	        	hide_search_deal_popup();
 	        },
 	        beforeSend: function(){
+	        	$(".loading").show();
             },
             complete: function(){
+            	$(".loading").hide();
             }
 		});
 	}

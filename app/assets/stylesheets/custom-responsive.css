@@ -24,11 +24,11 @@
 	}
 	.home-float-btn{
 		position:fixed; 
-		 right:0; 
-		 bottom:0px;
+		 right:20px; 
+		 bottom:14px;
 	}
 	.home-float-btn img{
-		width:48px;
+		width:70px;
 	}
 	.vote-result-td{
 		 width:42%;
@@ -45,15 +45,24 @@
 	.home-float-btn{
 		 position:fixed; 
 		 right:50%; 
-		 margin-right:-440px; 
-		 bottom:0px;
+		 margin-right:-400px; 
+		 bottom:10px;
 	}
 	
 	.home-float-btn img{
-		width:60px;
+		width:70px;
 	}
 	.vote-result-td{
 		 width:46%;
+	}
+}
+
+@media (min-width: 641px) and (max-width: 800px){
+	.home-float-btn{
+		 position:fixed; 
+		 right:50%; 
+		 margin-right:-300px; 
+		 bottom:10px;
 	}
 }
 

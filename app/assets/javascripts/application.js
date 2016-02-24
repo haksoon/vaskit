@@ -17,14 +17,20 @@
 
 
 function get_image_url(data, model_name, extention){
-	var image_url = ""; //static url
-	image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
-	var image_file_name = data.image_file_name;
-	if(image_file_name.indexOf(".") == -1){
-		image_file_name = image_file_name + ".";
-	} 
-  	image_url += image_file_name;
-  	return image_url;
+	
+	try {
+		var image_url = ""; //static url
+		image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+		var image_file_name = data.image_file_name;
+		if(image_file_name.indexOf(".") == -1){
+			image_file_name = image_file_name + ".";
+		} 
+	  	image_url += image_file_name;
+	  	return image_url;
+	}
+	catch(err) {
+	    return "/images/ask/card_a_upload.png";
+	}
 }
 
 function notify(flash_message){
@@ -71,16 +77,19 @@ function get_past_time(time){
     end   = new Date(),
     diff  = new Date(end - start),
     month  = Math.floor(diff/1000/60/60/24/30),
+   	week = Math.floor(diff/1000/60/60/24/7),
     day  = Math.floor(diff/1000/60/60/24),
     hour = Math.floor(diff/1000/60/60);
     ret = 0;
     
     if (month != 0){
     	return month + "개월 전";
+    }else if(week != 0){
+    	return week + "주 전";
     }else if(day != 0){
-    	return day + "d";
+    	return day + "일 전";
     }else if(hour != 0){
-    	return hour + "h";
+    	return hour + "시간 전";
     }else{
     	return "방금 전";
     }

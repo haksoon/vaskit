@@ -33,7 +33,14 @@ class DealsController < ApplicationController
     else
       naver_shop_link = "http://shopping.naver.com" + open(naver_deal[:link]).read.split("'")[1]
       naver_shop_doc = Nokogiri::HTML(open(naver_shop_link).read, nil, 'utf-8')
-      brand = ActionView::Base.full_sanitizer.sanitize(naver_shop_doc.css(".tit span")[2].to_s).tr("브랜드 ","")
+      
+      brand1 = naver_shop_doc.css(".tit span")[0].text
+      brand2 = naver_shop_doc.css(".tit span")[2].text
+      brand = ActionView::Base.full_sanitizer.sanitize(brand1.tr("브랜드 ","")) if brand1.include?("브랜드") 
+      brand = ActionView::Base.full_sanitizer.sanitize(brand2.tr("브랜드 ","")) if brand.blank? && brand2.include?("브랜드")
+      brand = ActionView::Base.full_sanitizer.sanitize(brand1.tr("제조사 ","")) if brand.blank? && brand1.include?("제조사") 
+      brand = ActionView::Base.full_sanitizer.sanitize(brand2.tr("제조사 ","")) if brand.blank? && brand2.include?("제조사")
+      
       naver_passing_page_link = naver_shop_doc.css(".mall_area div span a")[0].attr("href")
       naver_passing_page = Nokogiri::HTML(open(naver_passing_page_link).read, nil, 'utf-8')
       if naver_passing_page.to_s.include?("targetUrl")  #외부 쇼핑몰

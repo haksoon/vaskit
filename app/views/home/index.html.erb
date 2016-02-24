@@ -5,13 +5,7 @@
 
 <div id="asks" style="padding:9px 12px;"></div>
 <div class="home-float-btn">
-	<% if session[:view] == "mobile" %>
-		<a href="/asks/new"><img src="/images/home/writing.png"></a>
-		<a href="#"><img src="/images/home/up.png"></a>
-	<% else %>
-		<a href="#"><img src="/images/home/up.png"></a>
-		<a href="/asks/new"><img src="/images/home/writing.png"></a>
-	<% end %>
+	<a href="/asks/new"><img src="/images/home/writing.png"></a>
 </div>
 <div style="color:#555; font-size:14px; line-height:22px; text-align:left; padding:20px; ">
 	로그인 완료. 유저 이메일 : <%= current_user.email %>
@@ -62,8 +56,10 @@
 				{{ } }}
 			</p>
 			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
-				<a href="#"><img src="/images/home/share.png" style="width:24px;" /></a> 
-				<a href="#" onclick="show_more_popup({{=ask.id}});"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a> 
+				<a href="#"><img src="/images/home/share.png" style="width:24px;" /></a>
+				{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }} 
+				<a href="#" onclick="show_more_popup({{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }});"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
+				{{ } }}
 			</span>
 		</div>
 		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
@@ -86,28 +82,36 @@
 		<tr>
 			<td style="width:50%; position:relative;">
 		  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
-		  		{{ if( already_vote.length == 0 ){ }}
+		  		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 		  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
 		  		{{ } }}
 			</td>
 			<td style="width:50%; position:relative;">
 				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
-				{{ if( already_vote.length == 0 ){ }}
+				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
 				{{ } }}
 			</td>
 		</tr>
 	</table>
-	{{ if( already_vote.length != 0 ){ }}
-		{{ if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+	{{ if( ask.user_id == current_user_id || already_vote.length != 0 ){ }}
+		{{ if (ask.user_id == current_user_id){ }}
+			<div style="background:url('/images/home/vote_result_none.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
+		{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
 			<div style="background:url('/images/home/vote_result_l.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
 		{{ }else{ }}
 			<div style="background:url('/images/home/vote_result_r.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
 		{{ } }}
 		
-		{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
-		{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
-		{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+		{{ if (ask.user_id == current_user_id){ }}
+			{{ left_ratio = 0 }}
+			{{ right_ratio = 0 }}
+		{{ }else{ }}
+			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
+			{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
+			{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+		{{ } }}
+		
 		
 		{{left_background = "#fff"}}
 		{{right_background = "#fff"}}
@@ -136,7 +140,7 @@
 
 
 <script> 
-
+	var current_user_id = <%= current_user.id if current_user %>;
 	var asks = <%= raw @asks.to_json %>;
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var askTemplate = _.template( $('#ask-template').html() );

@@ -8,6 +8,5 @@ class CreateAskCompletes < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    remove_column :asks, :be_completed, :boolean
   end
 end

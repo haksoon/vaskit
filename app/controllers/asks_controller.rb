@@ -93,6 +93,11 @@ class AsksController < ApplicationController
     
     @ask = Ask.create(ask_params)
     
+    # 카테고리가 없는 경우 카테고리 추가
+    if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
+      UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
+    end
+    
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")
@@ -171,6 +176,12 @@ class AsksController < ApplicationController
     @ask.right_ask_deal.update(unlocked_params)
     
     @ask.update(ask_params)
+    
+    # 카테고리가 없는 경우 카테고리 추가
+    if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
+      UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
+    end
+    
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")
@@ -188,8 +199,10 @@ class AsksController < ApplicationController
   #GET /asks/:id/create_complete
   def create_complete
     if AskComplete.where(:user_id => current_user.id, :ask_id => @ask.id).blank? #이미 종료한 경우
+      @ask.update(:be_completed => true)
       AskComplete.create(:user_id => current_user.id, :ask_id => @ask.id, :ask_deal_id => params[:ask_deal_id], :star_point => params[:star_point])
     end
+    
     redirect_to root_path
   end
   

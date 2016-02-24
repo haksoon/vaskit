@@ -4,7 +4,7 @@
 	<p id="more_title" style="background-color:#4b3d3d; font-size:15px; color:#FFF; font-weight:bold; height:40px; line-height:40px; margin:0;">더보기</p>
 	<div id="more_popup_sub">
 		<a id="ask_edit_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">수정하기</a>
-		<a href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">신고하기</a>
+		<a id="ask_report_btn" href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">신고하기</a>
 		<a id="ask_complete_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; font-size:15px;">질문 종료하기</a>
 	</div>
 	<div id="more_popup_report" style="text-align:left; display:none;">
@@ -33,7 +33,13 @@
 <script>
 
 	var report_type;
-	function show_more_popup(ask_id){
+	function show_more_popup(ask_id, ask_user_id, current_user_id){
+		if (ask_user_id == current_user_id){
+			$("#ask_report_btn").hide();
+		}else{
+			$("#ask_edit_btn").hide();
+			$("#ask_complete_btn").hide();
+		}
 		$("#ask_edit_btn").attr("href","/asks/"+ask_id+"/edit");
 		$("#report_submit_btn").attr("onclick", "submit_report("+ask_id+"); return false;");
 		$("#ask_complete_btn").attr("href", "/asks/"+ask_id+"/ask_complete");
@@ -43,6 +49,9 @@
 	}
 	
 	function hide_more_popup(){
+		$("#ask_edit_btn").show();
+		$("#ask_report_btn").show();
+		$("#ask_complete_btn").show();
 		$("#more_popup_sub").show();
 		$("#more_popup_report").hide();
 		$("#more_popup_bg").hide();

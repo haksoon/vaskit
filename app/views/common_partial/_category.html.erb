@@ -62,13 +62,17 @@
 		<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff; border-top:1px solid #dbdbdb; text-align:center;">
 			<tr>
 				<td style="width:50%;">
-					<a href="#" onclick="select_all(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:14px; border-right:1px solid #dbdbdb;">
-						전체선택
+					<a href="#" onclick="select_all_toggle(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:14px; border-right:1px solid #dbdbdb;">
+						<img src="/images/category/all.png"  style="width:18px; margin-bottom:-1px; "/>
+						<span id="category_all_span">
+							<%= @user_categories.length == 12 ? '선택해제' : '전체선택' %>
+						</span>
 					</a>
 				</td>
 				<td style="width:50%;">
 					<a href="#" onclick="submit_category(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:14px;">
-						적용하기
+						<img src="/images/common/submit_btn.png"  style="width:14px; margin-bottom:-1px; "/>
+						&nbsp;적용하기
 					</a>
 				</td>
 			</tr>
@@ -98,7 +102,10 @@
 		}else{
 			$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_on.png");
 			change_user_categories.push(category_id)
-		}	
+		}
+		if (change_user_categories.length == 12){
+			$("#category_all_span").html("선택해제");
+		}
 	}
 	
 	function category_reset(){
@@ -110,11 +117,26 @@
 			}else{
 				$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
 			}
-		}	
+		}
 	}
 	
-	function select_all(){
-		window.location = "/home/set_category?category_ids=all";
+	function select_all_toggle(){
+		
+		if (change_user_categories.length == 12){
+			$("#category_all_span").html("전체선택");
+			change_user_categories = []
+			for(var i=0; i < 12; i++) {
+				index = i + 1;
+				$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
+			}
+		}else{
+			$("#category_all_span").html("선택해제");
+			change_user_categories = [1,2,3,4,5,6,7,8,9,10,11,12];
+			for(var i=0; i < 12; i++) {
+				index = i + 1;
+				$("#category_img_"+index).attr("src","/images/category/"+index+"_on.png");
+			}
+		}
 	}
 	
 	function submit_category(){
