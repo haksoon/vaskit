@@ -5,7 +5,7 @@
 	<div id="more_popup_sub">
 		<a id="ask_edit_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">수정하기</a>
 		<a href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">신고하기</a>
-		<a href="#" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; font-size:15px;">질문 종료하기</a>
+		<a id="ask_complete_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; font-size:15px;">질문 종료하기</a>
 	</div>
 	<div id="more_popup_report" style="text-align:left; display:none;">
 		<a id="report_btn_1" href="#"  onclick="set_report_type(1); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px;">
@@ -36,6 +36,8 @@
 	function show_more_popup(ask_id){
 		$("#ask_edit_btn").attr("href","/asks/"+ask_id+"/edit");
 		$("#report_submit_btn").attr("onclick", "submit_report("+ask_id+"); return false;");
+		$("#ask_complete_btn").attr("href", "/asks/"+ask_id+"/ask_complete");
+		
 		$("#more_popup_bg").show();
 		$("#more_popup").show();
 	}

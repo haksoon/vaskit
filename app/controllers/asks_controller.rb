@@ -1,6 +1,6 @@
 # coding : utf-8
 class AsksController < ApplicationController
-  before_action :set_ask, only: [:show, :edit, :update, :destroy, :vote]
+  before_action :set_ask, only: [:show, :edit, :update, :destroy, :vote, :ask_complete, :create_complete]
 
   before_filter :auth_admin, :only => ["destroy"]
   
@@ -105,8 +105,6 @@ class AsksController < ApplicationController
   # PATCH/PUT /asks/1
   # PATCH/PUT /asks/1.json
   def update
-    
-    
     left_deal_params = params[:left_deal]
     left_image = nil
     left_deal_is_modify = false
@@ -172,8 +170,6 @@ class AsksController < ApplicationController
     unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(right_deal_params)
     @ask.right_ask_deal.update(unlocked_params)
     
-    
-    
     @ask.update(ask_params)
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
@@ -183,6 +179,20 @@ class AsksController < ApplicationController
     
     redirect_to "/asks/#{@ask.id}"
   end
+  
+  #GET /asks/:id/ask_complete
+  def ask_complete
+    
+  end
+  
+  #GET /asks/:id/create_complete
+  def create_complete
+    if AskComplete.where(:user_id => current_user.id, :ask_id => @ask.id).blank? #이미 종료한 경우
+      AskComplete.create(:user_id => current_user.id, :ask_id => @ask.id, :ask_deal_id => params[:ask_deal_id], :star_point => params[:star_point])
+    end
+    redirect_to root_path
+  end
+  
 
   # DELETE /asks/1
   # DELETE /asks/1.json

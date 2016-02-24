@@ -2,7 +2,6 @@
 class Users::SessionsController < Devise::SessionsController
   skip_before_filter :auth_user
   
-  
   def check_email
     is_new_email = true
     user = User.find_by_email(params[:email])

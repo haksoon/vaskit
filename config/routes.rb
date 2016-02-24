@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :asks
+  resources :asks do
+    member do
+      get 'ask_complete'
+      get 'create_complete'      
+    end
+  end
   resources :ask_deals
   resources :categories
   resources :comments 
