@@ -46,6 +46,13 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :etc do
+    collection do
+      get 'rending'
+    end
+  end
+  
+  
   resources :reports
   resources :admin
   get "/admin/table/:table_name", :to => "admin#table"

@@ -62,10 +62,14 @@
 	}
 	
 	function show_report_popup(){
-		$("#more_popup_sub").hide();
-		$("#more_popup_report").show();
-		$("#more_title").html("신고하기");
-		$("#more_popup").css("margin-top", "-190px");
+		<% if current_user %>
+			$("#more_popup_sub").hide();
+			$("#more_popup_report").show();
+			$("#more_title").html("신고하기");
+			$("#more_popup").css("margin-top", "-190px");
+		<% else %>
+			notify("회원가입 후 신고하기가 가능합니다");
+		<% end %>
 	}
 	
 	function set_report_type(report_type_id){

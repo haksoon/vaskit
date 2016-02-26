@@ -2,17 +2,15 @@
 <%= render :partial => "common_partial/search" %>
 <%= render :partial => "common_partial/category" %>
 <%= render :partial => "common_partial/more_popup" %>
+<%= render :partial => "common_partial/share_popup" %>
 
 <div id="asks" style="padding:9px 12px;"></div>
 <div class="home-float-btn">
-	<a href="/asks/new"><img src="/images/home/writing.png"></a>
-</div>
-<div style="color:#555; font-size:14px; line-height:22px; text-align:left; padding:20px; ">
-	로그인 완료. 유저 이메일 : <%= current_user.email %>
-	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="background-color:#ccc;">
-		로그아웃
-	</a> 
-	<br />
+	<% if current_user %>
+		<a href="/asks/new"><img src="/images/home/writing.png"></a>
+	<% else %>
+		<a href="#" onclick="notify('회원가입 후 글쓰기가 가능합니다.'); return false;"><img src="/images/home/writing.png"></a>
+	<% end %>
 </div>
 
 <% if @asks && @asks.length == Ask::ASK_PER %>
@@ -44,7 +42,7 @@
 			{{ price = Math.round(price/10000) + "만" }}
 		{{ } }}
 		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
-			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" />{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}
+			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" /><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}</span>
 			{{ if (price != 0){ }}
 				<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />{{= price }}
 			{{ } }}
@@ -62,7 +60,7 @@
 				{{ } }}
 			</p>
 			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
-				<a href="#"><img src="/images/home/share.png" style="width:24px;" /></a>
+				<a href="#" onclick="show_share_popup({{=ask.id}}); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
 				{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }} 
 				<a href="#" onclick="show_more_popup({{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }});"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
 				{{ } }}
@@ -109,15 +107,14 @@
 			<div style="background:url('/images/home/vote_result_r.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%;"></div>
 		{{ } }}
 		
-		{{ if (ask.user_id == current_user_id){ }}
+		{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
+		{{ if (ask.user_id == current_user_id && total_count == 0){ }}
 			{{ left_ratio = 0 }}
 			{{ right_ratio = 0 }}
 		{{ }else{ }}
-			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
 			{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
 			{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
 		{{ } }}
-		
 		
 		{{left_background = "#fff"}}
 		{{right_background = "#fff"}}
@@ -144,11 +141,15 @@
 	{{ } }}
 </script>
 
-
 <script> 
-	var current_user_id = <%= current_user.id if current_user %>;
+	var current_user_id = 0;
+ 	<% if current_user %>
+ 		current_user_id = <%= current_user.id %>;
+ 	<% end %>
+	
 	var asks = <%= raw @asks.to_json %>;
 	var my_votes = <%= raw @my_votes.to_json %>;
+	var my_vote_count = <%= @my_votes.length %>;
 	var askTemplate = _.template( $('#ask-template').html() );
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
@@ -162,28 +163,35 @@
 	}
 	
 	function vote_ask_deal(ask_deal_id, is_left){
-		$.ajax({
-	        url: "/votes.json",
-	        type: 'POST',
-	        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
-	        dataType: 'json',
-	        error: function(){
-	            return false;
-	        },
-	        success: function(data){
-	        	my_votes.push(data.vote);
-	        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
-	        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
-	        	
-        		notify("투표 완료");
-	        },
-	        beforeSend: function(){
-	       		$(".loading").show();
-	        },
-	        complete: function(){
-	        	$(".loading").hide();
-	        }
-		});
+	 	if (current_user_id == 0 && my_vote_count > 4){
+	 		notify("결과를 더 알고 싶으실 경우 회원 가입해 주세요");
+	 	}else{
+	 		$.ajax({
+		        url: "/votes.json",
+		        type: 'POST',
+		        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
+		        dataType: 'json',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+		        	my_votes.push(data.vote);
+		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
+		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
+		        	
+	        		notify("투표 완료");
+	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
+	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 );
+	        		my_vote_count = my_vote_count + 1;
+		        },
+		        beforeSend: function(){
+		       		$(".loading").show();
+		        },
+		        complete: function(){
+		        	$(".loading").hide();
+		        }
+			});
+	 	}
 	}
 	
 	
@@ -199,7 +207,7 @@
 	var currentPage = 1
 	var is_more_asks = true;
 	function checkScroll() {
-	  if (nearBottomOfPage() && is_more_asks) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
+	  if (window.location.pathname == "/" && nearBottomOfPage() && is_more_asks) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
 	    currentPage ++;
 	    
 	    $.ajax({

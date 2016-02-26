@@ -2,6 +2,7 @@
 class HomeController < ApplicationController
   
   def index
+    
     @user_categories = []
     if current_user
       @my_votes = Vote.where(:user_id => current_user.id)
@@ -47,6 +48,7 @@ class HomeController < ApplicationController
           @asks = Ask.where(:be_completed => false, :category_id => @user_categories).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
         end 
     end
+    
     respond_to do |format|
       format.html {
         if @asks.blank?

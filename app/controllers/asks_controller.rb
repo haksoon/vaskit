@@ -8,9 +8,9 @@ class AsksController < ApplicationController
     @asks = Ask.where(:id => @ask.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
     
     if current_user
-      @my_votes = Vote.where(:user_id => current_user.id, :ask_id => @ask.id)
+      @my_votes = Vote.where(:user_id => current_user.id)
     elsif @visitor
-      @my_votes = Vote.where(:visitor_id => @visitor.id, :ask_id => @ask.id)  
+      @my_votes = Vote.where(:visitor_id => @visitor.id)  
     end
   end
   

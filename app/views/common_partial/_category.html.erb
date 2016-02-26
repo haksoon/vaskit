@@ -96,16 +96,21 @@
 	}
 	
 	function category_toggle(category_id){
-		if($.inArray(category_id, change_user_categories) > -1){
-			$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_off.png");
-			change_user_categories = jQuery.grep(change_user_categories, function(value) { return value != category_id; });
-		}else{
-			$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_on.png");
-			change_user_categories.push(category_id)
-		}
-		if (change_user_categories.length == 12){
-			$("#category_all_span").html("선택해제");
-		}
+		
+		<% if current_user %>
+			if($.inArray(category_id, change_user_categories) > -1){
+				$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_off.png");
+				change_user_categories = jQuery.grep(change_user_categories, function(value) { return value != category_id; });
+			}else{
+				$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_on.png");
+				change_user_categories.push(category_id)
+			}
+			if (change_user_categories.length == 12){
+				$("#category_all_span").html("선택해제");
+			}
+		<% else %>
+		 	notify("관심사 설정은 회원가입 후 가능합니다");
+		<% end %>
 	}
 	
 	function category_reset(){
@@ -121,28 +126,33 @@
 	}
 	
 	function select_all_toggle(){
-		
-		if (change_user_categories.length == 12){
-			$("#category_all_span").html("전체선택");
-			change_user_categories = []
-			for(var i=0; i < 12; i++) {
-				index = i + 1;
-				$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
+		<% if current_user %>
+			if (change_user_categories.length == 12){
+				$("#category_all_span").html("전체선택");
+				change_user_categories = []
+				for(var i=0; i < 12; i++) {
+					index = i + 1;
+					$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
+				}
+			}else{
+				$("#category_all_span").html("선택해제");
+				change_user_categories = [1,2,3,4,5,6,7,8,9,10,11,12];
+				for(var i=0; i < 12; i++) {
+					index = i + 1;
+					$("#category_img_"+index).attr("src","/images/category/"+index+"_on.png");
+				}
 			}
-		}else{
-			$("#category_all_span").html("선택해제");
-			change_user_categories = [1,2,3,4,5,6,7,8,9,10,11,12];
-			for(var i=0; i < 12; i++) {
-				index = i + 1;
-				$("#category_img_"+index).attr("src","/images/category/"+index+"_on.png");
-			}
-		}
+		<% else %>
+		 	notify("관심사 설정은 회원가입 후 가능합니다");
+		<% end %>
 	}
 	
 	function submit_category(){
-		window.location = "/home/set_category?category_ids="+change_user_categories;
+		<% if current_user %>
+			window.location = "/home/set_category?category_ids="+change_user_categories;
+		<% else %>
+		 	notify("관심사 설정은 회원가입 후 가능합니다");
+		<% end %>
 	}
-	
-	
 	
 </script>
