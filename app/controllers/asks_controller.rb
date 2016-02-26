@@ -5,6 +5,12 @@ class AsksController < ApplicationController
   before_filter :auth_admin, :only => ["destroy"]
   
   def show
+    if current_user
+      Alram.where(:ask_id => @ask.id, :user_id => current_user.id).each do |alram|
+        alram.update(:is_read => true)
+      end
+    end
+    
     @asks = Ask.where(:id => @ask.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
     
     if current_user

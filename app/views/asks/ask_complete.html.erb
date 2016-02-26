@@ -1,10 +1,12 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "종료하기"} %>
 
-
-<p style="margin:20px 0; font-size:12px; color:#383838;">
-	최종적으로 어떤 제품을 선택하셨는지 알려주시겠어요?<br />
-	선택한 제품을 클릭하시면 투표가 종료됩니다.
-</p>
+<div style="background:#f4f4f4; padding:12px 10px 0 10px; text-align:left;">
+	<p style="margin:0; font-size:14px; color:#9fa0a2; line-height:18px; text-align:left;">
+		투표 결과는 만족스러우셨나요?<br />
+		만족도 별점과 함께 선택한 제품을 알려주시면<br />
+		서비스 개선에 큰 도움이 됩니다. 
+	</p>
+</div>
 
 <div id="star_point_div" style='text-align:center; margin:0 auto; margin-top:40px;'>
 	<a href='#' onclick='set_star_point(1); return false;'><img style='width:30px; margin-right:4px;' src='/images/ask/star_off.png' /></a>
@@ -39,14 +41,14 @@
 <table cellspacing="0" cellpadding="0" style="position:fixed; bottom:0; width:inherit; overflow:visible; z-index:1; background-color:#fff; border-top:1px solid #dbdbdb;">
 	<tr>
 		<td style="width:50%;">
-			<a href="#" onclick="back_button(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px; border-right:1px solid #dbdbdb;">
+			<a href="#" onclick="back_button(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px; border-right:1px solid #dbdbdb;">
 				<img src="/images/common/cancel_btn.png" style="width:14px; margin-bottom:-1px;" />
 				&nbsp;취소
 			</a>
 		</td>
 		<td style="width:50%;">
-			<a href="#" onclick="submit_complete(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px;">
-				<img src="/images/common/submit_btn.png" style="width:16px;" />
+			<a href="#" onclick="submit_complete(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px;">
+				<img src="/images/common/submit_btn.png" style="width:18px;" />
 				&nbsp;투표 종료하기
 			</a>
 		</td>

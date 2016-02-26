@@ -58,6 +58,10 @@ function notify(flash_message){
     }, 2000);
 }
 
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 function back_button(){
 	if (parent.history.length == 1){
 		window.location = "/";

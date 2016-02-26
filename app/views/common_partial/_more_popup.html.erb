@@ -24,7 +24,7 @@
 			<textarea placeholder="선택 후 입력 가능합니다." class="ask_message_input" name="ask[report]" id="ask_report_message"></textarea>
 		</div>
 		<a id="report_submit_btn" href="#" onclick="submit_report(); return false;" style="display:block; background:#fff; line-height:40px; color:#383838; border-top:1px solid #dbdbdb; text-align:center; font-size:13px;">
-			<img src="/images/common/submit_btn.png" style="width:16px; margin:0 2px -2px 0;"/> 신고
+			<img src="/images/common/submit_btn.png" style="width:18px; margin:0 2px -2px 0;"/> 신고
 		</a>
 	</div>
 	
@@ -68,7 +68,7 @@
 			$("#more_title").html("신고하기");
 			$("#more_popup").css("margin-top", "-190px");
 		<% else %>
-			notify("회원가입 후 신고하기가 가능합니다");
+			notify("회원가입 후<br />신고를 제출할 수 있습니다.");
 		<% end %>
 	}
 	

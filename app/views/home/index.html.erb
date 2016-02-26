@@ -1,4 +1,18 @@
-<%= render :partial => "common_partial/header" %>
+<% case @type %>
+<% when "user", "hash_tag", "ask_deal", "brand", "none" %>
+	<%= render :partial => "common_partial/header_1", :locals => {:title => "검색결과"} %>
+<% when "my_ask" %>
+	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Asks"} %>
+<% when "vote_ask" %>
+	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Votes"} %>
+<% when "comment_ask" %>
+	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Comments"} %>
+<% when "my_ask_in_progress" %>
+	<%= render :partial => "common_partial/header_1", :locals => {:title => "진행 중인 질문"} %>
+<% else %>
+	<%= render :partial => "common_partial/header" %>
+<% end %>
+
 <%= render :partial => "common_partial/search" %>
 <%= render :partial => "common_partial/category" %>
 <%= render :partial => "common_partial/more_popup" %>
@@ -9,7 +23,7 @@
 	<% if current_user %>
 		<a href="/asks/new"><img src="/images/home/writing.png"></a>
 	<% else %>
-		<a href="#" onclick="notify('회원가입 후 글쓰기가 가능합니다.'); return false;"><img src="/images/home/writing.png"></a>
+		<a href="#" onclick="notify('회원가입 후<br />질문을 올릴 수 있습니다.'); return false;"><img src="/images/home/writing.png"></a>
 	<% end %>
 </div>
 
@@ -44,7 +58,7 @@
 		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
 			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" /><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}</span>
 			{{ if (price != 0){ }}
-				<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />{{= price }}
+				<img src="/images/home/money.png" style="width:12px; margin:0 2px -1px 2px;" />{{= numberWithCommas(price) }}
 			{{ } }}
 			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />{{= get_past_time(ask.created_at) }}
 		</span>
@@ -62,7 +76,7 @@
 			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
 				<a href="#" onclick="show_share_popup('ask', {{=ask.id}}, '{{=ask.user.id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
 				{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }} 
-				<a href="#" onclick="show_more_popup({{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }});"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
+				<a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
 				{{ } }}
 			</span>
 		</div>

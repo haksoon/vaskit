@@ -27,5 +27,4 @@ class VotesController < ApplicationController
     Vote.find_by_id(params[:id]).delete
     redirect_to(:back)
   end
-  
 end

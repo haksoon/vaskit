@@ -1,12 +1,16 @@
 <table class="header_shadow" cellspacing="0" cellpadding="0" style="position:fixed; top:0; width:inherit; overflow:visible; height:47px; z-index:1; background-color:#998675;">
 	<tr>
-		<td style="width:40px;">
+		<td style="width:60px;">
 			<a href="#" onclick="back_button(); return false;"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/common/backward_btn.png" /></a>
 		</td>
 		<td style="text-align:center;">
-			<span style="display:block; font-size:20px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;"><%= title %></span>	
+			<% if title == "logo" %>
+				<a href="/"><img src="/images/etc/logo_1.png" style="width:130px; margin-bottom:-5px;"/></a>
+			<% else %>
+				<span style="display:block; font-size:20px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;"><%= title %></span>
+			<% end %>
 		</td>
-		<td style="width:40px;">
+		<td style="width:60px;">
 		</td>
 	</tr>
 </table>

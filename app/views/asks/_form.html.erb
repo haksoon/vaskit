@@ -1,4 +1,4 @@
-<%= render :partial => "common_partial/header_1", :locals => {:title => "질문하기"} %>
+<%= render :partial => "common_partial/header_1", :locals => {:title => @ask.id ? "수정하기" : "질문하기" } %>
 <div style="background:#f4f4f4; padding:12px 10px 0 10px; text-align:left;">
 	<%= form_for(@ask) do |f| %>
 		<p style="margin:0 0 10px 0; font-size:14px; color:#9fa0a2; line-height:18px; text-align:left;">
@@ -197,20 +197,20 @@
 <table cellspacing="0" cellpadding="0" style="position:fixed; bottom:0; width:inherit; overflow:visible; z-index:1; background-color:#fff; border-top:1px solid #dbdbdb;">
 	<tr>
 		<td style="width:50%;">
-			<a href="#" onclick="back_button(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px; border-right:1px solid #dbdbdb;">
+			<a href="#" onclick="back_button(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px; border-right:1px solid #dbdbdb;">
 				<img src="/images/common/cancel_btn.png" style="width:14px; margin-bottom:-1px;" />
 				취소
 			</a>
 		</td>
 		<td style="width:50%;">
 			<% if @ask.id %>
-				<a href="#" onclick="edit_form(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px;">
-					<img src="/images/common/submit_btn.png" style="width:16px;" />
+				<a href="#" onclick="edit_form(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px;">
+					<img src="/images/common/submit_btn.png" style="width:18px;" />
 					수정하기
 				</a>
 			<% else %>
-				<a href="#" onclick="submit_form(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:15px;">
-					<img src="/images/common/submit_btn.png" style="width:16px;" />
+				<a href="#" onclick="submit_form(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px;">
+					<img src="/images/common/submit_btn.png" style="width:18px;" />
 					질문 제출하기
 				</a>
 			<% end %>
@@ -228,7 +228,7 @@
 				</td>
 				<td class="hover_pointer" onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;" style="border-bottom:1px solid #dbdbdb; text-align:left;">
 					<p style="font-size:12px; font-weight:bold; margin:0; color:#383838;">{{= truncate(item.title) }}</p>
-					<p style="font-size:12px; margin:0; color:#ee6e01;">{{= item.lprice }}원</p>
+					<p style="font-size:12px; margin:0; color:#ee6e01;">{{= numberWithCommas(item.lprice) }}원</p>
 					<p style="font-size:11px; margin:0; color:#383838;">{{= item.mallName }}</p>
 				</td>
 			</tr>
@@ -274,6 +274,23 @@
 
 	var items;
 	var image_items;
+	
+	function deal_search_by_key(){
+		var deal_search_keyword = $('#deal_search_keyword').val();
+		if(deal_search_keyword == "" || deal_search_keyword == undefined){
+			notify("제품명을 입력해주세요.");
+		}else{
+			$("#deal_search_btn").click(); 
+		}
+	}
+	
+	$('#deal_search_keyword').keypress(function(e) {
+		if (e.keyCode == '13') {
+        	e.preventDefault();
+        	deal_search_by_key();
+      	}
+	});
+	
 
 	function hide_search_deal_popup(){
 		$("#search_deal_popup").hide();

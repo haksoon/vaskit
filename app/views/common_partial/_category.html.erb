@@ -2,11 +2,12 @@
 <div id="category_overlay" style="width:inherit; position:fixed;top:0; z-index:4; display:none; background:#f4f4f4;">
 	<table class="main_header" cellspacing="0" cellpadding="0" style="background-color:#998675; width:100%; overflow:visible; height:42px;">
 		<tr>
-			<td style="width:60px;">
+			<td style="width:60px; position:relative;">
 				<a href="#" onclick="category_off(); return false;"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_off.png" /></a>
+				<img src="/images/etc/detail.png" style="position:absolute; left:21px; bottom:0; width:20px;">
 			</td>
 			<td style="text-align:center;">
-				<a href="/" style="display:block; font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">VASKIT</a>	
+				<a href="/" style="display:block; font-size:20px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">관심사 설정</a>	
 			</td>
 			<td style="width:60px;">
 			</td>
@@ -62,7 +63,7 @@
 		<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff; border-top:1px solid #dbdbdb; text-align:center;">
 			<tr>
 				<td style="width:50%;">
-					<a href="#" onclick="select_all_toggle(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:14px; border-right:1px solid #dbdbdb;">
+					<a href="#" onclick="select_all_toggle(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:14px; border-right:1px solid #dbdbdb;">
 						<img src="/images/category/all.png"  style="width:18px; margin-bottom:-1px; "/>
 						<span id="category_all_span">
 							<%= @user_categories.length == 12 ? '선택해제' : '전체선택' %>
@@ -70,8 +71,8 @@
 					</a>
 				</td>
 				<td style="width:50%;">
-					<a href="#" onclick="submit_category(); return false;" style="display:block; width:100%; padding:10px 0; color:#383838; font-size:14px;">
-						<img src="/images/common/submit_btn.png"  style="width:14px; margin-bottom:-1px; "/>
+					<a href="#" onclick="submit_category(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:14px;">
+						<img src="/images/common/submit_btn.png"  style="width:18px; margin-bottom:-1px; "/>
 						&nbsp;적용하기
 					</a>
 				</td>
@@ -109,7 +110,7 @@
 				$("#category_all_span").html("선택해제");
 			}
 		<% else %>
-		 	notify("관심사 설정은 회원가입 후 가능합니다");
+		 	notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
 		<% end %>
 	}
 	
@@ -143,7 +144,7 @@
 				}
 			}
 		<% else %>
-		 	notify("관심사 설정은 회원가입 후 가능합니다");
+		 	notify("관심사 설정은<br />회원가입 후 가능합니다");
 		<% end %>
 	}
 	
@@ -151,7 +152,7 @@
 		<% if current_user %>
 			window.location = "/home/set_category?category_ids="+change_user_categories;
 		<% else %>
-		 	notify("관심사 설정은 회원가입 후 가능합니다");
+		 	notify("관심사 설정은<br />회원가입 후 가능합니다");
 		<% end %>
 	}
 	

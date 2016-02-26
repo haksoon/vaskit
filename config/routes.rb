@@ -59,6 +59,11 @@ Rails.application.routes.draw do
   end
   
   
+  resources :alrams do 
+    collection do
+      get 'all_read'
+    end
+  end
   resources :reports
   resources :admin
   get "/admin/table/:table_name", :to => "admin#table"

@@ -1,0 +1,54 @@
+<%= render :partial => "common_partial/header_1", :locals => {:title => "알림피드"} %>
+<a href="/alrams/all_read" style="color:#ee6e01; display:block; font-size:20px; padding:20px 0;">모두 읽은 상태로 표시</a>
+
+<div style="border-bottom:1px solid #dbdbdb;">
+<% if @alrams.blank? %>
+	<p style="padding:40px; margin:0; font-size:20px; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
+<% else %>
+	<% @alrams.each do |alram| %>
+		<% if alram.alram_type.include?("vote_") %>
+			<a href="/asks/<%=alram.ask_id%>" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+				회원님의 질문에 <span style="color:#998675;"><%= alram.alram_type.tr("vote_", "" )%>명</span>이 투표하였습니다. 중간점검 해보세요!
+				<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.created_at) %></p>
+			</a>
+		<% elsif alram.alram_type.include?("sub_comment_") %>
+			<% owner_user = User.find(alram.ask_owner_user_id) %>
+			<% send_user = User.find(alram.send_user_id) %>
+			<% comment_count = alram.alram_type.tr("sub_comment_","").to_i %>
+			<a href="/asks/<%=alram.ask_id%>" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+			<% if comment_count == 1 %>
+				<span style="color:#998675;">@<%= send_user.string_id %></span>님도 <span style="color:#998675;">@<%=owner_user.string_id%></span>님의 질문에 의견을 남겼습니다.
+			<% else %>
+				<span style="color:#998675;">@<%= send_user.string_id %></span>님 외 <%= comment_count - 1 %>명도 <span style="color:#998675;">@<%=owner_user.string_id%></span>님의 질문에 의견을 남겼습니다.
+			<% end %>
+				<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.created_at) %></p>
+			</a>
+		<% elsif alram.alram_type.include?("like_comment_") %>
+			<% send_user = User.find(alram.send_user_id) %>
+			<% comment_like_count = alram.alram_type.tr("like_comment_","").to_i %>
+			<a href="/asks/<%=alram.ask_id%>" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+				<% if comment_like_count == 1 %>
+					<span style="color:#998675;">@<%= send_user.string_id %></span>님이 회원님의 의견을 좋아합니다.
+				<% else %>
+					<span style="color:#998675;">@<%= send_user.string_id %></span>님 외 <%= comment_like_count - 1 %>명이 회원님의 의견을 좋아합니다.
+				<% end %>
+				<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.created_at) %></p>
+			</a>
+		<% elsif alram.alram_type.include?("comment_") %>
+			<% send_user = User.find(alram.send_user_id) %>
+			<% comment_count = alram.alram_type.tr("comment_","").to_i %>
+			<a href="/asks/<%=alram.ask_id%>" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+				<% if comment_count == 1 %>
+					<span style="color:#998675;">@<%= send_user.string_id %></span>님이 회원님의 질문에 의견을 남겼습니다.
+				<% else %>
+					<span style="color:#998675;">@<%= send_user.string_id %></span>님 외 <%= comment_count - 1 %>명이 회원님의 질문에 의견을 남겼습니다.
+				<% end %>
+				<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.created_at) %></p>
+			</a>
+		<% end %>
+	<% end %>
+
+<% end %>
+
+</div>
+

@@ -7,7 +7,9 @@
 				<a href="#" onclick="category_on(); return false;"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_on.png" /></a>
 			</td>
 			<td style="text-align:center;">
-				<a href="/" style="display:block; font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">VASKIT</a>	
+				<a href="/" style="display:block; font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">
+					<img src="/images/etc/logo_1.png" style="width:130px; margin-bottom:-1px;"/>
+				</a>	
 			</td>
 			<td style="width:60px;">
 				<% if current_user %>
@@ -81,7 +83,7 @@
 		if(search_key == "" || search_key == undefined){
 			notify("검색어를 입력하세요.");
 		}else{
-			window.location = "/?keyword="+search_key+"&type=none"; 
+			window.location = "/?keyword="+encodeURIComponent(search_key)+"&type=none"; 
 		}
 	}
 	
@@ -97,7 +99,7 @@
 		$.ajax({
 	        url: "/search/get_keyword.json",
 	        type: 'GET',
-	        data: {'keyword': $('#search_input').val() },
+	        data: {'keyword': encodeURIComponent($('#search_input').val()) },
 	        dataType: 'json',
 	        error: function(){
 	            return false;
