@@ -7,7 +7,11 @@ Rails.application.routes.draw do
   end
   resources :ask_deals
   resources :categories
-  resources :comments 
+  resources :comments do
+    member do
+      post 'like'
+    end
+  end 
   resources :deals do
     collection do
       get 'get_naver_deals'
@@ -30,6 +34,8 @@ Rails.application.routes.draw do
   devise_scope :user do
     get 'users/facebook', :to => "users/facebook#auth"
     get 'users/check_email', :to => "users/sessions#check_email"
+    get 'users/manage', :to => "users/sessions#manage"
+    put 'users/change_nickname', :to => "users/sessions#change_nickname"
     delete 'users/:id', :to => "users/registrations#destroy"
   end
   resources :visitors

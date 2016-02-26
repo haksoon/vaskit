@@ -22,4 +22,19 @@ class CommentsController < ApplicationController
     redirect_to(:back)
   end
   
+  def like
+    already_like = false
+    comment = Comment.find(params[:id])
+    comment_like = CommentLike.where(:user_id => current_user.id, :comment_id => params[:id]).first
+    if comment_like
+      already_like = true
+      comment_like.delete
+      comment.update(:like_count => comment.like_count - 1)
+    else  
+      CommentLike.create(:user_id => current_user.id, :comment_id => params[:id])
+      comment.update(:like_count => comment.like_count + 1)
+    end
+    render :json => {:already_like => already_like}
+  end
+  
 end

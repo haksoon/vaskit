@@ -33,16 +33,16 @@
 <script>
 
 	var report_type;
-	function show_more_popup(ask_id, ask_user_id, current_user_id){
+	function show_more_popup(target, target_id, ask_user_id, current_user_id){
 		if (ask_user_id == current_user_id){
 			$("#ask_report_btn").hide();
 		}else{
 			$("#ask_edit_btn").hide();
 			$("#ask_complete_btn").hide();
 		}
-		$("#ask_edit_btn").attr("href","/asks/"+ask_id+"/edit");
-		$("#report_submit_btn").attr("onclick", "submit_report("+ask_id+"); return false;");
-		$("#ask_complete_btn").attr("href", "/asks/"+ask_id+"/ask_complete");
+		$("#ask_edit_btn").attr("href","/asks/"+target_id+"/edit");
+		$("#report_submit_btn").attr("onclick", "submit_report('"+target+"',"+target_id+"); return false;");
+		$("#ask_complete_btn").attr("href", "/asks/"+target_id+"/ask_complete");
 		
 		$("#more_popup_bg").show();
 		$("#more_popup").show();
@@ -112,7 +112,7 @@
 	        success: function(data){
 	        	hide_more_popup();
 	        	if (data.already_report){
-	        		notify("이미 신고한 질문입니다");
+	        		notify("이미 신고했습니다");
 	        	}else{
 	        		notify("신고 완료되었습니다");
 	        	}

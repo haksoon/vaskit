@@ -10,5 +10,20 @@ class Users::SessionsController < Devise::SessionsController
     render :json => {:is_new_email => is_new_email}
   end
   
+  def manage
+    
+  end
+  
+  def change_nickname
+    status = "success"
+    if User.find_by_string_id(params[:string_id])
+      status = "fail"
+    else
+      current_user.update(:string_id => params[:string_id])
+    end
+    
+    render :json => {:status => status}
+  end
+  
 end
 

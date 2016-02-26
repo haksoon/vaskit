@@ -27,6 +27,23 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def edit
   end
   
+  def update
+    if current_user.sign_up_type == "facebook"
+      params[:user][:current_password] = "is_facebook"
+      params[:user][:sign_up_type] = "both"
+    end
+    if current_user.valid_password?(params[:user][:current_password])
+      flash[:custom_notice] = "기존 비밀번호를 잘못 입력하였습니다"
+    elsif params[:user][:password] != params[:user][:password_confirmation]
+      flash[:custom_notice] = "신규 비밀번호와 비밀번호 확인란이 일치하지 않습니다"
+    elsif params[:user][:password].length < 8
+      flash[:custom_notice] = "비밀번호는 8자 이상으로 해주세요"
+    else
+      flash[:custom_notice] = "비밀번호 변경 성공"
+    end
+    super
+  end
+  
   def destroy
     user = User.find_by_id(params[:id])
     user.delete
@@ -43,6 +60,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
     path = root_path
     path
   end
+  
+  def after_update_path_for(resource)
+    "/users/manage"
+  end
+  
   
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) do |u|

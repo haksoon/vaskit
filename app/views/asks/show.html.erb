@@ -1,5 +1,7 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "투표 결과 상세"} %>
 <%= render :partial => "common_partial/more_popup" %>
+<%= render :partial => "common_partial/share_popup" %>
+
 <div id="asks" style="padding:10px 12px;"></div>
 
 <script type="text/template" id="ask-show-template">
@@ -43,7 +45,7 @@
 				{{ } }}
 			</p>
 			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
-				<a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
+				<a href="#" onclick="show_share_popup('ask',{{=ask.id}}, '{{=ask.user.id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
 				<a href="#" onclick="show_more_popup({{=ask.id}});"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a> 
 			</span>
 		</div>
@@ -320,7 +322,10 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">		
 				</div>
 			</div>
-			<p style="margin:0; padding:2px 0 6px 14px; font-size:12px; color:#9e9fa1;">@{{=comment.user.string_id}} &nbsp;{{= get_past_time(comment.created_at) }}</p>
+			<p style="margin:0; padding:2px 0 6px 14px; font-size:12px; color:#9e9fa1;">
+				@{{=comment.user.string_id}} &nbsp;{{= get_past_time(comment.created_at) }}
+				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;"><img src="/images/etc/recommend_icon.png" style="width:10px;"> <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span></a> | <a href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9e9fa1;">신고</a> 
+			</p>
 		</div>
 	{{ }else{ }}
 		<div style="width:100%; text-align:right;">
@@ -330,7 +335,10 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_r.png">		
 				</div>
 			</div>
-			<p style="margin:0; padding:2px 14px 6px 0; font-size:12px; color:#9e9fa1;">{{= get_past_time(comment.created_at) }} &nbsp;@{{=comment.user.string_id}}</p>
+			<p style="margin:0; padding:2px 14px 6px 0; font-size:12px; color:#9e9fa1;">
+				<a href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9e9fa1;">신고</a> | <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;"><img src="/images/etc/recommend_icon.png" style="width:10px;"> <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span></a>
+				{{= get_past_time(comment.created_at) }} &nbsp;@{{=comment.user.string_id}}
+			</p>
 		</div>
 	{{ } }} 
 </script>
@@ -409,10 +417,10 @@
 		        		$(".comment_box").val("");
 		        		
 		        		if ($("#ask_deal_id_change").html() == "A"){
-		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count")
+		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count");
 		        			left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
 		        		}else{
-		        			var right_ask_deal_comment_count = $("#right_ask_deal_comment_count")
+		        			var right_ask_deal_comment_count = $("#right_ask_deal_comment_count");
 		        			right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
 		        		}
 		        	}else{
@@ -426,9 +434,42 @@
 		        complete: function(){
 		        	$(".loading").hide();
 		        }
-		});
+			});
 		}
 		
+	}
+	
+	function comment_like(comment_id){
+		$.ajax({
+		        url: "/comments/"+comment_id+"/like.json",
+		        type: 'POST',
+		        data: {'blank': 'blank'},
+		        dataType: 'json',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+		        	var comment_count_span = $("#comment_"+comment_id+"_like_count");
+		        	if (data.already_like){
+		        		comment_count_span.html( parseInt(comment_count_span.html()) - 1 );
+		        		notify("좋아요 취소");
+		        	}else{
+		        		comment_count_span.html( parseInt(comment_count_span.html()) + 1 );
+		        		notify("좋아요 완료");
+		        	}
+		        },
+		        beforeSend: function(){
+		       		$(".loading").show();
+		        },
+		        complete: function(){
+		        	$(".loading").hide();
+		        }
+			});
+	}
+	
+	function comment_report(comment_id, user_id){
+		show_more_popup('comment',comment_id, user_id, '', '');
+		show_report_popup(); 
 	}
 	
 	function ask_deal_id_change(){
