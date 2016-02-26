@@ -5,7 +5,7 @@
   	<% if (controller.controller_name == "asks" && controller.action_name == "show") %>
 		<meta property="og:title" content="@<%=@ask.user.string_id%>님을 도와주세요! 머리가 빠져가고 있습니다..." />
 		<meta property="og:url" content="http://vaskit.nubo.us/asks/<%= @ask.id %>" />
-		<meta property="og:description" content="'<%=@ask.left_ask_deal.title%>' vs '<%=@ask.right_ask_deal.title%>', 무엇을 사야 후회하지 않을까요?<center></center>형님, 누님, 친구님들! 저의 결정장애에 도움을 주세요!" />
+		<meta property="og:description" content="'<%=@ask.left_ask_deal.title%>' vs '<%=@ask.right_ask_deal.title%>', 무엇을 사야 후회하지 않을까요? 형님, 누님, 친구님들! 저의 결정장애에 도움을 주세요!" />
 	
 		<meta property="og:image" content="http://vaskit.nubo.us/images/etc/share_image.png" />
 		<meta property="fb:app_id" content="1738386856398348" />

@@ -4,7 +4,7 @@
 	<p style="background-color:#4b3d3d; font-size:15px; color:#FFF; font-weight:bold; height:40px; line-height:40px; margin:0;">공유하기</p>
 	<div style="background-color:#f4f4f4;">
 		<p style="color:#9d9ea0; font-size:12px; margin:0; padding:14px 0 8px 0;">버튼을 눌러 해당 SNS로 공유하세요.</p>
-		<a href="#" onclick="share_facebook(); return false;"><img src="/images/etc/kakao_talk.png" style="width:60px;margin-right:3px;" /></a>
+		<a id="share_katalk_btn" href="#"><img src="/images/etc/kakao_talk.png" style="width:60px;margin-right:3px;" /></a>
 		<a href="#" onclick="share_facebook(); return false;"><img src="/images/etc/facebook.png" style="width:60px;margin-left:3px;" /></a>
 		<p style="color:#9d9ea0; font-size:12px; margin:0; padding-top:10px;">또는 아래 주소를 복사하세요.</p>
 		<div style="padding:12px 16px 16px 16px;">
@@ -16,8 +16,9 @@
 </div>
 
 <script>
-	function show_share_popup(ask_id){
-		$("#share_url").html("http://vaskit.nubo.us/asks/"+ask_id)
+	function show_share_popup(ask_id,user_string_id, left_deal_title, right_deal_title){
+		$("#share_url").html("http://vaskit.nubo.us/asks/"+ask_id);
+		$("#share_katalk_btn").attr("onclick","share_katalk('"+user_string_id+"','"+left_deal_title+"','"+right_deal_title+"'); return false;")
 		$("#share_popup_bg").show();
 		$("#share_popup").show();
 	}
@@ -45,11 +46,17 @@
 	}
 	
 	
-	function share_katalk() {
+	function share_katalk(user_string_id, left_deal_title, right_deal_title){
+		try{
+			Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+		}catch(err) {
+		}
+		
 		var share_url = $("#share_url").html();
 		var image_url = "http://vaskit.nubo.us/images/etc/share_image.png";
+		var label = "@"+user_string_id+"님을 도와주세요! 머리가 빠져가고 있습니다...\n'"+left_deal_title+"' vs '"+"'"+right_deal_title+"', 무엇을 사야 후회하지 않을까요? 형님, 누님, 친구님들! 저의 결정장애에 도움을 주세요!";
 		Kakao.Link.sendTalkLink({
-	      	label: content.title + "\n누드보고서에서 사람들의 생각을 확인하세요",
+	      	label: label,
 	      	image: {
 	        	src:  image_url,
 	        	width: '470',
