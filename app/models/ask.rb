@@ -5,4 +5,7 @@ class Ask < ActiveRecord::Base
   belongs_to :right_ask_deal, :class_name => 'AskDeal', :foreign_key => 'right_ask_deal_id'
   has_many :comments
   has_one :ask_complete
+  
+  ASK_PER = 5
+  
 end

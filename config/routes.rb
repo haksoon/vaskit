@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   resources :home do
     collection do
       get 'set_category'
+      get 'no_result'
     end
   end
   

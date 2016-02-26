@@ -1,5 +1,6 @@
-<div id="search_bg" onclick="search_input_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:1; opacity:0.6; display:none;"></div>
-<div id="search_overlay" style="width:inherit; position:fixed;top:0; z-index:2; display:none; background:#f4f4f4;">
+<div id="search_pc_bg" onclick="search_input_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:1; display:none;"></div>
+<div id="search_bg" onclick="search_input_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:2; opacity:0.6; display:none;"></div>
+<div id="search_overlay" style="width:inherit; position:fixed;top:0; z-index:3; display:none; background:#f4f4f4;">
 	<table class="main_header header_shadow" cellspacing="0" cellpadding="0" style="background-color:#4b3d3d; width:100%; overflow:visible; height:42px;">
 		<tr>
 			<td style="width:60px;">
@@ -24,8 +25,8 @@
 			</td>
 			<td style="width:100%; position:relative; padding:8px 14px 9px 0;">
 				<input id="search_input" placeholder="검색어를 입력하세요." type="text" style="" class="search_input" />
-				<span style="position:absolute; right:14px; top:9px;"><img style="width:20px; padding:6px;" src="/images/common/search_on.png"></span>
-				<a href="#" onclick="keyword_reset(); return false;" style="position:absolute; right:38px; top:10px;"><img style="width:18px; padding:6px;" src="/images/common/close_btn.png"></a>
+				<a href="#" onclick="search_by_key(); return false;" style="position:absolute; right:14px; top:9px;"><img style="width:20px; padding:6px;" src="/images/common/search_on.png"></a>
+				<a id="keyword_reset_btn" href="#" onclick="keyword_reset(); return false;" style="position:absolute; right:38px; top:10px; display:none;"><img style="width:18px; padding:6px;" src="/images/common/close_btn.png"></a>
 			</td>
 		</tr>
 	</table>
@@ -56,23 +57,43 @@
 
 	function search_input_on(){
 		$("#search_overlay").show();
+		$("#search_pc_bg").show();
 		$("#search_bg").show();
 		$('#search_input').focus().select();
-		
 	}
 	
 	function search_input_off(){
 		$("#search_overlay").hide();
+		$("#search_pc_bg").hide();
 		$("#search_bg").hide();
 		$('#search_input').val("");
+		$("#keyword_reset_btn").hide();
 	}
 	
 	function keyword_reset(){
 		$('#search_input').val("");
 		$('#search_result').html("");
+		$("#keyword_reset_btn").hide();
 	}
 	
-	$('#search_input').keyup(function() {
+	function search_by_key(){
+		var search_key = $('#search_input').val();
+		if(search_key == "" || search_key == undefined){
+			notify("검색어를 입력하세요.");
+		}else{
+			window.location = "/?keyword="+search_key+"&type=none"; 
+		}
+	}
+	
+	$('#search_input').keypress(function(e) {
+		if (e.keyCode == '13') {
+        	e.preventDefault();
+        	search_by_key();
+      	}
+	});
+	
+	$('#search_input').keyup(function(e) {
+  		$("#keyword_reset_btn").show();
 		$.ajax({
 	        url: "/search/get_keyword.json",
 	        type: 'GET',
@@ -83,29 +104,36 @@
 	        },
 	        success: function(data){
 	        	$('#search_result').html("");
-	        	var searchResultTemplate = _.template( $('#search-result-template').html() );
 	        	
-	        	$.each(data.users, function( index, user ) {
-	        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: user.id}));
-				});
-				
-				$.each(data.hash_tags, function( index, hash_tag ) {
-					$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
-				});
-				
-				$.each(data.ask_deals, function( index, ask_deal ) {
-					$('#search_result').append(searchResultTemplate({keyword: ask_deal.title, type: 'ask_deal', id: ask_deal.id}));
-				});
-				
-				if (data.brand){
-					$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
-				}
-				$("#search_result").highlight($('#search_input').val());
+	        	if (data.is_empty_result){
+	        		var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666;'>검색 결과가 없습니다.</span>";
+	        		$('#search_result').html(empty_span);
+	        	}else{
+	        		var searchResultTemplate = _.template( $('#search-result-template').html() );
+	        	
+		        	$.each(data.users, function( index, user ) {
+		        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: user.id}));
+					});
+					
+					$.each(data.hash_tags, function( index, hash_tag ) {
+						$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
+					});
+					
+					$.each(data.ask_deals, function( index, ask_deal ) {
+						$('#search_result').append(searchResultTemplate({keyword: ask_deal.title, type: 'ask_deal', id: ask_deal.id}));
+					});
+					
+					if (data.brand){
+						$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
+					}
+					$("#search_result").highlight($('#search_input').val());
+	        	}
 	        },
 	        beforeSend: function(){
 	        },
 	        complete: function(){
 	        }
 		});
+		
 	});
 </script>

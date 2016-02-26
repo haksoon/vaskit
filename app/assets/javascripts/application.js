@@ -15,6 +15,13 @@
 //= require turbolinks
 //= require_tree .
 
+function nearBottomOfPage() {
+  return scrollDistanceFromBottom() < 150;
+}
+
+function scrollDistanceFromBottom(argument) {
+  return $(document).height() - ($(window).height() + $(window).scrollTop());
+}
 
 function get_image_url(data, model_name, extention){
 	

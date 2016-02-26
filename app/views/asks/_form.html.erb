@@ -44,7 +44,7 @@
 				</td>
 				<td style="text-align:right; width:35%;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input" %>
 					</div>
 				</td>
 			</tr>
@@ -61,7 +61,7 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input" %>
 					</div>
 				</td>
 			</tr>
@@ -78,58 +78,58 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가스펙1", :class => "ask_text_field" %>
+						<%= text_field_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field" %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
-					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 2px; font-size:13px; color:#383838; padding:4px;">
-						추가스펙1
+					<div style=" border:1px solid #dbdbdb; margin:0 2px 0 2px; font-size:13px; color:#383838;">
+						<%= f.text_field :spec1, :placeholder => "추가 스펙명", :class => "ask_text_field center_input" %>
 					</div>
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "추가스펙1", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field right_input" %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "추가스펙2", :class => "ask_text_field" %>
+						<%= text_field_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field" %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
-					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 2px; font-size:13px; color:#383838; padding:4px;">
-						추가스펙2
+					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 2px; font-size:13px; color:#383838;">
+						<%= f.text_field :spec2, :placeholder => "추가 스펙명", :class => "ask_text_field center_input" %>
 					</div>
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "추가스펙2", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field right_input" %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "추가스펙3", :class => "ask_text_field" %>
+						<%= text_field_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field" %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
-					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 2px; font-size:13px; color:#383838; padding:4px;">
-						추가스펙3
+					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 2px; font-size:13px; color:#383838;">
+						<%= f.text_field :spec3, :placeholder => "추가 스펙명", :class => "ask_text_field center_input" %>
 					</div>
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "추가스펙3", :class => "ask_text_field" %>
+						<%= text_field_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field right_input" %>
 					</div>
 				</td>
 			</tr>
