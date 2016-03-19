@@ -1,7 +1,8 @@
-<div style="width:1000px; margin:0 auto; text-align:center;">
+<div style="margin:0 auto; text-align:center;">
 	<% @tables.each do |table| %>
-		<a href="/admin/table/<%=table%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px;"><%=table%></a>
+		<a href="/admin/table/<%=table%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px; margin-top:20px;"><%=table%></a>
 	<% end %>
+	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; margin-left:6px;">로그아웃</a>
 	<p style="margin:0 auto; padding:200px 0;">
 	어드민 페이지 입니다. 각 항목을 눌러 data를 확인해주세요.
 	</p>

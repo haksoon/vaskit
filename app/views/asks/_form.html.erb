@@ -85,6 +85,23 @@
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
+						<%= text_field_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field" %>
+					</div>
+				</td>
+				<td style="width:30%; padding-top:6px;">
+					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 2px; font-size:13px; color:#383838; padding:4px;">
+						링크
+					</div>
+				</td>
+				<td style="text-align:right; width:35%; padding-top:6px;">
+					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
+						<%= text_field_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input" %>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td style="text-align:left; width:35%; padding-top:6px;">
+					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
 						<%= text_field_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field" %>
 					</div>
 				</td>
@@ -141,9 +158,7 @@
 		<%= file_field_tag 'right_deal[image]', :accept => 'image/*', :multiple => false, :style => "visibility:hidden; width:1px; display:inline;" %>
 		<%= hidden_field_tag 'right_deal[image_id]' %>
 		
-		<%= hidden_field_tag 'left_deal[link]' %>
 		<%= hidden_field_tag 'left_deal[deal_id]' %>
-		<%= hidden_field_tag 'right_deal[link]' %>
 		<%= hidden_field_tag 'right_deal[deal_id]' %>
 		
 	<% end %>

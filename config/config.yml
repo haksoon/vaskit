@@ -3,6 +3,6 @@ development:
   host: 'http://localhost:3000'
   # katalk_app_id: '8f99f22318da1458ef402be08af6db0a'
 production:
-  image_host: 'http://vaskit.nubo.us'
-  host: 'http://vaskit.nubo.us'
+  image_host: 'http://vaskit.kr'
+  host: 'http://vaskit.kr'
   # katalk_app_id: '8f99f22318da1458ef402be08af6db0a'

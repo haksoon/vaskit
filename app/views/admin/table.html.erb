@@ -1,7 +1,8 @@
-<div style="width:1000px; margin:0 auto; text-align:center;">
+<div style="margin:0 auto; text-align:center;">
 	<% @tables.each do |table| %>
-		<a href="/admin/table/<%=table%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px;"><%=table%></a>
+		<a href="/admin/table/<%=table%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px; margin-top:20px;"><%=table%></a>
 	<% end %>
+	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; margin-left:6px;">로그아웃</a>
 </div>
 
 

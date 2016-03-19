@@ -22,6 +22,14 @@
 
 
 <script>
+
+	$('#user_password').keypress(function(e) {
+		if (e.keyCode == '13') {
+        	e.preventDefault();
+        	sign_in_submit();
+      	}
+	});
+
 	function sign_in_submit(){
 		if ($("#user_email").val() == ""){
 			notify('이메일을 입력해 주세요.');

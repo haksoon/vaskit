@@ -99,7 +99,7 @@
 		$.ajax({
 	        url: "/search/get_keyword.json",
 	        type: 'GET',
-	        data: {'keyword': encodeURIComponent($('#search_input').val()) },
+	        data: {'keyword': $('#search_input').val() },
 	        dataType: 'json',
 	        error: function(){
 	            return false;
@@ -108,8 +108,10 @@
 	        	$('#search_result').html("");
 	        	
 	        	if (data.is_empty_result){
-	        		var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666;'>검색 결과가 없습니다.</span>";
-	        		$('#search_result').html(empty_span);
+	        		if ($('#search_input').val() != ""){
+	        			var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666;'>검색 결과가 없습니다.</span>";
+	        			$('#search_result').html(empty_span);
+	        		}
 	        	}else{
 	        		var searchResultTemplate = _.template( $('#search-result-template').html() );
 	        	

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       get 'create_complete'      
     end
   end
+  resources :ask_completes
   resources :ask_deals
   resources :categories
   resources :comments do
@@ -12,6 +13,7 @@ Rails.application.routes.draw do
       post 'like'
     end
   end 
+  resources :comment_likes
   resources :deals do
     collection do
       get 'get_naver_deals'
@@ -38,6 +40,7 @@ Rails.application.routes.draw do
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
     delete 'users/:id', :to => "users/registrations#destroy"
   end
+  resources :user_categories
   resources :visitors
   resources :votes
   resources :search do

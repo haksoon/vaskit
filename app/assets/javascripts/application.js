@@ -24,7 +24,6 @@ function scrollDistanceFromBottom(argument) {
 }
 
 function get_image_url(data, model_name, extention){
-	
 	try {
 		var image_url = ""; //static url
 		image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
