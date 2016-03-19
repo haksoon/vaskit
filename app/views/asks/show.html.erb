@@ -45,7 +45,7 @@
 				{{ } }}
 			</p>
 			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
-				<a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
+				<a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
 				<a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a> 
 			</span>
 		</div>
@@ -139,14 +139,21 @@
 					</td>
 				</tr>
 				{{ } }}
+			</table>
+			<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 				{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
 				<tr>
-					<td style="width:50%;">
+					<td style="width:33.3%;">
 						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.left_ask_deal.spec1 }}
 						</p>
 					</td>
-					<td style="width:50%;">
+					<td style="width:33.3%;">
+						<p style="margin:0 1px 0 1px;  background-color:#f4f4f4; height:16px; color:#383838; font-size:13px; padding:2px 8px;">
+						{{= ask.spec1 }}
+						</p>
+					</td>
+					<td style="width:33.3;">
 						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.spec1 }}
 						</p>
@@ -155,12 +162,17 @@
 				{{ } }}
 				{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
 				<tr>
-					<td style="width:50%;">
-						<p style="margin:0 1px 0 0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
+					<td style="width:33.3%;">
+						<p style="margin:0 1px 0 0; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.left_ask_deal.spec2 }}
 						</p>
 					</td>
-					<td style="width:50%;">
+					<td style="width:33.3%;">
+						<p style="margin:0 1px 0 1px;  background-color:#f4f4f4; height:16px; color:#383838; font-size:13px; padding:2px 8px;">
+						{{= ask.spec2 }}
+						</p>
+					</td>
+					<td style="width:33.3%;">
 						<p style="margin:0 0 0 1px;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.spec2 }}
 						</p>
@@ -169,19 +181,43 @@
 				{{ } }}
 				{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
 				<tr>
-					<td style="width:50%;">
+					<td style="width:33.3%;">
 						<p style="margin:0 1px 0 0; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.left_ask_deal.spec3 }}
 						</p>
 					</td>
-					<td style="width:50%;">
+					<td style="width:33.3%;">
+						<p style="margin:0 1px 0 1px;  background-color:#f4f4f4; height:16px; color:#383838; font-size:13px; padding:2px 8px;">
+						{{= ask.spec3 }}
+						</p>
+					</td>
+					<td style="width:33.3%;">
 						<p style="margin:0 0 0 1px; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 						{{= ask.right_ask_deal.spec3 }}
 						</p>
 					</td>
 				</tr>
 				{{ } }}
+			</table>
+			<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 				<tr>
+					{{ if (ask.left_ask_deal.spec1 != null || ask.left_ask_deal.spec2 != null || ask.left_ask_deal.spec3 != null){ }}
+					<td style="width:33.3%;">
+						<p style="margin:0 1px 0 0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+						&nbsp;
+						</p>
+					</td>
+					<td style="width:33.3%;">
+						<p style="margin:0 1px 0 1px; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+						&nbsp;
+						</p>
+					</td>
+					<td style="width:33.3%;">
+						<p style="margin:0 0 0 1px; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+						&nbsp;
+						</p>
+					</td>
+					{{ }else{ }}
 					<td style="width:50%;">
 						<p style="margin:0 1px 0 0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
 						&nbsp;
@@ -192,8 +228,15 @@
 						&nbsp;
 						</p>
 					</td>
+					{{ } }}
 				</tr>
+				
 			</table>
+			
+			
+			
+			
+			
 			<div style="margin-top:10px;">
 				<p style="text-align:center; background-color:#4b3d3d; font-size:12px; color:#fff; font-weight:bold; padding:6px 0; margin:0 auto;">
 					<span style="float:left; margin-left:12px; font-size:13px; color:#fff;">

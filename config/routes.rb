@@ -55,9 +55,13 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :inquiry
+  
   resources :etc do
     collection do
       get 'rending'
+      get 'inquiry'
+      post 'create_inquiry'
     end
   end
   
@@ -68,7 +72,13 @@ Rails.application.routes.draw do
     end
   end
   resources :reports
-  resources :admin
+  resources :rank_asks
+  resources :admin do
+    collection do
+      post 'submit_rank_ask'
+      delete 'delete_rank_ask'
+    end
+  end
   get "/admin/table/:table_name", :to => "admin#table"
   
   get "/:string_id", :to => "etc#user"

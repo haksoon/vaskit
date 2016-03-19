@@ -74,7 +74,7 @@
 				{{ } }}
 			</p>
 			<span style="position:absolute; right:10px; top:29px; color:#9e9fa3; font-size:11px;">
-				<a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
+				<a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
 				{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }} 
 				<a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
 				{{ } }}
@@ -165,6 +165,21 @@
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var my_vote_count = <%= @my_votes.length %>;
 	var askTemplate = _.template( $('#ask-template').html() );
+	
+	
+	var ranking_asks = <%= raw @ranking_asks.to_json %>;
+	
+	for(var i=0; i < ranking_asks.length; i++) {
+		var ask = ranking_asks[i]
+        $('#asks').append(askTemplate({ask: ask}));
+        var hash_tags = ask.message.match(/#(\S+)/g);
+        $.each(hash_tags, function( index, hash_tag ) {
+		  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+		  	hash_tag = hash_tag.replace('#', '').replace("?","")
+			$("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
+		});
+	}
+	
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
         $('#asks').append(askTemplate({ask: ask}));
@@ -175,6 +190,7 @@
 			$("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
 		});
 	}
+	
 	
 	function vote_ask_deal(ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){

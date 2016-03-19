@@ -10,6 +10,15 @@ class EtcController < ApplicationController
   def personal_information
   end
   
+  def inquiry
+    
+  end
+  
+  def create_inquiry
+    Inquiry.create(:user_id => current_user.id, :message => params[:message])
+    flash[:custom_notice] = "정상적으로 전송되었습니다"
+    render :json => {:status => "success" }
+  end
   
   def user
     @my_ask_count = Ask.where(:user_id => current_user.id).count

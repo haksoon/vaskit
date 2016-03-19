@@ -1,11 +1,144 @@
 <div style="margin:0 auto; text-align:center;">
+	<a href="/admin" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px; margin-top:20px;">main</a>
 	<% @tables.each do |table| %>
 		<a href="/admin/table/<%=table%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px; margin-top:20px;"><%=table%></a>
 	<% end %>
 	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; margin-left:6px;">로그아웃</a>
-	<p style="margin:0 auto; padding:200px 0;">
-	어드민 페이지 입니다. 각 항목을 눌러 data를 확인해주세요.
-	</p>
-
+	
+	<div style="width:1000px; margin:0 auto; text-align:left;">
+		<p style="text-align:center; width:100%; margin:30px 0 0 0;">상단 고정 게시물 설정</p>
+		<br />
+		<a href="/admin" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px;">전체</a>
+		<% @categories.each do |category| %>
+			<a href="/admin?category_id=<%=category.id%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px;"><%= category.name %></a>
+		<% end %>
+		
+		<p>
+			현재 선정된 ask
+		</p>
+		
+		<table border="1" cellspacing="0" cellpadding="2" style="width: 100%; margin-top:20px; font-size:12px; text-align:center;">
+		  <thead>
+		    <tr>
+		      	<th>내용</th>
+		      	<th>사진1</th>
+		      	<th>사진2</th>
+		      	<th>순위</th>
+		      	<th></th>
+		    </tr>
+		  </thead>
+		
+		  <tbody>
+		    <% @rank_asks.each do |rank_ask| %>
+		    	<% ask = rank_ask.ask %>
+				<tr>
+					<td>
+						<%= ask.message %>
+					</td>
+					<td>
+						<img src="<%= ask.left_ask_deal.image.url(:normal) %>" style="width:100px" />
+					</td>
+					<td>
+						<img src="<%= ask.right_ask_deal.image.url(:normal) %>" style="width:100px" />
+					</td>
+					<td id="ask_<%=ask.id%>_ranking">
+						<input type="text" name="point" value="<%= rank_ask.ranking%>" />
+					</td>
+					<td>
+						<a href="#" onclick="delete_rank_ask(<%=rank_ask.id%>); return false;" style="background:#fff; color:#383838; width:60px; border:1px solid #dbdbdb; height:20px; line-height:20px; display:block; font-size:12px; margin:0 auto; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px;">
+							삭제
+						</a>
+					</td>
+		       	</tr>
+		    <% end %>
+		  </tbody>
+		</table>
+		
+		<p>
+			선정할 ask
+		</p>
+		
+		<table border="1" cellspacing="0" cellpadding="2" style="width: 100%; margin-top:20px; font-size:12px; text-align:center;">
+		  <thead>
+		    <tr>
+		      	<th>내용</th>
+		      	<th>사진1</th>
+		      	<th>사진2</th>
+		      	<th>순위</th>
+		      	<th></th>
+		    </tr>
+		  </thead>
+		
+		  <tbody>
+		    <% @asks.each do |ask| %>
+				<tr>
+					<td>
+						<%= ask.message %>
+					</td>
+					<td>
+						<img src="<%= ask.left_ask_deal.image.url(:normal) %>" style="width:100px" />
+					</td>
+					<td>
+						<img src="<%= ask.right_ask_deal.image.url(:normal) %>" style="width:100px" />
+					</td>
+					<td id="ask_<%=ask.id%>_ranking">
+						<input type="text" name="ranking" value="" />
+					</td>
+					<td>
+						<a href="#" onclick="submit_rank_ask(<%=ask.id%>, '<%= @category.id if @category%>'); return false;" style="background:#fff; color:#383838; width:60px; border:1px solid #dbdbdb; height:20px; line-height:20px; display:block; font-size:12px; margin:0 auto; -moz-border-radius:10px; -webkit-border-radius:10px; border-radius:10px;">
+							저장
+						</a>
+					</td>
+		       	</tr>
+		    <% end %>
+		  </tbody>
+		</table>
+		
+	</div>
 </div>
 
+<script>
+	function submit_rank_ask(ask_id, category_id){
+		var ranking = $("#ask_"+ask_id+"_ranking input").val();
+		if (ranking == 1 || ranking == 2 || ranking == 3){
+			$.ajax({
+		        url: "/admin/submit_rank_ask.json",
+		        type: 'POST',
+		        data: {'ask_id': ask_id, 'ranking': ranking, 'category_id': category_id },
+		        dataType: 'json',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+		        	location.reload();
+		        },
+		        beforeSend: function(){
+		        },
+		        complete: function(){
+		        }
+			});
+		}else{
+			alert("순위는 1~3사이 값이어야 합니다");
+		}
+	}
+	
+	function delete_rank_ask(rank_ask_id){
+		$.ajax({
+	        url: "/admin/delete_rank_ask.json",
+	        type: 'DELETE',
+	        data: {'rank_ask_id': rank_ask_id },
+	        dataType: 'json',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	location.reload();
+	        },
+	        beforeSend: function(){
+	        },
+	        complete: function(){
+	        }
+		});
+	}
+	
+</script>
