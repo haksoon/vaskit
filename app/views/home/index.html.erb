@@ -166,7 +166,7 @@
 	var my_vote_count = <%= @my_votes.length %>;
 	var askTemplate = _.template( $('#ask-template').html() );
 	
-	
+	<% unless @ranking_asks.blank? %>
 	var ranking_asks = <%= raw @ranking_asks.to_json %>;
 	
 	for(var i=0; i < ranking_asks.length; i++) {
@@ -179,6 +179,7 @@
 			$("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
 		});
 	}
+	<% end %>
 	
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
