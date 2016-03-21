@@ -75,10 +75,9 @@ class HomeController < ApplicationController
           end
         end 
     end
-    
     respond_to do |format|
       format.html {
-        if @asks.blank?
+        if params[:type] != nil && @asks.blank?
           redirect_to "/home/no_result"
         end 
       }
@@ -90,7 +89,7 @@ class HomeController < ApplicationController
   #GET /home/set_cateogry
   def set_category
     UserCategory.delete_all(:user_id => current_user.id) if current_user
-    if params[:type] != nil && params[:category_ids] == "all"
+    if params[:category_ids] == "all"
       @asks = Ask.all.order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal])
     else
       params[:category_ids].split(",").each do |category_id|
