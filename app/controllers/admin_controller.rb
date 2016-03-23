@@ -3,6 +3,7 @@ class AdminController < ApplicationController
   before_filter :auth_admin
   
   def index
+    @notices = Notice.all.order("id desc")
     category_id = params[:category_id]
     if category_id
       @rank_asks = RankAsk.where(:category_id => category_id).order("ranking asc")
@@ -19,10 +20,7 @@ class AdminController < ApplicationController
       else
         @asks = Ask.where("id not in (?)", @rank_asks.map(&:ask_id)).order("id desc")   
       end
-      
     end
-    
-    
     @categories = Category.all
     @tables = ActiveRecord::Base.connection.tables
     @tables = @tables - ["schema_migrations"]
@@ -55,6 +53,14 @@ class AdminController < ApplicationController
   
   def delete_rank_ask
     RankAsk.find(params[:rank_ask_id]).delete
+    render :json => {:status => "success"}
+  end
+  
+  def create_notice
+    notice = Notice.create(:title => params[:title], :message => params[:message])
+    User.where(:receive_notice_email => true).each do |user|
+      UserMailer.send_notice(user, notice).deliver
+    end
     render :json => {:status => "success"}
   end
   

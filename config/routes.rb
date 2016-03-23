@@ -21,6 +21,7 @@ Rails.application.routes.draw do
     end
   end
   resources :hash_tags
+  resources :notices
   resources :mail_logs
   resources :preview_images do
     collection do
@@ -38,6 +39,7 @@ Rails.application.routes.draw do
     get 'users/check_email', :to => "users/sessions#check_email"
     get 'users/manage', :to => "users/sessions#manage"
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
+    put 'users/toggle_receive_notice', :to => "users/sessions#toggle_receive_notice"
     delete 'users/:id', :to => "users/registrations#destroy"
   end
   resources :user_categories
@@ -77,6 +79,7 @@ Rails.application.routes.draw do
     collection do
       post 'submit_rank_ask'
       delete 'delete_rank_ask'
+      post 'create_notice'
     end
   end
   get "/admin/table/:table_name", :to => "admin#table"

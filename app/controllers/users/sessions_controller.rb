@@ -25,5 +25,18 @@ class Users::SessionsController < Devise::SessionsController
     render :json => {:status => status}
   end
   
+  
+  def toggle_receive_notice
+    message = "receive"
+    if current_user.receive_notice_email
+      current_user.update(:receive_notice_email => false)
+      message = "not_receive"
+    else
+      current_user.update(:receive_notice_email => true)
+    end
+    
+    render :json => {:message => message}
+  end
+  
 end
 
