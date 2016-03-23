@@ -1,6 +1,6 @@
 # coding : utf-8
 class UserMailer < ActionMailer::Base
-  default from: 'vaskit@vaskit.kr'
+  default from: 'notice@vaskit.kr'
   
   def send_notice(user, notice)
     @message = notice.message
