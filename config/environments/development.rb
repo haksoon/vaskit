@@ -42,8 +42,8 @@ Rails.application.configure do
     :address => 'dsmtp.naver.com',
     :port => 587,
     :authentication => :plain,
-    :user_name => 'afterwork_ndrive@naver.com',#email 주소
-    :password => 'qweruiop',#password
+    :user_name => 'vaskit@naver.com',#email 주소
+    :password => 'vaskit',#password
     :enable_starttls_auto => true
   }
   
