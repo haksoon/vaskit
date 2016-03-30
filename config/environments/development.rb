@@ -39,7 +39,7 @@ Rails.application.configure do
   
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => 'dsmtp.naver.com',
+    :address => 'smtp.worksmobile.com',
     :port => 587,
     :authentication => :plain,
     :user_name => 'notice@vaskit.kr',#email 주소
