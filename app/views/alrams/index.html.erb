@@ -1,7 +1,7 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "알림피드"} %>
-<a href="/alrams/all_read" style="color:#ee6e01; display:block; font-size:20px; padding:20px 0;">모두 읽은 상태로 표시</a>
+<a href="#" onclick="all_read(); return false;" style="color:#ee6e01; display:block; font-size:20px; padding:20px 0;">모두 읽은 상태로 표시</a>
 
-<div style="border-bottom:1px solid #dbdbdb;">
+<div id="alram_list" style="border-bottom:1px solid #dbdbdb;">
 <% if @alrams.blank? %>
 	<p style="padding:40px; margin:0; font-size:20px; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
 <% else %>
@@ -52,3 +52,26 @@
 
 </div>
 
+
+<script>
+	function all_read(){
+		$.ajax({
+	        url: '/alrams/all_read.json',
+	        type: 'PUT',
+	        data: {'blank':'blank'},
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+	        	$("#alram_list a").css("background-color","#fff");
+	        	notify("모두 읽음 처리 완료");
+	        },
+	        beforeSend: function(){
+	        	$(".loading").show();
+            },
+            complete: function(){
+            	$(".loading").hide();
+            }
+		});
+	}
+</script>

@@ -70,7 +70,7 @@ Rails.application.routes.draw do
   
   resources :alrams do 
     collection do
-      get 'all_read'
+      put 'all_read'
     end
   end
   resources :reports

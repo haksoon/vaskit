@@ -5,12 +5,13 @@ class AlramsController < ApplicationController
     @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15)
   end
   
-  
   def all_read
     Alram.where(:user_id => current_user.id, :is_read => false).each do |alram|
+      alram.record_timestamps = false #updated_at 안바뀌게
       alram.update(:is_read => true)
+      alram.record_timestamps = true #updated_at 안바뀌게
     end
-    redirect_to "/alrams"
+    render :json => {:status => "success"}
   end
   
 end

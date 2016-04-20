@@ -7,7 +7,9 @@ class AsksController < ApplicationController
   def show
     if current_user
       Alram.where(:ask_id => @ask.id, :user_id => current_user.id).each do |alram|
+        alram.record_timestamps = false #updated_at 안바뀌게
         alram.update(:is_read => true)
+        alram.record_timestamps = true #updated_at 안바뀌게
       end
     end
     
