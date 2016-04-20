@@ -304,13 +304,13 @@
 			<td style="width:50%; position:relative;">
 		  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
 		  		{{ if( ask.user_id != current_user_id  && already_vote.length == 0 ){ }}
-		  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+		  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
 		  		{{ } }}
 			</td>
 			<td style="width:50%; position:relative;">
 				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
-				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
 				{{ } }}
 			</td>
 		</tr>
@@ -425,7 +425,7 @@
       	}
 	});
 	
-	function vote_ask_deal(ask_deal_id, is_left){
+	function vote_ask_deal_show(ask_deal_id, is_left){
 		if (current_user_id == 0 && my_vote_count > 4){
 	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
 	 	}else{
