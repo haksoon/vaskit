@@ -61,7 +61,7 @@ Rails.application.routes.draw do
   
   resources :etc do
     collection do
-      get 'rending'
+      get 'landing'
       get 'inquiry'
       post 'create_inquiry'
     end
