@@ -28,6 +28,10 @@
 			var uniq_key = new Date() + Math.random();
 			$.cookie('uniq_key' , "<%= @uniq_key %>", { expires : 30000, path : '/' });
 		<% end %>
+		window.onbeforeunload = function(){
+			window.scrollTo(0,0);
+		}
+		
   	</script>
 </head>
 <body>

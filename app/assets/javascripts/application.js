@@ -37,7 +37,7 @@ function scrollDistanceFromBottom(argument) {
 function get_image_url(data, model_name, extention){
 	try {
 		var image_url = ""; //static url
-		image_url = "http://vaskit.kr/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+		image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
 		var image_file_name = data.image_file_name;
 		if(image_file_name.indexOf(".") == -1){
 			image_file_name = image_file_name + ".";

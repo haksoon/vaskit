@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   MOBILE_BROWSERS = ["android", "iphone", "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;", "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2","pocket","kindle", "mobile","pda","psp","treo"]
   
   def auth_user
-    render :template => "/etc/rending" unless current_user 
+    render :template => "/etc/landing" unless current_user 
   end
   
   def auth_admin

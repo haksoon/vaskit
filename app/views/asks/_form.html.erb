@@ -34,7 +34,7 @@
 			<tr>
 				<td style="text-align:left; width:35%;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field" %>
+						<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field", :rows => 1 %>
 					</div>
 				</td>
 				<td style="width:30%;">
@@ -44,14 +44,14 @@
 				</td>
 				<td style="text-align:right; width:35%;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input" %>
+						<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field" %>
+						<%= text_area_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field", :rows => 1 %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
@@ -61,14 +61,14 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input" %>
+						<%= text_area_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input", :rows => 1 %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
+						<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
@@ -78,14 +78,14 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
+						<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field" %>
+						<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field", :rows => 1 %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
@@ -95,14 +95,14 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input" %>
+						<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field" %>
+						<%= text_area_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field", :rows => 1 %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
@@ -112,14 +112,14 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field right_input" %>
+						<%= text_area_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field right_input", :rows => 1 %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field" %>
+						<%= text_area_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field", :rows => 1 %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
@@ -129,14 +129,14 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field right_input" %>
+						<%= text_area_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field right_input", :rows => 1 %>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td style="text-align:left; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 2px 0 0;">
-						<%= text_field_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field" %>
+						<%= text_area_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field", :rows => 1 %>
 					</div>
 				</td>
 				<td style="width:30%; padding-top:6px;">
@@ -146,7 +146,7 @@
 				</td>
 				<td style="text-align:right; width:35%; padding-top:6px;">
 					<div style=" border:1px solid #dbdbdb;margin:0 0 0 2px;">
-						<%= text_field_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field right_input" %>
+						<%= text_area_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field right_input", :rows => 1 %>
 					</div>
 				</td>
 			</tr>
@@ -527,7 +527,7 @@
 	});
 	
 	function submit_form(){
-		if ( $("#left_deal_image_btn img").attr("src") == null){
+		if ( $("#left_deal_image_btn img").attr("src") == "/images/ask/card_a_upload.png"){
 			notify('CARD A 이미지를 추가해주세요.');
 			return;
 		}
@@ -537,7 +537,7 @@
 			return;
 		}
 		
-		if ( $("#right_deal_image_btn img").attr("src") == null){
+		if ( $("#right_deal_image_btn img").attr("src") == "/images/ask/card_b_upload.png"){
 			notify('CARD B 이미지를 추가해주세요.');
 			return;
 		}
@@ -550,18 +550,9 @@
 	}
 	
 	function edit_form(){
-		if ( $("#left_deal_image_btn img").attr("src") == null){
-			notify('CARD A 이미지를 추가해주세요.');
-			return;
-		}
 		
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
-			return;
-		}
-		
-		if ( $("#right_deal_image_btn img").attr("src") == null){
-			notify('CARD B 이미지를 추가해주세요.');
 			return;
 		}
 		

@@ -53,6 +53,13 @@ p, ol, ul, td {
     color:    #CCC;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
 .hover_pointer { cursor: pointer; }
 
 #wrap{
@@ -239,6 +246,7 @@ p, ol, ul, td {
 }
 
 .ask_text_field{
+	display:block;
   	width:100%; 
   	border:none;
   	-webkit-box-sizing: border-box; 

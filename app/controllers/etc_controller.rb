@@ -1,7 +1,7 @@
 # coding : utf-8
 class EtcController < ApplicationController
   
-  def rending
+  def landing
   end 
   
   def access_term

@@ -51,7 +51,7 @@ class AsksController < ApplicationController
     end
     
     if left_deal_params[:deal_id].blank?
-      left_deal = Deal.create(:title => left_deal_params[:title], :brand => left_deal_params[:brand], :price => left_deal_params[:price], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3], :image => left_image)
+      left_deal = Deal.create(:title => left_deal_params[:title], :brand => left_deal_params[:brand], :price => left_deal_params[:price], :link => left_deal_params[:link], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3], :image => left_image)
     else
       left_deal = Deal.find(left_deal_params[:deal_id])
       if left_image.blank?
@@ -78,7 +78,7 @@ class AsksController < ApplicationController
     end
     
     if right_deal_params[:deal_id].blank?
-      right_deal = Deal.create(:title => right_deal_params[:title], :brand => right_deal_params[:brand], :price => right_deal_params[:price], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3], :image => right_image)
+      right_deal = Deal.create(:title => right_deal_params[:title], :brand => right_deal_params[:brand], :price => right_deal_params[:price], :link => right_deal_params[:link], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3], :image => right_image)
     else
       right_deal = Deal.find(right_deal_params[:deal_id])
       if right_image.blank?
@@ -130,7 +130,6 @@ class AsksController < ApplicationController
     
     if left_deal_params[:deal_id].blank?
       left_deal_params.except!("deal_id")
-      left_deal_params.except!("link")
       left_deal_params[:is_modify] = true
     else
       left_deal = Deal.find(left_deal_params[:deal_id])
@@ -163,7 +162,6 @@ class AsksController < ApplicationController
     
     if right_deal_params[:deal_id].blank?
       right_deal_params.except!("deal_id")
-      right_deal_params.except!("link")
       right_deal_params[:is_modify] = true
     else
       right_deal = Deal.find(right_deal_params[:deal_id])

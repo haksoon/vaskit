@@ -61,6 +61,7 @@
 		  <tbody>
 		    <% @rank_asks.each do |rank_ask| %>
 		    	<% ask = rank_ask.ask %>
+		    	<% if ask %>
 				<tr>
 					<td>
 						<%= ask.message %>
@@ -80,6 +81,7 @@
 						</a>
 					</td>
 		       	</tr>
+		       	<% end %>
 		    <% end %>
 		  </tbody>
 		</table>
