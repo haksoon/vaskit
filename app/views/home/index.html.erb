@@ -21,7 +21,7 @@
 <div id="asks" style="padding:9px 12px;"></div>
 <div class="home-float-btn">
 	<% if current_user %>
-		<a href="/asks/new"><img src="/images/home/writing.png"></a>
+		<a href="/asks/new" style="display:block; width:70px; height:70px;"><img src="/images/home/writing.png"></a>
 	<% else %>
 		<a href="#" onclick="notify('회원가입 후<br />질문을 올릴 수 있습니다.'); return false;"><img src="/images/home/writing.png"></a>
 	<% end %>
@@ -62,7 +62,7 @@
 			{{ } }}
 			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />{{= get_past_time(ask.created_at) }}
 		</span>
-		<div style="text-align:left; padding:9px 80px 9px 12px; position:relative;">
+		<div style="text-align:left; padding:9px 80px 9px 9px; position:relative;">
 			{{ if( ask.user){ }}
 				<p style="margin:0; color:#998675; font-size:17px; padding-right:9px;">@{{= ask.user.string_id }}</p>
 			{{ } }}
@@ -196,7 +196,7 @@
 	
 	function vote_ask_deal(ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
-	 		notify("회원가입 후<br />의견을 남길 수 있습니다.");
+	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
 	 	}else{
 	 		$.ajax({
 		        url: "/votes.json",

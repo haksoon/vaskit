@@ -80,6 +80,24 @@ function back_button(){
 	}
 }
 
+function share_log(channel){
+	$.ajax({
+        url: "/share_logs.json",
+        type: 'POST',
+        async: false,
+        data: {"channel" : channel},
+        dataType: 'json',
+        error: function(){
+            return false;
+        },
+        success: function(data){
+        },
+	    beforeSend: function(){
+        }
+	});
+}
+
+
 function truncate(string){
    if (string.length > 40)
       return string.substring(0,40)+'...';

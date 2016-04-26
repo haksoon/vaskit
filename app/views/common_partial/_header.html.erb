@@ -10,11 +10,11 @@
 		</td>
 		<td style="width:60px;">
 			<% if current_user %>
-				<a href="/<%=current_user.string_id%>" style="position:relative;">
-					<img style="width:48px; padding:0 4px; margin-bottom:-1px;" src="/images/header/my.png" />
+				<a href="/<%=current_user.string_id%>" style="position:relative; display:block;">
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img src="/images/common/new.png" style="position:absolute; top:-18px; right:10px; width:16px;"/>
+						<img src="/images/common/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
 					<% end %>
+					<img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
 				</a>
 			<% else %>
 				<a href="/etc/landing"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>

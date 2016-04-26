@@ -6,8 +6,8 @@
 	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; margin-left:6px;">로그아웃</a>
 </div>
 
-
-<% if @records.blank?%>
+<div style="padding:0 10px;">
+	<% if @records.blank?%>
 	<p style="margin:0 auto; padding:200px 0; width:100%;text-align:center;">
 		데이터가 없습니다.
 	</p>
@@ -27,7 +27,12 @@
 	    <% @records.each do |record| %>
 			<tr>
 				<% @record_names.each do |name| %>
-			    	<td><%=record[name]%></td>
+					<% if record[name].class == ActiveSupport::TimeWithZone %>
+					<td><%=record[name].to_s(:dot_colon_datetime) %></td>
+					<% else %>
+					<td><%=record[name]%></td>
+					<% end %>
+			    	
 			    <% end %>
 			    
 			    <td>
@@ -42,4 +47,6 @@
 	    <% end %>
 	  </tbody>
 	</table>
-<% end %>
+	<% end %>	
+</div>
+
