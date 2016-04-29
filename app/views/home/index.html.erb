@@ -99,7 +99,7 @@
 	{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
 	<table cellspacing="0" cellpadding="0" style="width:100%;">
 		<tr>
-			<td style="width:75%; position:relative;">
+			<td style="width:50%; position:relative;">
 		  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
 		  		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 		  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
