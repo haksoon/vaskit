@@ -43,7 +43,7 @@ class CommentsController < ApplicationController
   
   
   def destroy
-    Comment.find_by_id(params[:id]).delete
+    Comment.find_by_id(params[:id]).destroy
     redirect_to(:back)
   end
   

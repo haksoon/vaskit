@@ -7,9 +7,9 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="http://vaskit.kr/images/common/app_icon.png"/>
 	<link rel="apple-touch-icon" sizes="114x114" href="http://vaskit.kr/images/common/app_icon.png"/>
   	<% if (controller.controller_name == "asks" && controller.action_name == "show") %>
-		<meta property="og:title" content="@<%=@ask.user.string_id%>님을 도와주세요! 머리가 빠져가고 있습니다..." />
+		<meta property="og:title" content="@<%=@ask.user.string_id%>님을 도와주세요! 머리털이 빠지고 있어요..." />
 		<meta property="og:url" content="http://vaskit.kr/asks/<%= @ask.id %>" />
-		<meta property="og:description" content="'<%=@ask.left_ask_deal.title%>' vs '<%=@ask.right_ask_deal.title%>', 무엇을 사야 후회하지 않을까요? 형님, 누님, 친구님들! 저의 결정장애에 도움을 주세요!" />
+		<meta property="og:description" content="'<%=@ask.left_ask_deal.title%>' vs '<%=@ask.right_ask_deal.title%>', 무엇을 선택해야 후회하지 않을까요? 결정장애 해결에 도움을 주세요!" />
 	
 		<meta property="og:image" content="http://vaskit.kr/images/etc/share_image.png" />
 		<meta property="fb:app_id" content="1738386856398348" />

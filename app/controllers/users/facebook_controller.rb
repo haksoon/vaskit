@@ -30,17 +30,18 @@ class Users::FacebookController < Devise::PasswordsController
       if user.blank?
         if email && name && facebook_id && gender && birthday
           string_id = User.get_uniq_string_id( email.split("@")[0] )
-          user = User.create(:email => email, :password => "is_facebook", :password_confirmation => "is_facebook", :sign_up_type => "facebook", :facebook_id => graph_user["id"], :name => name, :birthday => birthday, :gender => gender, :string_id => string_id)
+          user = User.create(:email => email, :password => "is_facebook", :password_confirmation => "is_facebook", :sign_up_type => "facebook", :facebook_id => graph_user["id"], :name => name, :birthday => birthday, :gender => gender, :string_id => string_id, :remember_me => true)
           sign_in user
           redirect_to root_path
         else
           redirect_to new_user_registration_path(:email => email, :name => name, :facebook_id => facebook_id, :gender => gender, :birthday => birthday)
         end
       elsif user && user.sign_up_type == "email"
-        user.update(:facebook_id => facebook_id, :sign_up_type => "both")
+        user.update(:facebook_id => facebook_id, :sign_up_type => "both", :remember_me => true)
         sign_in user
         redirect_to root_path
       else
+        user.remember_me = true
         sign_in user
         redirect_to root_path
       end
