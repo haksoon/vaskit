@@ -45,7 +45,7 @@
 				# {{= keyword }}
 			</a>
 		{{ }else if(type == "ask_deal"){ }}
-			<a href="/?keyword={{=id}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
+			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
 				ⓟ {{= keyword }}
 			</a>
 		{{ }else if(type == "brand"){ }}
@@ -123,9 +123,9 @@
 						$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
 					});
 					
-					$.each(data.ask_deals, function( index, ask_deal ) {
-						$('#search_result').append(searchResultTemplate({keyword: ask_deal.title, type: 'ask_deal', id: ask_deal.id}));
-					});
+					if (data.ask_deal){
+            $('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
+          }
 					
 					if (data.brand){
 						$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
