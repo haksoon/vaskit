@@ -1,6 +1,6 @@
 class AskDeal < ActiveRecord::Base
   
-  has_attached_file :image, :styles => { :normal => "180x180#" },
+  has_attached_file :image, :styles => { :normal => "500x500#" },
                     :url  => "/assets/ask_deals/:id/:style/:basename.:extension",
                     :path => ":rails_root/public/assets/ask_deals/:id/:style/:basename.:extension",
                     :default_url => "/images/common/profile_photo.png"

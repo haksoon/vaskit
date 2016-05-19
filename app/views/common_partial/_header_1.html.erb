@@ -1,7 +1,11 @@
 <table class="header_shadow" cellspacing="0" cellpadding="0" style="position:fixed; top:0; width:inherit; overflow:visible; height:47px; z-index:1; background-color:#998675;">
 	<tr>
 		<td style="width:60px;">
-			<a href="#" onclick="back_button(); return false;"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/common/backward_btn.png" /></a>
+		  <% if flash[:redirect_url] %>
+        <a href="<%= flash[:redirect_url] %>"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/common/backward_btn.png" /></a>
+      <% else %>
+        <a href="#" onclick="back_button(); return false;"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/common/backward_btn.png" /></a>
+      <% end %>
 		</td>
 		<td style="text-align:center;">
 			<% if title == "logo" %>

@@ -41,11 +41,28 @@ class CommentsController < ApplicationController
     render :json => {:message => message, :comment => comment}
   end
   
-  
+  #어드민에서 삭제
   def destroy
     Comment.find_by_id(params[:id]).destroy
     redirect_to(:back)
   end
+  
+  def comment_del
+    comment = Comment.find_by_id(params[:id])
+    if comment.user_id == current_user.id
+      comment.destroy
+    end
+    
+    render :json => {:status => "success" }
+  end
+  
+  
+  def update
+    comment = Comment.find_by_id(params[:id])
+    comment.update(:content => params[:content])
+    render :json => {:status => "success" }
+  end
+  
   
   def like
     already_like = false

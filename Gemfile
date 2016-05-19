@@ -39,6 +39,8 @@ gem "nokogiri"
 # Use Unicorn as the app server
 gem 'unicorn'
 
+gem 'redis-rails'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

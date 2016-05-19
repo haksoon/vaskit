@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :comments do
     member do
       post 'like'
+      delete 'comment_del'
     end
   end 
   resources :comment_likes

@@ -166,6 +166,20 @@ input::-webkit-inner-spin-button {
   	-webkit-border-radius:0px;
 }
 
+.comment_modify_box{
+    width:100%; 
+    min-height:40px;
+    border:none;
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box; 
+    font-size:12px;
+    color:#393939;
+    height:34px;
+    -webkit-appearance: none;
+    -webkit-border-radius:0px;
+    display:none;
+}
+
 .deal_detail td{
 	max-width: 0;
 }
@@ -239,7 +253,7 @@ input::-webkit-inner-spin-button {
 .ask_message_input{
 	text-align:left; 
   	width:100%; 
-  	min-height:60px; 
+  	min-height:120px; 
   	-webkit-box-sizing: border-box; 
   	box-sizing: border-box; 
   	padding:8px; 
@@ -252,8 +266,8 @@ input::-webkit-inner-spin-button {
 
 .ask_search_deal{
 	display:block; 
-	background-color:#998675; 
-	border:1px solid #dbdbdb;
+	background-color:#ee6e01; 
+	border:1px solid #ee6e01;
 	border-top:none;
 	color:#fff;
 	font-size:13px;

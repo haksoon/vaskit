@@ -5,6 +5,7 @@
 	<div id="more_popup_sub">
 		<a id="ask_edit_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">수정하기</a>
 		<a id="ask_report_btn" href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">신고하기</a>
+		<a id="vote_modify_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">투표 취소하기</a>
 		<a id="ask_complete_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; font-size:15px;">질문 종료하기</a>
 	</div>
 	<div id="more_popup_report" style="text-align:left; display:none;">
@@ -33,7 +34,21 @@
 <script>
 
 	var report_type;
+	
 	function show_more_popup(target, target_id, ask_user_id, current_user_id){
+	  if (target == 'comment'){
+	    var already_vote = [];
+	  }else{
+	    var current_ask = $.grep(asks, function(obj) { return obj.id === target_id })[0];
+      var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === current_ask.id });
+	  }
+	  
+	  if (target == 'comment' || ask_user_id == current_user_id || already_vote.length == 0){ 
+      $("#vote_modify_btn").hide();
+	  }else{
+	    $("#vote_modify_btn").attr("onclick","vote_modify("+target_id+"); return false;");
+	  }
+	  
 		if (ask_user_id == current_user_id){
 			$("#ask_report_btn").hide();
 		}else{
@@ -51,6 +66,7 @@
 	function hide_more_popup(){
 		$("#ask_edit_btn").show();
 		$("#ask_report_btn").show();
+		$("#vote_modify_btn").show();
 		$("#ask_complete_btn").show();
 		$("#more_popup_sub").show();
 		$("#more_popup_report").hide();
@@ -124,7 +140,16 @@
 	        	$(".loading").hide();
 	        }
 		});
-		
+	}
+	
+	function vote_modify(ask_id){
+	  var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+	  var change_votes = $.grep(my_votes, function(obj) { return obj.ask_id != ask.id });
+	  my_votes = change_votes;
+	  var askDealTemplate = _.template($('#ask-deal-template').html())
+    $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask}));
+    notify("다시 투표해주세요");
+    hide_more_popup();
 	}
 	
 </script>

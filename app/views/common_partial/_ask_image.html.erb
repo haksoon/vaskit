@@ -1,0 +1,73 @@
+<div id="ask_image_bg" onclick="ask_image_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:3; opacity:0.75; display:none;"></div>
+<div id="ask_image_overlay" style="width:inherit; position:fixed; top:0; z-index:4; display:none;">
+  <a href="#" onclick="ask_image_off(); return false;" style="width:100%; display:block; text-align:right;">
+    <img style="width:26px; padding:6px 10px; margin-top:4px; margin-right:4px;" src="/images/header/menu_off.png" />
+  </a>
+  
+  <div id="ask_image_seg" style="padding:0 12px;">
+    
+  </div>
+  
+</div>
+
+
+<script type="text/template" id="ask-image-seg-template">
+  {{ if (is_left){ }}
+    {{ ask_deal = ask.left_ask_deal }}
+    {{ left_css = "color:#ee6e01; font-weight:bold; font-size:16px; border-bottom:3px solid #ee6e01; height:42px; line-height:42px;" }}
+    {{ right_css = "color:#fff; font-size:16px; height:42px; line-height:42px;" }}
+  {{ }else{ }}
+    {{ ask_deal = ask.right_ask_deal }}
+    {{ left_css = "color:#fff; font-size:16px; height:42px; line-height:42px;" }}
+    {{ right_css = "color:#ee6e01; font-weight:bold; font-size:16px; border-bottom:3px solid #ee6e01; height:42px; line-height:42px;" }}
+  {{ } }}
+  
+  <table cellspacing="0" cellpadding="0" style="width:100%; overflow:visible; height:42px;">
+    <tr>
+      <td style="width:50%;">
+        <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="width:100%; display:block; {{= left_css }} ">
+          CARD A
+        </a>
+      </td>
+      <td style="width:50%;">
+        <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="width:100%; display:block; {{= right_css }}">
+          CARD B
+        </a>
+      </td>
+    </tr>
+  </table>
+  <div>
+    <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%;" />
+    <p style="color:#fff; margin:12px 0 2px 0; font-weight:bold; font-size:14px;">
+      {{= ask_deal.title }}
+    </p>
+    <p style="color:#fff; margin:2px auto; font-weight:normal; font-size:13px;">
+      {{= ask_deal.brand }}
+    </p>
+    <p style="color:#fff; margin:2px auto; font-weight:normal; font-size:13px;">
+      {{= numberWithCommas(ask_deal.price) }}원
+    </p>
+    <p style="color:#fff; margin:2px auto; font-weight:normal; font-size:13px;">
+      {{ var aLink = document.createElement("a") }}
+      {{ aLink.href= ask_deal.link }}
+      <a href="{{=ask_deal.link }}" target="_blank" style="color:#fff;">{{= aLink.host }} <img src="/images/ask/link_icon.png" style="width:12px; margin-bottom:-2px;" /></a>
+    </p>
+  </div>
+</script>
+
+<script>
+  function ask_image_on(ask_id, is_left){
+    $("#ask_image_overlay").show();
+    $("#ask_image_bg").show();
+    
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
+    $("#ask_image_seg").html(askImageSegTemplate({ask:ask, is_left:is_left}));
+  }
+  
+  function ask_image_off(){
+    $("#ask_image_overlay").hide();
+    $("#ask_image_bg").hide();
+  }
+  
+</script>

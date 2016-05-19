@@ -97,6 +97,25 @@ function share_log(channel){
 	});
 }
 
+function get_user_ages(birthday){
+  try {
+    var ret = "";
+    if (birthday == null || birthday == ""){
+      ret = "기타";
+    }else{
+      var current_user_year = parseInt(birthday.split("-")[0]);
+      var current_year = (new Date).getFullYear();
+      var user_age = current_year - current_user_year + 1;
+
+      user_age = Math.floor(user_age/10) * 10;
+      ret = user_age + "대";
+    }
+    return ret;
+  }catch(err) {
+      return "기타";
+  }
+}
+
 
 function truncate(string){
    if (string.length > 40)

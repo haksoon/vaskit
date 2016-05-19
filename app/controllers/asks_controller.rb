@@ -12,9 +12,8 @@ class AsksController < ApplicationController
         alram.record_timestamps = true #updated_at 안바뀌게
       end
     end
-    
     @asks = Ask.where(:id => @ask.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
-    
+    @detail_vote_count = @ask.detail_vote_count
     if current_user
       @my_votes = Vote.where(:user_id => current_user.id)
     elsif @visitor
@@ -193,6 +192,10 @@ class AsksController < ApplicationController
       hash_tag = hash_tag.tr("#","").tr(",","")
       HashTag.create(:ask_id => @ask.id, :keyword => hash_tag) if HashTag.where(:ask_id => @ask.id, :keyword => hash_tag).blank? 
     end
+    
+    
+    flash[:redirect_url] = "/"
+    flash[:ask_update] = "게시글 수정이 완료되었습니다."
     
     redirect_to "/asks/#{@ask.id}"
   end
