@@ -109,26 +109,26 @@ input::-webkit-inner-spin-button {
 .category{
 	background-color:#4b3d3d; 
 	display:inline-block; 
-	padding:3px 7px; 
+	padding:5px 10px; 
 	color:#fff; 
 	font-weight:bold; 
 	font-size:12px; 
 	-moz-border-radius:3px; 
 	-webkit-border-radius:3px; 
-	border-radius:3px;
+	border-radius:0px;
 }
 
 .category_none{
 	background-color:#fff; 
 	display:inline-block;
 	border:1px solid #dbdbdb;
-	padding:3px 7px; 
+	padding:5px 10px; 
 	color:#9d9ea0; 
 	font-weight:bold; 
 	font-size:12px; 
 	-moz-border-radius:3px; 
 	-webkit-border-radius:3px; 
-	border-radius:3px;
+	border-radius:0px;
 }
 
 .home-float-btn img{
