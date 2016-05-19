@@ -57,6 +57,11 @@
 
 <script>
   function ask_image_on(ask_id, is_left){
+    $("body").bind("mousewheel.disableScroll DOMMouseScroll.disableScroll touchmove.disableScroll",function(e){
+      e.preventDefault();
+      return false;
+    });
+    
     $("#ask_image_overlay").show();
     $("#ask_image_bg").show();
     
@@ -66,6 +71,7 @@
   }
   
   function ask_image_off(){
+    $("body").unbind("mousewheel.disableScroll DOMMouseScroll.disableScroll touchmove.disableScroll");
     $("#ask_image_overlay").hide();
     $("#ask_image_bg").hide();
   }
