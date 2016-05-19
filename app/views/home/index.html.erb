@@ -99,7 +99,7 @@
       		{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
             <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
           {{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-            <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);">
+            <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);">
               <img src="/images/home/vote_result_check.png" style="width:34%; margin-top:26%; margin-left:0%;  ">
             </a>
           {{ } }}
@@ -115,7 +115,7 @@
 				
 				{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
   				{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-            <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
+            <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
           {{ }else if(ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
             <a href="#" onclick="ask_image_on({{=ask.id}}, false ); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);">
               <img src="/images/home/vote_result_check.png" style="width:34%; margin-top:26%; margin-left:0%;  ">
