@@ -249,16 +249,16 @@
       {{ } }}
       <table cellspacing="0" cellpadding="0" style="bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:32px;">
         <tr>
-          <td class="vote-result-td" style="text-align:right;">
-            <span style="float:left; margin-left:10px;">{{= left_ratio }}%</span>
-            <span style="display:inline-block; width:{{= Math.round(left_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
+          <td class="vote-result-td" style="text-align:right; padding-left:50px;">
+            <span style="float:left; margin-left:-40px;">{{= left_ratio }}%</span>
+            <span style="display:inline-block; width:{{= 100 }}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
           </td>
           <td style="min-width:56px;">
             투표 결과
           </td>
-          <td class="vote-result-td" style="text-align:left;">
-            <span style="float:right; margin-right:10px;">{{= right_ratio }}%</span>
-            <span style="display:inline-block; width:{{= Math.round(right_ratio * 0.6) + 2 }}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
+          <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+            <span style="float:right; margin-right:-40px;">{{= right_ratio }}%</span>
+            <span style="display:inline-block; width:{{= 100 }}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
           </td>
         </tr>
       </table>
@@ -283,28 +283,28 @@
         {{ }else if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) > (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
           {{ gender_male_css = "color: #ee6e01;font-weight: bold;" }}
         {{ } }} 
-        <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675;">
+        <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675; width:100%; background-color:#BEAD9D; font-size:12px; color:#fff;">
           <tbody>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(male_left_ratio * 0.6) }}%; height:5px;line-height:7px;background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px">
+                <span style="display:inline-block; width:{{= Math.round(male_left_ratio) }}%; height:5px;line-height:7px; background-color:{{= (male_left_ratio > male_right_ratio) ? '#ee6e01;' : '#fff;' }}">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{=gender_male_css }}">
                 남자
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(male_right_ratio * 0.6) }}%; height:5px;line-height:7px;background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px">
+                <span style="display:inline-block; width:{{= Math.round(male_right_ratio) }}%; height:5px;line-height:7px;background-color:{{= (male_left_ratio < male_right_ratio) ? '#ee6e01;' : '#fff;' }};">&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(female_left_ratio * 0.6) }}%; height:5px;line-height:7px;background-color: #ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px">
+                <span style="display:inline-block; width:{{= Math.round(female_left_ratio) }}%; height:5px;line-height:7px;background-color:{{= (female_left_ratio > female_right_ratio) ? '#ee6e01;' : '#fff;' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{=gender_female_css }}">
                 여자
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(female_right_ratio * 0.6) }}%; height:5px;line-height:7px;background-color: #ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px">
+                <span style="display:inline-block; width:{{= Math.round(female_right_ratio) }}%; height:5px;line-height:7px;background-color: {{= (female_left_ratio < female_right_ratio) ? '#ee6e01;' : '#fff;' }};">&nbsp;</span>
               </td>
             </tr>
           </tbody>
@@ -373,83 +373,83 @@
         {{ }else if( max_index == 6 ){ }}
           {{ etc_css = "color: #ee6e01;font-weight: bold;" }}
         {{ } }} 
-        <table cellspacing="1" cellpadding="0" class="graph">
+        <table cellspacing="1" cellpadding="0" class="graph" style="width:100%; background-color:#BEAD9D; font-size:12px; color:#fff;">
           <tbody>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(age_20_1_left_ratio * 0.6) }}%; height:5px; line-height:7px; background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px">
+                <span style="display:inline-block; width:{{= Math.round(age_20_1_left_ratio) }}%; height:5px; line-height:7px; background-color:{{= (age_20_1_left_ratio > age_20_1_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{= age_20_1_css }}">
                 20초
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(age_20_1_right_ratio * 0.6) }}%; height:5px;line-height:7px;background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_20_1_right_ratio) }}%; height:5px;line-height:7px;background-color:{{= (age_20_1_left_ratio < age_20_1_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(age_20_2_left_ratio * 0.6) }}%; height:5px;line-height:7px;background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_20_2_left_ratio) }}%; height:5px;line-height:7px;background-color:{{= (age_20_2_left_ratio > age_20_2_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{= age_20_2_css }}">
                 20중
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(age_20_2_right_ratio * 0.6) }}%; height:5px;line-height:7px;background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_20_2_right_ratio) }}%; height:5px;line-height:7px;background-color:{{= (age_20_2_left_ratio < age_20_2_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(age_20_3_left_ratio * 0.6) }}%; height:5px;line-height:7px;background-color:#ee6e01;border-radius: 5px 0 0 5px;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_20_3_left_ratio) }}%; height:5px;line-height:7px;background-color:{{= (age_20_3_left_ratio > age_20_3_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px;{{= age_20_3_css }}">
                 20후
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(age_20_3_right_ratio * 0.6) }}%; height:5px;line-height:7px;background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_20_3_right_ratio) }}%; height:5px;line-height:7px;background-color:{{= (age_20_3_left_ratio < age_20_3_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block;width:{{= Math.round(age_30_1_left_ratio * 0.6) }}%;height:5px;line-height:7px;background-color: #ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px;">
+                <span style="display:inline-block;width:{{= Math.round(age_30_1_left_ratio) }}%;height:5px;line-height:7px;background-color:{{= (age_30_1_left_ratio > age_30_1_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{= age_30_1_css }}">
                 30초
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block;width:{{= Math.round(age_30_1_right_ratio * 0.6) }}%;height:5px;line-height:7px;background-color: #ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+                <span style="display:inline-block;width:{{= Math.round(age_30_1_right_ratio) }}%;height:5px;line-height:7px;background-color:{{= (age_30_1_left_ratio < age_30_1_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(age_30_2_left_ratio * 0.6) }}%; height:5px; line-height:7px; background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_30_2_left_ratio) }}%; height:5px; line-height:7px; background-color:{{= (age_30_2_left_ratio > age_30_2_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{= age_30_2_css }}">
                 30중
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(age_30_2_right_ratio * 0.6) }}%; height:5px; line-height:7px; background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_30_2_right_ratio) }}%; height:5px; line-height:7px; background-color:{{= (age_30_2_left_ratio < age_30_2_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(age_30_3_left_ratio * 0.6) }}%; height:5px; line-height:7px; background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_30_3_left_ratio) }}%; height:5px; line-height:7px; background-color:{{= (age_30_3_left_ratio > age_30_3_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{= age_30_3_css }}">
                 30후
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(age_30_3_left_ratio * 0.6) }}%; height:5px; line-height:7px; background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+                <span style="display:inline-block; width:{{= Math.round(age_30_3_left_ratio) }}%; height:5px; line-height:7px; background-color:{{= (age_30_3_left_ratio < age_30_3_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
             </tr>
             <tr>
-              <td class="vote-result-td" style="text-align:right;">
-                <span style="display:inline-block; width:{{= Math.round(etc_left_ratio * 0.6) }}%; height:5px; line-height:7px; background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:right; padding-left:50px;">
+                <span style="display:inline-block; width:{{= Math.round(etc_left_ratio) }}%; height:5px; line-height:7px; background-color:{{= (etc_left_ratio > etc_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
               <td style="min-width:56px; {{= etc_css }}">
                 기타
               </td>
-              <td class="vote-result-td" style="text-align:left;">
-                <span style="display:inline-block; width:{{= Math.round(etc_right_ratio * 0.6) }}%; height:5px; line-height:7px; background-color:#ee6e01;">&nbsp;</span>
+              <td class="vote-result-td" style="text-align:left; padding-right:50px;">
+                <span style="display:inline-block; width:{{= Math.round(etc_right_ratio) }}%; height:5px; line-height:7px; background-color:{{= (etc_left_ratio < etc_right_ratio) ? '#ee6e01;' : '#fff' }};">&nbsp;</span>
               </td>
             </tr>
           </tbody>

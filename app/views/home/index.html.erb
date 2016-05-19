@@ -133,16 +133,16 @@
 		{{ } }}
 		<table cellspacing="0" cellpadding="0" style="position:absolute; bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:32px;">
 			<tr>
-				<td class="vote-result-td" style="text-align:right; padding:6px 0 4px 0px;">
-					<span style="float:left; margin-left:10px;">{{= left_ratio }}%</span>
-					<span style="float:right; margin-top:4px; width:{{= Math.round(left_ratio * 0.6) + 2 }}%; height:5px; background-color:{{=left_background}};">&nbsp;</span>
+				<td class="vote-result-td" style="text-align:right; padding:6px 0 4px 40px; padding-left:50px;">
+					<span style="float:left; margin-left:-40px;">{{= left_ratio }}%</span>
+					<span style="float:right; margin-top:4px; width:{{= Math.round(left_ratio)}}%; height:5px; background-color:{{=left_background}};">&nbsp;</span>
 				</td>
 				<td style="min-width:56px; padding:6px 0 4px 0px;">
 					투표 결과
 				</td>
-				<td class="vote-result-td" style="text-align:left; padding:6px 0 4px 0px;">
-					<span style="float:right; margin-right:10px;">{{= right_ratio }}%</span>
-					<span style="float:left; margin-top:4px; width:{{= Math.round(right_ratio * 0.6) + 2 }}%; height:5px; background-color:{{=right_background}};">&nbsp;</span>
+				<td class="vote-result-td" style="text-align:left; padding:6px 0 4px 0px; padding-right:50px;">
+					<span style="float:right; margin-right:-40px;">{{= right_ratio }}%</span>
+					<span style="float:left; margin-top:4px; width:{{= Math.round(right_ratio) }}%; height:5px; background-color:{{=right_background}};">&nbsp;</span>
 				</td>
 			</tr>
 		</table>
