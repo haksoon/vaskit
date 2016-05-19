@@ -10,13 +10,13 @@ class Ask < ActiveRecord::Base
   ASK_PER = 5
   
   def detail_vote_count
-    age_20 = Date.new(Time.now.year - 19, 1, 1)
-    age_20_1_end = Date.new(Time.now.year - 23, 1, 1)
-    age_20_2_end = Date.new(Time.now.year - 26, 1, 1)
-    age_30 = Date.new(Time.now.year - 29, 1, 1)
-    age_30_1_end = Date.new(Time.now.year - 33, 1, 1)
-    age_30_2_end = Date.new(Time.now.year - 36, 1, 1)
-    age_30_3_end = Date.new(Time.now.year - 39, 1, 1)
+    age_20 = Date.new(Time.now.year - 18, 1, 1)
+    age_20_1_end = Date.new(Time.now.year - 22, 1, 1)
+    age_20_2_end = Date.new(Time.now.year - 25, 1, 1)
+    age_30 = Date.new(Time.now.year - 28, 1, 1)
+    age_30_1_end = Date.new(Time.now.year - 32, 1, 1)
+    age_30_2_end = Date.new(Time.now.year - 35, 1, 1)
+    age_30_3_end = Date.new(Time.now.year - 38, 1, 1)
     
     detail_vote_count = {
       :left => {
