@@ -40,6 +40,8 @@ p, ol, ul, td {
     // font-family: verdana, arial, helvetica, sans-serif;
 }
 
+* {-webkit-text-size-adjust:none;}
+
 ::-webkit-input-placeholder { /* WebKit browsers */
     color:    #CCC; 
 }
@@ -178,6 +180,15 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     -webkit-border-radius:0px;
     display:none;
+}
+
+.deal_spec_detail td{
+    max-width: 0;
+    background-color:#f4f4f4;
+}
+
+.deal_spec_detail td p{
+    word-break:break-all;
 }
 
 .deal_detail td{

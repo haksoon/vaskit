@@ -189,7 +189,6 @@ function enableScroll() {
 }
 
 
-
 $( document ).ready(function() {
 	//ie 에서 placeholder 
 	(function($) {

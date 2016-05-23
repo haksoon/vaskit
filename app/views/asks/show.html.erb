@@ -32,7 +32,7 @@
           {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
         {{ } }}
         <p style="margin: 1px 3px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}}">{{= get_user_ages(ask.user.birthday) }}</p>
-        <p style="margin:2px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">@{{= ask.user.string_id }}</p>
+        <p style="margin:2px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
 			{{ } }}
 			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px;">
 				{{ if( ask.message){ }}
@@ -138,7 +138,7 @@
 			</tr>
 			{{ } }}
 		</table>
-		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
+		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 			{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
 			<tr>
 				<td style="width:33%;">
@@ -147,7 +147,7 @@
 					</p>
 				</td>
 				<td style="width:34%;">
-					<p style="margin:0;  background-color:#f4f4f4; height:16px; color:#383838; font-size:13px; padding:2px 8px;">
+					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.spec1 }}
 					</p>
 				</td>
@@ -166,7 +166,7 @@
 					</p>
 				</td>
 				<td style="width:34%;">
-					<p style="margin:0;  background-color:#f4f4f4; height:16px; color:#383838; font-size:13px; padding:2px 8px;">
+					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.spec2 }}
 					</p>
 				</td>
@@ -185,7 +185,7 @@
 					</p>
 				</td>
 				<td style="width:34%;">
-					<p style="margin:0;  background-color:#f4f4f4; height:16px; color:#383838; font-size:13px; padding:2px 8px;">
+					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.spec3 }}
 					</p>
 				</td>
@@ -251,14 +251,14 @@
         <tr>
           <td class="vote-result-td" style="text-align:right; padding-left:50px;">
             <span style="float:left; margin-left:-40px;">{{= left_ratio }}%</span>
-            <span style="display:inline-block; width:{{= 100 }}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
+            <span style="display:inline-block; width:{{= Math.round(left_ratio)}}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
           </td>
           <td style="min-width:56px;">
             투표 결과
           </td>
           <td class="vote-result-td" style="text-align:left; padding-right:50px;">
             <span style="float:right; margin-right:-40px;">{{= right_ratio }}%</span>
-            <span style="display:inline-block; width:{{= 100 }}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
+            <span style="display:inline-block; width:{{= Math.round(right_ratio)}}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
           </td>
         </tr>
       </table>
@@ -578,7 +578,7 @@
 				</div>
 			</div>
 			<p style="margin:0; padding:2px 0 6px 14px; font-size:12px; color:#9e9fa1;">
-				@{{=comment.user.string_id}} &nbsp;{{= get_past_time(comment.created_at) }}
+				{{=comment.user.string_id}} &nbsp;{{= get_past_time(comment.created_at) }}
 				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
 				  <img src="/images/etc/recommend_icon.png" style="width:10px;">
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
@@ -636,7 +636,7 @@
 				  <img src="/images/etc/recommend_icon.png" style="width:10px;"> 
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
 				</a>
-				{{= get_past_time(comment.created_at) }} &nbsp;@{{=comment.user.string_id}}
+				{{= get_past_time(comment.created_at) }} &nbsp;{{=comment.user.string_id}}
 			</p>
 		</div>
 	{{ } }} 
@@ -664,11 +664,14 @@
 	var askShowTemplate = _.template( $('#ask-show-template').html() );
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
-        $('#asks').append(askShowTemplate({ask: ask}));
-        var hash_tags = ask.message.match(/#(\S+)/g);
-        $.each(hash_tags, function( index, hash_tag ) {
-		  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-		  	hash_tag = hash_tag.replace('#', '').replace("?","")
+    $('#asks').append(askShowTemplate({ask: ask}));
+    var hash_tags = ask.message.match(/#(\S+)/g);
+    if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+    
+    $.each(hash_tags, function( index, hash_tag ) {
+      hash_tag = hash_tag.replace(",","");
+      $("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+		  hash_tag = hash_tag.replace('#', '').replace("?","")
 			$("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
 		});
 	}
@@ -706,11 +709,13 @@
 		        	my_votes.push(data.vote);
 			        $('#asks').html(askShowTemplate({ask: data.ask}));
 			        var hash_tags = ask.message.match(/#(\S+)/g);
+			        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 			        $.each(hash_tags, function( index, hash_tag ) {
-					  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-					  	hash_tag = hash_tag.replace('#', '').replace("?","")
-						$("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
-					});
+			          hash_tag = hash_tag.replace(",","");
+					  	  $("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+					  	  hash_tag = hash_tag.replace('#', '').replace("?","")
+						    $("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
+				      });
 	        		notify("투표 완료");
 		        },
 		        beforeSend: function(){

@@ -44,6 +44,7 @@ class AsksController < ApplicationController
     left_image = nil
     left_deal_is_modify = false
     
+    
     left_preview_image = PreviewImage.find_by_id(left_deal_params[:image_id]) 
     if left_preview_image
       left_image = left_preview_image.image
@@ -98,13 +99,14 @@ class AsksController < ApplicationController
     params[:ask][:left_ask_deal_id] = left_ask_deal.id
     params[:ask][:right_ask_deal_id] = right_ask_deal.id
     
+    params["ask"]["message"].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
     @ask = Ask.create(ask_params)
     
     # 카테고리가 없는 경우 카테고리 추가
     if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
       UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
     end
-    
+
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")
@@ -180,6 +182,7 @@ class AsksController < ApplicationController
     unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(right_deal_params)
     @ask.right_ask_deal.update(unlocked_params)
     
+    params["ask"]["message"].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
     @ask.update(ask_params)
     
     # 카테고리가 없는 경우 카테고리 추가
