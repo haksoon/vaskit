@@ -184,7 +184,11 @@
           hash_tag = hash_tag.replace(",","");
   		  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
   		  	hash_tag = hash_tag.replace('#', '').replace("?","")
-  			  $("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
+  			  $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+            if ( $(element).parent().prop('nodeName') == "P"){
+              $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+            }
+          });
 		    });
 	}
 	<% end %>
@@ -198,7 +202,11 @@
           hash_tag = hash_tag.replace(",","");
   		  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
   		  	hash_tag = hash_tag.replace('#', '').replace("?","")
-  			  $("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
+  			  $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+            if ( $(element).parent().prop('nodeName') == "P"){
+              $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+            }
+          });
   		  });
 	}
 	
@@ -281,7 +289,11 @@
     				          hash_tag = hash_tag.replace(",","");
       						  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
       						  	hash_tag = hash_tag.replace('#', '').replace("?","")
-      							  $("#ask_"+ask.id+"_message ."+index).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"});
+      							  $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+                        if ( $(element).parent().prop('nodeName') == "P"){
+                          $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+                        }
+                      });
     						    });
     					}
 	        	}
