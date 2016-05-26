@@ -1,0 +1,6 @@
+@charset "utf-8";
+
+/* About VASKIT 화면 설정 */
+#about_vaskit .contents_subtitle {
+  font-size:32px; letter-spacing:0.05em;
+}
