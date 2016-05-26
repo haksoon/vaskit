@@ -355,7 +355,7 @@
 	function deal_search(is_left){
 		var keyword = $("#deal_search_keyword").val();
 		$.ajax({
-	        url: '/deals/get_naver_deals/?keyword='+keyword,
+	        url: '/deals/get_naver_deals/?keyword='+encodeURIComponent(keyword),
 	        type: 'GET',
 	        error: function(){
 	            return false;
@@ -363,7 +363,7 @@
 	        success: function(data){
 	        	$("#search_deal_result").show();
 	        	image_items = data.image_result.rss.channel.item;
-			    if (image_items != null ){
+			      if (image_items != null ){
 		        	var naverImageTemplate = _.template( $('#naver-image-template').html() );
 				    $('#naver_images').html(naverImageTemplate({image_items: image_items, is_left: is_left}));
 	        	}else{
