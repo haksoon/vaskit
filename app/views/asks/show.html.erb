@@ -5,7 +5,7 @@
 <div id="asks" style="padding:10px 12px;"></div>
 
 <script type="text/template" id="ask-show-template">
-  
+
   <div style="text-align:left;padding: 5px 0 0 1px;">
     {{ if( ask.category){ }}
     <span class="category">{{= ask.category.name }}</span>
@@ -14,12 +14,12 @@
     {{ } }}
     <span style="position:relative; right:5px; top:2px; color:#9e9fa3; font-size:11px; float:right;">
       <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
-      {{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }} 
+      {{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
         <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
       {{ } }}
     </span>
   </div>
-  
+
 	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:9px; position:relative;">
 		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
 			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" /><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
@@ -43,7 +43,7 @@
 				{{ } }}
 			</p>
 		</div>
-		
+
 		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
       <tr>
         <th style="width:50%;">
@@ -58,7 +58,7 @@
         </th>
       </tr>
     </table>
-		
+
 		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
@@ -66,13 +66,13 @@
 		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
 				<td style="width:50%;">
-					<p style="margin:0;  background-color:#f4f4f4; line-height:12px;">
+					<p style="margin:0;  background-color:#f4f4f4; line-height:0px;">
 						&nbsp;
 					</p>
-					
+
 				</td>
 				<td style="width:50%;">
-					<p style="margin:0;  background-color:#f4f4f4; line-height:12px;">
+					<p style="margin:0;  background-color:#f4f4f4; line-height:0px;">
 						&nbsp;
 					</p>
 				</td>
@@ -141,17 +141,17 @@
 		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 			{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
 			<tr>
-				<td style="width:33%;">
+				<td style="width:40%;">
 					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.left_ask_deal.spec1 }}
 					</p>
 				</td>
-				<td style="width:34%;">
+				<td style="width:20%;">
 					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.spec1 }}
 					</p>
 				</td>
-				<td style="width:33%;">
+				<td style="width:40%;">
 					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.right_ask_deal.spec1 }}
 					</p>
@@ -160,17 +160,17 @@
 			{{ } }}
 			{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
 			<tr>
-				<td style="width:33%;">
+				<td style="width:40%;">
 					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.left_ask_deal.spec2 }}
 					</p>
 				</td>
-				<td style="width:34%;">
+				<td style="width:20%;">
 					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.spec2 }}
 					</p>
 				</td>
-				<td style="width:33%;">
+				<td style="width:40%;">
 					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.right_ask_deal.spec2 }}
 					</p>
@@ -179,17 +179,17 @@
 			{{ } }}
 			{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
 			<tr>
-				<td style="width:33%;">
+				<td style="width:40%;">
 					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.left_ask_deal.spec3 }}
 					</p>
 				</td>
-				<td style="width:34%;">
+				<td style="width:20%;">
 					<p style="margin:0;  background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.spec3 }}
 					</p>
 				</td>
-				<td style="width:33%;">
+				<td style="width:40%;">
 					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:13px; padding:2px 8px;">
 					{{= ask.right_ask_deal.spec3 }}
 					</p>
@@ -200,17 +200,17 @@
 		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
 				{{ if (ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != ""){ }}
-				<td style="width:33%;">
+				<td style="width:40%; border:none;">
 					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
 					&nbsp;
 					</p>
 				</td>
-				<td style="width:34%;">
+				<td style="width:20%; border:none;">
 					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
 					&nbsp;
 					</p>
 				</td>
-				<td style="width:33%;">
+				<td style="width:40%; border:none;">
 					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
 					&nbsp;
 					</p>
@@ -229,7 +229,7 @@
 				{{ } }}
 			</tr>
 		</table>
-		
+
 		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
   		{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
       {{ if (ask.user_id == current_user_id && total_count == 0){ }}
@@ -239,7 +239,7 @@
         {{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
         {{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
       {{ } }}
-      
+
       {{left_background = "#fff"}}
       {{right_background = "#fff"}}
       {{ if (left_ratio > right_ratio){ }}
@@ -262,7 +262,7 @@
           </td>
         </tr>
       </table>
-      <div id="detail_vote_count"> 
+      <div id="detail_vote_count">
         {{ gender_total_count = detail_vote_count.left.male_count + detail_vote_count.left.female_count + detail_vote_count.right.male_count + detail_vote_count.right.female_count }}
         {{ if ( gender_total_count == 0 ){ }}
           {{ male_left_ratio = 0 }}
@@ -275,14 +275,14 @@
           {{ female_left_ratio = Math.round(detail_vote_count.left.female_count/gender_total_count * 100) }}
           {{ female_right_ratio = Math.round(detail_vote_count.right.female_count/gender_total_count * 100) }}
         {{ } }}
-        
+
         {{ gender_male_css = "" }}
         {{ gender_female_css = "" }}
         {{ if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) < (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
           {{ gender_female_css = "color: #ee6e01;font-weight: bold;" }}
         {{ }else if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) > (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
           {{ gender_male_css = "color: #ee6e01;font-weight: bold;" }}
-        {{ } }} 
+        {{ } }}
         <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675; width:100%; background-color:#BEAD9D; font-size:12px; color:#fff;">
           <tbody>
             <tr>
@@ -341,7 +341,7 @@
           {{ etc_left_ratio = Math.round(detail_vote_count.left.etc_count/age_total_count * 100) }}
           {{ etc_right_ratio = Math.round(detail_vote_count.right.etc_count/age_total_count * 100) }}
         {{ } }}
-        
+
         {{ age_20_1_css = "" }}
         {{ age_20_2_css = "" }}
         {{ age_20_3_css = "" }}
@@ -372,7 +372,7 @@
           {{ age_30_3_css = "color: #ee6e01;font-weight: bold;" }}
         {{ }else if( max_index == 6 ){ }}
           {{ etc_css = "color: #ee6e01;font-weight: bold;" }}
-        {{ } }} 
+        {{ } }}
         <table cellspacing="1" cellpadding="0" class="graph" style="width:100%; background-color:#BEAD9D; font-size:12px; color:#fff;">
           <tbody>
             <tr>
@@ -459,7 +459,7 @@
         <p style="margin:0; color:#fff; font-size:12px;">상세 투표결과 닫기</p>
       </a>
 		{{ } }}
-		
+
 		<div style="margin-top:10px;">
 			<p style="text-align:center; background-color:#4b3d3d; font-size:12px; color:#fff; font-weight:bold; padding:6px 0; margin:0 auto;">
 				<span style="float:left; margin-left:12px; font-size:13px; color:#fff;">
@@ -472,7 +472,7 @@
 					<img src="/images/home/comment_r_white.png" style="width:16px; margin:0 0 -2px 4px;">
 				</span>
 			</p>
-			
+
 			{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
 			{{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
 				<img src="/images/deal_detail/comment_blur.png" style="width:100%;" />
@@ -527,7 +527,7 @@
 	  		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 	  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
 	  		{{ } }}
-	  		
+
 	  		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
           {{ if ((ask.user_id == current_user_id || ask.be_completed ) || ask.right_ask_deal_id == already_vote[0].ask_deal_id ){ }}
             <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
@@ -537,7 +537,7 @@
           </a>
           {{ } }}
         {{ } }}
-	  		
+
 			</td>
 			<td style="width:50%; position:relative;">
 			  <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;">
@@ -546,7 +546,7 @@
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
 				{{ } }}
-				
+
         {{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
           {{ if ((ask.user_id == current_user_id || ask.be_completed ) || ask.left_ask_deal_id == already_vote[0].ask_deal_id ){ }}
             <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
@@ -562,19 +562,19 @@
 </script>
 
 <script type="text/template" id="ask-comment-template">
-	
+
 	{{ if (ask.left_ask_deal_id == comment.ask_deal_id ){ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:left;">
 			<div style="position:relative; margin:4px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
 				<span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
-				
+
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
-			 	<a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; right:-34px; width:36px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; display:none;">     
+			 	<a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; right:-34px; width:36px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; display:none;">
           완료
         </a>
-        
-				<div style="position: absolute; top:1px; left:-8px;">			
-					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">		
+
+				<div style="position: absolute; top:1px; left:-8px;">
+					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
 			<p style="margin:0; padding:2px 0 6px 14px; font-size:12px; color:#9e9fa1;">
@@ -583,7 +583,7 @@
 				  <img src="/images/etc/recommend_icon.png" style="width:10px;">
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
 				</a>
-				| 
+				|
 				{{ if ( comment.user_id == current_user_id ){ }}
 				  <a href="#" onclick="comment_del({{=comment.id}}, true); return false;" style="color:#9e9fa1;">
             삭제
@@ -598,21 +598,21 @@
 				  <a href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9e9fa1;">
             신고
           </a>
-				{{ } }} 
+				{{ } }}
 			</p>
 		</div>
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
 			<div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
 				<span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
-				
+
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
-        <a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; left:-34px; width:36px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; display:none;">     
+        <a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; left:-34px; width:36px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; display:none;">
           완료
         </a>
-				
-				<div style="position: absolute; top:1px; right:-8px;">			
-					<img style="width:8px;" src="/images/deal_detail/seg_comment_r.png">		
+
+				<div style="position: absolute; top:1px; right:-8px;">
+					<img style="width:8px;" src="/images/deal_detail/seg_comment_r.png">
 				</div>
 			</div>
 			<p style="margin:0; padding:2px 14px 6px 0; font-size:12px; color:#9e9fa1;">
@@ -625,24 +625,24 @@
           </a>
           <a class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; display:none;">
             취소
-          </a>   
+          </a>
         {{ }else{ }}
           <a href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9e9fa1;">
             신고
           </a>
-        {{ } }} 
-				| 
+        {{ } }}
+				|
 				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
-				  <img src="/images/etc/recommend_icon.png" style="width:10px;"> 
+				  <img src="/images/etc/recommend_icon.png" style="width:10px;">
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
 				</a>
 				{{= get_past_time(comment.created_at) }} &nbsp;{{=comment.user.string_id}}
 			</p>
 		</div>
-	{{ } }} 
+	{{ } }}
 </script>
 
-<script> 
+<script>
 
   <% if flash[:ask_update] %>
     notify('<%=flash[:ask_update]%>');
@@ -654,7 +654,7 @@
  	<% end %>
 	var asks = <%= raw @asks.to_json %>;
 	var detail_vote_count = <%= raw @detail_vote_count.to_json %>;
-	
+
 	var my_ask = false;
 	if (current_user_id == asks[0].user_id){
 	  my_ask = true;
@@ -667,7 +667,7 @@
     $('#asks').append(askShowTemplate({ask: ask}));
     var hash_tags = ask.message.match(/#(\S+)/g);
     if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-    
+
     $.each(hash_tags, function( index, hash_tag ) {
       hash_tag = hash_tag.replace(",","");
       $("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
@@ -676,26 +676,26 @@
         if ( $(element).parent().prop('nodeName') == "P"){
           $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
         }
-      }); 
+      });
 		});
 	}
-	
+
 	function comment_input_by_key(){
 		var comment_message = $('#comment_input').val();
 		if(comment_message == "" || comment_message == undefined){
 			notify("내용을 입력해주세요.");
 		}else{
-			$("#send_comment_btn").click(); 
+			$("#send_comment_btn").click();
 		}
 	}
-	
+
 	$('#comment_input').keypress(function(e) {
 		if (e.keyCode == '13') {
         	e.preventDefault();
         	comment_input_by_key();
       	}
 	});
-	
+
 	function vote_ask_deal_show(ask_deal_id, is_left){
 		if (current_user_id == 0 && my_vote_count > 4){
 	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
@@ -732,17 +732,17 @@
 		        complete: function(){
 		        	$(".loading").hide();
 		        }
-			});	
+			});
 	 	}
 	}
-	
+
 	function send_comment(ask_id, ask_deal_id){
 		if (current_user_id == 0){
 			notify("회원가입 후<br />의견을 남길 수 있습니다.");
 		}else if ( already_vote.length == 0 && !my_ask ){
 		  notify("투표 참여 후<br />의견을 남길 수 있습니다.");
 		}else{
-		  
+
 			var content = $(".comment_box2").val();
 			if( content == "" || content == null ){
 				notify('내용을 입력해주세요.');
@@ -763,7 +763,7 @@
 		        		$("#ask_comment").append(askCommentTemplate({ask:ask, comment: comment}));
 		        		notify("작성 완료");
 		        		$(".comment_box2").val("");
-		        		
+
 		        		if ($("#ask_deal_id_change").html() == "A"){
 		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count");
 		        			left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
@@ -774,7 +774,7 @@
 		        	}else{
 		        		notify("댓글은 회원만 작성 가능합니다");
 		        	}
-		        	
+
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
@@ -784,9 +784,9 @@
 		        }
 			});
 		}
-		
+
 	}
-	
+
 	function comment_like(comment_id){
 		<% if current_user %>
 		$.ajax({
@@ -818,12 +818,12 @@
 			notify("회원가입 후<br />추천 할 수 있습니다")
 		<% end %>
 	}
-	
+
 	function comment_report(comment_id, user_id){
 		show_more_popup('comment',comment_id, user_id, '', '');
-		show_report_popup(); 
+		show_report_popup();
 	}
-	
+
 	function comment_del(comment_id, is_left){
 	  if(confirm("의견을 정말로 삭제하시겠어요?")) {
 	    $.ajax({
@@ -843,8 +843,8 @@
             var right_ask_deal_comment_count = $("#right_ask_deal_comment_count");
             right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) - 1 );
           }
-          notify("삭제되었습니다");  
-          
+          notify("삭제되었습니다");
+
         },
         beforeSend: function(){
           $(".loading").show();
@@ -855,40 +855,40 @@
       });
     }
 	}
-	
+
 	function comment_modify(comment_id){
 	  var comment_content = $("#comment_"+comment_id+" .comment_content");
 	  var modify_box_width = $($("#comment_"+comment_id+" div")[0]).width();
 	  var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
 	  var update_btn = $("#comment_"+comment_id+" .comment_update_btn");
-	  
+
 	  modify_box.show().focus();
 	  modify_box.css("width", modify_box_width);
-	  
+
 	  update_btn.show();
 	  comment_content.hide();
-	  
+
 	  $("#comment_"+comment_id+" .comment_modify_btn").hide();
 	  $("#comment_"+comment_id+" .comment_modify_cancel_btn").show();
 	}
-	
+
 	function comment_modify_cancel(comment_id){
 	  var comment_content = $("#comment_"+comment_id+" .comment_content");
     var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
     var update_btn = $("#comment_"+comment_id+" .comment_update_btn");
-    
+
     modify_box.hide();
-    
+
     update_btn.hide();
     comment_content.show();
-    
+
     $("#comment_"+comment_id+" .comment_modify_btn").show();
     $("#comment_"+comment_id+" .comment_modify_cancel_btn").hide();
 	}
-	
+
 	function comment_update(comment_id){
 	  var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
-	  
+
     var content = modify_box.val();
     if( content == "" || content == null ){
       notify('내용을 입력해주세요.');
@@ -919,7 +919,7 @@
       }
     });
 	}
-	
+
 	function ask_deal_id_change(){
 		if ($("#ask_deal_id_change").html() == "A"){
 			$("#ask_deal_id_change").html("B")
@@ -929,23 +929,22 @@
 			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].left_ask_deal.id+"); return false;");
 		}
 	}
-	
+
 	function detail_count_toggle(){
 	  if ($('#detail_vote_count').is(':visible')){
 	    $( "#detail_vote_count" ).slideUp( "slow", function() {
 	      $("#detail_count_toggle_btn p").html("상세 투표결과 열기");
 	    });
-	    
+
 	  }else{
 	    $( "#detail_vote_count" ).slideDown( "slow", function() {
 	      $("#detail_count_toggle_btn p").html("상세 투표결과 닫기");
 	    });
 	  }
-	  
+
 	}
-	
-	
+
+
 </script>
 
 <%= render :partial => "common_partial/ask_image" %>
-

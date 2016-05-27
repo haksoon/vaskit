@@ -16,7 +16,7 @@
 
 html{
 	height: 100%;
-    min-height: 100%;
+  min-height: 100%;
 }
 
 a:link {text-decoration:none;}
@@ -29,37 +29,37 @@ img{border:none;}
 body {
 	overflow-y:scroll;
 	height: 100%;
-    min-height: 100%;
+  min-height: 100%;
 	background-color:#f3f4f5; margin:0 auto;
-    font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
-    // font-family: verdana, arial, helvetica, sans-serif;
+  font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
+  // font-family: verdana, arial, helvetica, sans-serif;
 }
 
 p, ol, ul, td {
-    font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
-    // font-family: verdana, arial, helvetica, sans-serif;
+  font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
+  // font-family: verdana, arial, helvetica, sans-serif;
 }
 
 * {-webkit-text-size-adjust:none;}
 
 ::-webkit-input-placeholder { /* WebKit browsers */
-    color:    #CCC;
+  color:    #CCC;
 }
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #CCC;
+  color:    #CCC;
 }
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    #CCC;
+  color:    #CCC;
 }
 :-ms-input-placeholder { /* Internet Explorer 10+ */
-    color:    #CCC;
+  color:    #CCC;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  /* display: none; <- Crashes Chrome on hover */
+  -webkit-appearance: none;
+  margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
 .hover_pointer { cursor: pointer; }
@@ -75,41 +75,41 @@ input::-webkit-inner-spin-button {
 
 .header_shadow{
 	-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-	-moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-	box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-   	border-radius: 1px;
+	   -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+	        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+ 	border-radius: 1px;
 }
 
 
 .registrations_input{
-  	width:100%;
-  	border:none;
-  	-webkit-box-sizing: border-box;
-  	box-sizing: border-box;
-  	padding:8px;
-  	font-size:15px;
-  	line-height:22px;
-  	color:#393939;
-  	border:1px solid #dbdbdb;
-  	margin-top:10px;
+	width:100%;
+	border:none;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	padding:8px;
+	font-size:15px;
+	line-height:22px;
+	color:#393939;
+	border:1px solid #dbdbdb;
+	margin-top:10px;
 }
 
 .search_input{
 	width:100%;
-    height:34px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    padding:3px 40px 3px 6px;
-    color:#666;
-    font-size:14px;
-    line-height:16px;
-    border:1px solid #ee6e01;
-    -webkit-appearance: none;
-  	border-radius:0;
+  height:34px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  padding:3px 40px 3px 6px;
+  color:#666;
+  font-size:14px;
+  line-height:16px;
+  border:1px solid #ee6e01;
+  -webkit-appearance: none;
+	border-radius:0;
 }
 
 .category{
-	background-color:#4b3d3d; 
+	background-color:#4b3d3d;
 	display:inline-block;
 	padding:5px 10px;
 	color:#fff;
@@ -141,120 +141,127 @@ input::-webkit-inner-spin-button {
 	width:100%;
 	height:34px;
 	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+	        box-sizing: border-box;
 	border:1px solid #dbdbdb;
 	padding:3px 6px 3px 6px;
 	color:#666;
 	font-size:14px;
-    line-height:15px;
+  line-height:15px;
 	border:1px solid #dbdbdb;
 	border-right:none;
 	-webkit-appearance: none;
-  	border-radius:0;
+	border-radius:0;
 }
 
 .comment_box2{
 	display:block;
-  	width:100%;
-  	border:none;
-  	-webkit-box-sizing: border-box;
-  	box-sizing: border-box;
-  	border:1px solid #dbdbdb;
-  	font-size:12px;
-  	color:#393939;
-  	height:34px;
-  	padding:7px;
-  	-webkit-appearance: none;
-  	-webkit-border-radius:0px;
+	width:100%;
+	border:none;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	border:1px solid #dbdbdb;
+	font-size:12px;
+	color:#393939;
+	height:34px;
+	padding:7px;
+	-webkit-appearance: none;
+	-webkit-border-radius:0px;
 }
 
 .comment_modify_box{
-    width:100%;
-    min-height:40px;
-    border:none;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size:12px;
-    color:#393939;
-    height:34px;
-    -webkit-appearance: none;
-    -webkit-border-radius:0px;
-    display:none;
+  width:100%;
+  min-height:40px;
+  border:none;
+  -webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+  font-size:12px;
+  color:#393939;
+  height:34px;
+  -webkit-appearance: none;
+  -webkit-border-radius:0px;
+  display:none;
 }
 
 .deal_spec_detail td{
-    max-width: 0;
-    background-color:#f4f4f4;
+  max-width: 0;
+  background-color:#f4f4f4;
+	padding:5px 0;
+	border-top:1px solid #dbdbdb;
 }
 
 .deal_spec_detail td p{
-    word-break:break-all;
+  word-break:break-all;
 }
 
 .deal_detail td{
 	max-width: 0;
+	background-color:#f4f4f4;
+	padding:5px 0;
+}
+.deal_detail td:nth-of-type(2n+1){
+	border-right:1px solid #dbdbdb;
 }
 
 .deal_detail td p{
 	overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+	text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .highlight {
-    color: #ee6e01;
+  color: #ee6e01;
 }
 
 .category_select{
-    padding: 0;
-    margin: 0;
-    border: 1px solid #dbdbdb;
-    width: 136px;
-    border-radius: 0px;
-    overflow: hidden;
-    background-color: #fff;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   appearance: none;
-   background: #fff url("/images/common/select_drop.png") no-repeat 99% 50%;
-   background-size: 27px 24px;
-   padding: 4px 14px;
-   font-size:13px;
-   color:#393939;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #dbdbdb;
+  width: 136px;
+  border-radius: 0px;
+  overflow: hidden;
+  background-color: #fff;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background: #fff url("/images/common/select_drop.png") no-repeat 99% 50%;
+  background-size: 27px 24px;
+  padding: 4px 14px;
+  font-size:13px;
+  color:#393939;
 }
 
 .birthday_select{
-    padding: 0;
-    margin: 0;
-    border: 1px solid #dbdbdb;
-    border-radius: 0px;
-    overflow: hidden;
-    background-color: #fff;
-   -webkit-appearance: none;
-   -moz-appearance: none;
-   appearance: none;
-   background: #fff url("/images/common/select_drop.png") no-repeat 99% 50%;
-   background-size: 27px 24px;
-   padding:4px;
-   height:40px;
-   font-size:13px;
-   color:#393939;
+  padding: 0;
+	margin: 0;
+	border: 1px solid #dbdbdb;
+	border-radius: 0px;
+	overflow: hidden;
+	background-color: #fff;
+	-webkit-appearance: none;
+	   -moz-appearance: none;
+	        appearance: none;
+	background: #fff url("/images/common/select_drop.png") no-repeat 99% 50%;
+	background-size: 27px 24px;
+	padding:4px;
+	height:40px;
+	font-size:13px;
+	color:#393939;
 }
 
 
 .category_select select {
-    width: 130%;
-    border: none;
-    box-shadow: none;
-    background-color: transparent;
-    background-image: none;
-    -webkit-appearance: none;
-       -moz-appearance: none;
-            appearance: none;
+  width: 130%;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  background-image: none;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 
 .category_select select:focus {
-    outline: none;
+  outline: none;
 }
 
 .hash_tag{
@@ -263,16 +270,16 @@ input::-webkit-inner-spin-button {
 
 .ask_message_input{
 	text-align:left;
-  	width:100%;
-  	min-height:120px;
-  	-webkit-box-sizing: border-box;
-  	box-sizing: border-box;
-  	padding:8px;
-  	font-size:13px;
-  	line-height:17px;
-  	color:#393939;
-  	border:1px solid #dbdbdb;
-  	margin-top:10px;
+	width:100%;
+	min-height:120px;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+	padding:8px;
+	font-size:13px;
+	line-height:17px;
+	color:#393939;
+	border:1px solid #dbdbdb;
+	margin-top:10px;
 }
 
 .ask_search_deal{
@@ -287,39 +294,39 @@ input::-webkit-inner-spin-button {
 
 .ask_text_field{
 	display:block;
-  	width:100%;
-  	border:none;
-  	-webkit-box-sizing: border-box;
-  	box-sizing: border-box;
-  	padding:4px;
-  	font-size:12px;
-  	line-height:17px;
-  	color:#393939;
+	width:100%;
+	border:none;
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+	padding:4px;
+	font-size:12px;
+	line-height:17px;
+	color:#393939;
 }
 
 .naver_image_wrap{
 	display:block;
-    position: relative;
-    width: 100%;       /* desired width */
+  position: relative;
+  width: 100%;       /* desired width */
 }
 .naver_image_wrap:before{
-    content: "";
-    display: block;
-    padding-top: 100%;  /* ratio of 1:1*/
+  content: "";
+  display: block;
+  padding-top: 100%;  /* ratio of 1:1*/
 }
 
 .notice_title{
 	width:100%;
 	height:34px;
 	-webkit-box-sizing: border-box;
-	box-sizing: border-box;
+	        box-sizing: border-box;
 	border:1px solid #dbdbdb;
 	padding:3px 6px 3px 6px;
 	color:#666;
 	font-size:14px;
-    line-height:15px;
+  line-height:15px;
 	-webkit-appearance: none;
-  	border-radius:0;
+	border-radius:0;
 }
 
 .naver_image_content {
@@ -332,29 +339,29 @@ input::-webkit-inner-spin-button {
 }
 
 .center_input::-webkit-input-placeholder {
-text-align: center;
+	text-align: center;
 }
 .center_input:-moz-placeholder { /* Firefox 18- */
-text-align: center;
+	text-align: center;
 }
 .center_input::-moz-placeholder {  /* Firefox 19+ */
-text-align: center;
+	text-align: center;
 }
 .center_input:-ms-input-placeholder {
-text-align: center;
+	text-align: center;
 }
 
 .right_input::-webkit-input-placeholder {
-text-align: right;
+	text-align: right;
 }
 .right_input:-moz-placeholder { /* Firefox 18- */
-text-align: right;
+	text-align: right;
 }
 .right_input::-moz-placeholder {  /* Firefox 19+ */
-text-align: right;
+	text-align: right;
 }
 .right_input:-ms-input-placeholder {
-text-align: right;
+	text-align: right;
 }
 
 #flash  { -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; background-color:#ee6e01; color:#FFFFFF; font-weight:bold; padding:20px 10px; position:fixed; top:50%; left:50%; margin-left:-110px; margin-top:-30px; text-align:center; width:200px; z-index:990000; opacity:0.8; filter:alpha(opacity=60); font-size:14px; }
