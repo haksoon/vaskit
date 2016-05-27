@@ -12,7 +12,7 @@
     {{ }else{ }}
     <span class="category_none">관심사 미설정</span>
     {{ } }}
-    <span style="position:relative; right:5px; top:2px; color:#9e9fa3; font-size:11px; float:right;">
+    <span style="position:relative; right:5px; top:4px; color:#9e9fa3; font-size:11px; float:right;">
       <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
       {{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
         <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
@@ -21,7 +21,7 @@
   </div>
 
 	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:9px; position:relative;">
-		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
+		<span style="position:absolute; right:12px; top:14px; color:#9e9fa3; font-size:12px;">
 			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" /><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
 			<img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />{{= get_past_time(ask.created_at) }}
 		</span>
@@ -486,8 +486,8 @@
 				    {{= askCommentTemplate({ask:ask, comment: comment}) }}
 					{{ } }}
           {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
-          <div style="position:absolute; top:0; left:0; width:100%; padding-bottom:50px; height:100%; background-color:black; opacity:0.92;">
-            <p style="position:relative; top:50%; margin:-50px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
+            <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
               <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
               <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
             </p>
