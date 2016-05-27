@@ -1,0 +1,24 @@
+<table class="main_header header_shadow" cellspacing="0" cellpadding="0" style="position:fixed; top:0; background-color:#4b3d3d; width:inherit; overflow:visible; height:47px; z-index:1;">
+	<tr>
+		<td style="width:60px;">
+			<a href="#" onclick="category_on(); return false;"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_on.png" /></a>
+		</td>
+		<td style="text-align:center;">
+			<a href="/" style="display:block; font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">
+				<img src="/images/etc/logo_1.png" style="width:130px; margin-bottom:-1px;"/>
+			</a>
+		</td>
+		<td style="width:60px;">
+			<% if current_user %>
+				<a href="/<%=current_user.string_id%>" style="position:relative; display:block;">
+					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
+						<img src="/images/common/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
+					<% end %>
+					<img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
+				</a>
+			<% else %>
+				<a href="/etc/landing"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
+			<% end %>
+		</td>
+	</tr>
+</table>
