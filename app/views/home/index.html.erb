@@ -74,7 +74,7 @@
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-		<a href="/asks/{{=ask.id}}" style="padding:12px 12px 6px 12px; display:block;">
+		<a href="/asks/{{=ask.id}}" target="_blank" style="padding:12px 12px 6px 12px; display:block;">
 			<span style="float:left; font-size:13px; color:#9b9fa2"><img src="/images/home/comment_l.png" style="width:16px; margin:0 4px -2px 0;">{{=ask.left_ask_deal.comment_count}}</span>
 			<img style="width:76px; margin-top:-1px;" src="/images/home/details_on.png" />
 			<span style="float:right; font-size:13px; color:#9b9fa2">{{=ask.right_ask_deal.comment_count}}<img src="/images/home/comment_r.png" style="width:16px; margin:0 0 -2px 4px;"></span>
