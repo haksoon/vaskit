@@ -461,7 +461,7 @@
 		{{ } }}
 
 		<div style="margin-top:10px;">
-			<p style="text-align:center; background-color:#4b3d3d; font-size:12px; color:#fff; font-weight:bold; padding:6px 0; margin:0 auto;">
+			<p style="text-align:center; background-color:#4b3d3d; font-size:12px; color:#fff; font-weight:bold; padding:6px 0; margin:0 auto; line-height:2;">
 				<span style="float:left; margin-left:12px; font-size:13px; color:#fff;">
 					<img src="/images/home/comment_l_white.png" style="width:16px; margin:0 4px -2px 0;">&nbsp;
 					<span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
@@ -477,7 +477,7 @@
 			{{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
 				<img src="/images/deal_detail/comment_blur.png" style="width:100%;" />
 			{{ }else{ }}
-				<div id="ask_comment" style="background-color:#f4f4f4; padding:4px 0;">
+				<div id="ask_comment" style="background-color:#f4f4f4; padding:10px 0;">
 					{{ for(var i=0; i < ask.comments.length; i++) {  }}
 						{{ comment = ask.comments[i] }}
 						{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
@@ -565,7 +565,7 @@
 
 	{{ if (ask.left_ask_deal_id == comment.ask_deal_id ){ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:left;">
-			<div style="position:relative; margin:4px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
+			<div style="position:relative; margin:4px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
 				<span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
 
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
@@ -577,8 +577,9 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
-			<p style="margin:0; padding:2px 0 6px 14px; font-size:12px; color:#9e9fa1;">
-				{{=comment.user.string_id}} &nbsp;{{= get_past_time(comment.created_at) }}
+			<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9e9fa1;">
+				<span style="color:#998674;">{{=comment.user.string_id}}</span>
+        &nbsp;{{= get_past_time(comment.created_at) }}
 				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
 				  <img src="/images/etc/recommend_icon.png" style="width:10px;">
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
@@ -603,7 +604,7 @@
 		</div>
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
-			<div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px;">
+			<div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
 				<span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
 
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
@@ -615,7 +616,7 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_r.png">
 				</div>
 			</div>
-			<p style="margin:0; padding:2px 14px 6px 0; font-size:12px; color:#9e9fa1;">
+			<p style="margin:0; padding:5px 25px 10px 0; font-size:12px; color:#9e9fa1;">
 			  {{ if ( comment.user_id == current_user_id ){ }}
 			    <a href="#" onclick="comment_del({{=comment.id}}, false); return false;" style="color:#9e9fa1;">
             삭제
@@ -636,7 +637,7 @@
 				  <img src="/images/etc/recommend_icon.png" style="width:10px;">
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
 				</a>
-				{{= get_past_time(comment.created_at) }} &nbsp;{{=comment.user.string_id}}
+				{{= get_past_time(comment.created_at) }} &nbsp;<span style="color:#998674;">{{=comment.user.string_id}}</span>
 			</p>
 		</div>
 	{{ } }}
