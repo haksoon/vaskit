@@ -31,8 +31,8 @@
         {{ if ( !ask.user.gender){ }}
           {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
         {{ } }}
-        <p style="margin: 1px 3px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}}">{{= get_user_ages(ask.user.birthday) }}</p>
-        <p style="margin:2px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
+        <p style="margin:1px 5px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}}">{{= get_user_ages(ask.user.birthday) }}</p>
+        <p style="margin:3px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
 			{{ } }}
 			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px;">
 				{{ if( ask.message){ }}
@@ -47,12 +47,12 @@
 		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
       <tr>
         <th style="width:50%;">
-          <p style="background-color:#4b3d3d; font-size:12px; color:#fff; margin:0; padding:6px 0 6px 12px;">
+          <p style="background-color:#4b3d3d; font-size:12px; color:#fff; margin:0; padding:6px 0 6px 12px; line-height:2;">
             CARD A
           </p>
         </th>
         <th style="width:50%;">
-          <p style="background-color:#4b3d3d; font-size:12px; color:#fff; margin:0; padding:6px 12px 6px 0;">
+          <p style="background-color:#4b3d3d; font-size:12px; color:#fff; margin:0; padding:6px 12px 6px 0; line-height:2;">
             CARD B
           </p>
         </th>
@@ -201,28 +201,28 @@
 			<tr>
 				{{ if (ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != ""){ }}
 				<td style="width:40%; border:none;">
-					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:0px; padding:0px 8px;">
 					&nbsp;
 					</p>
 				</td>
 				<td style="width:20%; border:none;">
-					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:0px; padding:0px 8px;">
 					&nbsp;
 					</p>
 				</td>
 				<td style="width:40%; border:none;">
-					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:0px; padding:0px 8px;">
 					&nbsp;
 					</p>
 				</td>
 				{{ }else{ }}
 				<td style="width:50%;">
-					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:0px; padding:0px 8px;">
 					&nbsp;
 					</p>
 				</td>
 				<td style="width:50%;">
-					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:10px; padding:0px 8px;">
+					<p style="margin:0; background-color:#f4f4f4; color:#383838; font-size:10px; line-height:0px; padding:0px 8px;">
 					&nbsp;
 					</p>
 				</td>

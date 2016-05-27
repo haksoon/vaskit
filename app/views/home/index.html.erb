@@ -42,13 +42,13 @@
     {{ } }}
     <span style="position:relative; right:5px; top:2px; color:#9e9fa3; font-size:11px; float:right;">
       <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><img src="/images/home/share.png" style="width:24px;" /></a>
-      {{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }} 
+      {{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
         <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><img src="/images/home/more.png" style="width:24px; margin-left:8px;" /></a>
       {{ } }}
     </span>
   </div>
-  
-	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:9px; position:relative;">
+
+	<div style="border:1px solid #dbdbdb; background-color:#fff; margin-bottom:15px; position:relative;">
 		<span style="position:absolute; right:12px; top:12px; color:#9e9fa3; font-size:12px;">
 			<img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" /><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
 		</span>
@@ -58,8 +58,8 @@
 			  {{ if ( !ask.user.gender){ }}
 			    {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
 			  {{ } }}
-			  <p style="margin: 1px 3px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}}">{{= get_user_ages(ask.user.birthday) }}</p>
-				<p style="margin:2px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
+			  <p style="margin:1px 5px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}}">{{= get_user_ages(ask.user.birthday) }}</p>
+				<p style="margin:3px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
 			{{ } }}
 			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px;">
 				{{ if( ask.message){ }}
@@ -112,7 +112,7 @@
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
 				{{ } }}
-				
+
 				{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
   				{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
             <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
@@ -126,7 +126,7 @@
 		</tr>
 	</table>
 	{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
-		
+
 		{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
 		{{ if (ask.user_id == current_user_id && total_count == 0){ }}
 			{{ left_ratio = 0 }}
@@ -135,7 +135,7 @@
 			{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
 			{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
 		{{ } }}
-		
+
 		{{left_background = "#fff"}}
 		{{right_background = "#fff"}}
 		{{ if (left_ratio > right_ratio){ }}
@@ -161,20 +161,20 @@
 	{{ } }}
 </script>
 
-<script> 
+<script>
 	var current_user_id = 0;
  	<% if current_user %>
  		current_user_id = <%= current_user.id %>;
  	<% end %>
-	
+
 	var asks = <%= raw @asks.to_json %>;
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var my_vote_count = <%= @my_votes.length %>;
 	var askTemplate = _.template( $('#ask-template').html() );
-	
+
 	<% unless @ranking_asks.blank? %>
 	var ranking_asks = <%= raw @ranking_asks.to_json %>;
-	
+
 	for(var i=0; i < ranking_asks.length; i++) {
 		var ask = ranking_asks[i]
         $('#asks').append(askTemplate({ask: ask}));
@@ -192,7 +192,7 @@
 		    });
 	}
 	<% end %>
-	
+
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
         $('#asks').append(askTemplate({ask: ask}));
@@ -209,8 +209,8 @@
           });
   		  });
 	}
-	
-	
+
+
 	function vote_ask_deal(ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
 	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
@@ -227,7 +227,7 @@
 		        	my_votes.push(data.vote);
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
-		        	
+
 	        		notify("투표 완료");
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
@@ -242,23 +242,23 @@
 			});
 	 	}
 	}
-	
-	
+
+
 	var ready = function() {
 		if (asks.length == <%= Ask::ASK_PER %>){
 			setInterval("checkScroll()", 1000);
 		}
 	};
-	
+
 	$(document).ready(ready);
 	$(document).on('page:load', ready);
-	
+
 	var currentPage = 1
 	var is_more_asks = true;
 	function checkScroll() {
 	  if (window.location.pathname == "/" && nearBottomOfPage() && is_more_asks) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
 	    currentPage ++;
-	    
+
 	    $.ajax({
 	        url: window.location.href,
 	        data: {'page': currentPage},
@@ -270,7 +270,7 @@
 	        success: function(data){
 	        	var more_asks = data.asks;
 	        	$.merge(asks, more_asks);
-	        	
+
 	        	if( more_asks.length == 0 ){
 	        		is_more_asks = false;
 	        		$("#endless_loading").hide();
@@ -279,7 +279,7 @@
 	        			is_more_asks = false;
 	        			$("#endless_loading").hide();
 	        		}
-	        		
+
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
     				        $('#asks').append(askTemplate({ask: ask}));
@@ -308,4 +308,3 @@
 </script>
 
 <%= render :partial => "common_partial/ask_image" %>
-
