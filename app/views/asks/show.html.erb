@@ -476,7 +476,7 @@
 			{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
 				<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px;">
           <p style="font-size:14px; background:#f4f4f4; margin:0; padding:5px 0 10px; color:#9d9fa1;">
-            고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!
+            고민해결사 <span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님! 한마디 부탁해요!
           </p>
 					{{ for(var i=0; i < ask.comments.length; i++) {  }}
 						{{ comment = ask.comments[i] }}
