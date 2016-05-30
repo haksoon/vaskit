@@ -13,9 +13,14 @@
 			</td>
 			<td style="width:60px;">
 				<% if current_user %>
-					<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" /></a>
+					<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
+						<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
+							<img src="/images/common/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
+						<% end %>
+						<img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
+					</a>
 				<% else %>
-					<a href="/"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
+					<a href="/etc/landing"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
 				<% end %>
 			</td>
 		</tr>
