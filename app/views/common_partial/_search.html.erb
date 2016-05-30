@@ -9,11 +9,11 @@
 			<td style="text-align:center;">
 				<a href="/" style="display:block; font-size:28px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">
 					<img src="/images/etc/logo_1.png" style="width:130px; margin-bottom:-1px;"/>
-				</a>	
+				</a>
 			</td>
 			<td style="width:60px;">
 				<% if current_user %>
-					<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; margin-bottom:-1px;" src="/images/header/my.png" /></a>
+					<a href="/<%=current_user.string_id%>"><img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" /></a>
 				<% else %>
 					<a href="/"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
 				<% end %>
@@ -52,7 +52,7 @@
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
 				ⓑ {{= keyword }}
 			</a>
-		{{ } }} 
+		{{ } }}
 </script>
 
 <script>
@@ -63,7 +63,7 @@
 		$("#search_bg").show();
 		$('#search_input').focus().select();
 	}
-	
+
 	function search_input_off(){
 		$("#search_overlay").hide();
 		$("#search_pc_bg").hide();
@@ -71,29 +71,29 @@
 		$('#search_input').val("");
 		$("#keyword_reset_btn").hide();
 	}
-	
+
 	function keyword_reset(){
 		$('#search_input').val("");
 		$('#search_result').html("");
 		$("#keyword_reset_btn").hide();
 	}
-	
+
 	function search_by_key(){
 		var search_key = $('#search_input').val();
 		if(search_key == "" || search_key == undefined){
 			notify("검색어를 입력하세요.");
 		}else{
-			window.location = "/?keyword="+encodeURIComponent(search_key)+"&type=none"; 
+			window.location = "/?keyword="+encodeURIComponent(search_key)+"&type=none";
 		}
 	}
-	
+
 	$('#search_input').keypress(function(e) {
 		if (e.keyCode == '13') {
         	e.preventDefault();
         	search_by_key();
       	}
 	});
-	
+
 	$('#search_input').keyup(function(e) {
   		$("#keyword_reset_btn").show();
 		$.ajax({
@@ -106,7 +106,7 @@
 	        },
 	        success: function(data){
 	        	$('#search_result').html("");
-	        	
+
 	        	if (data.is_empty_result){
 	        		if ($('#search_input').val() != ""){
 	        			var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666;'>검색 결과가 없습니다.</span>";
@@ -114,19 +114,19 @@
 	        		}
 	        	}else{
 	        		var searchResultTemplate = _.template( $('#search-result-template').html() );
-	        	
+
 		        	$.each(data.users, function( index, user ) {
 		        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: user.id}));
 					});
-					
+
 					$.each(data.hash_tags, function( index, hash_tag ) {
 						$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
 					});
-					
+
 					if (data.ask_deal){
             $('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
           }
-					
+
 					if (data.brand){
 						$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
 					}
@@ -138,6 +138,6 @@
 	        complete: function(){
 	        }
 		});
-		
+
 	});
 </script>

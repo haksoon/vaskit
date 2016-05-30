@@ -184,7 +184,7 @@ input::-webkit-inner-spin-button {
 
 .deal_spec_detail td{
   max-width: 0;
-  background-color:#f4f4f4;
+  background-color:#fff;
 	padding:5px 0;
 	border-top:1px solid #dbdbdb;
 }
@@ -195,7 +195,7 @@ input::-webkit-inner-spin-button {
 
 .deal_detail td{
 	max-width: 0;
-	background-color:#f4f4f4;
+	background-color:#fff;
 	padding:5px 0;
 }
 .deal_detail td:nth-of-type(2n+1){
