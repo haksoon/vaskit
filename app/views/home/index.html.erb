@@ -306,37 +306,38 @@
 	  }
 	}
 
-	// 스크롤업할 경우 검색창 나타나기
-  var didScroll;
-  var lastScrollTop = 0;
-  var delta = 5;
-  var navbarHeight = $("#search_bar").outerHeight();
+	$(document).ready(function(){
+		// 스크롤업할 경우 검색창 나타나기
+	  var didScroll;
+	  var lastScrollTop = 0;
+	  var delta = 5;
+	  var navbarHeight = $("#search_bar").outerHeight();
 
-  $(window).scroll(function(event){
-      didScroll = true;
-  });
+	  $(window).scroll(function(event){
+	      didScroll = true;
+	  });
 
-	if (didScroll) {
-		hasScrolled();
-		didScroll = false;
-	}
+		if (didScroll) {
+			hasScrolled();
+			didScroll = false;
+		}
 
-  function hasScrolled() {
-      var st = $(this).scrollTop();
+	  function hasScrolled() {
+	      var st = $(this).scrollTop();
 
-      if(Math.abs(lastScrollTop - st) <= delta)
-          return;
+	      if(Math.abs(lastScrollTop - st) <= delta)
+	          return;
 
-      if (st > lastScrollTop && st > navbarHeight){
-          $("#search_bar").removeClass('nav-up');
-      } else {
-          if(st + $(window).height() < $(document).height() ) {
-              $("#search_bar").addClass('nav-up');
-          }
-      }
-      lastScrollTop = st;
-  }
-
+	      if (st > lastScrollTop && st > navbarHeight){
+	          $("#search_bar").removeClass('nav-up');
+	      } else {
+	          if(st + $(window).height() < $(document).height() ) {
+	              $("#search_bar").addClass('nav-up');
+	          }
+	      }
+	      lastScrollTop = st;
+	  }
+	});
 </script>
 
 <%= render :partial => "common_partial/ask_image" %>
