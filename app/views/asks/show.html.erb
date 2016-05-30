@@ -2,7 +2,7 @@
 <%= render :partial => "common_partial/more_popup" %>
 <%= render :partial => "common_partial/share_popup" %>
 
-<div id="asks" style="padding:15px 12px; margin-top:47px; border-bottom:3px solid #4b3d3d;"></div>
+<div id="asks" style="padding:15px 12px; margin-top:47px;"></div>
 
 <script type="text/template" id="ask-show-template">
 
@@ -474,7 +474,7 @@
 			</p>
 
 			{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-				<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+				<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px; border:1px solid #dbdbdb; border-top:none;">
 					{{ for(var i=0; i < ask.comments.length; i++) {  }}
 						{{ comment = ask.comments[i] }}
 						{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
@@ -490,7 +490,7 @@
           {{ } }}
 				</div>
         <% if current_user %>
-        <p style="font-size:14px; background:#fff; margin:0; padding:10px 0 5px; color:#9d9fa1; border:1px solid #dbdbdb; border-bottom:none;">
+        <p style="font-size:14px; background:#fff; margin:0; padding:10px 0 5px; color:#9d9fa1; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
           고민해결사 <span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님! 한마디 부탁해요!
         </p>
         <% end %>
