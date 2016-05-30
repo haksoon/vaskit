@@ -71,6 +71,7 @@ input::-webkit-inner-spin-button {
 	text-align:center;
 	background-color: #f4f4f4;
 	position:relative;
+	border-bottom:3px solid #4b3d3d;
 }
 
 .header_shadow{
