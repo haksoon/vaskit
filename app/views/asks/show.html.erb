@@ -21,13 +21,13 @@
   </div>
 
 	<div style="position:relative;">
-		<div style="text-align:left; padding:9px; position:relative; background-color:#fff; border:1px solid #dbdbdb; border-bottom:none;">
+		<div style="text-align:left; padding:9px; position:relative; background-color:#fff; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px;">
 			{{ if( ask.user){ }}
 				{{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
         {{ if ( !ask.user.gender){ }}
           {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
         {{ } }}
-        <p style="margin:1px 5px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}}">{{= get_user_ages(ask.user.birthday) }}</p>
+        <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">{{= get_user_ages(ask.user.birthday) }}</p>
         <p style="margin:3px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
         <span style="position:absolute; right:12px; top:14px; color:#9e9fa3; font-size:12px;">
           <img src="/images/home/vote.png" style="width:12px; margin:0 2px -1px 0;" /><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
@@ -44,7 +44,7 @@
 			</p>
 		</div>
 
-		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
       <tr>
         <th style="width:50%;">
           <p style="background-color:#4b3d3d; font-size:12px; color:#fff; margin:0; padding:6px 0 6px 12px; line-height:2;">
@@ -59,11 +59,11 @@
       </tr>
     </table>
 
-		<div id="ask_deal_{{=ask.id}}" style="position:relative; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+		<div id="ask_deal_{{=ask.id}}" style="position:relative; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
 			<tr>
 				<td style="width:50%; border-top:1px solid #dbdbdb;">
 					<p style="margin:0; line-height:0px;">
@@ -138,7 +138,7 @@
 			</tr>
 			{{ } }}
 		</table>
-		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
 			{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
 			<tr>
 				<td style="width:40%;">
@@ -197,7 +197,7 @@
 			</tr>
 			{{ } }}
 		</table>
-		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
 			<tr>
 				{{ if (ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != ""){ }}
 				<td style="width:40%; border:none; border-bottom:1px solid #dbdbdb;">
@@ -247,7 +247,7 @@
       {{ }else if(left_ratio < right_ratio){ }}
         {{right_background = "#ee6e01"}}
       {{ } }}
-      <table cellspacing="0" cellpadding="0" style="bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:36px; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+      <table cellspacing="0" cellpadding="0" style="bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:36px; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
         <tr>
           <td class="vote-result-td" style="text-align:right; padding-left:50px;">
             <span style="float:left; margin-left:-40px;">{{= left_ratio }}%</span>
@@ -283,7 +283,7 @@
         {{ }else if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) > (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
           {{ gender_male_css = "color: #ee6e01;font-weight: bold;" }}
         {{ } }}
-        <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675; width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+        <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675; width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
           <tbody>
             <tr>
               <td class="vote-result-td" style="text-align:right; padding-left:50px">
@@ -373,7 +373,7 @@
         {{ }else if( max_index == 6 ){ }}
           {{ etc_css = "color: #ee6e01;font-weight: bold;" }}
         {{ } }}
-        <table cellspacing="1" cellpadding="0" class="graph" style="width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+        <table cellspacing="1" cellpadding="0" class="graph" style="width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
           <tbody>
             <tr>
               <td class="vote-result-td" style="text-align:right; padding-left:50px">
@@ -474,7 +474,7 @@
 			</p>
 
 			{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-				<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px; border:1px solid #dbdbdb; border-top:none;">
+				<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px; border:1px solid #dbdbdb; border-top:none; border-right-width:2px;">
 					{{ for(var i=0; i < ask.comments.length; i++) {  }}
 						{{ comment = ask.comments[i] }}
 						{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
@@ -490,11 +490,11 @@
           {{ } }}
 				</div>
         <% if current_user %>
-        <p style="font-size:14px; background:#fff; margin:0; padding:10px 0 5px; color:#9d9fa1; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
-          고민해결사 <span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님! 한마디 부탁해요!
+        <p style="font-size:14px; background:#fff; margin:0; padding:10px 0 5px; color:#9d9fa1; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
+          고민해결사 <span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님! 한마디 부탁해요!<i class="fa fa-bullhorn" style="color:#998674; font-size:22px; transform:rotateZ(-15deg);"></i>
         </p>
         <% end %>
-				<table cellspacing="0" cellpadding="0" style="width:100%; border:1px solid #dbdbdb; border-top:none; background-color:#fff;">
+				<table cellspacing="0" cellpadding="0" style="width:100%; border:1px solid #dbdbdb; border-top:none; background-color:#fff; border-right-width:2px; border-bottom-width:2px;">
 					{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
 						{{ ask_deal_id = ask.left_ask_deal_id }}
 						{{ ask_deal_text = "A" }}
@@ -519,7 +519,7 @@
 						</tr>
 					</tbody>
 				</table>
-        <p style="font-size:12px; margin:0; padding:10px 20px; color:#9d9fa1; text-align:left;">A/B 버튼을 눌러 의견을 어디에 남길지 선택 가능!</p>
+        <p style="font-size:12px; margin:0; padding:10px 20px; color:#9d9fa1; text-align:left;"><i class="fa fa-exclamation-circle"></i>A/B 버튼을 눌러 의견을 어디에 남길지 선택 가능!</p>
 		</div>
 	</div>
 </script>
