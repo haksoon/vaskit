@@ -36,7 +36,7 @@
           <img src="/images/home/hour.png" style="width:12px; margin:0 2px -1px 2px;" />{{= get_past_time(ask.created_at) }}
         </span>
 			{{ } }}
-			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px;">
+			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px; line-height:1.4;">
 				{{ if( ask.message){ }}
 					{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
 					{{= ask_message }}
