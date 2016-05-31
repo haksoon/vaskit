@@ -548,7 +548,7 @@
 		  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
 		    </a>
 	  		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
-	  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=left_ask_deal.id}}, true); return false;"><span class="vote_btn"></span><span class="vote_btn_text">투표하기&nbsp;<i class="fa fa-play" style="color:#998674;"></i></span></a>
+	  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=left_ask_deal.id}}, true); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play" style="color:#998674;"></i></span></a>
 	  		{{ } }}
 
 	  		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
@@ -567,7 +567,7 @@
 				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
 				</a>
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
-				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=right_ask_deal.id}}, false); return false;"><span class="vote_btn"></span><span class="vote_btn_text">투표하기&nbsp;<i class="fa fa-play" style="color:#998674;"></i></span></a>
+				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=right_ask_deal.id}}, false); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play" style="color:#998674;"></i></span></a>
 				{{ } }}
 
         {{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
@@ -946,12 +946,10 @@
 
 	function ask_deal_id_change(){
 		if ($("#ask_deal_id_change").html() == "A"){
-      $("#ask_deal_id_change").animate({transform:"rotateY(360deg)"},300).html("B");
-			// $("#ask_deal_id_change").html("B");
+			$("#ask_deal_id_change").html("B")
 			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].right_ask_deal.id+"); return false;");
 		}else{
-      $("#ask_deal_id_change").animate({transform:"rotateY(-360deg)"},300).html("A");
-			// $("#ask_deal_id_change").html("A");
+			$("#ask_deal_id_change").html("A")
 			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].left_ask_deal.id+"); return false;");
 		}
 	}
