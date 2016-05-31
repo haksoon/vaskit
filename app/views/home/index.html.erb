@@ -61,12 +61,13 @@
 			    {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
 			  {{ } }}
 			  <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">
-				{{ if (ask.user.gender){ }}
-					<i class="fa fa-male"></i>
-				{{ }else{ }}
-					<i class="fa fa-female"></i>
-				{{ } }}
-					{{= get_user_ages(ask.user.birthday) }}</p>
+					{{ if (ask.user.gender){ }}
+						<i class="fa fa-male" style="margin-right:-2px;"></i>
+					{{ }else{ }}
+						<i class="fa fa-female style="margin-right:-2px;""></i>
+					{{ } }}
+					{{= get_user_ages(ask.user.birthday) }}
+				</p>
 				<p style="margin:3px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
 			{{ } }}
 			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px; line-height:1.4;">
