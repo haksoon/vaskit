@@ -38,7 +38,7 @@
     {{ if( ask.category){ }}
     <span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
     {{ }else{ }}
-    <span class="category_none">관심사 미설정</span>
+    <span class="category_none" onclick="category_on(); return false;">관심사 미설정</span>
     {{ } }}
 		<div style="position:absolute; bottom:0; right:0;">
 			<span style="float:left; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">

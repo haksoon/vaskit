@@ -18,13 +18,13 @@
 .clearfix:after {
   clear: both;
 }
-@media (max-width: 640px) {
+@media (max-width:520px) {
 	#wrap{
 		width:100%;
 	}
 	.home-float-btn{
-		position:fixed; 
-		 right:20px; 
+		position:fixed;
+		 right:20px;
 		 bottom:14px;
 	}
 	.home-float-btn img{
@@ -35,20 +35,19 @@
 	}
 }
 
-@media (min-width: 641px) {
+@media (min-width:521px) {
 	#wrap{
-		width:640px;
-		
-		box-shadow:0px 0px 10px rgba(166,180,188,0.8); 
+		width:520px;
+		box-shadow:0px 0px 10px rgba(166,180,188,0.8);
 		-webkit-box-shadow:0px 0px 10px rgba(166,180,188,0.8);
 	}
 	.home-float-btn{
-		 position:fixed; 
-		 right:50%; 
-		 margin-right:-400px; 
+		 position:fixed;
+		 right:50%;
+		 margin-right:-350px;
 		 bottom:10px;
 	}
-	
+
 	.home-float-btn img{
 		width:70px;
 	}
@@ -57,13 +56,11 @@
 	}
 }
 
-@media (min-width: 641px) and (max-width: 800px){
+@media (min-width:521px) and (max-width:750px){
 	.home-float-btn{
-		 position:fixed; 
-		 right:50%; 
-		 margin-right:-300px; 
+		 position:fixed;
+		 right:50%;
+		 margin-right:-250px;
 		 bottom:10px;
 	}
 }
-
-
