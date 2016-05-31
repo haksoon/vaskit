@@ -84,9 +84,9 @@
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
 		<a href="/asks/{{=ask.id}}" target="_blank" style="padding:12px; display:block; color:#9d9ea1; font-size:13px;">
-			<span style="float:left;"><i class="fa fa-comment" style="font-size:15px;">&nbsp;</i>{{=ask.left_ask_deal.comment_count}}</span>
+			<span style="float:left;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
 			<span><i class="fa fa-toggle-down" style="font-size:15px; vertical-align:top;">&nbsp;</i>상세 열기</span>
-			<span style="float:right;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; tranform:rotateY(180deg);">&nbsp;</i></span>
+			<span style="float:right;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; tranform:rotateY(180deg);"></i></span>
 		</a>
 	</div>
 </script>
