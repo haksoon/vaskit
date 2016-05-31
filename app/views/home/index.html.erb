@@ -40,11 +40,11 @@
     {{ }else{ }}
     <span class="category_none">관심사 미설정</span>
     {{ } }}
+		{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
 		<span style="float:right; width:60px; height:30px; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">
-      {{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
         <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; width:50px; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#ee6e01;"></i>&nbsp;더보기</a>
-      {{ } }}
     </span>
+		{{ } }}
 		<span style="float:right; width:75px; height:30px; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center; margin-right:-1px;">
       <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; width:60px; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#ee6e01;"></i>&nbsp;공유하기</a>
     </span>
