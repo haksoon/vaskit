@@ -41,12 +41,12 @@
     <span class="category_none">관심사 미설정</span>
     {{ } }}
 		{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
-		<span style="float:right; width:inherit; border-top:1px solid #dbdbdb; border-right:2px solid #dbdbdb; background-color:#fff; text-align:center;">
-        <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; width:50px; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
+		<span style="float:right; border-top:1px solid #dbdbdb; border-right:2px solid #dbdbdb; background-color:#fff; text-align:center;">
+        <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
     </span>
 		{{ } }}
-		<span style="float:right; width:inherit; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">
-      <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; width:60px; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
+		<span style="float:right; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">
+      <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
     </span>
   </div>
 
@@ -65,7 +65,7 @@
 					{{ } }}
 					{{= get_user_ages(ask.user.birthday) }}
 				</p>
-				<p style="margin:3px 0 0 0; color:#998675; font-size:17px; float:left; max-width:100px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</p>
+				<p style="margin:3px 0 0 0; color:#998675; font-size:17px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</p>
 				<span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
 					<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
 				</span>
