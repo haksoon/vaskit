@@ -306,6 +306,10 @@ input::-webkit-inner-spin-button {
 
 .hash_tag{
 	color:#ee6e01;
+	transition:background-color .2s;
+}
+.hash_tag:hover, .hash_tag:focus, .hash_tag:active {
+	background-color:#ffe4a9;
 }
 
 .ask_message_input{
