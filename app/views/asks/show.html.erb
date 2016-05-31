@@ -487,13 +487,12 @@
 				<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px; border:1px solid #dbdbdb; border-top:none; border-right-width:2px;">
           {{ if(ask.comments.length == 0) { }}
             <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
-          {{ }else{ }
-            {{ for(var i=0; i < ask.comments.length; i++) {  }}
-  						{{ comment = ask.comments[i] }}
-  						{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
-  				    {{= askCommentTemplate({ask:ask, comment: comment}) }}
-  					{{ } }}
-          {{ } }}
+          {{ } }
+          {{ for(var i=0; i < ask.comments.length; i++) {  }}
+						{{ comment = ask.comments[i] }}
+						{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
+				    {{= askCommentTemplate({ask:ask, comment: comment}) }}
+					{{ } }}
           {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
           <div style="position:absolute; top:0; left:-1px; width:100%; height:100%; background-color:black; opacity:0.92; border-left:1px solid black; border-right:1px solid black;">
             <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
