@@ -456,7 +456,7 @@
         </table>
       </div>
       <a id="detail_count_toggle_btn" href="#" onclick="detail_count_toggle(); return false;" style="display:block; text-align:center; padding:7px; position:relative; background-color:#998675; border-radius:0 0 3px 3px; height:20px; border:1px solid #dbdbdb; border-top:none; border-right-width:2px; border-bottom-width:2px;">
-        <p style="margin:0; color:#fff; font-size:12px; padding:3px;"><i class="fa fa-chevron-up"></i>상세 투표결과 닫기</p>
+        <p style="margin:0; color:#fff; font-size:12px; padding:3px;"><i class='fa fa-chevron-up' style="vertical-align:top; margin-right:3px;"></i>상세 투표결과 닫기</p>
       </a>
 		{{ } }}
 
@@ -519,7 +519,7 @@
 						</tr>
 					</tbody>
 				</table>
-        <p style="font-size:12px; margin:0; padding:10px 20px; color:#9d9fa1; text-align:left;"><i class="fa fa-exclamation-circle"></i>A/B 버튼을 눌러 의견을 어디에 남길지 선택 가능!</p>
+        <p style="font-size:12px; margin:0; padding:10px 15px; color:#9d9fa1; text-align:left;"><i class="fa fa-exclamation-circle">&nbsp;</i>A/B 버튼을 눌러 의견을 어디에 남길지 선택 가능!</p>
 		</div>
 	</div>
 </script>
@@ -944,12 +944,12 @@
 	function detail_count_toggle(){
 	  if ($('#detail_vote_count').is(':visible')){
 	    $( "#detail_vote_count" ).slideUp( "slow", function() {
-	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-down'>&nbsp;</i>상세 투표결과 열기");
+	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-down' style='vertical-align:top; margin-right:3px;'>&nbsp;</i>상세 투표결과 열기");
 	    });
 
 	  }else{
 	    $( "#detail_vote_count" ).slideDown( "slow", function() {
-	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-up'>&nbsp;</i>상세 투표결과 닫기");
+	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-up' style='vertical-align:top; margin-right:3px;'>&nbsp;</i>상세 투표결과 닫기");
 	    });
 	  }
 
