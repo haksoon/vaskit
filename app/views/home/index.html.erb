@@ -42,11 +42,11 @@
     {{ } }}
 		{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
 		<span style="float:right; width:60px; height:30px; border-top:1px solid #dbdbdb; border-right:2px solid #dbdbdb; background-color:#fff; text-align:center;">
-        <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; width:50px; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#ee6e01;"></i>&nbsp;더보기</a>
+        <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; width:50px; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
     </span>
 		{{ } }}
 		<span style="float:right; width:75px; height:30px; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">
-      <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; width:60px; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#ee6e01;"></i>&nbsp;공유하기</a>
+      <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; width:60px; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
     </span>
   </div>
 
@@ -60,7 +60,13 @@
 			  {{ if ( !ask.user.gender){ }}
 			    {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
 			  {{ } }}
-			  <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">{{= get_user_ages(ask.user.birthday) }}</p>
+			  <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">
+					<% if(ask.user) %>
+					<i class="fa fa-male"></i>
+					<% if (!ask.user.gender) %>
+					<i class="fa fa-female"></i>
+					<% end %>
+					{{= get_user_ages(ask.user.birthday) }}</p>
 				<p style="margin:3px 0 0 0; color:#998675; font-size:17px; padding-right:9px;">{{= ask.user.string_id }}</p>
 			{{ } }}
 			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px;">
