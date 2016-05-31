@@ -455,8 +455,8 @@
           </tbody>
         </table>
       </div>
-      <a id="detail_count_toggle_btn" href="#" onclick="detail_count_toggle(); return false;" style="display:block; text-align:center; padding:7px; position:relative; background-color:#998675; border-radius:0 0 3px 3px; height:20px; border:1px solid #dbdbdb; border-top:none;">
-        <p style="margin:0; color:#fff; font-size:12px; padding:3px;">상세 투표결과 닫기</p>
+      <a id="detail_count_toggle_btn" href="#" onclick="detail_count_toggle(); return false;" style="display:block; text-align:center; padding:7px; position:relative; background-color:#998675; border-radius:0 0 3px 3px; height:20px; border:1px solid #dbdbdb; border-top:none; border-right-width:2px; border-bottom-width:2px;">
+        <p style="margin:0; color:#fff; font-size:12px; padding:3px;"><i class="fa fa-chevron-up"></i>상세 투표결과 닫기</p>
       </a>
 		{{ } }}
 
@@ -491,7 +491,7 @@
 				</div>
         <% if current_user %>
         <p style="font-size:14px; background:#fff; margin:0; padding:10px 0 5px; color:#9d9fa1; border-left:1px solid #dbdbdb; border-right:2px solid #dbdbdb;">
-          고민해결사 <span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님! 한마디 부탁해요!<i class="fa fa-bullhorn" style="color:#998674; font-size:22px; transform:rotateZ(-15deg);"></i>
+          고민해결사 <span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님! 한마디 부탁해요! <i class="fa fa-bullhorn" style="color:#998674; font-size:22px; transform:rotateZ(-15deg);"></i>
         </p>
         <% end %>
 				<table cellspacing="0" cellpadding="0" style="width:100%; border:1px solid #dbdbdb; border-top:none; background-color:#fff; border-right-width:2px; border-bottom-width:2px;">
@@ -944,12 +944,12 @@
 	function detail_count_toggle(){
 	  if ($('#detail_vote_count').is(':visible')){
 	    $( "#detail_vote_count" ).slideUp( "slow", function() {
-	      $("#detail_count_toggle_btn p").html("상세 투표결과 열기");
+	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-down'>&nbsp;</i>상세 투표결과 열기");
 	    });
 
 	  }else{
 	    $( "#detail_vote_count" ).slideDown( "slow", function() {
-	      $("#detail_count_toggle_btn p").html("상세 투표결과 닫기");
+	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-up'>&nbsp;</i>상세 투표결과 닫기");
 	    });
 	  }
 
