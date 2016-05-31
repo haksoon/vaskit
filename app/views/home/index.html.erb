@@ -34,23 +34,25 @@
 <% end %>
 
 <script type="text/template" id="ask-template">
-  <div style="text-align:left;padding: 5px 0 0 1px;">
+  <div style="text-align:left;padding: 5px 0 0 0px; position:relative;">
     {{ if( ask.category){ }}
     <span class="category">{{= ask.category.name }}</span>
     {{ }else{ }}
     <span class="category_none">관심사 미설정</span>
     {{ } }}
-		{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
-		<span style="float:right; border-top:1px solid #dbdbdb; border-right:2px solid #dbdbdb; background-color:#fff; text-align:center;">
-        <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
-    </span>
-		{{ } }}
-		<span style="float:right; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">
-      <a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
-    </span>
+		<div style="position:absolute; bottom:0; right:0;">
+			<span style="float:left; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">
+				<a href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
+			</span>
+			{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
+			<span style="float:left; border-top:1px solid #dbdbdb; border-right:2px solid #dbdbdb; background-color:#fff; text-align:center;">
+	        <a href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
+	    </span>
+			{{ } }}
+		</div>
   </div>
 
-	<div style="border:1px solid #dbdbdb; border-right-width:2px; border-bottom-width:2px; background-color:#fff; margin-bottom:15px; position:relative;">
+	<div style="border:1px solid #dbdbdb; border-right-width:2px; border-bottom-width:2px; background-color:#fff; margin-bottom:15px; position:relative; clear:both;">
 		<div style="text-align:left; padding:15px; position:relative; background-color:#fff;">
 			{{ if( ask.user){ }}
 			  {{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
