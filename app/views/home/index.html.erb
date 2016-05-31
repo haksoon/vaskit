@@ -36,7 +36,7 @@
 <script type="text/template" id="ask-template">
   <div style="text-align:left; padding:5px 0 0 0px; position:relative;">
     {{ if( ask.category){ }}
-    <span class="category">{{= ask.category.name }}</span>
+    <span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
     {{ }else{ }}
     <span class="category_none">관심사 미설정</span>
     {{ } }}
