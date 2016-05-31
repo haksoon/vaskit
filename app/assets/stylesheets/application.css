@@ -167,6 +167,10 @@ input::-webkit-inner-spin-button {
 	line-height:28px;
 }
 
+.share_icon:hover, .share_icon:focus, .share_icon:active { color:#998674; font-weight:bold; }
+.more_icon:hover, .more_icon:focus, .more_icon:active { color:#998674; font-weight:bold; }
+.card_detail:hover, .card_detail:focus, .card_detail:active { color:#998674; font-weight:bold; }
+
 .comment_box{
 	width:100%;
 	height:34px;
