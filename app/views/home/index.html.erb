@@ -85,7 +85,7 @@
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-		<a href="/asks/{{=ask.id}}" target="_blank" style="padding:12px; display:block; color:#9d9ea1; font-size:13px;">
+		<a href="/asks/{{=ask.id}}" target="_blank" style="padding:12px 15px; display:block; color:#9d9ea1; font-size:13px;">
 			<span style="float:left;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
 			<span><i class="fa fa-angle-double-down" style="font-size:15px; vertical-align:top;">&nbsp;</i>상세 열기</span>
 			<span style="float:right;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
@@ -104,7 +104,7 @@
     		  <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
     		</a>
     		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
-    		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+    		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><span class="vote_btn"></span><span class="vote_btn_text">투표하기&nbsp;<i class="fa fa-play" style="color:#998674;"></i></span></a>
     		{{ } }}
     		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
       		{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
@@ -121,7 +121,7 @@
 				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
 				</a>
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
-				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><img style="width:100px; position:absolute; left:50%; margin-left:-50px; bottom:16px;" src="/images/home/vote_btn.png" /></a>
+				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><span class="vote_btn"></span><span class="vote_btn_text">투표하기&nbsp;<i class="fa fa-play" style="color:#998674;"></i></span></a>
 				{{ } }}
 
 				{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}

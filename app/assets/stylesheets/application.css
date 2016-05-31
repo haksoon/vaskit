@@ -147,6 +147,36 @@ input::-webkit-inner-spin-button {
 	display:block; float:right;
 }
 
+.vote_btn {
+	position:absolute;
+	bottom:16px;
+	left:50%;
+	margin-left:-50px;
+	width:100px;
+	height:28px;
+	-webkit-box-sizing:border-box;
+	   -moz-box-sizing:border-box;
+	        box-sizing:border-box;
+	background-color:#4b3d3d;
+	border:1px solid #fff;
+	-webkit-border-radius:14px;
+	   -moz-border-radius:14px;
+		      border-radius:14px;
+	opacity:0.8;
+}
+
+.vote_btn_text {
+	 position:absolute;
+	 bottom:16px;
+	 left:50%;
+	 margin-left:-50px;
+	 width:100px;
+	 height:28px;
+	 color:#fff;
+	 font-size:13px;
+	 line-height:28px;
+}
+
 .comment_box{
 	width:100%;
 	height:34px;
