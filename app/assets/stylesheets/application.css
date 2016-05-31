@@ -165,6 +165,16 @@ input::-webkit-inner-spin-button {
 	color:#fff;
 	font-size:13px;
 	line-height:28px;
+	-webkit-box-shadow:0px 5px 0px #4b3d3d;
+	   -moz-box-shadow:0px 5px 0px #4b3d3d;
+	        box-shadow:0px 5px 0px #4b3d3d;
+	transition:all .2s;
+}
+.vote_btn:hover, .vote_btn:focus, .vote_btn:active {
+	bottom:14px;
+	-webkit-box-shadow:0px 3px 0px #4b3d3d;
+	   -moz-box-shadow:0px 3px 0px #4b3d3d;
+	        box-shadow:0px 3px 0px #4b3d3d;
 }
 
 .share_icon { padding:8px 8px; display:inline-block; color:#9d9ea1; font-size:12px; transition:all .2s; }
