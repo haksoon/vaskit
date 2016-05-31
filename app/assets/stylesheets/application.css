@@ -125,13 +125,15 @@ input::-webkit-inner-spin-button {
 	background-color:#fff;
 	display:inline-block;
 	border:1px solid #dbdbdb;
-	padding:5px 10px;
+	border-bottom:none;
+	padding:8px 10px 7px;
 	color:#9d9ea0;
 	font-weight:bold;
 	font-size:12px;
 	-moz-border-radius:3px;
 	-webkit-border-radius:3px;
 	border-radius:0px;
+	margin-left:-1px;
 }
 
 .home-float-btn img{
