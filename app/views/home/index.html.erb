@@ -42,11 +42,11 @@
     {{ } }}
 		<div style="position:absolute; bottom:0; right:0;">
 			<span style="float:left; border:1px solid #dbdbdb; border-bottom:none; border-right-width:2px; background-color:#fff; text-align:center;">
-				<a class="share_icon" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;" style="padding:8px 8px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
+				<a class="share_icon" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
 			</span>
 			{{ if (ask.user_id != current_user_id || ask.ask_complete == null){ }}
 			<span style="float:left; border-top:1px solid #dbdbdb; border-right:2px solid #dbdbdb; background-color:#fff; text-align:center;">
-	        <a class="more_icon" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;" style="padding:8px 5px; display:inline-block; color:#9d9ea1; font-size:12px;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
+	        <a class="more_icon" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
 	    </span>
 			{{ } }}
 		</div>
@@ -85,7 +85,7 @@
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank" style="padding:12px 15px; display:block; color:#9d9ea1; font-size:13px;">
+		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank">
 			<span style="float:left;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
 			<span><i class="fa fa-angle-double-down" style="font-size:15px; vertical-align:top;">&nbsp;</i>상세 열기</span>
 			<span style="float:right;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>

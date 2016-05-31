@@ -167,8 +167,11 @@ input::-webkit-inner-spin-button {
 	line-height:28px;
 }
 
+.share_icon { padding:8px 8px; display:inline-block; color:#9d9ea1; font-size:12px; transition:all .2s; }
 .share_icon:hover, .share_icon:focus, .share_icon:active { color:#998674; font-weight:bold; }
+.more_icon { padding:8px 5px; display:inline-block; color:#9d9ea1; font-size:12px; transition:all .2s; }
 .more_icon:hover, .more_icon:focus, .more_icon:active { color:#998674; font-weight:bold; }
+.card_detail { padding:12px 15px; display:block; color:#9d9ea1; font-size:13px; transition:all .2s; }
 .card_detail:hover, .card_detail:focus, .card_detail:active { color:#998674; font-weight:bold; }
 
 .comment_box{
