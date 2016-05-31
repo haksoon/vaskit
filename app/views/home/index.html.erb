@@ -70,7 +70,7 @@
 					<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
 				</span>
 			{{ } }}
-			<p id="ask_{{=ask.id}}_message" style="margin:9px 0 0 0; color:#383838; font-size:13px; line-height:1.4;">
+			<p id="ask_{{=ask.id}}_message" style="clear:both; margin:0; padding-top:10px; color:#383838; font-size:13px; line-height:1.4;">
 				{{ if( ask.message){ }}
 					{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
 					{{= ask_message }}
