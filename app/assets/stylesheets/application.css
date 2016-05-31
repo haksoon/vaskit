@@ -410,3 +410,6 @@ input::-webkit-inner-spin-button {
 
 #flash  { -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; background-color:#ee6e01; color:#FFFFFF; font-weight:bold; padding:20px 10px; position:fixed; top:50%; left:50%; margin-left:-110px; margin-top:-30px; text-align:center; width:200px; z-index:990000; opacity:0.8; filter:alpha(opacity=60); font-size:14px; }
 .loading { -moz-border-radius:3px; -webkit-border-radius:3px; border-radius:3px; background-color:#ee6e01; color:#FFFFFF; font-weight:bold; padding:20px 10px; position:fixed; top:50%; left:50%; margin-left:-110px; margin-top:-30px; text-align:center; width:200px; z-index:990000; opacity:0.8; filter:alpha(opacity=60); font-size:14px; }
+
+::-moz-selection { background:#ffe4a9; } /* Code for Firefox */
+::selection { background:#ffe4a9; }
