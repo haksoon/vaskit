@@ -946,12 +946,12 @@
 
 	function ask_deal_id_change(){
 		if ($("#ask_deal_id_change").html() == "A"){
-      $(this).animate({transform:"rotateY(360deg)"},300);
-			$("#ask_deal_id_change").html("B");
+      $(this).animate({transform:"rotateY(360deg)"},300).html("B");
+			// $("#ask_deal_id_change").html("B");
 			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].right_ask_deal.id+"); return false;");
 		}else{
-      $(this).animate({transform:"rotateY(-360deg)"},300);
-			$("#ask_deal_id_change").html("A");
+      $(this).animate({transform:"rotateY(-360deg)"},300).html("A");
+			// $("#ask_deal_id_change").html("A");
 			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].left_ask_deal.id+"); return false;");
 		}
 	}
