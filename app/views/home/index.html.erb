@@ -313,6 +313,7 @@
                       });
     						    });
     					}
+							img_hover();
 	        	}
 	        },
 	        beforeSend: function(){
@@ -323,7 +324,7 @@
 	  }
 	}
 
-	$(document).ready(function(){
+	function img_hover(){
 		$(".card_image").hover(
 			function(){
 				$(this).addClass("img_hover");
@@ -346,7 +347,7 @@
 				$(this).prev().children("p").removeClass("img_hover");
 			}
 		);
-	});
+	};
 
 </script>
 
