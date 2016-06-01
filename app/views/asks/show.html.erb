@@ -544,7 +544,8 @@
 		<tr>
 			<td style="width:50%; position:relative;">
 			  <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;">
-		  		<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+          <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
+					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
 		    </a>
 	  		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 	  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=left_ask_deal.id}}, true); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play"></i></span></a>
@@ -552,9 +553,9 @@
 
 	  		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
           {{ if ((ask.user_id == current_user_id || ask.be_completed ) || ask.right_ask_deal_id == already_vote[0].ask_deal_id ){ }}
-            <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
+            <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" class="card_image_overlay"></a>
           {{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-            <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);">
+            <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" class="card_image_overlay">
             <img src="/images/home/vote_result_check.png" style="width:50%; margin-top:20%; margin-left:0%;">
           </a>
           {{ } }}
@@ -563,7 +564,8 @@
 			</td>
 			<td style="width:50%; position:relative;">
 			  <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;">
-				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+          <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
+					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
 				</a>
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=right_ask_deal.id}}, false); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play"></i></span></a>
@@ -571,9 +573,9 @@
 
         {{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
           {{ if ((ask.user_id == current_user_id || ask.be_completed ) || ask.left_ask_deal_id == already_vote[0].ask_deal_id ){ }}
-            <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);"></a>
+            <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" class="card_image_overlay"></a>
           {{ }else if(ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
-            <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="display:black; position:absolute; top:0; left:0; width:100%; height:100%; margin-bottom:-32px; background-color: rgba(0,0,0,0.6);">
+            <a href="#" onclick="ask_image_on({{=ask.id}}, false ); return false;" class="card_image_overlay">
             <img src="/images/home/vote_result_check.png" style="width:50%; margin-top:20%; margin-left:0%;">
           </a>
           {{ } }}
