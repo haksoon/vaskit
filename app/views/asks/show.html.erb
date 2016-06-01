@@ -506,11 +506,6 @@
             </div>
           {{ } }}
 				</div>
-        <% if current_user %>
-          <p style="font-size:14px; background:#fff; margin:0; padding:10px 0 5px; color:#9d9fa1; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">고민해결사 <span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님! 한마디 부탁해요!&nbsp;<i class="fa fa-bullhorn" style="color:#998674; font-size:22px; transform:rotateZ(-15deg);"></i></p>
-        <% else %>
-          <p style="font-size:14px; background:#fff; margin:0; padding:10px 0 5px; color:#9d9fa1; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">회원가입하시고 의견을 남겨주세요!&nbsp;<i class="fa fa-bullhorn" style="color:#998674; font-size:22px; transform:rotateZ(-15deg);"></i></p>
-        <% end %>
 				<table cellspacing="0" cellpadding="0" style="width:100%; border:1px solid #dbdbdb; border-top:none; background-color:#fff; border-right-width:3px; border-bottom-width:5px;">
 					{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
 						{{ ask_deal_id = ask.left_ask_deal_id }}
