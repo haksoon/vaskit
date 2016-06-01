@@ -749,7 +749,7 @@
                   }
                 });
 				      });
-              img_hover();
+              hover_action();
 	        		notify("투표 완료");
 		        },
 		        beforeSend: function(){
@@ -971,33 +971,8 @@
 
 	}
 
-  function img_hover(){
-		$(".card_image").hover(
-			function(){
-				$(this).addClass("img_hover");
-				$(this).next().addClass("img_hover");
-			},
-			function(){
-				$(this).removeClass("img_hover");
-				$(this).next().removeClass("img_hover");
-			}
-		);
-		$(".card_image_overlay").hover(
-			function(){
-				$(this).addClass("img_hover");
-				$(this).prev().children("img").addClass("img_hover");
-				$(this).prev().children("p").addClass("img_hover");
-			},
-			function(){
-				$(this).removeClass("img_hover");
-				$(this).prev().children("img").removeClass("img_hover");
-				$(this).prev().children("p").removeClass("img_hover");
-			}
-		);
-	};
-
   $(document).ready(function(){
-    img_hover();
+    hover_action();
   });
 
 </script>

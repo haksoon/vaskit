@@ -16,7 +16,7 @@
 //= require_tree .
 
 
-// ga 
+// ga
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -24,7 +24,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 
 ga('create', 'UA-75373901-1', 'auto');
 ga('send', 'pageview');
-// ga 
+// ga
 
 function nearBottomOfPage() {
   return scrollDistanceFromBottom() < 150;
@@ -41,7 +41,7 @@ function get_image_url(data, model_name, extention){
 		var image_file_name = data.image_file_name;
 		if(image_file_name.indexOf(".") == -1){
 			image_file_name = image_file_name + ".";
-		} 
+		}
 	  	image_url += image_file_name;
 	  	return image_url;
 	}
@@ -56,7 +56,7 @@ function notify(flash_message){
     flash_div.html(flash_message);
     flash_div.attr('class', 'flash_ajax');
     flash_div.fadeIn("fast");
-      
+
     // use Javascript timeout function to delay calling
     // our jQuery fadeOut, and hide
     setTimeout(function(){
@@ -139,7 +139,7 @@ function get_past_time(time){
     day  = Math.floor(diff/1000/60/60/24),
     hour = Math.floor(diff/1000/60/60);
     ret = 0;
-    
+
     if (month != 0){
     	return month + "개월 전";
     }else if(week != 0){
@@ -160,7 +160,7 @@ function preventDefault(e) {
   e = e || window.event;
   if (e.preventDefault)
       e.preventDefault();
-  e.returnValue = false;  
+  e.returnValue = false;
 }
 
 function preventDefaultForScrollKeys(e) {
@@ -182,15 +182,39 @@ function disableScroll() {
 function enableScroll() {
     if (window.removeEventListener)
         window.removeEventListener('DOMMouseScroll', preventDefault, false);
-    window.onmousewheel = document.onmousewheel = null; 
-    window.onwheel = null; 
-    window.ontouchmove = null;  
-    document.onkeydown = null;  
+    window.onmousewheel = document.onmousewheel = null;
+    window.onwheel = null;
+    window.ontouchmove = null;
+    document.onkeydown = null;
 }
 
+function hover_action(){
+  $(".card_image").hover(
+    function(){
+      $(this).addClass("img_hover");
+      $(this).next().addClass("img_hover");
+    },
+    function(){
+      $(this).removeClass("img_hover");
+      $(this).next().removeClass("img_hover");
+    }
+  );
+  $(".card_image_overlay").hover(
+    function(){
+      $(this).addClass("img_hover");
+      $(this).prev().children("img").addClass("img_hover");
+      $(this).prev().children("p").addClass("img_hover");
+    },
+    function(){
+      $(this).removeClass("img_hover");
+      $(this).prev().children("img").removeClass("img_hover");
+      $(this).prev().children("p").removeClass("img_hover");
+    }
+  );
+};
 
 $( document ).ready(function() {
-	//ie 에서 placeholder 
+	//ie 에서 placeholder
 	(function($) {
 	  $.fn.placeholder = function() {
 	    if(typeof document.createElement("input").placeholder == 'undefined') {
