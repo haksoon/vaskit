@@ -103,9 +103,9 @@
 	{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
 	<table cellspacing="0" cellpadding="0" style="width:100%;">
 		<tr>
-			<td style="width:50%; position:relative;">
+			<td style="width:50%; position:relative; overflow:hidden;">
   	    <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;">
-    		  <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+    		  <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
     		</a>
     		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
     		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play"></i></span></a>
@@ -120,9 +120,9 @@
           {{ } }}
         {{ } }}
 			</td>
-			<td style="width:50%; position:relative;">
+			<td style="width:50%; position:relative; overflow:hidden;">
 			  <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;">
-				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
 				</a>
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
 				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play"></i></span></a>

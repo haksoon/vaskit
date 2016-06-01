@@ -147,6 +147,13 @@ input::-webkit-inner-spin-button {
 	display:block; float:right;
 }
 
+ .card_image { width:100%; display:block; transition:all .2s; }
+ .card_image:hover, .card_image:focus, .card_image:active {
+	 -webkit-transform:scale(1.02);
+	    -moz-transform:scale(1.02);
+	         transform:scale(1.02);
+ }
+
 .vote_btn {
 	position:absolute;
 	bottom:16px;
