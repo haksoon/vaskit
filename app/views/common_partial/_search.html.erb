@@ -64,19 +64,19 @@
 
 	function search_input_on(){
 		disableScroll();
-		$("#search_overlay").show();
-		$("#search_pc_bg").show();
-		$("#search_bg").show();
+		$("#search_overlay").fadeIn(200);
+		$("#search_pc_bg").fadeIn(200);
+		$("#search_bg").fadeIn(200);
 		$('#search_input').focus().select();
 	}
 
 	function search_input_off(){
 		enableScroll();
-		$("#search_overlay").hide();
-		$("#search_pc_bg").hide();
-		$("#search_bg").hide();
+		$("#search_overlay").fadeOut(200);
+		$("#search_pc_bg").fadeOut(200);
+		$("#search_bg").fadeOut(200);
 		$('#search_input').val("");
-		$("#keyword_reset_btn").hide();
+		$("#keyword_reset_btn").fadeOut(200);
 	}
 
 	function keyword_reset(){
@@ -102,7 +102,7 @@
 	});
 
 	$('#search_input').keyup(function(e) {
-  		$("#keyword_reset_btn").show();
+  	$("#keyword_reset_btn").show();
 		$.ajax({
 	        url: "/search/get_keyword.json",
 	        type: 'GET',

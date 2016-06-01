@@ -59,9 +59,9 @@
 <script>
   function ask_image_on(ask_id, is_left){
     disableScroll();
-    $("#ask_image_overlay").show();
-    $("#ask_image_pc_bg").show();
-    $("#ask_image_bg").show();
+    $("#ask_image_overlay").fadeIn(200);
+    $("#ask_image_pc_bg").fadeIn(200);
+    $("#ask_image_bg").fadeIn(200);
 
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
@@ -70,9 +70,9 @@
 
   function ask_image_off(){
     enableScroll();
-    $("#ask_image_overlay").hide();
-    $("#ask_image_pc_bg").hide();
-    $("#ask_image_bg").hide();
+    $("#ask_image_overlay").fadeOut(200);
+    $("#ask_image_pc_bg").fadeOut(200);
+    $("#ask_image_bg").fadeOut(200);
   }
 
 </script>

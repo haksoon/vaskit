@@ -28,13 +28,13 @@
 			<img src="/images/common/submit_btn.png" style="width:18px; margin:0 2px -2px 0;"/> 신고
 		</a>
 	</div>
-	
+
 </div>
 
 <script>
 
 	var report_type;
-	
+
 	function show_more_popup(target, target_id, ask_user_id, current_user_id){
 	  if (target == 'comment'){
 	    var already_vote = [];
@@ -42,13 +42,13 @@
 	    var current_ask = $.grep(asks, function(obj) { return obj.id === target_id })[0];
       var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === current_ask.id });
 	  }
-	  
-	  if (target == 'comment' || ask_user_id == current_user_id || already_vote.length == 0){ 
+
+	  if (target == 'comment' || ask_user_id == current_user_id || already_vote.length == 0){
       $("#vote_modify_btn").hide();
 	  }else{
 	    $("#vote_modify_btn").attr("onclick","vote_modify("+target_id+"); return false;");
 	  }
-	  
+
 		if (ask_user_id == current_user_id){
 			$("#ask_report_btn").hide();
 		}else{
@@ -58,11 +58,11 @@
 		$("#ask_edit_btn").attr("href","/asks/"+target_id+"/edit");
 		$("#report_submit_btn").attr("onclick", "submit_report('"+target+"',"+target_id+"); return false;");
 		$("#ask_complete_btn").attr("href", "/asks/"+target_id+"/ask_complete");
-		
-		$("#more_popup_bg").show();
-		$("#more_popup").show();
+
+		$("#more_popup_bg").fadeIn(200);
+		$("#more_popup").fadeIn(200);
 	}
-	
+
 	function hide_more_popup(){
 		$("#ask_edit_btn").show();
 		$("#ask_report_btn").show();
@@ -76,7 +76,7 @@
 		$("#more_popup").css("margin-top", "-110px");
 		report_type_reset()
 	}
-	
+
 	function show_report_popup(){
 		<% if current_user %>
 			$("#more_popup_sub").hide();
@@ -87,7 +87,7 @@
 			notify("회원가입 후<br />신고를 제출할 수 있습니다.");
 		<% end %>
 	}
-	
+
 	function set_report_type(report_type_id){
 		if(report_type_id != 4){
 			$("#ask_report_message").val("");
@@ -99,7 +99,7 @@
 		report_type = report_type_id;
 		$("#report_btn_"+report_type_id+" img").attr("src","/images/home/check_on.png");
 	}
-	
+
 	function report_type_reset(){
 		report_type = null;
 		$("#report_btn_1 img").attr("src","/images/home/check_off.png");
@@ -107,7 +107,7 @@
 		$("#report_btn_3 img").attr("src","/images/home/check_off.png");
 		$("#report_btn_4 img").attr("src","/images/home/check_off.png");
 	}
-	
+
 	function submit_report(target, target_id){
 		var report_message = $("#ask_report_message").val();
 		if (report_type == null){
@@ -141,7 +141,7 @@
 	        }
 		});
 	}
-	
+
 	function vote_modify(ask_id){
 	  var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
 	  var change_votes = $.grep(my_votes, function(obj) { return obj.ask_id != ask.id });
@@ -151,5 +151,5 @@
     notify("다시 투표해주세요");
     hide_more_popup();
 	}
-	
+
 </script>

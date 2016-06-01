@@ -19,16 +19,16 @@
 	function show_share_popup(ask_id,user_string_id, left_deal_title, right_deal_title){
 		$("#share_url").html("http://vaskit.kr/asks/"+ask_id);
 		$("#share_katalk_btn").attr("onclick","share_katalk('"+user_string_id+"','"+left_deal_title+"','"+right_deal_title+"'); return false;")
-		$("#share_popup_bg").show();
-		$("#share_popup").show();
+		$("#share_popup_bg").fadeIn(200);
+		$("#share_popup").fadeIn(200);
 	}
-	
+
 	function hide_share_popup(){
-		$("#share_popup").hide();
-		$("#share_popup_bg").hide();
+		$("#share_popup").fadeOut(200);
+		$("#share_popup_bg").fadeOut(200);
 	}
-	
-	
+
+
 	function share_facebook(){
 		share_log("facebook");
 		if (typeof(FB) != 'undefined' && FB != null ) {
@@ -38,22 +38,22 @@
 			    xfbml      : true,
 			    version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
 			  });
-		} 
+		}
 		var share_url = $("#share_url").html();
 		FB.ui({
 			method: 'share',
 			href: share_url,
 		}, function(response){});
 	}
-	
-	
+
+
 	function share_katalk(user_string_id, left_deal_title, right_deal_title){
 		share_log("katalk");
 		try{
 			Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
 		}catch(err) {
 		}
-		
+
 		var share_url = $("#share_url").html();
 		var image_url = "http://vaskit.kr/images/etc/share_image.png";
 		var label = "@"+user_string_id+"님을 도와주세요! 머리털이 빠지고 있어요...\n\n'"+left_deal_title+"' vs '"+right_deal_title+"', 무엇을 선택해야 후회하지 않을까요?\n\n결정장애 해결에 도움을 주세요!\n\n"+share_url;
