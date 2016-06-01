@@ -63,6 +63,7 @@
 <script>
 
 	function search_input_on(){
+		disableScroll();
 		$("#search_overlay").show();
 		$("#search_pc_bg").show();
 		$("#search_bg").show();
@@ -70,6 +71,7 @@
 	}
 
 	function search_input_off(){
+		enableScroll();
 		$("#search_overlay").hide();
 		$("#search_pc_bg").hide();
 		$("#search_bg").hide();

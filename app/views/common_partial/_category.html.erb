@@ -1,3 +1,4 @@
+<div id="category_pc_bg" onclick="category_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:1; display:none;"></div>
 <div id="category_bg" onclick="category_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:12; opacity:0.6; display:none;"></div>
 <div id="category_overlay" style="width:inherit; position:fixed;top:0; z-index:13; display:none; background:#f4f4f4;">
 	<table class="main_header" cellspacing="0" cellpadding="0" style="background-color:#998675; width:100%; overflow:visible; height:42px;">
@@ -87,12 +88,16 @@
 	var user_categories = <%=raw @user_categories.to_json %>;
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 	function category_on(){
+		disableScroll();
 		$("#category_overlay").show();
+		$("#category_pc_bg").show();
 		$("#category_bg").show();
 	}
 
 	function category_off(){
+		enableScroll();
 		$("#category_overlay").hide();
+		$("#category_pc_bg").hide();
 		$("#category_bg").hide();
 		category_reset();
 	}
