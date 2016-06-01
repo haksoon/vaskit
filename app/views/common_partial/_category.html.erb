@@ -7,13 +7,14 @@
 				<img src="/images/etc/detail.png" style="position:absolute; left:21px; bottom:0; width:20px;">
 			</td>
 			<td style="text-align:center;">
-				<a href="/" style="display:block; font-size:20px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">관심사 설정</a>	
+				<a href="/" style="display:block; font-size:20px; color:#FFFFFF; font-weight:bold; margin:0 auto; margin-top:3px;">관심사 설정</a>
 			</td>
 			<td style="width:60px;">
 			</td>
 		</tr>
 	</table>
 	<div style="width:100%; background:#fff; text-align:left;">
+		<p style="margin:0; padding:20px 20px 0px; font-size:14px; color:#9d9ea1;"><i class="fa fa-info-circle" style="font-size:16px;"></i>&nbsp;본인의 관심사만 선택하여 조회하실 수 있습니다.</p>
 		<div style="padding:10px 8px;">
 			<table cellspacing="0" cellpadding="4">
 				<tr>
@@ -21,7 +22,7 @@
 						<a href="#" onclick="category_toggle(1); return false;"><img id="category_img_1" style="width:100%; display:block;" src="/images/category/1_<%= @user_categories.include?(1) ? 'on' : "off" %>.png"></a>
 					</td>
 					<td style="width:25%;">
-            <a href="#" onclick="category_toggle(7); return false;"><img id="category_img_7" style="width:100%; display:block;" src="/images/category/7_<%= @user_categories.include?(7) ? 'on' :"off" %>.png"></a>
+            <a href="#" onclick="category_toggle(7); return false;"><img id="category_img_7" style="width:100%; display:block;" src="/images/category/7_<%= @user_categories.include?(7) ? 'on' : "off" %>.png"></a>
           </td>
 					<td style="width:25%;">
 						<a href="#" onclick="category_toggle(2); return false;"><img id="category_img_2" style="width:100%; display:block;" src="/images/category/2_<%= @user_categories.include?(2) ? 'on' : "off" %>.png"></a>
@@ -82,22 +83,22 @@
 </div>
 
 <script>
-	
+
 	var user_categories = <%=raw @user_categories.to_json %>;
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 	function category_on(){
 		$("#category_overlay").show();
 		$("#category_bg").show();
 	}
-	
+
 	function category_off(){
 		$("#category_overlay").hide();
 		$("#category_bg").hide();
 		category_reset();
 	}
-	
+
 	function category_toggle(category_id){
-		
+
 		<% if current_user %>
 			if($.inArray(category_id, change_user_categories) > -1){
 				$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_off.png");
@@ -113,7 +114,7 @@
 		 	notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
 		<% end %>
 	}
-	
+
 	function category_reset(){
 		change_user_categories = user_categories;
 		for(var i=0; i < 12; i++) {
@@ -125,7 +126,7 @@
 			}
 		}
 	}
-	
+
 	function select_all_toggle(){
 		<% if current_user %>
 			if (change_user_categories.length == 12){
@@ -147,7 +148,7 @@
 		 	notify("관심사 설정은<br />회원가입 후 가능합니다");
 		<% end %>
 	}
-	
+
 	function submit_category(){
 		<% if current_user %>
 			window.location = "/home/set_category?category_ids="+change_user_categories;
@@ -155,5 +156,5 @@
 		 	notify("관심사 설정은<br />회원가입 후 가능합니다");
 		<% end %>
 	}
-	
+
 </script>
