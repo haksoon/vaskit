@@ -174,7 +174,7 @@ input::-webkit-inner-spin-button {
 }
 .vote_btn:hover, .vote_btn:focus, .vote_btn:active {
 	border-bottom-width:3px;
-	background-color:rgba(238,110,1,0.8)
+	background-color:rgba(238,110,1,0.8);
 }
 
 .share_icon { padding:8px 8px; display:inline-block; color:#9d9ea1; font-size:12px; transition:all .2s; }
