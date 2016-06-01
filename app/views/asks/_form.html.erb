@@ -6,9 +6,9 @@
 			제품과 관련된 내용을 상세하게 입력해주세요.
 		</p>
 		<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "…관심사 선택…" }, :class => "category_select" %>
-		
-		<%= f.text_area :message, :placeholder => "…상황태그 입력…", :class => "ask_message_input" %> 
-		
+
+		<%= f.text_area :message, :placeholder => "…상황태그 입력…", :class => "ask_message_input" %>
+
 		<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-top:6px;">
 			<tr>
 				<td style="width:50%;">
@@ -29,7 +29,7 @@
 				</td>
 			</tr>
 		</table>
-		
+
 		<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-top:10px;">
 			<tr>
 				<td style="text-align:left; width:35%;">
@@ -150,17 +150,17 @@
 					</div>
 				</td>
 			</tr>
-			
+
 		</table>
 		<%= file_field_tag 'left_deal[image]', :accept => 'image/*', :multiple => false, :style => "visibility:hidden; width:1px; display:inline;" %>
 		<%= hidden_field_tag 'left_deal[image_id]' %>
-		
+
 		<%= file_field_tag 'right_deal[image]', :accept => 'image/*', :multiple => false, :style => "visibility:hidden; width:1px; display:inline;" %>
 		<%= hidden_field_tag 'right_deal[image_id]' %>
-		
+
 		<%= hidden_field_tag 'left_deal[deal_id]' %>
 		<%= hidden_field_tag 'right_deal[deal_id]' %>
-		
+
 	<% end %>
 </div>
 
@@ -289,23 +289,23 @@
 
 	var items;
 	var image_items;
-	
+
 	function deal_search_by_key(){
 		var deal_search_keyword = $('#deal_search_keyword').val();
 		if(deal_search_keyword == "" || deal_search_keyword == undefined){
 			notify("제품명을 입력해주세요.");
 		}else{
-			$("#deal_search_btn").click(); 
+			$("#deal_search_btn").click();
 		}
 	}
-	
+
 	$('#deal_search_keyword').keypress(function(e) {
 		if (e.keyCode == '13') {
         	e.preventDefault();
         	deal_search_by_key();
       	}
 	});
-	
+
 
 	function hide_search_deal_popup(){
 		$("#search_deal_popup").hide();
@@ -316,7 +316,7 @@
 		$("#naver_images").html("");
 		$("#deal_search_btn").attr("onclick","");
 	}
-	
+
 	function show_search_deal_popup(is_left){
 		$("#search_deal_popup_bg").show();
 		$("#search_deal_popup").show();
@@ -327,7 +327,7 @@
 			$("#search_deal_title").html("CARD B 검색해서 입력하기");
 		}
 	}
-	
+
 	function show_naver_deals(){
 		$("#search_result_div").scrollTop(0);
 		$("#naver_deals").show();
@@ -339,7 +339,7 @@
 		$("#naver_deals_btn").css("border-right","none");
 		$("#naver_deals_btn").css("background-color","#fff");
 	}
-	
+
 	function show_naver_images(){
 		$("#search_result_div").scrollTop(0);
 		$("#naver_deals").hide();
@@ -351,7 +351,7 @@
 		$("#naver_images_btn").css("border-left","none");
 		$("#naver_images_btn").css("background-color","#fff");
 	}
-	
+
 	function deal_search(is_left){
 		var keyword = $("#deal_search_keyword").val();
 		$.ajax({
@@ -369,7 +369,7 @@
 	        	}else{
 	        		$('#naver_images').html("<p style='line-height:150px; color:#383838;'>이미지 검색결과가 없습니다.</p>");
 	        	}
-	        	
+
 	        	items = data.shop_result.rss.channel.item;
 	        	if (items != null ){
 		        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
@@ -387,10 +387,10 @@
             }
 		});
 	}
-	
+
 	function select_deal(product_id, is_left){
 		item = $.grep(items, function(obj) { return obj.productId === product_id; })[0];
-		
+
 		$.ajax({
 	        url: '/deals/create_by_naver.json',
 	        type: 'POST',
@@ -407,7 +407,7 @@
 	        		$("#left_deal_price").val(deal.price);
 	        		$("#left_deal_link").val(deal.link);
 	        		$("#left_deal_deal_id").val(deal.id);
-	        		
+
 	        		$("#left_deal_image_id").val("");
 	        	}else{
 	        		$("#right_deal_image_btn img").attr("src", get_image_url(deal, "deals", "normal") );
@@ -416,7 +416,7 @@
 	        		$("#right_deal_price").val(deal.price);
 	        		$("#right_deal_link").val(deal.link);
 	        		$("#right_deal_deal_id").val(deal.id);
-	        		
+
 	        		$("#right_deal_image_id").val("");
 	        	}
 	        	$("#naver_images").html("");
@@ -431,7 +431,7 @@
             }
 		});
 	}
-	
+
 	function select_image(image_url, is_left){
 		$.ajax({
 	        url: '/preview_images/create_by_naver.json',
@@ -470,12 +470,12 @@
 	function left_deal_image_upload(){
 		$("#left_deal_image").click();
 	}
-	
+
 	$("#left_deal_image").change(function(){
 		$.each( $("#left_deal_image")[0].files, function( i, file ) {
 			var formData = new FormData();
 		    formData.append('File', file);
-		    
+
 		    $.ajax({
 		       type: "POST",
 		       url: "/preview_images.json",
@@ -495,17 +495,17 @@
 		    }).fail(function (data) {}).done(function () {});
 		});
 	});
-	
-	
+
+
 	function right_deal_image_upload(){
 		$("#right_deal_image").click();
 	}
-	
+
 	$("#right_deal_image").change(function(){
 		$.each( $("#right_deal_image")[0].files, function( i, file ) {
 			var formData = new FormData();
 		    formData.append('File', file);
-		    
+
 		    $.ajax({
 		       type: "POST",
 		       url: "/preview_images.json",
@@ -525,49 +525,55 @@
 		    }).fail(function (data) {}).done(function () {});
 		});
 	});
-	
+
 	function submit_form(){
 		if ( $("#left_deal_image_btn img").attr("src") == "/images/ask/card_a_upload.png"){
 			notify('CARD A 이미지를 추가해주세요.');
 			return;
 		}
-		
+
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
 			return;
 		}
-		
+
 		if ( $("#right_deal_image_btn img").attr("src") == "/images/ask/card_b_upload.png"){
 			notify('CARD B 이미지를 추가해주세요.');
 			return;
 		}
-		
+
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
 			notify('CARD B 제품명을 입력해주세요.');
 			return;
 		}
-		$("#new_ask").submit();
+		var check_click = 0;
+		if (check_click == 0) {
+			$("#new_ask").submit();
+			check_click = check_click + 1;
+		} else {
+			return;
+		}
 	}
-	
+
 	function edit_form(){
-		
+
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
 			return;
 		}
-		
+
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
 			notify('CARD B 제품명을 입력해주세요.');
 			return;
 		}
 		$(".edit_ask").submit();
 	}
-	
+
   //
   $(window).bind('beforeunload', function(){
       return "게시글 작성을 중단하시겠습니까?";
   });
-  
+
   $(document).on("submit", "form", function(event){
       $(window).off('beforeunload');
   });
