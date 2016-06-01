@@ -59,8 +59,8 @@
 		$("#report_submit_btn").attr("onclick", "submit_report('"+target+"',"+target_id+"); return false;");
 		$("#ask_complete_btn").attr("href", "/asks/"+target_id+"/ask_complete");
 
-		$("#more_popup_bg").fadeIn(100);
-		$("#more_popup").fadeIn(100);
+		$("#more_popup_bg").show();
+		$("#more_popup").show();
 	}
 
 	function hide_more_popup(){
@@ -70,8 +70,8 @@
 		$("#ask_complete_btn").show();
 		$("#more_popup_sub").show();
 		$("#more_popup_report").hide();
-		$("#more_popup_bg").fadeOut(100);
-		$("#more_popup").fadeOut(100);
+		$("#more_popup_bg").hide();
+		$("#more_popup").hide();
 		$("#more_title").html("더보기");
 		$("#more_popup").css("margin-top", "-110px");
 		report_type_reset()

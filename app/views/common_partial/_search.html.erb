@@ -64,19 +64,19 @@
 
 	function search_input_on(){
 		disableScroll();
-		$("#search_overlay").fadeIn(100);
-		$("#search_pc_bg").fadeIn(100);
-		$("#search_bg").fadeIn(100);
+		$("#search_overlay").show();
+		$("#search_pc_bg").show();
+		$("#search_bg").show();
 		$('#search_input').focus().select();
 	}
 
 	function search_input_off(){
 		enableScroll();
-		$("#search_overlay").fadeOut(100);
-		$("#search_pc_bg").fadeOut(100);
-		$("#search_bg").fadeOut(100);
+		$("#search_overlay").hide();
+		$("#search_pc_bg").hide();
+		$("#search_bg").hide();
 		$('#search_input').val("");
-		$("#keyword_reset_btn").fadeOut(100);
+		$("#keyword_reset_btn").hide();
 	}
 
 	function keyword_reset(){
