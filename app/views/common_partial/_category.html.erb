@@ -89,16 +89,16 @@
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 	function category_on(){
 		disableScroll();
-		$("#category_overlay").fadeIn(200);
-		$("#category_pc_bg").fadeIn(200);
-		$("#category_bg").fadeIn(200);
+		$("#category_overlay").show();
+		$("#category_pc_bg").show();
+		$("#category_bg").show();
 	}
 
 	function category_off(){
 		enableScroll();
-		$("#category_overlay").fadeOut(200);
-		$("#category_pc_bg").fadeOut(200);
-		$("#category_bg").fadeOut(200);
+		$("#category_overlay").hide();
+		$("#category_pc_bg").hide();
+		$("#category_bg").hide();
 		category_reset();
 	}
 
