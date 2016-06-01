@@ -147,7 +147,11 @@ input::-webkit-inner-spin-button {
 	display:block; float:right;
 }
 
- .card_image { width:100%; display:block; transition:all .2s; }
+ .card_image {
+	 width:100%;
+	 display:block;
+	 transition:all .2s;
+ }
  .card_image.img_hover {
 	 -webkit-transform:scale(1.02);
 	    -moz-transform:scale(1.02);
@@ -160,6 +164,11 @@ input::-webkit-inner-spin-button {
 	 right:10px;
 	 color:#fff;
 	 z-index:1;
+	 opacity:0.2;
+	 transition:all .2s;
+ }
+ .card_image_expand.img_hover {
+	 opacity:1;
  }
  .card_image_overlay {
 	 display:block;
@@ -170,10 +179,11 @@ input::-webkit-inner-spin-button {
 	 height:100%;
 	 margin-bottom:-32px;
 	 background-color:rgba(0,0,0,0.6);
-}
-.card_image_overlay.img_hover {
+	 transition:all .2s;
+ }
+ .card_image_overlay.img_hover {
 	background-color:rgba(0,0,0,0.2);
-}
+ }
 
 .vote_btn {
 	position:absolute;
