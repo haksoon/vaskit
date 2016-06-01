@@ -245,6 +245,7 @@
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
 
+							img_hover();
 	        		notify("투표 완료");
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
@@ -348,6 +349,10 @@
 			}
 		);
 	};
+
+	$(document).ready(function(){
+    img_hover();
+  });
 
 </script>
 
