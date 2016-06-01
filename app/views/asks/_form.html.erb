@@ -526,6 +526,8 @@
 		});
 	});
 
+	var check_click = 0;
+
 	function submit_form(){
 		if ( $("#left_deal_image_btn img").attr("src") == "/images/ask/card_a_upload.png"){
 			notify('CARD A 이미지를 추가해주세요.');
@@ -546,7 +548,6 @@
 			notify('CARD B 제품명을 입력해주세요.');
 			return;
 		}
-		var check_click = 0;
 		if (check_click == 0) {
 			$("#new_ask").submit();
 			check_click = check_click + 1;
