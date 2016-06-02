@@ -1,3 +1,4 @@
+{{ if(current_user){ }}
 <div id="user_overlay" style="width:inherit; position:fixed; top:48px; z-index:13; display:none; background:#f4f4f4;">
 	<div style="width:100%; background:#f4f4f4; text-align:left;">
 		<div style="width:60px; height:48px; position:absolute; top:-48px; right:0px; background-color:#4b3d3d; text-align:center;">
@@ -48,6 +49,7 @@
 		</div>
 	</div>
 </div>
+{{ } }}
 
 <script>
 	<% if flash[:custom_notice] %>
