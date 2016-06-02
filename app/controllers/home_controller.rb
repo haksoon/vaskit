@@ -6,8 +6,18 @@ class HomeController < ApplicationController
     if current_user
       @my_votes = Vote.where(:user_id => current_user.id)
       @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id)
+      @my_ask_count = Ask.where(:user_id => current_user.id).count
+      @my_vote_count = Vote.where(:user_id => current_user.id).count
+      @my_comment_count = Comment.where(:user_id => current_user.id).count
+      @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count
+      @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
     elsif @visitor
       @my_votes = Vote.where(:visitor_id => @visitor.id)
+      @my_ask_count = 0
+      @my_vote_count = 0
+      @my_comment_count = 0
+      @in_progress_count = 0
+      @alram_count = 0
     end
 
     @type = params[:type]
