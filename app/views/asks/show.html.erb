@@ -548,7 +548,7 @@
 					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
 		    </a>
 	  		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
-	  		<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=left_ask_deal.id}}, true); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play"></i></span></a>
+	  		<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal_show({{=left_ask_deal.id}}, true); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 	  		{{ } }}
 
 	  		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
@@ -568,7 +568,7 @@
 					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
 				</a>
 				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
-				<a class="vote_btn_{{=ask.id}}" href="#" onclick="vote_ask_deal_show({{=right_ask_deal.id}}, false); return false;"><span class="vote_btn">투표하기&nbsp;<i class="fa fa-play"></i></span></a>
+				<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal_show({{=right_ask_deal.id}}, false); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 				{{ } }}
 
         {{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
