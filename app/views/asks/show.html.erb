@@ -250,32 +250,36 @@
         {{ left_ratio = 0 }}
         {{ right_ratio = 0 }}
       {{ }else{ }}
-        {{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
-        {{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+        {{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80) }}
+        {{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80) }}
       {{ } }}
 
-      {{left_background = "#fff"}}
-      {{right_background = "#fff"}}
-      {{ if (left_ratio > right_ratio){ }}
-        {{left_background = "#ee6e01"}}
-      {{ }else if(left_ratio < right_ratio){ }}
-        {{right_background = "#ee6e01"}}
-      {{ } }}
-      <table cellspacing="0" cellpadding="0" style="bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:36px; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
-        <tr>
-          <td class="vote-result-td" style="text-align:right; padding-left:50px;">
-            <span style="float:left; margin-left:-40px;">{{= left_ratio }}%</span>
-            <span style="display:inline-block; width:{{= Math.round(left_ratio)}}%; height:5px; line-height:7px; background-color:{{=left_background}};">&nbsp;</span>
-          </td>
-          <td style="min-width:56px;">
-            투표 결과
-          </td>
-          <td class="vote-result-td" style="text-align:left; padding-right:50px;">
-            <span style="float:right; margin-right:-40px;">{{= right_ratio }}%</span>
-            <span style="display:inline-block; width:{{= Math.round(right_ratio)}}%; height:5px; line-height:7px; background-color:{{=right_background}};">&nbsp;</span>
-          </td>
-        </tr>
-      </table>
+      {{ left_background = "#fff" }}
+  		{{ left_font_weight = "normal" }}
+  		{{ right_background = "#fff" }}
+  		{{ right_font_weight = "normal" }}
+  		{{ if (left_ratio > right_ratio){ }}
+  			{{ left_background = "#ffcc5a" }}
+  			{{ left_font_weight = "bold" }}
+  		{{ }else if(left_ratio < right_ratio){ }}
+  			{{ right_background = "#ffcc5a" }}
+  			{{ right_font_weight = "bold" }}
+  		{{ } }}
+      <table cellspacing="0" cellpadding="0" style="width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:35px;">
+  			<tr>
+  				<td class="vote-result-td" style="width:50%;">
+  					<span class="vote-result-bar" style="float:right; margin:4px 0 6px; min-width:3px; width:{{= Math.round(left_ratio)}}%; height:5px; background-color:{{=left_background}}; border-radius:5px 0 0 5px; -webkit-border-radius:5px 0 0 5px; -moz-border-radius:5px 0 0 5px; ">&nbsp;</span>
+  					<span style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{= Math.round(left_ratio / 80 * 100) }}%</span>
+  				</td>
+  				<td style="min-width:40px;">
+  					A vs B
+  				</td>
+  				<td class="vote-result-td" style="width:50%;">
+  					<span class="vote-result-bar" style="float:left; margin:4px 0 6px; min-width:3px; width:{{= Math.round(right_ratio) }}%; height:5px; background-color:{{=right_background}}; border-radius:0 5px 5px 0; -webkit-border-radius:0 5px 5px 0; -moz-border-radius:0 5px 5px 0;">&nbsp;</span>
+  					<span style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
+  				</td>
+  			</tr>
+  		</table>
       <div id="detail_vote_count">
         {{ gender_total_count = detail_vote_count.left.male_count + detail_vote_count.left.female_count + detail_vote_count.right.male_count + detail_vote_count.right.female_count }}
         {{ if ( gender_total_count == 0 ){ }}
