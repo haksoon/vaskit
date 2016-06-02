@@ -151,6 +151,10 @@
 	  var askDealTemplate = _.template($('#ask-deal-template').html())
     $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask}));
     notify("다시 투표해주세요");
+
+		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
+		vote_count_span.html( parseInt(vote_count_span.html()) - 1 + "표" );
+
 		hover_action();
     hide_more_popup();
 	}
