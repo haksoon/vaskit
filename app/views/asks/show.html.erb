@@ -28,7 +28,7 @@
   </div>
 
   <div style="position:relative; margin-bottom:12px; background-color:#fff; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb; border-bottom:4px solid #dbdbdb;">
-		<div style="text-align:left; padding:15px; position:relative; background-color:#fff; border:1px solid #dbdbdb; border-bottom:none; border-right-width:3px; clear:both;">
+		<div style="text-align:left; padding:15px; position:relative; background-color:#fff; clear:both;">
 			{{ if( ask.user){ }}
 				{{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
         {{ if ( !ask.user.gender){ }}
@@ -57,13 +57,13 @@
 				{{ } }}
 			</p>
 		</div>
-		<div id="ask_deal_{{=ask.id}}" style="position:relative; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
+		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
   </div>
   <div style="position:relative; margin-bottom:12px; background-color:#fff; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb; border-bottom:4px solid #dbdbdb;">
-    <table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
+    <table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
       <tr>
         <th style="width:50%;">
           <p style="background-color:#4b3d3d; font-size:12px; color:#fff; margin:0; padding:6px 0 6px 12px; line-height:2;">
@@ -77,7 +77,7 @@
         </th>
       </tr>
     </table>
-    <table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
+    <table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
 				<td style="width:50%; border-top:1px solid #dbdbdb;">
 					<p style="margin:0; line-height:0px;">
@@ -152,7 +152,7 @@
 			</tr>
 			{{ } }}
 		</table>
-		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
+		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 			{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
 			<tr>
 				<td style="width:40%;">
@@ -211,7 +211,7 @@
 			</tr>
 			{{ } }}
 		</table>
-		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb; border-bottom:3px solid #dbdbdb;">
+		<table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
 				{{ if (ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != ""){ }}
 				<td style="width:40%; border-right:none;">
@@ -266,7 +266,7 @@
   			{{ right_background = "#ffcc5a" }}
   			{{ right_font_weight = "bold" }}
   		{{ } }}
-      <table cellspacing="0" cellpadding="0" style="width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:35px; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
+      <table cellspacing="0" cellpadding="0" style="width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:35px;">
   			<tr>
   				<td class="vote-result-td">
   					<span class="vote-result-bar-left" style="width:{{= Math.round(left_ratio)}}%; background-color:{{=left_background}};">&nbsp;</span>
@@ -302,7 +302,7 @@
         {{ }else if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) > (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
           {{ gender_male_css = "color:#ffcc5a; font-weight:bold;" }}
         {{ } }}
-        <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675; width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
+        <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675; width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0;">
           <tbody>
             <tr>
               <td class="vote-result-td">
@@ -392,7 +392,7 @@
         {{ }else if( max_index == 6 ){ }}
           {{ etc_css = "color:#ffcc5a; font-weight:bold;" }}
         {{ } }}
-        <table cellspacing="1" cellpadding="0" class="graph" style="width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb;">
+        <table cellspacing="1" cellpadding="0" class="graph" style="width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0;">
           <tbody>
             <tr>
               <td class="vote-result-td">
@@ -474,70 +474,68 @@
           </tbody>
         </table>
       </div>
-      <a id="detail_count_toggle_btn" href="#" onclick="detail_count_toggle(); return false;" style="display:block; text-align:center; padding:7px; position:relative; background-color:#998675; border-radius:0 0 3px 3px; height:20px; border:1px solid #dbdbdb; border-top:none; border-right-width:3px; border-bottom-width:3px;">
+      <a id="detail_count_toggle_btn" href="#" onclick="detail_count_toggle(); return false;" style="display:block; text-align:center; padding:7px; position:relative; background-color:#998675; height:20px;">
         <p style="margin:0; color:#fff; font-size:12px; padding:3px;"><i class='fa fa-chevron-up' style="vertical-align:top; margin-right:3px;"></i>상세 투표결과 닫기</p>
       </a>
 		{{ } }}
   </div>
   <div style="position:relative; margin-bottom:12px; background-color:#fff; border-left:1px solid #dbdbdb; border-right:3px solid #dbdbdb; border-bottom:4px solid #dbdbdb;">
-		<div style="margin-top:12px;">
-			<p style="text-align:center; background-color:#4b3d3d; font-size:12px; color:#fff; font-weight:bold; padding:10px 0; margin:0 auto; border-right:3px solid #dbdbdb;">
-				<span style="float:left; margin-left:12px; font-size:13px; color:#fff;">
-          <i class="fa fa-comment" style="font-size:16px; margin-right:3px;"></i>
-					<span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
-				</span>
-				의견보기
-				<span style="float:right; margin-right:12px; font-size:13px; color:#fff;">
-					<span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-					<i class="fa fa-comment" style="font-size:16px; margin-left:3px; transform:rotateY(180deg);"></i>
-				</span>
-			</p>
+		<p style="text-align:center; background-color:#4b3d3d; font-size:12px; color:#fff; font-weight:bold; padding:10px 0; margin:0 auto;">
+			<span style="float:left; margin-left:12px; font-size:13px; color:#fff;">
+        <i class="fa fa-comment" style="font-size:16px; margin-right:3px;"></i>
+				<span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
+			</span>
+			의견보기
+			<span style="float:right; margin-right:12px; font-size:13px; color:#fff;">
+				<span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+				<i class="fa fa-comment" style="font-size:16px; margin-left:3px; transform:rotateY(180deg);"></i>
+			</span>
+		</p>
 
-			{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-				<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px; border:1px solid #dbdbdb; border-top:none; border-right-width:3px;">
-          {{ for(var i=0; i < ask.comments.length; i++) {  }}
-						{{ comment = ask.comments[i] }}
-						{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
-				    {{= askCommentTemplate({ask:ask, comment: comment}) }}
-					{{ } }}
-          {{ if(ask.comments.length == 0) { }}
-            <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
-          {{ } }}
-          {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
-            <div style="position:absolute; top:0; left:-1px; width:100%; height:100%; background-color:black; opacity:0.92; border-left:1px solid black; border-right:1px solid black;">
-              <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
-                <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
-                <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
-              </p>
-            </div>
-          {{ } }}
-				</div>
-				<table cellspacing="0" cellpadding="0" style="width:100%; border:1px solid #dbdbdb; border-top:none; background-color:#fff; border-right-width:3px; border-bottom-width:5px;">
-					{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
-						{{ ask_deal_id = ask.left_ask_deal_id }}
-						{{ ask_deal_text = "A" }}
-					{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-						{{ ask_deal_id = ask.left_ask_deal_id }}
-						{{ ask_deal_text = "A" }}
-					{{ }else{ }}
-						{{ ask_deal_id = ask.right_ask_deal_id }}
-						{{ ask_deal_text = "B" }}
-					{{ } }}
-					<tbody>
-						<tr>
-							<td style="padding:7px 7px 7px 12px;">
-								<a id="ask_deal_id_change" onclick="ask_deal_id_change(); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
-							</td>
-							<td style="width:100%; padding-right:7px;">
-								<textarea id="comment_input" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
-							</td>
-							<td style="padding-right:12px;">
-								<a id="send_comment_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#ee6e01; display:inline-block; color:#fff; font-size:14px;">입력</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-		</div>
+		{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+			<div id="ask_comment" style="position:relative; background-color:#f4f4f4; padding:10px 0; min-height:200px;">
+        {{ for(var i=0; i < ask.comments.length; i++) {  }}
+					{{ comment = ask.comments[i] }}
+					{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
+			    {{= askCommentTemplate({ask:ask, comment: comment}) }}
+				{{ } }}
+        {{ if(ask.comments.length == 0) { }}
+          <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
+        {{ } }}
+        {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
+          <div style="position:absolute; top:0; left:-1px; width:100%; height:100%; background-color:black; opacity:0.92; border-left:1px solid black; border-right:1px solid black;">
+            <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
+              <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
+              <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
+            </p>
+          </div>
+        {{ } }}
+			</div>
+			<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
+				{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
+					{{ ask_deal_id = ask.left_ask_deal_id }}
+					{{ ask_deal_text = "A" }}
+				{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+					{{ ask_deal_id = ask.left_ask_deal_id }}
+					{{ ask_deal_text = "A" }}
+				{{ }else{ }}
+					{{ ask_deal_id = ask.right_ask_deal_id }}
+					{{ ask_deal_text = "B" }}
+				{{ } }}
+				<tbody>
+					<tr>
+						<td style="padding:7px 7px 7px 12px;">
+							<a id="ask_deal_id_change" onclick="ask_deal_id_change(); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
+						</td>
+						<td style="width:100%; padding-right:7px;">
+							<textarea id="comment_input" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
+						</td>
+						<td style="padding-right:12px;">
+							<a id="send_comment_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#ee6e01; display:inline-block; color:#fff; font-size:14px;">입력</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 	</div>
   <p style="font-size:12px; margin:-12px 0 0 0; padding:10px 15px; color:#9d9fa1; text-align:left;"><i class="fa fa-info-circle">&nbsp;</i>A/B 버튼을 눌러 의견을 어디에 남길지 선택 가능!</p>
 </script>
