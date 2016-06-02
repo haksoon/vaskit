@@ -18,6 +18,7 @@
 <%= render :partial => "common_partial/more_popup" %>
 <%= render :partial => "common_partial/share_popup" %>
 
+<% if @asks %>
 <div id="search_bar">
 	<table cellspacing="0" cellpadding="0" style="width:100%;">
 		<tr>
@@ -29,7 +30,6 @@
 		</tr>
 	</table>
 </div>
-<% if @asks %>
 <p style="margin:3px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
 	이미지를 클릭해 투표에 참여해보세요!
 </p>
