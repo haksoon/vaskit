@@ -169,6 +169,7 @@ input::-webkit-inner-spin-button {
  }
  .card_image_expand.img_hover {
 	 opacity:1;
+	 color:#ffcc5a;
  }
  .card_image_overlay {
 	 display:block;

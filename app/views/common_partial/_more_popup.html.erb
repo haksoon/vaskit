@@ -151,6 +151,7 @@
 	  var askDealTemplate = _.template($('#ask-deal-template').html())
     $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask}));
     notify("다시 투표해주세요");
+		hover_action();
     hide_more_popup();
 	}
 
