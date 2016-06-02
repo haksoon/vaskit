@@ -149,29 +149,29 @@
 			{{ left_ratio = 0 }}
 			{{ right_ratio = 0 }}
 		{{ }else{ }}
-			{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
-			{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+			{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80) }}
+			{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80) }}
 		{{ } }}
 
 		{{left_background = "#fff"}}
 		{{right_background = "#fff"}}
 		{{ if (left_ratio > right_ratio){ }}
-			{{left_background = "#ee6e01"}}
+			{{left_background = "#ffcc5a"}}
 		{{ }else if(left_ratio < right_ratio){ }}
-			{{right_background = "#ee6e01"}}
+			{{right_background = "#ffcc5a"}}
 		{{ } }}
-		<table cellspacing="0" cellpadding="0" style="position:absolute; bottom:0; width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:32px;">
+		<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:35px;">
 			<tr>
-				<td class="vote-result-td" style="text-align:right; padding:6px 0 4px 40px; padding-left:50px;">
-					<span style="float:left; margin-left:-40px;">{{= left_ratio }}%</span>
-					<span style="float:right; margin-top:4px; width:{{= Math.round(left_ratio)}}%; height:5px; background-color:{{=left_background}};">&nbsp;</span>
+				<td class="vote-result-td">
+					<span style="float:right; margin-top:4px; width:{{= Math.round(left_ratio)}}%; height:5px; background-color:{{=left_background}}; border-radius:5px 0 0 5px; -webkit-border-radius:5px 0 0 5px; -moz-border-radius:5px 0 0 5px; ">&nbsp;</span>
+					<span style="float:right; margin-right:5px; font-weight:normal; color:{{=left_background}};">{{= left_ratio }}%</span>
 				</td>
-				<td style="min-width:56px; padding:6px 0 4px 0px;">
-					투표 결과
+				<td style="width:40px;">
+					A vs B
 				</td>
-				<td class="vote-result-td" style="text-align:left; padding:6px 0 4px 0px; padding-right:50px;">
-					<span style="float:right; margin-right:-40px;">{{= right_ratio }}%</span>
-					<span style="float:left; margin-top:4px; width:{{= Math.round(right_ratio) }}%; height:5px; background-color:{{=right_background}};">&nbsp;</span>
+				<td class="vote-result-td">
+					<span style="float:left; margin-top:4px; width:{{= Math.round(right_ratio) }}%; height:5px; background-color:{{=right_background}}; border-radius:0 5px 5px 0; -webkit-border-radius:0 5px 5px 0; -moz-border-radius:0 5px 5px 0;">&nbsp;</span>
+					<span style="float:left; margin-left:5px; font-weight:normal; color:{{=right_background}};">{{= right_ratio }}%</span>
 				</td>
 			</tr>
 		</table>
