@@ -67,7 +67,7 @@ input::-webkit-inner-spin-button {
 #wrap{
 	min-height:100%;
 	margin:0 auto;
-	padding:0;
+	padding:47px 0 0 0;
 	text-align:center;
 	background-color: #f4f4f4;
 	position:relative;
@@ -150,7 +150,7 @@ input::-webkit-inner-spin-button {
 .content_box {
 	 margin-bottom:15px;
 	 background-color:#fff;
-	 border-width:1px 3px 5px 1px;
+	 border-width:1px 3px 3px 1px;
 	 border-style:solid;
 	 border-color:#dbdbdb;
 	 -webkit-border-radius:0 0 0 5px;
