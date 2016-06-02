@@ -1,17 +1,17 @@
 # coding : utf-8
 class HomeController < ApplicationController
-  
+
   def index
     @user_categories = []
     if current_user
       @my_votes = Vote.where(:user_id => current_user.id)
       @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id)
     elsif @visitor
-      @my_votes = Vote.where(:visitor_id => @visitor.id)  
+      @my_votes = Vote.where(:visitor_id => @visitor.id)
     end
-    
+
     @type = params[:type]
-    
+
     case params[:type]
       when "user"
         @asks = Ask.where(:user_id => params[:keyword]).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
@@ -28,7 +28,7 @@ class HomeController < ApplicationController
         @asks = Ask.where(:user_id => current_user.id).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "vote_ask"
         @asks = Ask.where(:id => @my_votes.map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
-      when "comment_ask"  
+      when "comment_ask"
         @asks = Ask.where(:id => Comment.where(:user_id => current_user.id).map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "my_ask_in_progress"
         @asks = Ask.where(:user_id => current_user.id, :be_completed => false).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
@@ -49,14 +49,14 @@ class HomeController < ApplicationController
             if current_user
               @ranking_asks = Ask.where(:id => ranking_ask_ids).where("user_id <> ?", current_user.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, :rank_ask])
             else
-              @ranking_asks = Ask.where(:id => ranking_ask_ids).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, :rank_ask])  
+              @ranking_asks = Ask.where(:id => ranking_ask_ids).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, :rank_ask])
             end
             @ranking_asks = @ranking_asks.sort_by{ |k| k["rank_ask"]["ranking"] }
-          else  
+          else
             ranking_ask_ids = RankAsk.where(:category_id => nil).where("ask_id not in (?)", @my_votes.map(&:ask_id)).pluck(:ask_id)
             if current_user
               @ranking_asks = Ask.where(:id => ranking_ask_ids).where("user_id <> ?", current_user.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, :rank_ask])
-            else  
+            else
               @ranking_asks = Ask.where(:id => ranking_ask_ids).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, :rank_ask])
             end
             @ranking_asks = @ranking_asks.sort_by{ |k| k["rank_ask"]["ranking"] }
@@ -75,7 +75,7 @@ class HomeController < ApplicationController
               @ranking_asks = Ask.where(:id => ranking_ask_ids).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, :rank_ask])
             end
             @ranking_asks = @ranking_asks.sort_by{ |k| k["rank_ask"]["ranking"] }
-          else  
+          else
             ranking_ask_ids = RankAsk.where(:category_id => @user_categories).where("ask_id not in (?)", @my_votes.map(&:ask_id)).pluck(:ask_id).uniq
             if current_user
               @ranking_asks = Ask.where(:id => ranking_ask_ids).where("user_id <> ?", current_user.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, :rank_ask])
@@ -89,19 +89,19 @@ class HomeController < ApplicationController
           else
             @asks = Ask.where(:be_completed => false, :category_id => @user_categories).where("id not in (?)", ranking_ask_ids).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
           end
-        end 
+        end
     end
     respond_to do |format|
       format.html {
         if params[:type] != nil && @asks.blank?
           redirect_to "/home/no_result"
-        end 
+        end
       }
       format.json {render :json => { :asks => @asks }}
     end
   end
-  
-  
+
+
   #GET /home/set_cateogry
   def set_category
     UserCategory.delete_all(:user_id => current_user.id) if current_user
@@ -114,12 +114,21 @@ class HomeController < ApplicationController
     end
     redirect_to root_path
   end
-  
-  
+
+
   #GET /home/no_result
   def no_result
     @user_categories = []
     @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id) if current_user
   end
-  
+
+  def user
+    @my_ask_count = Ask.where(:user_id => current_user.id).count
+    @my_vote_count = Vote.where(:user_id => current_user.id).count
+    @my_comment_count = Comment.where(:user_id => current_user.id).count
+
+    @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count
+    @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
+  end
+
 end
