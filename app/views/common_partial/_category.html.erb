@@ -1,21 +1,13 @@
 <div id="category_pc_bg" onclick="category_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:1; display:none;"></div>
 <div id="category_bg" onclick="category_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:12; opacity:0.6; display:none;"></div>
-<div id="category_overlay" style="width:inherit; position:fixed;top:0; z-index:13; display:none; background:#f4f4f4;">
-	<table class="main_header" cellspacing="0" cellpadding="0" style="background-color:#4b3d3d; width:100%; overflow:visible; height:42px;">
-		<tr>
-			<td style="width:60px; position:relative;">
-				<a href="#" onclick="category_off(); return false;"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_off.png" /></a>
-				<img src="/images/etc/detail.png" style="position:absolute; left:21px; bottom:0; width:20px;">
-			</td>
-			<td style="text-align:center;">
-				<a href="#" onclick="category_off(); return false;" style="display:block; font-size:20px; color:#FFFFFF; margin:0 auto; margin-top:3px;">관심사 설정</a>
-			</td>
-			<td style="width:60px;">
-			</td>
-		</tr>
-	</table>
+<div id="category_overlay" style="width:inherit; position:fixed;top:0; z-index:14; display:none; background:#f4f4f4;">
 	<div style="width:100%; background:#fff; text-align:left;">
-		<p style="margin:0; padding:20px 20px 0px; font-size:14px; color:#9d9ea1;"><i class="fa fa-info-circle" style="font-size:16px;"></i>&nbsp;본인의 관심사를 선택할 수 있습니다.</p>
+		<div style="width:60px; height:47px; position:absolute; top:-47px; background-color:#4b3d3d;">
+			<a href="#" onclick="category_off(); return false;"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_off.png" /></a>
+		</div>
+		<div style="position:absolute; top:-8px; left:24px; border-bottom:8px solid #998674; border-right:6px solid transparent; border-left:6px solid transparent;"></div>
+		<p style="margin:0; padding:20px 20px 0px; font-size:20px; color:#fff; background-color:#998674; text-align:center;">관심사 설정</p>
+		<p style="margin:0; padding:15px 20px 0px; font-size:14px; color:#9d9ea1;"><i class="fa fa-info-circle" style="font-size:16px;"></i>&nbsp;본인의 관심사를 선택할 수 있습니다.</p>
 		<div style="padding:10px 8px;">
 			<table cellspacing="0" cellpadding="4">
 				<tr>
@@ -92,6 +84,7 @@
 		$("#category_overlay").show();
 		$("#category_pc_bg").show();
 		$("#category_bg").show();
+		$(".main_header").css("z-index","13");
 	}
 
 	function category_off(){
@@ -99,6 +92,7 @@
 		$("#category_overlay").hide();
 		$("#category_pc_bg").hide();
 		$("#category_bg").hide();
+		$(".main_header").css("z-index","10");
 		category_reset();
 	}
 
