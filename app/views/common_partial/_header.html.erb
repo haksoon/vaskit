@@ -10,7 +10,7 @@
 		</td>
 		<td style="width:60px;">
 			<% if current_user %>
-				<a href="/<%=current_user.string_id%>" style="position:relative; display:block;">
+				<a href="#" onclick="user_on(); return false;"style="position:relative; display:block;">
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
 						<img src="/images/common/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
 					<% end %>
