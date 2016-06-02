@@ -109,6 +109,9 @@ input::-webkit-inner-spin-button {
 	border-bottom-width:3px;
   -webkit-appearance:none;
 	outline:none;
+	-webkit-border-radius:0px;
+	   -moz-border-radius:0px;
+	        border-radius:0px;
 }
 
 .category{
