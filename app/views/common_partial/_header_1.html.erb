@@ -1,4 +1,4 @@
-<table class="header_shadow" cellspacing="0" cellpadding="0" style="position:fixed; top:0; width:inherit; overflow:visible; height:47px; z-index:10; background-color:#4b3d3d;">
+<table class="header_shadow" cellspacing="0" cellpadding="0" style="position:fixed; top:0; width:inherit; overflow:visible; height:48px; z-index:10; background-color:#4b3d3d;">
 	<tr>
 		<td style="width:60px;">
 		  <% if flash[:redirect_url] %>
@@ -18,3 +18,5 @@
 		</td>
 	</tr>
 </table>
+<div id="menu_pc_bg" onclick="search_input_off(); category_off(); user_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:1; display:none;"></div>
+<div id="menu_bg" onclick="search_input_off(); category_off(); user_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:8; opacity:0.6; display:none;"></div>
