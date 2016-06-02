@@ -78,12 +78,12 @@
 	var user_categories = <%=raw @user_categories.to_json %>;
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 	function category_on(){
-		search_input_off();
-		user_off();
 		disableScroll();
 		$("#category_overlay").show();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
+		search_input_off();
+		user_off();
 	}
 
 	function category_off(){
