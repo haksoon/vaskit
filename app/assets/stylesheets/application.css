@@ -218,6 +218,9 @@ input::-webkit-inner-spin-button {
 .vote-result-td {
 	width:50%;
 }
+.vote-result-td-title{
+	min-width:40px;
+}
 .vote-result-bar-left {
 	float:right;
 	margin:4px 0 6px;
