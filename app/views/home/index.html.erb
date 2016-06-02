@@ -154,7 +154,9 @@
 		{{ } }}
 
 		{{ left_background = "#fff" }}
+		{{ left_font_weight = "normal" }}
 		{{ right_background = "#fff" }}
+		{{ right_font_weight = "normal" }}
 		{{ if (left_ratio > right_ratio){ }}
 			{{ left_background = "#ffcc5a" }}
 			{{ left_font_weight = "bold" }}
@@ -173,7 +175,7 @@
 				</td>
 				<td class="vote-result-td" style="width:50%;">
 					<span class="vote-result-bar" style="float:left; margin-top:4px; min-width:3px; width:{{= Math.round(right_ratio) }}%; height:5px; background-color:{{=right_background}}; border-radius:0 5px 5px 0; -webkit-border-radius:0 5px 5px 0; -moz-border-radius:0 5px 5px 0;">&nbsp;</span>
-					<span style="float:left; margin-left:5px; font-weight:{{=left_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
+					<span style="float:left; margin-left:5px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
 				</td>
 			</tr>
 		</table>
