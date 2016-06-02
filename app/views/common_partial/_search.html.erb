@@ -38,11 +38,11 @@
 
 	function search_input_on(){
 		$("#search_overlay").show();
+		category_off();
+		user_off();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
 		$('#search_input').focus().select();
-		category_off();
-		user_off();
 	}
 
 	function search_input_off(){
