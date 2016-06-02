@@ -147,6 +147,18 @@ input::-webkit-inner-spin-button {
 	display:block; float:right;
 }
 
+.content_box {
+	 margin-bottom:15px;
+	 background-color:#fff;
+	 border-width:1px 3px 5px 1px;
+	 border-style:solid;
+	 border-color:#dbdbdb;
+	 -webkit-border-radius:0 5px 0 5px;
+	    -moz-border-radius:0 5px 0 5px;
+	         border-radius:0 5px 0 5px;
+	 clear:both;
+}
+
  .card_image {
 	 width:100%;
 	 display:block;
