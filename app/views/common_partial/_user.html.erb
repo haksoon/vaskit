@@ -59,10 +59,13 @@
 	function user_on(){
 		disableScroll();
 		$("#user_overlay").show();
-		search_input_off();
-		category_off();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
+
+		$("#category_overlay").hide();
+		$("#search_overlay").hide();
+		$('#search_input').val("");
+		$("#keyword_reset_btn").hide();
 	}
 
 	function user_off(){
