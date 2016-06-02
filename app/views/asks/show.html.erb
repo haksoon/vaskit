@@ -779,6 +779,7 @@
 		        type: 'POST',
 		        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id },
 		        dataType: 'json',
+            async: false,  // 코멘트 중복 전송을 방지
 		        error: function(){
 		            return false;
 		        },
