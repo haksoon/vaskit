@@ -30,9 +30,6 @@
 	.home-float-btn img{
 		width:70px;
 	}
-	.vote-result-td{
-		 width:42%;
-	}
 }
 
 @media (min-width:521px) {
@@ -50,9 +47,6 @@
 
 	.home-float-btn img{
 		width:70px;
-	}
-	.vote-result-td{
-		 width:46%;
 	}
 }
 
