@@ -21,35 +21,7 @@
 			 	<a href="/users/manage" style="float:right;"><img style="width:22px;" src="/images/common/setting_btn.png"></a>
 			</p>
 		</div>
-		<div style="padding:0 10px;">
-			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:18px; line-height:40px; position:relative;">
-				히스토리
-			</div>
-			<table cellspacing="0" cellpadding="0" style="border:1px solid #dbdbdb; border-top:none; width:100%; text-align:center; background-color:#fff;">
-				<tr>
-					<td style="width:40%; padding:10px 0;">
-						<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_ask_count %></a>
-						<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
-					</td>
-					<td style="width:20%;">
-						<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
-						<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
-					</td>
-					<td style="width:40%;">
-						<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_comment_count %></a>
-						<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
-					</td>
-				</tr>
-			</table>
-
-			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:18px; line-height:40px; position:relative; margin-top:16px;">
-				진행 중인 질문 (<%= @in_progress_count%>)
-			</a>
-
-			<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:18px; line-height:40px; position:relative; margin-top:16px;">
-				알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>)
-			</a>
-		</div>
+		
 		<div style="padding:50px 12px 16px 12px; margin:0; font-size:12px; color:#9d9ea0; text-align:left; line-height:22px;">
 			<a href="#" onclick="alert('준비중입니다.')" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- ABOUT US :</span> 저희가 도대체 뭐하는 사람들이냐구요?</a><br />
 			<a href="/etc/inquiry" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- CONTACT US :</span> 혹시 불편하신 점이 있으신가요? 말씀해주세요!</a> <br />
