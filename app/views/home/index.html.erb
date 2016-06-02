@@ -166,15 +166,15 @@
 		{{ } }}
 		<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:35px;">
 			<tr>
-				<td class="vote-result-td" style="width:50%;">
-					<span class="vote-result-bar" style="float:right; margin:4px 0 6px; min-width:3px; width:{{= Math.round(left_ratio)}}%; height:5px; background-color:{{=left_background}}; border-radius:5px 0 0 5px; -webkit-border-radius:5px 0 0 5px; -moz-border-radius:5px 0 0 5px; ">&nbsp;</span>
+				<td class="vote-result-td">
+					<span class="vote-result-bar-left" style="width:{{= Math.round(left_ratio)}}%; background-color:{{=left_background}};">&nbsp;</span>
 					<span style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{= Math.round(left_ratio / 80 * 100) }}%</span>
 				</td>
 				<td style="min-width:40px;">
 					A vs B
 				</td>
-				<td class="vote-result-td" style="width:50%;">
-					<span class="vote-result-bar" style="float:left; margin:4px 0 6px; min-width:3px; width:{{= Math.round(right_ratio) }}%; height:5px; background-color:{{=right_background}}; border-radius:0 5px 5px 0; -webkit-border-radius:0 5px 5px 0; -moz-border-radius:0 5px 5px 0;">&nbsp;</span>
+				<td class="vote-result-td">
+					<span class="vote-result-bar-right" style="width:{{= Math.round(right_ratio) }}%; background-color:{{=right_background}};">&nbsp;</span>
 					<span style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
 				</td>
 			</tr>
