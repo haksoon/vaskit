@@ -1,5 +1,3 @@
-<div id="user_pc_bg" onclick="user_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:1; display:none;"></div>
-<div id="user_bg" onclick="user_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:8; opacity:0.6; display:none;"></div>
 <div id="user_overlay" style="width:inherit; position:fixed; top:48px; z-index:13; display:none; background:#f4f4f4;">
 	<div style="width:100%; background:#f4f4f4; text-align:left;">
 		<div style="width:60px; height:48px; position:absolute; top:-48px; right:0px; background-color:#4b3d3d; text-align:center;">
@@ -57,15 +55,19 @@
 	<% end %>
 
 	function user_on(){
+		disableScroll();
+		search_input_off();
+		category_off();
 		$("#user_overlay").show();
-		$("#user_pc_bg").show();
-		$("#user_bg").show();
+		$("#menu_pc_bg").show();
+		$("#menu_bg").show();
 	}
 
 	function user_off(){
+		enableScroll();
 		$("#user_overlay").hide();
-		$("#user_pc_bg").hide();
-		$("#user_bg").hide();
+		$("#menu_pc_bg").hide();
+		$("#menu_bg").hide();
 	}
 
 </script>
