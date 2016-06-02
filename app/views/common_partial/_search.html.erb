@@ -1,5 +1,5 @@
 <div id="search_pc_bg" onclick="search_input_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:1; display:none;"></div>
-<div id="search_bg" onclick="search_input_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:12; opacity:0.6; display:none;"></div>
+<div id="search_bg" onclick="search_input_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:5; opacity:0.6; display:none;"></div>
 <div id="search_overlay" style="width:inherit; position:fixed; top:50px; z-index:14; display:none; background:#f4f4f4;">
 	<table cellspacing="0" cellpadding="0" style="width:100%;">
 		<tbody>
@@ -42,7 +42,6 @@
 		$("#search_overlay").show();
 		$("#search_pc_bg").show();
 		$("#search_bg").show();
-		$(".main_header").css("z-index","13");
 		$('#search_input').focus().select();
 	}
 
@@ -51,7 +50,6 @@
 		$("#search_pc_bg").hide();
 		$("#search_bg").hide();
 		$('#search_input').val("");
-		$(".main_header").css("z-index","10");
 		$("#keyword_reset_btn").hide();
 	}
 

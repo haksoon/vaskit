@@ -1,5 +1,5 @@
 <div id="category_pc_bg" onclick="category_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:1; display:none;"></div>
-<div id="category_bg" onclick="category_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:12; opacity:0.6; display:none;"></div>
+<div id="category_bg" onclick="category_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:5; opacity:0.6; display:none;"></div>
 <div id="category_overlay" style="width:inherit; position:fixed; top:48px; z-index:14; display:none; background:#f4f4f4;">
 	<div style="width:100%; background:#fff; text-align:left;">
 		<div style="width:60px; height:48px; position:absolute; top:-48px; background-color:#4b3d3d; text-align:center;">
@@ -84,7 +84,6 @@
 		$("#category_overlay").show();
 		$("#category_pc_bg").show();
 		$("#category_bg").show();
-		$(".main_header").css("z-index","13");
 	}
 
 	function category_off(){
@@ -92,7 +91,6 @@
 		$("#category_overlay").hide();
 		$("#category_pc_bg").hide();
 		$("#category_bg").hide();
-		$(".main_header").css("z-index","10");
 		category_reset();
 	}
 
