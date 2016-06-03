@@ -3,7 +3,7 @@
 	<p style="font-size:18px; font-weight:bold; color:#ec6e00; margin:26px 0 0 0;">"A, B "둘 중에 뭐 사지?"</p>
 	<p style="font-size:14px; color:#998674; margin:8px 0 0 0; line-height:20px;">VASKIT은 사용자들의 참여를 통해<br/>구매결정고민을 해결하는 서비스입니다.</p>
 	<div style="position:relative; width: 100%; height: 200px; background: #ffcc5a; margin-top: 120px;">
-		<img class="cover" src="/images/cover.png" style="position: absolute; left:50%; bottom: 0; margin-left: -150px; max-height: 300px;" />
+		<img class="cover" src="/images/cover.png" style="position: absolute; left:50%; bottom: -2px; margin-left: -150px; max-height: 300px;" />
 	</div>
 	<img style="margin:0 auto; padding-top:10px; width:80%; display:block;" src="/images/landing/welcome.png" />
 
@@ -598,11 +598,12 @@
 
 <style type="text/css">
 	img.cover {
-		animation: cover_ani 1s ease-in-out infinite alternate;
+		animation: cover_ani 1.5s ease-in-out infinite alternate;
+		transform-origin: bottom center;
 	}
 	@keyframes cover_ani {
-		0% { margin-left:-100px; }
-		100% { margin-left:-200px; }
+		0% { transform: rotateZ(2deg); }
+		100% { transform: rotateZ(-2deg); }
 	}
 	a.login_btn {
 		display:block;
