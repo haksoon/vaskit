@@ -161,6 +161,12 @@ input::-webkit-inner-spin-button {
 
 .home-float-btn-area {
 	transition: all 1s;
+	animation:home-float-btn-area-ani .5s ease-out 1s;
+}
+@keyframes home-float-btn-area-ani {
+	0% { bottom:-100px; }
+	% { bottom:18px; }
+	100% { bottom:15px; }
 }
 
 .home-float-btn {
@@ -174,7 +180,7 @@ input::-webkit-inner-spin-button {
   line-height: 75px;
   border-radius: 35px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
-  animation: home-btn-ani 40s ease-out 2s infinite;
+  animation: home-btn-ani 40s linear 2s infinite;
 }
 
 @keyframes home-btn-ani {
@@ -201,7 +207,7 @@ input::-webkit-inner-spin-button {
   border-radius: 35px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
   transform: rotateX(180deg);
-  animation: home-btn-text-ani 40s ease-out 2s infinite;
+  animation: home-btn-text-ani 40s linear 2s infinite;
 }
 @keyframes home-btn-text-ani {
     0% { transform:rotateX(180deg); opacity:0; }
