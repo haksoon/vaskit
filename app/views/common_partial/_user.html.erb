@@ -34,11 +34,14 @@
 				</table>
 
 				<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:16px; line-height:40px; position:relative; margin-top:16px;">
-					진행 중인 질문 (<%= @in_progress_count%>)
+					진행 중인 질문 (<%= @in_progress_count%>개)
 				</a>
 
 				<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:16px; line-height:40px; position:relative; margin-top:16px;">
-					알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>)
+					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
+					<img src="/images/common/new.png" style="position:relative; top:3px; width:16px;"/>
+					<% end %>
+					알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>개)
 				</a>
 			</div>
 			<div style="padding:16px 12px 16px 12px; margin:0; font-size:12px; color:#9d9ea0; text-align:left; line-height:22px;">
