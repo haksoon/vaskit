@@ -2,18 +2,20 @@
 	<img style="margin:0 auto; margin-top:50px; width:200px;display:block;" src="/images/etc/logo_2.png">
 	<p style="font-size:18px; font-weight:bold; color:#ec6e00; margin:26px 0 0 0;">"A, B "둘 중에 뭐 사지?"</p>
 	<p style="font-size:14px; color:#998674; margin:8px 0 0 0; line-height:20px;">VASKIT은 사용자들의 참여를 통해<br/>구매결정고민을 해결하는 서비스입니다.</p>
-	<img style="margin:0 auto; margin-top:20px; width:100%; display:block;" src="/images/landing/illust.png" />
+	<div style="position:relative; width: 100%; height: 200px; background: #ffcc5a; margin-top: 120px;">
+		<img class="cover" src="/images/cover.png" style="position: absolute; left:50%; bottom: 0; margin-left: -150px; max-height: 300px;" />
+	</div>
 	<img style="margin:0 auto; padding-top:10px; width:80%; display:block;" src="/images/landing/welcome.png" />
 
-	<a href="#" onclick="webLoginWithFB(); return false;" style="background:#3b589e; width:200px; height:40px; line-height:40px; display:block; font-size:14px; font-weight:bold; color:#FFFFFF; margin:0 auto; margin-top:30px;-moz-border-radius:20px; -webkit-border-radius:20px; border-radius:20px;">
+	<a class="login_btn" href="#" onclick="webLoginWithFB(); return false;" style="background:#3b589e; color:#fff;">
 		<i class="fa fa-facebook"></i>&nbsp;페이스북 로그인
 	</a>
 
-	<a href="/users/sign_up" style="background:#ee6e01; width:200px; height:40px; line-height:40px; display:block; font-size:14px; font-weight:bold; color:#FFFFFF; margin:0 auto; margin-top:10px;-moz-border-radius:20px; -webkit-border-radius:20px; border-radius:20px;">
+	<a class="login_btn" href="/users/sign_up" style="background:#ee6e01; color:#fff;">
 		<i class="fa fa-users"></i>&nbsp;회원가입<small>&nbsp;/sign-up</small>
 	</a>
 
-	<a href="/users/sign_in" style="background:#fff; color:#383838; width:200px; border:1px solid #dbdbdb; height:40px; line-height:40px; display:block; font-size:14px; font-weight:bold; margin:0 auto; margin-top:10px;-moz-border-radius:20px; -webkit-border-radius:20px; border-radius:20px;">
+	<a class="login_btn" href="/users/sign_in" style="background:#fff; color:#383838; border:1px solid #dbdbdb; ">
 		<i class="fa fa-sign-in"></i>&nbsp;로그인<small>&nbsp;/sign-in</small>
 	</a>
 
@@ -546,7 +548,6 @@
 					회사는 이용자의 개인정보를 보호하고 개인정보와 관련한 불만을 처리하기 위하여 아래와 같이 관련 부서를 지정하고 있습니다. 본 방침에 대하여 의문 사항이 있거나 회사가 보유한 이용자의 정보를 업데이트하고자 하는 경우, 아래 연락처로 회사에 연락하시기 바랍니다.
 				</p>
 				<div class="paragraph_sub_div">
-					<i class="fa fa-tags"></i>
 					<p class="paragraph_sub_title">
 						개인정보 보호책임자
 					</p>
@@ -576,26 +577,46 @@
 	}
 
 	function access_term_on() {
-		$("#login_screen").hide();
-		$("#access_term").show();
+		$("#login_screen").fadeOut(100);
+		$("#access_term").fadeIn(100);
 		$(window).scrollTop(0);
 	}
 	function access_term_off() {
-		$("#login_screen").show();
-		$("#access_term").hide();
+		$("#login_screen").fadeIn(100);
+		$("#access_term").fadeOut(100);
 	}
 	function personal_information_on() {
-		$("#login_screen").hide();
-		$("#personal_information").show();
+		$("#login_screen").fadeOut(100);
+		$("#personal_information").fadeIn(100);
 		$(window).scrollTop(0);
 	}
 	function personal_information_off() {
-		$("#login_screen").show();
-		$("#personal_information").hide();
+		$("#login_screen").fadeIn(100);
+		$("#personal_information").fadeOut(100);
 	}
 </script>
 
 <style type="text/css">
+	img.cover {
+		animation: cover_ani 1s ease-in-out infinite alternate;
+	}
+	@keyframes cover_ani {
+		0% { margin-left:-100px; }
+		100% { margin-left:-200px; }
+	}
+	a.login_btn {
+		display:block;
+		margin:0 auto; margin-top:30px;
+		width:200px; height:40px; line-height:40px;
+		font-size:14px; font-weight:bold;
+		-webkit-border-radius:20px;
+		   -moz-border-radius:20px;
+		        border-radius:20px;
+		transition:all .2s;
+	}
+	a.login_btn:hover {
+		width:250px;
+	}
 	h3.title {
 		margin: 20px 0 0 0;
 		padding: 10px;
