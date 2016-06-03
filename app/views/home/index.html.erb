@@ -2,9 +2,6 @@
 <% when "user", "hash_tag", "ask_deal", "brand", "none" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<div id="search_bar" style="margin:12px 0px;">
-		<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-			'{{= keyword }}'에 대한 검색 결과입니다.
-		</p>
 		<table cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
 				<td onclick="search_input_on(); return false;" style="width:100%; position:relative; padding:0px 12px;">
@@ -14,31 +11,31 @@
 			</tr>
 		</table>
 	</div>
+	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		'{{= keyword }}'에 대한 검색 결과입니다.
+	</p>
 <% when "my_ask" %>
 	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Asks"} %>
 	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		내가 직접 질문한 히스토리입니다.
+		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 질문한 히스토리입니다.
 	</p>
 <% when "vote_ask" %>
 	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Votes"} %>
 	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		내가 투표에 참여한 히스토리입니다.
+		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 투표에 참여한 히스토리입니다.
 	</p>
 <% when "comment_ask" %>
 	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Comments"} %>
 	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		내가 의견을 남긴 히스토리입니다.
+		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 의견을 남긴 히스토리입니다.
 	</p>
 <% when "my_ask_in_progress" %>
 	<%= render :partial => "common_partial/header_1", :locals => {:title => "진행 중인 질문"} %>
 	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		내가 진행중인 질문 내역입니다. 투표를 종료할 수 있습니다.
+		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 진행중인 질문 내역입니다. 투표를 종료할 수 있습니다.
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header" %>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
-	</p>
 	<div id="search_bar" style="margin:12px 0px;">
 		<table cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
@@ -49,6 +46,9 @@
 			</tr>
 		</table>
 	</div>
+	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
+	</p>
 <% end %>
 
 
