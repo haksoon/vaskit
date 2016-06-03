@@ -6,7 +6,7 @@
 					<td style="width:100%; position:relative;">
 						<a href="#" onclick="search_input_off(); return false;" style="position:absolute;"><i class="fa fa-angle-left" style="color:#ee6e01; padding:5px 12px; font-size:26px;"></i></a>
 						<input id="search_input" placeholder="검색어를 입력하세요." type="text" class="search_input"/>
-						<a href="#" onclick="search_by_key(); return false;" style="position:absolute; right:1px; top:0px; padding:8px 9px; background-color:#ee6e01;"><i class="fa fa-search" style="color:#fff; font-size:18px;"></i></a>
+						<a href="#" onclick="search_by_key(); return false;" style="position:absolute; right:3px; top:1px; padding:8px 8px 6px 10px; background-color:rgba(238,110,1,0.8);"><i class="fa fa-search" style="color:#fff; font-size:18px;"></i></a>
 						<a id="keyword_reset_btn" href="#" onclick="keyword_reset(); return false;" style="position:absolute; right:35px; top:1px; display:none;"><i class="fa fa-times-circle" style="color:#9d9ea1; font-size:15px; padding:10px;"></i></a>
 					</td>
 				</tr>
@@ -102,20 +102,20 @@
 
 		        	$.each(data.users, function( index, user ) {
 		        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: user.id}));
-					});
+							});
 
-					$.each(data.hash_tags, function( index, hash_tag ) {
-						$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
-					});
+							$.each(data.hash_tags, function( index, hash_tag ) {
+								$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
+							});
 
-					if (data.ask_deal){
-            $('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
-          }
+							if (data.ask_deal){
+		            $('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
+		          }
 
-					if (data.brand){
-						$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
-					}
-					$("#search_result").highlight($('#search_input').val());
+							if (data.brand){
+								$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
+							}
+							$("#search_result").highlight($('#search_input').val());
 	        	}
 	        },
 	        beforeSend: function(){

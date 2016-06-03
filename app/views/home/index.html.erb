@@ -6,32 +6,32 @@
 			<tr>
 				<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
 					<p style="position:relative; margin:0; width:100%; height:38px; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; background-color:#fff; border:1px solid #dbdbdb; border-right-width:3px; border-bottom-width:3px;">
-					<span style="position:absolute; right:1px; padding:8px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
+					<span style="position:absolute; right:0px; top:0px; padding:8px 8px 6px 10px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
 				</td>
 			</tr>
 		</table>
 	</div>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		'{{= keyword }}'에 대한 검색 결과입니다.
+	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		입력하신 검색어에 대한 검색 결과입니다.
 	</p>
 <% when "my_ask" %>
-	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Asks"} %>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<%= render :partial => "common_partial/header_3" %>
+	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
 		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 질문한 히스토리입니다.
 	</p>
 <% when "vote_ask" %>
-	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Votes"} %>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<%= render :partial => "common_partial/header_3" %>
+	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
 		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 투표에 참여한 히스토리입니다.
 	</p>
 <% when "comment_ask" %>
-	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Comments"} %>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<%= render :partial => "common_partial/header_3" %>
+	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
 		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 의견을 남긴 히스토리입니다.
 	</p>
 <% when "my_ask_in_progress" %>
-	<%= render :partial => "common_partial/header_1", :locals => {:title => "진행 중인 질문"} %>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<%= render :partial => "common_partial/header_3" %>
+	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
 		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 진행중인 질문 내역입니다. 투표를 종료할 수 있습니다.
 	</p>
 <% else %>
@@ -41,18 +41,18 @@
 			<tr>
 				<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
 					<p style="position:relative; margin:0; width:100%; height:38px; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; background-color:#fff; border:1px solid #dbdbdb; border-right-width:3px; border-bottom-width:3px;">
-					<span style="position:absolute; right:1px; padding:8px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
+					<span style="position:absolute; right:0px; top:0px; padding:8px 8px 6px 10px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
 				</td>
 			</tr>
 		</table>
 	</div>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
 		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
 	</p>
 <% end %>
 
 
-<div id="asks" style="padding:0px 12px 0px;"></div>
+<div id="asks" style="padding:10px 12px 0px;"></div>
 <div class="home-float-btn">
 	<% if current_user %>
 		<a href="/asks/new" style="display:block;"><div style="width: 65px; height: 65px; background: rgba(238,110,1,0.8); color: #fff; font-size: 70px; line-height: 75px; border-radius: 35px; box-shadow: 0px 0px 10px rgba(0,0,0,0.4); font-weight: bold;">+</div></a>
