@@ -74,7 +74,8 @@ function numberWithCommas(x) {
 
 function back_button(){
 	if (parent.history.length == 1){
-		window.location = "/";
+		// window.location = "/";
+    window.close();
 	}else{
 		parent.history.back();
 	}
