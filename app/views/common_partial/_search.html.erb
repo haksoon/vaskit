@@ -1,16 +1,18 @@
 <div id="search_overlay" style="width:inherit; position:fixed; top:50px; z-index:13; display:none; background:#f4f4f4; border-bottom:5px solid #4b3d3d;">
-	<table cellspacing="0" cellpadding="0" style="width:100%;">
-		<tbody>
-			<tr>
-				<td style="width:100%; position:relative; padding:12px;">
-					<a href="#" onclick="search_input_off(); return false;" style="position:absolute;"><i class="fa fa-angle-left" style="color:#ee6e01; padding:5px 12px; font-size:26px;"></i></a>
-					<input id="search_input" placeholder="검색어를 입력하세요." type="text" class="search_input"/>
-					<a href="#" onclick="search_by_key(); return false;" style="position:absolute; right:15px; top:13px; padding:8px 9px; background-color:#ee6e01;"><i class="fa fa-search" style="color:#fff; font-size:18px;"></i></a>
-					<a id="keyword_reset_btn" href="#" onclick="keyword_reset(); return false;" style="position:absolute; right:50px; top:13px; display:none;"><i class="fa fa-times-circle" style="color:#9d9ea1; font-size:15px; padding:10px;"></i></a>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<div id="search_bar_on" style="padding:12px;">
+		<table cellspacing="0" cellpadding="0" style="width:100%;">
+			<tbody>
+				<tr>
+					<td style="width:100%; position:relative;">
+						<a href="#" onclick="search_input_off(); return false;" style="position:absolute;"><i class="fa fa-angle-left" style="color:#ee6e01; padding:5px 12px; font-size:26px;"></i></a>
+						<input id="search_input" placeholder="검색어를 입력하세요." type="text" class="search_input"/>
+						<a href="#" onclick="search_by_key(); return false;" style="position:absolute; right:1px; top:0px; padding:8px 9px; background-color:#ee6e01;"><i class="fa fa-search" style="color:#fff; font-size:18px;"></i></a>
+						<a id="keyword_reset_btn" href="#" onclick="keyword_reset(); return false;" style="position:absolute; right:35px; top:1px; display:none;"><i class="fa fa-times-circle" style="color:#9d9ea1; font-size:15px; padding:10px;"></i></a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<div id="search_result" style="width:100%; background:#fff; border-top:1px solid #9e9fa1; text-align:left; max-height:340px; overflow-y:auto;"></div>
 </div>
 

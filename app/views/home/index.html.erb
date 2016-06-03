@@ -1,10 +1,10 @@
 <% case @type %>
 <% when "user", "hash_tag", "ask_deal", "brand", "none" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<div id="search_bar" style="margin:12px 0px;">
+	<div id="search_bar" style="padding:12px;">
 		<table cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
-				<td onclick="search_input_on(); return false;" style="width:100%; position:relative; padding:0px 12px;">
+				<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
 					<p style="position:relative; margin:0; width:100%; height:38px; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; background-color:#fff; border:1px solid #dbdbdb; border-right-width:3px; border-bottom-width:3px;">
 					<span style="position:absolute; right:1px; padding:8px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
 				</td>
@@ -36,10 +36,10 @@
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header" %>
-	<div id="search_bar" style="margin:12px 0px;">
+	<div id="search_bar" style="padding:12px;">
 		<table cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
-				<td onclick="search_input_on(); return false;" style="width:100%; position:relative; padding:0px 12px;">
+				<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
 					<p style="position:relative; margin:0; width:100%; height:38px; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; background-color:#fff; border:1px solid #dbdbdb; border-right-width:3px; border-bottom-width:3px;">
 					<span style="position:absolute; right:1px; padding:8px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
 				</td>
