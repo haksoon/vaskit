@@ -159,8 +159,51 @@ input::-webkit-inner-spin-button {
 	cursor:pointer;
 }
 
+.home-float-btn-area {
+	transition: all 1s;
+}
 .home-float-btn {
-	transition: all .2s;
+  width: 65px;
+  height: 65px;
+  background: rgba(238,110,1,0.8);
+  color: #fff;
+  font-size: 70px;
+	font-weight: bold;
+  line-height: 75px;
+  border-radius: 35px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
+	z-index:6;
+  float: right;
+  animation: home-btn-ani 5s ease-out 2s infinite;
+}
+
+@keyframes home-btn-ani {
+    0% { transform:rotateX(0deg); z-index:6; }
+    90% { transform:rotateX(0deg); z-index:6; }
+    100% { transform:rotateX(360deg); z-index:5; }
+}
+.home-float-btn-text {
+  width: 65px;
+  height: 65px;
+  background-color: rgba(238,110,1,0.8);
+  color: #fff;
+  font-size: 15px;
+	font-weight: bold;
+  line-height: 15px;
+  border-radius: 35px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
+  padding-top: 18px;
+  box-sizing: border-box;
+  transform: rotateX(360deg);
+	z-index:5;
+  position: absolute;
+  float: right;
+  animation: home-btn-text-ani 5s ease-out 2s infinite;
+}
+@keyframes home-btn-text-ani {
+    0% { transform:rotateX(360deg); z-index:5; }
+    90% { transform:rotateX(360deg); z-index:5; }
+    100% { transform:rotateX(0deg); z-index:6; }
 }
 
 .content_box {

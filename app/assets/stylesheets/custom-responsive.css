@@ -22,7 +22,7 @@
 	#wrap{
 		width:100%;
 	}
-	.home-float-btn{
+	.home-float-btn-area{
 		position:fixed;
 		right:20px;
 		bottom:15px;
@@ -35,7 +35,7 @@
 		box-shadow:0px 0px 10px rgba(166,180,188,0.8);
 		-webkit-box-shadow:0px 0px 10px rgba(166,180,188,0.8);
 	}
-	.home-float-btn{
+	.home-float-btn-area{
 		 position:fixed;
 		 right:50%;
 		 margin-right:-345px;
@@ -44,7 +44,7 @@
 }
 
 @media (min-width:521px) and (max-width:750px){
-	.home-float-btn{
+  .home-float-btn-area{
 		 position:fixed;
 		 right:50%;
 		 margin-right:-250px;

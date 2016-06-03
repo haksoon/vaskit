@@ -1,45 +1,45 @@
 <% case @type %>
-<% when "user", "hash_tag", "ask_deal", "brand", "none" %> 
+<% when "user", "hash_tag", "ask_deal", "brand", "none" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<%= render :partial => "common_partial/search" %>
-	<p class="chat_bubble">
+	<p class="chat_bubble" style="margin-top:0px;">
 		입력하신 검색어에 대한 검색 결과입니다.
 	</p>
 <% when "my_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<p class="chat_bubble">
-		<span style="color:#998674;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요! 와우! 많은 고민을 해결하셨나요?
+		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요!<br>와우! 많은 고민을 해결하셨나요?
 	</p>
 <% when "vote_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<p class="chat_bubble">
-		<span style="color:#998674;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674;"><%= @my_vote_count %>개</span>의 투표에 참여했군요! 와우! 많은 이들의 탈모를 막아주었습니다!
+		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_vote_count %>개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
 	</p>
 <% when "comment_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<p class="chat_bubble">
-		<span style="color:#998674;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요! 와우! 우리 모두 수다쟁이를 좋아한답니다!
+		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요!<br>와우! 우리 모두 수다쟁이를 좋아한답니다!
 	</p>
 <% when "my_ask_in_progress" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<p class="chat_bubble">
-		<span style="color:#998674;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674;"><%= @in_progress_count %>개</span>의 질문을 진행중입니다. 더보기 버튼을 눌러 투표를 종료할 수 있습니다.
+		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674; font-weight:bold;"><%= @in_progress_count %>개</span>의 질문을 진행중입니다.<br>더보기 버튼을 눌러 투표를 종료할 수 있는 것, 알고 계셨나요?
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header" %>
 	<%= render :partial => "common_partial/search" %>
-	<p class="chat_bubble">
+	<p class="chat_bubble" style="margin-top:0px;">
 		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
 	</p>
 <% end %>
 
 
 <div id="asks" style="padding:10px 12px 0px;"></div>
-<div class="home-float-btn">
+<div class="home-float-btn-area">
 	<% if current_user %>
-		<a href="/asks/new" style="display:block;"><div style="width: 65px; height: 65px; background: rgba(238,110,1,0.8); color: #fff; font-size: 70px; line-height: 75px; border-radius: 35px; box-shadow: 0px 0px 10px rgba(0,0,0,0.4); font-weight: bold;">+</div></a>
+		<a href="/asks/new" style="display:block;"><div class="home-float-btn">+</div><div class="home-float-btn">질문<br>하기</div></a>
 	<% else %>
-		<a href="#" onclick="notify('회원가입 후<br />질문을 올릴 수 있습니다.'); return false;" style="display:block;"><div style="width: 65px; height: 65px; background: rgba(238,110,1,0.8); color: #fff; font-size: 70px; line-height: 75px; border-radius: 35px; box-shadow: 0px 0px 10px rgba(0,0,0,0.4); font-weight: bold;">+</div></a>
+		<a href="#" onclick="notify('회원가입 후<br />질문을 올릴 수 있습니다.'); return false;" style="display:block;"><div class="home-float-btn">+</div><div class="home-float-btn">질문<br>하기</div></a>
 	<% end %>
 </div>
 
