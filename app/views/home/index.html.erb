@@ -16,23 +16,23 @@
 	</p>
 <% when "my_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 질문한 히스토리입니다.
+	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="color:#998674;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요! 와우!
 	</p>
 <% when "vote_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 투표에 참여한 히스토리입니다.
+	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="color:#998674;"><%= @my_vote_count %>개</span>의 투표에 참여했군요! 와우!
 	</p>
 <% when "comment_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 의견을 남긴 히스토리입니다.
+	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="color:#998674;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요! 와우!
 	</p>
 <% when "my_ask_in_progress" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		<span style="color:#998674;">@<%= current_user.string_id %></span>님께서 진행중인 질문 내역입니다. 투표를 종료할 수 있습니다.
+	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		<span style="color:#998674;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674;"><%= @in_progress_count %>개</span>의 질문을 진행중입니다. 더보기 버튼을 눌러 투표를 종료할 수 있습니다.
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header" %>
