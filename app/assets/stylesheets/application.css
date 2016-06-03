@@ -161,7 +161,7 @@ input::-webkit-inner-spin-button {
 
 .home-float-btn-area {
 	transition: all 1s;
-	animation:home-float-btn-ani 5s ease-out;
+	animation:home-float-btn-ani 3s ease-out;
 }
 @keyframes home-float-btn-ani {
 	0% { bottom:-100px; }
