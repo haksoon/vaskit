@@ -19,7 +19,8 @@
 <%= render :partial => "common_partial/more_popup" %>
 <%= render :partial => "common_partial/share_popup" %>
 
-<% if "my_ask", "vote_ask", "comment_ask", "my_ask_in_progress" %>
+<% case @type %>
+<% when "my_ask", "vote_ask", "comment_ask", "my_ask_in_progress" %>
 
 <% else %>
 	<div id="search_bar">
