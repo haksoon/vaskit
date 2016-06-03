@@ -165,7 +165,7 @@ input::-webkit-inner-spin-button {
 }
 @keyframes home-float-btn-ani {
 	0% { bottom:-100px; }
-	% { bottom:18px; }
+	90% { bottom:18px; }
 	100% { bottom:15px; }
 }
 
