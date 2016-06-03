@@ -81,6 +81,17 @@ input::-webkit-inner-spin-button {
  	border-radius: 1px;
 }
 
+.chat_bubble {
+	margin:15px 12px 0px;
+	padding:7px 15px;
+	color:#9d9ea1;
+	font-size:13px;
+	text-align:left;
+	line-height:1.6;
+	background-color:#fff;
+	border-right:3px solid #dbdbdb;
+	border-bottom:3px solid #dbdbdb;
+}
 
 .registrations_input{
 	width:100%;

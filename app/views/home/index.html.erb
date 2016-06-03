@@ -1,52 +1,34 @@
 <% case @type %>
-<% when "user", "hash_tag", "ask_deal", "brand", "none" %>
+<% when "user", "hash_tag", "ask_deal", "brand", "none" %> 
 	<%= render :partial => "common_partial/header_3" %>
-	<div id="search_bar" style="padding:12px;">
-		<table cellspacing="0" cellpadding="0" style="width:100%;">
-			<tr>
-				<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
-					<p style="position:relative; margin:0; width:100%; height:38px; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; background-color:#fff; border:1px solid #dbdbdb; border-right-width:3px; border-bottom-width:3px;">
-					<span style="position:absolute; right:0px; top:0px; padding:8px 8px 6px 10px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<%= render :partial => "common_partial/search" %>
+	<p class="chat_bubble">
 		입력하신 검색어에 대한 검색 결과입니다.
 	</p>
 <% when "my_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="color:#998674;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요! 와우!
+	<p class="chat_bubble">
+		<span style="color:#998674;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요! 와우! 많은 고민을 해결하셨나요?
 	</p>
 <% when "vote_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="color:#998674;"><%= @my_vote_count %>개</span>의 투표에 참여했군요! 와우!
+	<p class="chat_bubble">
+		<span style="color:#998674;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674;"><%= @my_vote_count %>개</span>의 투표에 참여했군요! 와우! 많은 이들의 탈모를 막아주었습니다!
 	</p>
 <% when "comment_ask" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="color:#998674;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요! 와우!
+	<p class="chat_bubble">
+		<span style="color:#998674;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요! 와우! 우리 모두 수다쟁이를 좋아한답니다!
 	</p>
 <% when "my_ask_in_progress" %>
 	<%= render :partial => "common_partial/header_3" %>
-	<p style="margin:20x 0 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<p class="chat_bubble">
 		<span style="color:#998674;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674;"><%= @in_progress_count %>개</span>의 질문을 진행중입니다. 더보기 버튼을 눌러 투표를 종료할 수 있습니다.
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header" %>
-	<div id="search_bar" style="padding:12px;">
-		<table cellspacing="0" cellpadding="0" style="width:100%;">
-			<tr>
-				<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
-					<p style="position:relative; margin:0; width:100%; height:38px; box-sizing:border-box; -webkit-box-sizing:border-box; -moz-box-sizing:border-box; background-color:#fff; border:1px solid #dbdbdb; border-right-width:3px; border-bottom-width:3px;">
-					<span style="position:absolute; right:0px; top:0px; padding:8px 8px 6px 10px;"><i class="fa fa-search" style="color:#9d9ea1; font-size:18px;"></i></span></p>
-				</td>
-			</tr>
-		</table>
-	</div>
-	<p style="margin:5px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+	<%= render :partial => "common_partial/search" %>
+	<p class="chat_bubble">
 		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
 	</p>
 <% end %>
@@ -371,7 +353,6 @@
 
 </script>
 
-<%= render :partial => "common_partial/search" %>
 <%= render :partial => "common_partial/category" %>
 <%= render :partial => "common_partial/user" %>
 <%= render :partial => "common_partial/more_popup" %>
