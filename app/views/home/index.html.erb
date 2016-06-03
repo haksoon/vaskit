@@ -2,6 +2,9 @@
 <% when "user", "hash_tag", "ask_deal", "brand", "none" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<div id="search_bar" style="margin:12px 0px;">
+		<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+			'{{= keyword }}'에 대한 검색 결과입니다.
+		</p>
 		<table cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
 				<td onclick="search_input_on(); return false;" style="width:100%; position:relative; padding:0px 12px;">
@@ -11,9 +14,6 @@
 			</tr>
 		</table>
 	</div>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		검색 결과입니다.
-	</p>
 <% when "my_ask" %>
 	<%= render :partial => "common_partial/header_1", :locals => {:title => "히스토리 : Asks"} %>
 	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
@@ -36,6 +36,9 @@
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header" %>
+	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
+		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
+	</p>
 	<div id="search_bar" style="margin:12px 0px;">
 		<table cellspacing="0" cellpadding="0" style="width:100%;">
 			<tr>
@@ -46,9 +49,6 @@
 			</tr>
 		</table>
 	</div>
-	<p style="margin:12px 0; padding:0px 18px; color:#9d9ea0; font-size:13px; text-align:left;">
-		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
-	</p>
 <% end %>
 
 
