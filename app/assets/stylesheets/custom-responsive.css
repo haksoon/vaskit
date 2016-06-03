@@ -24,11 +24,8 @@
 	}
 	.home-float-btn{
 		position:fixed;
-		 right:20px;
-		 bottom:14px;
-	}
-	.home-float-btn img{
-		width:70px;
+		right:20px;
+		bottom:15px;
 	}
 }
 
@@ -41,12 +38,8 @@
 	.home-float-btn{
 		 position:fixed;
 		 right:50%;
-		 margin-right:-350px;
-		 bottom:10px;
-	}
-
-	.home-float-btn img{
-		width:70px;
+		 margin-right:-345px;
+		 bottom:15px;
 	}
 }
 
