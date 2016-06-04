@@ -68,7 +68,7 @@ class CommentsController < ApplicationController
     already_like = false
     comment = Comment.find(params[:id])
     comment_like = CommentLike.where(:user_id => current_user.id, :comment_id => params[:id]).first
-    @comment_alreay_like = CommentLike.where(:user_id => current_user.id, :comment_id => params[:id])
+    @comment_already_like = CommentLike.where(:user_id => current_user.id, :comment_id => params[:id])
     if comment_like
       already_like = true
       comment_like.delete

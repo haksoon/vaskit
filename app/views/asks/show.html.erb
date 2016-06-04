@@ -602,7 +602,7 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
-      {{ if(comment_alreay_like == null){ }}
+      {{ if (comment_already_like == null) { }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9d9ea1; font-size:12px;">
           <i class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
@@ -822,7 +822,7 @@
 
 	}
 
-  var comment_alreay_like = <%= raw @comment_alreay_like.to_json %>;
+  var comment_already_like = <%= raw @comment_already_like.to_json %>;
 
 	function comment_like(comment_id){
 		<% if current_user %>
