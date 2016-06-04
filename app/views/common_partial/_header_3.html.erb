@@ -1,4 +1,4 @@
-<table class="main_header" cellspacing="0" cellpadding="0" style="position:fixed; top:0; background-color:#4b3d3d; width:inherit; overflow:visible; height:50px; z-index:10; border-top:2px solid #ee6e01;">
+<table class="main_header" cellspacing="0" cellpadding="0">
 	<tr>
 		<td style="width:60px;">
 			<% if flash[:redirect_url] %>
@@ -7,18 +7,20 @@
         <a href="#" onclick="back_button(); return false;"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/backward_btn.png" /></a>
       <% end %>
 		</td>
-		<td style="text-align:center;">
-			<a href="/" style="display:block; font-size:28px; color:#FFFFFF; margin:0 auto; margin-top:3px;">
-				<img src="/images/etc/logo_1.png" style="width:130px; margin-bottom:-1px;"/>
+		<td style="width:100%;">
+			<a href="/" style="display:inline-block; margin-top:3px; padding:5px;">
+				<img src="/images/etc/logo_1.png" style="height:26px;"/>
 			</a>
 		</td>
 		<td style="width:60px;">
 			<% if current_user %>
-				<a href="#" onclick="user_on(); return false;" style="position:relative; display:block;">
+				<a href="#" onclick="user_on(); return false;" style="display:block; width:60px; height:50px;">
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
 						<img src="/images/header/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
 					<% end %>
 					<img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
+					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 11px;"></i>
+					<span style="position: absolute; bottom: 11px; right: 23px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
 				</a>
 			<% else %>
 				<a href="/etc/landing"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
