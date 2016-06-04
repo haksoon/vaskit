@@ -590,7 +590,10 @@
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:left;">
 			<div style="position:relative; margin:4px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
 				<span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
-
+        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+          <i class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
+          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+        </a>
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
 			 	<a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; right:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:0 4px 4px 0; -moz-border-radius:0 4px 4px 0; -webkit-border-radius:0 4px 4px 0; display:none;">
           완료
@@ -603,10 +606,6 @@
 			<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9e9fa1;">
 				<span style="color:#998674;">{{=comment.user.string_id}}</span>
         &nbsp;{{= get_past_time(comment.created_at) }}
-				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
-          <i class="fa fa-heart-o" style="color:#9d9ea1;"></i>
-				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-				</a>
 				|
 				{{ if ( comment.user_id == current_user_id ){ }}
 				  <a href="#" onclick="comment_del({{=comment.id}}, true); return false;" style="color:#9e9fa1;">
@@ -628,8 +627,11 @@
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
 			<div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
-				<span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
-
+        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+          <span id="comment_{{=comment.id}}_like_count" style="margint-right:3px;">{{=comment.like_count}}</span>
+				  <i class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
+				</a>
+        <span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
         <a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; left:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:4px 0 0 4px; -moz-border-radius:4px 0 0 4px; -webkit-border-radius:4px 0 0 4px; display:none;">
           완료
@@ -656,17 +658,6 @@
           </a>
         {{ } }}
 				|
-        <% if already_like %>
-  				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01;">
-  				  <i class="fa fa-heart" style="color:#ee6e01;"></i>
-  				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-  				</a>
-        <% else %>
-          <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
-  				  <i class="fa fa-heart-o" style="color:#9d9ea1;"></i>
-  				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-  				</a>
-        <% end %>
 				{{= get_past_time(comment.created_at) }} &nbsp;<span style="color:#998674;">{{=comment.user.string_id}}</span>
 			</p>
 		</div>
