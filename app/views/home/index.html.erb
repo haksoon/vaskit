@@ -315,7 +315,7 @@
 	        	var more_asks = data.asks;
 	        	$.merge(asks, more_asks);
 
-	        	if( more_asks.length == 0 ){
+	        	if( more_asks.length =< 5 ){
 	        		is_more_asks = false;
 	        		$("#endless_loading").hide();
 							$("#end_of_contents").show();
