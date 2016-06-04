@@ -656,10 +656,17 @@
           </a>
         {{ } }}
 				|
-				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
-				  <i class="fa fa-heart-o" style="color:#9d9ea1;"></i>
-				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-				</a>
+        <% if data.already_like %>
+  				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01;">
+  				  <i class="fa fa-heart" style="color:#ee6e01;"></i>
+  				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+  				</a>
+        <% else %>
+          <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
+  				  <i class="fa fa-heart-o" style="color:#9d9ea1;"></i>
+  				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+  				</a>
+        <% end %>
 				{{= get_past_time(comment.created_at) }} &nbsp;<span style="color:#998674;">{{=comment.user.string_id}}</span>
 			</p>
 		</div>
