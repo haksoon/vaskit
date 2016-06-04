@@ -815,6 +815,8 @@
 
 	}
 
+  var comment_alreay_like = <%= raw @comment_alreay_like.to_json %>;
+
 	function comment_like(comment_id){
 		<% if current_user %>
 		$.ajax({
