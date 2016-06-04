@@ -2,14 +2,14 @@
 	<tr>
 		<td style="width:60px;">
 			<% if flash[:redirect_url] %>
-        <a href="<%= flash[:redirect_url] %>"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/backward_btn.png" /></a>
+        <a href="<%= flash[:redirect_url] %>" syle="display:block; width:60px; height:50px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>
       <% else %>
-        <a href="#" onclick="back_button(); return false;"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/backward_btn.png" /></a>
+        <a href="#" onclick="back_button(); return false;" syle="display:block; width:60px; height:50px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>
       <% end %>
 		</td>
 		<td style="width:100%;">
-			<a href="/" style="display:inline-block; margin-top:3px; padding:5px;">
-				<img src="/images/etc/logo_1.png" style="height:26px;"/>
+			<a href="/" style="display:inline-block; margin-top:4px; padding:5px;">
+				<img src="/images/etc/logo_1.png" style="height:25px;"/>
 			</a>
 		</td>
 		<td style="width:60px;">
