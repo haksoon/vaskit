@@ -3,17 +3,17 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   before_filter :detect_browser, :set_visitor
-  
+
   MOBILE_BROWSERS = ["android", "iphone", "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;", "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2","pocket","kindle", "mobile","pda","psp","treo"]
-  
+
   def auth_user
-    render :template => "/etc/landing" unless current_user 
+    render :template => "/etc/landing" unless current_user
   end
-  
+
   def auth_admin
-    render  :template => "/admin/not_auth" unless current_user.email == "admin@vaskit.com" 
+    render  :template => "/admin/not_auth" unless current_user.email == "admin@vaskit.com"
   end
-  
+
   def set_visitor
     @uniq_key = cookies["uniq_key"]
     @visitor = Visitor.find_by_uniq_key( Digest::MD5.hexdigest(@uniq_key ) ) unless @uniq_key.blank?
@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
       @visitor = Visitor.create(:uniq_key => hash_uniq_key, :remote_ip => get_remote_ip)
     end
   end
-  
+
   def detect_browser
     if params[:view]
       if params[:view] == 'mobile'
@@ -47,26 +47,26 @@ class ApplicationController < ActionController::Base
             break
             end
           end
-          
+
           #아이폰 모바일 앱 검출
           if session[:browser] == 'iphone'
             if ( request.headers["HTTP_USER_AGENT"].include?('vaskit_iphone') == false && !request.headers["MyUserAgent"] )
               session[:browser] = 'iphone-web'
             end
           end
-          
+
           #안드로이드 모바일웹 검출
           if session[:browser] == 'android'
             if ( request.headers["HTTP_USER_AGENT"].include?('VaskitAndroid') == false )
               session[:browser] = 'android-web'
             end
           end
-          
+
           if agent.match('ipad')
             session[:view] = 'mobile'
             session[:browser] = 'iphone-web'
           end
-          
+
           # ipad 검출
           # if agent.match('ipad')
             # session[:view] = 'mobile'
@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+
   def get_remote_ip
     ret = nil
     if request.env["HTTP_X_FORWARDED_FOR"] != nil
@@ -90,5 +90,13 @@ class ApplicationController < ActionController::Base
     end
     ret.split(",")[0]
   end
-  
+
+  def user
+    @my_ask_count = Ask.where(:user_id => current_user.id).count
+    @my_vote_count = Vote.where(:user_id => current_user.id).count
+    @my_comment_count = Comment.where(:user_id => current_user.id).count
+    @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count
+    @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
+  end
+
 end
