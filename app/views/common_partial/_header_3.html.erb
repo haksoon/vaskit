@@ -18,7 +18,6 @@
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
 						<img src="/images/header/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
 					<% end %>
-					<img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 11px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 23px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
 				</a>
