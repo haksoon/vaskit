@@ -1,7 +1,7 @@
 <table class="main_header" cellspacing="0" cellpadding="0">
 	<tr>
 		<td style="width:60px;">
-			<a href="#" onclick="category_on(); return false;" style="display:block; width:60px; height:50px;">
+			<a href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;">
 				<i class="fa fa-bars" style="color: #fff; font-size: 26px; padding-top: 12px;"></i>
 			</a>
 		</td>
@@ -12,7 +12,7 @@
 		</td>
 		<td style="width:60px;">
 			<% if current_user %>
-				<a href="#" onclick="user_on(); return false;" style="display:block; width:60px; height:50px;">
+				<a href="#" onclick="user_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 23px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
@@ -20,7 +20,9 @@
 					<% end %>
 				</a>
 			<% else %>
-				<a href="/etc/landing"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
+				<a href="/etc/landing" style="display: block; box-sizing: border-box; width: 60px; height: 50px; padding-top: 14px; padding-right: 10px;">
+					<p style="color:#fff;margin: 0 auto;padding: 2px 4px;border: 2px solid #fff;border-radius: 5px;font-size: 12px;font-weight: bold;box-sizing: border-box;display: inline-block;">Login</p>
+				</a>
 			<% end %>
 		</td>
 	</tr>
