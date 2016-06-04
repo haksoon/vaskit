@@ -2,9 +2,9 @@
 	<tr>
 		<td style="width:60px;">
 			<% if flash[:redirect_url] %>
-        <a href="<%= flash[:redirect_url] %>"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/common/backward_btn.png" /></a>
+        <a href="<%= flash[:redirect_url] %>"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/backward_btn.png" /></a>
       <% else %>
-        <a href="#" onclick="back_button(); return false;"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/common/backward_btn.png" /></a>
+        <a href="#" onclick="back_button(); return false;"><img style="width:18px; padding:0px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/backward_btn.png" /></a>
       <% end %>
 		</td>
 		<td style="text-align:center;">
@@ -16,7 +16,7 @@
 			<% if current_user %>
 				<a href="#" onclick="user_on(); return false;" style="position:relative; display:block;">
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img src="/images/common/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
+						<img src="/images/header/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
 					<% end %>
 					<img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
 				</a>

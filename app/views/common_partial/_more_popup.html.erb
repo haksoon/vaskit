@@ -1,6 +1,6 @@
 <div id="more_popup_bg" href="#" onclick="hide_more_popup(); return false;" style="display:block; position:fixed;left:0; top:0; width:100%; height:100%; background-color:black; z-index:12; opacity:0.6; display:none;"></div>
 <div id='more_popup' style='width:240px; z-index:13; position:fixed; left:50%; top:50%; margin-left:-120px; margin-top:-110px; overflow-y:hidden; overflow-x:hidden; display:none;'>
-	<a href="#" onclick="hide_more_popup(); return false;" style="position:absolute; right:11px; top:11px;"><img style="width:18px;" src="/images/header/menu_off.png" /></a>
+	<a href="#" onclick="hide_more_popup(); return false;" style="position:absolute; right:0; top:0; width:40px; height:40px;"><i class="fa fa-times" style="color:#fff; font-size:20px; padding-top:10px;"></i></a>
 	<p id="more_title" style="background-color:#4b3d3d; font-size:15px; color:#FFF; height:40px; line-height:40px; margin:0;">더보기</p>
 	<div id="more_popup_sub">
 		<a id="ask_edit_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:15px;">수정하기</a>
@@ -9,23 +9,23 @@
 		<a id="ask_complete_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; font-size:15px;">질문 종료하기</a>
 	</div>
 	<div id="more_popup_report" style="text-align:left; display:none;">
-		<a id="report_btn_1" href="#"  onclick="set_report_type(1); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px;">
-			<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 12px" /> 구매결정과는 무관한 내용이군요
+		<a id="report_btn_1" href="#"  onclick="set_report_type(1); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px; padding-left:12px;">
+			<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 구매결정과는 무관한 내용이군요
 		</a>
-		<a id="report_btn_2" href="#" onclick="set_report_type(2); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px;">
-			<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 12px" /> 광고성, 홍보성이 짙은 내용이군요
+		<a id="report_btn_2" href="#" onclick="set_report_type(2); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px; padding-left:12px;">
+			<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 광고성, 홍보성이 짙은 내용이군요
 		</a>
-		<a id="report_btn_3" href="#"  onclick="set_report_type(3); return false;" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; border-bottom:1px solid #dbdbdb; font-size:13px;">
-			<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 12px" /> 비윤리적인 내용은 보고싶지 않아요
+		<a id="report_btn_3" href="#"  onclick="set_report_type(3); return false;" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; border-bottom:1px solid #dbdbdb; font-size:13px; padding-left:12px;">
+			<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 비윤리적인 내용은 보고싶지 않아요
 		</a>
  		<div style="background:#f4f4f4; line-height:20px; padding:12px 12px 8px 12px;">
 			<a id="report_btn_4" href="#" onclick="set_report_type(4); return false;" style="display:block; color:#383838; font-size:13px;">
-				<img src="/images/home/check_off.png" style="width:14px; margin:0 3px -2px 0px" /> 직접 입력하겠어요
+				<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 직접 입력하겠어요
 			</a>
 			<textarea placeholder="선택 후 입력 가능합니다." class="ask_message_input" name="ask[report]" id="ask_report_message"></textarea>
 		</div>
 		<a id="report_submit_btn" href="#" onclick="submit_report(); return false;" style="display:block; background:#fff; line-height:40px; color:#383838; border-top:1px solid #dbdbdb; text-align:center; font-size:13px;">
-			<img src="/images/common/submit_btn.png" style="width:18px; margin:0 2px -2px 0;"/> 신고
+			<i class="fa fa-cab" style="color:#ee6e01;"></i> 신고
 		</a>
 	</div>
 
@@ -99,15 +99,15 @@
 		}
 		report_type_reset();
 		report_type = report_type_id;
-		$("#report_btn_"+report_type_id+" img").attr("src","/images/home/check_on.png");
+		$("#report_btn_"+report_type_id+" i").removeClass("fa-square").addClass("fa-check-square").css("color","#ee6e01","text-shadow","1px 1px 0 rgba(238,110,1,0.3)");
 	}
 
 	function report_type_reset(){
 		report_type = null;
-		$("#report_btn_1 img").attr("src","/images/home/check_off.png");
-		$("#report_btn_2 img").attr("src","/images/home/check_off.png");
-		$("#report_btn_3 img").attr("src","/images/home/check_off.png");
-		$("#report_btn_4 img").attr("src","/images/home/check_off.png");
+		$("#report_btn_1 i").removeClass("fa-check-square").addClass("fa-square").css("color","#fff","text-shadow","1px 1px 0 #dbdbdb");
+		$("#report_btn_2 i").removeClass("fa-check-square").addClass("fa-square").css("color","#fff","text-shadow","1px 1px 0 #dbdbdb");
+		$("#report_btn_3 i").removeClass("fa-check-square").addClass("fa-square").css("color","#fff","text-shadow","1px 1px 0 #dbdbdb");
+		$("#report_btn_4 i").removeClass("fa-check-square").addClass("fa-square").css("color","#fff","text-shadow","1px 1px 0 #dbdbdb");
 	}
 
 	function submit_report(target, target_id){

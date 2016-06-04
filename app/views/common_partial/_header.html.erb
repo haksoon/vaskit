@@ -12,7 +12,7 @@
 			<% if current_user %>
 				<a href="#" onclick="user_on(); return false;" style="position:relative; display:block;">
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img src="/images/common/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
+						<img src="/images/header/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
 					<% end %>
 					<img style="width:48px; padding:0 4px; display:block;" src="/images/header/my.png" />
 				</a>

@@ -8,7 +8,7 @@
 			<p style="margin:0; padding:10px; font-size:18px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
 			<p style="margin:0; padding:15px;">
 			 	<span style="color:#998674;"><%= current_user.string_id %></span>님, 환영합니다!
-			 	<a href="/users/manage" style="float:right;"><img style="width:22px;" src="/images/common/setting_btn.png"></a>
+			 	<a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
 			</p>
 			<div style="padding:0 12px;">
 				<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:16px; line-height:40px; position:relative;">
@@ -39,7 +39,7 @@
 
 				<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:16px; line-height:40px; position:relative; margin-top:16px;">
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-					<img src="/images/common/new.png" style="position:relative; top:3px; width:16px;"/>
+					<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
 					<% end %>
 					알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>개)
 				</a>

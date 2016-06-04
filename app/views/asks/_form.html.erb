@@ -210,22 +210,14 @@
 
 <table cellspacing="0" cellpadding="0" style="position:fixed; bottom:0; width:inherit; overflow:visible; z-index:1; background-color:#fff; border-top:1px solid #dbdbdb;">
 	<tr>
-		<td style="width:50%;">
-			<a href="#" onclick="back_button(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px; border-right:1px solid #dbdbdb;">
-				<img src="/images/common/cancel_btn.png" style="width:14px; margin-bottom:-1px;" />
-				취소
-			</a>
-		</td>
-		<td style="width:50%;">
+		<td style="width:100%;">
 			<% if @ask.id %>
-				<a href="#" onclick="edit_form(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px;">
-					<img src="/images/common/submit_btn.png" style="width:18px;" />
-					수정하기
+				<a href="#" onclick="edit_form(); return false;" style="display:block; width:100%; padding:14px 0; color:#ee6e01; font-size:15px;">
+					<i class="fa fa-plus-circle"></i>&nbsp;질문 수정하기
 				</a>
 			<% else %>
-				<a href="#" onclick="submit_form(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:15px;">
-					<img src="/images/common/submit_btn.png" style="width:18px;" />
-					질문 제출하기
+				<a href="#" onclick="submit_form(); return false;" style="display:block; width:100%; padding:14px 0; color:#ee6e01; font-size:15px;">
+					<i class="fa fa-plus-circle"></i>&nbsp;질문 제출하기
 				</a>
 			<% end %>
 		</td>
