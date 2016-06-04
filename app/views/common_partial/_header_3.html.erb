@@ -15,11 +15,11 @@
 		<td style="width:60px;">
 			<% if current_user %>
 				<a href="#" onclick="user_on(); return false;" style="display:block; width:60px; height:50px;">
-					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img src="/images/header/new.png" style="position:absolute; top:0px; right:14px; width:16px;"/>
-					<% end %>
-					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 11px;"></i>
+					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 23px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
+					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
+						<img src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px;"/>
+					<% end %>
 				</a>
 			<% else %>
 				<a href="/etc/landing"><img style="width:50px; padding:3px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/login.png" /></a>
