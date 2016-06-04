@@ -51,7 +51,7 @@
 
 <script type="text/template" id="ask-template">
   <div style="text-align:left; padding:5px 0 0 0px; position:relative;">
-    {{ if( ask.category){ }}
+    {{ if (ask.category) { }}
     <span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
     {{ }else{ }}
     <span class="category_none" onclick="category_on(); return false;">관심사 미설정</span>
@@ -74,9 +74,12 @@
 
 	<div class="content_box">
 		<div style="text-align:left; padding:15px; position:relative; background-color:#fff;">
-			{{ if( ask.user){ }}
+			{{ if (ask.ask_complete) != null }}
+				<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: left; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
+			{{ } }}
+			{{ if (ask.user) { }}
 			  {{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
-			  {{ if ( !ask.user.gender){ }}
+			  {{ if (!ask.user.gender) { }}
 			    {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
 			  {{ } }}
 			  <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px 4px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">
