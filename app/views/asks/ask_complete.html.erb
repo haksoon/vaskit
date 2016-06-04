@@ -4,23 +4,23 @@
 	<p style="margin:0; font-size:14px; color:#9fa0a2; line-height:18px; text-align:left;">
 		투표 결과는 만족스러우셨나요?<br />
 		만족도 별점과 함께 선택한 제품을 알려주시면<br />
-		서비스 개선에 큰 도움이 됩니다. 
+		서비스 개선에 큰 도움이 됩니다.
 	</p>
 </div>
 
 <div id="star_point_div" style='text-align:center; margin:0 auto; margin-top:40px;'>
-	<a href='#' onclick='set_star_point(1); return false;'><img style='width:30px; margin-right:4px;' src='/images/ask/star_off.png' /></a>
-	<a href='#' onclick='set_star_point(2); return false;'><img style='width:30px; margin-right:4px;' src='/images/ask/star_off.png' /></a>
-	<a href='#' onclick='set_star_point(3); return false;'><img style='width:30px; margin-right:4px;' src='/images/ask/star_off.png' /></a>
-	<a href='#' onclick='set_star_point(4); return false;'><img style='width:30px; margin-right:4px;' src='/images/ask/star_off.png' /></a>
-	<a href='#' onclick='set_star_point(5); return false;'><img style='width:30px; margin-right:4px;' src='/images/ask/star_off.png' /></a>
+	<a href="#" onclick="set_star_point(1); return false;" style="display: inline-block; width: 30px; height: 30px;"><i class="fa fa-star" style="color: #9d9ea1; font-size: 30px;"></i></a>
+	<a href="#" onclick="set_star_point(2); return false;" style="display: inline-block; width: 30px; height: 30px;"><i class="fa fa-star" style="color: #9d9ea1; font-size: 30px;"></i></a>
+	<a href="#" onclick="set_star_point(3); return false;" style="display: inline-block; width: 30px; height: 30px;"><i class="fa fa-star" style="color: #9d9ea1; font-size: 30px;"></i></a>
+	<a href="#" onclick="set_star_point(4); return false;" style="display: inline-block; width: 30px; height: 30px;"><i class="fa fa-star" style="color: #9d9ea1; font-size: 30px;"></i></a>
+	<a href="#" onclick="set_star_point(5); return false;" style="display: inline-block; width: 30px; height: 30px;"><i class="fa fa-star" style="color: #9d9ea1; font-size: 30px;"></i></a>
 </div>
 
 <div style="padding:10px 10px 40px 10px;">
 	<table cellspacing="0" cellpadding="0" style="width:100%;">
 		<tr>
 			<td style="width:50%; position:relative;">
-		  		<a href="#" onclick="select_ask_deal(<%=@ask.left_ask_deal.id%>, true); return false;" onclick=><img src='<%= @ask.left_ask_deal.image.url(:normal) %>' style="width:100%; display:block;" /></a>
+		  		<a href="#" onclick="select_ask_deal(<%=@ask.left_ask_deal.id%>, true); return false;"><img src='<%= @ask.left_ask_deal.image.url(:normal) %>' style="width:100%; display:block;" /></a>
 		  		<div id="left_select_div" style="background:url('/images/ask/ask_complete_select.png'); background-size:100% 100%; overflow: hidden; position:absolute; left:0; top:0; width:100%; height:100%; display:none;"></div>
 			</td>
 			<td style="width:50%; position:relative;">
@@ -59,15 +59,15 @@
 
 	var star_point;
 	var ask_deal_id;
-	
+
 	function set_star_point(point){
 		star_point = point;
-		$("#star_point_div img").attr("src","/images/ask/star_off.png");
+		$("#star_point_div i").css("color","#9d9ea1");
 		for ( var i = 0; i < point; i++ ) {
-			$($("#star_point_div img").get(i)).attr("src","/images/ask/star_on.png");
+			$($("#star_point_div i").get(i)).css("color","#ee6e01");
 		}
 	}
-	
+
 	function select_ask_deal(para_ask_deal_id, is_left){
 		ask_deal_id = para_ask_deal_id;
 		$("#left_select_div").hide();
@@ -78,18 +78,18 @@
 			$("#right_select_div").show();
 		}
 	}
-	
+
 	function submit_complete(){
 		if(star_point == null){
 			notify('만족도 별점을 눌러주세요');
 			return;
 		}
-		
+
 		if(ask_deal_id == null){
 			notify("최종 선택하신 제품을 선택해주세요");
 			return;
 		}
 		window.location = "/asks/<%=@ask.id%>/create_complete?star_point="+star_point+"&ask_deal_id="+ask_deal_id;
 	}
-	
+
 </script>

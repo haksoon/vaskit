@@ -130,14 +130,14 @@
 					<p style="margin:0; font-size:13px; padding:2px 8px;">
 						{{ var aLink = document.createElement("a") }}
 						{{ aLink.href= ask.left_ask_deal.link }}
-						<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#383838;">{{= aLink.host }} <img src="/images/ask/link_icon.png" style="width:12px; margin-bottom:-2px;" /></a>
+						<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#383838;">{{= aLink.host }}&nbsp;<i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i></a>
 					</p>
 				</td>
 				<td style="width:50%;">
 					<p style="margin:0; font-size:13px; padding:2px 8px;">
 						{{ var bLink = document.createElement("a") }}
 						{{ bLink.href= ask.right_ask_deal.link }}
-						<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#383838;">{{= bLink.host }} <img src="/images/ask/link_icon.png" style="width:12px; margin-bottom:-2px;" /></a>
+						<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#383838;">{{= bLink.host }}&nbsp;<i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i></a>
 					</p>
 				</td>
 			</tr>
@@ -604,7 +604,7 @@
 				<span style="color:#998674;">{{=comment.user.string_id}}</span>
         &nbsp;{{= get_past_time(comment.created_at) }}
 				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
-				  <img src="/images/etc/recommend_icon.png" style="width:10px;">
+          <i class="fa fa-heart-o" style="color:#9d9ea1;"></i>
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
 				</a>
 				|
@@ -657,7 +657,7 @@
         {{ } }}
 				|
 				<a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1;">
-				  <img src="/images/etc/recommend_icon.png" style="width:10px;">
+				  <i class="fa fa-heart-o" style="color:#9d9ea1;"></i>
 				  <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
 				</a>
 				{{= get_past_time(comment.created_at) }} &nbsp;<span style="color:#998674;">{{=comment.user.string_id}}</span>
@@ -825,12 +825,17 @@
 	            return false;
 	        },
 	        success: function(data){
+            var comment_like_icon = $("#comment_"+comment_id+" .fa")
 	        	var comment_count_span = $("#comment_"+comment_id+"_like_count");
 	        	if (data.already_like){
 	        		comment_count_span.html( parseInt(comment_count_span.html()) - 1 );
+              comment_count_span.css("color","#9d9ea1");
+              comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1");
 	        		notify("좋아요 취소");
 	        	}else{
 	        		comment_count_span.html( parseInt(comment_count_span.html()) + 1 );
+              comment_count_span.css("color","#ee6e01");
+              comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01");
 	        		notify("좋아요 완료");
 	        	}
 	        },
