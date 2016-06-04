@@ -74,9 +74,6 @@
 
 	<div class="content_box">
 		<div style="text-align:left; padding:15px; position:relative; background-color:#fff;">
-			{{ if (ask.ask_complete != null) { }}
-				<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: left; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
-			{{ } }}
 			{{ if (ask.user) { }}
 			  {{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
 			  {{ if (!ask.user.gender) { }}
@@ -94,6 +91,9 @@
 				<span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
 					<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
 				</span>
+				{{ if (ask.ask_complete != null) { }}
+					<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
+				{{ } }}
 			{{ } }}
 			<p id="ask_{{=ask.id}}_message" style="clear:both; margin:0; padding-top:10px; color:#383838; font-size:13px; line-height:1.4;">
 				{{ if( ask.message){ }}
@@ -127,7 +127,7 @@
     		  <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
 					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
     		</a>
-    		{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
+    		{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.ask_complete == null ){ }}
     		<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
     		{{ } }}
     		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
@@ -145,7 +145,7 @@
 				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
 					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
 				</a>
-				{{ if( ask.user_id != current_user_id && already_vote.length == 0 ){ }}
+				{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.ask_complete == null ){ }}
 				<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 				{{ } }}
 
