@@ -357,35 +357,39 @@
       {{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
       {{ if (ask.user_id == current_user_id && total_count == 0){ }}
         {{ left_ratio = 0 }}
+        {{ left_ratio_full = 0 }}
         {{ right_ratio = 0 }}
+        {{ right_ratio_full = 0 }}
       {{ }else{ }}
         {{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80) }}
+        {{ left_ratio_full = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
         {{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80) }}
+        {{ right_ratio_full = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
       {{ } }}
 
-      {{ left_background = "#fff" }}
-      {{ left_font_weight = "normal" }}
-      {{ right_background = "#fff" }}
-      {{ right_font_weight = "normal" }}
-      {{ if (left_ratio > right_ratio){ }}
-        {{ left_background = "#ffcc5a" }}
-        {{ left_font_weight = "bold" }}
-      {{ }else if(left_ratio < right_ratio){ }}
-        {{ right_background = "#ffcc5a" }}
-        {{ right_font_weight = "bold" }}
-      {{ } }}
+      {{ left_background = "#ffcc5a" }}
+			{{ left_font_weight = "bold" }}
+			{{ right_background = "#ffcc5a" }}
+			{{ right_font_weight = "bold" }}
+			{{ if (left_ratio > right_ratio){ }}
+				{{ right_background = "#fff" }}
+				{{ right_font_weight = "normal" }}
+			{{ }else if(left_ratio < right_ratio){ }}
+				{{ left_background = "#fff" }}
+				{{ left_font_weight = "normal" }}
+			{{ } }}
       <table cellspacing="0" cellpadding="0" style="width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:35px;">
         <tr>
           <td class="vote-result-td">
-            <span class="vote-result-bar-left" style="width:{{= Math.round(left_ratio)}}%; background-color:{{=left_background}};">&nbsp;</span>
-            <span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{= Math.round(left_ratio / 80 * 100) }}%</span>
+            <span class="vote-result-bar-left" style="width:{{=left_ratio}}%; background-color:{{=left_background}};">&nbsp;</span>
+            <span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{=left_ratio_full}}%</span>
           </td>
           <td class="vote-result-td-title">
             A vs B
           </td>
           <td class="vote-result-td">
-            <span class="vote-result-bar-right" style="width:{{= Math.round(right_ratio) }}%; background-color:{{=right_background}};">&nbsp;</span>
-            <span class="vote-result-num-right" style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
+            <span class="vote-result-bar-right" style="width:{{=right_ratio}}%; background-color:{{=right_background}};">&nbsp;</span>
+            <span class="vote-result-num-right" style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{=rigth_ratio_full}}%</span>
           </td>
         </tr>
       </table>
