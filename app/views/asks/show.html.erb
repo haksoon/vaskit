@@ -602,7 +602,7 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
-      {{ if(already_like){ }}
+      {{ if(already_like.length == 1){ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
           <i class="fa fa-heart" style="color:#ee6e01; margin-left:1px;"></i>
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
@@ -636,7 +636,7 @@
 		</div>
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
-      {{ if(already_like){ }}
+      {{ if(already_like.length == 1){ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
           <i class="fa fa-heart" style="color:#ee6e01; margin-right:3px;"></i>
