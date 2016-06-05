@@ -266,14 +266,14 @@
     <table cellspacing="0" cellpadding="0" style="width:100%; background-color:#4b3d3d; color:#fff; font-size:12px; font-weight:bold; height:35px;">
       <tr>
         <td class="vote-result-td">
-          <span class="vote-result-bar-left" style="width:{{= Math.round(left_ratio)}}%; background-color:{{=left_background}};">&nbsp;</span>
+          <span class="vote-result-bar-left main-result" style="width:{{= Math.round(left_ratio)}}%; background-color:{{=left_background}};">&nbsp;</span>
           <span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{= Math.round(left_ratio / 80 * 100) }}%</span>
         </td>
         <td class="vote-result-td-title">
           A vs B
         </td>
         <td class="vote-result-td">
-          <span class="vote-result-bar-right" style="width:{{= Math.round(right_ratio) }}%; background-color:{{=right_background}};">&nbsp;</span>
+          <span class="vote-result-bar-right main-result" style="width:{{= Math.round(right_ratio) }}%; background-color:{{=right_background}};">&nbsp;</span>
           <span class="vote-result-num-right" style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
         </td>
       </tr>
@@ -1002,8 +1002,8 @@
   });
 
   function graph_animation() {
-    $(".vote-result-bar-left").first().css("width","3px").animate({width:left_ratio+"%"}, 30 * left_ratio); // 1.59초 동안 실행됨
-    $(".vote-result-bar-right").first().css("width","3px").animate({width:right_ratio+"%"}, 30 * right_ratio); // 0.66초 동안 실행됨
+    $(".vote-result-bar-left.main-result").css("width","3px").animate({width:left_ratio+"%"}, 30 * left_ratio); // 1.59초 동안 실행됨
+    $(".vote-result-bar-right.main-result").css("width","3px").animate({width:right_ratio+"%"}, 30 * right_ratio); // 0.66초 동안 실행됨
 
     var num_left_width = 0;
     var left_ratio_increase = setInterval( function() {
