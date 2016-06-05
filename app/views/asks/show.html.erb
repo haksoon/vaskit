@@ -602,7 +602,6 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
-      {{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
       {{ if(already_like){ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
           <i class="fa fa-heart" style="color:#ee6e01; margin-left:1px;"></i>
@@ -637,7 +636,6 @@
 		</div>
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
-      {{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
       {{ if(already_like){ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
@@ -702,6 +700,10 @@
 	}
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var my_vote_count = <%= @my_votes.length %>;
+
+  var my_like_comment = <%= raw @my_like_comment.to_json %>;
+  already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id })
+
 	var askShowTemplate = _.template( $('#ask-show-template').html() );
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
@@ -830,8 +832,6 @@
 		}
 
 	}
-
-  var my_like_comment = <%= raw @my_like_comment.to_json %>;
 
 	function comment_like(comment_id){
 		<% if current_user %>
