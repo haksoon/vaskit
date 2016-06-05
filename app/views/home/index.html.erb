@@ -57,7 +57,7 @@
     <span class="category_none" onclick="category_on(); return false;">관심사 미설정</span>
     {{ } }}
 		<div style="position:absolute; bottom:0; right:0;">
-			{{ if (ask.user_id != current_user_id || ask.ask_complete == true){ }}
+			{{ if (ask.be_completed == false){ }}
 				<span style="float:left; border:1px solid #dbdbdb; border-bottom:none; border-right-width:1px; background-color:#fff; text-align:center;">
 					<a class="share_icon" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
 				</span>
@@ -91,7 +91,7 @@
 				<span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
 					<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
 				</span>
-				{{ if (ask.ask_complete == true) { }}
+				{{ if (ask.ask_complete) { }}
 					<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
 				{{ } }}
 			{{ } }}
@@ -127,7 +127,7 @@
     		  <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
 					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
     		</a>
-    		{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.ask_complete == false ){ }}
+    		{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.be_completed == false ){ }}
     		<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
     		{{ } }}
     		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
@@ -145,7 +145,7 @@
 				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
 					<p class="card_image_expand"><i class="fa fa-expand"></i></p>
 				</a>
-				{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.ask_complete == false ){ }}
+				{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.be_completed == false ){ }}
 				<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 				{{ } }}
 
