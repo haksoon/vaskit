@@ -173,15 +173,12 @@ input::-webkit-inner-spin-button {
 }
 
 .home-float-btn {
-	position: absolute;
-	float: right;
+	position: relative;
   width: 65px;
   height: 65px;
   background: rgba(238,110,1,0.8);
   color: #fff;
   font-size: 40px;
-  font-weight: bold;
-  line-height: 75px;
   border-radius: 35px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
   animation: home-btn-ani 40s linear 2s infinite;
@@ -197,6 +194,8 @@ input::-webkit-inner-spin-button {
     100% { transform:rotateX(0deg); opacity:1; }
 }
 .home-float-btn-text {
+	position: absolute;
+	top:0px;
 	float: right;
 	box-sizing: border-box;
 	padding-top: 18px;
