@@ -602,17 +602,10 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
-      {{ if (comment_like_user == current_user_id) { }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
-          <i class="fa fa-heart-o" style="color:#ee6e01; margin-left:1px;"></i>
-          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-        </a>
-      {{ }else{ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
-          <i class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
-          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-        </a>
-      {{ } }}
+      <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+        <i class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
+        <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+      </a>
 			<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9e9fa1;">
 				<span style="color:#998674;">{{=comment.user.string_id}}</span>
         &nbsp;{{= get_past_time(comment.created_at) }}
@@ -821,8 +814,6 @@
 		}
 
 	}
-
-  var comment_like_user = <%= @comment_like_user %>;
 
 	function comment_like(comment_id){
 		<% if current_user %>

@@ -72,7 +72,6 @@ class CommentsController < ApplicationController
       already_like = true
       comment_like.delete
       comment.update(:like_count => comment.like_count - 1)
-      @comment_like_user = comment_like.user_id
     else
       comment_like = CommentLike.create(:user_id => current_user.id, :comment_id => params[:id])
       comment.update(:like_count => comment.like_count + 1)
