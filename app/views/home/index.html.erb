@@ -37,9 +37,9 @@
 <div id="asks" style="padding:10px 12px 0px;"></div>
 <div class="home-float-btn-area">
 	<% if current_user %>
-		<a href="/asks/new" style="display:block;"><div class="home-float-btn">+</div><div class="home-float-btn-text">질문<br>하기</div></a>
+		<a href="/asks/new" style="display:block;"><div class="home-float-btn"><i class="fa fa-plus"></i></div><div class="home-float-btn-text">질문<br>하기</div></a>
 	<% else %>
-		<a href="#" onclick="notify('회원가입 후<br />질문을 올릴 수 있습니다.'); return false;" style="display:block;"><div class="home-float-btn">+</div><div class="home-float-btn-text">질문<br>하기</div></a>
+		<a href="#" onclick="notify('회원가입 후<br />질문을 올릴 수 있습니다.'); return false;" style="display:block;"><div class="home-float-btn"><i class="fa fa-plus"></i></div><div class="home-float-btn-text">질문<br>하기</div></a>
 	<% end %>
 </div>
 
