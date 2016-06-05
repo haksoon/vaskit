@@ -193,14 +193,14 @@
 			<tr>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-left" style="width:{{= Math.round(left_ratio)}}%; background-color:{{=left_background}};">&nbsp;</span>
-					<span style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{= Math.round(left_ratio / 80 * 100) }}%</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{= Math.round(left_ratio / 80 * 100) }}%</span>
 				</td>
 				<td class="vote-result-td-title">
 					A vs B
 				</td>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-right" style="width:{{= Math.round(right_ratio) }}%; background-color:{{=right_background}};">&nbsp;</span>
-					<span style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{= Math.round(right_ratio / 80 * 100) }}%</span>
 				</td>
 			</tr>
 		</table>
@@ -332,6 +332,7 @@
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
     				        $('#asks').append(askTemplate({ask: ask}));
+										graph_animation();
     				        var hash_tags = ask.message.match(/#(\S+)/g);
     				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
     				        $.each(hash_tags, function( index, hash_tag ) {
