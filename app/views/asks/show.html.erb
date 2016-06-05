@@ -708,6 +708,7 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
     $('#asks').append(askShowTemplate({ask: ask}));
+    graph_animation();
     var hash_tags = ask.message.match(/#(\S+)/g);
     if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 
