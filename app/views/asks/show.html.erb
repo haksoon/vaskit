@@ -831,7 +831,7 @@
 
 	}
 
-  var comment_like_user = <%= raw @my_like_comment.to_json %>;
+  var my_like_comment = <%= raw @my_like_comment.to_json %>;
 
 	function comment_like(comment_id){
 		<% if current_user %>
