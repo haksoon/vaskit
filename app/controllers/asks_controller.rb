@@ -24,6 +24,7 @@ class AsksController < ApplicationController
       @my_like_comment = CommentLike.where(:user_id => current_user.id) #AJS추가
     elsif @visitor
       @my_votes = Vote.where(:visitor_id => @visitor.id)
+      @my_like_comment = []
     end
   end
 
