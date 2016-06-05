@@ -24,6 +24,7 @@ class AsksController < ApplicationController
     elsif @visitor
       @my_votes = Vote.where(:visitor_id => @visitor.id)
     end
+    @comment_like_user = CommentLike.where(:user_id => current_user.id, :comment_id => params[:id])
   end
 
   def destroy

@@ -602,7 +602,7 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
-      <a href="#" onclick="like_comment({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+      <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
         <i class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
         <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
       </a>
@@ -629,7 +629,7 @@
 		</div>
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
-      <a href="#" onclick="like_comment({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+      <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
         <span id="comment_{{=comment.id}}_like_count" style="margint-right:3px;">{{=comment.like_count}}</span>
         <i class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
       </a>
@@ -815,7 +815,9 @@
 
 	}
 
-	function like_comment(comment_id){
+  var comment_like_user = <%= @comment_like_user =>;
+
+	function comment_like(comment_id){
 		<% if current_user %>
 		$.ajax({
 	        url: "/comments/"+comment_id+"/like.json",
