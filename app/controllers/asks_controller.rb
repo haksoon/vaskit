@@ -21,10 +21,10 @@ class AsksController < ApplicationController
       @my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
       @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
       @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
+      @my_like_comment = CommentLike.where(:user_id => current_user.id) #AJS추가
     elsif @visitor
       @my_votes = Vote.where(:visitor_id => @visitor.id)
     end
-    @my_like_comment = CommentLike.where(:user_id => current_user.id) #AJS추가
   end
 
   def destroy
