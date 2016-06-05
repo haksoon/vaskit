@@ -609,7 +609,7 @@
         </a>
       {{ }else{ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
-          <i class="fa fa-heart-o" style="color:#ee6e01; margin-left:1px;"></i>
+          <i class="fa fa-heart" style="color:#ee6e01; margin-left:1px;"></i>
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
         </a>
       {{ } }}
@@ -636,10 +636,17 @@
 		</div>
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
-      <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
-        <span id="comment_{{=comment.id}}_like_count" style="margint-right:3px;">{{=comment.like_count}}</span>
-        <i class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
-      </a>
+      {{ if(comment_like_user == 0){ }}
+        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+          <i class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
+        </a>
+      {{ }else{ }}
+        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
+          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+          <i class="fa fa-heart" style="color:#ee6e01; margin-right:3px;"></i>
+        </a>
+      {{ } }}
       <div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
         <span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
