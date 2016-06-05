@@ -602,14 +602,15 @@
 					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
 				</div>
 			</div>
-      {{ if(comment_like_user == 0){ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
-          <i class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
+      {{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
+      {{ if(already_like){ }}
+        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
+          <i class="fa fa-heart" style="color:#ee6e01; margin-left:1px;"></i>
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
         </a>
       {{ }else{ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
-          <i class="fa fa-heart" style="color:#ee6e01; margin-left:1px;"></i>
+        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+          <i class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
         </a>
       {{ } }}
@@ -636,15 +637,16 @@
 		</div>
 	{{ }else{ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right;">
-      {{ if(comment_like_user == 0){ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
-          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-          <i class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
-        </a>
-      {{ }else{ }}
+      {{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
+      {{ if(already_like){ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
           <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
           <i class="fa fa-heart" style="color:#ee6e01; margin-right:3px;"></i>
+        </a>
+      {{ }else{ }}
+        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#9e9fa1; font-size:12px;">
+          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+          <i class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
         </a>
       {{ } }}
       <div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
@@ -829,7 +831,7 @@
 
 	}
 
-  var comment_like_user = <%= @comment_like_user.length %>;
+  var comment_like_user = <%= raw @my_like_comment.to_json %>;
 
 	function comment_like(comment_id){
 		<% if current_user %>
