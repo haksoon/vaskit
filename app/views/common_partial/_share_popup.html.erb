@@ -21,6 +21,7 @@
 		$("#share_url").html("http://vaskit.kr/asks/"+ask_id);
 		$("#share_katalk_btn").attr("onclick","share_katalk('"+user_string_id+"','"+left_deal_title+"','"+right_deal_title+"'); return false;")
 		disableScroll();
+		$("#share_complete").show();
 		$("#share_popup_bg").show();
 		$("#share_popup").show();
 	}
@@ -34,6 +35,7 @@
 
 
 	function share_facebook(){
+		$("#share_complete").css({"opacity":"1"});
 		share_log("facebook");
 		if (typeof(FB) != 'undefined' && FB != null ) {
 			  FB.init({
@@ -48,11 +50,11 @@
 			method: 'share',
 			href: share_url,
 		}, function(response){});
-		$("#share_complete").css({"opacity":"1"});
 	}
 
 
 	function share_katalk(user_string_id, left_deal_title, right_deal_title){
+		$("#share_complete").css({"opacity":"1"});
 		share_log("katalk");
 		try{
 			Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
@@ -74,6 +76,5 @@
 	        	url: share_url
 	      	}
 	    });
-		$("#share_complete").css({"opacity":"1"});
 	}
 </script>
