@@ -44,7 +44,7 @@
           <i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
           <i class="fa fa-clock-o" style="font-size:13px; margin:0 3px 0 5px;"></i>{{= get_past_time(ask.created_at) }}
         </span>
-        {{ if (ask.ask_complete) { }}
+        {{ if (ask.be_completed == true) { }}
 					<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
 				{{ } }}
 			{{ } }}
