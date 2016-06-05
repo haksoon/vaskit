@@ -230,7 +230,7 @@ input::-webkit-inner-spin-button {
   transform: rotateX(0deg);
 	opacity: 0;
 	transition:all .2s;
-  animation: home-btn-text-ani 30s ease-out infinite;
+  animation: home-btn-text-ani 3s ease-out infinite;
 }
 @keyframes home-btn-text-ani {
     0% { opacity:0; }
