@@ -690,7 +690,6 @@
 	var current_user_id = 0;
  	<% if current_user %>
  		current_user_id = <%= current_user.id %>;
-    var my_like_comment = <%= raw @my_like_comment.to_json %>;
  	<% end %>
 	var asks = <%= raw @asks.to_json %>;
 	var detail_vote_count = <%= raw @detail_vote_count.to_json %>;
@@ -702,6 +701,7 @@
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var my_vote_count = <%= @my_votes.length %>;
 
+  var my_like_comment = <%= raw @my_like_comment.to_json %>;
 
 	var askShowTemplate = _.template( $('#ask-show-template').html() );
 	for(var i=0; i < asks.length; i++) {
