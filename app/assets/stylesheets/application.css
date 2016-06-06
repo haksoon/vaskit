@@ -93,7 +93,7 @@ input::-webkit-inner-spin-button {
 .chat_bubble {
 	margin:15px 12px 0px;
 	padding:7px 15px;
-	color:##4b3d3d;
+	color:#4b3d3d;
 	font-size:13px;
 	text-align:left;
 	line-height:1.6;
