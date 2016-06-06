@@ -456,18 +456,15 @@ input::-webkit-inner-spin-button {
 }
 
 .birthday_select{
-	height:40px;
-	margin: 0;
+	height: 36px;
+	margin: 0 0 5px;
 	padding: 4px;
 	border: 1px solid #dbdbdb;
 	border-radius: 5px;
-	overflow: hidden;
 	background-color: #fff;
 	-webkit-appearance: none;
 	   -moz-appearance: none;
 	        appearance: none;
-	background: #fff url("/images/common/select_drop.png") no-repeat 99% 50%;
-	background-size: 27px 24px;
 	font-size:13px;
 	color:#9d9ea1;
 }
