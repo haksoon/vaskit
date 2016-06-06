@@ -62,6 +62,11 @@ input::-webkit-inner-spin-button {
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+input:hover, input:focus, input:active, select:hover, select:focus, select:active {
+	outline: none;
+	box-shadow: 0px 0px 10px #ffcc5a;
+}
+
 .hover_pointer { cursor: pointer; }
 
 #wrap{
@@ -440,6 +445,25 @@ input::-webkit-inner-spin-button {
 
 .category_select select:focus {
   outline: none;
+}
+
+
+#gender_male, #gender_female {
+	text-align:center;
+	display:inline-block;
+	font-size:14px;
+	border-radius:5px;
+	width:99%;
+	line-height:36px;
+	height:36px;
+	background-color:#dbdbdb;
+	color:#fff;
+}
+
+#gender_male:hover, #gender_male:hover, #gender_male:hover,
+#gender_female:hover, #gender_female:hover, #gender_female:hover {
+	outline: none;
+	box-shadow: 0px 0px 10px #ffcc5a;
 }
 
 .registrations_input{
