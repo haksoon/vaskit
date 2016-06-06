@@ -1,13 +1,13 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => @ask.id ? "수정하기" : "질문하기" } %>
-<div style="background:#f4f4f4; padding:12px 10px 0 10px; text-align:left;">
-	<%= form_for(@ask) do |f| %>
-		<p style="margin:0 0 10px 0; font-size:14px; color:#9fa0a2; line-height:18px; text-align:left;">
-			고민하고 있는 상황에 대해 설명해주시고,<br />
-			제품과 관련된 내용을 상세하게 입력해주세요.
-		</p>
-		<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "…관심사 선택…" }, :class => "category_select" %>
 
-		<%= f.text_area :message, :placeholder => "…상황태그 입력…", :class => "ask_message_input" %>
+<p class="chat_bubble">
+	고민하고 있는 상황에 대해 설명해주시고,<br />
+	제품과 관련된 내용을 상세하게 입력해주세요.
+</p>
+<div style="background:#f4f4f4; padding:15px 12px 30px; text-align:left;">
+	<%= form_for(@ask) do |f| %>
+		<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "관심사를 선택해주세요." }, :class => "category_select" %>
+		<%= f.text_area :message, :placeholder => "고민하고 계신 상황을 상세하게 입력해주세요. 다른 분들이 응답하는데 도움이 된답니다. #해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
 
 		<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-top:6px;">
 			<tr>

@@ -423,42 +423,6 @@ img.cover {
 	100% { transform: rotateZ(-2deg); }
 }
 
-.category_select{
-  padding: 0;
-  margin: 0;
-	padding: 0px 10px;
-  border: 1px solid #dbdbdb;
-  width: 136px;
-  border-radius: 0px;
-  overflow: hidden;
-  background-color: #fff;
-  -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
-	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 100% 50%;
-	background-size: 10px 6px;
-	background-origin: content-box;
-  font-size:13px;
-  color:#393939;
-}
-
-#gender_male, #gender_female {
-	text-align:center;
-	display:inline-block;
-	font-size:14px;
-	border-radius:5px;
-	width:99%;
-	line-height:36px;
-	height:36px;
-	background-color:#dbdbdb;
-	color:#fff;
-}
-
-#gender_male:focus, #gender_female:focus {
-	outline: none;
-	box-shadow: 0px 0px 10px #ffcc5a;
-}
-
 .registrations_input{
 	width:100%;
 	border:none;
@@ -479,7 +443,6 @@ img.cover {
 	padding: 0px 10px;
 	border: 1px solid #dbdbdb;
 	border-radius: 5px;
-	background-color: #fff;
 	-webkit-appearance: none;
 	   -moz-appearance: none;
 	        appearance: none;
@@ -490,6 +453,23 @@ img.cover {
 	color:#9d9ea1;
 }
 
+#gender_male, #gender_female {
+	text-align:center;
+	display:inline-block;
+	font-size:14px;
+	border-radius:5px;
+	width:99%;
+	line-height:36px;
+	height:36px;
+	background-color:#dbdbdb;
+	color:#fff;
+}
+
+#gender_male:focus, #gender_female:focus {
+	outline: none;
+	box-shadow: 0px 0px 10px #ffcc5a;
+}
+
 .hash_tag{
 	color:#ee6e01;
 	transition:background-color .2s;
@@ -498,18 +478,36 @@ img.cover {
 	background-color:#ffe4a9;
 }
 
+.category_select{
+	width: 100%;
+	height: 36px;
+  margin: 0;
+	padding: 0px 10px;
+  border: 1px solid #dbdbdb;
+	border-radius: 5px;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 100% 50%;
+	background-size: 10px 6px;
+	background-origin: content-box;
+	color: #393939;
+  font-size: 13px;
+	margin-bottom: 10px;
+}
+
 .ask_message_input{
-	text-align:left;
-	width:100%;
-	min-height:120px;
+	width: 100%;
+	min-height: 120px;
 	-webkit-box-sizing: border-box;
 	        box-sizing: border-box;
-	padding:8px;
-	font-size:13px;
-	line-height:17px;
-	color:#393939;
-	border:1px solid #dbdbdb;
-	margin-top:10px;
+	padding: 10px;
+	border: 1px solid #dbdbdb;
+	border-radius: 5px;
+	color: #393939;
+	font-size: 13px;
+	line-height: 17px;
+	margin-bottom: 10px;
 }
 
 .ask_search_deal{
