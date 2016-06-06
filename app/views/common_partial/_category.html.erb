@@ -7,7 +7,6 @@
 		</div>
 		<div style="position:absolute; top:-10px; left:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
 		<p style="margin:0; padding:10px; font-size:18px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">관심사 설정</p>
-		<p style="margin:0; padding:15px 20px 0px; font-size:14px; color:#9d9ea1;"><i class="fa fa-info-circle" style="font-size:16px;"></i>&nbsp;본인의 관심사를 선택할 수 있습니다.</p>
 		<div style="padding:10px 8px;">
 			<table cellspacing="0" cellpadding="4">
 				<tr>
@@ -54,20 +53,20 @@
 				</tr>
 			</table>
 		</div>
+		<p style="margin:0; padding:0px 15px 10px; font-size:12px; color:#9d9ea1;"><i class="fa fa-info-circle" style="font-size:13px;"></i>&nbsp;본인의 관심사만 선택하여 둘러볼 수 있습니다.</p>
 		<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff; border-top:1px solid #dbdbdb; text-align:center;">
 			<tr>
 				<td style="width:50%;">
 					<a href="#" onclick="select_all_toggle(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:14px; border-right:1px solid #dbdbdb;">
 						<img src="/images/category/all.png"  style="width:18px; margin-bottom:-1px; "/>
 						<span id="category_all_span">
-							<%= @user_categories.length == 12 ? '선택해제' : '전체선택' %>
+							<%= @user_categories.length == 12 ? '전체해제' : '전체선택' %>
 						</span>
 					</a>
 				</td>
 				<td style="width:50%;">
-					<a href="#" onclick="submit_category(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:14px;">
-						<img src="/images/common/submit_btn.png"  style="width:18px; margin-bottom:-1px; "/>
-						&nbsp;적용하기
+					<a href="#" onclick="submit_category(); return false;" style="display:block; width:100%; padding:14px 0; color:#ee6e01; font-size:14px;">
+						<i class="fa fa-bookmark"></i>&nbsp;적용하기
 					</a>
 				</td>
 			</tr>
@@ -110,7 +109,7 @@
 				change_user_categories.push(category_id)
 			}
 			if (change_user_categories.length == 12){
-				$("#category_all_span").html("선택해제");
+				$("#category_all_span").html("전체해제");
 			}
 		<% else %>
 		 	notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
@@ -139,7 +138,7 @@
 					$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
 				}
 			}else{
-				$("#category_all_span").html("선택해제");
+				$("#category_all_span").html("전체해제");
 				change_user_categories = [1,2,3,4,5,6,7,8,9,10,11,12];
 				for(var i=0; i < 12; i++) {
 					index = i + 1;

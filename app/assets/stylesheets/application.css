@@ -72,11 +72,12 @@ input:focus, select:focus, textarea:focus {
 #wrap{
 	min-height:100%;
 	margin:0 auto;
-	padding:50px 0 0 0;
+	padding:50px 0 10px 0;
 	text-align:center;
 	background-color: #f4f4f4;
 	position:relative;
 	border-bottom:3px solid #dbdbdb;
+	box-sizing:border-box;
 }
 
 .main_header {

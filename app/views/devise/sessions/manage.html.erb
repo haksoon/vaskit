@@ -23,7 +23,7 @@
 			</td>
 		</tr>
 	</table>
-	
+
 	<a href="/users/edit" style="color:#ee6e01; font-size:12px; text-align:left; display:block; padding:14px 0 30px 0;">비밀번호 변경</a>
 	<p style="font-size:16px; font-weight:bold; color:#9d9ea0; margin:0; text-align:left;">알림 설정</p>
 	<p style="font-size:12px; color:#383838; margin:0; padding:10px 0 0 0; text-align:left;">이메일 알림</p>
@@ -60,7 +60,7 @@
 
 <div style="padding:14px 14px 10px 14px;">
 	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; display:block; padding-top:30px;">로그아웃</a>
-	<a href="#" style="color:#ee6e01; font-size:12px; text-align:left; display:block; padding:6px 0 30px 0;">회원 탈퇴</a>
+	<a href="#" onclick="alert('준비중입니다. 회원탈퇴가 꼭 필요하신 경우 VASKIT 고객센터 notice@vaskit.kr로 연락 부탁드립니다.')" style="color:#ee6e01; font-size:12px; text-align:left; display:block; padding:6px 0 30px 0;">회원 탈퇴</a>
 </div>
 
 <script>
@@ -88,7 +88,7 @@
 		        	}else{
 		        		notify("이미 있는 닉네임입니다");
 		        	}
-		        	
+
 		        },
 		        beforeSend: function(){
 		        	$(".loading").show();
@@ -99,7 +99,7 @@
 			});
 		}
 	}
-	
+
 	function toggle_receive_notice(){
 		$.ajax({
 	        url: '/users/toggle_receive_notice.json',
@@ -116,7 +116,7 @@
 	        		$("#receive_notice_btn img").attr("src","/images/etc/off_btn.png");
 	        		notify("이메일 받기 취소");
 	        	}
-	        	
+
 	        },
 	        beforeSend: function(){
 	        	$(".loading").show();
@@ -126,5 +126,5 @@
             }
 		});
 	}
-	
+
 </script>

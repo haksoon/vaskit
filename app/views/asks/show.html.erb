@@ -713,7 +713,6 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
     $('#asks').append(askShowTemplate({ask: ask}));
-    detail_count_toggle();
     var hash_tags = ask.message.match(/#(\S+)/g);
     if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
     $.each(hash_tags, function( index, hash_tag ) {
@@ -775,7 +774,6 @@
 	        		notify("투표 완료");
               hover_action();
               graph_animation(data.ask.id);
-              detail_count_toggle();
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
