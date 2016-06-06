@@ -414,6 +414,15 @@ input:focus, select:focus, textarea:focus {
   color: #ee6e01;
 }
 
+img.cover {
+	animation: cover_ani 1.5s ease-in-out infinite alternate;
+	transform-origin: bottom center;
+}
+@keyframes cover_ani {
+	0% { transform: rotateZ(2deg); }
+	100% { transform: rotateZ(-2deg); }
+}
+
 .category_select{
   padding: 0;
   margin: 0;
