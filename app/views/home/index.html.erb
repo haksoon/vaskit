@@ -66,11 +66,11 @@
 				<span style="float:left; border:1px solid #dbdbdb; border-bottom:none; border-right-width:1px; background-color:#fff; text-align:center;">
 					<a class="share_icon" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
 				</span>
-				<span style="float:left; border-top:1px solid #dbdbdb; border-right:3px solid #dbdbdb; background-color:#fff; text-align:center;">
+				<span style="float:left; border-top:1px solid #dbdbdb; border-right:3px solid #dbdbdb; background-color:#fff; text-align:center; border-radius:0 3px 0 0;">
 		        <a class="more_icon" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
 		    </span>
 			{{ }else{ }}
-				<span style="float:left; border:1px solid #dbdbdb; border-bottom:none; border-right-width:3px; background-color:#fff; text-align:center;">
+				<span style="float:left; border:1px solid #dbdbdb; border-bottom:none; border-right-width:3px; background-color:#fff; text-align:center; border-radius:0 3px 0 0;">
 					<a class="share_icon" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
 				</span>
 			{{ } }}

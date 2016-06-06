@@ -1,19 +1,19 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "회원가입"} %>
 
-<p style="margin:0; text-align:left; color:#383838; font-size:12px; padding:14px 10px 4px 10px; line-height:15px;">
-나의 고민에 대한 질문을 올려보고 싶으신가요?<br />
-투표 결과를 분석하거나, 남겨진 의견을 읽어보고 싶은가요?<br />
-당신만의 히스토리를 남겨 언제든 다시 뒤져볼 수도 있습니다
+<p class="chat_bubble">
+  지금 회원가입하시면 나의 고민에 대한 질문을 올리거나,<br>
+  남의 고민에 대한 의견을 남길 수 있습니다. 히스토리도 남길 수 있어요.<br>
+  어서 VASKIT하러 가자구요! 현기증 난단 말이에요~
 </p>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:id => "sign_up_form"}) do |f| %>
   	<%= devise_error_messages! %>
-	<div style="padding:0 10px; text-align:left;">
-		
+	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
+
 		<% if resource.facebook_id.blank? %>
 			<%= f.email_field :email, :placeholder => "이메일주소(example@naver.com)", :class => "registrations_input" %>
 			<%= f.password_field :password, :placeholder => "비밀번호", :class => "registrations_input" %>
-			
+
 			<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-top:10px;">
 				<tr>
 					<td style="width:30px; text-align:left; color:#383838; font-size:14px;">
@@ -31,18 +31,18 @@
 						<a id="gender_male" href="#" onclick="select_gender(1); return false;" style="margin:14px 0;text-align:center; display:inline-block; font-size:14px; border-radius:6px; -webkit-border-radius:6px; width:60px; line-height:32px; height:32px; background-color:#E4E1E0; color:#FFF;">
 							남성
 						</a>
-						
+
 						<a id ="gender_female" href="#" onclick="select_gender(0); return false;" style="text-align:center; display:inline-block; font-size:14px; border-radius:6px; -webkit-border-radius:6px; width:60px; line-height:32px; height:32px; background-color:#E4E1E0; color:#FFF;">
 							여성
 						</a>
 					</td>
 				</tr>
 			</table>
-			<a href="#" onclick="sign_up_submit(); return false;" style="display:block; background-color:#4b3d3d; color:#fff; font-size:14px; margin:10px 0; height:36px; line-height:36px; text-align:center;">
+			<a href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center;">
 				<img src="/images/common/submit_btn.png" style="width:18px; margin-bottom:-1px;" />
 				&nbsp;회원가입
 			</a>
-			
+
 	 		<p style="margin:10px 0 0 0; font-size:12px; text-align:center; color:#383838;">
 				<%= f.check_box :agree_access_term, {:checked=>true} %> <span style="color:#ee6e01;">VASKIT의 회원약관</span>에 동의합니다.
 			</p>
@@ -53,7 +53,7 @@
 				<%= f.hidden_field :email %>
 			<% end %>
 			<%= f.hidden_field :password, :placeholder => "비밀번호" %>
-		
+
 			<% if resource.birthday.blank? %>
 				<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-top:10px;">
 					<tr>
@@ -68,7 +68,7 @@
 			<% else %>
 				<%= f.hidden_field :birthday %>
 			<% end %>
-			
+
 			<% if resource.gender.blank? %>
 				<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-top:10px;">
 					<tr>
@@ -79,7 +79,7 @@
 							<a id="gender_male" href="#" onclick="select_gender(1); return false;" style="margin:14px 0;text-align:center; display:inline-block; font-size:14px; border-radius:6px; -webkit-border-radius:6px; width:60px; line-height:32px; height:32px; background-color:#E4E1E0; color:#FFF;">
 								남성
 							</a>
-							
+
 							<a id ="gender_female" href="#" onclick="select_gender(0); return false;" style="text-align:center; display:inline-block; font-size:14px; border-radius:6px; -webkit-border-radius:6px; width:60px; line-height:32px; height:32px; background-color:#E4E1E0; color:#FFF;">
 								여성
 							</a>
@@ -91,11 +91,11 @@
 				<img src="/images/common/submit_btn.png" style="width:18px; margin-bottom:-1px;" />
 				&nbsp;회원가입
 			</a>
-			
+
 	 		<p style="margin:10px 0 0 0; font-size:12px; text-align:center; color:#383838;">
 				<%= f.check_box :agree_access_term, {:checked=>true} %> <span style="color:#ee6e01;">VASKIT의 회원약관</span>에 동의합니다.
 			</p>
-	 		
+
  		<% end %>
  		<%= f.hidden_field :facebook_id %>
  		<%= f.hidden_field :name %>
@@ -111,21 +111,21 @@
 	}
 	<% if session[:view] == 'standard' %>
 	#user_birthday_1i{
-	  width:32%;	
-	} 
+	  width:32%;
+	}
 	#user_birthday_2i{
 	  width:32%;
-	} 
+	}
 	#user_birthday_3i{
 	  width:32%;
 	}
 	<% else %>
 	#user_birthday_1i{
 	  width:32%;
-	} 
+	}
 	#user_birthday_2i{
 	  width:29%;
-	} 
+	}
 	#user_birthday_3i{
 	  width:29%;
 	}
@@ -135,19 +135,19 @@
 <script>
 
 	<% if flash[:alert] != nil %>
-  		alert("이메일/아이디 또는 비밀번호가 다릅니다. \n다시한번 확인해 주세요.") 
+  		alert("이메일/아이디 또는 비밀번호가 다릅니다. \n다시한번 확인해 주세요.")
 	<% end %>
 
 	//select박스에 년 붙여줌
 	$.each($("#user_birthday_1i option"), function( index, value ) {
 		value.text = value.text+"년";
 	});
-	
+
 	//select박스에 일 붙여줌
 	$.each($("#user_birthday_3i option"), function( index, value ) {
 		value.text = value.text+"일";
 	});
-	
+
 	function select_gender(gender_no){
 		if(gender_no == 1){
 			$("#gender_female").css("background-color", "#E4E1E0");
@@ -159,24 +159,24 @@
 			$("#user_gender").val("f");
 		}
 	}
-	
+
 	function sign_up_submit(){ //submit 전에 value 체크
 		if ($("#user_email").val() == ""){
 			notify('이메일을 입력해 주세요.');
 			return;
 		}
-		
+
 		<% unless resource.facebook_id %>
 			if ($("#user_password").val() == ""){
 				notify('비밀번호를 입력해 주세요.');
 				return;
 			}
 		<% end %>
-		
+
 		if ($("#user_birthday_1i").val() == "" || $("#user_birthday_2i").val() == "" || $("#user_birthday_3i").val() == ""){
 			notify('생일을 입력해주세요');
 			return;
-		} 
+		}
 		if ($("#user_gender").val() == ""){
 			notify('성별을 입력해주세요');
 			return;
@@ -185,9 +185,8 @@
 			notify('회원약관에 동의해주세요');
 			return;
 		}
-		
+
 		$("#sign_up_form").submit();
 	}
-	
-</script>
 
+</script>
