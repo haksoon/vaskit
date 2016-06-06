@@ -7,7 +7,7 @@ class EtcController < ApplicationController
   def access_term
   end
 
-  def privacy_policy
+  def private_policy
   end
 
   def inquiry
