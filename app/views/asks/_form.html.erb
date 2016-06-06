@@ -7,7 +7,7 @@
 <div style="background:#f4f4f4; padding:15px 12px 30px; text-align:left;">
 	<%= form_for(@ask) do |f| %>
 		<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "관심사를 선택해주세요." }, :class => "category_select" %>
-		<%= f.text_area :message, :placeholder => "고민하고 계신 상황을 상세하게 입력해주세요.&#13;&#10;다른 분들이 응답하는데 도움이 된답니다.&#13;&#10;#&#13;&#10;해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
+		<%= f.text_area :message, :placeholder => "고민하고 계신 상황을 상세하게 입력해주세요. #해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
 
 		<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-bottom:10px;">
 			<tr>
