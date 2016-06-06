@@ -465,6 +465,8 @@ input::-webkit-inner-spin-button {
 	-webkit-appearance: none;
 	   -moz-appearance: none;
 	        appearance: none;
+	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 99% 50%;
+	background-size: 30px 18px;
 	font-size:13px;
 	color:#9d9ea1;
 }
