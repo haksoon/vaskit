@@ -531,12 +531,25 @@ img.cover {
 	width: 100%;
 	height: 36px;
 	border: 1px solid #dbdbdb;
+	border-radius: 5px;
 	-webkit-box-sizing: border-box;
 	        box-sizing: border-box;
 	padding: 8px;
 	font-size: 13px;
 	line-height: 17px;
 	color:#393939;
+}
+
+.ask_none_text_field{
+	height: 36px;
+	box-sizing: border-box;;
+	padding: 0;
+	margin: 0 2px 0 2px;
+	border:1px solid #dbdbdb;
+	border-radius: 5px;
+	font-size:13px;
+	line-height: 36px;
+	color:#383838;
 }
 
 .naver_image_wrap{
