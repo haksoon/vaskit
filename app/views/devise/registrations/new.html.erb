@@ -28,18 +28,18 @@
   						<a id="gender_male" href="#" onclick="select_gender(1); return false;" style="text-align:center; display:inline-block; font-size:14px; border-radius:5px; width:99%; line-height:36px; height:36px; background-color:#E4E1E0; color:#FFF;">
                 <i class="fa fa-male"></i>&nbsp;남성
   						</a>
-            <td style="width:50%; text-align:right;">
             </td>
+            <td style="width:50%; text-align:right;">
   						<a id ="gender_female" href="#" onclick="select_gender(0); return false;" style="text-align:center; display:inline-block; font-size:14px; border-radius:5px; width:99%; line-height:36px; height:36px; background-color:#E4E1E0; color:#FFF;">
   							<i class="fa fa-female"></i>&nbsp;여성
   						</a>
   					</td>
   				</tr>
   			</table>
-        <p style="margin:10px 0 0 0; font-size:12px; text-align:center; color:#9d9ea1;">
-          <div style="display:inline-block; vertical-align:middle;"><%= f.check_box :agree_access_term, {:checked=>false} %></div>
-          <a href="#" onclick="return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
-          <a href="#" onclick="return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
+        <p style="margin:10px 0 0 0; font-size:12px; text-align:left; color:#9d9ea1;">
+          <span style="display:inline-block; vertical-align:middle;"><%= f.check_box :agree_access_term, {:checked=>false} %></span>
+          <a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
+      		<a href="#" onclick="private_policy_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
         </p>
   			<a href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
   				<i class="fa fa-users"></i>&nbsp;회원가입
