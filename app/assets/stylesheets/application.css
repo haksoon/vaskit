@@ -411,6 +411,7 @@ input::-webkit-inner-spin-button {
 .category_select{
   padding: 0;
   margin: 0;
+	padding: 0px 10px;
   border: 1px solid #dbdbdb;
   width: 136px;
   border-radius: 0px;
@@ -419,9 +420,9 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
-  background: #fff url("/images/common/select_drop.png") no-repeat 99% 50%;
-  background-size: 27px 24px;
-  padding: 4px 14px;
+	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 100% 50%;
+	background-size: 10px 6px;
+	background-origin: content-box;
   font-size:13px;
   color:#393939;
 }
@@ -458,15 +459,16 @@ input::-webkit-inner-spin-button {
 .birthday_select{
 	height: 36px;
 	margin: 0 0 5px;
-	padding: 4px;
+	padding: 0px 10px;
 	border: 1px solid #dbdbdb;
 	border-radius: 5px;
 	background-color: #fff;
 	-webkit-appearance: none;
 	   -moz-appearance: none;
 	        appearance: none;
-	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 99% 50%;
-	background-size: 30px 18px;
+	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 100% 50%;
+	background-size: 10px 6px;
+	background-origin: content-box;
 	font-size:13px;
 	color:#9d9ea1;
 }
