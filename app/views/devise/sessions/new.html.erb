@@ -8,9 +8,9 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:id => "sign_in_form"}) do |f| %>
   	<%= devise_error_messages! %>
 	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
-		<%= f.email_field :email, :placeholder => "이메일주소(example@naver.com)", :class => "registrations_input" %>
-		<%= f.password_field :password, :placeholder => "비밀번호", :class => "registrations_input" %>
-		<a href="#" onclick="sign_in_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center;">
+		<%= f.email_field :email, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+		<%= f.password_field :password, :placeholder => "설정하신 비밀번호를 입력해주세요.", :class => "registrations_input" %>
+		<a href="#" onclick="sign_in_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
 			<i class="fa fa-sign-in"></i>&nbsp;로그인
 		</a>
 	</div>

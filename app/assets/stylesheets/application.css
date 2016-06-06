@@ -115,6 +115,7 @@ input::-webkit-inner-spin-button {
 	color:#393939;
 	border:1px solid #dbdbdb;
 	margin-bottom:10px;
+	border-radius:5px;
 }
 
 .search_input{
