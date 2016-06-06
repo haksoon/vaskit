@@ -1,6 +1,6 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "회원가입"} %>
 <%= render :partial => "common_partial/access_term" %>
-<%= render :partial => "common_partial/private_policy" %>
+<%= render :partial => "common_partial/privacy_policy" %>
 
 <div id="login_screen">
   <p class="chat_bubble">
@@ -15,6 +15,9 @@
   		<% if resource.facebook_id.blank? %>
   			<%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
   			<%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
+        <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
+          <i class="fa fa-plus"></i>&nbsp;추가 입력정보
+        </p>
   			<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-bottom:10px;">
   				<tr>
   					<td style="width:100%;">
@@ -39,7 +42,7 @@
         <p style="margin:10px 0 0 0; font-size:12px; text-align:left; color:#9d9ea1;">
           <span style="display:inline-block; vertical-align:middle;"><%= f.check_box :agree_access_term, {:checked=>false} %></span>
           <a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
-      		<a href="#" onclick="private_policy_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
+      		<a href="#" onclick="privacy_policy_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
         </p>
   			<a href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
   				<i class="fa fa-users"></i>&nbsp;회원가입
@@ -100,31 +103,14 @@
 </div>
 
 <style>
-	#user_birthday_1i, #user_birthday_2i, #user_birthday_3i{
-	  font-size:14px;
-	  height:38px;
-	  margin:0;
-	}
 	<% if session[:view] == 'standard' %>
-	#user_birthday_1i{
-	  width:32%;
-	}
-	#user_birthday_2i{
-	  width:32%;
-	}
-	#user_birthday_3i{
-	  width:32%;
-	}
+  	#user_birthday_1i{ width:32%; }
+  	#user_birthday_2i{ width:32%; }
+  	#user_birthday_3i{ width:32%; }
 	<% else %>
-	#user_birthday_1i{
-	  width:32%;
-	}
-	#user_birthday_2i{
-	  width:29%;
-	}
-	#user_birthday_3i{
-	  width:29%;
-	}
+  	#user_birthday_1i{ width:32%; }
+  	#user_birthday_2i{ width:29%; }
+  	#user_birthday_3i{ width:29%; }
 	<% end %>
 </style>
 
