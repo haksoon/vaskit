@@ -19,18 +19,16 @@ html{
   min-height: 100%;
 }
 
-a:link {text-decoration:none;}
-a:visited {text-decoration:none;}
-a:hover {text-decoration:none;}
-a:active {text-decoration:none;}
+a:link, a:visited, a:hover, a:active { text-decoration:none; }
 
-img{border:none;}
+img{ border:none; }
 
 body {
-	overflow-y:scroll;
+	overflow-y: scroll;
 	height: 100%;
   min-height: 100%;
-	background-color:#f3f4f5; margin:0 auto;
+	background-color :#f4f4f4;
+	margin:0 auto;
   font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
   // font-family: verdana, arial, helvetica, sans-serif;
 }
@@ -40,7 +38,10 @@ p, ol, ul, td {
   // font-family: verdana, arial, helvetica, sans-serif;
 }
 
-* {-webkit-text-size-adjust:none;}
+* {
+	-webkit-text-size-adjust:none;
+	-webkit-tap-highlight-color:transparent;
+}
 
 ::-webkit-input-placeholder { /* WebKit browsers */
   color:    #CCC;
@@ -526,14 +527,15 @@ img.cover {
 }
 
 .ask_text_field{
-	display:block;
-	width:100%;
-	border:none;
+	display: block;
+	width: 100%;
+	height: 36px;
+	border: 1px solid #dbdbdb;
 	-webkit-box-sizing: border-box;
 	        box-sizing: border-box;
-	padding:4px;
-	font-size:12px;
-	line-height:17px;
+	padding: 8px;
+	font-size: 13px;
+	line-height: 17px;
 	color:#393939;
 }
 
@@ -548,6 +550,15 @@ img.cover {
   padding-top: 100%;  /* ratio of 1:1*/
 }
 
+.naver_image_content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: red;
+}
+
 .notice_title{
 	width:100%;
 	height:34px;
@@ -560,15 +571,6 @@ img.cover {
   line-height:15px;
 	-webkit-appearance: none;
 	border-radius:0;
-}
-
-.naver_image_content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: red;
 }
 
 .center_input::-webkit-input-placeholder {
