@@ -103,10 +103,12 @@
   				<i class="fa fa-users"></i>&nbsp;회원가입
   			</a>
    		<% end %>
-      <%= f.check_box :agree_access_term, {:checked=>false}, {:style=>"display:none;"} %>
-   		<%= f.hidden_field :facebook_id %>
-   		<%= f.hidden_field :name %>
-   		<%= f.hidden_field :gender %>
+      <div style="display:none;">
+        <%= f.check_box :agree_access_term, {:checked=>false} %>
+     		<%= f.hidden_field :facebook_id %>
+     		<%= f.hidden_field :name %>
+     		<%= f.hidden_field :gender %>
+      </div>
   	</div>
     <div class="content_box" style="margin:5px 12px 30px; padding:5px 10px; color:#9d9ea1; font-size:12px; text-align:left; line-height:1.5; background-color:#ededed;">
       <i class="fa fa-info-circle" style="padding-bottom: 5px; font-weight: bold;">&nbsp;걱정마세요!</i>
@@ -157,8 +159,13 @@
 	}
 
   function access_term_agree(){
-    $("#user_agree_access_term").prop("checked",true);
-    $("#agree_access_term_btn i").removeClass("fa-square").addClass("fa-check-square").css("color","#ee6e01","text-shadow","1px 1px 0 rgba(238,110,1,0.3)");
+    if( $("#user_agree_access_term").prop("checked") == false ) {
+      $("#user_agree_access_term").prop("checked",true);
+      $("#agree_access_term_btn i").removeClass("fa-square").addClass("fa-check-square").css("color","#ee6e01","text-shadow","1px 1px 0 rgba(238,110,1,0.3)");
+    } else {
+      $("#user_agree_access_term").prop("checked",false);
+      $("#agree_access_term_btn i").removeClass("fa-check-square").addClass("fa-square").css("color","#ffe4a9","text-shadow","1px 1px 0 #ffcc5a");
+    }
   }
 
 	function sign_up_submit(){ //submit 전에 value 체크
