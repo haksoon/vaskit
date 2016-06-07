@@ -1,16 +1,14 @@
-<div id="search" style="width:inherit;">
-	<div class="search_bar_area">
-		<table cellspacing="0" cellpadding="0" style="width:100%;">
-			<tr>
-				<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
-					<p class="search_bar">
-						궁금한 제품을 검색해보세요!
-						<span class="search_btn"><i class="fa fa-search" style="display:inline-block; line-height:34px;"></i></span>
-					</p>
-				</td>
-			</tr>
-		</table>
-	</div>
+<div class="search_bar_area">
+	<table cellspacing="0" cellpadding="0" style="width:100%;">
+		<tr>
+			<td onclick="search_input_on(); return false;" style="width:100%; position:relative;">
+				<p class="search_bar">
+					궁금한 제품을 검색해보세요!
+					<span class="search_btn"><i class="fa fa-search" style="display:inline-block; line-height:34px;"></i></span>
+				</p>
+			</td>
+		</tr>
+	</table>
 </div>
 <div id="search_overlay" style="width:inherit; position:fixed; top:50px; z-index:13; display:none; background:#f4f4f4; border-bottom:5px solid #4b3d3d;">
 	<div class="search_bar_area">
@@ -168,15 +166,13 @@
 	          return;
 	      if (st > lastScrollTop && st > navbarHeight){
 					if ( $("#search_overlay").css("display") == "none" ){
-						// $(".search_bar_area").animate({"top":"-50px"},300);
-						$("#search").animate({"top":"-50px"},300);
+						$(".search_bar_area").animate({"top":"-50px"},300);
 						$(".home-float-btn-area").animate({"bottom":"-85px"},300);
 						// $(".search_bar_area").slideUp(500);
 					}
 	      } else {
 	          if(st + $(window).height() < $(document).height() ) {
-							// $(".search_bar_area").animate({"top":"50px"},300);
-							$("#search").animate({"top":"50px"},300);
+							$(".search_bar_area").animate({"top":"50px"},300);
 							$(".home-float-btn-area").animate({"bottom":"15px"},300);
 							// $(".search_bar_area").slideDown(500);
 	          }
