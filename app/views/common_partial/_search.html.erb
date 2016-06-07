@@ -137,4 +137,46 @@
 		});
 
 	});
+
+	function search_bar_hide(){
+		// 스크롤 다운시 검색창 및 질문버튼 숨기기
+	  var didScroll;
+	  var lastScrollTop = 0;
+	  var delta = 5;
+		var navbarHeight = $(".search_bar_area").outerHeight();
+
+	  $(window).scroll(function(event){
+	      didScroll = true;
+	  });
+
+    setInterval(function() {
+      if (didScroll) {
+        hasScrolled();
+        didScroll = false;
+      }
+    }, 250);
+
+	  function hasScrolled() {
+	      var st = $(this).scrollTop();
+
+	      if(Math.abs(lastScrollTop - st) <= delta)
+	          return;
+	      if (st > lastScrollTop && st > navbarHeight){
+					if ( $("#search_overlay").css("display") == "none" ){
+						$(".search_bar_area").animate({"top":"-30px"},300);
+						$(".home-float-btn-area").animate({"bottom":"-65px"},300);
+					}
+	      } else {
+	          if(st + $(window).height() < $(document).height() ) {
+							$(".search_bar_area").animate({"top":"50px"},300);
+							$(".home-float-btn-area").animate({"bottom":"15px"},300);
+	          }
+	      }
+	      lastScrollTop = st;
+	  }
+	}
+
+	$(document).ready(function(){
+		search_bar_hide();
+	})
 </script>

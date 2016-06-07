@@ -129,7 +129,7 @@ input:focus, select:focus, textarea:focus {
 	text-align: left;
 }
 .search_bar.search_on {
-	padding-left: 35px;
+	padding-left: 30px;
 	padding-right: 65px;
 	border-color: #ee6e01;
 	color:#666;
@@ -141,7 +141,7 @@ input:focus, select:focus, textarea:focus {
 	top: 0px;
 	height: 34px;
 	box-sizing: border-box;
-	padding: 8px 8px 7px 10px;
+	padding: 7px 8px 7px 10px;
 	background-color: rgba(153,134,116,0.8);
 	color: #fff;
 	font-size: 18px;
@@ -152,11 +152,10 @@ input:focus, select:focus, textarea:focus {
 	top: 1px; right: 1px;
 }
 
-
 .chat_bubble {
 	margin:15px 12px 0px;
 	padding:7px 15px;
-	color:#9d9ea1;
+	color:#666;
 	font-size:13px;
 	text-align:left;
 	line-height:1.6;
@@ -201,7 +200,6 @@ input:focus, select:focus, textarea:focus {
 
 .home-float-btn-area {
 	z-index: 1;
-	transition: all 1s;
 	animation: home-float-btn-area-ani 30s ease-out infinite;
 }
 @keyframes home-float-btn-area-ani {
