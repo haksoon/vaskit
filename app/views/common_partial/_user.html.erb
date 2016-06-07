@@ -20,15 +20,15 @@
 					<tr>
 						<td style="width:5%;"></td>
 						<td style="width:30%; padding:10px 0;">
-							<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_ask_count %></a>
+							<a id="my_ask_count" href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_ask_count %></a>
 							<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
 						</td>
 						<td style="width:30%;">
-							<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
+							<a id="my_vote_count" href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
 							<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
 						</td>
 						<td style="width:30%;">
-							<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_comment_count %></a>
+							<a id="my_comment_count" href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_comment_count %></a>
 							<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
 						</td>
 						<td style="width:5%;"></td>
@@ -63,6 +63,9 @@
 
 	function user_on(){
 		disableScroll();
+		$("#my_ask_count").text(<%= @my_ask_count %>);
+		$("#my_vote_count").text(<%= @my_vote_count %>);
+		$("#my_comment_count").text(<%= @my_comment_count %>);
 		$("#user_overlay").show();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
