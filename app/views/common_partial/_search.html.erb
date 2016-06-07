@@ -57,6 +57,8 @@
 		$("#menu_bg").show();
 		$('#search_input').focus().select();
 		$(document).scrollTop(scroll);
+		$(".main_header").css("top",scroll);
+		$("#search_overlay").css("top",scroll+50);
 
 		$("#user_overlay").hide();
 		$("#category_overlay").hide();
