@@ -103,7 +103,7 @@
   				<i class="fa fa-users"></i>&nbsp;회원가입
   			</a>
    		<% end %>
-      <%= f.hidden_field :agree_access_term %>
+      <%= f.hidden_field :agree_access_term, {:checked=>false} %>
    		<%= f.hidden_field :facebook_id %>
    		<%= f.hidden_field :name %>
    		<%= f.hidden_field :gender %>
