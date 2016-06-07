@@ -1,74 +1,57 @@
-<table class="main_header" cellspacing="0" cellpadding="0" style="position:fixed; top:0; background-color:#4b3d3d; width:inherit; overflow:visible; height:47px;">
-	<tr>
-		<td style="width:60px;">
-		</td>
-		<td style="text-align:center;">
-			<a href="/" style="display:block; font-size:20px; color:#FFFFFF; margin:0 auto; margin-top:3px;">마이 페이지</a>
-		</td>
-		<td style="width:60px; position:relative;">
-			<a href="/"><img style="width:26px; padding:12px 10px; margin-bottom:-4px; margin-left:4px;" src="/images/header/menu_off.png" /></a>
-		</td>
-		<div style="position:absolute; top:-8px; right:26px; border-bottom:8px solid #998674; border-right:6px solid transparent; border-left:6px solid transparent;"></div>
-	</tr>
-</table>
-<div style="width:100%; background:#f4f4f4;">
-	<div style="width:100%; text-align:left;">
-		<p style="padding:18px 12px; margin:0;">
-		 	<span style="color:#ee6e01;">@<%= current_user.string_id %></span>님, 환영합니다!
-		 	<a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
-		</p>
-	</div>
-	<div style="padding:0 10px;">
-		<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:18px; line-height:40px; position:relative;">
-			히스토리
-		</div>
-		<table cellspacing="0" cellpadding="0" style="border:1px solid #dbdbdb; border-top:none; width:100%; text-align:center; background-color:#fff;">
-			<tr>
-				<td style="width:40%; padding:10px 0;">
-					<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_ask_count %></a>
-					<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
-				</td>
-				<td style="width:20%;">
-					<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
-					<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
-				</td>
-				<td style="width:40%;">
-					<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_comment_count %></a>
-					<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
-				</td>
-			</tr>
-		</table>
-
-		<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:18px; line-height:40px; position:relative; margin-top:16px;">
-			진행 중인 질문 (<%= @in_progress_count%>)
-		</a>
-
-		<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:18px; line-height:40px; position:relative; margin-top:16px;">
-			알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>)
-		</a>
-	</div>
-	<div style="padding:50px 12px 16px 12px; margin:0; font-size:12px; color:#9d9ea0; text-align:left; line-height:22px;">
-		<a href="#" onclick="alert('준비중입니다.')" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- ABOUT US :</span> 저희가 도대체 뭐하는 사람들이냐구요?</a><br />
-		<a href="/etc/inquiry" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- CONTACT US :</span> 혹시 불편하신 점이 있으신가요? 말씀해주세요!</a> <br />
-		<a href="#" onclick="alert('준비중입니다.')" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- AGREEMENT :</span> 당신의 소중한 개인정보, 이렇게 지켜드립니다!</a> <br />
-		<a href="#" onclick="alert('준비중입니다.')" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- FAQ, HELP :</span> 사용법이 어려우신가요? 도와드리겠습니다!</a>
-	</div>
-
-	<div style="border-top:1px solid #dbdbdb; border-bottom:1px solid #dbdbdb; text-align:left; position:relative;">
-		<div style="padding:30px 12px; margin:0;">
-			<span style="display:inline-block; color:#393939; border-bottom:2px solid #9c9c9c; font-weight:bold; font-size:15px;">Offer Wanted</span>
-			<p style="color:#383838; font-size:13px; line-height:20px;">
-				함께 땀 흘릴 개발자 구인중!<br />
-				열정 넘치는 인재를 모십니다!
+<% if current_user %>
+	<div id="user_overlay" style="width:inherit; position:fixed; top:50px; z-index:13; display:none; background:#f4f4f4; border-bottom:5px solid #998674;">
+		<div style="width:100%; background:#f4f4f4; text-align:left;">
+			<div style="width:60px; height:50px; position:absolute; top:-50px; right:0px; background-color:#4b3d3d; text-align:center;">
+				<a href="#" onclick="user_off(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+					<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
+				</a>
+			</div>
+			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
+			<p style="margin:0; padding:10px; font-size:18px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
+			<p style="margin:0; padding:15px;">
+			 	<span style="color:#998674;"><%= current_user.string_id %></span>님, 환영합니다!
+			 	<a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
 			</p>
+			<div style="padding:0 12px;">
+				<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:16px; line-height:40px; position:relative;">
+					히스토리
+				</div>
+				<table cellspacing="0" cellpadding="0" style="border:1px solid #dbdbdb; border-top:none; width:100%; text-align:center; background-color:#fff;">
+					<tr>
+						<td style="width:5%;"></td>
+						<td style="width:30%; padding:10px 0;">
+							<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_ask_count %></a>
+							<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
+						</td>
+						<td style="width:30%;">
+							<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
+							<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
+						</td>
+						<td style="width:30%;">
+							<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_comment_count %></a>
+							<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
+						</td>
+						<td style="width:5%;"></td>
+					</tr>
+				</table>
 
+				<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:16px; line-height:40px; position:relative; margin-top:16px;">
+					진행 중인 질문 (<%= @in_progress_count%>개)
+				</a>
+
+				<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:16px; line-height:40px; position:relative; margin-top:16px;">
+					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
+					<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
+					<% end %>
+					알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>개)
+				</a>
+			</div>
+			<div style="padding:16px 12px 16px 12px; margin:0; font-size:12px; color:#9d9ea0; text-align:left; line-height:22px;">
+				<a href="#" onclick="alert('준비중입니다.')" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- ABOUT US :</span> 저희가 도대체 뭐하는 사람들이냐구요?</a><br />
+				<a href="/etc/inquiry" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- CONTACT US :</span> 혹시 불편하신 점이 있으신가요? 말씀해주세요!</a> <br />
+				<a href="#" onclick="alert('준비중입니다.')" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- AGREEMENT :</span> 당신의 소중한 개인정보, 이렇게 지켜드립니다!</a> <br />
+				<a href="#" onclick="alert('준비중입니다.')" style="color:#9d9ea0;"><span style="color:#988574; font-size:15px; font-weight:bold;">- FAQ, HELP :</span> 사용법이 어려우신가요? 도와드리겠습니다!</a>
+			</div>
 		</div>
-		<img style="width:120px; position:absolute; right:30px; top:16px;" src="/images/etc/offer_wanted.png" />
 	</div>
-</div>
-
-<script>
-	<% if flash[:custom_notice] %>
-		notify('<%=flash[:custom_notice]%>');
-	<% end %>
-</script>
+<% end %>
