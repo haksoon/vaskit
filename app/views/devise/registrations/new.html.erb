@@ -41,7 +41,7 @@
   			</table>
         <p style="margin:20px 0 0 0; font-size:12px; text-align:left; color:#9d9ea1;">
           <span style="display:inline-block; vertical-align:middle;">
-            <a id="agree_access_term_btn" href="#" onclick="return false;">
+            <a id="agree_access_term_btn" href="#" onclick="access_term_agree(); return false;">
       				<i class="fa fa-square" style="font-size: 14px; color: #ffe4a9; text-shadow: 1px 1px 0 #ffcc5a; margin-right:5px;"></i>
       			</a>
           </span>
@@ -92,8 +92,8 @@
   	 		<% end %>
         <p style="margin:20px 0 0 0; font-size:12px; text-align:left; color:#9d9ea1;">
           <span style="display:inline-block; vertical-align:middle;">
-            <a id="agree_access_term_btn" href="#" onclick="return false;">
-      				<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb; margin-right:5px;"></i>
+            <a id="agree_access_term_btn" href="#" onclick="access_term_agree(); return false;">
+      				<i class="fa fa-square" style="font-size: 14px; color: #ffe4a9; text-shadow: 1px 1px 0 #ffcc5a; margin-right:5px;"></i>
       			</a>
           </span>
           <a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
@@ -156,6 +156,11 @@
 		}
 	}
 
+  function access_term_agree(){
+    $("#user_agree_access_term").prop("checked",true);
+    $("#agree_access_term_btn i").removeClass("fa-square").addClass("fa-check-square").css("color","#ee6e01","text-shadow","1px 1px 0 rgba(238,110,1,0.3)");
+  }
+
 	function sign_up_submit(){ //submit 전에 value 체크
 		if ($("#user_email").val() == ""){
 			notify('이메일을 입력해주세요.');
@@ -177,7 +182,7 @@
 			notify('성별을 선택해주세요');
 			return;
 		}
-		if ( !$("#user_agree_access_term").is(":checked") ){
+		if ( $("#user_agree_access_term").prop("checked") !== true ){
 			notify('회원약관에 동의해주세요');
 			return;
 		}
