@@ -104,15 +104,12 @@ input:focus, select:focus, textarea:focus {
 }
 
 .search_bar_area {
-	position: fixed;
-	top: 50px;
 	width: inherit;
 	height: 50px;
 	padding: 6px 12px;
 	box-sizing: border-box;
 	background-color: #ffe4a9;
 	border-bottom: 2px solid #ffcc5a;
-	z-index: 9;
 }
 
 .search_bar {
