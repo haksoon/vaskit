@@ -57,7 +57,7 @@
 		$("#search_overlay").show();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
-		// $('#search_input').focus().select();
+		$('#search_input').focus().select();
 
 		$("#user_overlay").hide();
 		$("#category_overlay").hide();
@@ -168,13 +168,15 @@
 	          return;
 	      if (st > lastScrollTop && st > navbarHeight){
 					if ( $("#search_overlay").css("display") == "none" ){
-						$(".search_bar_area").animate({"top":"-50px"},300);
+						// $(".search_bar_area").animate({"top":"-50px"},300);
+						$("#search").animate({"top":"-50px"},300);
 						$(".home-float-btn-area").animate({"bottom":"-85px"},300);
 						// $(".search_bar_area").slideUp(500);
 					}
 	      } else {
 	          if(st + $(window).height() < $(document).height() ) {
-							$(".search_bar_area").animate({"top":"50px"},300);
+							// $(".search_bar_area").animate({"top":"50px"},300);
+							$("#search").animate({"top":"50px"},300);
 							$(".home-float-btn-area").animate({"bottom":"15px"},300);
 							// $(".search_bar_area").slideDown(500);
 	          }
