@@ -142,7 +142,6 @@ input:focus, select:focus, textarea:focus {
 	width: 34px;
 	height: 34px;
 	box-sizing: border-box;
-	padding-top: 6px;
 	background-color: rgba(153,134,116,0.8);
 	color: #fff;
 	font-size: 18px;
