@@ -103,17 +103,56 @@ input:focus, select:focus, textarea:focus {
  	border-radius: 1px;
 }
 
+.search_bar_area {
+	position: fixed;
+	width: inherit;
+	height: 50px;
+	padding: 6px 12px;
+	box-sizing: border-box;
+	padding: 5px 12px;
+	background-color: #ffe4a9;
+	border-bottom: 2px solid #ffcc5a;
+	z-index: 9;
+}
+
+.search_bar {
+	position: relative;
+	margin: 0;
+	padding: 10px;
+	width: 100%;
+	height: 36px;
+	box-sizing: border-box;
+	background-color: #fff;
+	border: 1px solid #998674;
+	border-radius: 5px;
+	color: #998674;
+	font-size: 13px;
+	text-align: left;
+}
+
+.search_btn {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	padding: 7px 8px 7px 10px;
+	background-color: #998674;
+	color: #fff;
+	font-size: 18px;
+}
+
+
+
 .chat_bubble {
 	margin:15px 12px 0px;
 	padding:7px 15px;
-	color:#4b3d3d;
+	color:#9d9ea1;
 	font-size:13px;
 	text-align:left;
 	line-height:1.6;
-	background-color:#ffe4a9;
+	background-color:#fff;
 	border-width:1px 3px 3px 1px;
 	border-style:solid;
-	border-color:#ffcc5a;
+	border-color:#dbdbdb;
 	border-radius:0px 3px;
 }
 
