@@ -40,7 +40,11 @@
   				</tr>
   			</table>
         <p style="margin:20px 0 0 0; font-size:12px; text-align:left; color:#9d9ea1;">
-          <span style="display:inline-block; vertical-align:middle;"><%= f.check_box :agree_access_term, {:checked=>false} %></span>
+          <span style="display:inline-block; vertical-align:middle;">
+            <a id="agree_access_term_btn" href="#" onclick="return false;">
+      				<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb; margin-right:5px;"></i>
+      			</a>
+          </span>
           <a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
       		<a href="#" onclick="privacy_policy_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
         </p>
