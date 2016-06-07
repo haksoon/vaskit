@@ -139,14 +139,17 @@ input:focus, select:focus, textarea:focus {
 	position: absolute;
 	right: 0px;
 	top: 0px;
+	height: 34px;
+	box-sizing: border-box;
 	padding: 8px 8px 7px 10px;
-	background-color: #998674;
+	background-color: rgba(153,134,116,0.8);
 	color: #fff;
 	font-size: 18px;
 	border-radius: 0px 3px 3px 0px;
 }
 .search_btn.search_on {
-	background-color: #ee6e01;
+	background-color: rgba(238,110,1,0.8);
+	top: 1px; right: 1px;
 }
 
 
