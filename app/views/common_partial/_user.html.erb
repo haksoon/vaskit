@@ -63,7 +63,8 @@
 
 	function user_on(){
 		disableScroll();
-		$("#user_overlay").html(<%= render :partial => 'common_partial/my' %>);
+		var new_user = <%= render :partial => 'common_partial/my' %>
+		$("#user_overlay").html(new_user);
 		$("#user_overlay").show();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
