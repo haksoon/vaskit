@@ -11,7 +11,7 @@
 				<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "관심사를 선택해주세요." }, :class => "category_select" %>
 				<span class="input_icon"><i class="fa fa-heart"></i></span>
 			</div>
-			<div style="position:relative;">
+			<div style="position:relative; height:120px;">
 				<%= f.text_area :message, :placeholder => "고민하고 있는 상황을 알려주세요! #해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
 				<span class="input_icon" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
 			</div>
@@ -47,7 +47,7 @@
 				<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
 				<span class="input_icon" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 			</div>
-			<div style="position:relative; margin-bottom:10px;">
+			<div style="position:relative;">
 				<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field", :rows => 1 %>
 				<span class="input_icon" onclick="$('#left_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
 			</div>
@@ -68,22 +68,11 @@
 				<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
 				<span class="input_icon right_input" onclick="$('#right_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 			</div>
-			<div style="position:relative; margin-bottom:10px;">
+			<div style="position:relative;">
 				<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
 				<span class="input_icon right_input" onclick="$('#right_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
 			</div>
 		</div>
-
-		<% if @ask.id %>
-			<a href="#" onclick="edit_form(); return false;" class="ask_submit_btn">
-				<i class="fa fa-plus-circle"></i>&nbsp;질문 수정하기
-			</a>
-		<% else %>
-			<a href="#" onclick="submit_form(); return false;" class="ask_submit_btn">
-				<i class="fa fa-plus-circle"></i>&nbsp;질문 제출하기
-			</a>
-		<% end %>
-
 
 		<div style="display:none;">
 			<div>
@@ -129,6 +118,17 @@
 			<%= hidden_field_tag 'left_deal[deal_id]' %>
 			<%= hidden_field_tag 'right_deal[deal_id]' %>
 		</div>
+	<% end %>
+</div>
+<div style="position:fixed; bottom:0; width:inherit; box-sizing:border-box; z-index:1;">
+	<% if @ask.id %>
+		<a href="#" onclick="edit_form(); return false;" class="ask_submit_btn">
+			<i class="fa fa-plus-circle"></i>&nbsp;질문 수정하기
+		</a>
+	<% else %>
+		<a href="#" onclick="submit_form(); return false;" class="ask_submit_btn">
+			<i class="fa fa-plus-circle"></i>&nbsp;질문 제출하기
+		</a>
 	<% end %>
 </div>
 
