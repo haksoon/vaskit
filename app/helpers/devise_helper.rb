@@ -8,8 +8,8 @@ module DeviseHelper
                       :resource => resource.class.model_name.human.downcase)
 
     html = <<-HTML
-    <div id="error_explanation" style="text-align:left; color:#ff0000;">
-      <ul>#{messages}</ul>
+    <div id="error_explanation">
+      <ul style="margin:0; padding:0; list-style:none;">#{messages}</ul>
     </div>
     HTML
 

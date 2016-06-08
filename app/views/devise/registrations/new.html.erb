@@ -3,15 +3,15 @@
 <%= render :partial => "common_partial/privacy_policy" %>
 
 <div id="login_screen">
-  <p class="chat_bubble">
+  <p class="chat_bubble" style="margin-bottom:15px;">
     지금 회원가입하시면 나의 고민에 대한 질문을 올리거나,<br>
     남의 고민에 대한 의견을 남길 수 있습니다. 히스토리도 남길 수 있어요.<br>
     어서 VASKIT하러 가자구요! 현기증 난단 말이에요~
   </p>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:id => "sign_up_form"}) do |f| %>
-    	<%= devise_error_messages! %>
-  	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
+  	<%= devise_error_messages! %>
+  	<div class="content_box" style="padding:10px; margin:0px 12px 15px; text-align:left;">
   		<% if resource.facebook_id.blank? %>
   			<%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
   			<%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>

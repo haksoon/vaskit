@@ -504,6 +504,20 @@ img.cover {
 	box-shadow: 0px 0px 10px #ffcc5a;
 }
 
+#error_explanation {
+	margin: 0px 12px;
+	background-color: #ffcc5a;
+	color: #ee6e01;
+	font-size: 13px;
+	text-align: center;
+	line-height: 40px;
+	border-right: 3px soild #dbdbdb;
+}
+.field_with_errors input {
+	background-color: rgba(238,110,1,0.3);
+	border-color: #ee6e01;
+}
+
 .hash_tag{
 	color:#ee6e01;
 	transition:background-color .2s;
