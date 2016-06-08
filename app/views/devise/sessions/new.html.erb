@@ -20,6 +20,10 @@
 
 <script>
 
+  <% if flash[:custom_notice] != nil %>
+      alert("<%=flash[:custom_notice]%>");
+  <% end %>
+
 	$('#user_password').keypress(function(e) {
 		if (e.keyCode == '13') {
         	e.preventDefault();
