@@ -814,6 +814,7 @@
 		        		notify("작성 완료");
 		        		$(".comment_box2").val("");
                 $("#no_comment").hide();
+                $("#send_comment_btn").css("background-color","#dbdbdb");
 
 		        		if ($("#ask_deal_id_change").html() == "A"){
 		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count");
@@ -1007,7 +1008,7 @@
   $("#comment_input").keyup(function(){
     $("#send_comment_btn").css("background-color","#ee6e01");
   });
-  
+
   function graph_animation(ask_deal_id) {
     var timing = 30
     var target_ask = "#ask_deal_"+ask_deal_id
