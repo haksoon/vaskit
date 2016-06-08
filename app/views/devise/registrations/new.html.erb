@@ -13,15 +13,28 @@
   	<%= devise_error_messages! %>
   	<div class="content_box" style="padding:10px; margin:0px 12px 15px; text-align:left;">
   		<% if resource.facebook_id.blank? %>
-  			<%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
-  			<%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
+        <div style="position:relative;">
+  			  <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+          <span class="registrations_input_icon"><i class="fa fa-envelope-o"></i></span>
+        </div>
+        <div style="position:relative;">
+  			  <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
+          <span class="registrations_input_icon"><i class="fa fa-key"></i></span>
+        </div>
+        <div style="position:relative;">
+          <input placeholder="입력하신 비밀번호를 확인해주세요." class="registrations_input" type="password" id="user_password_confirm">
+          <span class="registrations_input_icon"><i class="fa fa-check"></i></span>
+        </div>
         <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
           <i class="fa fa-plus"></i>&nbsp;추가 입력정보
         </p>
   			<table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-bottom:0px;">
   				<tr>
-  					<td style="width:100%;">
+  					<td style="width:100%; position:relative;">
   						<%= f.date_select :birthday, {:start_year => 2005, :end_year => 1900,:prompt => {:year => '', :month => '월', :day => '' }}, {:class => "birthday_select"} %>
+              <span class="registrations_input_icon" style="top: 1px; height: 34px; line-height: 36px; font-size: 10px; width: 38px; font-weight: bold;">YEAR</span>
+              <span class="registrations_input_icon" style="top: 42px; height: 34px; line-height: 34px; font-size: 10px; width: 38px; font-weight: bold;">MONTH</span>
+              <span class="registrations_input_icon" style="top: 83px; height: 34px; line-height: 34px; font-size: 10px; width: 38px; font-weight: bold;">DAY</span>
   					</td>
   				</tr>
   			</table>
@@ -53,11 +66,21 @@
   			</a>
   		<% else %>
   			<% if resource.email.blank? %>
-  				<%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+          <div style="position:relative;">
+            <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+            <span class="registrations_input_icon"><i class="fa fa-envelope-o"></i></span>
+          </div>
   			<% else %>
   				<%= f.hidden_field :email %>
   			<% end %>
-  			<%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
+        <div style="position:relative;">
+          <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
+          <span class="registrations_input_icon"><i class="fa fa-key"></i></span>
+        </div>
+        <div style="position:relative;">
+          <input placeholder="입력하신 비밀번호를 확인해주세요." class="registrations_input" type="password" id="user_password_confirm">
+          <span class="registrations_input_icon"><i class="fa fa-check"></i></span>
+        </div>
         <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
           <i class="fa fa-plus"></i>&nbsp;추가 입력정보
         </p>
@@ -65,8 +88,11 @@
   			<% if resource.birthday.blank? %>
           <table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-bottom:0px;">
             <tr>
-              <td style="width:100%;">
+              <td style="width:100%; position:relative;">
                 <%= f.date_select :birthday, {:start_year => 2005, :end_year => 1900,:prompt => {:year => '', :month => '월', :day => '' }}, {:class => "birthday_select"} %>
+                <span class="registrations_input_icon" style="top: 1px; height: 34px; line-height: 36px; font-size: 10px; width: 38px; font-weight: bold;">YEAR</span>
+                <span class="registrations_input_icon" style="top: 42px; height: 34px; line-height: 34px; font-size: 10px; width: 38px; font-weight: bold;">MONTH</span>
+                <span class="registrations_input_icon" style="top: 83px; height: 34px; line-height: 34px; font-size: 10px; width: 38px; font-weight: bold;">DAY</span>
               </td>
             </tr>
           </table>
@@ -171,18 +197,26 @@
 	function sign_up_submit(){ //submit 전에 value 체크
 		if ($("#user_email").val() == ""){
 			notify('이메일을 입력해주세요.');
+      $("#user_email").focus().select();
 			return;
 		}
 
 		<% unless resource.facebook_id %>
 			if ($("#user_password").val() == ""){
 				notify('비밀번호를 입력해주세요.');
+        $("#user_password").focus().select();
+				return;
+			}
+      if ($("#user_password").val() != $("#user_password_confirm").val()){
+				notify('비밀번호를 확인해주세요.');
+        $("#user_password_confirm").focus().select();
 				return;
 			}
 		<% end %>
 
 		if ($("#user_birthday_1i").val() == "" || $("#user_birthday_2i").val() == "" || $("#user_birthday_3i").val() == ""){
 			notify('생년월일을 입력해주세요');
+      $("#user_birthday_1i").focus().select();
 			return;
 		}
 		if ($("#user_gender").val() == ""){
