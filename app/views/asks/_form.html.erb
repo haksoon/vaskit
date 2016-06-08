@@ -30,63 +30,63 @@
 			</tr>
 		</table>
 
-					<div style="margin:0 2px 0 0;">
-						<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field", :rows => 1 %>
-					</div>
+		<div class="">
+			<div class="ask_none_text_field">
+				제품명
+			</div>
+			<div>
+				<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field", :rows => 1 %>
+			</div>
+			<div class="ask_none_text_field">
+				브랜드
+			</div>
+			<div>
+				<%= text_area_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field", :rows => 1 %>
+			</div>
+			<div class="ask_none_text_field">
+				판매가격
+			</div>
+			<div>
+				<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
+			</div>
+			<div class="ask_none_text_field">
+				링크
+			</div>
+			<div>
+				<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field", :rows => 1 %>
+			</div>
 
-					<div class="ask_none_text_field">
-						제품명
-					</div>
-
-					<div style="margin:0 0 02px;">
-						<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
-					</div>
-
-					<div style="margin:0 2px 0 0;">
-						<%= text_area_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field", :rows => 1 %>
-					</div>
-
-					<div class="ask_none_text_field">
-						브랜드
-					</div>
-
-					<div style="margin:0 0 0 2px;">
-						<%= text_area_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input", :rows => 1 %>
-					</div>
-
-
-
-					<div style="margin:0 2px 0 0;">
-						<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
-					</div>
-
-
-					<div class="ask_none_text_field">
-						판매가격
-					</div>
-
-
-					<div style="margin:0 0 0 2px;">
-						<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
-					</div>
+		</div>
+		<div class="">
+			<div class="ask_none_text_field">
+				제품명
+			</div>
+			<div>
+				<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
+			</div>
+			<div class="ask_none_text_field">
+				브랜드
+			</div>
+			<div>
+				<%= text_area_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input", :rows => 1 %>
+			</div>
+			<div class="ask_none_text_field">
+				판매가격
+			</div>
+			<div>
+				<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
+			</div>
+			<div class="ask_none_text_field">
+				링크
+			</div>
+			<div>
+				<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
+			</div>
+		</div>
 
 
 
-
-					<div style="margin:0 2px 0 0;">
-						<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field", :rows => 1 %>
-					</div>
-
-					<div class="ask_none_text_field">
-						링크
-					</div>
-
-					<div style="margin:0 0 0 2px;">
-						<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
-					</div>
-
-
-					<div style="margin:0 2px 0 0;">
+					<div>
 						<%= text_area_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field", :rows => 1 %>
 					</div>
 					<div style="margin:0 2px 0 2px; font-size:13px; color:#383838;">
