@@ -19,9 +19,9 @@
 
 		<div style="position:relative;">
 			<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;">
-				<% if @ask.id %>CARD A 수정하기<% else %><i class="fa fa-search" style="color:#ee6e01;"></i>CARD A 검색하기<% end %>
+				<% if @ask.id %>CARD A 수정하기<% else %><i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD A 검색하기<% end %>
 			</a>
-			<span class="input_icon right_input" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px;">
+			<span class="input_icon right_input" onclick="show_card_overlay(true)" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px;">
 			  <i class="fa fa-edit"></i>
 			</span>
 		</div>
@@ -49,9 +49,9 @@
 
 		<div style="position:relative;">
 			<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;">
-				<% if @ask.id %>CARD B 수정하기<% else %><i class="fa fa-search" style="color:#ee6e01;"></i>CARD B 검색하기<% end %>
+				<% if @ask.id %>CARD B 수정하기<% else %><i class="fa fa-search" style="color:#ee6e01;"></i>>&nbsp;CARD B 검색하기<% end %>
 			</a>
-			<span class="input_icon right_input" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px;">
+			<span class="input_icon right_input" onclick="show_card_overlay(false)" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px;">
 				<i class="fa fa-edit"></i>
 			</span>
 		</div>
@@ -252,6 +252,13 @@
       	}
 	});
 
+	function show_card_overlay(is_left) {
+		if (is_left) {
+			$("#card_a_overlay").slideDown(500);
+		} else {
+			$("#card_b_overlay").slideDown(500);
+		}
+	}
 
 	function hide_search_deal_popup(){
 		$("#search_deal_popup").hide();
