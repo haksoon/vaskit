@@ -21,7 +21,7 @@
 			<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;">
 				<% if @ask.id %>CARD A 수정하기<% else %><i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD A 검색하기<% end %>
 			</a>
-			<span class="input_icon right_input" onclick="show_card_overlay(true)" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
+			<span id="card_a_overlay_open" class="input_icon right_input" onclick="show_card_overlay(true)" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
 			  <i class="fa fa-angle-down"></i>
 			</span>
 		</div>
@@ -51,7 +51,7 @@
 			<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;">
 				<% if @ask.id %>CARD B 수정하기<% else %><i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD B 검색하기<% end %>
 			</a>
-			<span class="input_icon right_input" onclick="show_card_overlay(false)" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
+			<span id="card_b_overlay_open" class="input_icon right_input" onclick="show_card_overlay(false)" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
 				<i class="fa fa-angle-down"></i>
 			</span>
 		</div>
@@ -253,20 +253,12 @@
 	});
 
 	function show_card_overlay(is_left) {
-		if ( $(this).children("i").hasClass("fa-angle-down") ) {
-			$(this).children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
-			if (is_left) {
-				$("#card_a_overlay").slideDown(500);
-			} else {
-				$("#card_b_overlay").slideDown(500);
-			}
+		if (is_left) {
+			$("#card_a_overlay_open").children("i").toggleClass("fa-angle-down").toggleClass("fa-angle-up");
+			$("#card_a_overlay").slideToggle(500);
 		} else {
-			$(this).children("i").removeClass("fa-angle-up").addClass("fa-angle-down");
-			if (is_left) {
-				$("#card_a_overlay").slideUp(500);
-			} else {
-				$("#card_b_overlay").slideUp(500);
-			}
+			$("#card_b_overlay_open").children("i").toggleClass("fa-angle-down").toggleClass("fa-angle-up");
+			$("#card_b_overlay").slideToggle(500);
 		}
 	}
 
@@ -286,9 +278,15 @@
 		$("#deal_search_btn").attr("onclick", "deal_search("+is_left+"); return false;");
 		if (is_left){
 			$("#card_a_overlay").slideDown(500);
+			$("#card_a_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
+			var top = $("#card_a_overlay").offset().top;
+			$(window).scrollTop(top);
 			$("#search_deal_title").html("CARD A 검색해서 입력하기");
 		}else{
 			$("#card_b_overlay").slideDown(500);
+			$("#card_b_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
+			var top = $("#card_b_overlay").offset().top;
+			$(window).scrollTop(top);
 			$("#search_deal_title").html("CARD B 검색해서 입력하기");
 		}
 	}
