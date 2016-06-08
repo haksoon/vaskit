@@ -1002,11 +1002,12 @@
 
   $(document).ready(function(){
     hover_action();
-    $("#comment_input").keyup(function(){
-      $("#send_comment_btn").css("background-color","#ee6e01;")
-    });
   });
 
+  $("#comment_input").keyup(function(){
+    $("#send_comment_btn").css("background-color","#ee6e01");
+  });
+  
   function graph_animation(ask_deal_id) {
     var timing = 30
     var target_ask = "#ask_deal_"+ask_deal_id
