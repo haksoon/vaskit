@@ -16,11 +16,7 @@
             CARD A 간편입력
           </a>
 					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; border-top:none; margin:0 2px 0 0;">
-						<% if @left_ask_deal && @left_ask_deal.image %>
-							<img src="<%= @left_ask_deal.image.url(:normal) %>" style="display:block; margin:0 auto; width:100%;">
-						<% else %>
-							<p>CARD A 이미지 업로드</p>
-						<% end %>
+						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
 		  		</a>
 				</td>
 				<td style="width:50%;">
