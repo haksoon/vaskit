@@ -538,10 +538,10 @@
 			return;
 		}
 		if (check_click == 0) {
-			// var left_price = $("#left_deal_price").val();
-			// var right_price = $("#right_deal_price").val();
-			// $("#left_deal_price").val(uncomma(left_price));
-			// $("#right_deal_price").val(uncomma(left_price));
+			var left_price = $("#left_deal_price").val();
+			var right_price = $("#right_deal_price").val();
+			$("#left_deal_price").val(uncomma(left_price));
+			$("#right_deal_price").val(uncomma(left_price));
 			$("#new_ask").submit();
 			check_click = check_click + 1;
 		} else {
@@ -560,10 +560,10 @@
 			notify('CARD B 제품명을 입력해주세요.');
 			return;
 		}
-		// var left_price = $("#left_deal_price").val();
-		// var right_price = $("#right_deal_price").val();
-		// $("#left_deal_price").val(uncomma(left_price));
-		// $("#right_deal_price").val(uncomma(left_price));
+		var left_price = $("#left_deal_price").val();
+		var right_price = $("#right_deal_price").val();
+		$("#left_deal_price").val(uncomma(left_price));
+		$("#right_deal_price").val(uncomma(left_price));
 		$(".edit_ask").submit();
 	}
 
@@ -590,8 +590,10 @@
 	    obj.value = comma(uncomma(obj.value));
 	}
 
-	// $("#left_deal_price").attr("onkeyup","inputNumberFormat(this)");
-	// $("#right_deal_price").attr("onkeyup","inputNumberFormat(this)");
+	$("#left_deal_price").attr("type","text");
+	$("#right_deal_price").attr("type","text");
+	$("#left_deal_price").attr("onkeyup","inputNumberFormat(this)");
+	$("#right_deal_price").attr("onkeyup","inputNumberFormat(this)");
 
 
 </script>
