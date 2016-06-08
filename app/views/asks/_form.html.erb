@@ -281,10 +281,12 @@
 		if (is_left){
 			$("#card_a_overlay").slideDown(500);
 			$("#card_a_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
+			$("html, body").scrollTop( $(document).height() );
 			$("#search_deal_title").html("CARD A 검색해서 입력하기");
 		}else{
 			$("#card_b_overlay").slideDown(500);
 			$("#card_b_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
+			$("html, body").scrollTop( $(document).height() );
 			$("#search_deal_title").html("CARD B 검색해서 입력하기");
 		}
 	}
