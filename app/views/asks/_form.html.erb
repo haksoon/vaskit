@@ -38,7 +38,7 @@
 				<span class="input_icon" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
-				<%= f.text_field 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
+				<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
 				<span class="input_icon" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
@@ -83,7 +83,7 @@
 				<span class="input_icon right_input" onclick="$('#right_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
-				<%= f.text_field 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
+				<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
 				<span class="input_icon right_input" onclick="$('#right_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
@@ -538,10 +538,10 @@
 			return;
 		}
 		if (check_click == 0) {
-			var left_price = $("#left_deal_price").val();
-			var right_price = $("#right_deal_price").val();
-			$("#left_deal_price").val(uncomma(left_price));
-			$("#right_deal_price").val(uncomma(left_price));
+			// var left_price = $("#left_deal_price").val();
+			// var right_price = $("#right_deal_price").val();
+			// $("#left_deal_price").val(uncomma(left_price));
+			// $("#right_deal_price").val(uncomma(left_price));
 			$("#new_ask").submit();
 			check_click = check_click + 1;
 		} else {
@@ -560,10 +560,10 @@
 			notify('CARD B 제품명을 입력해주세요.');
 			return;
 		}
-		var left_price = $("#left_deal_price").val();
-		var right_price = $("#right_deal_price").val();
-		$("#left_deal_price").val(uncomma(left_price));
-		$("#right_deal_price").val(uncomma(left_price));
+		// var left_price = $("#left_deal_price").val();
+		// var right_price = $("#right_deal_price").val();
+		// $("#left_deal_price").val(uncomma(left_price));
+		// $("#right_deal_price").val(uncomma(left_price));
 		$(".edit_ask").submit();
 	}
 
@@ -590,8 +590,8 @@
 	    obj.value = comma(uncomma(obj.value));
 	}
 
-	$("#left_deal_price").attr("onkeyup","inputNumberFormat(this)");
-	$("#right_deal_price").attr("onkeyup","inputNumberFormat(this)");
+	// $("#left_deal_price").attr("onkeyup","inputNumberFormat(this)");
+	// $("#right_deal_price").attr("onkeyup","inputNumberFormat(this)");
 
 
 </script>
