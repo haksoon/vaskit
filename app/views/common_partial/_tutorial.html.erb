@@ -1,0 +1,63 @@
+<% unless current_user %>
+  <div id="tutorial_bg" href="#" onclick="hide_tutorial(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; background-color:black; opacity:0.6; z-index:2; display:none;"></div>
+  <div id="tutorial_overlay" onclick="hide_tutorial(); return false;" style="position: fixed; top: 0; width: 100%; height: 100%; z-index: 13;">
+    <div>
+      <p class="tutorial_bubble left_top">이 곳을 눌러<br><span class="bold">관심사를 설정</span>할 수 있어요!<br>단, 회원만 가능합니다!</p>
+      <p class="tutorial_bubble right_top">이 곳을 눌러<br><span class="bold">회원가입</span>을 진행합니다!<br>로그인 이후에는 <span class="bold">마이페이지</span>로 연결됩니다 :)</p>
+      <p class="tutorial_bubble center"><i class="fa fa-search"></i>&nbsp;그럴싸하니 <span class="bold">검색창</span>처럼 생겼죠?<br>유저, 제품명, 브랜드, 무엇이든 검색이 가능합니다.</p>
+      <p class="tutorial_bubble right_bottom"><span class="bold">새로운 투표글</span>을 작성하는 버튼입니다!<br>당신의 구매 고민들,<br>이 곳에서 털어놔보아요~</p>
+    </div>
+  </div>
+
+  <script>
+    function hide_tutorial() {
+      $("#tutorial_bg").hide();
+      $("#tutorial_overlay").hide();
+    }
+  </script>
+
+  <style>
+    .tutorial_bubble {
+      position:absolute;
+      display:inline-block;
+      margin:0;
+    	padding:7px 15px;
+    	color:#666;
+    	font-size:13px;
+    	text-align:left;
+    	line-height:1.6;
+    	background-color:#fff;
+    	border-width:1px 3px 3px 1px;
+    	border-style:solid;
+    	border-color:#dbdbdb;
+    	border-radius:0px 3px;
+    }
+    .tutorial_bubble.left_top {
+      width:150px;
+      top:40px;
+      left:-205px;
+    }
+    .tutorial_bubble.right_top {
+      width:160px;
+      top:40px;
+      left:540px;
+    }
+    .tutorial_bubble.center {
+      width:200px;
+      top:120px;
+      left:50px;
+    }
+    .tutorial_bubble.right_bottom {
+      width:160px;
+      bottom:40px;
+      left:320px;
+    }
+
+    .bold {
+      font-weight:bold;
+      color:#ee6e01;
+      text-shadow:1px 1px 0 #dbdbdb;
+    }
+  </style>
+
+<% end %>
