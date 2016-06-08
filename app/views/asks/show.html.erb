@@ -727,21 +727,6 @@
 		});
 	}
 
-	function comment_input_by_key(){
-		var comment_message = $('#comment_input').val();
-		if(comment_message == "" || comment_message == undefined){
-			notify("내용을 입력해주세요.");
-		}else{
-			$("#send_comment_btn").click();
-		}
-	}
-
-	$('#comment_input').keypress(function(e) {
-		if (e.keyCode == '13') {
-        	e.preventDefault();
-        	comment_input_by_key();
-      	}
-	});
 
 	function vote_ask_deal_show(ask_deal_id, is_left){
 		if (current_user_id == 0 && my_vote_count > 4){
@@ -784,6 +769,23 @@
 			});
 	 	}
 	}
+
+  function comment_input_by_key(){
+    var comment_message = $('#comment_input').val();
+    if(comment_message == "" || comment_message == undefined){
+      notify("내용을 입력해주세요.");
+    }else{
+      $("#send_comment_btn").click();
+    }
+  }
+
+  $('#comment_input').keypress(function(e) {
+    $("#send_comment_btn").css("background-color","#ee6e01");
+    if (e.keyCode == '13') {
+      e.preventDefault();
+      comment_input_by_key();
+    }
+  });
 
 	function send_comment(ask_id, ask_deal_id){
 		if (current_user_id == 0){
@@ -1005,38 +1007,6 @@
   $(document).ready(function(){
     hover_action();
   });
-
-  $("#comment_input").keyup(function(){
-    $("#send_comment_btn").css("background-color","#ee6e01");
-  });
-
-  function graph_animation(ask_deal_id) {
-    var timing = 30
-    var target_ask = "#ask_deal_"+ask_deal_id
-
-    $(target_ask).find("#main_vote_count").find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
-    $(target_ask).find("#main_vote_count").find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
-
-    var num_left_width = 0;
-    var left_ratio_increase = setInterval( function() {
-      if(num_left_width < left_ratio_full) {
-        num_left_width++;
-        $(target_ask).find(".vote-result-num-left").text(num_left_width+"%");
-      } else {
-        clearInterval(left_ratio_increase);
-      }
-    }, timing * left_ratio / left_ratio_full );
-
-    var num_right_width = 0;
-    var right_ratio_increase = setInterval( function() {
-      if(num_right_width < right_ratio_full) {
-        num_right_width++;
-        $(target_ask).find(".vote-result-num-right").text(num_right_width+"%");
-      } else {
-        clearInterval(right_ratio_increase);
-      }
-    }, timing * right_ratio / right_ratio_full );
-  }
 
 </script>
 

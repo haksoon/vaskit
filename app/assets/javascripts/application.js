@@ -189,6 +189,7 @@ function enableScroll() {
     document.onkeydown = null;
 }
 
+// AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
 function hover_action(){
   $(".card_image").hover(
     function(){
@@ -213,6 +214,35 @@ function hover_action(){
     }
   );
 };
+
+// AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
+function graph_animation(ask_deal_id) {
+  var timing = 30
+  var target_ask = "#ask_deal_"+ask_deal_id
+
+  $(target_ask).find("#main_vote_count").find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
+  $(target_ask).find("#main_vote_count").find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
+
+  var num_left_width = 0;
+  var left_ratio_increase = setInterval( function() {
+    if(num_left_width < left_ratio_full) {
+      num_left_width++;
+      $(target_ask).find(".vote-result-num-left").text(num_left_width+"%");
+    } else {
+      clearInterval(left_ratio_increase);
+    }
+  }, timing * left_ratio / left_ratio_full );
+
+  var num_right_width = 0;
+  var right_ratio_increase = setInterval( function() {
+    if(num_right_width < right_ratio_full) {
+      num_right_width++;
+      $(target_ask).find(".vote-result-num-right").text(num_right_width+"%");
+    } else {
+      clearInterval(right_ratio_increase);
+    }
+  }, timing * right_ratio / right_ratio_full );
+}
 
 $( document ).ready(function() {
 	//ie 에서 placeholder
