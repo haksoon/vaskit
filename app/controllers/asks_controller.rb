@@ -66,7 +66,7 @@ class AsksController < ApplicationController
       else
         left_deal_is_modify = true
       end
-      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price]
+      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
         left_deal_is_modify = true
       end
     end
@@ -93,7 +93,7 @@ class AsksController < ApplicationController
       else
         right_deal_is_modify = true
       end
-      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price]
+      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
         right_deal_is_modify = true
       end
     end
@@ -146,7 +146,7 @@ class AsksController < ApplicationController
       else
         left_deal_is_modify = true
       end
-      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price]
+      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
         left_deal_is_modify = true
       end
       @ask.left_ask_deal.update(:image => left_image)
@@ -178,7 +178,7 @@ class AsksController < ApplicationController
       else
         right_deal_is_modify = true
       end
-      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price]
+      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
         right_deal_is_modify = true
       end
       @ask.right_ask_deal.update(:image => right_image)
