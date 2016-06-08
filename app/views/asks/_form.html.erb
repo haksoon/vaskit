@@ -276,8 +276,10 @@
 		$("#deal_search_btn").attr("onclick", "deal_search("+is_left+"); return false;");
 		if (is_left){
 			$("#search_deal_title").html("CARD A 검색해서 입력하기");
+			show_card_overlay(true);
 		}else{
 			$("#search_deal_title").html("CARD B 검색해서 입력하기");
+			show_card_overlay(false);
 		}
 	}
 
