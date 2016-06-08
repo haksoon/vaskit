@@ -472,7 +472,7 @@ img.cover {
 	margin-bottom:10px;
 }
 
-.registrations_input_icon {
+.input_icon {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -584,7 +584,6 @@ img.cover {
 	color: #393939;
 	font-size: 13px;
 	line-height: 17px;
-	margin-bottom: 10px;
 }
 
 .ask_search_deal {
@@ -612,7 +611,7 @@ img.cover {
 	margin-top: 10px;
 }
 
-.ask_text_field{
+.ask_text_field {
 	display: block;
 	max-width: 100%;
 	min-width: 100%;
@@ -626,7 +625,24 @@ img.cover {
 	padding-left: 50px;
 	font-size: 13px;
 	line-height: 17px;
+	text-align: left;
 	color:#393939;
+}
+
+.input_icon.right_input {
+	left: initial;
+	right: 0px;
+}
+
+.ask_text_field.center_input {
+	text-align: center;
+	padding-left: 0px;
+}
+
+.ask_text_field.right_input {
+	text-align: right;
+	padding-left: 0px;
+	padding-right: 50px;
 }
 
 /*.ask_none_text_field{
