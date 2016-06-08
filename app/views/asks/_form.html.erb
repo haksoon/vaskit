@@ -25,7 +25,7 @@
 			  <i class="fa fa-angle-down"></i>
 			</span>
 		</div>
-		<div id="card_a_overlay" class="content_box" style="padding:10px; margin-top:-5px; display:none;">
+		<div id="card_a_overlay" class="content_box" style="padding:10px; margin-top:-5px;">
 			<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
 				<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
 			</a>
@@ -70,7 +70,7 @@
 				<i class="fa fa-angle-down"></i>
 			</span>
 		</div>
-		<div id="card_b_overlay" class="content_box" style="padding:10px; margin-top:-5px; display:none;">
+		<div id="card_b_overlay" class="content_box" style="padding:10px; margin-top:-5px;">
 			<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
 				<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
 			</a>
@@ -261,10 +261,9 @@
       	}
 	});
 
-	<% if @ask.id %>
-		show_card_overlay(true);
-		show_card_overlay(false);
-		$(window).scrollTop(0);
+	<% unless @ask.id %>
+		hide_card_overlay(true);
+		hide_card_overlay(false);
 	<% end %>
 
 	function show_card_overlay(is_left) {
