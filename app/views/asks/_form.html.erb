@@ -261,6 +261,11 @@
       	}
 	});
 
+	<% if @ask.id %>
+		show_card_overlay(true);
+		show_card_overlay(false);
+	<% end %>
+
 	function show_card_overlay(is_left) {
 		if (is_left) {
 			$("#card_a_overlay").slideDown(500, function(){
