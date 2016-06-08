@@ -15,22 +15,19 @@
 					<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;" style="margin:0 2px 0 0;">
             CARD A 간편입력
           </a>
-					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; border-top:none; margin:0 2px 0 0;">
-						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-		  		</a>
 				</td>
 				<td style="width:50%;">
 					<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;" style="margin:0 0 0 2px;">
             CARD B 간편입력
           </a>
-					<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; border-top:none; margin:0 0 0 2px;">
-						<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-					</a>
 				</td>
 			</tr>
 		</table>
 
 		<div class="">
+			<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; border-top:none; margin:0 2px 0 0;">
+				<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+			</a>
 			<div class="ask_none_text_field">
 				제품명
 			</div>
@@ -58,6 +55,9 @@
 
 		</div>
 		<div class="">
+			<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; border-top:none; margin:0 0 0 2px;">
+				<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+			</a>
 			<div class="ask_none_text_field">
 				제품명
 			</div>
