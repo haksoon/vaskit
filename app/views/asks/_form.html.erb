@@ -278,7 +278,7 @@
 		if (is_left){
 			$("#card_a_overlay").slideDown(500, function(){
 				var top = $("#card_a_overlay").offset().top;
-				$(window).scrollTop(top-110);
+				$("body").animate({scrollTop:top-110},500);
 				$("#card_a_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
 				$("#search_deal_popup_bg").show();
 				$("#search_deal_popup").show();
@@ -288,7 +288,7 @@
 		} else {
 			$("#card_b_overlay").slideDown(500,function(){
 				var top = $("#card_b_overlay").offset().top;
-				$(window).scrollTop(top-110);
+				$("body").animate({scrollTop:top-110},500);
 				$("#card_b_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
 				$("#search_deal_popup_bg").show();
 				$("#search_deal_popup").show();
