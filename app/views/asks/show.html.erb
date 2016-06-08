@@ -976,10 +976,6 @@
     });
 	}
 
-  $("#comment_input").keyup(function(){
-    $("#send_comment_btn").css("background-color","#ee6e01;")
-  });
-
 	function ask_deal_id_change(){
 		if ($("#ask_deal_id_change").html() == "A"){
 			$("#ask_deal_id_change").html("B")
@@ -1006,6 +1002,9 @@
 
   $(document).ready(function(){
     hover_action();
+    $("#comment_input").keyup(function(){
+      $("#send_comment_btn").css("background-color","#ee6e01;")
+    });
   });
 
   function graph_animation(ask_deal_id) {
