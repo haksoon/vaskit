@@ -13,7 +13,7 @@
 			</div>
 			<div style="position:relative;">
 				<%= f.text_area :message, :placeholder => "고민하고 있는 상황을 알려주세요! #해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
-				<span class="input_icon" onclick="$('#ask_message').focus(); return false;" style="top:1px; left:1px; height: 118px; line-height: 118px; border:none; border-right:1px solid #dbdbdb;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
+				<span class="input_icon" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
 			</div>
 		</div>
 
@@ -31,52 +31,47 @@
 				</td>
 			</tr>
 		</table>
-		<div class="content_box" style="padding:10px;">
-
-			<div id="card_a_overlay" style="display:none;">
-				<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
-					<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-				</a>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon" onclick="$('#left_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
-					<span class="input_icon" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon" onclick="$('#left_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
-				</div>
+		<div id="card_a_overlay" class="content_box" style="padding:10px;">
+			<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
+				<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+			</a>
+			<div style="position:relative; margin-bottom:10px;">
+				<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field", :rows => 1 %>
+				<span class="input_icon" onclick="$('#left_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
 			</div>
-
-			<div id="card_b_overlay" style="display:none;">
-				<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
-					<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-				</a>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
-					<span class="input_icon right_input" onclick="$('#right_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
-				</div>
+			<div style="position:relative; margin-bottom:10px;">
+				<%= text_area_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field", :rows => 1 %>
+				<span class="input_icon" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 			</div>
-
+			<div style="position:relative; margin-bottom:10px;">
+				<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
+				<span class="input_icon" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
+			</div>
+			<div style="position:relative; margin-bottom:10px;">
+				<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field", :rows => 1 %>
+				<span class="input_icon" onclick="$('#left_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
+			</div>
+		</div>
+		<div id="card_b_overlay" class="content_box" style="padding:10px;">
+			<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
+				<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+			</a>
+			<div style="position:relative; margin-bottom:10px;">
+				<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
+				<span class="input_icon right_input" onclick="$('#right_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
+			</div>
+			<div style="position:relative; margin-bottom:10px;">
+				<%= text_area_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input", :rows => 1 %>
+				<span class="input_icon right_input" onclick="$('#right_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
+			</div>
+			<div style="position:relative; margin-bottom:10px;">
+				<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
+				<span class="input_icon right_input" onclick="$('#right_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
+			</div>
+			<div style="position:relative; margin-bottom:10px;">
+				<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
+				<span class="input_icon right_input" onclick="$('#right_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
+			</div>
 		</div>
 
 		<% if @ask.id %>

@@ -632,6 +632,7 @@ img.cover {
 .input_icon.right_input {
 	left: initial;
 	right: 0px;
+	border-radius: 0 3px 3px 0;
 }
 
 .ask_text_field.center_input {
