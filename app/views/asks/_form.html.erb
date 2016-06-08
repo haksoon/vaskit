@@ -38,7 +38,7 @@
 				<span class="input_icon" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
-				<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
+				<%= f.text_field 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
 				<span class="input_icon" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
@@ -83,7 +83,7 @@
 				<span class="input_icon right_input" onclick="$('#right_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
-				<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
+				<%= f.text_field 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
 				<span class="input_icon right_input" onclick="$('#right_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 			</div>
 			<div style="position:relative; margin-bottom:10px;">
