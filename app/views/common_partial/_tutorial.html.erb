@@ -1,6 +1,9 @@
 <% unless current_user %>
-  <div id="tutorial_bg" href="#" onclick="hide_tutorial(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; background-color:black; opacity:0.6; z-index:2;"></div>
-  <div id="tutorial_overlay" onclick="hide_tutorial(); return false;" style="position: fixed; top: 0; width: 100%; height: 100%; z-index: 13;">
+  <div id="tutorial_bg" style="position:fixed; left:0; top:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:2;">
+    <div class="tutorial_exit">화면을 눌러 게임을 시작하지<br>넌 미끼를 물어분 것이여...<br><br>Let's VASKIT!</div>
+  </div>
+  <div id="tutorial_pc_bg" onclick="hide_tutorial(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:15;"></div>
+  <div id="tutorial_overlay" style="position:fixed; top:0; width:inherit; height:100%; z-index:13;">
     <div class="tutorial_border left_top"></div>
     <div class="tutorial_border right_top"></div>
     <div class="tutorial_border center"></div>
@@ -14,14 +17,13 @@
       <div class="tutorial_arrow left_side"></div>
     </div>
     <div class="tutorial_bubble center">
-      <i class="fa fa-search"></i>&nbsp;그럴싸하니 <span class="bold">검색창</span>처럼 생겼죠?<br>유저, 제품명, 브랜드, 무엇이든 검색이 가능합니다.
+      <i class="fa fa-search"></i>&nbsp;보아하니 <span class="bold">검색창</span>처럼 생겼죠?<br>유저, 제품명, 브랜드, 무엇이든 검색이 가능합니다.
       <div class="tutorial_arrow top_side"></div>
     </div>
     <div class="tutorial_bubble right_bottom">
       <span class="bold">새로운 투표글</span>을 작성하는 버튼입니다!<br>당신의 구매 고민들,<br>이 곳에서 털어놔보아요~
       <div class="tutorial_arrow bottom_side"></div>
     </div>
-    <div class="tutorial_exit">화면을 눌러 게임을 시작하지<br>넌 미끼를 물어분 것이여...<br><br>Let's VASKIT!</div>
   </div>
 
   <script>
@@ -29,6 +31,7 @@
     function hide_tutorial() {
       enableScroll();
       $("#tutorial_bg").fadeOut(500);
+      $("#tutorial_pc_bg").hide();
       $("#tutorial_overlay").fadeOut(500);
     }
   </script>
@@ -51,13 +54,13 @@
     }
     .tutorial_bubble.left_top {
       width:160px;
-      top:15px;
+      top:12px;
       left:-205px;
     }
     .tutorial_bubble.right_top {
       width:160px;
-      top:15px;
-      left:535px;
+      top:12px;
+      right:-207px;
     }
     .tutorial_bubble.center {
       width:200px;
@@ -67,7 +70,7 @@
     .tutorial_bubble.right_bottom {
       width:160px;
       bottom:105px;
-      left:405px;
+      right:-77px;
     }
     .bold {
       font-weight:bold;
@@ -132,7 +135,7 @@
     }
     .tutorial_border.right_top {
       top: 1px;
-      left: 458px;
+      right: 9px;
       width: 53px;
       height: 48px;
       border-radius: 12px;
@@ -145,7 +148,7 @@
     }
     .tutorial_border.right_bottom {
       bottom: 7px;
-      left: 532px;
+      right: -93px;
       width: 81px;
       height: 81px;
       border-radius: 42px;
@@ -155,9 +158,9 @@
       top: 50%;
       margin: 0;
       margin-top: -50px;
-      padding: 15px;
-      left: 130px;
-      width: 260px;
+      padding: 16px;
+      left: 0px;
+      width: 100%;
       height: 100px;
       box-sizing: border-box;
       color: #4b3d3d;

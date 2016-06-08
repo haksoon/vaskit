@@ -550,6 +550,8 @@ img.cover {
   margin: 0;
 	padding: 0px 10px;
   border: 1px solid #dbdbdb;
+	border-right-width: 3px;
+	border-bottom-width: 3px;
 	border-radius: 5px;
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -569,6 +571,8 @@ img.cover {
 	        box-sizing: border-box;
 	padding: 10px;
 	border: 1px solid #dbdbdb;
+	border-right-width: 3px;
+	border-bottom-width: 3px;
 	border-radius: 5px;
 	color: #393939;
 	font-size: 13px;
