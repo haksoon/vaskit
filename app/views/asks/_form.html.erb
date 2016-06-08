@@ -12,7 +12,7 @@
 		</div>
 
 		<div style="position:relative;">
-			<%= f.text_area :message, :placeholder => "고민하고 계신 상황을 상세하게 입력해주세요. #해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
+			<%= f.text_area :message, :placeholder => "고민하고 있는 상황을 알려주세요! #해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
 			<span class="registrations_input_icon" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-edit"></i></span>
 		</div>
 
@@ -20,12 +20,12 @@
 			<tr>
 				<td style="width:50%;">
 					<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;" style="margin:0 2px 0 0;">
-            CARD A 간편입력
+            <% if @ask.id %>CARD A 수정하기<% else %>CARD A 입력하기<% end %>
           </a>
 				</td>
 				<td style="width:50%;">
 					<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;" style="margin:0 0 0 2px;">
-            CARD B 간편입력
+            <% if @ask.id %>CARD B 수정하기<% else %>CARD B 입력하기<% end %>
           </a>
 				</td>
 			</tr>
