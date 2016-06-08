@@ -107,7 +107,7 @@
 
 	        	if (data.is_empty_result){
 	        		if ($('#search_input').val() != ""){
-	        			var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666;'>검색 결과가 없습니다.</span>";
+	        			var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다.</span>";
 	        			$('#search_result').html(empty_span);
 	        		}
 	        	}else{
@@ -166,10 +166,10 @@
 					$("#search").animate({"top":"-50px"},300);
 					$(".home-float-btn-area").animate({"bottom":"-85px"},300);
 	      } else {
-	          if(st + $(window).height() < $(document).height() ) {
+	          // if(st + $(window).height() < $(document).height() ) {
 							$("#search").animate({"top":"50px"},300);
 							$(".home-float-btn-area").animate({"bottom":"15px"},300);
-	          }
+	          // }
 	      }
 	      lastScrollTop = st;
 	  }
