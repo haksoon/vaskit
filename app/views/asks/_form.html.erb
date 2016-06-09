@@ -13,113 +13,86 @@
 			</div>
 		</div>
 
-
 		<div class="content_box" style="padding:10px;">
-			<div style="position:relative;">
-				<span id="card_a_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(true); <% else %> show_card_overlay(true); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color:<% if @ask.id %>#f4f4f4<% else %>#fff<% end %>; padding-left: 2px; cursor:pointer; font-size:13px;">
-					CARD A <% if @ask.id %>수정<% else %>입력<% end %>하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
-				</span>
-				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;">
-					<i class="fa fa-search" style="color:#ee6e01;"></i>
+			<div class="table_div">
+				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;" style="float:left;">
+					<i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD A 검색하기
+				</a>
+				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;" style="float:right;">
+					<i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD B 검색하기
 				</a>
 			</div>
-			<div id="card_a_overlay" style="padding-top:10px; <% if @ask.id %> display:block; <% else %> display:none; <% end %>">
-				<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
-					<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-				</a>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon left_input" onclick="$('#left_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
+			<span id="card_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(); <% else %> show_card_overlay(); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color:<% if @ask.id %>#f4f4f4<% else %>#fff<% end %>; padding-left: 2px; cursor:pointer; font-size:13px;">
+				제품 정보 <% if @ask.id %>수정<% else %>입력<% end %>하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
+			</span>
+			<div id="card_overlay" style="padding-top:10px; <% if @ask.id %> display:block; <% else %> display:none; <% end %>">
+				<div class="table_div" style="margin-bottom: 0;">
+				  <div class="ask_text_field left_input" onclick="left_deal_image_upload(); return false;" style="text-align: center; border-radius: 5px 0 0 0; cursor:pointer;">CARD A 이미지 업로드</div>
+					<div class="ask_text_field right_input" onclick="right_deal_image_upload(); return false;" style="text-align: center; border-radius: 0 5px 0 0; cursor:pointer;">CARD B 이미지 업로드</div>
+					<span class="input_icon center_input" onclick="$('#left_deal_title').focus(); return false;"><i class="fa fa-image"></i></span>
 				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon left_input" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
+				<div class="table_div">
+					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="display:block; float:left; width:50%; box-sizing:border-box; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 0 5px; overflow:hidden;">
+						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+					</a>
+					<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="display:block; float:right; width:50%; box-sizing:border-box; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 5px 0; overflow:hidden;">
+						<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+					</a>
 				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field" %>
-					<span class="input_icon left_input" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon left_input" onclick="$('#left_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px; color:#9d9ea1; text-align:center; height:16px;">
-	  			<i class="fa fa-plus"></i>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon left_input" onclick="$('#left_deal_spec1').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon left_input" onclick="$('#left_deal_spec2').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
-				</div>
-				<div style="position:relative;">
-					<%= text_area_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field", :rows => 1 %>
-					<span class="input_icon left_input" onclick="$('#left_deal_spec3').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
-				</div>
-			</div>
-		</div>
 
-		<div class="content_box" style="padding:10px;">
-			<div style="position:relative;">
-				<span id="card_b_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(false); <% else %> show_card_overlay(false); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color:<% if @ask.id %>#f4f4f4<% else %>#fff<% end %>; padding-left: 2px; cursor:pointer; font-size:13px;">
-					CARD B <% if @ask.id %>수정<% else %>입력<% end %>하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
-				</span>
-				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;">
-					<i class="fa fa-search" style="color:#ee6e01;"></i>
-				</a>
-			</div>
-			<div id="card_b_overlay" style="padding-top:10px; <% if @ask.id %> display:block; <% else %> display:none; <% end %>">
-				<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="display:block; border:1px solid #dbdbdb; margin-bottom:10px;">
-					<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-				</a>
-				<div style="position:relative; margin-bottom:10px;">
+				<div class="table_div">
+					<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field left_input", :rows => 1 %>
 					<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
+					<span class="input_icon center_input" onclick="$('#left_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
 				</div>
-				<div style="position:relative; margin-bottom:10px;">
+				<div class="table_div">
+					<%= text_area_tag 'left_deal[brand]', @left_ask_deal && @left_ask_deal.brand ? @left_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field left_input", :rows => 1 %>
 					<%= text_area_tag 'right_deal[brand]', @right_ask_deal && @right_ask_deal.brand ? @right_ask_deal.brand : nil, :placeholder => "브랜드", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
+					<span class="input_icon center_input" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 				</div>
-				<div style="position:relative; margin-bottom:10px;">
+				<div class="table_div">
+					<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field left_input" %>
 					<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
-					<span class="input_icon right_input" onclick="$('#right_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
+					<span class="input_icon center_input" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 				</div>
-				<div style="position:relative; margin-bottom:10px;">
+				<div class="table_div">
+					<%= text_area_tag 'left_deal[link]', @left_ask_deal && @left_ask_deal.link ? @left_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field left_input", :rows => 1 %>
 					<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
+					<span class="input_icon center_input" onclick="$('#left_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
 				</div>
-				<div style="position:relative; margin-bottom:10px; color:#9d9ea1; text-align:center; height:16px;">
-	  			<i class="fa fa-plus"></i>
+
+				<div class="table_div" style="margin-bottom:0px;">
+					<div id="add_info_1" style="display:none;">
+						<%= f.text_field :spec1, :placeholder => "추가 스펙명", :class => "ask_text_field center_input add_info" %>
+						<div class="table_div">
+							<%= text_area_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
+							<%= text_area_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
+							<span class="input_icon center_input" onclick="$('#ask_spec1').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
+						</div>
+					</div>
+					<div id="add_info_2" style="display:none;">
+						<%= f.text_field :spec2, :placeholder => "추가 스펙명", :class => "ask_text_field center_input add_info" %>
+						<div class="table_div">
+							<%= text_area_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
+							<%= text_area_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
+							<span class="input_icon center_input" onclick="$('#ask_spec2').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
+						</div>
+					</div>
+					<div id="add_info_3" style="display:none;">
+						<%= f.text_field :spec3, :placeholder => "추가 스펙명", :class => "ask_text_field center_input add_info" %>
+						<div class="table_div" style="margin-bottom:0px;">
+							<%= text_area_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
+							<%= text_area_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
+							<span class="input_icon center_input" onclick="$('#ask_spec3').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
+						</div>
+					</div>
+					<div onclick="show_more_add_info(); return false;" style="position:relative; height:36px; line-height:36px; margin-top:10px; margin-bottom:5px; border:1px solid #dbdbdb; border-radius:5px; background-color:#f4f4f4; color:#9d9ea1; font-size:13px; text-align:center; cursor:pointer;">
+		  			<i class="fa fa-plus-circle"></i>&nbsp;추가 정보 입력하기
+					</div>
 				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_spec1').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
-				</div>
-				<div style="position:relative; margin-bottom:10px;">
-					<%= text_area_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_spec2').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
-				</div>
-				<div style="position:relative;">
-					<%= text_area_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field right_input", :rows => 1 %>
-					<span class="input_icon right_input" onclick="$('#right_deal_spec3').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
-				</div>
+
 			</div>
 		</div>
-
-		<div style="display:none;">
-			<div style="margin:0 2px 0 2px; font-size:13px; color:#383838;">
-				<%= f.text_field :spec1, :placeholder => "추가 스펙명", :class => "ask_text_field center_input" %>
-			</div>
-			<div style="margin:0 2px 0 2px; font-size:13px; color:#383838;">
-				<%= f.text_field :spec2, :placeholder => "추가 스펙명", :class => "ask_text_field center_input" %>
-			</div>
-			<div style="margin:0 2px 0 2px; font-size:13px; color:#383838;">
-				<%= f.text_field :spec3, :placeholder => "추가 스펙명", :class => "ask_text_field center_input" %>
-			</div>
-		</div>
-
 		<div style="display:none;">
 			<%= file_field_tag 'left_deal[image]', :accept => 'image/*', :multiple => false, :style => "visibility:hidden; width:1px; display:inline;" %>
 			<%= hidden_field_tag 'left_deal[image_id]' %>
@@ -132,14 +105,15 @@
 		</div>
 	<% end %>
 </div>
+
 <div style="position:fixed; bottom:0; width:inherit; box-sizing:border-box; z-index:1;">
 	<% if @ask.id %>
 		<a href="#" onclick="edit_form(); return false;" class="ask_submit_btn">
-			<i class="fa fa-plus-circle"></i>&nbsp;질문 수정하기
+			<i class="fa fa-send"></i>&nbsp;질문 수정하기
 		</a>
 	<% else %>
 		<a href="#" onclick="submit_form(); return false;" class="ask_submit_btn">
-			<i class="fa fa-plus-circle"></i>&nbsp;질문 제출하기
+			<i class="fa fa-send"></i>&nbsp;질문 제출하기
 		</a>
 	<% end %>
 </div>
@@ -262,36 +236,19 @@
       	}
 	});
 
-	function show_card_overlay(is_left) {
-		if (is_left) {
-			$("#card_a_overlay").slideDown(500, function(){
-				$("#card_a_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
-				$("#card_a_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
-				var top = $("#card_a_overlay").offset().top;
-				$("body").animate({scrollTop:top-117},500);
-			});
-		} else {
-			$("#card_b_overlay").slideDown(500, function(){
-				$("#card_b_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
-				$("#card_b_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(false); return false;");
-				var top = $("#card_b_overlay").offset().top;
-				$("body").animate({scrollTop:top-117},500);
-			});
-		}
+	function show_card_overlay() {
+		$("#card_overlay").slideDown(500, function(){
+			// $("#card_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
+			// $("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
+			var top = $("#card_overlay").offset().top;
+			$("body").animate({scrollTop:top-117},500);
+		});
 	}
 
-	function hide_card_overlay(is_left) {
-		if (is_left) {
-			$("#card_a_overlay").slideUp(500, function(){
-				$("#card_a_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
-				$("#card_a_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
-			});
-		} else {
-			$("#card_b_overlay").slideUp(500, function(){
-				$("#card_b_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
-				$("#card_b_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(false); return false;");
-			});
-		}
+	function hide_card_overlay() {
+		$("#card_overlay").slideUp(500, function(){
+			// $("#card_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
+			// $("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
 	}
 
 	function hide_search_deal_popup(){
@@ -311,10 +268,10 @@
 		$("#deal_search_btn").attr("onclick", "deal_search("+is_left+"); return false;");
 		if (is_left){
 			$("#search_deal_title").html("CARD A 검색해서 입력하기");
-			show_card_overlay(true);
+			show_card_overlay();
 		} else {
 			$("#search_deal_title").html("CARD B 검색해서 입력하기");
-			show_card_overlay(false);
+			show_card_overlay();
 		}
 	}
 
@@ -515,6 +472,19 @@
 		    }).fail(function (data) {}).done(function () {});
 		});
 	});
+
+	function show_more_add_info() {
+		if ( $("#add_info_1:visible").length == 0 ) {
+			$("#add_info_1").slideDown(300);
+			return;
+		} else if ( $("#add_info_2:visible").length == 0 ) {
+			$("#add_info_2").slideDown(300);
+			return;
+		} else {
+			$("#add_info_3").slideDown(300);
+			return;
+		}
+	}
 
 	var check_click = 0;
 

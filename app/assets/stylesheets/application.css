@@ -293,6 +293,9 @@ input:focus, select:focus, textarea:focus {
    border-radius:0 0 0 3px;
 	 clear:both;
 }
+.content_box::after {
+  content:""; display:block; clear:both;
+}
 
  .card_image {
 	 width:100%;
@@ -574,11 +577,9 @@ img.cover {
 }
 
 .ask_search_deal {
-	position: absolute;
-	top: 0;
-	right: 0;
-	display: block;
-	width: 40px;
+	display: inline-block;
+	box-sizing: border-box;
+	width: 49%;
 	height: 40px;
 	line-height: 40px;
 	border-radius: 5px;
@@ -605,11 +606,18 @@ img.cover {
 	border-radius: 5px 5px 0 0;
 }
 
+.table_div {
+	position: relative;
+	margin-bottom: 10px;
+}
+.table_div::after {
+  content:""; display:block; clear:both;
+}
+
 .ask_text_field {
-	display: block;
-	max-width: 100%;
-	min-width: 100%;
-	max-width: 100%;
+	display: inline-block;
+	min-width: 50%;
+	max-width: 50%;
 	min-height: 40px;
 	max-height: 40px;
 	border: 1px solid #dbdbdb;
@@ -617,11 +625,34 @@ img.cover {
   box-sizing: border-box;
 	margin: 0;
 	padding: 10px;
-	padding-left: 50px;
 	font-size: 13px;
 	line-height: 17px;
-	text-align: left;
 	color:#393939;
+}
+.ask_text_field.left_input {
+	float: left;
+	text-align: left;
+	padding-right: 20px;
+}
+.ask_text_field.center_input {
+	text-align: center;
+}
+.ask_text_field.right_input {
+	float: right;
+	text-align: right;
+	padding-left: 20px;
+}
+.ask_text_field.add_info {
+	min-width: 100%;
+	max-width: 100%;
+	border-bottom: none;
+	border-radius: 5px 5px 0 0;
+}
+.ask_text_field.add_info_left {
+	border-radius: 0 0 0 5px;
+}
+.ask_text_field.add_info_right {
+	border-radius: 0 0 5px 0;
 }
 
 .input_icon {
@@ -641,20 +672,14 @@ img.cover {
 	left: 0px;
 	border-radius: 3px 0 0px 3px;
 }
+.input_icon.left_input {
+	left: 50%;
+	margin-left: -20px;
+	border-radius: 0px;
+}
 .input_icon.right_input {
 	right: 0px;
 	border-radius: 0 3px 3px 0;
-}
-
-.ask_text_field.center_input {
-	text-align: center;
-	padding-left: 0px;
-}
-
-.ask_text_field.right_input {
-	text-align: right;
-	padding-left: 0px;
-	padding-right: 50px;
 }
 
 .naver_image_wrap{
