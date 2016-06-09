@@ -10,11 +10,11 @@
 	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
     <div style="position:relative;">
 		  <%= f.email_field :email, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
-      <span class="input_icon" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+      <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
     </div>
     <div style="position:relative;">
 		  <%= f.password_field :password, :placeholder => "설정하신 비밀번호를 입력해주세요.", :class => "registrations_input" %>
-      <span class="input_icon" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
+      <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
     </div>
 		<a href="#" onclick="sign_in_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
 			<i class="fa fa-sign-in"></i>&nbsp;로그인

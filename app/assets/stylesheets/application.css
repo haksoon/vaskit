@@ -469,22 +469,6 @@ img.cover {
 	margin-bottom:10px;
 }
 
-.input_icon {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    width: 40px;
-    height: 40px;
-		box-sizing: border-box;
-    text-align: center;
-    line-height: 40px;
-    color: #666;
-    font-size: 15px;
-    background-color: #f4f4f4;
-    border: 1px solid #dbdbdb;
-		border-radius: 3px 0 0px 3px;
-}
-
 .birthday_select{
 	height: 40px;
 	margin: 0 0 10px;
@@ -622,8 +606,24 @@ img.cover {
 	color:#393939;
 }
 
+.input_icon {
+    position: absolute;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+		box-sizing: border-box;
+    text-align: center;
+    line-height: 40px;
+    color: #666;
+    font-size: 15px;
+    background-color: #f4f4f4;
+    border: 1px solid #dbdbdb;
+}
+.input_icon.left_input {
+	left: 0px;
+	border-radius: 3px 0 0px 3px;
+}
 .input_icon.right_input {
-	left: initial;
 	right: 0px;
 	border-radius: 0 3px 3px 0;
 }

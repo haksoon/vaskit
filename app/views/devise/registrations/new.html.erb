@@ -15,15 +15,15 @@
   		<% if resource.facebook_id.blank? %>
         <div style="position:relative;">
   			  <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
-          <span class="input_icon" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+          <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
         </div>
         <div style="position:relative;">
   			  <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
-          <span class="input_icon" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
+          <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
         </div>
         <div style="position:relative;">
           <input placeholder="입력하신 비밀번호를 확인해주세요." class="registrations_input" type="password" id="user_password_confirm">
-          <span class="input_icon" onclick="$('#user_password_confirm').focus(); return false;"><i class="fa fa-check"></i></span>
+          <span class="input_icon left_input" onclick="$('#user_password_confirm').focus(); return false;"><i class="fa fa-check"></i></span>
         </div>
         <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
           <i class="fa fa-plus"></i>&nbsp;추가 입력정보
@@ -32,9 +32,9 @@
   				<tr>
   					<td style="width:100%; position:relative;">
   						<%= f.date_select :birthday, {:start_year => 2005, :end_year => 1900,:prompt => {:year => '', :month => '월', :day => '' }}, {:class => "birthday_select"} %>
-              <span class="input_icon" style="top: 0px; font-size: 10px; font-weight: bold;">YEAR</span>
-              <span class="input_icon" style="top: 50px; font-size: 10px; font-weight: bold;">MONTH</span>
-              <span class="input_icon" style="top: 100px; font-size: 10px; font-weight: bold;">DAY</span>
+              <span class="input_icon left_input" style="top: 0px; font-size: 10px; font-weight: bold;">YEAR</span>
+              <span class="input_icon left_input" style="top: 50px; font-size: 10px; font-weight: bold;">MONTH</span>
+              <span class="input_icon left_input" style="top: 100px; font-size: 10px; font-weight: bold;">DAY</span>
   					</td>
   				</tr>
   			</table>
@@ -68,18 +68,18 @@
   			<% if resource.email.blank? %>
           <div style="position:relative;">
             <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
-            <span class="input_icon" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+            <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
           </div>
   			<% else %>
   				<%= f.hidden_field :email %>
   			<% end %>
         <div style="position:relative;">
           <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
-          <span class="input_icon" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
+          <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
         </div>
         <div style="position:relative;">
           <input placeholder="입력하신 비밀번호를 확인해주세요." class="registrations_input" type="password" id="user_password_confirm">
-          <span class="input_icon" onclick="$('#user_password_confirm').focus(); return false;"><i class="fa fa-check"></i></span>
+          <span class="input_icon left_input" onclick="$('#user_password_confirm').focus(); return false;"><i class="fa fa-check"></i></span>
         </div>
         <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
           <i class="fa fa-plus"></i>&nbsp;추가 입력정보
@@ -90,9 +90,9 @@
             <tr>
               <td style="width:100%; position:relative;">
                 <%= f.date_select :birthday, {:start_year => 2005, :end_year => 1900,:prompt => {:year => '', :month => '월', :day => '' }}, {:class => "birthday_select"} %>
-                <span class="input_icon" style="top: 0px; font-size: 10px; font-weight: bold;">YEAR</span>
-                <span class="input_icon" style="top: 50px; font-size: 10px; font-weight: bold;">MONTH</span>
-                <span class="input_icon" style="top: 100px; font-size: 10px; font-weight: bold;">DAY</span>
+                <span class="input_icon left_input" style="top: 0px; font-size: 10px; font-weight: bold;">YEAR</span>
+                <span class="input_icon left_input" style="top: 50px; font-size: 10px; font-weight: bold;">MONTH</span>
+                <span class="input_icon left_input" style="top: 100px; font-size: 10px; font-weight: bold;">DAY</span>
               </td>
             </tr>
           </table>
