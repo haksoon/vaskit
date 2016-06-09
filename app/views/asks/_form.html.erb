@@ -23,7 +23,7 @@
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;">
 					<i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD A 검색하기
 				</a>
-				<span id="card_a_overlay_open" class="input_icon right_input" onclick="<% if @ask.id %> hide_card_overlay(true); <% else %> show_card_overlay(true); <% end %> return false;" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
+				<span id="card_a_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(true); <% else %> show_card_overlay(true); <% end %> return false;" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
 				  <i class="fa <% if @ask.id %> fa-angle-up <% else %> fa-angle-down <% end %>"></i>
 				</span>
 			</div>
@@ -70,7 +70,7 @@
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;">
 					<i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD B 검색하기
 				</a>
-				<span id="card_b_overlay_open" class="input_icon right_input" onclick="<% if @ask.id %> hide_card_overlay(false); <% else %> show_card_overlay(false); <% end %> return false;" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
+				<span id="card_b_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(false); <% else %> show_card_overlay(false); <% end %> return false;" style="width: 44px; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer;">
 					<i class="fa <% if @ask.id %> fa-angle-up <% else %> fa-angle-down <% end %>"></i>
 				</span>
 			</div>
