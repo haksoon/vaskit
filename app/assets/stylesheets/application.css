@@ -550,6 +550,7 @@ img.cover {
 	min-height: 120px;
 	max-height: 120px;
   box-sizing: border-box;
+	margin: 0;
 	padding: 10px;
 	padding-left: 50px;
 	border: 1px solid #dbdbdb;
@@ -557,7 +558,6 @@ img.cover {
 	color: #393939;
 	font-size: 13px;
 	line-height: 17px;
-	margin: 0;
 }
 
 .ask_search_deal {
@@ -599,6 +599,7 @@ img.cover {
 	border: 1px solid #dbdbdb;
 	border-radius: 5px;
   box-sizing: border-box;
+	margin: 0;
 	padding: 10px;
 	padding-left: 50px;
 	font-size: 13px;
