@@ -136,7 +136,7 @@
 				<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff;">
 					<tr>
 						<td style="width:100%;">
-							<input id="deal_search_keyword" type="text" class="comment_box" placeholder="제품명을 입력해주세요." />
+							<input id="deal_search_keyword" type="text" class="comment_box" placeholder="제품명을 입력해주세요." onkeyup="$('#deal_search_btn').css('background-color','#ee6e01'); return false;"/>
 						</td>
 						<td>
 							<a id="deal_search_btn" href="#" style="width:50px; height:40px; line-height:40px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
@@ -235,7 +235,6 @@
 	}
 
 	$('#deal_search_keyword').keypress(function(e) {
-		$("#deal_search_btn").css("background-color","#ee6e01");
 		if (e.keyCode == '13') {
         	e.preventDefault();
         	deal_search_by_key();
