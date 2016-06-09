@@ -558,8 +558,8 @@ img.cover {
 	font-size: 13px;
 	line-height: 17px;
 	position: absolute;
-	top: 0;
-	left: 0;
+	top: -1px;
+	left: -1px;
 }
 
 .ask_search_deal {
