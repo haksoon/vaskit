@@ -17,7 +17,7 @@
 		<div class="content_box" style="padding:10px;">
 			<div style="position:relative;">
 				<span id="card_a_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(true); <% else %> show_card_overlay(true); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer; font-size:13px;">
-					CARD A 입력하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-up <% else %> fa-angle-down <% end %>" style="font-size:15px;"></i>
+					CARD A 입력하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
 				</span>
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;">
 					<i class="fa fa-search" style="color:#ee6e01;"></i>
@@ -64,7 +64,7 @@
 		<div class="content_box" style="padding:10px;">
 			<div style="position:relative;">
 				<span id="card_b_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(false); <% else %> show_card_overlay(false); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer; font-size:13px;">
-					CARD B 입력하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-up <% else %> fa-angle-down <% end %>" style="font-size:15px;"></i>
+					CARD B 입력하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
 				</span>
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;">
 					<i class="fa fa-search" style="color:#ee6e01;"></i>
@@ -265,15 +265,15 @@
 	function show_card_overlay(is_left) {
 		if (is_left) {
 			$("#card_a_overlay").slideDown(500, function(){
-				$("#card_a_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
-				$("#card_a_overlay_open").attr("onclick","hide_card_overlay(true); return false;");
+				$("#card_a_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
+				$("#card_a_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
 				var top = $("#card_a_overlay").offset().top;
 				$("body").animate({scrollTop:top-110},500);
 			});
 		} else {
 			$("#card_b_overlay").slideDown(500, function(){
-				$("#card_b_overlay_open").children("i").removeClass("fa-angle-down").addClass("fa-angle-up");
-				$("#card_b_overlay_open").attr("onclick","hide_card_overlay(false); return false;");
+				$("#card_b_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
+				$("#card_b_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(false); return false;");
 				var top = $("#card_b_overlay").offset().top;
 				$("body").animate({scrollTop:top-110},500);
 			});
@@ -283,13 +283,13 @@
 	function hide_card_overlay(is_left) {
 		if (is_left) {
 			$("#card_a_overlay").slideUp(500, function(){
-				$("#card_a_overlay_open").children("i").removeClass("fa-angle-up").addClass("fa-angle-down");
-				$("#card_a_overlay_open").attr("onclick","show_card_overlay(true); return false;");
+				$("#card_a_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
+				$("#card_a_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
 			});
 		} else {
 			$("#card_b_overlay").slideUp(500, function(){
-				$("#card_b_overlay_open").children("i").removeClass("fa-angle-up").addClass("fa-angle-down");
-				$("#card_b_overlay_open").attr("onclick","show_card_overlay(false); return false;");
+				$("#card_b_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
+				$("#card_b_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(false); return false;");
 			});
 		}
 	}
