@@ -238,8 +238,8 @@
 
 	function show_card_overlay() {
 		$("#card_overlay").slideDown(500, function(){
-			// $("#card_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
-			// $("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
+			$("#card_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
+			$("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
 			var top = $("#card_overlay").offset().top;
 			$("body").animate({scrollTop:top-117},500);
 		});
@@ -247,8 +247,8 @@
 
 	function hide_card_overlay() {
 		$("#card_overlay").slideUp(500, function(){
-			// $("#card_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
-			// $("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
+			$("#card_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
+			$("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
 		});
 	}
 
