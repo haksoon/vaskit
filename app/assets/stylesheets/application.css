@@ -63,6 +63,10 @@ input::-webkit-inner-spin-button {
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
+select::-ms-expand {
+    display: none;
+}
+
 input, select, textarea {
 	-webkit-appearance: none;
 		 -moz-appearance: none;
