@@ -84,7 +84,7 @@ input, select, textarea {
 
 input:focus, select:focus, textarea:focus {
 	outline: none;
-	background-color: rgba(255,268,169,0.2);
+	background-color: rgba(238,110,1,0.1);
 }
 
 .hover_pointer { cursor: pointer; }
