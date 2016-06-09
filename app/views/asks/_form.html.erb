@@ -8,7 +8,7 @@
 				<span class="input_icon left_input" onclick="$('#ask_category_id').focus().select(); return false;"><i class="fa fa-heart"></i></span>
 			</div>
 			<div style="position:relative; height:120px;">
-				<%= f.text_area :message, :placeholder => "고민하고 있는 상황을 알려주세요! #해시태그도 자유롭게 활용해보세요.", :class => "ask_message_input" %>
+				<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input" %>
 				<span class="input_icon left_input" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
 			</div>
 		</div>
@@ -69,26 +69,26 @@
 
 				<div class="table_div" style="margin-bottom:0px;">
 					<div id="add_info_1" style="display:none;">
-						<%= f.text_field :spec1, :placeholder => "추가 스펙명", :class => "ask_text_field center_input add_info" %>
+						<%= f.text_field :spec1, :placeholder => "제목", :class => "ask_text_field center_input add_info" %>
 						<div class="table_div">
-							<%= text_area_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
-							<%= text_area_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "추가 스펙1", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
+							<%= text_area_tag 'left_deal[spec1]', @left_ask_deal && @left_ask_deal.spec1 ? @left_ask_deal.spec1 : nil, :placeholder => "내용", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
+							<%= text_area_tag 'right_deal[spec1]', @right_ask_deal && @right_ask_deal.spec1 ? @right_ask_deal.spec1 : nil, :placeholder => "내용", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
 							<span class="input_icon center_input" onclick="$('#ask_spec1').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
 						</div>
 					</div>
 					<div id="add_info_2" style="display:none;">
-						<%= f.text_field :spec2, :placeholder => "추가 스펙명", :class => "ask_text_field center_input add_info" %>
+						<%= f.text_field :spec2, :placeholder => "제목", :class => "ask_text_field center_input add_info" %>
 						<div class="table_div">
-							<%= text_area_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
-							<%= text_area_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "추가 스펙2", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
+							<%= text_area_tag 'left_deal[spec2]', @left_ask_deal && @left_ask_deal.spec2 ? @left_ask_deal.spec2 : nil, :placeholder => "내용", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
+							<%= text_area_tag 'right_deal[spec2]', @right_ask_deal && @right_ask_deal.spec2 ? @right_ask_deal.spec2 : nil, :placeholder => "내용", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
 							<span class="input_icon center_input" onclick="$('#ask_spec2').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
 						</div>
 					</div>
 					<div id="add_info_3" style="display:none;">
-						<%= f.text_field :spec3, :placeholder => "추가 스펙명", :class => "ask_text_field center_input add_info" %>
+						<%= f.text_field :spec3, :placeholder => "제목", :class => "ask_text_field center_input add_info" %>
 						<div class="table_div" style="margin-bottom:0px;">
-							<%= text_area_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
-							<%= text_area_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "추가 스펙3", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
+							<%= text_area_tag 'left_deal[spec3]', @left_ask_deal && @left_ask_deal.spec3 ? @left_ask_deal.spec3 : nil, :placeholder => "내용", :class => "ask_text_field left_input add_info_left", :rows => 1 %>
+							<%= text_area_tag 'right_deal[spec3]', @right_ask_deal && @right_ask_deal.spec3 ? @right_ask_deal.spec3 : nil, :placeholder => "내용", :class => "ask_text_field right_input add_info_right", :rows => 1 %>
 							<span class="input_icon center_input" onclick="$('#ask_spec3').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
 						</div>
 					</div>
@@ -246,8 +246,6 @@
 		$("#card_overlay").slideDown(500, function(){
 			$("#card_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
 			$("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
-			var top = $("#card_overlay").offset().top;
-			$("body").animate({scrollTop:top-117},500);
 		});
 	}
 
