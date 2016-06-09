@@ -64,7 +64,13 @@ input::-webkit-inner-spin-button {
 }
 
 select::-ms-expand {
-    display: none;
+  display: none;
+}
+textarea {
+  overflow: auto;
+}
+input::-ms-clear {
+  display: none;
 }
 
 input, select, textarea {
