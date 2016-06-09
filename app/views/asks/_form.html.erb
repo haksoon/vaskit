@@ -16,7 +16,7 @@
 
 		<div class="content_box" style="padding:10px;">
 			<div style="position:relative;">
-				<span id="card_a_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(true); <% else %> show_card_overlay(true); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer; font-size:13px;">
+				<span id="card_a_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(true); <% else %> show_card_overlay(true); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer; font-size:13px;">
 					CARD A 입력하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-up <% else %> fa-angle-down <% end %>" style="font-size:15px;"></i>
 				</span>
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;">
@@ -63,7 +63,7 @@
 
 		<div class="content_box" style="padding:10px;">
 			<div style="position:relative;">
-				<span id="card_b_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(false); <% else %> show_card_overlay(false); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer; font-size:13px;">
+				<span id="card_b_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(false); <% else %> show_card_overlay(false); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; margin-right:50px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color: #fff; padding-left: 2px; cursor:pointer; font-size:13px;">
 					CARD B 입력하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-up <% else %> fa-angle-down <% end %>" style="font-size:15px;"></i>
 				</span>
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(false); return false;">
