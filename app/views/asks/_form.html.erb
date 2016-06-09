@@ -512,7 +512,6 @@
 
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
-			$("#left_deal_title").focus();
 			return;
 		}
 
@@ -523,7 +522,6 @@
 
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
 			notify('CARD B 제품명을 입력해주세요.');
-			$("#right_deal_title").focus();
 			return;
 		}
 		if (check_click == 0) {
@@ -542,13 +540,11 @@
 
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
-			$("#left_deal_title").focus();
 			return;
 		}
 
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
 			notify('CARD B 제품명을 입력해주세요.');
-			$("#right_deal_title").focus();
 			return;
 		}
 		var left_price = $("#left_deal_price").val();
