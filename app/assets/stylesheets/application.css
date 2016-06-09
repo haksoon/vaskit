@@ -557,6 +557,9 @@ img.cover {
 	color: #393939;
 	font-size: 13px;
 	line-height: 17px;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 
 .ask_search_deal {
