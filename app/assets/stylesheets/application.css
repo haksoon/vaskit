@@ -574,7 +574,11 @@ img.cover {
 }
 
 .ask_search_deal {
+	position: absolute;
+	top: 0;
+	right: 0;
 	display: block;
+	width: 40px;
 	height: 40px;
 	line-height: 40px;
 	border-radius: 5px;
@@ -586,7 +590,6 @@ img.cover {
 	font-size: 13px;
 	font-weight: bold;
 	text-align: center;
-	margin-left: 50px;
 }
 
 .ask_submit_btn {
