@@ -92,7 +92,7 @@
 							<span class="input_icon center_input" onclick="$('#ask_spec3').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
 						</div>
 					</div>
-					<div onclick="show_more_add_info(); return false;" style="position:relative; height:36px; line-height:36px; margin-top:10px; margin-bottom:5px; border:1px solid #dbdbdb; border-radius:5px; background-color:#f4f4f4; color:#9d9ea1; font-size:13px; text-align:center; cursor:pointer;">
+					<div id="add_info_btn" onclick="show_more_add_info(); return false;" style="position:relative; height:36px; line-height:36px; margin-top:10px; margin-bottom:5px; border:1px solid #dbdbdb; border-radius:5px; background-color:#f4f4f4; color:#9d9ea1; font-size:13px; text-align:center; cursor:pointer;">
 		  			<i class="fa fa-plus-circle"></i>&nbsp;추가 정보 입력하기
 					</div>
 				</div>
@@ -496,7 +496,7 @@
 			return;
 		} else {
 			$("#add_info_3").slideDown(300);
-			$(this).hide();
+			$("#add_info_btn").hide();
 			return;
 		}
 	}
