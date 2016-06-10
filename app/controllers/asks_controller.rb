@@ -110,9 +110,11 @@ class AsksController < ApplicationController
     @ask = Ask.create(ask_params)
 
     # 카테고리가 없는 경우 카테고리 추가
-    # if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
-    #   UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
-    # end
+    unless UserCategory.where(:user_id => current_user.id)
+      if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
+        UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
+      end
+    end
 
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
@@ -193,9 +195,11 @@ class AsksController < ApplicationController
     @ask.update(ask_params)
 
     # 카테고리가 없는 경우 카테고리 추가
-    # if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
-    #   UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
-    # end
+    unless UserCategory.where(:user_id => current_user.id)
+      if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
+        UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
+      end
+    end
 
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
