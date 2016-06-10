@@ -27,13 +27,13 @@
 				<div class="table_div" style="border:1px solid #dbdbdb;">
 					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="position:relative; display:block; float:left; width:50%; box-sizing:border-box; overflow:hidden;">
 						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_image_preview.png" %>" style="display:block; margin:0 auto; width:100%;">
-						<div id="card_a_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666;">
+						<div id="card_a_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666; display:<% if @ask.id %>none<% else %>block<% end %>;">
   						<span style="top: 50%;margin-top: -50px;margin-left: -50px;position: absolute;font-size: 13px;padding: 20px;width: 100px;height: 100px;background-color: #fff;border-radius: 60px;box-sizing: border-box;"><i class="fa fa-image" style="font-size: 30px; padding-bottom: 5px;"></i><br>이미지<br>업로드</span>
 						</div>
 					</a>
 					<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="position:relative; display:block; float:right; width:50%; box-sizing:border-box; overflow:hidden;">
 						<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_image_preview.png" %>" style="display:block; margin:0 auto; width:100%;">
-						<div id="card_b_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666; border-left:1px solid #dbdbdb;">
+						<div id="card_b_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666; border-left:1px solid #dbdbdb; display:<% if @ask.id %>none<% else %>block<% end %>;">
 							<span style="top: 50%;margin-top: -50px;margin-left: -50px;position: absolute;font-size: 13px;padding: 20px;width: 100px;height: 100px;background-color: #fff;border-radius: 60px;box-sizing: border-box;"><i class="fa fa-image" style="font-size: 30px; padding-bottom: 5px;"></i><br>이미지<br>업로드</span>
 						</div>
 					</a>
