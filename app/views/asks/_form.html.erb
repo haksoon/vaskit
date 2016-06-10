@@ -23,7 +23,7 @@
 				</a>
 			</div>
 			<span class="seperate_line"></span>
-			<div id="card_overlay" style="padding-top:10px; <% if @ask.id %> display:block; <% else %> display:none; <% end %>">
+			<div id="card_overlay" style="<% if @ask.id %> display:block; <% else %> display:none; <% end %>">
 				<div class="table_div" style="border:1px solid #dbdbdb;">
 					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="position:relative; display:block; float:left; width:50%; box-sizing:border-box; overflow:hidden;">
 						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
