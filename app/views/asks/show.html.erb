@@ -3,11 +3,11 @@
 
 <script type="text/template" id="ask-show-template">
   <div class="table_div" style="margin-bottom:0px; border-radius:0 3px 0 0; overflow:hidden;">
-		<span class="input_icon left_input" style="border-bottom:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
+		<span class="input_icon left_input" style="border-bottom:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:initial;"><i class="fa fa-filter"></i></span>
     {{ if (ask.category) { }}
-    	<span class="category">{{= ask.category.name }}</span>
+    	<span class="category" style="cursor:initial;">{{= ask.category.name }}</span>
     {{ }else{ }}
-    	<span class="category none">관심사 미설정</span>
+    	<span class="category none" style="cursor:initial;">관심사 미설정</span>
     {{ } }}
 		<div style="position:absolute; bottom:0; right:3px;">
 			<a class="share_icon" style="width:80px;" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
