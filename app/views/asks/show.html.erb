@@ -731,8 +731,8 @@
 	function vote_ask_deal_show(ask_deal_id, is_left){
 		if (current_user_id == 0 && my_vote_count > 4){
 	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
-      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1000);
-			setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2000);
+      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
+			setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
 	 	}else{
 	 		$.ajax({
 		        url: "/votes.json",
