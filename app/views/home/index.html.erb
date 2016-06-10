@@ -44,7 +44,7 @@
 			<div class="home-float-btn-text">질문<br>하기</div>
 		</a>
 	<% else %>
-		<a href="#" onclick="notify('회원가입 후<br />질문을 올릴 수 있습니다.'); setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1000); setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2000); return false;" style="display:block;"><div class="home-float-btn"><i class="fa fa-plus"></i></div><div class="home-float-btn-text">질문<br>하기</div></a>
+		<a href="#" onclick="visitor_new_ask(); return false;" style="display:block;"><div class="home-float-btn"><i class="fa fa-plus"></i></div><div class="home-float-btn-text">질문<br>하기</div></a>
 	<% end %>
 </div>
 
@@ -364,6 +364,12 @@
 	$(document).ready(function(){
     hover_action();
   });
+
+	function visitor_new_ask() {
+		notify('회원가입 후<br />질문을 올릴 수 있습니다.');
+		setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1000);
+		setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2000);
+	}
 
 </script>
 
