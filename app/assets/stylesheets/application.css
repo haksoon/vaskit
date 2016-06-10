@@ -195,6 +195,7 @@ input:focus, select:focus, textarea:focus {
 	font-weight:bold;
 	border:1px solid #dbdbdb;
 	border-bottom:none;
+	border-right-width: 3px;
   border-radius:0px 3px 0px 0px;
 	cursor:pointer;
 }
@@ -355,7 +356,7 @@ input:focus, select:focus, textarea:focus {
 	box-sizing: border-box;
 	height: 40px;
 	line-height: 40px;
-	border: 1px soild #dbdbdb;
+	border: 1px solid #dbdbdb;
 	border-right: none;
 	border-bottom: none;
 	color: #666;
@@ -365,8 +366,7 @@ input:focus, select:focus, textarea:focus {
 	transition: all .2s;
 }
 
-.share_icon:hover, .share_icon:focus, .share_icon:active { color:#998674; font-weight:bold; }
-.more_icon { padding:8px 5px; display:inline-block; color:#9d9ea1; font-size:12px; transition:all .2s; }
+.share_icon:hover, .share_icon:focus, .share_icon:active,
 .more_icon:hover, .more_icon:focus, .more_icon:active { color:#998674; font-weight:bold; }
 .card_detail { padding:12px 15px; display:block; color:#9d9ea1; font-size:13px; transition:all .2s; }
 .card_detail:hover, .card_detail:focus, .card_detail:active { color:#998674; font-weight:bold; }
