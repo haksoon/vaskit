@@ -26,13 +26,13 @@
 			<div id="card_overlay" style="<% if @ask.id %> display:block; <% else %> display:none; <% end %>">
 				<div class="table_div" style="border:1px solid #dbdbdb;">
 					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="position:relative; display:block; float:left; width:50%; box-sizing:border-box; overflow:hidden;">
-						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_image_preview.png" %>" style="display:block; margin:0 auto; width:100%;">
 						<div id="card_a_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666;">
   						<span style="top: 50%;margin-top: -50px;margin-left: -50px;position: absolute;font-size: 13px;padding: 20px;width: 100px;height: 100px;background-color: #fff;border-radius: 60px;box-sizing: border-box;"><i class="fa fa-image" style="font-size: 30px; padding-bottom: 5px;"></i><br>이미지<br>업로드</span>
 						</div>
 					</a>
 					<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="position:relative; display:block; float:right; width:50%; box-sizing:border-box; overflow:hidden;">
-						<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
+						<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_image_preview.png" %>" style="display:block; margin:0 auto; width:100%;">
 						<div id="card_b_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666; border-left:1px solid #dbdbdb;">
 							<span style="top: 50%;margin-top: -50px;margin-left: -50px;position: absolute;font-size: 13px;padding: 20px;width: 100px;height: 100px;background-color: #fff;border-radius: 60px;box-sizing: border-box;"><i class="fa fa-image" style="font-size: 30px; padding-bottom: 5px;"></i><br>이미지<br>업로드</span>
 						</div>
@@ -85,7 +85,7 @@
 							<span class="input_icon center_input" onclick="$('#ask_spec3').focus(); return false;"><i class="fa fa-plus-circle"></i></span>
 						</div>
 					</div>
-					<div id="add_info_btn" onclick="show_more_add_info(); return false;" style="position:relative; height:36px; line-height:36px; margin-top:10px; margin-bottom:5px; border:1px solid #dbdbdb; border-radius:5px; background-color:#f4f4f4; color:#9d9ea1; font-size:13px; text-align:center; cursor:pointer;">
+					<div id="add_info_btn" onclick="show_more_add_info(); return false;" style="position:relative; height:36px; line-height:36px; margin-top:10px; margin-bottom:5px; border:1px solid #dbdbdb; border-radius:5px; background-color:#fff; color:#9d9ea1; font-size:13px; text-align:center; cursor:pointer;">
 		  			<i class="fa fa-plus-circle"></i>&nbsp;추가 정보 입력하기
 					</div>
 				</div>
@@ -500,7 +500,7 @@
 	var check_click = 0;
 
 	function submit_form(){
-		if ( $("#left_deal_image_btn img").attr("src") == "/images/ask/card_a_upload.png"){
+		if ( $("#left_deal_image_btn img").attr("src") == "/images/ask/card_image_preview.png"){
 			notify('CARD A 이미지를 추가해주세요.');
 			return;
 		}
@@ -510,7 +510,7 @@
 			return;
 		}
 
-		if ( $("#right_deal_image_btn img").attr("src") == "/images/ask/card_b_upload.png"){
+		if ( $("#right_deal_image_btn img").attr("src") == "/images/ask/card_image_preview.png"){
 			notify('CARD B 이미지를 추가해주세요.');
 			return;
 		}

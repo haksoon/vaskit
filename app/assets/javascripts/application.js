@@ -46,7 +46,7 @@ function get_image_url(data, model_name, extention){
 	  	return image_url;
 	}
 	catch(err) {
-	    return "/images/ask/card_a_upload.png";
+	    return "/images/ask/card_image_preview.png";
 	}
 }
 
