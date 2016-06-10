@@ -148,7 +148,9 @@
 				}
 			}
 		<% else %>
-		 	notify("관심사 설정은<br />회원가입 후 가능합니다");
+      notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
+      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1000);
+      setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2000);
 		<% end %>
 	}
 
@@ -156,7 +158,9 @@
 		<% if current_user %>
 			window.location = "/home/set_category?category_ids="+change_user_categories;
 		<% else %>
-		 	notify("관심사 설정은<br />회원가입 후 가능합니다");
+      notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
+      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1000);
+      setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2000);
 		<% end %>
 	}
 
