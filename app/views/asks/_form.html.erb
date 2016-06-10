@@ -3,11 +3,11 @@
 <div style="background:#f4f4f4; padding:15px 12px 40px; text-align:left;">
 	<%= form_for(@ask) do |f| %>
 		<div class="content_box" style="padding:10px;">
-			<div style="position:relative;">
+			<div class="table_div">
 				<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "어떤 제품/서비스의 구매를 고민중이신가요?" }, :class => "category_select" %>
-				<span class="input_icon left_input" onclick="$('#ask_category_id').focus().select(); return false;"><i class="fa fa-heart"></i></span>
+				<span class="input_icon left_input" onclick="$('#ask_category_id').focus().select(); return false;"><i class="fa fa-filter"></i></span>
 			</div>
-			<div style="position:relative; height:120px;">
+			<div class="table_div" style="margin-bottom:0px; height:120px;">
 				<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input" %>
 				<span class="input_icon left_input" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
 			</div>

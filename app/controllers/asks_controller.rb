@@ -110,7 +110,7 @@ class AsksController < ApplicationController
     @ask = Ask.create(ask_params)
 
     # 카테고리가 없는 경우 카테고리 추가
-    unless UserCategory.where(:user_id => current_user.id).blank?
+    unless UserCategory.where(:user_id => current_user.id).blank? #AJS추가 유저가 카테고리를 수동으로 설정한 경우에 한해, 신규 카테고리 내용 글 쓰면 카테고리를 추가해서 보여줌
       if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
         UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
       end
@@ -195,7 +195,7 @@ class AsksController < ApplicationController
     @ask.update(ask_params)
 
     # 카테고리가 없는 경우 카테고리 추가
-    unless UserCategory.where(:user_id => current_user.id).blank?
+    unless UserCategory.where(:user_id => current_user.id).blank? #AJS추가 유저가 카테고리를 수동으로 설정한 경우에 한해, 신규 카테고리 내용 글 쓰면 카테고리를 추가해서 보여줌
       if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
         UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
       end
