@@ -22,30 +22,23 @@
 					<i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD B 검색하기
 				</a>
 			</div>
-			<span id="card_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(); <% else %> show_card_overlay(); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 44px; line-height: 44px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color:<% if @ask.id %>#f4f4f4<% else %>#fff<% end %>; padding-left: 2px; cursor:pointer; font-size:13px;">
-				제품 정보 <% if @ask.id %>수정<% else %>입력<% end %>하기&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
-			</span>
+			<span class="seperate_line"></span>
 			<div id="card_overlay" style="padding-top:10px; <% if @ask.id %> display:block; <% else %> display:none; <% end %>">
-				<div class="table_div" style="margin-bottom: 0;">
-				  <div class="ask_text_field left_input" onclick="left_deal_image_upload(); return false;" style="text-align: center; border-radius: 5px 0 0 0; cursor:pointer; padding-left:5px; padding-right:20px;">CARD A 이미지 업로드</div>
-					<div class="ask_text_field right_input" onclick="right_deal_image_upload(); return false;" style="text-align: center; border-radius: 0 5px 0 0; cursor:pointer; padding-left:20px; padding-right:5px;">CARD B 이미지 업로드</div>
-					<span class="input_icon center_input"><i class="fa fa-image"></i></span>
-				</div>
-				<div class="table_div">
-					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="position:relative; display:block; float:left; width:50%; box-sizing:border-box; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 0 5px; overflow:hidden;">
+				<div class="table_div" style="border:1px solid #dbdbdb;">
+					<a id="left_deal_image_btn" href="#" onclick="left_deal_image_upload(); return false;" style="position:relative; display:block; float:left; width:50%; box-sizing:border-box; overflow:hidden;">
 						<img src="<%= @left_ask_deal && @left_ask_deal.image ? @left_ask_deal.image.url(:normal) : "/images/ask/card_a_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-						<div id="card_a_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666; border-radius: 0 0 0 5px;">
-  						<i class="fa fa-image" style="top: 50%;margin-top: -20px;margin-left: -38px;line-height: 16px;position: absolute;font-size: 13px;"><br>이미지를<br>업로드해주세요</i>
+						<div id="card_a_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666;">
+  						<span style="top: 50%;margin-top: -50px;margin-left: -50px;position: absolute;font-size: 13px;padding: 20px;width: 100px;height: 100px;background-color: #fff;border-radius: 60px;box-sizing: border-box;"><i class="fa fa-image" style="font-size: 30px; padding-bottom: 5px;"></i><br>이미지<br>업로드</span>
 						</div>
 					</a>
-					<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="position:relative; display:block; float:right; width:50%; box-sizing:border-box; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 5px 0; overflow:hidden;">
+					<a id="right_deal_image_btn" href="#" onclick="right_deal_image_upload(); return false;" style="position:relative; display:block; float:right; width:50%; box-sizing:border-box; overflow:hidden;">
 						<img src="<%= @right_ask_deal && @right_ask_deal.image ? @right_ask_deal.image.url(:normal) : "/images/ask/card_b_upload.png" %>" style="display:block; margin:0 auto; width:100%;">
-						<div id="card_b_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666; border-radius: 0 0 5px 0;">
-  						<i class="fa fa-image" style="top: 50%;margin-top: -20px;margin-left: -38px;line-height: 16px;position: absolute;font-size: 13px;"><br>이미지를<br>업로드해주세요</i>
+						<div id="card_b_img_overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #f4f4f4; text-align: center; color: #666; border-left:1px solid #dbdbdb;">
+							<span style="top: 50%;margin-top: -50px;margin-left: -50px;position: absolute;font-size: 13px;padding: 20px;width: 100px;height: 100px;background-color: #fff;border-radius: 60px;box-sizing: border-box;"><i class="fa fa-image" style="font-size: 30px; padding-bottom: 5px;"></i><br>이미지<br>업로드</span>
 						</div>
 					</a>
 				</div>
-
+				<span class="seperate_line"></span>
 				<div class="table_div">
 					<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field left_input", :rows => 1 %>
 					<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
@@ -66,7 +59,7 @@
 					<%= text_area_tag 'right_deal[link]', @right_ask_deal && @right_ask_deal.link ? @right_ask_deal.link : nil, :placeholder => "링크", :class => "ask_text_field right_input", :rows => 1 %>
 					<span class="input_icon center_input" onclick="$('#left_deal_link').focus(); return false;"><i class="fa fa-link"></i></span>
 				</div>
-
+				<span class="seperate_line"></span>
 				<div class="table_div" style="margin-bottom:0px;">
 					<div id="add_info_1" style="display:none;">
 						<%= f.text_field :spec1, :placeholder => "제목", :class => "ask_text_field center_input add_info" %>
@@ -96,8 +89,11 @@
 		  			<i class="fa fa-plus-circle"></i>&nbsp;추가 정보 입력하기
 					</div>
 				</div>
-
+				<span class="seperate_line"></span>
 			</div>
+			<span id="card_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(); <% else %> show_card_overlay(); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 40px; line-height: 40px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color:<% if @ask.id %>#f4f4f4<% else %>#fff<% end %>; padding-left: 2px; cursor:pointer; font-size:13px; overflow:hidden;">
+				제품 정보 <% if @ask.id %>닫기<% else %>열기<% end %>&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
+			</span>
 		</div>
 		<div style="display:none;">
 			<%= file_field_tag 'left_deal[image]', :accept => 'image/*', :multiple => false, :style => "visibility:hidden; width:1px; display:inline;" %>
@@ -243,14 +239,14 @@
 
 	function show_card_overlay() {
 		$("#card_overlay").slideDown(500, function(){
-			$("#card_overlay_open").children("i").removeClass("fa-angle-double-down").addClass("fa-angle-double-up");
+			$("#card_overlay_open").html("제품 정보 닫기&nbsp;<i class='fa fa-angle-double-up' style='font-size:15px;'></i>");
 			$("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
 		});
 	}
 
 	function hide_card_overlay() {
 		$("#card_overlay").slideUp(500, function(){
-			$("#card_overlay_open").children("i").removeClass("fa-angle-double-up").addClass("fa-angle-double-down");
+			$("#card_overlay_open").html("제품 정보 열기&nbsp;<i class='fa fa-angle-double-down' style='font-size:15px;'></i>");
 			$("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
 		});
 	}
