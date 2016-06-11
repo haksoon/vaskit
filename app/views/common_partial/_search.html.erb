@@ -58,7 +58,7 @@
 		$("#menu_bg").show();
 		$(window).bind("scroll",function(){
 	  	var scrollHeight = $(window).scrollTop();
-			$("#main_header").css("position","absolute").css("top",scrollHeight);
+			$(".main_header").css("position","absolute").css("top",scrollHeight);
 	  	$("#search_overlay").css("top",scrollHeight + 50);
 		});
 		$('#search_input').focus().select();
@@ -66,7 +66,7 @@
 
 	function search_input_off(){
 		enableScroll();
-		$("#main_header").css("position","fixed").css("top",0);
+		$(".main_header").css("position","fixed").css("top",0);
 		$("#search").show();
 		$("#search_overlay").hide();
 		$("#menu_pc_bg").hide();
