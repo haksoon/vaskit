@@ -8,7 +8,12 @@
 				<span class="input_icon left_input" onclick="$('#ask_category_id').focus().select(); return false;"><i class="fa fa-filter"></i></span>
 			</div>
 			<div class="table_div" style="margin-bottom:0px; height:120px;">
-				<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input" %>
+				<div id="hashtag_container">
+					<div id="hashtag_backdrop">
+						<div id="hashtag_highlights"></div>
+					</div>
+					<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input" %>
+				</div>
 				<span class="input_icon left_input" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
 			</div>
 		</div>
