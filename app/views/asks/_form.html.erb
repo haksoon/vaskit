@@ -9,10 +9,10 @@
 			</div>
 			<div class="table_div" style="margin-bottom:0px; height:120px;">
 				<div id="hashtag_container">
+					<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input" %>
 					<div id="hashtag_backdrop">
 						<div id="hashtag_highlights"></div>
 					</div>
-					<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input" %>
 				</div>
 				<span class="input_icon left_input" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
 			</div>
@@ -581,6 +581,39 @@
 	$("#right_deal_price").attr("type","text");
 	$("#left_deal_price").attr("onkeyup","inputNumberFormat(this)");
 	$("#right_deal_price").attr("onkeyup","inputNumberFormat(this)");
+
+
+	// 입력중 해시태그 강조 추가
+	var textarea_font = $("#ask_message").css("font");
+	$("#hashtag_highlights").css("font",textarea_font);
+
+	function applyHighlights(text) {
+		text = text.replace(/\n$/g, '\n\n').replace(/\#([0-9a-zA-Z가-힣_]*)/g, '<mark>$&</mark>');
+		return text;
+	}
+
+	function handleInput() {
+		var text = $("#ask_message").val();
+		var highlightedText = applyHighlights(text);
+		$("#hashtag_highlights").html(highlightedText);
+	}
+
+	function handleScroll() {
+		var scrollTop = $("#ask_message").scrollTop();
+		$("#hashtag_backdrop").scrollTop(scrollTop);
+		var scrollLeft = $("#ask_message").scrollLeft();
+		$("#hashtag_backdrop").scrollLeft(scrollLeft);
+	}
+
+	function bindEvents() {
+		$("#ask_message").on({
+			'input': handleInput,
+			'scroll': handleScroll
+		});
+	}
+
+	bindEvents();
+	handleInput();
 
 
 </script>
