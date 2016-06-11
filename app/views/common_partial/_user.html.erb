@@ -56,8 +56,8 @@
 	<% end %>
 
 	function user_on(){
-		disableScroll();
 		$("#user_overlay").show();
+		$("#footer").show().animate({"bottom":"-1px"},500);
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
 
@@ -68,8 +68,8 @@
 	}
 
 	function user_off(){
-		enableScroll();
 		$("#user_overlay").hide();
+		$("#footer").animate({"bottom":"-100%"},500,function(){$(this).hide();});
 		$("#menu_pc_bg").hide();
 		$("#menu_bg").hide();
 	}
