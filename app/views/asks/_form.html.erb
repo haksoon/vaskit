@@ -593,10 +593,10 @@
 	$("#hashtag_highlights").css("font",textarea_font);
 
 	function applyHighlights(text) {
-		text = text.replace(/\n$/g, '\n\n').replace(/\#([0-9a-zA-Z가-힣_]*)/g, '<mark>$&</mark>');
-		if (isIE) {
-    	text = text.replace(/ /g, ' <wbr>');
-  	}
+		text = text.replace(/\n$/g, '\n\n').replace(/\#([0-9a-zA-Zㄱ-ㅎ가-힣_]*)/g, '<mark>$&</mark>');
+		// if (isIE) {
+    // 	text = text.replace(/ /g, ' <wbr>');
+  	// }
 		return text;
 	}
 
@@ -627,8 +627,9 @@
 	  });
 	}
 
-	bindEvents();
-	handleInput();
-
+	if (!isIE) {		// IE는 일단 해당 기능 제거할 것
+		bindEvents();
+		handleInput();
+	}
 
 </script>
