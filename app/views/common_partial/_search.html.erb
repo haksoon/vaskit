@@ -51,22 +51,27 @@
 </script>
 
 <script>
+
 	function search_input_on(){
 		$("#search").hide();
 		$("#search_overlay").show();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
 		$(window).bind("scroll",function(){
-	  	var scrollHeight = $(window).scrollTop();
+			var scrollHeight = $(window).scrollTop();
 			$(".main_header").css("position","absolute").css("top",scrollHeight);
-	  	$("#search_overlay").css("top",scrollHeight + 50);
+			$("#search_overlay").css("top",scrollHeight + 50);
 		});
 		$('#search_input').focus().select();
 	}
 
 	function search_input_off(){
 		enableScroll();
-		$(".main_header").css("position","fixed").css("top",0);
+		$(window).bind("scroll",function(){
+			var scrollHeight = $(window).scrollTop();
+			$(".main_header").css("position","fixed").css("top",0);
+			$("#search_overlay").css("top",scrollHeight + 50);
+		});
 		$("#search").show();
 		$("#search_overlay").hide();
 		$("#menu_pc_bg").hide();
