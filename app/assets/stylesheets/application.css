@@ -167,7 +167,8 @@ input:focus, select:focus, textarea:focus {
 #footer i {
 	margin: 5px 0;
 	padding: 10px;
-	font-size: 18px;
+	width: 16px;
+	font-size: 16px;
 	background-color: #ffe4a9;
   border: 1px solid #998674;
   border-left: none;
