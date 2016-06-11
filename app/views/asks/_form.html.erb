@@ -174,10 +174,10 @@
 		{{ for(var i=0; i < items.length; i++) { }}
 			{{ var item = items[i] }}
 			<tr>
-				<td class="hover_pointer" onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;" style="width:80px; height:80px; padding:4px 12px; border-bottom:1px solid #dbdbdb;">
+				<td onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;" style="width:80px; height:80px; padding:4px 12px; border-bottom:1px solid #dbdbdb; cursor:pointer;">
 					<img src="{{= item.image }}" style="width:80px; height:80px; display:block;" />
 				</td>
-				<td class="hover_pointer" onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;" style="border-bottom:1px solid #dbdbdb; text-align:left;">
+				<td onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;" style="border-bottom:1px solid #dbdbdb; text-align:left; cursor:pointer;">
 					<p style="font-size:12px; font-weight:bold; margin:0; color:#383838;">{{= truncate(item.title) }}</p>
 					<p style="font-size:12px; margin:0; color:#ee6e01;">{{= numberWithCommas(item.lprice) }}원</p>
 					<p style="font-size:11px; margin:0; color:#383838;">{{= item.mallName }}</p>

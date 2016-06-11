@@ -1,13 +1,13 @@
-<div id="user_overlay" style="width:inherit; position:fixed; top:50px; z-index:13; display:none; background:#f4f4f4; border-bottom:5px solid #998674;">
+<div id="user_overlay">
 	<% if current_user %>
-		<div style="width:100%; background:#f4f4f4; text-align:left;">
-			<div style="width:60px; height:50px; position:absolute; top:-50px; right:0px; background-color:#4b3d3d; text-align:center;">
-				<a href="#" onclick="user_off(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
-					<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
-				</a>
-			</div>
-			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
-			<p style="margin:0; padding:10px; font-size:18px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
+		<div style="position:absolute; top:-55px; right:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
+			<a href="#" onclick="user_off(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+				<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
+			</a>
+		</div>
+		<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
+		<div style="box-sizing:border-box; width:100%; background-color:#fff; border:5px solid #998674; border-radius:5px; overflow:hidden;">
+			<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
 			<p style="margin:0; padding:15px;">
 			 	<span style="color:#998674;"><%= current_user.string_id %></span>님, 환영합니다!
 			 	<a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>

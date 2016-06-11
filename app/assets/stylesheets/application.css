@@ -87,7 +87,6 @@ input:focus, select:focus, textarea:focus {
 	background-color: rgba(238,110,1,0.05);
 }
 
-.hover_pointer { cursor: pointer; }
 
 #wrap{
 	min-height:100%;
@@ -100,7 +99,7 @@ input:focus, select:focus, textarea:focus {
 	box-sizing:border-box;
 }
 
-.main_header {
+#main_header {
 	position: fixed;
 	top: 0;
 	width: inherit;
@@ -109,11 +108,50 @@ input:focus, select:focus, textarea:focus {
 	background-color: #4b3d3d;
 }
 
-.header_shadow{
-	-webkit-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-	   -moz-box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
-	        box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
- 	border-radius: 1px;
+#search {
+	position: fixed;
+	top: 50px;
+	width: inherit;
+	z-index: 8;
+}
+
+#menu_bg {
+	position: fixed;
+	top: -100%;
+	width: inherit;
+	height: 300%;
+	background-color: #000;
+	opacity: 0.6;
+	z-index: 9;
+	display: none;
+}
+
+#menu_pc_bg {
+	position: fixed;
+	top: 0; left: 0;
+	width: 100%; height: 100%;
+	z-index: 7;
+	display: none;
+}
+
+#category_overlay, #user_overlay {
+	position: fixed;
+	top: 55px;
+	box-sizing: border-box;
+	width: inherit;
+	padding: 0 5px;
+	z-index: 13;
+	display: none;
+}
+
+#search_overlay {
+	position: fixed;
+	top: 50px;
+	width: inherit;
+	background: #f4f4f4;
+	border-bottom: 5px solid #4b3d3d;
+	z-index: 13;
+	display: none;
 }
 
 .search_bar_area {
