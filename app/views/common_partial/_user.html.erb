@@ -57,9 +57,9 @@
 
 	function user_on(){
 		$("#user_overlay").show();
-		$("#footer").show().animate({"bottom":"-1px"},500);
+		$("#footer").show().animate({"bottom":"-1px"},100);
 		$("#menu_pc_bg").show();
-		$("#menu_bg").show();
+		$("#menu_bg").fadeIn(100);
 
 		$("#category_overlay").hide();
 		$("#search_overlay").hide();
@@ -71,7 +71,7 @@
 		$("#user_overlay").hide();
 		$("#footer").animate({"bottom":"-100%"},500,function(){$(this).hide();});
 		$("#menu_pc_bg").hide();
-		$("#menu_bg").hide();
+		$("#menu_bg").fadeOut(300);
 	}
 
 </script>

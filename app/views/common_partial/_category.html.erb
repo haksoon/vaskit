@@ -80,9 +80,9 @@
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 	function category_on(){
 		$("#category_overlay").show();
-		$("#footer").show().animate({"bottom":"-1px"},500);
+		$("#footer").show().animate({"bottom":"-1px"},100);
 		$("#menu_pc_bg").show();
-		$("#menu_bg").show();
+		$("#menu_bg").fadeIn(100);
 
 		$("#user_overlay").hide();
 		$("#search_overlay").hide();
@@ -94,7 +94,7 @@
 		$("#category_overlay").hide();
 		$("#footer").animate({"bottom":"-100%"},500,function(){$(this).hide();});
 		$("#menu_pc_bg").hide();
-		$("#menu_bg").hide();
+		$("#menu_bg").fadeOut(300);
 		category_reset();
 	}
 
