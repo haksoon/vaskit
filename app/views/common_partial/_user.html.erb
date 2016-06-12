@@ -24,7 +24,7 @@
 							<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
 						</td>
 						<td style="width:30%;">
-							<a id="my_vote_count" href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
+							<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
 							<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
 						</td>
 						<td style="width:30%;">
@@ -51,10 +51,6 @@
 </div>
 
 <script>
-	var my_vote_count = <%= raw @my_vote_count.to_json %>;
-	// 마이페이지 열 때마다 숫자를 다시 불러오려고 했는데, vote 외에는 작동되지 않음
-
-
 	<% if flash[:custom_notice] %>
 		notify('<%=flash[:custom_notice]%>');
 	<% end %>
@@ -64,7 +60,6 @@
 		$("#footer").show().animate({"bottom":"-1px"},200);
 		$("#menu_pc_bg").show();
 		$("#menu_bg").fadeIn(100);
-		$("#my_vote_count").text(my_vote_count);
 
 		$("#category_overlay").hide();
 		$("#search_overlay").hide();
