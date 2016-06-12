@@ -51,6 +51,8 @@
 </div>
 
 <script>
+	var my_vote_count = <%= raw @my_vote_count.to_json %>;
+
 	<% if flash[:custom_notice] %>
 		notify('<%=flash[:custom_notice]%>');
 	<% end %>
@@ -60,7 +62,7 @@
 		$("#footer").show().animate({"bottom":"-1px"},200);
 		$("#menu_pc_bg").show();
 		$("#menu_bg").fadeIn(100);
-		$("#my_vote_count").load(<%= @my_vote_count %>);
+		$("#my_vote_count").text(my_vote_count);
 
 		$("#category_overlay").hide();
 		$("#search_overlay").hide();
