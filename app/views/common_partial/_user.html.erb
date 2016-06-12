@@ -24,7 +24,7 @@
 							<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
 						</td>
 						<td style="width:30%;">
-							<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
+							<a id="my_vote_count" href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
 							<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
 						</td>
 						<td style="width:30%;">
@@ -60,6 +60,7 @@
 		$("#footer").show().animate({"bottom":"-1px"},200);
 		$("#menu_pc_bg").show();
 		$("#menu_bg").fadeIn(100);
+		$("#my_vote_count").load(<%= @my_vote_count %>);
 
 		$("#category_overlay").hide();
 		$("#search_overlay").hide();
