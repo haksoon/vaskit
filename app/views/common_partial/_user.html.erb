@@ -55,8 +55,7 @@
 	var my_vote_count = <%= raw @my_vote_count.to_json %>;
 	var my_comment_count = <%= raw @my_comment_count.to_json %>;
 	var in_progress_count = <%= raw @in_progress_count.to_json %>;
-	var alram_count = <%= raw @alram_count.to_json > 15 ? "15+": @alram_count.to_json.to_s %>;
-	// 알람 카운트는 메커니즘이 좀 달라서 추후에 보완
+	var alram_count = <%= raw @alram_count.to_json %>;
 
 	<% if flash[:custom_notice] %>
 		notify('<%=flash[:custom_notice]%>');
@@ -71,7 +70,7 @@
 		$("#my_vote_count").text(my_vote_count);
 		$("#my_comment_count").text(my_comment_count);
 		$("#in_progress_count").text(in_progress_count);
-		$("#alram_count").text(alram_count);
+		$("#alram_count").text(alram_count > 15 ? "15+" : alram_count);
 
 		$("#category_overlay").hide();
 		$("#search_overlay").hide();
