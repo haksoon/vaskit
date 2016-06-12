@@ -20,15 +20,15 @@
 					<tr>
 						<td style="width:5%;"></td>
 						<td style="width:30%; padding:10px 0;">
-							<a id="my_ask_count" href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">0</a>
+							<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_ask_count %></a>
 							<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
 						</td>
 						<td style="width:30%;">
-							<a id="my_vote_count" href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">0</a>
+							<a id="my_vote_count" href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
 							<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
 						</td>
 						<td style="width:30%;">
-							<a id="my_comment_count" href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">0</a>
+							<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_comment_count %></a>
 							<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
 						</td>
 						<td style="width:5%;"></td>
@@ -36,14 +36,14 @@
 				</table>
 
 				<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
-					진행 중인 질문 (<span id="in_progress_count">0</span>개)
+					진행 중인 질문 (<%= @in_progress_count%>개)
 				</a>
 
 				<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
 					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
 					<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
 					<% end %>
-					알림피드 (<span id="alram_count">0</span>개)
+					알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>개)
 				</a>
 			</div>
 		</div>
@@ -51,11 +51,9 @@
 </div>
 
 <script>
-	var my_ask_count = <%= raw @my_ask_count.to_json %>;
 	var my_vote_count = <%= raw @my_vote_count.to_json %>;
-	var my_comment_count = <%= raw @my_comment_count.to_json %>;
-	var in_progress_count = <%= raw @in_progress_count.to_json %>;
-	var alram_count = <%= raw @alram_count.to_json %>;
+	// 마이페이지 열 때마다 숫자를 다시 불러오려고 했는데, vote 외에는 작동되지 않음
+
 
 	<% if flash[:custom_notice] %>
 		notify('<%=flash[:custom_notice]%>');
@@ -66,11 +64,7 @@
 		$("#footer").show().animate({"bottom":"-1px"},200);
 		$("#menu_pc_bg").show();
 		$("#menu_bg").fadeIn(100);
-		$("#my_ask_count").text(my_ask_count);
 		$("#my_vote_count").text(my_vote_count);
-		$("#my_comment_count").text(my_comment_count);
-		$("#in_progress_count").text(in_progress_count);
-		$("#alram_count").text(alram_count > 15 ? "15+" : alram_count);
 
 		$("#category_overlay").hide();
 		$("#search_overlay").hide();
