@@ -55,8 +55,8 @@
 					<span class="input_icon center_input" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 				</div>
 				<div class="table_div">
-					<%= number_field_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field left_input" %>
-					<%= number_field_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
+					<%= text_area_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field left_input" %>
+					<%= text_area_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
 					<span class="input_icon center_input" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 				</div>
 				<div class="table_div">
