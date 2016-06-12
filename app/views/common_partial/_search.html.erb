@@ -33,19 +33,19 @@
 <script type="text/template" id="search-result-template">
 		{{ if(type == "user"){ }}
 			<a href="/?keyword={{=id}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
-				@ {{= keyword }}
+				<i class="fa fa-user"></i>&nbsp;{{= keyword }}
 			</a>
 		{{ }else if(type == "hash_tag"){ }}
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
-				# {{= keyword }}
+				<i class="fa fa-hashtag"></i>&nbsp;{{= keyword }}
 			</a>
 		{{ }else if(type == "ask_deal"){ }}
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
-				ⓟ {{= keyword }}
+				<i class="fa fa-cube"></i>&nbsp;{{= keyword }}
 			</a>
 		{{ }else if(type == "brand"){ }}
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
-				ⓑ {{= keyword }}
+				<i class="fa fa-tag"></i>&nbsp;{{= keyword }}
 			</a>
 		{{ } }}
 </script>
