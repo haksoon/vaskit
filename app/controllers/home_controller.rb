@@ -19,7 +19,6 @@ class HomeController < ApplicationController
 
     case params[:type]
       when "user"
-        keyword = params[:keyword]
         @asks = Ask.where(:user_id => params[:keyword]).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "hash_tag"
         hash_tags = HashTag.where("keyword like ?", "%#{params[:keyword]}%" )
