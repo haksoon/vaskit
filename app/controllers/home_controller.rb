@@ -34,7 +34,7 @@ class HomeController < ApplicationController
         @asks = Ask.where("left_ask_deal_id in (?) OR right_ask_deal_id in (?)", ask_deals.map(&:id), ask_deals.map(&:id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete]) unless ask_deals.blank?
       when "brand"
         keyword = params[:keyword] #AJS추가
-        flash[:msg] = <i class="fa fa-tag"></i>&nbsp; + keyword #AJS추가
+        flash[:msg] = keyword #AJS추가
         ask_deals = AskDeal.where("brand like ?", "%#{params[:keyword]}%" )
         @asks = Ask.where("left_ask_deal_id in (?) OR right_ask_deal_id in (?)", ask_deals.map(&:id), ask_deals.map(&:id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete]) unless ask_deals.blank?
       when "my_ask"
