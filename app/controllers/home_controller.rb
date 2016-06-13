@@ -20,7 +20,7 @@ class HomeController < ApplicationController
     case params[:type]
       when "user"
         keyword_id = params[:keyword] #AJS추가
-        keyword = User.where(:user_id => keyword_id).string_id #AJS추가
+        keyword = User.where(:user_id => keyword_id).select(:string_id) #AJS추가
         flash[:keyword] = keyword #AJS추가
         @asks = Ask.where(:user_id => params[:keyword]).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "hash_tag"
