@@ -19,8 +19,6 @@ class HomeController < ApplicationController
 
     case params[:type]
       when "user"
-        keyword = User.where(:user_id => params[:keyword]).pluck(:string_id) #AJS추가
-        flash[:keyword] = keyword #AJS추가
         @asks = Ask.where(:user_id => params[:keyword]).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "hash_tag"
         keyword = params[:keyword] #AJS추가
