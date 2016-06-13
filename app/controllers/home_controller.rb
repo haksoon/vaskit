@@ -20,7 +20,7 @@ class HomeController < ApplicationController
     case params[:type]
       when "user"
         find_user = User.where(:id => params[:keyword]).select(:string_id) #AJS추가
-        flash[:keyword] = find_user.string_id #AJS추가
+        flash[:keyword] = find_user #AJS추가 - string_id의 값을 어떻게 추출하지?
         @asks = Ask.where(:user_id => params[:keyword]).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "hash_tag"
         flash[:keyword] = params[:keyword] #AJS추가
