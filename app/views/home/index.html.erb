@@ -4,7 +4,7 @@
 	<%= render :partial => "common_partial/search" %>
 	<p class="chat_bubble" style="margin-top:65px;">
 		<% if @type == "user" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;유저 검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;<%= user_id.string_id %></span>&nbsp;유저 검색 결과입니다.
 		<% elsif @type == "hash_tag" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;해쉬태그 검색 결과입니다.
 		<% elsif @type == "ask_deal" %>
@@ -15,25 +15,18 @@
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-search"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;통합 검색 결과입니다.
 		<% end %>
 	</p>
-<% when "my_ask" %>
+<% when "my_ask", "vote_ask", "comment_ask", "my_ask_in_progress" %>
 	<%= render :partial => "common_partial/header_3" %>
 	<p class="chat_bubble">
-		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요!<br>와우! 많은 고민을 해결하셨나요?
-	</p>
-<% when "vote_ask" %>
-	<%= render :partial => "common_partial/header_3" %>
-	<p class="chat_bubble">
-		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_vote_count %>개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
-	</p>
-<% when "comment_ask" %>
-	<%= render :partial => "common_partial/header_3" %>
-	<p class="chat_bubble">
-		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요!<br>와우! 우리 모두 수다쟁이를 좋아한답니다!
-	</p>
-<% when "my_ask_in_progress" %>
-	<%= render :partial => "common_partial/header_3" %>
-	<p class="chat_bubble">
-		<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674; font-weight:bold;"><%= @in_progress_count %>개</span>의 질문을 진행중입니다.<br>더보기 버튼을 눌러 투표를 종료할 수 있는 것, 알고 계셨나요?
+		<% if @type == "my_ask" %>
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요!<br>와우! 많은 고민을 해결하셨나요?
+		<% elsif @type == "vote_ask" %>
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_vote_count %>개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
+		<% elsif @type == "comment_ask" %>
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요!<br>와우! 우리 모두 수다쟁이를 좋아한답니다!
+		<% elsif @type == "my_ask_in_progress" %>
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674; font-weight:bold;"><%= @in_progress_count %>개</span>의 질문을 진행중입니다.<br>더보기 버튼을 눌러 투표를 종료할 수 있는 것, 알고 계셨나요?
+		<% end %>
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header" %>
