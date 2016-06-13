@@ -4,15 +4,15 @@
 	<%= render :partial => "common_partial/search" %>
 	<p class="chat_bubble" style="margin-top:65px;">
 		<% if @type == "user" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;{{= asks[0].user.string_id }}</span>&nbsp;검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;유저 검색 결과입니다.
 		<% elsif @type == "hash_tag" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;해쉬태그 검색 결과입니다.
 		<% elsif @type == "ask_deal" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-cube"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-cube"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;제품명 검색 결과입니다.
 		<% elsif @type == "brand" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-tag"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-tag"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;브랜드 검색 결과입니다.
 		<% elsif @type == "none" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-search"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-search"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;통합 검색 결과입니다.
 		<% end %>
 	</p>
 <% when "my_ask" %>
