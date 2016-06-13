@@ -5,13 +5,13 @@
 	<p class="chat_bubble" style="margin-top:65px;">
 		<% if @type == "user" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;{{= asks[0].user.string_id }}</span>&nbsp;검색 결과입니다.
-		<% elsif @type == "user" %>
+		<% elsif @type == "hash_tag" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
-		<% elsif @type == "user" %>
+		<% elsif @type == "ask_deal" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-cube"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
-		<% elsif @type == "user" %>
+		<% elsif @type == "brand" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-tag"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
-		<% elsif @type == "user" %>
+		<% elsif @type == "none" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-search"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;검색 결과입니다.
 		<% end %>
 	</p>
