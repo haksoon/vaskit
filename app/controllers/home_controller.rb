@@ -39,6 +39,7 @@ class HomeController < ApplicationController
         @asks = Ask.where(:user_id => current_user.id, :be_completed => false).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "none" #통합 검색
         keyword = params[:keyword]
+        flash[:msg] = keyword
         user_ask_ids = Ask.where(:user_id => User.where("string_id like ?", "%#{keyword}%").pluck(:id)).pluck(:id)
         hash_tag_ask_ids = Ask.where(:id => HashTag.where("keyword like ?", "%#{keyword}%" ).pluck(:ask_id) ).pluck(:id)
         title_ask_deal_ids = AskDeal.where("title like ?", "%#{keyword}%" ).pluck(:id)
