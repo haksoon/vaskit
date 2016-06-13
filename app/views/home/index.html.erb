@@ -4,7 +4,7 @@
 	<%= render :partial => "common_partial/search" %>
 	<p class="chat_bubble" style="margin-top:65px;">
 		<% if @type == "user" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;유저 검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;<%= ask.user.string_id %></span>&nbsp;유저 검색 결과입니다.
 		<% elsif @type == "hash_tag" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;해쉬태그 검색 결과입니다.
 		<% elsif @type == "ask_deal" %>
