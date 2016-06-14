@@ -32,7 +32,7 @@
 
 <script type="text/template" id="search-result-template">
 		{{ if(type == "user"){ }}
-			<a href="/?keyword={{=id}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
+			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
 				<i class="fa fa-user"></i>&nbsp;{{= keyword }}
 			</a>
 		{{ }else if(type == "hash_tag"){ }}
@@ -118,7 +118,7 @@
 	        		var searchResultTemplate = _.template( $('#search-result-template').html() );
 
 		        	$.each(data.users, function( index, user ) {
-		        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: user.id}));
+		        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: null}));
 							});
 
 							$.each(data.hash_tags, function( index, hash_tag ) {
