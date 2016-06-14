@@ -21,7 +21,7 @@ class HomeController < ApplicationController
       when "user"
         flash[:keyword] = params[:keyword] #AJS추가
         users = User.where("string_id like ?", "%#{params[:keyword]}%")
-        @asks = Ask.where(:id => users.map(&:ask_id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
+        @asks = Ask.where(:user_id => users.map(&:id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "hash_tag"
         flash[:keyword] = params[:keyword] #AJS추가
         hash_tags = HashTag.where("keyword like ?", "%#{params[:keyword]}%" )
