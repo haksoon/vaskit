@@ -128,9 +128,7 @@
     		  <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
 					<p class="card_image_expander"><i class="fa fa-expand"></i></p>
     		</a>
-    		{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.be_completed == false ){ }}
-    		<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
-    		{{ } }}
+				<div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background-color: #fff;"></div>
     		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
       		{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
             <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" class="card_image_overlay"></a>
@@ -146,10 +144,7 @@
 				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
 					<p class="card_image_expander"><i class="fa fa-expand"></i></p>
 				</a>
-				{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.be_completed == false ){ }}
-				<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
-				{{ } }}
-
+				<div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background-color: #fff;"></div>
 				{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
   				{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
             <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" class="card_image_overlay"></a>
@@ -162,7 +157,12 @@
 			</td>
 		</tr>
 	</table>
-	<div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 1px; background-color: #dbdbdb;"></div>
+	{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.be_completed == false ){ }}
+		<div class="table_div" style="margin-bottom:0px;">
+			<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;" style="float:left;">투표하기&nbsp;<i class="fa fa-play"></i></a>
+			<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;" style="float:right; border-left:1px solid #fff;">투표하기&nbsp;<i class="fa fa-play"></i></a>
+		</div>
+	{{ } }}
 	{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
 		<div id="main_vote_count">
 			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
