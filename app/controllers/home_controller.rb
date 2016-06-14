@@ -18,21 +18,22 @@ class HomeController < ApplicationController
     @type = params[:type]
 
     case params[:type]
+      flash[:keyword] = params[:keyword] #AJS추가
       when "user"
-        flash[:keyword] = params[:keyword] #AJS추가
+        # flash[:keyword] = params[:keyword] #AJS추가
         users = User.where("string_id like ?", "%#{params[:keyword]}%") #AJS추가
         # @asks = Ask.where(:user_id => params[:keyword]).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
         @asks = Ask.where(:user_id => users.map(&:id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete]) #AJS추가(수정)
       when "hash_tag"
-        flash[:keyword] = params[:keyword] #AJS추가
+        # flash[:keyword] = params[:keyword] #AJS추가
         hash_tags = HashTag.where("keyword like ?", "%#{params[:keyword]}%" )
         @asks = Ask.where(:id => hash_tags.map(&:ask_id) ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "ask_deal"
-        flash[:keyword] = params[:keyword] #AJS추가
+        # flash[:keyword] = params[:keyword] #AJS추가
         ask_deals = AskDeal.where("title like ?", "%#{params[:keyword]}%" )
         @asks = Ask.where("left_ask_deal_id in (?) OR right_ask_deal_id in (?)", ask_deals.map(&:id), ask_deals.map(&:id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete]) unless ask_deals.blank?
       when "brand"
-        flash[:keyword] = params[:keyword] #AJS추가
+        # flash[:keyword] = params[:keyword] #AJS추가
         ask_deals = AskDeal.where("brand like ?", "%#{params[:keyword]}%" )
         @asks = Ask.where("left_ask_deal_id in (?) OR right_ask_deal_id in (?)", ask_deals.map(&:id), ask_deals.map(&:id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete]) unless ask_deals.blank?
       when "my_ask"
@@ -45,7 +46,7 @@ class HomeController < ApplicationController
         @asks = Ask.where(:user_id => current_user.id, :be_completed => false).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
       when "none" #통합 검색
         keyword = params[:keyword]
-        flash[:keyword] = params[:keyword] #AJS추가
+        # flash[:keyword] = params[:keyword] #AJS추가
         user_ask_ids = Ask.where(:user_id => User.where("string_id like ?", "%#{keyword}%").pluck(:id)).pluck(:id)
         hash_tag_ask_ids = Ask.where(:id => HashTag.where("keyword like ?", "%#{keyword}%" ).pluck(:ask_id) ).pluck(:id)
         title_ask_deal_ids = AskDeal.where("title like ?", "%#{keyword}%" ).pluck(:id)
