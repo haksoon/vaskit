@@ -730,6 +730,9 @@ img.cover {
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	line-height: 40px;
+	padding-top: 0;
+	padding-bottom: 0;
 }
 .ask_text_field.add_info {
 	min-width: 100%;
