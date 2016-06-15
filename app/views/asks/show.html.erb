@@ -62,8 +62,8 @@
 			{{ } }}
 			{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
         <div class="table_div">
-          <div class="ask_text_field left_input output_field" style="color:#ee6e01;"><p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p></div>
-          <div class="ask_text_field right_input output_field" style="color:#ee6e01;"><p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p></div>
+          <div class="ask_text_field left_input output_field"><p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p></div>
+          <div class="ask_text_field right_input output_field"><p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p></div>
           <span class="input_icon center_input"><i class="fa fa-won"></i></span>
         </div>
 			{{ } }}
@@ -132,7 +132,7 @@
         </div>
       {{ } }}
     </div>
-    <div class="table_div" style="margin-bottom:0; padding:15px;">
+    <div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
 				{{ if( ask.message){ }}
 					{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
@@ -145,7 +145,7 @@
 
     {{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
     {{ if(already_vote == "") { }}
-  		<div class="table_div" style="margin-bottom:0; height:40px; line-height:40px; border-top:1px solid #dbdbdb; border-bottom:1px solid #dbdbdb; color:#383838; background-color:#fff; font-size:13px; text-align:center;">
+  		<div class="table_div" style="margin-bottom:0; height:40px; line-height:40px; border-bottom:1px solid #dbdbdb; color:#383838; background-color:#fff; font-size:13px; text-align:center;">
         <span style="width:100%;">
           <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
         </span>
@@ -159,7 +159,7 @@
   			</span>
   		</div>
     {{ }else{ }}
-      <div class="table_div" onclick="$('#comment_input').focus(); return false;" style="margin-bottom:0; height:40px; line-height:40px; border-top:1px solid #ee6e01; border-bottom:1px solid #ee6e01; color:#fff; background-color:rgba(238,110,1,0.7); font-size:13px; font-weight:bold; text-align:center; cursor:pointer;">
+      <div class="table_div" onclick="$('#comment_input').focus(); return false;" style="margin-bottom:0; height:40px; line-height:40px; color:#fff; background-color:rgba(238,110,1,0.7); font-size:13px; font-weight:bold; text-align:center; cursor:pointer;">
         <span style="width:100%;">
           <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
         </span>

@@ -100,7 +100,7 @@
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-		<div class="table_div" style="margin-bottom:0; padding:15px;">
+		<div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
 				{{ if( ask.message){ }}
 					{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
@@ -110,10 +110,10 @@
 				{{ } }}
 			</p>
 		</div>
-		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank" style="border-top:1px solid #dbdbdb;">
-			<span style="float:left;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
-			<span><i class="fa fa-angle-double-down" style="font-size:15px; vertical-align:top;">&nbsp;</i>상세 열기</span>
-			<span style="float:right;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
+		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank">
+			<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
+			<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
+			<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
 		</a>
 	</div>
 </script>
