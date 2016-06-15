@@ -64,7 +64,7 @@
           <a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
       		<a href="#" onclick="privacy_policy_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
         </p>
-  			<a href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
+  			<a id="register_btn" href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
   				<i class="fa fa-users"></i>&nbsp;회원가입
   			</a>
   		<% else %>
@@ -72,6 +72,7 @@
           <div style="position:relative;">
             <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
             <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+            <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
           </div>
   			<% else %>
   				<%= f.hidden_field :email %>
@@ -79,10 +80,12 @@
         <div style="position:relative;">
           <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
           <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
+          <span id="password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
         </div>
         <div style="position:relative;">
           <input placeholder="입력하신 비밀번호를 확인해주세요." class="registrations_input" type="password" id="user_password_confirm">
           <span class="input_icon left_input" onclick="$('#user_password_confirm').focus(); return false;"><i class="fa fa-check"></i></span>
+          <span id="password_confirm_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
         </div>
         <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
           <i class="fa fa-plus"></i>&nbsp;추가 입력정보
@@ -128,7 +131,7 @@
           <a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
       		<a href="#" onclick="privacy_policy_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
         </p>
-  			<a href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#4b3d3d; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
+  			<a id="register_btn" href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px;">
   				<i class="fa fa-users"></i>&nbsp;회원가입
   			</a>
    		<% end %>
@@ -180,10 +183,12 @@
 			$("#gender_female").css("background-color", "#E4E1E0");
 			$("#gender_male").css("background-color", "#0389ed");
 			$("#user_gender").val("t");
+      ready_to_submit();
 		}else{
 			$("#gender_male").css("background-color", "#E4E1E0");
 			$("#gender_female").css("background-color", "#ea065e");
 			$("#user_gender").val("f");
+      ready_to_submit();
 		}
 	}
 
@@ -191,9 +196,11 @@
     if( $("#user_agree_access_term").prop("checked") == false ) {
       $("#user_agree_access_term").prop("checked",true);
       $("#agree_access_term_btn i").removeClass("fa-square").addClass("fa-check-square").css("color","#ee6e01","text-shadow","1px 1px 0 rgba(238,110,1,0.3)");
+      ready_to_submit();
     } else {
       $("#user_agree_access_term").prop("checked",false);
       $("#agree_access_term_btn i").removeClass("fa-check-square").addClass("fa-square").css("color","#ffe4a9","text-shadow","1px 1px 0 #ffcc5a");
+      ready_to_submit();
     }
   }
 
@@ -243,6 +250,20 @@
   $("#user_password").attr("onkeyup","password_check(); password_confirm_check(); return false;");
   $("#user_password_confirm").attr("onkeyup","password_confirm_check(); return false;");
 
+  function ready_to_submit() {
+    if (
+      $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val() == $("#user_password_confirm").val()
+      && $("#user_birthday_1i").val() != "" && $("#user_birthday_2i").val() != "" && $("#user_birthday_3i").val() != "" && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
+    ) {
+      $("#register_btn").css("background-color","#ee6e01");
+    } else {
+      $("#register_btn").css("background-color","#9d9ea1");
+    }
+  }
+
+  $("#sign_up_form").on("change",function(){
+    ready_to_submit();
+  })
 
 	function sign_up_submit(){ //submit 전에 value 체크
 		if ($("#user_email").val() == ""){
