@@ -197,7 +197,6 @@
     }
   }
 
-
   function email_check() {
     if ( $("#user_email").val() == /[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}/ ) {
       $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
@@ -221,6 +220,11 @@
       $("#password_confirm_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
     }
   }
+
+  $("#user_email").attr("onkeyup","email_check(); return false;");
+  $("#user_password").attr("onkeyup","password_check(); return false;");
+  $("#user_password_confirm").attr("onkeyup","password_confirm_check(); return false;");
+
 
 	function sign_up_submit(){ //submit 전에 value 체크
 		if ($("#user_email").val() == ""){
