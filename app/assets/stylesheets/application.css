@@ -494,7 +494,7 @@ input:focus, select:focus, textarea:focus {
 .deal_spec_detail td p {
 	display: inline-block;
 	margin: 0;
-	padding: 0px 10px;
+	padding: 10px;
 	color: #383838;
 	font-size: 13px;
 	line-height: 15px;
