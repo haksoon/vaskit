@@ -144,7 +144,7 @@
 		</div>
 
     {{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-    {{ if(already_vote == null) { }}
+    {{ if(already_vote == "") { }}
   		<div class="table_div" style="margin-bottom:0; height:40px; line-height:40px; border-top:1px solid #dbdbdb; border-bottom:1px solid #dbdbdb; color:#383838; background-color:#fff; font-size:13px; text-align:center;">
         <span style="width:100%;">
           <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
