@@ -45,8 +45,8 @@
 				</div>
 				<span class="seperate_line"></span>
 				<div class="table_div">
-					<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field left_input", :rows => 1 %>
-					<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "제품명", :class => "ask_text_field right_input", :rows => 1 %>
+					<%= text_area_tag 'left_deal[title]', @left_ask_deal && @left_ask_deal.title ? @left_ask_deal.title : nil, :placeholder => "제품명*", :class => "ask_text_field left_input", :rows => 1 %>
+					<%= text_area_tag 'right_deal[title]', @right_ask_deal && @right_ask_deal.title ? @right_ask_deal.title : nil, :placeholder => "*제품명", :class => "ask_text_field right_input", :rows => 1 %>
 					<span class="input_icon center_input" onclick="$('#left_deal_title').focus(); return false;"><i class="fa fa-cube"></i></span>
 				</div>
 				<div class="table_div">
@@ -115,11 +115,11 @@
 
 <div style="position:absolute; bottom:0; width:inherit; box-sizing:border-box; padding:0 12px; z-index:1;">
 	<% if @ask.id %>
-		<a href="#" onclick="edit_form(); return false;" class="ask_submit_btn">
+		<a id="ask_submit_btn" href="#" onclick="edit_form(); return false;" class="ask_submit_btn">
 			<i class="fa fa-send"></i>&nbsp;질문 수정하기
 		</a>
 	<% else %>
-		<a href="#" onclick="submit_form(); return false;" class="ask_submit_btn">
+		<a id="ask_submit_btn" href="#" onclick="submit_form(); return false;" class="ask_submit_btn">
 			<i class="fa fa-send"></i>&nbsp;질문 제출하기
 		</a>
 	<% end %>
@@ -317,26 +317,25 @@
 	        	image_items = data.image_result.rss.channel.item;
 			      if (image_items != null ){
 		        	var naverImageTemplate = _.template( $('#naver-image-template').html() );
-				    $('#naver_images').html(naverImageTemplate({image_items: image_items, is_left: is_left}));
-	        	}else{
+				    	$('#naver_images').html(naverImageTemplate({image_items: image_items, is_left: is_left}));
+	        	} else {
 	        		$('#naver_images').html("<p style='line-height:150px; color:#383838;'>이미지 검색결과가 없습니다.</p>");
 	        	}
-
 	        	items = data.shop_result.rss.channel.item;
 	        	if (items != null ){
 		        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
-				    $('#naver_deals').html( naverDealTemplate({item: items, is_left: is_left}) );
-	        	}else{
+				    	$('#naver_deals').html( naverDealTemplate({item: items, is_left: is_left}) );
+	        	} else {
 	        		$('#naver_deals').html("<p style='line-height:150px; color:#383838;'>상품 검색결과가 없습니다.</p>");
 	        	}
 	        	show_naver_deals();
 	        },
 	        beforeSend: function(){
 	        	$(".loading").show();
-            },
-            complete: function(){
-            	$(".loading").hide();
-            }
+          },
+          complete: function(){
+          	$(".loading").hide();
+          }
 		});
 	}
 
@@ -376,14 +375,15 @@
 	        	$("#naver_images").html("");
 	        	$("#naver_deals").html("");
 	        	hide_search_deal_popup();
-						var scroll_top = $("#card_overlay").offset().top;
- 						$("body").animate({scrollTop:scroll_top-165},500);
 					},
 					beforeSend: function(){
 						$(".loading").show();
 					},
 					complete: function(){
 						$(".loading").hide();
+						var scroll_top = $("#card_overlay").offset().top;
+						$("body").animate({scrollTop:scroll_top-165},500);
+						ready_to_submit();
 					}
 		});
 	}
@@ -415,14 +415,15 @@
 	        	$("#naver_images").html("");
 	        	$("#naver_deals").html("");
 	        	hide_search_deal_popup();
-						var scroll_top = $("#card_overlay").offset().top;
- 						$("body").animate({scrollTop:scroll_top-165},500);
 					},
 	        beforeSend: function(){
 						$(".loading").show();
 					},
 					complete: function(){
 						$(".loading").hide();
+						var scroll_top = $("#card_overlay").offset().top;
+						$("body").animate({scrollTop:scroll_top-165},500);
+						ready_to_submit();
 					}
 		});
 	}
@@ -452,6 +453,7 @@
 					 },
 					 complete: function(){
 						 $(".loading").hide();
+						 ready_to_submit();
 					 }
 		    }).fail(function (data) {}).done(function () {});
 		});
@@ -483,6 +485,7 @@
            },
            complete: function(){
 						 $(".loading").hide();
+						 ready_to_submit();
            }
 		    }).fail(function (data) {}).done(function () {});
 		});
@@ -629,5 +632,23 @@
 		bindEvents();
 		handleInput();
 	}
+
+	// 제출버튼 필수입력필드 입력해야 활성화되도록
+	function ready_to_submit() {
+    if (
+			$("#left_deal_image_btn img").attr("src") != "/images/ask/card_image_preview.png" && $("#right_deal_image_btn img").attr("src") != "/images/ask/card_image_preview.png" &&
+			$("#left_deal_title").val() != "" && $("#right_deal_title").val() != ""
+    ) {
+      $("#ask_submit_btn").css("background-color","#ee6e01");
+    } else {
+      $("#ask_submit_btn").css("background-color","#9d9ea1");
+    }
+  }
+
+	$("#left_deal_title").attr("onkeyup","ready_to_submit(); return false;");
+	$("#right_deal_title").attr("onkeyup","ready_to_submit(); return false;");
+  $("#new_ask").on("change",function(){ ready_to_submit(); })
+	$("#edit_ask").on("change",function(){ ready_to_submit(); })
+
 
 </script>

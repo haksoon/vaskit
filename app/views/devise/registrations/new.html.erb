@@ -282,12 +282,6 @@
 			}
 		<% end %>
 
-		if ($("#user_birthday_1i").val() == "" || $("#user_birthday_2i").val() == "" || $("#user_birthday_3i").val() == ""){
-			notify('생년월일을 입력해주세요');
-      $("#user_birthday_1i").focus().select();
-			return;
-		}
-
     if ($("#user_birthday_1i").val() == ""){
       notify('생년월일을 입력해주세요');
       $("#user_birthday_1i").focus().select();
