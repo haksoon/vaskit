@@ -17,7 +17,7 @@
 				{{ } }}
 			</div>
 	  </div>
-		<div class="table_div" style="margin-bottom:0; padding:15px;">
+		<div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			{{ if( ask.user){ }}
 				{{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
         {{ if ( !ask.user.gender){ }}
@@ -45,129 +45,88 @@
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-    <div style="border-bottom:1px solid #dbdbdb;">
-      <table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
-  			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
-  			<tr>
-  				<td style="width:50%;">
-  					<p style="margin:0;  color:#383838; font-size:13px; font-weight:bold; padding:2px 8px;">
-  						{{= ask.left_ask_deal.title }}
-  					</p>
-  				</td>
-  				<td style="width:50%;">
-  					<p style="margin:0;  color:#383838; font-size:13px; font-weight:bold; padding:2px 8px;">
-  						{{= ask.right_ask_deal.title }}
-  					</p>
-  				</td>
-  			</tr>
-  			{{ } }}
-  			{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
-  			<tr>
-  				<td style="width:50%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.left_ask_deal.brand }}
-  					</p>
-  				</td>
-  				<td style="width:50%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.right_ask_deal.brand }}
-  					</p>
-  				</td>
-  			</tr>
-  			{{ } }}
-  			{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
-  			<tr>
-  				<td style="width:50%;">
-  					<p style="margin:0; color:#ee6e01; font-size:13px; padding:2px 8px;">
-  					{{= numberWithCommas(ask.left_ask_deal.price) }}원
-  					</p>
-  				</td>
-  				<td style="width:50%;">
-  					<p style="margin:0; color:#ee6e01; font-size:13px; padding:2px 8px;">
-  					{{= numberWithCommas(ask.right_ask_deal.price) }}원
-  					</p>
-  				</td>
-  			</tr>
-  			{{ } }}
-  			{{ if (ask.left_ask_deal.link != null || ask.right_ask_deal.link != null ){ }}
-  			<tr>
-  				<td style="width:50%;">
-  					<p style="margin:0; font-size:13px; padding:2px 8px;">
-  						{{ var aLink = document.createElement("a") }}
-  						{{ aLink.href= ask.left_ask_deal.link }}
-  						<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#383838;">{{= aLink.host }}&nbsp;<i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i></a>
-  					</p>
-  				</td>
-  				<td style="width:50%;">
-  					<p style="margin:0; font-size:13px; padding:2px 8px;">
-  						{{ var bLink = document.createElement("a") }}
-  						{{ bLink.href= ask.right_ask_deal.link }}
-  						<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#383838;">{{= bLink.host }}&nbsp;<i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i></a>
-  					</p>
-  				</td>
-  			</tr>
-  			{{ } }}
-  		</table>
-  		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
-  			{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
-  			<tr>
-  				<td style="width:40%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.left_ask_deal.spec1 }}
-  					</p>
-  				</td>
-  				<td style="width:20%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.spec1 }}
-  					</p>
-  				</td>
-  				<td style="width:40%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.right_ask_deal.spec1 }}
-  					</p>
-  				</td>
-  			</tr>
-  			{{ } }}
-  			{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
-  			<tr>
-  				<td style="width:40%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.left_ask_deal.spec2 }}
-  					</p>
-  				</td>
-  				<td style="width:20%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.spec2 }}
-  					</p>
-  				</td>
-  				<td style="width:40%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.right_ask_deal.spec2 }}
-  					</p>
-  				</td>
-  			</tr>
-  			{{ } }}
-  			{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
-  			<tr>
-  				<td style="width:40%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.left_ask_deal.spec3 }}
-  					</p>
-  				</td>
-  				<td style="width:20%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.spec3 }}
-  					</p>
-  				</td>
-  				<td style="width:40%;">
-  					<p style="margin:0; color:#383838; font-size:13px; padding:2px 8px;">
-  					{{= ask.right_ask_deal.spec3 }}
-  					</p>
-  				</td>
-  			</tr>
-  			{{ } }}
-  		</table>
-
+    <div style="padding:10px 10px 0px 10px; border-bottom:1px solid #dbdbdb;">
+			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
+        <div class="table_div">
+          <div class="ask_text_field left_input output_field" style="font-weight:bold;">{{= ask.left_ask_deal.title }}</div>
+          <div class="ask_text_field right_input output_field" style="font-weight:bold;">{{= ask.right_ask_deal.title }}</div>
+					<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
+        </div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
+        <div class="table_div">
+          <div class="ask_text_field left_input output_field">{{= ask.left_ask_deal.brand }}</div>
+          <div class="ask_text_field right_input output_field">{{= ask.right_ask_deal.brand }}</div>
+          <span class="input_icon center_input"><i class="fa fa-tag"></i></span>
+        </div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
+        <div class="table_div">
+          <div class="ask_text_field left_input output_field" style="color:#ee6e01;">{{= numberWithCommas(ask.left_ask_deal.price) }}원</div>
+          <div class="ask_text_field right_input output_field" style="color:#ee6e01;">{{= numberWithCommas(ask.right_ask_deal.price) }}원</div>
+          <span class="input_icon center_input"><i class="fa fa-won"></i></span>
+        </div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.link != null || ask.right_ask_deal.link != null ){ }}
+        <div class="table_div">
+          <div class="ask_text_field left_input output_field">
+            {{ var aLink = document.createElement("a") }}
+						{{ aLink.href= ask.left_ask_deal.link }}
+						<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#383838;">{{= aLink.host }}&nbsp;<i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i></a>
+          </div>
+          <div class="ask_text_field right_input output_field">
+            {{ var bLink = document.createElement("a") }}
+						{{ bLink.href= ask.right_ask_deal.link }}
+						<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#383838;">{{= bLink.host }}&nbsp;<i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i></a>
+          </div>
+          <span class="input_icon center_input"><i class="fa fa-link"></i></span>
+        </div>
+			{{ } }}
+      {{ if (ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") }}
+        <div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
+      		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
+      			{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
+        			<tr>
+        				<td style="width:40%;">
+        					<p>{{= ask.left_ask_deal.spec1 }}</p>
+        				</td>
+        				<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+        					<p>{{= ask.spec1 }}</p>
+        				</td>
+        				<td style="width:40%;">
+                  <p>{{= ask.right_ask_deal.spec1 }}</p>
+        				</td>
+        			</tr>
+      			{{ } }}
+      			{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
+        			<tr>
+        				<td style="width:40%; border-top:1px solid #dbdbdb;">
+        					<p>{{= ask.left_ask_deal.spec2 }}</p>
+        				</td>
+        				<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+        					<p>{{= ask.spec2 }}</p>
+        				</td>
+        				<td style="width:40%; border-top:1px solid #dbdbdb;">
+        					<p>{{= ask.right_ask_deal.spec2 }}</p>
+        				</td>
+        			</tr>
+      			{{ } }}
+      			{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
+        			<tr>
+        				<td style="width:40%; border-top:1px solid #dbdbdb;">
+        					<p>{{= ask.left_ask_deal.spec3 }}</p>
+        				</td>
+        				<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+        					<p>{{= ask.spec3 }}</p>
+        				</td>
+        				<td style="width:40%; border-top:1px solid #dbdbdb;">
+        					<p>{{= ask.right_ask_deal.spec3 }}</p>
+        				</td>
+        			</tr>
+      			{{ } }}
+      		</table>
+        </div>
+      {{ } }}
     </div>
     <div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">

@@ -487,29 +487,19 @@ input:focus, select:focus, textarea:focus {
 }
 
 .deal_spec_detail td{
-  max-width: 0;
-  background-color:#fff;
-	padding:5px 0;
-	border-top:1px solid #dbdbdb;
+	min-height: 40px;
+	line-height: 40px;
 }
 
-.deal_spec_detail td p{
-  word-break:break-all;
-}
-
-.deal_detail td{
-	max-width: 0;
-	background-color:#fff;
-	padding:5px 0;
-}
-.deal_detail td:nth-of-type(2n+1){
-	border-right:1px solid #dbdbdb;
-}
-
-.deal_detail td p{
-	overflow: hidden;
-	text-overflow: ellipsis;
-  white-space: nowrap;
+.deal_spec_detail td p {
+	display: inline-block;
+	margin: 0;
+	padding: 0px 10px;
+	color: #383838;
+	font-size: 13px;
+	line-height: 15px;
+	word-break:break-word;
+	vertical-align:middle;
 }
 
 .highlight {
@@ -725,7 +715,7 @@ img.cover {
 .ask_text_field.left_input {
 	float: left;
 	text-align: left;
-	padding-right: 20px;
+	padding-right: 30px;
 }
 .ask_text_field.center_input {
 	text-align: center;
@@ -733,7 +723,13 @@ img.cover {
 .ask_text_field.right_input {
 	float: right;
 	text-align: right;
-	padding-left: 20px;
+	padding-left: 30px;
+}
+.ask_text_field.output_field {
+	text-align: center;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 .ask_text_field.add_info {
 	min-width: 100%;
