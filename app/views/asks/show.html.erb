@@ -142,65 +142,65 @@
 				{{ } }}
 			</p>
 		</div>
-  </div>
 
-  <div class="content_box">
-		<div class="table_div" style="margin-bottom:0; height:40px; line-height:40px; border-bottom:1px solid #dbdbdb; color:#666; background-color:#fff; font-size:13px; text-align:center; font-weight:bold; ">
-			<span style="float:left; margin-left:15px; font-size:13px;">
-        <i class="fa fa-comment" style="font-size:16px; margin-right:3px;"></i>
+		<div class="table_div" style="margin-bottom:0; height:40px; line-height:40px; border-bottom:1px solid #dbdbdb; color:#666; background-color:#fff; font-size:13px; text-align:center;">
+      <span style="width:100%;">
+        <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
+      </span>
+			<span style="position:absolute; top:0; left:10px; width:40px;">
+        <i class="fa fa-comment" style="font-size:16px;"></i>
 				<span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
 			</span>
-			의견보기
-			<span style="float:right; margin-right:15px; font-size:13px;">
+			<span style="position:absolute; top:0; right:10px; width:40px;">
 				<span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-				<i class="fa fa-comment" style="font-size:16px; margin-right:3px; transform:rotateY(180deg);"></i>
+				<i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
 			</span>
 		</div>
 
 		{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-			<div id="ask_comment" style="position:relative; background-color:#f0f2f4; padding:10px 0; min-height:200px;">
-        {{ for(var i=0; i < ask.comments.length; i++) {  }}
-					{{ comment = ask.comments[i] }}
-					{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
-			    {{= askCommentTemplate({ask:ask, comment: comment}) }}
-				{{ } }}
-        {{ if(ask.comments.length == 0) { }}
-          <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
-        {{ } }}
-        {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
-          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
-            <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
-              <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
-              <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
-            </p>
-          </div>
-        {{ } }}
-			</div>
-			<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
-				{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
-					{{ ask_deal_id = ask.left_ask_deal_id }}
-					{{ ask_deal_text = "A" }}
-				{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-					{{ ask_deal_id = ask.left_ask_deal_id }}
-					{{ ask_deal_text = "A" }}
-				{{ }else{ }}
-					{{ ask_deal_id = ask.right_ask_deal_id }}
-					{{ ask_deal_text = "B" }}
-				{{ } }}
-				<tbody>
-					<tr>
-						<td style="padding:7px 7px 7px 12px;">
-							<a id="ask_deal_id_change" onclick="ask_deal_id_change(); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
-						</td>
-						<td style="width:100%; padding-right:7px;">
-							<textarea id="comment_input" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" onkeyup="$('#send_comment_btn').css('background-color','#ee6e01'); return false;"></textarea>
-						</td>
-						<td style="padding-right:12px;">
-							<a id="send_comment_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+		<div id="ask_comment" style="position:relative; background-color:#f0f2f4; padding:10px 0; min-height:200px;">
+      {{ for(var i=0; i < ask.comments.length; i++) {  }}
+				{{ comment = ask.comments[i] }}
+				{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
+		    {{= askCommentTemplate({ask:ask, comment: comment}) }}
+			{{ } }}
+      {{ if(ask.comments.length == 0) { }}
+        <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
+      {{ } }}
+      {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
+        <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
+          <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
+            <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
+            <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
+          </p>
+        </div>
+      {{ } }}
+		</div>
+		<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
+			{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
+				{{ ask_deal_id = ask.left_ask_deal_id }}
+				{{ ask_deal_text = "A" }}
+			{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+				{{ ask_deal_id = ask.left_ask_deal_id }}
+				{{ ask_deal_text = "A" }}
+			{{ }else{ }}
+				{{ ask_deal_id = ask.right_ask_deal_id }}
+				{{ ask_deal_text = "B" }}
+			{{ } }}
+			<tbody>
+				<tr>
+					<td style="padding:7px 7px 7px 12px;">
+						<a id="ask_deal_id_change" onclick="ask_deal_id_change(); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
+					</td>
+					<td style="width:100%; padding-right:7px;">
+						<textarea id="comment_input" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" onkeyup="$('#send_comment_btn').css('background-color','#ee6e01'); return false;"></textarea>
+					</td>
+					<td style="padding-right:12px;">
+						<a id="send_comment_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
   <p style="font-size:12px; margin:-15px 0 0 0; padding:10px 15px; color:#9d9fa1; text-align:left;"><i class="fa fa-info-circle">&nbsp;</i>A/B 버튼을 눌러 의견을 어디에 남길지 선택 가능!</p>
 </script>
@@ -293,7 +293,7 @@
         </tr>
       </table>
     </div>
-    <div id="detail_vote_count">
+    <div id="detail_vote_count" style="background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb;">
       {{ gender_total_count = detail_vote_count.left.male_count + detail_vote_count.left.female_count + detail_vote_count.right.male_count + detail_vote_count.right.female_count }}
       {{ if ( gender_total_count == 0 ){ }}
         {{ male_left_ratio = 0 }}
@@ -314,28 +314,28 @@
       {{ }else if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) > (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
         {{ gender_male_css = "color:#ffcc5a; font-weight:bold;" }}
       {{ } }}
-      <table cellspacing="1" cellpadding="0" class="graph" style="border-bottom: dotted 1px #998675; width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0;">
+      <table cellspacing="1" cellpadding="0" class="graph" style="padding:10px; border-bottom:1px solid #dbdbdb;">
         <tbody>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(male_left_ratio)}}%; background-color:{{= (male_left_ratio > male_right_ratio) ? '#ffcc5a;' : '#fff;' }}">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(male_left_ratio)}}%; background-color:{{= (male_left_ratio > male_right_ratio) ? '#ffcc5a;' : '#9d9ea1;' }}">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{=gender_male_css }}">
               남자
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(male_right_ratio) }}%; background-color:{{= (male_left_ratio < male_right_ratio) ? '#ffcc5a;' : '#fff;' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(male_right_ratio) }}%; background-color:{{= (male_left_ratio < male_right_ratio) ? '#ffcc5a;' : '#9d9ea1;' }};">&nbsp;</span>
             </td>
           </tr>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(female_left_ratio) }}%; background-color:{{= (female_left_ratio > female_right_ratio) ? '#ffcc5a;' : '#fff;' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(female_left_ratio) }}%; background-color:{{= (female_left_ratio > female_right_ratio) ? '#ffcc5a;' : '#9d9ea1;' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{=gender_female_css }}">
               여자
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(female_right_ratio) }}%; background-color: {{= (female_left_ratio < female_right_ratio) ? '#ffcc5a;' : '#fff;' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(female_right_ratio) }}%; background-color: {{= (female_left_ratio < female_right_ratio) ? '#ffcc5a;' : '#9d9ea1;' }};">&nbsp;</span>
             </td>
           </tr>
         </tbody>
@@ -404,91 +404,88 @@
       {{ }else if( max_index == 6 ){ }}
         {{ etc_css = "color:#ffcc5a; font-weight:bold;" }}
       {{ } }}
-      <table cellspacing="1" cellpadding="0" class="graph" style="width:100%; background-color:#BEAD9D; font-size:12px; color:#fff; padding:5px 0;">
+      <table cellspacing="1" cellpadding="0" class="graph" style="padding:10px;">
         <tbody>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(age_20_1_left_ratio) }}%; background-color:{{= (age_20_1_left_ratio > age_20_1_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(age_20_1_left_ratio) }}%; background-color:{{= (age_20_1_left_ratio > age_20_1_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{= age_20_1_css }}">
               20초
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(age_20_1_right_ratio) }}%; background-color:{{= (age_20_1_left_ratio < age_20_1_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(age_20_1_right_ratio) }}%; background-color:{{= (age_20_1_left_ratio < age_20_1_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
           </tr>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(age_20_2_left_ratio) }}%; background-color:{{= (age_20_2_left_ratio > age_20_2_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(age_20_2_left_ratio) }}%; background-color:{{= (age_20_2_left_ratio > age_20_2_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{= age_20_2_css }}">
               20중
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(age_20_2_right_ratio) }}%; background-color:{{= (age_20_2_left_ratio < age_20_2_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(age_20_2_right_ratio) }}%; background-color:{{= (age_20_2_left_ratio < age_20_2_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
           </tr>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(age_20_3_left_ratio) }}%; background-color:{{= (age_20_3_left_ratio > age_20_3_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(age_20_3_left_ratio) }}%; background-color:{{= (age_20_3_left_ratio > age_20_3_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{= age_20_3_css }}">
               20후
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(age_20_3_right_ratio) }}%; background-color:{{= (age_20_3_left_ratio < age_20_3_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(age_20_3_right_ratio) }}%; background-color:{{= (age_20_3_left_ratio < age_20_3_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
           </tr>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(age_30_1_left_ratio) }}%; background-color:{{= (age_30_1_left_ratio > age_30_1_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(age_30_1_left_ratio) }}%; background-color:{{= (age_30_1_left_ratio > age_30_1_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{= age_30_1_css }}">
               30초
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(age_30_1_right_ratio) }}%; background-color:{{= (age_30_1_left_ratio < age_30_1_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(age_30_1_right_ratio) }}%; background-color:{{= (age_30_1_left_ratio < age_30_1_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
           </tr>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(age_30_2_left_ratio) }}%; background-color:{{= (age_30_2_left_ratio > age_30_2_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(age_30_2_left_ratio) }}%; background-color:{{= (age_30_2_left_ratio > age_30_2_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{= age_30_2_css }}">
               30중
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(age_30_2_right_ratio) }}%; background-color:{{= (age_30_2_left_ratio < age_30_2_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(age_30_2_right_ratio) }}%; background-color:{{= (age_30_2_left_ratio < age_30_2_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
           </tr>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio > age_30_3_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio > age_30_3_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{= age_30_3_css }}">
               30후
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio < age_30_3_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio < age_30_3_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
           </tr>
           <tr>
             <td class="vote-result-td">
-              <span class="vote-result-bar-left" style="width:{{= Math.round(etc_left_ratio) }}%; background-color:{{= (etc_left_ratio > etc_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-left" style="width:{{= Math.round(etc_left_ratio) }}%; background-color:{{= (etc_left_ratio > etc_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
             <td class="vote-result-td-title" style="{{= etc_css }}">
               기타
             </td>
             <td class="vote-result-td">
-              <span class="vote-result-bar-right" style="width:{{= Math.round(etc_right_ratio) }}%; background-color:{{= (etc_left_ratio < etc_right_ratio) ? '#ffcc5a;' : '#fff' }};">&nbsp;</span>
+              <span class="vote-result-bar-right" style="width:{{= Math.round(etc_right_ratio) }}%; background-color:{{= (etc_left_ratio < etc_right_ratio) ? '#ffcc5a;' : '#9d9ea1' }};">&nbsp;</span>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-    <a id="detail_count_toggle_btn" href="#" onclick="detail_count_toggle(); return false;" style="display:block; text-align:center; padding:7px; position:relative; background-color:#998675; height:20px;">
-      <p style="margin:0; color:#fff; font-size:12px; padding:3px;"><i class='fa fa-chevron-up' style="vertical-align:top; margin-right:3px;"></i>상세 투표결과 닫기</p>
-    </a>
   {{ } }}
 </script>
 
@@ -888,20 +885,6 @@
 			$("#ask_deal_id_change").html("A")
 			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].left_ask_deal.id+"); return false;");
 		}
-	}
-
-	function detail_count_toggle(){
-	  if ($('#detail_vote_count').is(':visible')){
-	    $( "#detail_vote_count" ).slideUp( "slow", function() {
-	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-down' style='vertical-align:top; margin-right:3px;'>&nbsp;</i>상세 투표결과 열기");
-	    });
-
-	  }else{
-	    $( "#detail_vote_count" ).slideDown( "slow", function() {
-	      $("#detail_count_toggle_btn p").html("<i class='fa fa-chevron-up' style='vertical-align:top; margin-right:3px;'>&nbsp;</i>상세 투표결과 닫기");
-	    });
-	  }
-
 	}
 
   $(document).ready(function(){
