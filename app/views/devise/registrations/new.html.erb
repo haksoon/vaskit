@@ -16,14 +16,17 @@
         <div style="position:relative;">
   			  <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
           <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+          <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
         </div>
         <div style="position:relative;">
   			  <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
           <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
+          <span id="password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
         </div>
         <div style="position:relative;">
           <input placeholder="입력하신 비밀번호를 확인해주세요." class="registrations_input" type="password" id="user_password_confirm">
           <span class="input_icon left_input" onclick="$('#user_password_confirm').focus(); return false;"><i class="fa fa-check"></i></span>
+          <span id="password_confirm_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
         </div>
         <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
           <i class="fa fa-plus"></i>&nbsp;추가 입력정보
@@ -191,6 +194,31 @@
     } else {
       $("#user_agree_access_term").prop("checked",false);
       $("#agree_access_term_btn i").removeClass("fa-check-square").addClass("fa-square").css("color","#ffe4a9","text-shadow","1px 1px 0 #ffcc5a");
+    }
+  }
+
+
+  function email_check() {
+    if ( $("#user_email").val() == /[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}/ ) {
+      $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
+    } else {
+      $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+    }
+  }
+
+  function password_check() {
+    if ( $("#user_password").val().length >= 8 && $("#user_password").val() == /[0-9a-zA-Z]*/ ) {
+      $("#password_checker").html("<i class='fa fa-check' style='color: green;'></i>");
+    } else {
+      $("#password_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+    }
+  }
+
+  function password_confirm_check() {
+    if ( $("#user_password").val() == $("#user_password_confirm").val() ) {
+      $("#password_confirm_checker").html("<i class='fa fa-check' style='color: green;'></i>");
+    } else {
+      $("#password_confirm_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
     }
   }
 
