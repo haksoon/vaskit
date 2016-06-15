@@ -246,10 +246,6 @@
     }
   }
 
-  $("#user_email").attr("onkeyup","email_check(); return false;");
-  $("#user_password").attr("onkeyup","password_check(); password_confirm_check(); return false;");
-  $("#user_password_confirm").attr("onkeyup","password_confirm_check(); return false;");
-
   function ready_to_submit() {
     if (
       $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val() == $("#user_password_confirm").val()
@@ -261,9 +257,10 @@
     }
   }
 
-  $("#sign_up_form").on("change",function(){
-    ready_to_submit();
-  })
+  $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
+  $("#user_password").attr("onkeyup","password_check(); password_confirm_check(); ready_to_submit(); return false;");
+  $("#user_password_confirm").attr("onkeyup","password_confirm_check(); ready_to_submit(); return false;");
+  $("#sign_up_form").on("change",function(){ ready_to_submit(); })
 
 	function sign_up_submit(){ //submit 전에 value 체크
 		if ($("#user_email").val() == ""){
