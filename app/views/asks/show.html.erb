@@ -41,6 +41,10 @@
 				{{ } }}
 			{{ } }}
 		</div>
+		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
+			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
+	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
+		</div>
     <div style="border-bottom:1px solid #dbdbdb;">
       <table class="deal_detail" cellspacing="0" cellpadding="0" style="width:100%;">
   			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
@@ -165,11 +169,6 @@
   		</table>
 
     </div>
-
-		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
-			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
-	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
-		</div>
     <div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
 				{{ if( ask.message){ }}
