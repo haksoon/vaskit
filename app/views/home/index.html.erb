@@ -338,6 +338,10 @@
 
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
+								already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id })
+								if ( already_vote != "" ){
+									continue;
+								} else {
     				        $('#asks').append(askTemplate({ask: ask}));
     				        var hash_tags = ask.message.match(/#(\S+)/g);
     				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
@@ -351,6 +355,7 @@
                         }
                       });
     						    });
+									}
     					}
 							hover_action();
 	        	}
