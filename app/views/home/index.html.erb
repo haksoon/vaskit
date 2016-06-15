@@ -226,36 +226,36 @@
 	for(var i=0; i < ranking_asks.length; i++) {
 		var ask = ranking_asks[i]
         $('#asks').append(askTemplate({ask: ask}));
-        var hash_tags = ask.message.match(/#(\S+)/g);
-        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-        $.each(hash_tags, function( index, hash_tag ) {
-          hash_tag = hash_tag.replace(",","");
-  		  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-  		  	hash_tag = hash_tag.replace('#', '').replace("?","")
-  			  $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-            if ( $(element).parent().prop('nodeName') == "P"){
-              $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-            }
-          });
-		    });
+        // var hash_tags = ask.message.match(/#(\S+)/g);
+        // if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+        // $.each(hash_tags, function( index, hash_tag ) {
+        //   hash_tag = hash_tag.replace(",","");
+  		  // 	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+  		  // 	hash_tag = hash_tag.replace('#', '').replace("?","")
+  			//   $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+        //     if ( $(element).parent().prop('nodeName') == "P"){
+        //       $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+        //     }
+        //   });
+		    // });
 	}
 	<% end %>
 
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
-		var hash_tags = ask.message.match(/#(\S+)/g);
-		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-		$.each(hash_tags, function( index, hash_tag ) {
-			hash_tag = hash_tag.replace(",","");
-			$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-			hash_tag = hash_tag.replace('#', '').replace("?","")
-			$.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-				if ( $(element).parent().prop('nodeName') == "P"){
-					$(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-				}
-			});
-		});
+		// var hash_tags = ask.message.match(/#(\S+)/g);
+		// if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+		// $.each(hash_tags, function( index, hash_tag ) {
+		// 	hash_tag = hash_tag.replace(",","");
+		// 	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+		// 	hash_tag = hash_tag.replace('#', '').replace("?","")
+		// 	$.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+		// 		if ( $(element).parent().prop('nodeName') == "P"){
+		// 			$(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+		// 		}
+		// 	});
+		// });
 	}
 
 
@@ -322,30 +322,29 @@
 	        	var more_asks = data.asks;
 	        	$.merge(asks, more_asks);
 
-	        	if( more_asks.length == 0 ){
+	        	if ( more_asks.length == 0 ) {
 	        		is_more_asks = false;
 	        		$("#endless_loading").hide();
-	        	}else{
+	        	} else {
 	        		if( more_asks.length < <%= Ask::ASK_PER %> ){
 	        			is_more_asks = false;
 	        			$("#endless_loading").hide();
 	        		}
-
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
-				        var hash_tags = ask.message.match(/#(\S+)/g);
-				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-				        $.each(hash_tags, function( index, hash_tag ) {
-				          hash_tag = hash_tag.replace(",","");
-  						  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-  						  	hash_tag = hash_tag.replace('#', '').replace("?","")
-  							  $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-                    if ( $(element).parent().prop('nodeName') == "P"){
-                      $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-                    }
-                  });
-						    });
+				        // var hash_tags = ask.message.match(/#(\S+)/g);
+				        // if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+				        // $.each(hash_tags, function( index, hash_tag ) {
+				        //   hash_tag = hash_tag.replace(",","");
+  						  // 	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+  						  // 	hash_tag = hash_tag.replace('#', '').replace("?","")
+  							//   $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+                //     if ( $(element).parent().prop('nodeName') == "P"){
+                //       $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+                //     }
+                //   });
+						    // });
     					}
 							hover_action();
 	        	}
