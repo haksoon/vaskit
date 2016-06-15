@@ -253,10 +253,6 @@ input:focus, select:focus, textarea:focus {
 	color:#666;
 	font-size:12px;
 	font-weight:bold;
-	border:1px solid #dbdbdb;
-	border-bottom:none;
-	border-right-width: 3px;
-  border-radius:0px 3px 0px 0px;
 	cursor:pointer;
 }
 
@@ -397,12 +393,12 @@ input:focus, select:focus, textarea:focus {
 	height: 40px;
 	line-height: 40px;
 	color:#fff;
-	background-color:rgba(75,61,61,0.9);
+	background-color:rgba(238,110,1,0.7);
 	font-size:13px;
 	transition:all .2s;
 }
 .vote_btn:hover, .vote_btn:focus, .vote_btn:active {
-	background-color:rgba(238,110,1,0.8);
+	background-color:rgba(238,110,1,0.9);
 }
 
 .share_icon, .more_icon {
@@ -411,9 +407,7 @@ input:focus, select:focus, textarea:focus {
 	box-sizing: border-box;
 	height: 40px;
 	line-height: 40px;
-	border: 1px solid #dbdbdb;
-	border-right: none;
-	border-bottom: none;
+	border-left: 1px solid #dbdbdb;
 	color: #666;
 	background-color: #fff;
 	font-size: 12px;

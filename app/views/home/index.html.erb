@@ -58,23 +58,22 @@
 <% end %>
 
 <script type="text/template" id="ask-template">
-  <div class="table_div" style="margin-bottom:0px; border-radius:0 3px 0 0; overflow:hidden;">
-		<span class="input_icon left_input" onclick="category_on(); return false;" style="border-bottom:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
-    {{ if (ask.category) { }}
-    	<span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
-    {{ }else{ }}
-    	<span class="category none" onclick="category_on(); return false;">관심사 미설정</span>
-    {{ } }}
-		<div style="position:absolute; bottom:0; right:3px;">
-			<a class="share_icon" style="width:80px;" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
-			{{ if (ask.be_completed == false){ }}
-        <a class="more_icon" style="width:70px;" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
-			{{ } }}
-		</div>
-  </div>
-
 	<div class="content_box">
-		<div style="text-align:left; padding:15px; position:relative; background-color:#fff;">
+		<div class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
+			<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
+	    {{ if (ask.category) { }}
+	    	<span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
+	    {{ }else{ }}
+	    	<span class="category none" onclick="category_on(); return false;">관심사 미설정</span>
+	    {{ } }}
+			<div style="position:absolute; bottom:0; right:0;">
+				<a class="share_icon" style="width:80px;" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
+				{{ if (ask.be_completed == false){ }}
+	        <a class="more_icon" style="width:70px;" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
+				{{ } }}
+			</div>
+	  </div>
+		<div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			{{ if (ask.user) { }}
 			  {{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
 			  {{ if (!ask.user.gender) { }}
@@ -96,18 +95,20 @@
 					<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
 				{{ } }}
 			{{ } }}
-			<p id="ask_{{=ask.id}}_message" style="clear:both; margin:0; padding-top:10px; color:#383838; font-size:13px; line-height:1.4;">
-				{{ if( ask.message){ }}
-					{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
-					{{= ask_message }}
-				{{ }else{ }}
-					둘중 하나를 골라주세요.
-				{{ } }}
-			</p>
 		</div>
 		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
+		</div>
+		<div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
+			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
+				{{ if( ask.message){ }}
+					{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
+					{{= ask_message }}
+				{{ }else{ }}
+					저의 결정장애 극복을 도와주세요! 둘 중에 뭐를 사야 하죠?
+				{{ } }}
+			</p>
 		</div>
 		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank">
 			<span style="float:left;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
