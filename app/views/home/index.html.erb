@@ -244,7 +244,7 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
 		already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id })
-		if ( already_vote.ask_id == ask.id ){
+		if ( already_vote[0].ask_id == ask.id ){
 			continue;
 		} else {
 			$('#asks').append(askTemplate({ask: ask}));
