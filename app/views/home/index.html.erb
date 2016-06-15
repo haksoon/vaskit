@@ -58,6 +58,9 @@
 <% end %>
 
 <script type="text/template" id="ask-template">
+	{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+	{{ if ( ask.id == already_vote.ask_id ) { }}
+	{{ }else{ }}
 	<div class="content_box">
 		<div class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
 			<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
@@ -116,6 +119,7 @@
 			<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
 		</a>
 	</div>
+	{{ } }}
 </script>
 
 <script type="text/template" id="ask-deal-template">
