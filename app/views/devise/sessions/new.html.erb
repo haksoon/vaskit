@@ -11,12 +11,10 @@
     <div style="position:relative;">
 		  <%= f.email_field :email, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
       <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
-      <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
     </div>
     <div style="position:relative;">
 		  <%= f.password_field :password, :placeholder => "설정하신 비밀번호를 입력해주세요.", :class => "registrations_input" %>
       <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
-      <span id="password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
     </div>
 		<a id="login_btn" href="#" onclick="sign_in_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
 			<i class="fa fa-sign-in"></i>&nbsp;로그인
@@ -39,34 +37,6 @@
       	}
 	});
 
-  function email_check() {
-    if ( $("#user_email").val() == "" ) {
-      $("#email_checker").html("");
-    } else {
-      var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
-      if ( reg.test($("#user_email").val()) ) {
-        $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-      } else {
-        $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-      }
-    }
-  }
-
-  function password_check() {
-    if ( $("#user_password").val() == "" ) {
-      $("#password_checker").html("");
-    } else {
-      var reg = /^\S*$/
-      if ( $("#user_password").val().length >= 8 && reg.test($("#user_password").val()) ) {
-        $("#password_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-      } else if ( $("#user_password").val().length >= 4 && reg.test($("#user_password").val()) ) {
-        $("#password_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
-      }  else {
-        $("#password_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-      }
-    }
-  }
-
   function ready_to_submit() {
     if ( $("#user_email").val() != "" && $("#user_password").val() != "" ) {
       $("#login_btn").css("background-color","#ee6e01");
@@ -75,8 +45,8 @@
     }
   }
 
-  $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
-  $("#user_password").attr("onkeyup","password_check(); ready_to_submit(); return false;");
+  $("#user_email").attr("onkeyup","ready_to_submit(); return false;");
+  $("#user_password").attr("onkeyup","ready_to_submit(); return false;");
   $("#sign_in_form").on("change",function(){ ready_to_submit(); })
 
 	function sign_in_submit(){
