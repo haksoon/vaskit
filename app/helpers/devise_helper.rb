@@ -9,7 +9,7 @@ module DeviseHelper
 
     html = <<-HTML
     <div id="error_explanation">
-      <ul style="margin:0; padding:0; list-style:none;"><i class="fa fa-exclamation-triangle"></i>&nbsp;#{messages}</ul>
+      <ul style="margin:0; padding:0; list-style:none;">#{messages}</ul>
     </div>
     HTML
 
