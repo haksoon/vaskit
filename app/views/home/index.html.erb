@@ -333,19 +333,18 @@
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
-				        // var hash_tags = ask.message.match(/#(\S+)/g);
-				        // if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-				        // $.each(hash_tags, function( index, hash_tag ) {
-				        //   hash_tag = hash_tag.replace(",","");
-  						  // 	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-  						  // 	hash_tag = hash_tag.replace('#', '').replace("?","")
-  							//   $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-                //     if ( $(element).parent().prop('nodeName') == "P"){
-                //       $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-                //     }
-                //   });
-						    // });
-								hash_tagging();
+				        var hash_tags = ask.message.match(/#(\S+)/g);
+				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+				        $.each(hash_tags, function( index, hash_tag ) {
+				          hash_tag = hash_tag.replace(",","");
+  						  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+  						  	hash_tag = hash_tag.replace('#', '').replace("?","")
+  							  $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+                    if ( $(element).parent().prop('nodeName') == "P"){
+                      $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+                    }
+                  });
+						    });
     					}
 							hover_action();
 	        	}
@@ -366,21 +365,6 @@
 		notify('회원가입 후<br />질문을 올릴 수 있습니다.');
 		setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
 		setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
-	}
-
-	function hash_tagging() {
-		var hash_tags = ask.message.match(/#(\S+)/g);
-		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-		$.each(hash_tags, function( index, hash_tag ) {
-			hash_tag = hash_tag.replace(",","");
-			$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-			hash_tag = hash_tag.replace('#', '').replace("?","")
-			$.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-				if ( $(element).parent().prop('nodeName') == "P"){
-					$(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-				}
-			});
-		});
 	}
 
 </script>
