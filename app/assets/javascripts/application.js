@@ -245,6 +245,13 @@ function graph_animation(ask_deal_id) {
 }
 
 $( document ).ready(function() {
+  $("select").on("change",function(){
+    if( $(this).val() != "" ) {
+      $(this).css("color","#666");
+    } else {
+      $(this).css("color","#ccc");
+    }
+  });
 	//ie 에서 placeholder
 	(function($) {
 	  $.fn.placeholder = function() {

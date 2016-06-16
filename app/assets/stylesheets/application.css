@@ -517,7 +517,7 @@ img.cover {
 	background-size: 10px 6px;
 	background-origin: content-box;
 	font-size:13px;
-	color:#9d9ea1;
+	color:#ccc;
 }
 
 #gender_male, #gender_female {
@@ -573,7 +573,7 @@ img.cover {
 	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 100% 50%;
 	background-size: 10px 6px;
 	background-origin: content-box;
-	color: #666;
+	color: #ccc;
   font-size: 13px;
 }
 
