@@ -27,8 +27,26 @@
       </td>
 		</tr>
 	</table>
-	<div class="table_div" style="margin-bottom: 0; background-color: #fff; border-width: 0 3px; border-style: solid; border-color: #998674;"></div>
+	<div id="footer_seg" class="table_div" style="margin-bottom: 0; background-color: #fff; border-width: 0 3px; border-style: solid; border-color: #998674;"></div>
 </div>
-<script>
 
+<script type="text/template" id="footer_seg_template_1">
+	ABOUT US
+</script>
+<script type="text/template" id="footer_seg_template_2">
+	CONTACT US
+</script>
+<script type="text/template" id="footer_seg_template_3">
+	TERMS
+</script>
+<script type="text/template" id="footer_seg_template_4">
+	HELP
+</script>
+
+
+<script>
+	function footer_menu_on(index) {
+		var footerSegTemplate = _.template($('#footer_seg_template_'+index).html());
+		$("#footer_seg").html(footerSegTemplate());
+	}
 </script>

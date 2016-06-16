@@ -123,7 +123,7 @@
 
 		function user_on(){
 			$("#user_overlay").fadeIn(100);
-			$("#footer").show().animate({"bottom":"-1px"},200);
+			$("#footer").fadeIn(100);
 			$("#menu_pc_bg").show();
 			$("#menu_bg").fadeIn(100);
 
@@ -138,7 +138,7 @@
 
 		function user_off(){
 			$("#user_overlay").fadeOut(300);
-			$("#footer").animate({"bottom":"-100%"},300,function(){$(this).hide();});
+			$("#footer").fadeOut(300);
 			$("#menu_pc_bg").hide();
 			$("#menu_bg").fadeOut(300);
 
