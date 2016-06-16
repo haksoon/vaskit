@@ -131,7 +131,7 @@ input:focus, select:focus, textarea:focus {
 
 #footer {
 	position: fixed;
-	bottom: -100%;
+	bottom: 0;
 	box-sizing: border-box;
 	width: inherit;
 	padding: 0 5px;
