@@ -508,6 +508,16 @@
 	var check_click = 0;
 
 	function submit_form(){
+		if ( $("#ask_category_id").val() == "" || $("#ask_category_id").val() == null ){
+			notify('관심사 카테고리를 설정해주세요');
+			return;
+		}
+
+		if ( $("#ask_message").val() == "" || $("#ask_message").val() == null ){
+			notify('고민하고 있는 상황을 입력해주세요');
+			return;
+		}
+
 		if ( $("#left_deal_image_btn img").attr("src") == "/images/ask/card_image_preview.png"){
 			notify('CARD A 이미지를 추가해주세요.');
 			return;
@@ -540,6 +550,15 @@
 	}
 
 	function edit_form(){
+		if ( $("#ask_category_id").val() == "" || $("#ask_category_id").val() == null ){
+			notify('관심사 카테고리를 설정해주세요');
+			return;
+		}
+
+		if ( $("#ask_message").val() == "" || $("#ask_message").val() == null ){
+			notify('고민하고 있는 상황을 입력해주세요');
+			return;
+		}
 
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
@@ -636,6 +655,7 @@
 	// 제출버튼 필수입력필드 입력해야 활성화되도록
 	function ready_to_submit() {
     if (
+			$("#ask_category_id").val() != "" && $("#ask_message").val() != "" &&
 			$("#left_deal_image_btn img").attr("src") != "/images/ask/card_image_preview.png" && $("#right_deal_image_btn img").attr("src") != "/images/ask/card_image_preview.png" &&
 			$("#left_deal_title").val() != "" && $("#right_deal_title").val() != ""
     ) {
@@ -645,10 +665,10 @@
     }
   }
 
+	$("#ask_message").attr("onkeyup","ready_to_submit(); return false;");
 	$("#left_deal_title").attr("onkeyup","ready_to_submit(); return false;");
 	$("#right_deal_title").attr("onkeyup","ready_to_submit(); return false;");
   $("#new_ask").on("change",function(){ ready_to_submit(); })
 	$("#edit_ask").on("change",function(){ ready_to_submit(); })
-
 
 </script>
