@@ -510,11 +510,13 @@
 	function submit_form(){
 		if ( $("#ask_category_id").val() == "" || $("#ask_category_id").val() == null ){
 			notify('관심사 카테고리를 설정해주세요');
+			$("#ask_category_id").focus().select();
 			return;
 		}
 
 		if ( $("#ask_message").val() == "" || $("#ask_message").val() == null ){
 			notify('고민하고 있는 상황을 입력해주세요');
+			$("#ask_message").focus().select();
 			return;
 		}
 
@@ -525,6 +527,7 @@
 
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
+			$("#left_deal_title").focus().select();
 			return;
 		}
 
@@ -535,6 +538,7 @@
 
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
 			notify('CARD B 제품명을 입력해주세요.');
+			$("#right_deal_title").focus().select();
 			return;
 		}
 		if (check_click == 0) {
@@ -552,21 +556,25 @@
 	function edit_form(){
 		if ( $("#ask_category_id").val() == "" || $("#ask_category_id").val() == null ){
 			notify('관심사 카테고리를 설정해주세요');
+			$("#ask_category_id").focus().select();
 			return;
 		}
 
 		if ( $("#ask_message").val() == "" || $("#ask_message").val() == null ){
 			notify('고민하고 있는 상황을 입력해주세요');
+			$("#ask_message").focus().select();
 			return;
 		}
 
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
 			notify('CARD A 제품명을 입력해주세요.');
+			$("#left_deal_title").focus().select();
 			return;
 		}
 
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
 			notify('CARD B 제품명을 입력해주세요.');
+			$("#right_deal_title").focus().select();
 			return;
 		}
 		var left_price = $("#left_deal_price").val();
