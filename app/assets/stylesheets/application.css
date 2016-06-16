@@ -43,19 +43,6 @@ p, ol, ul, td {
 	-webkit-tap-highlight-color:transparent;
 }
 
-::-webkit-input-placeholder { /* WebKit browsers */
-  color:    #CCC;
-}
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-  color:    #CCC;
-}
-::-moz-placeholder { /* Mozilla Firefox 19+ */
-  color:    #CCC;
-}
-:-ms-input-placeholder { /* Internet Explorer 10+ */
-  color:    #CCC;
-}
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   /* display: none; <- Crashes Chrome on hover */
@@ -63,30 +50,18 @@ input::-webkit-inner-spin-button {
   margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
 
-select::-ms-expand {
-  display: none;
-}
 textarea {
   overflow: auto;
 }
-input::-ms-clear {
-  display: none;
-}
-input:ms-input-placeholder {
-	color: #CCC;
-}
-
 input, select, textarea {
 	-webkit-appearance: none;
 		 -moz-appearance: none;
 					appearance: none;
 }
-
 input:focus, select:focus, textarea:focus {
 	outline: none;
 	background-color: rgba(238,110,1,0.05);
 }
-
 
 #wrap{
 	min-height:100%;
@@ -844,3 +819,25 @@ p.output_field {
 
 ::-moz-selection { background:#ffe4a9; } /* Code for Firefox */
 ::selection { background:#ffe4a9; }
+
+::-webkit-input-placeholder { /* WebKit browsers */
+  color:    #CCC;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color:    #CCC;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color:    #CCC;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color:    #CCC;
+}
+select::-ms-expand {
+	display: none;
+}
+input::-ms-clear {
+	display: none;
+}
+input:ms-input-placeholder {
+	color: #CCC;
+}
