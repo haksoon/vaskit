@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :asks do
     member do
       get 'ask_complete'
-      get 'create_complete'      
+      get 'create_complete'
     end
   end
   resources :ask_completes
@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       post 'like'
       delete 'comment_del'
     end
-  end 
+  end
   resources :comment_likes
   resources :deals do
     collection do
@@ -57,9 +57,9 @@ Rails.application.routes.draw do
       get 'no_result'
     end
   end
-  
+
   resources :inquiry
-  
+
   resources :etc do
     collection do
       get 'landing'
@@ -67,9 +67,9 @@ Rails.application.routes.draw do
       post 'create_inquiry'
     end
   end
-  
-  
-  resources :alrams do 
+
+
+  resources :alrams do
     collection do
       put 'all_read'
     end
@@ -84,9 +84,9 @@ Rails.application.routes.draw do
     end
   end
   get "/admin/table/:table_name", :to => "admin#table"
-  
-  get "/:string_id", :to => "etc#user"
-  
+
+  # get "/:string_id", :to => "etc#user"
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
