@@ -535,14 +535,14 @@
         &nbsp;{{= get_past_time(comment.created_at) }}
 				|
 				{{ if ( comment.user_id == current_user_id ){ }}
-				  <a href="#" onclick="comment_del({{=comment.id}}, true); return false;" style="color:#9e9fa1;">
-            삭제
-          </a>
           <a class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="color:#9e9fa1;">
             수정
           </a>
           <a class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; display:none;">
             취소
+          </a>
+          <a href="#" onclick="comment_del({{=comment.id}}, true); return false;" style="color:#9e9fa1;">
+            삭제
           </a>
 				{{ }else{ }}
 				  <a href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9e9fa1;">
