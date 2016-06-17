@@ -116,8 +116,7 @@ class AsksController < ApplicationController
       end
     end
 
-    # hash_tags = @ask.message.scan(/#\S+/)
-    hash_tags = @ask.message.scan(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/)
+    hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")
       HashTag.create(:ask_id => @ask.id, :keyword => hash_tag)
@@ -203,8 +202,7 @@ class AsksController < ApplicationController
     end
 
     HashTag.delete_all(:ask_id => @ask.id) #AJS추가 - 해쉬태그 기존 값을 모두 삭제 후 업데이트된 내용으로 재 설정
-    # hash_tags = @ask.message.scan(/#\S+/)
-    hash_tags = @ask.message.scan(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/)
+    hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")
       HashTag.create(:ask_id => @ask.id, :keyword => hash_tag) # if HashTag.where(:ask_id => @ask.id, :keyword => hash_tag).blank?
