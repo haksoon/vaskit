@@ -48,8 +48,20 @@
     <div style="padding:10px 10px 0px 10px; border-bottom:1px solid #dbdbdb;">
 			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
         <div class="table_div">
-          <div class="ask_text_field left_input output_field" style="font-weight:bold;"><p class="output_field">{{= ask.left_ask_deal.title }}</p></div>
-          <div class="ask_text_field right_input output_field" style="font-weight:bold;"><p class="output_field">{{= ask.right_ask_deal.title }}</p></div>
+          <div class="ask_text_field left_input output_field" style="font-weight:bold;">
+            <p class="output_field">{{= ask.left_ask_deal.title }}</p>
+            <div class="tooltip_area">
+              <div class="tooltip_arrow bottom"></div>
+              <div class="tooltip_content">{{= ask.left_ask_deal.title }}</div>
+            </div>
+          </div>
+          <div class="ask_text_field right_input output_field" style="font-weight:bold;">
+            <p class="output_field">{{= ask.right_ask_deal.title }}</p>
+            <div class="tooltip_area">
+              <div class="tooltip_arrow bottom"></div>
+              <div class="tooltip_content">{{= ask.right_ask_deal.title }}</div>
+            </div>
+          </div>
 					<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
         </div>
 			{{ } }}
