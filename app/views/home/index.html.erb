@@ -226,7 +226,7 @@
 	for(var i=0; i < ranking_asks.length; i++) {
 		var ask = ranking_asks[i]
         $('#asks').append(askTemplate({ask: ask}));
-        var hash_tags = ask.message.match(/\#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
+        var hash_tags = ask.message.match(/#(\S+)/g);
         if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
         $.each(hash_tags, function( index, hash_tag ) {
           hash_tag = hash_tag.replace(",","");
@@ -244,7 +244,7 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
-		var hash_tags = ask.message.match(/\#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
+		var hash_tags = ask.message.match(/#(\S+)/g);
 		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 		$.each(hash_tags, function( index, hash_tag ) {
 			hash_tag = hash_tag.replace(",","");
@@ -333,7 +333,7 @@
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
-				        var hash_tags = ask.message.match(/\#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
+				        var hash_tags = ask.message.match(/#(\S+)/g);
 				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 				        $.each(hash_tags, function( index, hash_tag ) {
 				          hash_tag = hash_tag.replace(",","");
