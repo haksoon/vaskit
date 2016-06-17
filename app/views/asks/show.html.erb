@@ -930,7 +930,7 @@
         $(this).next().css("width",tooltip_width).slideDown(200); },
     function(){
       if ($(this).next().is(':visible'))
-        $(this).next().stop().delay(1000).slideUp(200);
+        $(this).next().delay(500).slideUp(200);
   })
   .on("click",function(){
     var tooltip_width = $(this).width();
