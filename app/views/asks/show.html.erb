@@ -934,8 +934,11 @@
   })
   .on("click",function(){
     var tooltip_width = $(this).width();
-    if ($(this).next().is(':visible'))
-      $(this).next().css("width",tooltip_width).slideUp(200);
+    if ($(this).next().is(':visible')) {
+      $(this).next().css("width",tooltip_width).slideDown(200);
+    } else if ($(this).next().is(':visible')) {
+      $(this).next().slideUp(200);
+    }
   });
 
 </script>
