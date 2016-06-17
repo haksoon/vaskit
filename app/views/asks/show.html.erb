@@ -50,14 +50,14 @@
         <div class="table_div">
           <div class="ask_text_field left_input output_field" style="font-weight:bold;">
             <p class="output_field">{{= ask.left_ask_deal.title }}</p>
-            <div class="tooltip_area" onclick="$(this).slideUp(200); return false;">
+            <div class="tooltip_area">
               <div class="tooltip_arrow bottom"></div>
               <div class="tooltip_content">{{= ask.left_ask_deal.title }}</div>
             </div>
           </div>
           <div class="ask_text_field right_input output_field" style="font-weight:bold;">
             <p class="output_field">{{= ask.right_ask_deal.title }}</p>
-            <div class="tooltip_area" onclick="$(this).slideUp(200); return false;">
+            <div class="tooltip_area">
               <div class="tooltip_arrow bottom"></div>
               <div class="tooltip_content">{{= ask.right_ask_deal.title }}</div>
             </div>
@@ -922,7 +922,7 @@
   hover_action();
 
   // 제품명 툴팁박스 추가
-  $("p.output_field").on("click",function(){
+  $("p.output_field").on("touch",function(){
     var tooltip_width = $(this).width();
     $(this).next().css("width",tooltip_width).slideToggle(200);
   }).on("mouseover",function(){
