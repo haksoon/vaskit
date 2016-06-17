@@ -656,19 +656,24 @@
 		        success: function(data){
 		          detail_vote_count = data.detail_vote_count;
 		        	my_votes.push(data.vote);
-			        $('#asks').html(askShowTemplate({ask: data.ask}));
-			        var hash_tags = ask.message.match(/#(\S+)/g);
-			        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-			        $.each(hash_tags, function( index, hash_tag ) {
-			          hash_tag = hash_tag.replace(",","");
-					  	  $("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-					  	  hash_tag = hash_tag.replace('#', '').replace("?","")
-						    $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-                  if ( $(element).parent().prop('nodeName') == "P"){
-                    $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-                  }
-                });
-				      });
+              var askDealTemplate = _.template( $('#ask-deal-template').html() );
+              $('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
+              var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
+	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
+	        		my_vote_count = my_vote_count + 1;
+			        // $('#asks').html(askShowTemplate({ask: data.ask}));
+			        // var hash_tags = ask.message.match(/#(\S+)/g);
+			        // if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+			        // $.each(hash_tags, function( index, hash_tag ) {
+			        //   hash_tag = hash_tag.replace(",","");
+					  	//   $("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+					  	//   hash_tag = hash_tag.replace('#', '').replace("?","")
+						  //   $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+              //     if ( $(element).parent().prop('nodeName') == "P"){
+              //       $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+              //     }
+              //   });
+				      // });
 	        		notify("투표 완료");
               hover_action();
               graph_animation(data.ask.id);
