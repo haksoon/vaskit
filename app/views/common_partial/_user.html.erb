@@ -18,6 +18,7 @@
 		<p style="margin:0; margin-bottom:16px; padding:0 10px; color:#666; text-align:center;">
 			<span style="color:#998674;"><%= current_user.string_id %></span>님, 환영합니다!
 			<a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
+			<a href="#" onclick="manage_on(); return "style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
 		</p>
 		<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
 			히스토리
@@ -145,10 +146,10 @@
 			$("#user_overlay_seg").html();
 		}
 
-		function manage_on() {
-			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
-	    $("#user_overlay_seg").html(userOverlaySegTemplate());
-		}
+		// function manage_on() {
+		// 	var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
+	  //   $("#user_overlay_seg").html(userOverlaySegTemplate());
+		// }
 
 	</script>
 <% end %>

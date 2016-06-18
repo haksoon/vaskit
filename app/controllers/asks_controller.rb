@@ -119,7 +119,7 @@ class AsksController < ApplicationController
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")
-      HashTag.create(:ask_id => @ask.id, :keyword => hash_tag)
+      HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag)
     end
 
     redirect_to root_path
@@ -205,7 +205,7 @@ class AsksController < ApplicationController
     hash_tags = @ask.message.scan(/#\S+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")
-      HashTag.create(:ask_id => @ask.id, :keyword => hash_tag) # if HashTag.where(:ask_id => @ask.id, :keyword => hash_tag).blank?
+      HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag) # if HashTag.where(:ask_id => @ask.id, :keyword => hash_tag).blank?
     end
 
 
