@@ -221,7 +221,6 @@
         var tooltip_area = $("#user_email").parent().find(".tooltip_area");
         var tooltip_content = $("#user_email").parent().find(".tooltip_content");
         if (data.email){
-          $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
           tooltip_area.css("width",tooltip_width).slideDown(200);
           tooltip_content.text("이미 존재하는 이메일입니다");
         } else {
@@ -236,7 +235,9 @@
           $("#email_checker").html("");
         } else {
           var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
-          if ( reg.test($("#user_email").val()) ) {
+          if ( data.email ) {
+            $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
+          } else if ( reg.test($("#user_email").val()) ) {
             $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
           } else {
             $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
