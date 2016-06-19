@@ -217,11 +217,11 @@
       var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
       if ( reg.test($("#user_email").val()) ) {
         $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-        tooltip_area.is(":visible").stop().slideUp(200);
+        if (tooltip_area.is(":visible")) tooltip_area.stop().slideUp(200);
       } else {
         $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-        tooltip_area.is(":hidden").css("width",tooltip_width).delay(1000).slideDown(200);
-        tolltip_content.text("이메일 형식이 아닌 것 같습니다");
+        if (tooltip_area.is(":hidden")) tooltip_area.css("width",tooltip_width).delay(1000).slideDown(200);
+        tooltip_content.text("이메일 형식이 아닌 것 같습니다");
       }
     }
     $.ajax({
@@ -235,8 +235,8 @@
       success: function(data){
         if (data.email){
           $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-          tooltip_area.is(":hidden").css("width",tooltip_width).slideDown(200);
-          tolltip_content.text("이미 존재하는 이메일입니다");
+          if (tooltip_area.is(":hidden")) tooltip_area.css("width",tooltip_width).slideDown(200);
+          tooltip_content.text("이미 존재하는 이메일입니다");
         }
       },
       beforeSend: function(){
