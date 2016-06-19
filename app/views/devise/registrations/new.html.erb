@@ -220,19 +220,6 @@
         var tooltip_width = $("#user_email").width();
         var tooltip_area = $("#user_email").parent().find(".tooltip_area");
         var tooltip_content = $("#user_email").parent().find(".tooltip_content");
-        if (data.email){
-          $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
-          tooltip_area.css("width",tooltip_width).slideDown(200);
-          tooltip_content.text("이미 존재하는 이메일입니다");
-          return false;
-        } else {
-          tooltip_area.stop().slideUp(200);
-        }
-      },
-      beforeSend: function(){
-        $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
-      },
-      complete: function(){
         if ( $("#user_email").val() == "" ) {
           $("#email_checker").html("");
         } else {
@@ -243,6 +230,18 @@
             $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
           }
         }
+        if (data.email){
+          $("#password_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
+          tooltip_area.css("width",tooltip_width).slideDown(200);
+          tooltip_content.text("이미 존재하는 이메일입니다");
+        } else {
+          tooltip_area.stop().slideUp(200);
+        }
+      },
+      beforeSend: function(){
+        $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
+      },
+      complete: function(){
       }
     })
   }
