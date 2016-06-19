@@ -206,7 +206,7 @@
 
   function email_check2() {
     $.ajax({
-      url: "registrations/get_email.json",
+      url: "users/get_email.json",
       type: "GET",
       data: {'user_email_input': $('#user_email').val() },
       dataType: 'json',
