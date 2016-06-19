@@ -831,7 +831,6 @@ p.output_field {
     color: #fff;
     font-size: 12px;
     border-radius: 5px;
-    max-width: 200px;
 }
 .tooltip_arrow {
     position: absolute;
