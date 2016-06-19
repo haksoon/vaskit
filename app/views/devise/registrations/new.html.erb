@@ -208,16 +208,6 @@
   }
 
   function email_check() {
-    if ( $("#user_email").val() == "" ) {
-      $("#email_checker").html("");
-    } else {
-      var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
-      if ( reg.test($("#user_email").val()) ) {
-        $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-      } else {
-        $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-      }
-    }
     $.ajax({
       url: "/users/get_email.json",
       type: "GET",
@@ -239,8 +229,19 @@
         }
       },
       beforeSend: function(){
+        $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
       },
       complete: function(){
+        if ( $("#user_email").val() == "" ) {
+          $("#email_checker").html("");
+        } else {
+          var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
+          if ( reg.test($("#user_email").val()) ) {
+            $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
+          } else {
+            $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+          }
+        }
       }
     })
   }
