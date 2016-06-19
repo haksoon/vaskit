@@ -204,6 +204,27 @@
     }
   }
 
+  function email_check2() {
+    $.ajax({
+      url: "registrations/get_email.json",
+      type: "GET",
+      data: {'user_email_input': $('#user_email').val() },
+      dataType: 'json',
+      error: function(){
+          return false;
+      },
+      success: function(data){
+        if (data.email){
+          notify('이미 존재하는 이메일!');
+        }
+      },
+      beforeSend: function(){
+      },
+      complete: function(){
+      }
+    })
+  }
+
   function email_check() {
     if ( $("#user_email").val() == "" ) {
       $("#email_checker").html("");
