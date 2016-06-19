@@ -208,18 +208,18 @@
   }
 
   function email_check() {
-    var tooltip_width = $("#email_checker").width();
+    var tooltip_width = $("#user_email").width();
     if ( $("#user_email").val() == "" ) {
       $("#email_checker").html("");
     } else {
       var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
       if ( reg.test($("#user_email").val()) ) {
         $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-        $("#email_checker").parent().find(".tooltip_area").slideUp(200);
+        $("#user_email").parent().find(".tooltip_area").slideUp(200);
       } else {
         $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-        $("#email_checker").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
-        $("#email_checker").parent().find(".tooltip_content").text("이메일 형식이 아닌 것 같습니다.");
+        $("#user_email").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+        $("#user_email").parent().find(".tooltip_content").text("이메일 형식이 아닌 것 같습니다.");
       }
     }
     $.ajax({
@@ -233,8 +233,8 @@
       success: function(data){
         if (data.email){
           $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-          $("#email_checker").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
-          $("#email_checker").parent().find(".tooltip_content").text("이메일 형식이 아닌 것 같습니다.");
+          $("#user_email").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+          $("#user_email").parent().find(".tooltip_content").text("이메일 형식이 아닌 것 같습니다.");
         }
       },
       beforeSend: function(){
@@ -245,39 +245,39 @@
   }
 
   function password_check() {
-    var tooltip_width = $("#password_checker").width();
+    var tooltip_width = $("#user_password").width();
     if ( $("#user_password").val() == "" ) {
       $("#password_checker").html("");
     } else {
       var reg = /^\S*$/
       if ( $("#user_password").val().length >= 8 && reg.test($("#user_password").val()) ) {
         $("#password_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-        $("#password_checker").parent().find(".tooltip_area").slideUp(200);
+        $("#user_password").parent().find(".tooltip_area").slideUp(200);
       } else if ( $("#user_password").val().length >= 4 && reg.test($("#user_password").val()) ) {
         $("#password_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
-        $("#password_checker").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
-        $("#password_checker").parent().find(".tooltip_content").text("비밀번호는 8자리 이상 입력해주세요");
+        $("#user_password").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+        $("#user_password").parent().find(".tooltip_content").text("비밀번호는 8자리 이상 입력해주세요");
       }  else {
         $("#password_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-        $("#password_checker").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
-        $("#password_checker").parent().find(".tooltip_content").text("비밀번호는 8자리 이상 입력해주세요!");
+        $("#user_password").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+        $("#user_password").parent().find(".tooltip_content").text("비밀번호는 8자리 이상 입력해주세요!");
       }
     }
   }
 
   function password_confirm_check() {
-    var tooltip_width = $("#password_confirm_checker").width();
+    var tooltip_width = $("#user_password_confirm").width();
     if ( $("#user_password_confirm").val() == "" ) {
       $("#password_confirm_checker").html("");
     } else {
       if ( $("#user_password").val() != "" || $("#user_password_confirm").val() != "" ) {
         if ( $("#user_password").val() == $("#user_password_confirm").val() ) {
           $("#password_confirm_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-          $("#password_confirm_checker").parent().find(".tooltip_area").slideUp(200);
+          $("#user_password_confirm").parent().find(".tooltip_area").slideUp(200);
         } else {
           $("#password_confirm_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-          $("#password_confirm_checker").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
-          $("#password_confirm_checker").parent().find(".tooltip_content").text("입력하신 비밀번호가 다릅니다");
+          $("#user_password_confirm").parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+          $("#user_password_confirm").parent().find(".tooltip_content").text("입력하신 비밀번호가 다릅니다");
         }
       }
     }
