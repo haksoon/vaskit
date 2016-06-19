@@ -215,7 +215,9 @@
       },
       success: function(data){
         if (data.email){
-          notify('이미 존재하는 이메일!');
+          $("#user_email").css("background-color","red");
+        } else {
+          $("#user_email").css("background-color","blue");
         }
       },
       beforeSend: function(){
