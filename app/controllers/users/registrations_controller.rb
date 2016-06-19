@@ -11,9 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def get_email
     user_email_input = params[:user_email_input]
-    unless user_email_input.blank?
-      email = true unless User.where("email like ?", "%#{user_email_input}").blank?
-    end
+    email = true unless User.where("email like ?", "%#{user_email_input}").blank?
     render :json => {:email => email}
   end
 
