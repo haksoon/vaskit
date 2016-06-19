@@ -204,29 +204,6 @@
     }
   }
 
-  function email_check2() {
-    $.ajax({
-      url: "/users/get_email.json",
-      type: "GET",
-      data: {'user_email_input': $('#user_email').val() },
-      dataType: 'json',
-      error: function(){
-          return false;
-      },
-      success: function(data){
-        if (data.email){
-          $("#user_email").css("background-color","red");
-        } else {
-          $("#user_email").css("background-color","blue");
-        }
-      },
-      beforeSend: function(){
-      },
-      complete: function(){
-      }
-    })
-  }
-
   function email_check() {
     if ( $("#user_email").val() == "" ) {
       $("#email_checker").html("");
@@ -238,7 +215,38 @@
         $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
       }
     }
+    $.ajax({
+      url: "/users/get_email.json",
+      type: "GET",
+      data: {'user_email_input': $('#user_email').val() },
+      dataType: 'json',
+      error: function(){
+          return false;
+      },
+      success: function(data){
+        if (data.email){
+          $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+        }
+      },
+      beforeSend: function(){
+      },
+      complete: function(){
+      }
+    })
   }
+
+  // function email_check() {
+  //   if ( $("#user_email").val() == "" ) {
+  //     $("#email_checker").html("");
+  //   } else {
+  //     var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
+  //     if ( reg.test($("#user_email").val()) ) {
+  //       $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
+  //     } else {
+  //       $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+  //     }
+  //   }
+  // }
 
   function password_check() {
     if ( $("#user_password").val() == "" ) {
@@ -280,7 +288,7 @@
     }
   }
 
-  $("#user_email").attr("onkeyup","email_check2(); ready_to_submit(); return false;");
+  $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
   $("#user_password").attr("onkeyup","password_check(); password_confirm_check(); ready_to_submit(); return false;");
   $("#user_password_confirm").attr("onkeyup","password_confirm_check(); ready_to_submit(); return false;");
   $("#sign_up_form").on("change",function(){ ready_to_submit(); })
