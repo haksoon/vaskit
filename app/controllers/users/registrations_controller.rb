@@ -9,9 +9,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     respond_with self.resource
   end
 
-  def get_email
+  def get_email #AJS추가
     user_email_input = params[:user_email_input]
-    email = true unless User.where("email like ?", "%#{user_email_input}").blank?
+    email = true unless User.find_by_email(params[:user_email_input]).blank?
     render :json => {:email => email}
   end
 
