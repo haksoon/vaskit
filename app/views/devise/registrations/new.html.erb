@@ -218,7 +218,8 @@
         $(this).parent().find(".tooltip_area").slideUp(200);
       } else {
         $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-        $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200).text("이메일 형식이 아닌 것 같습니다.");
+        $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+        $(this).parent().find(".tooltip_content").text("이메일 형식이 아닌 것 같습니다.");
       }
     }
     $.ajax({
@@ -232,7 +233,8 @@
       success: function(data){
         if (data.email){
           $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-          $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200).text("이미 존재하는 이메일입니다.");
+          $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+          $(this).parent().find(".tooltip_content").text("이메일 형식이 아닌 것 같습니다.");
         }
       },
       beforeSend: function(){
@@ -253,10 +255,12 @@
         $(this).parent().find(".tooltip_area").slideUp(200);
       } else if ( $("#user_password").val().length >= 4 && reg.test($("#user_password").val()) ) {
         $("#password_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
-        $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200).text("비밀번호는 8자리 이상 입력해주세요");
+        $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+        $(this).parent().find(".tooltip_content").text("비밀번호는 8자리 이상 입력해주세요");
       }  else {
         $("#password_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-        $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200).text("비밀번호는 8자리 이상 입력해주세요!");
+        $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+        $(this).parent().find(".tooltip_content").text("비밀번호는 8자리 이상 입력해주세요!");
       }
     }
   }
@@ -272,7 +276,8 @@
           $(this).parent().find(".tooltip_area").slideUp(200);
         } else {
           $("#password_confirm_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-          $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200).text("입력하신 비밀번호가 다릅니다.");
+          $(this).parent().find(".tooltip_area").css("width",tooltip_width).slideDown(200);
+          $(this).parent().find(".tooltip_content").text("입력하신 비밀번호가 다릅니다");
         }
       }
     }
