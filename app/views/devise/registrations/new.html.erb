@@ -209,7 +209,7 @@
 
   function email_check() {
     $.ajax({
-      url: "/users/get_email.json",
+      url: "/users/check_email.json",
       type: "GET",
       data: {'user_email_input': $('#user_email').val() },
       dataType: 'json',
@@ -230,12 +230,12 @@
             $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
           }
         }
-        if (data.email){
+        if (data.is_new_email) {
+          tooltip_area.stop().slideUp(200);
+        } else {
           $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
           tooltip_area.css("width",tooltip_width).slideDown(200);
           tooltip_content.text("이미 존재하는 이메일입니다");
-        } else {
-          tooltip_area.stop().slideUp(200);
         }
       },
       beforeSend: function(){

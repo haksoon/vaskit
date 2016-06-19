@@ -37,8 +37,8 @@ Rails.application.routes.draw do
   }
   devise_scope :user do
     get 'users/facebook', :to => "users/facebook#auth"
-    get 'users/check_email', :to => "users/sessions#check_email"
-    get 'users/get_email', :to => "users/registrations#get_email" #AJS추가
+    # get 'users/check_email', :to => "users/sessions#check_email"
+    get 'users/check_email', :to => "users/registrations#check_email" #AJS추가
     get 'users/manage', :to => "users/sessions#manage"
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
     put 'users/toggle_receive_notice', :to => "users/sessions#toggle_receive_notice"

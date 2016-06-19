@@ -9,10 +9,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
     respond_with self.resource
   end
 
-  def get_email #AJS추가
+  def check_email #AJS추가
     user_email_input = params[:user_email_input]
-    email = true unless User.find_by_email(params[:user_email_input]).blank?
-    render :json => {:email => email}
+    is_new_email = true if User.find_by_email(params[:user_email_input]).blank?
+    render :json => {:is_new_email => is_new_email}
   end
 
   def create
