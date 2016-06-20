@@ -108,7 +108,7 @@
 		}
 	}
 
-	$('#search_input').keyup(function(e) {
+	$('#search_input').keypress(function(e) {
 		$("#keyword_reset_btn").show();
 		if ( $("#search_input").val() == "" ) $("#keyword_reset_btn").hide();
 		$.ajax({
