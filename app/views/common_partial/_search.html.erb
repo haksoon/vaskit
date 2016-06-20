@@ -96,9 +96,9 @@
 		}
 	});
 
-	var select_num = 0;
 	$('#search_input').keyup(function(e) {
-  	$("#keyword_reset_btn").show();
+		$("#keyword_reset_btn").show();
+		if ("#search_input").val() == "") $("#keyword_reset_btn").hide();
 		$.ajax({
 	        url: "/search/get_keyword.json",
 	        type: 'GET',
@@ -108,16 +108,19 @@
 	            return false;
 	        },
 	        success: function(data){
+						var select_num = 0;
 						if (e.keyCode == '40') {
 							e.preventDefault();
 							$("#search_result a").removeClass("search_focus");
 							$("#search_result a:eq(select_num)").addClass("search_focus");
 							select_num = select_num + 1;
+							return false;
 						} else if (e.keyCode == '38') {
 							e.preventDefault();
 							$("#search_result a").removeClass("search_focus");
 							select_num = select_num - 1;
 							$("#search_result a:eq(select_num)").addClass("search_focus");
+							return false;
 						} else {
 		        	$('#search_result').html("");
 							select_num = 0;
