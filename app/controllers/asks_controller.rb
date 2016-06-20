@@ -16,11 +16,11 @@ class AsksController < ApplicationController
     @detail_vote_count = @ask.detail_vote_count
     if current_user
       @my_votes = Vote.where(:user_id => current_user.id)
-      # @my_ask_count = Ask.where(:user_id => current_user.id).count #AJS추가
-      # @my_vote_count = Vote.where(:user_id => current_user.id).count #AJS추가
-      # @my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
-      # @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
-      # @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
+      @my_ask_count = Ask.where(:user_id => current_user.id).count #AJS추가
+      @my_vote_count = Vote.where(:user_id => current_user.id).count #AJS추가
+      @my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
+      @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
+      @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
       @my_like_comment = CommentLike.where(:user_id => current_user.id) #AJS추가
     elsif @visitor
       @my_votes = Vote.where(:visitor_id => @visitor.id)

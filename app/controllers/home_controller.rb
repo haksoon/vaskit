@@ -6,11 +6,11 @@ class HomeController < ApplicationController
     if current_user
       @my_votes = Vote.where(:user_id => current_user.id)
       @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id)
-      # @my_ask_count = Ask.where(:user_id => current_user.id).count #AJS추가
-      # @my_vote_count = Vote.where(:user_id => current_user.id).count #AJS추가
-      # @my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
-      # @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
-      # @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
+      @my_ask_count = Ask.where(:user_id => current_user.id).count #AJS추가
+      @my_vote_count = Vote.where(:user_id => current_user.id).count #AJS추가
+      @my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
+      @in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
+      @alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
     elsif @visitor
       @my_votes = Vote.where(:visitor_id => @visitor.id)
     end
