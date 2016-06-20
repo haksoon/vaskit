@@ -59,7 +59,7 @@
     disableScroll();
     $("#ask_image_overlay").show();
     $("#menu_pc_bg").show();
-		$("#menu_bg").fadeIn(100);
+		$("#menu_bg").fadeIn(100).css("opacity","0.75");
 
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
@@ -70,7 +70,7 @@
     enableScroll();
     $("#ask_image_overlay").hide();
     $("#menu_pc_bg").hide();
-		$("#menu_bg").fadeOut(300);
+		$("#menu_bg").fadeOut(300).css("opacity","0.6");
   }
 
   $("#menu_bg, #menu_pc_bg").on("click",function(){ ask_image_off(); return false; });
