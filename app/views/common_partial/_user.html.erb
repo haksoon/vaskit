@@ -146,6 +146,8 @@
 			$("#user_overlay_seg").html();
 		}
 
+		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
+
 		// function manage_on() {
 		// 	var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	  //   $("#user_overlay_seg").html(userOverlaySegTemplate());

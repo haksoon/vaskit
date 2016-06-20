@@ -69,6 +69,8 @@
 		keyword_reset();
 	}
 
+	$("#menu_bg, #menu_pc_bg").on("click",function(){ search_input_off(); return false; });
+
 	function keyword_reset(){
 		$('#search_input').val("");
 		$('#search_result').html("");

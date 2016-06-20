@@ -98,6 +98,8 @@
 		category_reset();
 	}
 
+	$("#menu_bg, #menu_pc_bg").on("click",function(){ category_off(); return false; });
+
 	function category_toggle(category_id){
 
 		<% if current_user %>
