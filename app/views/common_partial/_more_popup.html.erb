@@ -59,15 +59,13 @@
 		$("#report_submit_btn").attr("onclick", "submit_report('"+target+"',"+target_id+"); return false;");
 		$("#ask_complete_btn").attr("href", "/asks/"+target_id+"/ask_complete");
 
-		// disableScroll();
-		$("body").css("overflow","hidden");
+		disableScroll();
 		$("#more_popup_bg").show();
 		$("#more_popup").show();
 	}
 
 	function hide_more_popup(){
-		// enableScroll();
-		$("body").css("overflow","auto");
+		enableScroll();
 		$("#ask_edit_btn").show();
 		$("#ask_report_btn").show();
 		$("#vote_modify_btn").show();

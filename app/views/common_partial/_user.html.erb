@@ -123,6 +123,7 @@
 		<% end %>
 
 		function user_on(){
+			disableScroll();
 			$("#user_overlay").fadeIn(100);
 			$("#footer").fadeIn(100);
 			$("#menu_pc_bg").show();
@@ -133,6 +134,9 @@
 			$('#search_input').val("");
 			$("#keyword_reset_btn").hide();
 
+			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
+			$("#user_overlay_seg").html(userOverlaySegTemplate());
+			
 			$.ajax({
 				url: "/users/show.json",
 	      type: "GET",
@@ -147,8 +151,6 @@
 					my_comment_count = data.my_comment_count;
 					in_progress_count = data.in_progress_count;
 					alram_count = data.alram_count;
-					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-					$("#user_overlay_seg").html(userOverlaySegTemplate());
 				},
 				beforeSend: function(){
 	      },
@@ -159,6 +161,7 @@
 		}
 
 		function user_off(){
+			enableScroll();
 			$("#user_overlay").fadeOut(300);
 			$("#footer").fadeOut(300);
 			$("#menu_pc_bg").hide();

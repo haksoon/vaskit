@@ -18,8 +18,7 @@
 	function show_share_popup(ask_id,user_string_id, left_deal_title, right_deal_title){
 		$("#share_url").attr("value","http://vaskit.kr/asks/"+ask_id);
 		$("#share_katalk_btn").attr("onclick","share_katalk('"+user_string_id+"','"+left_deal_title+"','"+right_deal_title+"'); return false;")
-		// disableScroll();
-		$("body").css("overflow","hidden");
+		disableScroll();
 		$("#share_complete").show();
 		$("#share_popup_bg").show();
 		$("#share_popup").show();
@@ -27,8 +26,7 @@
 	}
 
 	function hide_share_popup(){
-		// enableScroll();
-		$("body").css("overflow","auto");
+		enableScroll();
 		$("#share_complete").hide().css({"opacity":"0"});
 		$("#share_popup").hide();
 		$("#share_popup_bg").hide();

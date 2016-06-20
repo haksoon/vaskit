@@ -79,7 +79,7 @@
 	var user_categories = <%=raw @user_categories.to_json %>;
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 	function category_on(){
-		$("body").css("overflow","hidden");
+		disableScroll();
 		$("#category_overlay").fadeIn(100);
 		$("#footer").fadeIn(100);
 		$("#menu_pc_bg").show();
@@ -92,7 +92,7 @@
 	}
 
 	function category_off(){
-		$("body").css("overflow","auto");
+		enableScroll();
 		$("#category_overlay").fadeOut(300);
 		$("#footer").fadeOut(300);
 		$("#menu_pc_bg").hide();

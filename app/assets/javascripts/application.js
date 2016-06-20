@@ -176,21 +176,25 @@ function preventDefaultForScrollKeys(e) {
 }
 
 function disableScroll() {
-  if (window.addEventListener) // older FF
-      window.addEventListener('DOMMouseScroll', preventDefault, false);
-  window.onwheel = preventDefault; // modern standard
-  window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-  window.ontouchmove  = preventDefault; // mobile
-  document.onkeydown  = preventDefaultForScrollKeys;
+  // if (window.addEventListener) // older FF
+  //     window.addEventListener('DOMMouseScroll', preventDefault, false);
+  // window.onwheel = preventDefault; // modern standard
+  // window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+  // window.ontouchmove  = preventDefault; // mobile
+  // document.onkeydown  = preventDefaultForScrollKeys;
+  $("body").css("overflow","hidden");
+  $("#menu_bg").bind('touchmove', function(e){e.preventDefault()});
 }
 
 function enableScroll() {
-    if (window.removeEventListener)
-        window.removeEventListener('DOMMouseScroll', preventDefault, false);
-    window.onmousewheel = document.onmousewheel = null;
-    window.onwheel = null;
-    window.ontouchmove = null;
-    document.onkeydown = null;
+  // if (window.removeEventListener)
+  //     window.removeEventListener('DOMMouseScroll', preventDefault, false);
+  // window.onmousewheel = document.onmousewheel = null;
+  // window.onwheel = null;
+  // window.ontouchmove = null;
+  // document.onkeydown = null;
+  $("body").css("overflow","auto");
+	$("#menu_bg").unbind('touchmove');
 }
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여

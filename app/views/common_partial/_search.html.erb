@@ -53,8 +53,7 @@
 <script>
 
 	function search_input_on(){
-		$("body").css("overflow","hidden");
-		$("#menu_bg").bind('touchmove', function(e){e.preventDefault()});
+		disableScroll();
 		$("#search").hide();
 		$("#search_overlay").show();
 		$("#menu_pc_bg").show();
@@ -63,9 +62,7 @@
 	}
 
 	function search_input_off(){
-		// enableScroll();
-		$("body").css("overflow","auto");
-		$("#menu_bg").unbind('touchmove');
+		enableScroll();
 		$("#search").show();
 		$("#search_overlay").hide();
 		$("#menu_pc_bg").hide();
