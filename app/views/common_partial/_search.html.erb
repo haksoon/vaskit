@@ -96,12 +96,15 @@
 			var focus_height = $("#search_result a").eq(select_num).outerHeight();
 			var list_scrolltop = $("#search_result").scrollTop();
 			var list_height = $("#search_result").height();
-			if ( list_height + list_scrolltop < focus_position + focus_height )  $("#search_result").scrollTop(focus_position + focus_height - list_height);
+			if ( select_num == 0 ) {
+				$("#search_result").scrollTop(0)
+			} else if ( list_height + list_scrolltop < focus_position + focus_height ) {
+				$("#search_result").scrollTop(focus_position + focus_height - list_height);
+			}
 			if ( select_num < $("#search_result a").length - 1 ) {
 				select_num = select_num + 1;
 			} else {
 				select_num = 0;
-				$("#search_result").scrollTop(0);
 			}
 		} else {
 			$("#search_result a").removeClass("search_focus");
