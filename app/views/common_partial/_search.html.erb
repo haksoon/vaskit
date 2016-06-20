@@ -130,6 +130,7 @@
 		$("#search_result a").mouseover(function(){
 			$("#search_result a").removeClass("search_focus");
 			$(this).addClass("search_focus");
+			select_num = $("#search_result a.search_focus").index();
 		})
 	}
 
