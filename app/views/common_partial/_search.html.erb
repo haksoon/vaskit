@@ -96,7 +96,7 @@
 			var focus_height = $("#search_result a").eq(select_num).outerHeight();
 			var list_scrolltop = $("#search_result").scrollTop();
 			var list_height = $("#search_result").height();
-			if ( list_height + list_scrolltop < focus_offset + focus_height )  $("#search_result").scrollTop(focus_offset + focus_height - list_height - list_scrolltop);
+			if ( list_height + list_scrolltop < focus_offset + focus_height )  $("#search_result").scrollTop(focus_offset + focus_height - list_height);
 			if ( select_num < $("#search_result a").length - 1 ) {
 				select_num = select_num + 1;
 			} else {
