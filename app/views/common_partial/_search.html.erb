@@ -99,10 +99,10 @@
 			}
 		} else {
 			$("#search_result a").removeClass("search_focus");
-			if ( select_num = 0 ) {
-				select_num = $("#search_result a").length - 1;
-			} else {
+			if ( select_num > 0 ) {
 				select_num = select_num - 1;
+			} else {
+				select_num = $("#search_result a").length - 1;
 			}
 			$("#search_result a").eq(select_num).addClass("search_focus");
 		}
