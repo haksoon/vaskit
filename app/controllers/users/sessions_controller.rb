@@ -2,6 +2,18 @@
 class Users::SessionsController < Devise::SessionsController
   skip_before_filter :auth_user
 
+  #AJS추가
+  def show
+    if current_user
+      my_ask_count = Ask.where(:user_id => current_user.id).count #AJS추가
+      my_vote_count = Vote.where(:user_id => current_user.id).count #AJS추가
+      my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
+      in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
+      alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
+    end
+    render :json => {:my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count}
+  end
+
   def create
     self.resource = warden.authenticate(auth_options)
     if self.resource
@@ -20,7 +32,6 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   def manage
-
   end
 
   def change_nickname

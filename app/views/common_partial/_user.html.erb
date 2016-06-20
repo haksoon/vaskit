@@ -27,28 +27,28 @@
 			<tr>
 				<td style="width:5%;"></td>
 				<td style="width:30%; padding:10px 0;">
-					<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_ask_count %></a>
+					<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= my_ask_count %></a>
 					<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
 				</td>
 				<td style="width:30%;">
-					<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_vote_count %></a>
+					<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= my_vote_count %></a>
 					<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
 				</td>
 				<td style="width:30%;">
-					<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= @my_comment_count %></a>
+					<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;"><%= my_comment_count %></a>
 					<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
 				</td>
 				<td style="width:5%;"></td>
 			</tr>
 		</table>
 		<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
-			진행 중인 질문 (<%= @in_progress_count%>개)
+			진행 중인 질문 (<%= in_progress_count%>개)
 		</a>
 		<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
 			<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
 			<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
 			<% end %>
-			알림피드 (<%= @alram_count > 15 ? "15+": @alram_count.to_s %>개)
+			알림피드 (<%= alram_count > 15 ? "15+": alram_count.to_s %>개)
 		</a>
 	</script>
 
@@ -133,8 +133,24 @@
 			$('#search_input').val("");
 			$("#keyword_reset_btn").hide();
 
-	    var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-	    $("#user_overlay_seg").html(userOverlaySegTemplate());
+			$.ajax({
+				url: "/users/show.json",
+	      type: "GET",
+	      data: {},
+	      dataType: 'json',
+	      error: function(){
+	          return false;
+	      },
+	      success: function(data){
+					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
+					$("#user_overlay_seg").html(userOverlaySegTemplate());
+				},
+				beforeSend: function(){
+	      },
+	      complete: function(){
+	      }
+			})
+
 		}
 
 		function user_off(){
