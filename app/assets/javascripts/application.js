@@ -73,10 +73,11 @@ function numberWithCommas(x) {
 }
 
 function back_button(){
+  var index_href = /^http:\/\/vaskit.kr\/[\S]*/
   var ask_href = /^http:\/\/vaskit.kr\/asks\/\d*$/
-  if ( ask_href.test(window.location.href) && document.referrer == "http://vaskit.kr/" ) {
+  if ( ask_href.test(window.location.href) && index_href.test(document.referrer) ) {
     window.close();
-  } else if ( ask_href.test(window.location.href) && document.referrer != "http://vaskit.kr/" ){
+  } else if ( ask_href.test(window.location.href) && index_href.test(document.referrer) == false ){
 		window.location = "/";
 	} else {
 		parent.history.back();
