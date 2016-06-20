@@ -96,6 +96,7 @@
 		}
 	});
 
+	var select_num = 0;
 	$('#search_input').keyup(function(e) {
   	$("#keyword_reset_btn").show();
 		$.ajax({
@@ -107,7 +108,6 @@
 	            return false;
 	        },
 	        success: function(data){
-						var select_num = 0;
 						if (e.keyCode == '40') {
 							e.preventDefault();
 							$("#search_result a").removeClass("search_focus");
@@ -120,6 +120,7 @@
 							$("#search_result a:eq(select_num)").addClass("search_focus");
 						} else {
 		        	$('#search_result').html("");
+							select_num = 0;
 
 		        	if (data.is_empty_result){
 		        		if ($('#search_input').val() != ""){
