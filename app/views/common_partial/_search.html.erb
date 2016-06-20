@@ -81,7 +81,9 @@
 		var search_key = $('#search_input').val();
 		if(search_key == "" || search_key == undefined){
 			notify("검색어를 입력하세요.");
-		}else{
+		} else if ( $("#search_result a").hasClass("search_focus") ) {
+			window.location = $("#search_result a.search_focus").attr("href");
+		}else {
 			window.location = "/?keyword="+encodeURIComponent(search_key)+"&type=none";
 		}
 	}
@@ -100,23 +102,6 @@
 	}
 
 	$('#search_input').keyup(function(e) {
-		if (e.keyCode == '13') {
-    	e.preventDefault();
-    	search_by_key();
-  	} else if (e.keyCode == '27') {
-			e.preventDefault();
-			keyword_reset();
-		}
-		// else if (e.keyCode == '40') {
-		// 	e.preventDefault();
-		// 	navigate_by_key(true);
-		// } else if (e.keyCode == '38') {
-		// 	e.preventDefault();
-		// 	navigate_by_key(false);
-		// }
-	});
-
-	$('#search_input').keyup(function(e) {
 		$("#keyword_reset_btn").show();
 		if ( $("#search_input").val() == "" ) $("#keyword_reset_btn").hide();
 		$.ajax({
@@ -128,7 +113,13 @@
 	            return false;
 	        },
 	        success: function(data){
-						if (e.keyCode == '40') {
+						if (e.keyCode == '13') {
+				    	e.preventDefault();
+				    	search_by_key();
+				  	} else if (e.keyCode == '27') {
+							e.preventDefault();
+							keyword_reset();
+						} else if (e.keyCode == '40') {
 							e.preventDefault();
 							navigate_by_key(true);
 						} else if (e.keyCode == '38') {
