@@ -85,8 +85,9 @@
 			window.location = "/?keyword="+encodeURIComponent(search_key)+"&type=none";
 		}
 	}
+
+	var select_num = 0;
 	function navigate_by_key(is_down) {
-		var select_num = 0;
 		if (is_down == true) {
 			$("#search_result a").removeClass("search_focus");
 			$("#search_result a").eq(select_num).addClass("search_focus");
