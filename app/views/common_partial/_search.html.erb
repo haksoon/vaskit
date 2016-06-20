@@ -112,11 +112,11 @@
 							e.preventDefault();
 							$("#search_result a").removeClass("search_focus");
 							$("#search_result a:eq(0)").addClass("search_focus");
-							select_num ++;
+							select_num = select_num + 1;
 						} else if (e.keyCode == '38') {
 							e.preventDefault();
 							$("#search_result a").removeClass("search_focus");
-							select_num --;
+							select_num = select_num - 1;
 							$("#search_result a:eq(select_num)").addClass("search_focus");
 						} else {
 		        	$('#search_result').html("");
