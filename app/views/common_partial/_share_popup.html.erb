@@ -1,4 +1,3 @@
-<div id="share_popup_bg" href="#" onclick="hide_share_popup(); return false;" style="display:block; position:fixed;left:0; top:0; width:100%; height:100%; background-color:black; z-index:12; opacity:0.6; display:none;"></div>
 <div id='share_popup' style='width:240px; z-index:13; position:fixed; left:50%; top:50%; margin-left:-120px; margin-top:-110px; overflow-y:hidden; overflow-x:hidden; display:none;'>
 	<a href="#" onclick="hide_share_popup(); return false;" style="position:absolute; right:0; top:0; width:40px; height:40px;"><i class="fa fa-times" style="color:#fff; font-size:20px; padding-top:10px;"></i></a>
 	<p style="background-color:#4b3d3d; font-size:15px; color:#FFF; height:40px; line-height:40px; margin:0;">공유하기</p>
@@ -20,18 +19,19 @@
 		$("#share_katalk_btn").attr("onclick","share_katalk('"+user_string_id+"','"+left_deal_title+"','"+right_deal_title+"'); return false;")
 		disableScroll();
 		$("#share_complete").show();
-		$("#share_popup_bg").show();
-		$("#share_popup").show();
+		$("#menu_pc_bg").show();
+		$("#menu_bg").fadeIn(100);
 		copy_url();
 	}
 
 	function hide_share_popup(){
 		enableScroll();
 		$("#share_complete").hide().css({"opacity":"0"});
-		$("#share_popup").hide();
-		$("#share_popup_bg").hide();
+		$("#menu_pc_bg").hide();
+		$("#menu_bg").fadeOut(300);
 	}
 
+	$("#menu_bg, #menu_pc_bg").on("click",function(){ hide_share_popup(); return false; });
 
 	function share_facebook(){
 		$("#share_complete").css({"opacity":"1"});
