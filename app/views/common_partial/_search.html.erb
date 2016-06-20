@@ -54,7 +54,7 @@
 
 	function search_input_on(){
 		$("body").css("overflow","hidden");
-		$("body").bind('touchmove', function(e){e.preventDefault()});
+		$("#menu_bg").bind('touchmove', function(e){e.preventDefault()});
 		$("#search").hide();
 		$("#search_overlay").show();
 		$("#menu_pc_bg").show();
@@ -65,7 +65,7 @@
 	function search_input_off(){
 		// enableScroll();
 		$("body").css("overflow","auto");
-		$("body").unbind('touchmove');
+		$("#menu_bg").unbind('touchmove');
 		$("#search").show();
 		$("#search_overlay").hide();
 		$("#menu_pc_bg").hide();
