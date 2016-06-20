@@ -89,13 +89,13 @@
 
 	var select_num = 0;
 	function navigate_by_key(is_down) {
-		var focus_position = $("#search_result a").eq(select_num).position().top;
-		var focus_height = $("#search_result a").eq(select_num).outerHeight();
-		var list_scrolltop = $("#search_result").scrollTop();
-		var list_height = $("#search_result").height();
 		if (is_down == true) {
 			$("#search_result a").removeClass("search_focus");
 			$("#search_result a").eq(select_num).addClass("search_focus");
+			var focus_position = $("#search_result a").eq(select_num).position().top;
+			var focus_height = $("#search_result a").eq(select_num).outerHeight();
+			var list_scrolltop = $("#search_result").scrollTop();
+			var list_height = $("#search_result").height();
 			if ( select_num == 0 ) {
 				$("#search_result").scrollTop(0)
 			} else if ( list_height + list_scrolltop < focus_position + focus_height ) {
@@ -114,8 +114,12 @@
 				select_num = $("#search_result a").length - 1;
 			}
 			$("#search_result a").eq(select_num).addClass("search_focus");
+			var focus_position = $("#search_result a").eq(select_num).position().top;
+			var focus_height = $("#search_result a").eq(select_num).outerHeight();
+			var list_scrolltop = $("#search_result").scrollTop();
+			var list_height = $("#search_result").height();
 			if ( select_num == $("#search_result a").length - 1 ) {
-				$("#search_result").scrollTop(focus_position + focus_height - list_height);	
+				$("#search_result").scrollTop(focus_position + focus_height - list_height);
 			} else if ( list_scrolltop > focus_position ) {
 				$("#search_result").scrollTop(focus_position);
 			}
