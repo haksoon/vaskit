@@ -58,7 +58,8 @@
 
 <script>
   function ask_image_on(ask_id, is_left){
-    disableScroll();
+    // disableScroll();
+    $("body").css("overflow","hidden");
     $("#ask_image_overlay").show();
     $("#ask_image_pc_bg").show();
     $("#ask_image_bg").show();
@@ -69,7 +70,8 @@
   }
 
   function ask_image_off(){
-    enableScroll();
+    // enableScroll();
+    $("body").css("overflow","auto");
     $("#ask_image_overlay").hide();
     $("#ask_image_pc_bg").hide();
     $("#ask_image_bg").hide();
