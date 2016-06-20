@@ -89,12 +89,12 @@
 		var select_num = 0;
 		if (is_down == true) {
 			$("#search_result a").removeClass("search_focus");
-			$("#search_result a:eq(select_num)").addClass("search_focus");
+			$("#search_result a").eq(select_num).addClass("search_focus");
 			select_num = select_num + 1;
 		} else {
 			$("#search_result a").removeClass("search_focus");
 			select_num = select_num - 1;
-			$("#search_result a:eq(select_num)").addClass("search_focus");
+			$("#search_result a").eq(select_num).addClass("search_focus");
 		}
 	}
 
