@@ -105,6 +105,11 @@
 				select_num = $("#search_result a").length - 1;
 			}
 			$("#search_result a").eq(select_num).addClass("search_focus");
+			var focus_offset = $("#search_result a").eq(select_num).offset().top - 101;
+			var focus_height = $("#search_result a").eq(select_num).height() + 16;
+			var list_scrolltop = $("#search_result").scrollTop();
+			var list_height = $("#search_result").height();
+			if ( list_height + list_scrolltop < focus_offset + focus_height )  $("#search_result").scrollTop(focus_offset + focus_height - list_height - list_scrolltop);
 		}
 	}
 
