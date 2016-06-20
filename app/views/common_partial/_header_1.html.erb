@@ -12,7 +12,7 @@
 				<img src="/images/etc/logo_1.png" style="height:25px;"/>
 			</a>
 		</td>
-		<td style="width:60px; visibility:hidden;">
+		<td style="width:60px;">
 			<% if current_user %>
 				<a href="#" onclick="user_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
@@ -32,3 +32,4 @@
 <p style="height:40px; margin:0; padding:0 10px; font-size:18px; font-weight:bold; color:#fff; background-color:#998674; text-align:center; line-height:40px;"><%= title %></p>
 <div id="menu_pc_bg"></div>
 <div id="menu_bg"></div>
+<%= render :partial => "common_partial/user" %>
