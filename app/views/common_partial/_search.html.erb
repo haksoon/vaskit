@@ -107,33 +107,46 @@
 	            return false;
 	        },
 	        success: function(data){
-	        	$('#search_result').html("");
+						var select_num = 0;
+						if (e.keyCode == '40') {
+							e.preventDefault();
+							$("#search_result a").removeClass("search_focus");
+							$("#search_result a:eq(0)").addClass("search_focus");
+							select_num ++;
+						} else if (e.keyCode == '38') {
+							e.preventDefault();
+							$("#search_result a").removeClass("search_focus");
+							select_num --;
+							$("#search_result a:eq(select_num)").addClass("search_focus");
+						} else {
+		        	$('#search_result').html("");
 
-	        	if (data.is_empty_result){
-	        		if ($('#search_input').val() != ""){
-	        			var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다.</span>";
-	        			$('#search_result').html(empty_span);
-	        		}
-	        	}else{
-	        		var searchResultTemplate = _.template( $('#search-result-template').html() );
+		        	if (data.is_empty_result){
+		        		if ($('#search_input').val() != ""){
+		        			var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다.</span>";
+		        			$('#search_result').html(empty_span);
+		        		}
+		        	}else{
+		        		var searchResultTemplate = _.template( $('#search-result-template').html() );
 
-		        	$.each(data.users, function( index, user ) {
-		        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: null}));
-							});
+			        	$.each(data.users, function( index, user ) {
+			        		$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: null}));
+								});
 
-							$.each(data.hash_tags, function( index, hash_tag ) {
-								$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
-							});
+								$.each(data.hash_tags, function( index, hash_tag ) {
+									$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
+								});
 
-							if (data.ask_deal){
-		            $('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
-		          }
+								if (data.ask_deal){
+			            $('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
+			          }
 
-							if (data.brand){
-								$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
-							}
-							$("#search_result").highlight($('#search_input').val());
-	        	}
+								if (data.brand){
+									$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
+								}
+								$("#search_result").highlight($('#search_input').val());
+		        	}
+						}
 	        },
 	        beforeSend: function(){
 	        },
@@ -182,3 +195,9 @@
 		search_bar_hide();
 	})
 </script>
+
+<style>
+	.search_focus {
+		background-color: #f4f4f4;
+	}
+</style>
