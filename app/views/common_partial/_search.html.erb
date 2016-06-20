@@ -126,13 +126,15 @@
 		}
 	}
 
-	$("#search_result a").mouseover(function(){
-		$("#search_result a").removeClass("search_focus");
-		$(this).addClass("search_focus");
-	}).mouseleave(function(){
-		$("#search_result a").removeClass("search_focus");
-		select_num= 0;
-	})
+	function navigate_by_mouse() {
+		$("#search_result a").mouseover(function(){
+			$("#search_result a").removeClass("search_focus");
+			$(this).addClass("search_focus");
+		}).mouseleave(function(){
+			$("#search_result a").removeClass("search_focus");
+			select_num= 0;
+		})
+	}
 
 	$('#search_input').keyup(function(e) {
 		$("#keyword_reset_btn").show();
@@ -186,6 +188,7 @@
 									$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
 								}
 								$("#search_result").highlight($('#search_input').val());
+								navigate_by_mouse();
 							}
 						}
 	        },
