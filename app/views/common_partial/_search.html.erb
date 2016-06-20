@@ -126,6 +126,14 @@
 		}
 	}
 
+	$("#search_result a").mouseover(function(){
+		$("#search_result a").removeClass("search_focus");
+		$(this).addClass("search_focus");
+	}).mouseleave(function(){
+		$("#search_result a").removeClass("search_focus");
+		select_num= 0;
+	})
+
 	$('#search_input').keyup(function(e) {
 		$("#keyword_reset_btn").show();
 		if ( $("#search_input").val() == "" ) $("#keyword_reset_btn").hide();
