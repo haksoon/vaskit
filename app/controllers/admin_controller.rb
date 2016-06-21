@@ -24,7 +24,7 @@ class AdminController < ApplicationController
     @categories = Category.all
     @tables = ActiveRecord::Base.connection.tables
     @tables = @tables - ["schema_migrations"]
-    render :layout => "admin_layout"
+    render :layout => "layout_admin"
   end
 
 
@@ -34,7 +34,7 @@ class AdminController < ApplicationController
     tableModel = params[:table_name].classify.constantize
     @record_names = tableModel.columns.map(&:name)
     @records = tableModel.all.order("id desc")
-    render :layout => "admin_layout"
+    render :layout => "layout_admin"
   end
 
   def submit_rank_ask
