@@ -122,6 +122,11 @@
 			notify('<%=flash[:custom_notice]%>');
 		<% end %>
 
+		$(window).resize(function(){
+	    var user_overlay_seg_height = $(window).height();
+			$("#user_overlay_seg").css("max-height",user_overlay_seg_height);
+	  }).resize();
+
 		function user_on(){
 			disableScroll();
 			$("#user_overlay").fadeIn(100);
@@ -166,7 +171,6 @@
 			$("#footer").fadeOut(300);
 			$("#menu_pc_bg").hide();
 			$("#menu_bg").fadeOut(300);
-
 			$("#user_overlay_seg").html();
 		}
 
@@ -176,6 +180,67 @@
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 		}
+
+		function change_string_id(){
+			var english = /^[a-z0-9]*$/;
+			var string_id = $("#string_id_input").val();
+			if ( string_id == "" || string_id == null ){
+				notify("변경할 닉네임을 입력해 주세요.");
+			}else if( !english.test(string_id) ){
+				notify("닉네임은 영문 소문자 및 숫자만 입력 가능합니다.");
+			}else{
+				$.ajax({
+			        url: '/users/change_nickname.json',
+			        data: {"string_id": string_id} ,
+			        type: 'PUT',
+			        error: function(){
+			            return false;
+			        },
+			        success: function(data){
+			        	if (data.status == "success"){
+			        		notify("변경 완료");
+			        	}else{
+			        		notify("이미 있는 닉네임입니다");
+			        	}
+
+			        },
+			        beforeSend: function(){
+			        	$(".loading").show();
+		            },
+		            complete: function(){
+		            	$(".loading").hide();
+		            }
+				});
+			}
+		}
+
+		function toggle_receive_notice(){
+			$.ajax({
+		        url: '/users/toggle_receive_notice.json',
+		        data: {"blank": 'blank'},
+		        type: 'PUT',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+		        	if (data.message == "receive"){
+		        		$("#receive_notice_btn img").attr("src","/images/etc/on_btn.png");
+		        		notify("이메일 받기 완료");
+		        	}else{
+		        		$("#receive_notice_btn img").attr("src","/images/etc/off_btn.png");
+		        		notify("이메일 받기 취소");
+		        	}
+
+		        },
+		        beforeSend: function(){
+		        	$(".loading").show();
+	            },
+	            complete: function(){
+	            	$(".loading").hide();
+	            }
+			});
+		}
+
 
 	</script>
 <% end %>
