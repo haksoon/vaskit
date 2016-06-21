@@ -149,7 +149,7 @@
 	          return false;
 	      },
 	      success: function(data){
-					current_user_id = data.current_user_id;
+					current_user_id = data.current_user_id.string_id;
 					my_ask_count = data.my_ask_count;
 					my_vote_count = data.my_vote_count;
 					my_comment_count = data.my_comment_count;
