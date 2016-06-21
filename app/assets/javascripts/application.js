@@ -278,7 +278,7 @@ function tooltip_box() {
     $("p.output_field").on("click",function(){
       var tooltip_width = $(this).width();
       if ($(this).next().is(':hidden')) {
-        $(this).next().css("width",tooltip_width).slideDown(200);
+        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);
       } else if ($(this).next().is(':visible')) {
         $(this).next().clearQueue().slideUp(200);
       }
@@ -287,12 +287,10 @@ function tooltip_box() {
     $("p.output_field").hover(
       function(){
         var tooltip_width = $(this).width();
-        if ($(this).next().is(':hidden'))
-          $(this).next().css("width",tooltip_width).slideDown(200); },
-      function(){
-        if ($(this).next().is(':visible'))
-          $(this).next().delay(500).slideUp(200);
-    });
+        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);,
+      }, function(){
+        $(this).next().clearQueue().delay(500).slideUp(200);
+      });
   }
 }
 
