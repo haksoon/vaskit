@@ -64,7 +64,7 @@
             $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
           }
         }
-        if (data.is_new_email == false) {
+        if (data.is_new_email) {
           tooltip_area.stop().slideUp(200);
         } else {
           $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
