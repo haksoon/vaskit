@@ -8,7 +8,7 @@
 		어떤 내용이라도 좋습니다. 무엇이든 말씀해주세요!
 	</p>
 	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
-		<div class="table_div">
+		<div class="table_div" style="margin-bottom:0;">
 			<%= text_field_tag :contact, nil, :placeholder => "연락처를 적어주시면 빠른 시일 내에 답변드리겠습니다.", :class => "registrations_input" %>
 			<span class="input_icon left_input" onclick="$('#contact').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
 		</div>
@@ -50,7 +50,7 @@
 						if (data.status == "success") {
 							$("#message, #contact").val("");
 							$("#submit_btn").css("background-color","#9d9ea1");
-							notify('소중한 의견이 접수되었습니다. 감사합니다!')
+							notify('소중한 의견이 접수되었습니다.<br>정말 감사합니다!');
 						}
 	        },
 	        beforeSend: function(){
