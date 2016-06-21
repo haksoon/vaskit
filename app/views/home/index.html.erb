@@ -360,9 +360,10 @@
 		        	my_votes.push(data.vote);
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
+							graph_animation(data.ask.id);
 	        		notify("투표 완료");
 							hover_action();
-							graph_animation(data.ask.id);
+							tooltip_box();
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
 	        		my_vote_count = my_vote_count + 1;
@@ -430,6 +431,7 @@
 						    });
     					}
 							hover_action();
+							tooltip_box();
 	        	}
 	        },
 	        beforeSend: function(){
@@ -440,9 +442,8 @@
 	  }
 	}
 
-	$(document).ready(function(){
-    hover_action();
-  });
+  hover_action();
+	tooltip_box();
 
 	function visitor_new_ask() {
 		notify('회원가입 후<br />질문을 올릴 수 있습니다.');

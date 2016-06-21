@@ -272,6 +272,30 @@ function graph_animation(ask_deal_id) {
   }, timing * right_ratio / right_ratio_full );
 }
 
+// AJS추가 : 제품명 툴팁박스 추가
+function tooltip_box() {
+  if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    $("p.output_field").on("click",function(){
+      var tooltip_width = $(this).width();
+      if ($(this).next().is(':hidden')) {
+        $(this).next().css("width",tooltip_width).slideDown(200);
+      } else if ($(this).next().is(':visible')) {
+        $(this).next().clearQueue().slideUp(200);
+      }
+    });
+  } else {
+    $("p.output_field").hover(
+      function(){
+        var tooltip_width = $(this).width();
+        if ($(this).next().is(':hidden'))
+          $(this).next().css("width",tooltip_width).slideDown(200); },
+      function(){
+        if ($(this).next().is(':visible'))
+          $(this).next().delay(500).slideUp(200);
+    });
+  }
+}
+
 $( document ).ready(function() {
   $("select").on("change",function(){
     if( $(this).val() != "" ) {

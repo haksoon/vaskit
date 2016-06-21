@@ -918,26 +918,7 @@
 	}
 
   hover_action();
-
-  // 제품명 툴팁박스 추가
-  $("p.output_field")
-  .hover(
-    function(){
-      var tooltip_width = $(this).width();
-      if ($(this).next().is(':hidden'))
-        $(this).next().css("width",tooltip_width).slideDown(200); },
-    function(){
-      if ($(this).next().is(':visible'))
-        $(this).next().delay(500).slideUp(200);
-  })
-  .on("click",function(){
-    var tooltip_width = $(this).width();
-    if ($(this).next().is(':hidden')) {
-      $(this).next().css("width",tooltip_width).slideDown(200);
-    } else if ($(this).next().is(':visible')) {
-      $(this).next().clearQueue().slideUp(200);
-    }
-  });
+  tooltip_box();
 
 </script>
 
