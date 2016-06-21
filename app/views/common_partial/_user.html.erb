@@ -7,53 +7,57 @@
 			</div>
 			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
 			<div style="box-sizing:border-box; width:100%; background-color:#f4f4f4; border:3px solid #998674; border-radius:5px; overflow:hidden;">
-				<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
-				<div id="user_overlay_seg" style="padding:20px; max-height:300px; overflow-y:auto;">
+				<div id="user_overlay_seg" style="max-height:300px; overflow-y:auto;">
 
 				</div>
 			</div>
 	</div>
 
 	<script type="text/template" id="user_overlay_seg_template">
-		<p style="margin:0; margin-bottom:16px; padding:0 10px; color:#666; text-align:center;">
-			<span style="color:#998674;">{{= current_user_id[0].string_id }}</span>님, 환영합니다!
-			<a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
-			<!-- <a href="#" onclick="manage_on(); return "style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a> -->
-		</p>
-		<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
-			히스토리
+		<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
+		<div style="padding:20px;">
+			<p style="margin:0; margin-bottom:16px; padding:0 10px; color:#666; text-align:center;">
+				<span style="color:#998674;">{{= current_user_id[0].string_id }}</span>님, 환영합니다!
+				<!-- <a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a> -->
+				<a href="#" onclick="manage_on(); return "style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
+			</p>
+			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
+				히스토리
+			</div>
+			<table cellspacing="0" cellpadding="0" style="border:1px solid #dbdbdb; border-top:none; width:100%; text-align:center; background-color:#fff; border-radius:0 0 5px 5px;">
+				<tr>
+					<td style="width:5%;"></td>
+					<td style="width:30%; padding:10px 0;">
+						<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_ask_count }}</a>
+						<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
+					</td>
+					<td style="width:30%;">
+						<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_vote_count }}</a>
+						<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
+					</td>
+					<td style="width:30%;">
+						<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_comment_count }}</a>
+						<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
+					</td>
+					<td style="width:5%;"></td>
+				</tr>
+			</table>
+			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
+				진행 중인 질문 ({{= in_progress_count }}개)
+			</a>
+			<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
+			<!-- <a href="#" onclick="alram_on(); return false;" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;"> -->
+				<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
+				<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
+				<% end %>
+				알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
+			</a>
 		</div>
-		<table cellspacing="0" cellpadding="0" style="border:1px solid #dbdbdb; border-top:none; width:100%; text-align:center; background-color:#fff; border-radius:0 0 5px 5px;">
-			<tr>
-				<td style="width:5%;"></td>
-				<td style="width:30%; padding:10px 0;">
-					<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_ask_count }}</a>
-					<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
-				</td>
-				<td style="width:30%;">
-					<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_vote_count }}</a>
-					<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
-				</td>
-				<td style="width:30%;">
-					<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_comment_count }}</a>
-					<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
-				</td>
-				<td style="width:5%;"></td>
-			</tr>
-		</table>
-		<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
-			진행 중인 질문 ({{= in_progress_count }}개)
-		</a>
-		<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
-			<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-			<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
-			<% end %>
-			알림피드 ({{= alram_count > 15 ? "15+": alram_count }}개)
-		</a>
 	</script>
 
 	<script type="text/template" id="user_overlay_seg_template_manage">
-		<div style="padding:14px 14px 10px 14px;">
+		<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">계정 설정</p>
+		<div style="padding:20px;">
 			<p style="font-size:16px; font-weight:bold; color:#9d9ea0; margin:0; text-align:left;">계정 설정</p>
 			<table cellspacing="0" cellpadding="0" style="width:100%; margin-top:12px;">
 				<tr>
@@ -117,13 +121,20 @@
 		</div>
 	</script>
 
+	<script type="text/template" id="user_overlay_seg_template_alram">
+		<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">계정 설정</p>
+		<div style="padding:20px;">
+
+		</div>
+	</script>
+
 	<script>
 		<% if flash[:custom_notice] %>
 			notify('<%=flash[:custom_notice]%>');
 		<% end %>
 
 		$(window).resize(function(){
-	    var user_overlay_seg_height = $(window).height() - 300;
+	    var user_overlay_seg_height = $(window).height() - 200;
 			$("#user_overlay_seg").css("max-height",user_overlay_seg_height);
 	  }).resize();
 
@@ -179,6 +190,11 @@
 
 		function manage_on() {
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
+	    $("#user_overlay_seg").html(userOverlaySegTemplate());
+		}
+
+		function alram_on() {
+			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_alram').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 		}
 
