@@ -21,7 +21,7 @@
 		<% if @type == "my_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요!<br>와우! 많은 고민을 해결하셨나요?
 		<% elsif @type == "vote_ask" %>
-			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;">{{= my_vote_count }}개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_votes.length %>개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
 		<% elsif @type == "comment_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요!<br>와우! 우리 모두 수다쟁이를 좋아한답니다!
 		<% elsif @type == "my_ask_in_progress" %>
