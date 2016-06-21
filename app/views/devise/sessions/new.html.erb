@@ -11,6 +11,8 @@
     <div style="position:relative;">
 		  <%= f.email_field :email, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
       <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+      <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
+      <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
     </div>
     <div style="position:relative;">
 		  <%= f.password_field :password, :placeholder => "설정하신 비밀번호를 입력해주세요.", :class => "registrations_input" %>
@@ -36,6 +38,45 @@
         	sign_in_submit();
       	}
 	});
+
+  function email_check() {
+    $.ajax({
+      url: "/users/check_email.json",
+      type: "GET",
+      data: {'user_email_input': $('#user_email').val() },
+      dataType: 'json',
+      error: function(){
+          return false;
+      },
+      success: function(data){
+        var tooltip_width = $("#user_email").width();
+        var tooltip_area = $("#user_email").parent().find(".tooltip_area");
+        var tooltip_content = $("#user_email").parent().find(".tooltip_content");
+        if ( $("#user_email").val() == "" ) {
+          $("#email_checker").html("");
+        } else {
+          var reg = /^[0-9a-zA-Z-_.]+@[a-z]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
+          if ( reg.test($("#user_email").val()) ) {
+            $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
+          } else {
+            $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+          }
+        }
+        if (data.is_new_email) {
+          $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
+          tooltip_area.css("width",tooltip_width).slideDown(200);
+          tooltip_content.text("가입되지 않은 이메일입니다");
+        } else {
+          tooltip_area.stop().slideUp(200);
+        }
+      },
+      beforeSend: function(){
+        $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
+      },
+      complete: function(){
+      }
+    })
+  }
 
   function ready_to_submit() {
     if ( $("#user_email").val() != "" && $("#user_password").val() != "" ) {
