@@ -244,6 +244,20 @@
     })
   }
 
+  function password_confirm_check_tooltip() {
+    var tooltip_width = $("#user_password_confirm").width();
+    var tooltip_area = $("#user_password_confirm").parent().find(".tooltip_area");
+    var tooltip_content = $("#user_password_confirm").parent().find(".tooltip_content");
+    if ( $("#email_checker i").hasClass("fa-exclamation-triangle") ) {
+      return false;
+    } else if ( $("#email_checker i").hasClass("fa-remove") ) {
+      tooltip_area.css("width",tooltip_width).slideDown(200);
+      tooltip_content.text("이메일 형식이 아닌 것 같습니다.");
+    } else {
+      tooltip_area.clearQueue().slideUp(200);
+    }
+  }
+
   function password_check() {
     if ( $("#user_password").val() == "" ) {
       $("#password_checker").html("");
@@ -311,6 +325,7 @@
   }
 
   $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
+  $("#user_password").attr("onblur","email_check_tooltip(); return false;");
   $("#user_password").attr("onkeyup","password_check(); password_confirm_check(); ready_to_submit(); return false;");
   $("#user_password").attr("onblur","password_check_tooltip(); return false;");
   $("#user_password_confirm").attr("onkeyup","password_confirm_check(); ready_to_submit(); return false;");
