@@ -17,7 +17,6 @@ class EtcController < ApplicationController
   def create_inquiry
     Inquiry.create(:user_id => current_user.id, :message => params[:message], :contact => params[:contact])
     render :json => {:status => "success" }
-    render :layout => "layout_empty"
   end
 
   def user
