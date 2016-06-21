@@ -244,7 +244,7 @@
     })
   }
 
-  function password_confirm_check_tooltip() {
+  function email_check_tooltip() {
     var tooltip_width = $("#user_password_confirm").width();
     var tooltip_area = $("#user_password_confirm").parent().find(".tooltip_area");
     var tooltip_content = $("#user_password_confirm").parent().find(".tooltip_content");
@@ -325,7 +325,7 @@
   }
 
   $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
-  $("#user_password").attr("onblur","email_check_tooltip(); return false;");
+  $("#user_email").attr("onblur","email_check_tooltip(); return false;");
   $("#user_password").attr("onkeyup","password_check(); password_confirm_check(); ready_to_submit(); return false;");
   $("#user_password").attr("onblur","password_check_tooltip(); return false;");
   $("#user_password_confirm").attr("onkeyup","password_confirm_check(); ready_to_submit(); return false;");
