@@ -29,7 +29,7 @@
 <script>
 
   <% if flash[:custom_notice] != nil %>
-      alert("<%=flash[:custom_notice]%>");
+      notify("<%=flash[:custom_notice]%>");
   <% end %>
 
 	$('#user_password').keypress(function(e) {
@@ -87,6 +87,7 @@
   }
 
   $("#user_email").attr("onkeyup","ready_to_submit(); return false;");
+  $("#user_email").attr("onblur","email_check(); return false;");
   $("#user_password").attr("onkeyup","ready_to_submit(); return false;");
   $("#sign_in_form").on("change",function(){ ready_to_submit(); })
 
