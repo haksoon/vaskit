@@ -69,7 +69,7 @@
           tooltip_area.css("width",tooltip_width).slideDown(200);
           tooltip_content.text("가입되지 않은 이메일입니다");
         } else {
-          tooltip_area.stop().slideUp(200);
+          tooltip_area.clearQueue().slideUp(200);
         }
       },
       beforeSend: function(){

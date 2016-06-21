@@ -935,7 +935,7 @@
     if ($(this).next().is(':hidden')) {
       $(this).next().css("width",tooltip_width).slideDown(200);
     } else if ($(this).next().is(':visible')) {
-      $(this).next().stop().slideUp(200);
+      $(this).next().clearQueue().slideUp(200);
     }
   });
 
