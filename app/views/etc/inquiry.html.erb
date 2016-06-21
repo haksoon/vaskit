@@ -1,14 +1,23 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "문의하기" } %>
 
-<div style="background:#f4f4f4; padding:12px 10px 0 10px; text-align:left;">
-	<p style="margin:0; font-size:14px; color:#9fa0a2; line-height:18px; text-align:left;">
-		혹시 불편하신 점이 있으신가요? 말씀해주세요!
+<div style="background:#f4f4f4; text-align:left;">
+	<p class="chat_bubble">
+		혹시 불편하신 점이 있으신가요? 혹은 저희 TEAM VASKIT에게 하고싶은 말씀이 있으신가요?<br>
+		어떤 내용이라도 좋습니다. 저희는 항상 고객님의 의견에 귀를 기울입니다. 무엇이든 말씀해주세요!
 	</p>
-	<%= text_area_tag :message, nil, :placeholder => "혹시 불편하신 점이 있으신가요? 말씀해주세요! ", :class => "ask_message_input" %>
-
-	<a href="#" onclick="submit_inquiry(); return false;" style="display:block; background-color:#4b3d3d; color:#fff; font-size:14px; margin:20px 0 10px 0; height:36px; line-height:36px; text-align:center;">
-		&nbsp;전송
-	</a>
+	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
+		<div style="position:relative;">
+			<%= text_area_tag :message, nil, :placeholder => "말씀하실 내용, 무엇이든 말씀해주세요!", :class => "ask_message_input" %>
+			<span class="input_icon left_input" onclick="$('#message').focus(); return false;"><i class="fa fa-edit"></i></span>
+		</div>
+		<div style="position:relative;">
+			<%= text_area_tag :contact, nil, :placeholder => "연락처를 적어주시면 빠른 시일 내에 답변드리겠습니다.", :class => "ask_message_input" %>
+			<span class="input_icon left_input" onclick="$('#contact').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+		</div>
+		<a href="#" onclick="submit_inquiry(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
+			<i class="fa fa-send"></i>&nbsp;전송
+		</a>
+	</div>
 </div>
 
 <script>
@@ -20,7 +29,7 @@
 		$.ajax({
 	        url: '/etc/create_inquiry.json',
 	        type: 'POST',
-	        data: {message: $("#message").val()},
+	        data: {message: $("#message").val(), contact: $("#contact").val()},
 	        error: function(){
 	            return false;
 	        },
@@ -30,9 +39,9 @@
 	        beforeSend: function(){
 	        	$(".loading").show();
             },
-            complete: function(){
-            	$(".loading").hide();
-            }
+          complete: function(){
+          	$(".loading").hide();
+          }
 		});
 	}
 </script>
