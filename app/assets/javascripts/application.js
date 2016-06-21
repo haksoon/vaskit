@@ -202,34 +202,36 @@ function hover_action(){
   $(".card_image").hover(
     function(){
       $(this).addClass("img_hover");
-      $(this).next().addClass("img_hover");
+      $(this).parent().children(".card_image_expander").addClass("img_hover");
     },
     function(){
       $(this).removeClass("img_hover");
-      $(this).next().removeClass("img_hover");
+      $(this).parent().children(".card_image_expander").removeClass("img_hover");
     }
   );
   $(".card_image_overlay").hover(
     function(){
       $(this).addClass("img_hover");
-      $(this).prev().children("img").addClass("img_hover");
-      $(this).prev().children("p").addClass("img_hover");
+      $(this).prev().children(".card_image").addClass("img_hover");
+      $(this).prev().children(".card_image_expander").addClass("img_hover");
     },
     function(){
       $(this).removeClass("img_hover");
-      $(this).prev().children("img").removeClass("img_hover");
-      $(this).prev().children("p").removeClass("img_hover");
+      $(this).prev().children(".card_image").removeClass("img_hover");
+      $(this).prev().children(".card_image_expander").removeClass("img_hover");
     }
   );
   $(".vote_btn").hover(
     function(){
-      $(this).prev().children("img").addClass("img_hover");
-      $(this).prev().children("p").addClass("img_hover");
+      $(this).prev().children(".card_image").addClass("img_hover");
+      $(this).prev().children(".card_image_expander").addClass("img_hover");
+      $(this).prev().children(".card_image_hover").fadeIn(100);
       $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().slideDown(200);
     },
     function(){
-      $(this).prev().children("img").removeClass("img_hover");
-      $(this).prev().children("p").removeClass("img_hover");
+      $(this).prev().children(".card_image").removeClass("img_hover");
+      $(this).prev().children(".card_image_expander").removeClass("img_hover");
+      $(this).prev().children(".card_image_hover").fadeOut(100);
       $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
     }
   );
