@@ -32,6 +32,8 @@
       notify("<%=flash[:custom_notice]%>");
   <% end %>
 
+  $("#main_header td").eq(2).css("visibility","hidden");
+
 	$('#user_password').keypress(function(e) {
 		if (e.keyCode == '13') {
         	e.preventDefault();
@@ -62,12 +64,12 @@
             $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
           }
         }
-        if (data.is_new_email) {
+        if (data.is_new_email == false) {
+          tooltip_area.stop().slideUp(200);
+        } else {
           $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
           tooltip_area.css("width",tooltip_width).slideDown(200);
           tooltip_content.text("가입되지 않은 이메일입니다");
-        } else {
-          tooltip_area.stop().slideUp(200);
         }
       },
       beforeSend: function(){
