@@ -221,6 +221,16 @@ function hover_action(){
       $(this).prev().children("p").removeClass("img_hover");
     }
   );
+  $(".vote_btn").hover(
+    function(){
+      $(this).prev().children("img").addClass("img_hover");
+      $(this).prev().children("p").addClass("img_hover");
+    },
+    function(){
+      $(this).prev().children("img").removeClass("img_hover");
+      $(this).prev().children("p").removeClass("img_hover");
+    }
+  );
 };
 
 // AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
