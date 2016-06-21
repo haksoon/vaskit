@@ -164,6 +164,105 @@
 			<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;" style="float:right; border-left:1px solid #fff;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 		</div>
 	{{ } }}
+	<div style="padding:10px 10px 0px 10px; display:none;">
+		{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
+			<div class="table_div">
+				<div class="ask_text_field left_input output_field" style="font-weight:bold;">
+					<p class="output_field">{{= ask.left_ask_deal.title }}</p>
+					<div class="tooltip_area">
+						<div class="tooltip_arrow bottom"></div>
+						<div class="tooltip_content">{{= ask.left_ask_deal.title }}</div>
+					</div>
+				</div>
+				<div class="ask_text_field right_input output_field" style="font-weight:bold;">
+					<p class="output_field">{{= ask.right_ask_deal.title }}</p>
+					<div class="tooltip_area">
+						<div class="tooltip_arrow bottom"></div>
+						<div class="tooltip_content">{{= ask.right_ask_deal.title }}</div>
+					</div>
+				</div>
+				<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
+			</div>
+		{{ } }}
+		{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
+			<div class="table_div">
+				<div class="ask_text_field left_input output_field"><p class="output_field">{{= ask.left_ask_deal.brand }}</p></div>
+				<div class="ask_text_field right_input output_field"><p class="output_field">{{= ask.right_ask_deal.brand }}</p></div>
+				<span class="input_icon center_input"><i class="fa fa-tag"></i></span>
+			</div>
+		{{ } }}
+		{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
+			<div class="table_div">
+				<div class="ask_text_field left_input output_field"><p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p></div>
+				<div class="ask_text_field right_input output_field"><p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p></div>
+				<span class="input_icon center_input"><i class="fa fa-won"></i></span>
+			</div>
+		{{ } }}
+		{{ if (ask.left_ask_deal.link != null || ask.right_ask_deal.link != null ){ }}
+			<div class="table_div">
+				<div class="ask_text_field left_input output_field">
+					<p class="output_field">
+						{{ var aLink = document.createElement("a") }}
+						{{ aLink.href= ask.left_ask_deal.link }}
+						<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#666;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
+					</p>
+				</div>
+				<div class="ask_text_field right_input output_field">
+					<p class="output_field">
+						{{ var bLink = document.createElement("a") }}
+						{{ bLink.href= ask.right_ask_deal.link }}
+						<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#666;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
+					<p>
+				</div>
+				<span class="input_icon center_input"><i class="fa fa-link"></i></span>
+			</div>
+		{{ } }}
+		{{ if (ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") { }}
+			<div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
+				<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
+					{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
+						<tr>
+							<td style="width:40%;">
+								<p>{{= ask.left_ask_deal.spec1 }}</p>
+							</td>
+							<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+								<p>{{= ask.spec1 }}</p>
+							</td>
+							<td style="width:40%;">
+								<p>{{= ask.right_ask_deal.spec1 }}</p>
+							</td>
+						</tr>
+					{{ } }}
+					{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
+						<tr>
+							<td style="width:40%; border-top:1px solid #dbdbdb;">
+								<p>{{= ask.left_ask_deal.spec2 }}</p>
+							</td>
+							<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
+								<p>{{= ask.spec2 }}</p>
+							</td>
+							<td style="width:40%; border-top:1px solid #dbdbdb;">
+								<p>{{= ask.right_ask_deal.spec2 }}</p>
+							</td>
+						</tr>
+					{{ } }}
+					{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
+						<tr>
+							<td style="width:40%; border-top:1px solid #dbdbdb;">
+								<p>{{= ask.left_ask_deal.spec3 }}</p>
+							</td>
+							<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
+								<p>{{= ask.spec3 }}</p>
+							</td>
+							<td style="width:40%; border-top:1px solid #dbdbdb;">
+								<p>{{= ask.right_ask_deal.spec3 }}</p>
+							</td>
+						</tr>
+					{{ } }}
+				</table>
+			</div>
+		{{ } }}
+	</div>
 	{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
 		<div id="main_vote_count">
 			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
