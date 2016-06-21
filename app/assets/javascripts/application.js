@@ -198,43 +198,49 @@ function enableScroll() {
 }
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
+// 모바일의 경우 호버 액션은 실행되지 않도록 제어
 function hover_action(){
-  $(".card_image").hover(
-    function(){
-      $(this).addClass("img_hover");
-      $(this).parent().children(".card_image_expander").addClass("img_hover");
-    },
-    function(){
-      $(this).removeClass("img_hover");
-      $(this).parent().children(".card_image_expander").removeClass("img_hover");
-    }
-  );
-  $(".card_image_overlay").hover(
-    function(){
-      $(this).addClass("img_hover");
-      $(this).prev().children(".card_image").addClass("img_hover");
-      $(this).prev().children(".card_image_expander").addClass("img_hover");
-    },
-    function(){
-      $(this).removeClass("img_hover");
-      $(this).prev().children(".card_image").removeClass("img_hover");
-      $(this).prev().children(".card_image_expander").removeClass("img_hover");
-    }
-  );
-  $(".vote_btn").hover(
-    function(){
-      $(this).prev().children(".card_image").addClass("img_hover");
-      $(this).prev().children(".card_image_expander").addClass("img_hover");
-      $(this).prev().children(".card_image_hover").fadeIn(100);
-      $(this).parent().parent().parent().find(".card_detail_table").clearQueue().slideDown(200);
-    },
-    function(){
-      $(this).prev().children(".card_image").removeClass("img_hover");
-      $(this).prev().children(".card_image_expander").removeClass("img_hover");
-      $(this).prev().children(".card_image_hover").fadeOut(100);
-      // $(this).parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
-    }
-  );
+  if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    $(".card_image_expander").addClass("img_hover");
+    return false;
+  } else {
+    $(".card_image").hover(
+      function(){
+        $(this).addClass("img_hover");
+        $(this).parent().children(".card_image_expander").addClass("img_hover");
+      },
+      function(){
+        $(this).removeClass("img_hover");
+        $(this).parent().children(".card_image_expander").removeClass("img_hover");
+      }
+    );
+    $(".card_image_overlay").hover(
+      function(){
+        $(this).addClass("img_hover");
+        $(this).prev().children(".card_image").addClass("img_hover");
+        $(this).prev().children(".card_image_expander").addClass("img_hover");
+      },
+      function(){
+        $(this).removeClass("img_hover");
+        $(this).prev().children(".card_image").removeClass("img_hover");
+        $(this).prev().children(".card_image_expander").removeClass("img_hover");
+      }
+    );
+    $(".vote_btn").hover(
+      function(){
+        $(this).prev().children(".card_image").addClass("img_hover");
+        $(this).prev().children(".card_image_expander").addClass("img_hover");
+        $(this).prev().children(".card_image_hover").fadeIn(100);
+        $(this).parent().parent().parent().find(".card_detail_table").clearQueue().slideDown(200);
+      },
+      function(){
+        $(this).prev().children(".card_image").removeClass("img_hover");
+        $(this).prev().children(".card_image_expander").removeClass("img_hover");
+        $(this).prev().children(".card_image_hover").fadeOut(100);
+        // $(this).parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
+      }
+    );
+  }
 };
 
 // AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
