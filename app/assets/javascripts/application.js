@@ -226,13 +226,13 @@ function hover_action(){
       $(this).prev().children(".card_image").addClass("img_hover");
       $(this).prev().children(".card_image_expander").addClass("img_hover");
       $(this).prev().children(".card_image_hover").fadeIn(100);
-      $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().slideDown(200);
+      $(this).parent().parent().parent().find(".card_detail_table").clearQueue().slideDown(200);
     },
     function(){
       $(this).prev().children(".card_image").removeClass("img_hover");
       $(this).prev().children(".card_image_expander").removeClass("img_hover");
       $(this).prev().children(".card_image_hover").fadeOut(100);
-      // $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
+      // $(this).parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
     }
   );
 };
