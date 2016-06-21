@@ -265,6 +265,8 @@
     if ( $("#user_password").val().length < 8 ) {
       tooltip_area.css("width",tooltip_width).slideDown(200);
       tooltip_content.text("비밀번호는 8자리 이상으로 설정해주세요.");
+    } else if ( $("#user_password").val() == "" ) {
+      tooltip_area.stop().slideUp(200);
     }
   }
 
@@ -290,6 +292,8 @@
     if ( $("#user_password").val() != $("#user_password_confirm").val()  ) {
       tooltip_area.css("width",tooltip_width).slideDown(200);
       tooltip_content.text("입력하신 비밀번호가 일치하지 않습니다.");
+    } else if ( $("#user_password_confirm").val() == "" ) {
+      tooltip_area.stop().slideUp(200);
     }
   }
 
