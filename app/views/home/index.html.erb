@@ -323,7 +323,6 @@
 	for(var i=0; i < ranking_asks.length; i++) {
 		var ask = ranking_asks[i]
         $('#asks').append(askTemplate({ask: ask}));
-				$("#ask_deal_"+ask.id).hover(function(){ $(this).find(".card_detail_table").clearQueue().slideDown(200) }, function() { $(this).find(".card_detail_table:visible").clearQueue().delay(500).slideUp(200) });
         var hash_tags = ask.message.match(/#(\S+)/g);
         if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
         $.each(hash_tags, function( index, hash_tag ) {
@@ -342,7 +341,6 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
-		$("#ask_deal_"+ask.id).hover(function(){ $(this).find(".card_detail_table").clearQueue().slideDown(200) }, function() { $(this).find(".card_detail_table:visible").clearQueue().delay(500).slideUp(200) });
 		var hash_tags = ask.message.match(/#(\S+)/g);
 		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 		$.each(hash_tags, function( index, hash_tag ) {
@@ -376,7 +374,6 @@
 		        	my_votes.push(data.vote);
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
-							$("#ask_deal_"+data.ask.id).hover(function(){ $(this).find(".card_detail_table").clearQueue().slideDown(200) }, function() { $(this).find(".card_detail_table:visible").clearQueue().delay(500).slideUp(200) });
 	        		notify("투표 완료");
 							hover_action();
 							graph_animation(data.ask.id);
@@ -433,7 +430,6 @@
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
-								$("#ask_deal_"+ask.id).hover(function(){ $(this).find(".card_detail_table").clearQueue().slideDown(200) }, function() { $(this).find(".card_detail_table:visible").clearQueue().delay(500).slideUp(200) });
 				        var hash_tags = ask.message.match(/#(\S+)/g);
 				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 				        $.each(hash_tags, function( index, hash_tag ) {
