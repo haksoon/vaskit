@@ -257,6 +257,18 @@
     }
   }
 
+  function password_check_tooltip() {
+    var tooltip_width = $("#user_password").width();
+    var tooltip_area = $("#user_password").parent().find(".tooltip_area");
+    var tooltip_content = $("#user_password").parent().find(".tooltip_content");
+    if ( $("#user_password").val().length < 8 ) {
+      tooltip_area.css("width",tooltip_width).slideDown(200);
+      tooltip_content.text("비밀번호는 8자리 이상으로 설정해주세요.");
+    } else {
+      tooltip_area.stop().slideUp(200);
+    }
+  }
+
   function password_confirm_check() {
     if ( $("#user_password_confirm").val() == "" ) {
       $("#password_confirm_checker").html("");
@@ -268,6 +280,18 @@
           $("#password_confirm_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
         }
       }
+    }
+  }
+
+  function password_confirm_check_tooltip() {
+    var tooltip_width = $("#user_password_confirm").width();
+    var tooltip_area = $("#user_password_confirm").parent().find(".tooltip_area");
+    var tooltip_content = $("#user_password_confirm").parent().find(".tooltip_content");
+    if ( $("#user_password").val() != $("#user_password_confirm").val()  ) {
+      tooltip_area.css("width",tooltip_width).slideDown(200);
+      tooltip_content.text("입력하신 비밀번호가 일치하지 않습니다.");
+    } else {
+      tooltip_area.stop().slideUp(200);
     }
   }
 
@@ -284,7 +308,9 @@
 
   $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
   $("#user_password").attr("onkeyup","password_check(); password_confirm_check(); ready_to_submit(); return false;");
+  $("#user_password").attr("onblur","password_check_tooltip(); return false;");
   $("#user_password_confirm").attr("onkeyup","password_confirm_check(); ready_to_submit(); return false;");
+  $("#user_password_confirm").attr("onblur","password_confirm_check_tooltip(); return false;");
   $("#sign_up_form").on("change",function(){ ready_to_submit(); })
 
 	function sign_up_submit(){ //submit 전에 value 체크

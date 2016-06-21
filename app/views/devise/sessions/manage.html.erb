@@ -67,6 +67,7 @@
 	<% if flash[:custom_notice] %>
 		notify('<%=flash[:custom_notice]%>');
 	<% end %>
+	
 	function change_string_id(){
 		var english = /^[a-z0-9]*$/;
 		var string_id = $("#string_id_input").val();
