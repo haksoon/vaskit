@@ -21,7 +21,7 @@
 		<% if @type == "my_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_ask_count %>개</span>의 질문을 던지셨군요!<br>와우! 많은 고민을 해결하셨나요?
 		<% elsif @type == "vote_ask" %>
-			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_vote_count %>개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;">{{= my_vote_count }}개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
 		<% elsif @type == "comment_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= @my_comment_count %>개</span>의 의견을 남기셨군요!<br>와우! 우리 모두 수다쟁이를 좋아한답니다!
 		<% elsif @type == "my_ask_in_progress" %>
@@ -244,14 +244,14 @@
 				<div class="ask_text_field left_input output_field">
 					<p class="output_field">
 						{{ var aLink = document.createElement("a") }}
-						{{ aLink.href= ask.left_ask_deal.link }}
+						{{ aLink.href = ask.left_ask_deal.link }}
 						<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#666;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
 					</p>
 				</div>
 				<div class="ask_text_field right_input output_field">
 					<p class="output_field">
 						{{ var bLink = document.createElement("a") }}
-						{{ bLink.href= ask.right_ask_deal.link }}
+						{{ bLink.href = ask.right_ask_deal.link }}
 						<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#666;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
 					<p>
 				</div>
