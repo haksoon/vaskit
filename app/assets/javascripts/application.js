@@ -287,7 +287,7 @@ function tooltip_box() {
     $("p.output_field").hover(
       function(){
         var tooltip_width = $(this).width();
-        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);,
+        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);
       }, function(){
         $(this).next().clearQueue().delay(500).slideUp(200);
       });
