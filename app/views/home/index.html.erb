@@ -127,7 +127,7 @@
 			<td style="width:50%; position:relative; overflow:hidden;">
   	    <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;">
     		  <img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
-					<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:rgba(238,110,1,0.1); display:none;"></span>
+					<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.2; display:none;"></span>
 					<p class="card_image_expander"><i class="fa fa-expand"></i></p>
     		</a>
     		{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
@@ -146,7 +146,7 @@
 			<td style="width:50%; position:relative; overflow:hidden;">
 			  <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;">
 				  <img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
-					<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:rgba(238,110,1,0.1); display:none;"></span>
+					<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.2; display:none;"></span>
 					<p class="card_image_expander"><i class="fa fa-expand"></i></p>
 				</a>
 				{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}

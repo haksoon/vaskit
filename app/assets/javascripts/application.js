@@ -232,7 +232,7 @@ function hover_action(){
       $(this).prev().children(".card_image").removeClass("img_hover");
       $(this).prev().children(".card_image_expander").removeClass("img_hover");
       $(this).prev().children(".card_image_hover").fadeOut(100);
-      $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
+      // $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
     }
   );
 };
