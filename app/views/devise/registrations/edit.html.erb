@@ -1,25 +1,62 @@
 <%= render :partial => "common_partial/header_1", :locals => {:title => "비밀번호 변경"}%>
 
-
-<div style="padding:6px 10px;">
+<div class="content_box" style="padding:10px; margin:15px 12px 15px; text-align:left;">
 	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
 	  <%= devise_error_messages! %>
 		<% unless current_user.sign_up_type == "facebook" %>
+			<div style="position:relative;">
 	  		<%= f.password_field :current_password, :placeholder => "기존 비밀번호", :class => "registrations_input" %>
-	  	<% end %>
-	  	<%= f.password_field :password, :autocomplete => "off", :placeholder => "신규 비밀번호", :class => "registrations_input" %>
-	  	<%= f.password_field :password_confirmation, :autocomplete => "off", :placeholder => "신규 비밀번호 확인", :class => "registrations_input" %>
-	  
-	  <a href="#" onclick="edit_password_submit(); return false;" style="display:block; background-color:#4b3d3d; color:#fff; font-size:14px; margin:16px 0; height:36px; line-height:36px; text-align:center;">
-		<img src="/images/common/submit_btn.png" style="width:18px; margin-bottom:-1px;" />
-		&nbsp; 변경하기
-	</a>
-	  
-	<% end %>	
+				<span class="input_icon left_input" onclick="$('#user_current_password').focus(); return false;"><i class="fa fa-unlock"></i></span>
+			</div>
+  	<% end %>
+		<div style="position:relative;">
+  		<%= f.password_field :password, :autocomplete => "off", :placeholder => "신규 비밀번호", :class => "registrations_input" %>
+			<span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
+		</div>
+		<div style="position:relative;">
+  		<%= f.password_field :password_confirmation, :autocomplete => "off", :placeholder => "신규 비밀번호 확인", :class => "registrations_input" %>
+			<span class="input_icon left_input" onclick="$('#user_password_confirmation').focus(); return false;"><i class="fa fa-check"></i></span>
+		</div>
+	  <a id="submit_btn" href="#" onclick="edit_password_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
+			<i class="fa fa-lock"></i>&nbsp; 변경하기
+		</a>
+	<% end %>
 </div>
 
 <script>
-	function edit_password_submit(){
-		document.getElementById('edit_user').submit();
+	function ready_to_submit() {
+		if (
+			$("#user_current_password").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()
+		) {
+			$("#submit_btn").css("background-color","#ee6e01");
+		} else {
+			$("#submit_btn").css("background-color","#9d9ea1");
+		}
+	}
+
+	$("#user_current_password").attr("onkeyup","ready_to_submit(); return false;");
+	$("#user_password").attr("onkeyup","ready_to_submit(); return false;");
+	$("#user_password_confirmation").attr("onkeyup","ready_to_submit(); return false;");
+
+	function edit_password_submit() {
+		<% unless current_user.sign_up_type == "facebook" %>
+			if ($("#user_current_password").val() == ""){
+				notify('기존 비밀번호를 입력해주세요.');
+				$("#user_current_password").focus().select();
+				return;
+			}
+  	<% end %>
+		if ($("#user_password").val() == ""){
+			notify('비밀번호를 입력해주세요.');
+			$("#user_password").focus().select();
+			return;
+		}
+		if ($("#user_password").val() != $("#user_password_confirmation").val()){
+			notify('비밀번호를 확인해주세요.');
+			$("#user_password_confirm").focus().select();
+			return;
+		}
+
+		$("#edit_user").submit();
 	}
 </script>

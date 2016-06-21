@@ -8,7 +8,7 @@
 			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
 			<div style="box-sizing:border-box; width:100%; background-color:#f4f4f4; border:3px solid #998674; border-radius:5px; overflow:hidden;">
 				<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
-				<div id="user_overlay_seg" style="padding:20px;">
+				<div id="user_overlay_seg" style="padding:20px; max-height:300px; overflow-y:auto;">
 
 				</div>
 			</div>
@@ -172,10 +172,10 @@
 
 		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
 
-		// function manage_on() {
-		// 	var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
-	  //   $("#user_overlay_seg").html(userOverlaySegTemplate());
-		// }
+		function manage_on() {
+			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
+	    $("#user_overlay_seg").html(userOverlaySegTemplate());
+		}
 
 	</script>
 <% end %>
