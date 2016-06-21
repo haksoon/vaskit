@@ -164,7 +164,7 @@
 			<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;" style="float:right; border-left:1px solid #fff;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 		</div>
 	{{ } }}
-	<div style="padding:10px 10px 0px 10px; display:none;">
+	<div class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
 		{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
 			<div class="table_div">
 				<div class="ask_text_field left_input output_field" style="font-weight:bold;">
@@ -343,6 +343,13 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
+		$("#ask_deal_"+ask.id).hover(
+			function(){
+	    	$(this).find("card_detail_table").slideDown(200);
+	  	}, function() {
+	    	$(this).find("card_detail_table").slideUp(200);
+	  	}
+		);
 		var hash_tags = ask.message.match(/#(\S+)/g);
 		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 		$.each(hash_tags, function( index, hash_tag ) {
