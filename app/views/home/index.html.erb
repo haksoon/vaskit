@@ -164,6 +164,49 @@
 			<a class="vote_btn_{{=ask.id}} vote_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;" style="float:right; border-left:1px solid #fff;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 		</div>
 	{{ } }}
+	{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
+		<div id="main_vote_count">
+			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
+			{{ if (ask.user_id == current_user_id && total_count == 0){ }}
+				{{ left_ratio = 0 }}
+				{{ left_ratio_full = 0 }}
+				{{ right_ratio = 0 }}
+				{{ right_ratio_full = 0 }}
+			{{ }else{ }}
+				{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80) }}
+				{{ left_ratio_full = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
+				{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80) }}
+				{{ right_ratio_full = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+			{{ } }}
+
+			{{ left_background = "#ffcc5a" }}
+			{{ left_font_weight = "bold" }}
+			{{ right_background = "#ffcc5a" }}
+			{{ right_font_weight = "bold" }}
+			{{ if (left_ratio > right_ratio){ }}
+				{{ right_background = "#fff" }}
+				{{ right_font_weight = "normal" }}
+			{{ }else if(left_ratio < right_ratio){ }}
+				{{ left_background = "#fff" }}
+				{{ left_font_weight = "normal" }}
+			{{ } }}
+			<table cellspacing="0" cellpadding="0" style="width:100%; background-color:rgba(75,61,61,0.9); color:#fff; font-size:12px; font-weight:bold; height:40px;">
+				<tr>
+					<td class="vote-result-td">
+						<span class="vote-result-bar-left" style="width:{{=left_ratio}}%; background-color:{{=left_background}};">&nbsp;</span>
+						<span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{=left_ratio_full}}%</span>
+					</td>
+					<td class="vote-result-td-title">
+						A vs B
+					</td>
+					<td class="vote-result-td">
+						<span class="vote-result-bar-right" style="width:{{=right_ratio}}%; background-color:{{=right_background}};">&nbsp;</span>
+						<span class="vote-result-num-right" style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{=right_ratio_full}}%</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+	{{ } }}
 	<div class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
 		{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
 			<div class="table_div">
@@ -263,49 +306,6 @@
 			</div>
 		{{ } }}
 	</div>
-	{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
-		<div id="main_vote_count">
-			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
-			{{ if (ask.user_id == current_user_id && total_count == 0){ }}
-				{{ left_ratio = 0 }}
-				{{ left_ratio_full = 0 }}
-				{{ right_ratio = 0 }}
-				{{ right_ratio_full = 0 }}
-			{{ }else{ }}
-				{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80) }}
-				{{ left_ratio_full = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
-				{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80) }}
-				{{ right_ratio_full = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
-			{{ } }}
-
-			{{ left_background = "#ffcc5a" }}
-			{{ left_font_weight = "bold" }}
-			{{ right_background = "#ffcc5a" }}
-			{{ right_font_weight = "bold" }}
-			{{ if (left_ratio > right_ratio){ }}
-				{{ right_background = "#fff" }}
-				{{ right_font_weight = "normal" }}
-			{{ }else if(left_ratio < right_ratio){ }}
-				{{ left_background = "#fff" }}
-				{{ left_font_weight = "normal" }}
-			{{ } }}
-			<table cellspacing="0" cellpadding="0" style="width:100%; background-color:rgba(75,61,61,0.9); color:#fff; font-size:12px; font-weight:bold; height:40px;">
-				<tr>
-					<td class="vote-result-td">
-						<span class="vote-result-bar-left" style="width:{{=left_ratio}}%; background-color:{{=left_background}};">&nbsp;</span>
-						<span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{=left_ratio_full}}%</span>
-					</td>
-					<td class="vote-result-td-title">
-						A vs B
-					</td>
-					<td class="vote-result-td">
-						<span class="vote-result-bar-right" style="width:{{=right_ratio}}%; background-color:{{=right_background}};">&nbsp;</span>
-						<span class="vote-result-num-right" style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{=right_ratio_full}}%</span>
-					</td>
-				</tr>
-			</table>
-		</div>
-	{{ } }}
 </script>
 
 <script>
@@ -325,6 +325,7 @@
 	for(var i=0; i < ranking_asks.length; i++) {
 		var ask = ranking_asks[i]
         $('#asks').append(askTemplate({ask: ask}));
+				$("#ask_deal_"+ask.id).hover(function(){ $(this).find(".card_detail_table").slideDown(200) }, function() { $(this).find(".card_detail_table").slideUp(200) });
         var hash_tags = ask.message.match(/#(\S+)/g);
         if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
         $.each(hash_tags, function( index, hash_tag ) {
@@ -343,13 +344,7 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
-		$("#ask_deal_"+ask.id).hover(
-			function(){
-	    	$(this).find(".card_detail_table").slideDown(200);
-	  	}, function() {
-	    	$(this).find(".card_detail_table").slideUp(200);
-	  	}
-		);
+		$("#ask_deal_"+ask.id).hover(function(){ $(this).find(".card_detail_table").slideDown(200) }, function() { $(this).find(".card_detail_table").slideUp(200) });
 		var hash_tags = ask.message.match(/#(\S+)/g);
 		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 		$.each(hash_tags, function( index, hash_tag ) {
@@ -383,6 +378,7 @@
 		        	my_votes.push(data.vote);
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
+							$("#ask_deal_"+data.ask.id).hover(function(){ $(this).find(".card_detail_table").slideDown(200) }, function() { $(this).find(".card_detail_table").slideUp(200) });
 	        		notify("투표 완료");
 							hover_action();
 							graph_animation(data.ask.id);
@@ -439,6 +435,7 @@
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
+								$("#ask_deal_"+ask.id).hover(function(){ $(this).find(".card_detail_table").slideDown(200) }, function() { $(this).find(".card_detail_table").slideUp(200) });
 				        var hash_tags = ask.message.match(/#(\S+)/g);
 				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 				        $.each(hash_tags, function( index, hash_tag ) {
