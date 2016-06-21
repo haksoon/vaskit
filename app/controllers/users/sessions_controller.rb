@@ -20,7 +20,7 @@ class Users::SessionsController < Devise::SessionsController
       super
     else
       flash[:custom_notice] = "이메일/아이디 또는 비밀번호가 다릅니다.\\n다시한번 확인해 주세요."
-      redirect_to "/users/sign_in"
+      # redirect_to "/users/sign_in"
     end
   end
 
