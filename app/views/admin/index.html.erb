@@ -4,16 +4,15 @@
 		<a href="/admin/table/<%=table%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px; margin-top:20px;"><%=table%></a>
 	<% end %>
 	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; margin-left:6px;">로그아웃</a>
-	
+
 	<div style="width:1000px; margin:0 auto; text-align:left;">
 		<p style="text-align:center; width:100%; margin:20px 0 10px 0;">공지사항 생성</p>
 		<input type="text" name="point" id="notice_title" placeholder="제목을 입력하세요" class="notice_title" />
 		<textarea placeholder="내용 입력" class="ask_message_input" id="notice_message"></textarea>
 		<a href="#" onclick="create_notice(); return false;" style="display:block; background-color:#4b3d3d; color:#fff; font-size:14px; margin:6px 0; height:36px; line-height:36px; text-align:center;">
-			<img src="/images/common/submit_btn.png" style="width:18px; margin-bottom:-1px;" />
-			&nbsp; 보내기
+			보내기
 		</a>
-		
+
 		<p style="text-align:center; width:100%; margin:20px 0 10px 0;">보낸 공지사항 리스트</p>
 		<table border="1" cellspacing="0" cellpadding="2" style="width: 100%; margin-top:20px; font-size:12px; text-align:center;">
 		  <thead>
@@ -33,20 +32,20 @@
 		    <% end %>
 		  </tbody>
 		</table>
-		
+
 		<br />
-		
+
 		<p style="text-align:center; width:100%; margin:30px 0 0 0;">상단 고정 게시물 설정</p>
 		<br />
 		<a href="/admin" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px;">전체</a>
 		<% @categories.each do |category| %>
 			<a href="/admin?category_id=<%=category.id%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px;"><%= category.name %></a>
 		<% end %>
-		
+
 		<p>
 			현재 선정된 ask
 		</p>
-		
+
 		<table border="1" cellspacing="0" cellpadding="2" style="width: 100%; margin-top:20px; font-size:12px; text-align:center;">
 		  <thead>
 		    <tr>
@@ -57,7 +56,7 @@
 		      	<th></th>
 		    </tr>
 		  </thead>
-		
+
 		  <tbody>
 		    <% @rank_asks.each do |rank_ask| %>
 		    	<% ask = rank_ask.ask %>
@@ -85,11 +84,11 @@
 		    <% end %>
 		  </tbody>
 		</table>
-		
+
 		<p>
 			선정할 ask
 		</p>
-		
+
 		<table border="1" cellspacing="0" cellpadding="2" style="width: 100%; margin-top:20px; font-size:12px; text-align:center;">
 		  <thead>
 		    <tr>
@@ -100,7 +99,7 @@
 		      	<th></th>
 		    </tr>
 		  </thead>
-		
+
 		  <tbody>
 		    <% @asks.each do |ask| %>
 				<tr>
@@ -125,7 +124,7 @@
 		    <% end %>
 		  </tbody>
 		</table>
-		
+
 	</div>
 </div>
 
@@ -153,7 +152,7 @@
 			alert("순위는 1~3사이 값이어야 합니다");
 		}
 	}
-	
+
 	function delete_rank_ask(rank_ask_id){
 		$.ajax({
 	        url: "/admin/delete_rank_ask.json",
@@ -172,7 +171,7 @@
 	        }
 		});
 	}
-	
+
 	function create_notice(){
 		var notice_title = $("#notice_title").val();
 		var notice_message = $("#notice_message").val();
@@ -203,5 +202,5 @@
 	        }
 		});
 	}
-	
+
 </script>

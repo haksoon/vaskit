@@ -199,14 +199,13 @@
 		}
 
 		function change_string_id(){
-			// var english = /^[a-z0-9]*$/;
+			var english = /^[a-z0-9]*$/;
 			var string_id = $("#string_id_input").val();
 			if ( string_id == "" || string_id == null ){
 				notify("변경할 닉네임을 입력해 주세요.");
+			}else if( !english.test(string_id) ){
+				notify("닉네임은 영문 소문자 및 숫자만 입력 가능합니다.");
 			}
-			// else if( !english.test(string_id) ){
-			// 	notify("닉네임은 영문 소문자 및 숫자만 입력 가능합니다.");
-			// }
 			else{
 				$.ajax({
 			        url: '/users/change_nickname.json',

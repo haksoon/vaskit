@@ -590,8 +590,7 @@ img.cover {
 	color: #666;
 	background-color: #fff;
 	font-size: 13px;
-	line-height: 17px;
-	position: absolute;
+	line-height: 17px;;
 }
 
 #hashtag_backdrop {
