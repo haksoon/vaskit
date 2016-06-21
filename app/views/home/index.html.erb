@@ -345,9 +345,9 @@
 		$('#asks').append(askTemplate({ask: ask}));
 		$("#ask_deal_"+ask.id).hover(
 			function(){
-	    	$(this).find("card_detail_table").slideDown(200);
+	    	$(this).find(".card_detail_table").slideDown(200);
 	  	}, function() {
-	    	$(this).find("card_detail_table").slideUp(200);
+	    	$(this).find(".card_detail_table").slideUp(200);
 	  	}
 		);
 		var hash_tags = ask.message.match(/#(\S+)/g);
