@@ -230,7 +230,7 @@ function hover_action(){
     function(){
       $(this).prev().children("img").removeClass("img_hover");
       $(this).prev().children("p").removeClass("img_hover");
-      $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200) });
+      $(this).parent().parent().parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
     }
   );
 };
