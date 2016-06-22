@@ -455,6 +455,8 @@
 		setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
 	}
 
+	$(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
+	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
 	$(window).resize(function(){
 		$(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
   	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
