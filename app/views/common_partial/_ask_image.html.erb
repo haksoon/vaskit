@@ -1,6 +1,6 @@
 <div id="ask_image_bg" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; cursor:pointer; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
 <div id="ask_image_overlay" style="position:fixed; top:0; width:inherit; height:100%; display:table; z-index:13; display:none;">
-  <a href="#" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:0; display:block; text-align:right;">
+  <a href="#" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; display:block; text-align:right;">
     <i class="fa fa-times" style="color: #fff; width: 50px; font-size: 30px; text-align: center; padding: 10px 0;"></i>
   </a>
   <div style="display:table; width:100%; height:100%;">
@@ -28,7 +28,7 @@
     <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; {{= right_css }}">CARD B</a>
   </div>
   <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
-  <div style="padding:10px; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
+  <div class="table_div" style="padding:10px; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
     <p style="margin:5px auto; font-weight:bold;">
       {{= ask_deal.title }}
     </p>
