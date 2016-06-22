@@ -203,8 +203,7 @@ class AsksController < ApplicationController
       HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag) # if HashTag.where(:ask_id => @ask.id, :keyword => hash_tag).blank?
     end
 
-
-    flash[:redirect_url] = "/"
+    # flash[:redirect_url] = "/" #AJS추가(삭제)
     flash[:ask_update] = "게시글 수정이 완료되었습니다."
 
     redirect_to "/asks/#{@ask.id}"
