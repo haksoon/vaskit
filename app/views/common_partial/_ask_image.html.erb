@@ -15,30 +15,20 @@
 <script type="text/template" id="ask-image-seg-template">
   {{ if (is_left){ }}
     {{ ask_deal = ask.left_ask_deal }}
-    {{ left_css = "color:#ee6e01; font-weight:bold; font-size:16px; border-bottom:3px solid #ee6e01; height:42px; line-height:42px;" }}
-    {{ right_css = "color:#fff; font-size:16px; height:42px; line-height:42px;" }}
+    {{ left_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
+    {{ right_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
   {{ }else{ }}
     {{ ask_deal = ask.right_ask_deal }}
-    {{ left_css = "color:#fff; font-size:16px; height:42px; line-height:42px;" }}
-    {{ right_css = "color:#ee6e01; font-weight:bold; font-size:16px; border-bottom:3px solid #ee6e01; height:42px; line-height:42px;" }}
+    {{ left_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
+    {{ right_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
   {{ } }}
 
-  <table cellspacing="0" cellpadding="0" style="width:100%; overflow:visible; height:42px;">
-    <tr>
-      <td style="width:50%;">
-        <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="width:100%; display:block; {{= left_css }} ">
-          CARD A
-        </a>
-      </td>
-      <td style="width:50%;">
-        <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="width:100%; display:block; {{= right_css }}">
-          CARD B
-        </a>
-      </td>
-    </tr>
-  </table>
+  <div class="table_div" style="margin-bottom:0;">
+    <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; {{= left_css }} ">CARD A</a>
+    <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="float:right; width:50%; display:block; height:40px; line-height:40px; border-radius:0 10px 0 0; {{= right_css }}">CARD B</a>
+  </div>
   <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block; border-radius:10px 10px 0 0;" />
-  <div style="padding:10px 10px 5px; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
+  <div style="padding:10px; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
     <p style="margin:5px auto; font-weight:bold;">
       {{= ask_deal.title }}
     </p>
