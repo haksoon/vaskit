@@ -248,6 +248,7 @@ function graph_animation(ask_deal_id) {
   var timing = 30
   var target_ask = "#ask_deal_"+ask_deal_id
 
+  graph_width_adjust();
   $(target_ask).find("#main_vote_count").find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
   $(target_ask).find("#main_vote_count").find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
 
@@ -270,6 +271,15 @@ function graph_animation(ask_deal_id) {
       clearInterval(right_ratio_increase);
     }
   }, timing * right_ratio / right_ratio_full );
+}
+
+function graph_width_adjust() {
+  $(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
+	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
+  $(window).resize(function(){
+    $(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
+  	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
+	}).resize();
 }
 
 // AJS추가 : 제품명 툴팁박스 추가

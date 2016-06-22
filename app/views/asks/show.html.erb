@@ -918,13 +918,7 @@
 
   hover_action();
   tooltip_box();
-
-  $(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
-  $(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
-  $(window).resize(function(){
-		$(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
-  	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
-	}).resize();
+  graph_width_adjust();
 
 </script>
 

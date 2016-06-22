@@ -448,19 +448,13 @@
 
   hover_action();
 	tooltip_box();
+	graph_width_adjust();
 
 	function visitor_new_ask() {
 		notify('회원가입 후<br />질문을 올릴 수 있습니다.');
 		setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
 		setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
 	}
-
-	$(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
-	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
-	$(window).resize(function(){
-		$(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
-  	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
-	}).resize();
 
 </script>
 
