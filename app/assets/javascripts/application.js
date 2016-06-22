@@ -320,6 +320,51 @@ function hash_tagging(origin_string, target_element) {
   });
 }
 
+// AJS추가 : 텍스트 라인 세기
+void function $getLines($){
+    function countLines($element){
+        var lines          = 0;
+        var greatestOffset = void 0;
+        $element.find('character').each(function(){
+            if(!greatestOffset || this.offsetTop > greatestOffset){
+                greatestOffset = this.offsetTop;
+                ++lines;
+            }
+        });
+        return lines;
+    }
+    $.fn.getLines = function $getLines(){
+        var lines = 0;
+        var clean = this;
+        var dirty = this.clone();
+        (function wrapCharacters(fragment){
+            var parent = fragment;
+            $(fragment).contents().each(function(){
+                if(this.nodeType === Node.ELEMENT_NODE){
+                    wrapCharacters(this);
+                }
+                else if(this.nodeType === Node.TEXT_NODE){
+                    void function replaceNode(text){
+                        var characters = document.createDocumentFragment();
+                        text.nodeValue.replace(/[\s\S]/gm, function wrapCharacter(character){
+                            characters.appendChild($('<character>' + character + '</>')[0]);
+                        });
+                        parent.replaceChild(characters, text);
+                    }(this);
+                }
+            });
+        }(dirty[0]));
+        clean.replaceWith(dirty);
+        lines = countLines(dirty);
+        dirty.replaceWith(clean);
+        return lines;
+    };
+}(jQuery);
+
+// AJS추가 : just for fun...
+console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
+console.log("%c3개월 전만 해도 회계사였는데 여기까지 혼자 공부하면서 왔습니다 ㅠ\n이제는 도움이 필요합니다. 도와주세요...", "font-size:1.5em; color:#666;");
+
 $( document ).ready(function() {
   $("select").on("change",function(){
     if( $(this).val() != "" ) {
