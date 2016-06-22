@@ -312,7 +312,7 @@ function hash_tagging(origin_string, target_element) {
     hash_tag = hash_tag.replace(",","");
     target_element.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
     hash_tag = hash_tag.replace('#', '').replace("?","");
-    $.each( target_element.find("span").find("."+index), function( index2, element ){
+    $.each( target_element.find("."+index), function( index2, element ){
       if ( $(element).parent().prop('nodeName') == "SPAN"){
         $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
       }
