@@ -71,7 +71,7 @@ class HomeController < ApplicationController
           if @ranking_asks.blank?
             @asks = Ask.where(:be_completed => false).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
           else
-            @asks = Ask.where(:be_completed => false).where("id not in (?)", ranking_ask_ids).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
+            @asks = Ask.where(:be_completed => false).where("id not in (?)", ranking_ask_ids).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ])
           end
         else
           if @my_votes.blank?
