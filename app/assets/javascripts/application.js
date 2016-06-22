@@ -183,7 +183,7 @@ function disableScroll() {
   // window.ontouchmove  = preventDefault; // mobile
   // document.onkeydown  = preventDefaultForScrollKeys;
   $("body").css("overflow","hidden");
-  $("#menu_bg").bind('touchmove', function(e){e.preventDefault()});
+  // $("#menu_bg").bind('touchmove', function(e){e.preventDefault()});
 }
 
 function enableScroll() {
@@ -194,7 +194,7 @@ function enableScroll() {
   // window.ontouchmove = null;
   // document.onkeydown = null;
   $("body").css("overflow","auto");
-	$("#menu_bg").unbind('touchmove');
+	// $("#menu_bg").unbind('touchmove');
 }
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
