@@ -117,6 +117,8 @@ class AsksController < ApplicationController
       HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag)
     end
 
+    flash[:ask_create] = "게시글 작성 완료!"
+
     redirect_to root_path
   end
 
@@ -204,7 +206,7 @@ class AsksController < ApplicationController
     end
 
     # flash[:redirect_url] = "/" #AJS추가(삭제)
-    flash[:ask_update] = "게시글 수정이 완료되었습니다."
+    flash[:ask_update] = "게시글 수정 완료!"
 
     redirect_to "/asks/#{@ask.id}"
   end

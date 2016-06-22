@@ -307,6 +307,10 @@
 </script>
 
 <script>
+	<% if flash[:ask_create] %>
+		notify('<%=flash[:ask_create]%>');
+	<% end %>
+
 	var current_user_id = 0;
  	<% if current_user %>
  		current_user_id = <%= current_user.id %>;
