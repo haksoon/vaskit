@@ -348,6 +348,7 @@
 			msg.hide();
 			msg_short.show();
 			msg_short.html(origin_string.replace(new RegExp('\r?\n', 'g'), '<br>').replace(/(<br>)+/g,"<br>").substring(0,100)+" ...");
+			hash_tagging(msg_short.html(), msg_short);
 			msg_more.show();
 		};
 	}
