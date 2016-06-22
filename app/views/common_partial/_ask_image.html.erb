@@ -62,11 +62,7 @@
   }
 
   $(window).resize(function(){
-    if ( $("#ask_image_seg").outerHeight() > $(window).height() ) {
-      $("#ask_image_seg").css("height","100%");
-    } else {
-      $("#ask_image_seg").css("height","");
-    }
+    $(window).height() < 730 ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
   }).resize();
 
 </script>
