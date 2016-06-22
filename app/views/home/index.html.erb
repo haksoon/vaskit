@@ -112,7 +112,7 @@
 				</span>
 				<span id="ask_{{=ask.id}}_message_text_shorten" style="display:none;">
 				</span>
-				<a id="ask_{{=ask.id}}_message_more" href="#" style="margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').slideDown(100); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide();">더 보기<i class="fa fa-angle-down"></i></a>
+				<a id="ask_{{=ask.id}}_message_more" href="#" style="margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').slideDown(100); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">더 보기<i class="fa fa-angle-down"></i></a>
 			</p>
 		</div>
 		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank">
