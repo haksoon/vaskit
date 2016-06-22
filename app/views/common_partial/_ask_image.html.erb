@@ -11,58 +11,61 @@
 
 
 <script type="text/template" id="ask-image-seg-template">
-  <div style="text-align:right;">
-    <i class="fa fa-times" style="color: #fff; width: 50px; font-size: 30px; text-align: center; padding: 10px 0;"></i>
-  </div>
-  {{ if (is_left){ }}
-    {{ ask_deal = ask.left_ask_deal }}
-    {{ left_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
-    {{ right_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
-  {{ }else{ }}
-    {{ ask_deal = ask.right_ask_deal }}
-    {{ left_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
-    {{ right_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
-  {{ } }}
-  <div class="table_div" style="margin-bottom:0;">
-    <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; {{= left_css }} ">CARD A</a>
-    <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; {{= right_css }}">CARD B</a>
-  </div>
-  <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
-  <div class="table_div" style="padding:10px; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
-    <p style="margin:5px auto; font-weight:bold;">
-      {{= ask_deal.title }}
-    </p>
-    <p style="margin:5px auto; font-weight:normal;">
-      {{= ask_deal.brand }}
-    </p>
-    <p style="margin:5px auto; font-weight:normal;">
-      {{= numberWithCommas(ask_deal.price) }}원
-    </p>
-    {{ var aLink = document.createElement("a") }}
-    {{ aLink.href= ask_deal.link }}
-    <a href="{{=ask_deal.link }}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
+  <div id="ask_image_box">
+    <div style="text-align:right;">
+      <i class="fa fa-times" style="color: #fff; width: 50px; font-size: 30px; text-align: center; padding: 10px 0;"></i>
+    </div>
+    {{ if (is_left){ }}
+      {{ ask_deal = ask.left_ask_deal }}
+      {{ left_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
+      {{ right_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
+    {{ }else{ }}
+      {{ ask_deal = ask.right_ask_deal }}
+      {{ left_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
+      {{ right_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
+    {{ } }}
+    <div class="table_div" style="margin-bottom:0;">
+      <a href="#" onclick="ask_image_on({{=ask.id}}, true); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; {{= left_css }} ">CARD A</a>
+      <a href="#" onclick="ask_image_on({{=ask.id}}, false); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; {{= right_css }}">CARD B</a>
+    </div>
+    <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+    <div class="table_div" style="padding:10px; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
+      <p style="margin:5px auto; font-weight:bold;">
+        {{= ask_deal.title }}
+      </p>
+      <p style="margin:5px auto; font-weight:normal;">
+        {{= ask_deal.brand }}
+      </p>
+      <p style="margin:5px auto; font-weight:normal;">
+        {{= numberWithCommas(ask_deal.price) }}원
+      </p>
+      {{ var aLink = document.createElement("a") }}
+      {{ aLink.href= ask_deal.link }}
+      <a href="{{=ask_deal.link }}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
+    </div>
   </div>
 </script>
 
 <script>
   function ask_image_on(ask_id, is_left){
     disableScroll();
-    $("#ask_image_overlay").show();
-    $("#ask_image_bg").show();
+    $("#ask_image_overlay").fadeIn(100);
+    $("#ask_image_bg").fadeIn(100);
 
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
     $("#ask_image_seg").html(askImageSegTemplate({ask:ask, is_left:is_left}));
+    $("#ask_imgae_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
   }
 
   function ask_image_off(){
     enableScroll();
-    $("#ask_image_overlay").hide();
-    $("#ask_image_bg").hide();
+    $("#ask_image_overlay").fadeOut(300);
+    $("#ask_image_bg").fadeOut(300);
   }
 
   $(window).resize(function(){
-    $(window).height() < 730 ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
+    $("#ask_imgae_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
   }).resize();
 
 </script>
