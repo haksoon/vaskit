@@ -1,12 +1,10 @@
-<div id="ask_image_pc_bg" onclick="ask_image_off(); return false;" style="position:fixed; left:0; top:0; width:100%; height:100%; z-index:7; display:none;"></div>
-<div id="ask_image_bg" onclick="ask_image_off(); return false;" style="position:fixed; top:0; width:inherit; height:100%; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
-<div id="ask_image_overlay" style="width:inherit; position:fixed; top:0; z-index:13; display:none;">
-  <a href="#" onclick="ask_image_off(); return false;" style="width:100%; display:block; text-align:right;">
+<div id="ask_image_bg" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
+<div id="ask_image_overlay" style="position:fixed; top:0; width:inherit; height:100%; display:table; z-index:13; display:none;">
+  <a href="#" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; display:block; text-align:right;">
     <i class="fa fa-times" style="color: #fff; width: 50px; font-size: 30px; text-align: center; padding: 10px 0;"></i>
   </a>
-
-  <div id="ask_image_seg" style="padding:0 12px;">
-
+  <div onclick="ask_image_off(); return false;" style="display:table-cell; text-align:center; vertical-align:middle;">
+    <div id="ask_image_seg" style="padding:0 12px; display:inline-block;"></div>
   </div>
 
 </div>
@@ -60,7 +58,6 @@
   function ask_image_on(ask_id, is_left){
     disableScroll();
     $("#ask_image_overlay").show();
-    $("#ask_image_pc_bg").show();
     $("#ask_image_bg").show();
 
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
@@ -71,7 +68,6 @@
   function ask_image_off(){
     enableScroll();
     $("#ask_image_overlay").hide();
-    $("#ask_image_pc_bg").hide();
     $("#ask_image_bg").hide();
   }
 
