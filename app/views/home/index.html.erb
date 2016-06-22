@@ -337,18 +337,17 @@
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
-		abbreviate_msg(ask.id);
+		abbreviate_msg(ask.message, ask.id);
 	}
 
-	function abbreviate_msg(ask_id) {
+	function abbreviate_msg(origin_string, ask_id) {
 		var msg = $("#ask_"+ask_id+"_message_text");
 		var msg_short = $("#ask_"+ask_id+"_message_text_shorten");
-		var msg_text = $("#ask_"+ask_id+"_message_text").html();
 		var msg_more = $("#ask_"+ask_id+"_message_more");
-		if (msg_text.length > 100) {
+		if (origin_string.length > 100) {
 			msg.hide();
 			msg_short.show();
-			msg_short.html(msg_text.replace(/(<br>)+/g,"<br>").substring(0,100)+" ...");
+			msg_short.html(origin_string.replace(/(<br>)+/g,"<br>").substring(0,100)+" ...");
 			msg_more.show();
 		};
 	}
@@ -428,7 +427,7 @@
     						var ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
-								abbreviate_msg(ask.id);
+								abbreviate_msg(ask.message, ask.id);
     					}
 							hover_action();
 							tooltip_box();
