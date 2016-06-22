@@ -919,6 +919,11 @@
   hover_action();
   tooltip_box();
 
+  $(window).resize(function(){
+		$(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
+  	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
+	}).resize();
+
 </script>
 
 <%= render :partial => "common_partial/ask_image" %>
