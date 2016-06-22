@@ -30,7 +30,7 @@
 <%= render :partial => "common_partial/user" %>
 
 <script>
-	var index_href = /^http:\/\/vaskit.kr\//;
+	var index_href = /^http:\/\/vaskit.kr\/$/;
 	if ( index_href.test(window.location.href) ) {
 		$("#main_header tr td:eq(0)").html('<a href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-filter" style="color: #fff; font-size: 26px; padding-top: 12px;"></i></a>');
 	} else {
