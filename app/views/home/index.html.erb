@@ -331,13 +331,29 @@
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
-		var hash_tags = ask.message.match(/#(\S+)/g);
+		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
+		// var hash_tags = ask.message.match(/#(\S+)/g);
+		// if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+		// $.each(hash_tags, function( index, hash_tag ) {
+		// 	hash_tag = hash_tag.replace(",","");
+		// 	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+		// 	hash_tag = hash_tag.replace('#', '').replace("?","")
+		// 	$.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+		// 		if ( $(element).parent().prop('nodeName') == "P"){
+		// 			$(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+		// 		}
+		// 	});
+		// });
+	}
+
+	function hash_tagging(origin_string, target_element) {
+		var hash_tags = origin_string.match(/#(\S+)/g);
 		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
 		$.each(hash_tags, function( index, hash_tag ) {
 			hash_tag = hash_tag.replace(",","");
-			$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+			target_element.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
 			hash_tag = hash_tag.replace('#', '').replace("?","")
-			$.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
+			$.each( target_element.find("."+index) ), function( index2, element ){
 				if ( $(element).parent().prop('nodeName') == "P"){
 					$(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
 				}
@@ -345,6 +361,20 @@
 		});
 	}
 
+
+	// var msg = $("#ask_"+ask.id+"_message_text");
+	// var msg_text = $("#ask_"+ask.id+"_message_text").html();
+	// var msg_more = $("#ask_"+ask.id+"_message_more");
+	// if (msg_text.length > 100) {
+	// 	msg_more.show();
+	// 	msg.html(msg_text.replace(/(<br>)+/g,"<br>").substring(0,100)+" ...");
+	// } else {
+	// 	msg_more.hide();
+	// }
+	// function show_msg() {
+	//   msg.html(msg_text);
+	// 	msg_more.hide();
+	// }
 
 	function vote_ask_deal(ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
@@ -367,7 +397,6 @@
 							graph_animation(data.ask.id);
 	        		notify("투표 완료");
 							hover_action();
-							tooltip_box();
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
 	        		my_vote_count = my_vote_count + 1;
