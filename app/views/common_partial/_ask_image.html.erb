@@ -55,7 +55,7 @@
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
     $("#ask_image_seg").html(askImageSegTemplate({ask:ask, is_left:is_left}));
-    $("#ask_imgae_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
+    $("#ask_image_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
   }
 
   function ask_image_off(){
@@ -65,7 +65,7 @@
   }
 
   $(window).resize(function(){
-    $("#ask_imgae_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
+    $("#ask_image_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","");
   }).resize();
 
 </script>
