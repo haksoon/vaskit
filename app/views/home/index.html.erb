@@ -1,6 +1,6 @@
 <% case @type %>
 <% when "user", "hash_tag", "ask_deal", "brand", "none" %>
-	<%= render :partial => "common_partial/header_3" %>
+	<%= render :partial => "common_partial/header" %>
 	<%= render :partial => "common_partial/search" %>
 	<p class="chat_bubble" style="margin-top:65px;">
 		<% if @type == "user" %>
@@ -16,7 +16,7 @@
 		<% end %>
 	</p>
 <% when "my_ask", "vote_ask", "comment_ask", "my_ask_in_progress" %>
-	<%= render :partial => "common_partial/header_3" %>
+	<%= render :partial => "common_partial/header" %>
 	<p class="chat_bubble">
 		<% if @type == "my_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= Ask.where(:user_id => current_user.id).count %>개</span>의 질문을 던지셨군요!<br>와우! 많은 고민을 해결하셨나요?
