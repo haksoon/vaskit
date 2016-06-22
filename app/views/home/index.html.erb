@@ -337,7 +337,7 @@
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
-		// abbreviate_msg(ask.id);
+		abbreviate_msg(ask.id);
 	}
 
 	function abbreviate_msg(ask_id) {
