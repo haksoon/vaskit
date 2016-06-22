@@ -1,6 +1,6 @@
-<div id="ask_image_bg" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
+<div id="ask_image_bg" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; cursor:pointer; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
 <div id="ask_image_overlay" style="position:fixed; top:0; width:inherit; height:100%; display:table; z-index:13; display:none;">
-  <a href="#" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; display:block; text-align:right;">
+  <a href="#" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:0; display:block; text-align:right;">
     <i class="fa fa-times" style="color: #fff; width: 50px; font-size: 30px; text-align: center; padding: 10px 0;"></i>
   </a>
   <div style="display:table; width:100%; height:100%;">
@@ -38,11 +38,9 @@
     <p style="margin:5px auto; font-weight:normal;">
       {{= numberWithCommas(ask_deal.price) }}원
     </p>
-    <p style="margin:5px auto; font-weight:normal;">
-      {{ var aLink = document.createElement("a") }}
-      {{ aLink.href= ask_deal.link }}
-      <i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;<a href="{{=ask_deal.link }}" target="_blank" style="color:#ee6e01;">{{= aLink.host }}</a>
-    </p>
+    {{ var aLink = document.createElement("a") }}
+    {{ aLink.href= ask_deal.link }}
+    <a href="{{=ask_deal.link }}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
   </div>
 </script>
 
