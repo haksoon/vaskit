@@ -332,35 +332,7 @@
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
-		// var hash_tags = ask.message.match(/#(\S+)/g);
-		// if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-		// $.each(hash_tags, function( index, hash_tag ) {
-		// 	hash_tag = hash_tag.replace(",","");
-		// 	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-		// 	hash_tag = hash_tag.replace('#', '').replace("?","")
-		// 	$.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-		// 		if ( $(element).parent().prop('nodeName') == "P"){
-		// 			$(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-		// 		}
-		// 	});
-		// });
 	}
-
-	function hash_tagging(origin_string, target_element) {
-		var hash_tags = origin_string.match(/#(\S+)/g);
-		if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-		$.each(hash_tags, function( index, hash_tag ) {
-			hash_tag = hash_tag.replace(",","");
-			target_element.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-			hash_tag = hash_tag.replace('#', '').replace("?","");
-			$.each( target_element.find("."+index), function( index2, element ){
-				if ( $(element).parent().prop('nodeName') == "P"){
-					$(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-				}
-			});
-		});
-	}
-
 
 	// var msg = $("#ask_"+ask.id+"_message_text");
 	// var msg_text = $("#ask_"+ask.id+"_message_text").html();
@@ -450,18 +422,7 @@
 	        		for(var i=0; i < more_asks.length; i++) {
     						var ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
-				        var hash_tags = ask.message.match(/#(\S+)/g);
-				        if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-				        $.each(hash_tags, function( index, hash_tag ) {
-				          hash_tag = hash_tag.replace(",","");
-  						  	$("#ask_"+ask.id+"_message").highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-  						  	hash_tag = hash_tag.replace('#', '').replace("?","")
-  							  $.each( $("#ask_"+ask.id+"_message ."+index), function( index2, element ){
-                    if ( $(element).parent().prop('nodeName') == "P"){
-                      $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-                    }
-                  });
-						    });
+								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
     					}
 							hover_action();
 							tooltip_box();

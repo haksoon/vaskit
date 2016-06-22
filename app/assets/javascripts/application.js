@@ -304,6 +304,22 @@ function tooltip_box() {
   }
 }
 
+// AJS추가 : 해쉬태그 하이라이트 별도 함수로 지정
+function hash_tagging(origin_string, target_element) {
+  var hash_tags = origin_string.match(/#(\S+)/g);
+  if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+  $.each(hash_tags, function( index, hash_tag ) {
+    hash_tag = hash_tag.replace(",","");
+    target_element.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+    hash_tag = hash_tag.replace('#', '').replace("?","");
+    $.each( target_element.find("."+index), function( index2, element ){
+      if ( $(element).parent().prop('nodeName') == "P"){
+        $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
+      }
+    });
+  });
+}
+
 $( document ).ready(function() {
   $("select").on("change",function(){
     if( $(this).val() != "" ) {
