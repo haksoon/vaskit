@@ -110,7 +110,7 @@
 						저의 결정장애 극복을 도와주세요! 둘 중에 뭐를 사야 하죠?
 					{{ } }}
 				</span>
-				<a id="ask_{{=ask.id}}_message_more" href="#" style="margin:0 5px; color:#998674; cursor:pointer;">더 보기<i class="fa fa-angle-down"></i></a>
+				<!-- <a id="ask_{{=ask.id}}_message_more" href="#" style="margin:0 5px; color:#998674; cursor:pointer;">더 보기<i class="fa fa-angle-down"></i></a> -->
 			</p>
 		</div>
 		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank">
@@ -335,21 +335,21 @@
 		var ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
-		abbreviate_msg(ask.id);
+		// abbreviate_msg(ask.id);
 	}
 
-	function abbreviate_msg(ask_id) {
-		var msg = $("#ask_"+ask_id+"_message_text");
-		var msg_text = $("#ask_"+ask_id+"_message_text").html();
-		var msg_more = $("#ask_"+ask_id+"_message_more");
-		if (msg_text.length > 100) {
-			msg_more.show();
-			msg.html(msg_text.replace(/(<br>)+/g,"<br>").substring(0,100)+" ...");
-		} else {
-			msg_more.hide();
-		};
-		msg_more.attr("onclick","msg.html(msg_text); msg_more.hide();");
-	}
+	// function abbreviate_msg(ask_id) {
+	// 	var msg = $("#ask_"+ask_id+"_message_text");
+	// 	var msg_text = $("#ask_"+ask_id+"_message_text").html();
+	// 	var msg_more = $("#ask_"+ask_id+"_message_more");
+	// 	if (msg_text.length > 100) {
+	// 		msg_more.show();
+	// 		msg.html(msg_text.replace(/(<br>)+/g,"<br>").substring(0,100)+" ...");
+	// 	} else {
+	// 		msg_more.hide();
+	// 	};
+	// 	msg_more.attr("onclick","msg.html(msg_text); msg_more.hide();");
+	// }
 
 	function vote_ask_deal(ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
