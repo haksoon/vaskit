@@ -1,10 +1,12 @@
 <div id="ask_image_bg" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
 <div id="ask_image_overlay" style="position:fixed; top:0; width:inherit; height:100%; display:table; z-index:13; display:none;">
-  <a href="#" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; display:block; text-align:right;">
+  <a href="#" onclick="ask_image_off(); return false;" style="position:fixed; top:0; left:0; width:100%; display:block; text-align:right;">
     <i class="fa fa-times" style="color: #fff; width: 50px; font-size: 30px; text-align: center; padding: 10px 0;"></i>
   </a>
-  <div onclick="ask_image_off(); return false;" style="display:table-cell; text-align:center; vertical-align:middle;">
-    <div id="ask_image_seg" style="padding:0 12px; display:inline-block;"></div>
+  <div style="display:table; width:100%; height:100%;">
+    <div onclick="ask_image_off(); return false;" style="display:table-cell; text-align:center; vertical-align:middle;">
+      <div id="ask_image_seg" style="padding:0 12px; display:inline-block;"></div>
+    </div>
   </div>
 
 </div>
@@ -37,16 +39,16 @@
   </table>
   <div>
     <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%;" />
-    <p style="color:#fff; margin:12px 0 2px 0; font-weight:bold; font-size:14px;">
+    <p style="color:#fff; margin:12px 0 5px 0; font-weight:bold; font-size:14px;">
       {{= ask_deal.title }}
     </p>
-    <p style="color:#fff; margin:2px auto; font-weight:normal; font-size:13px;">
+    <p style="color:#fff; margin:5px auto; font-weight:normal; font-size:13px;">
       {{= ask_deal.brand }}
     </p>
-    <p style="color:#fff; margin:2px auto; font-weight:normal; font-size:13px;">
+    <p style="color:#fff; margin:5px auto; font-weight:normal; font-size:13px;">
       {{= numberWithCommas(ask_deal.price) }}원
     </p>
-    <p style="color:#fff; margin:2px auto; font-weight:normal; font-size:13px;">
+    <p style="color:#fff; margin:5px auto; font-weight:normal; font-size:13px;">
       {{ var aLink = document.createElement("a") }}
       {{ aLink.href= ask_deal.link }}
       <i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;<a href="{{=ask_deal.link }}" target="_blank" style="color:#fff;">{{= aLink.host }}</a>
