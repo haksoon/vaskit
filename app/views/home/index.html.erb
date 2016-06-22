@@ -347,12 +347,12 @@
 			msg.html(msg_text.replace(/(<br>)+/g,"<br>").substring(0,100)+" ...");
 		} else {
 			msg_more.hide();
-		}
-		msg_more.onclick(function(){
+		};
+		msg_more.on("click",function(){
 			msg.html(msg_text);
 			hash_tagging(msg_text, msg);
 			msg_more.hide();
-		})
+		});
 	}
 
 	function vote_ask_deal(ask_deal_id, is_left){
