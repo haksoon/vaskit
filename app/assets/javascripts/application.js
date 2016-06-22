@@ -74,11 +74,11 @@ function numberWithCommas(x) {
 
 //AJS추가(수정) - 상세화면 내부유입의 경우 창 닫기, 상세화면 외부유입의 경우 메인 페이지로 이동, 그 외의 경우 모두 뒤로 가기로 작동하도록 로직 수정
 function back_button(){
-  var index_href = /^http:\/\/vaskit.kr\/[\S]*/
+  var referrer_href = /^http:\/\/vaskit.kr\/[\S]*/
   var ask_href = /^http:\/\/vaskit.kr\/asks\/\d*$/
-  if ( ask_href.test(window.location.href) && parent.history.length == 1 && index_href.test(document.referrer) ) {
+  if ( ask_href.test(window.location.href) && parent.history.length == 1 && referrer_href.test(document.referrer) ) {
     window.close();
-  } else if ( ask_href.test(window.location.href) && ( parent.history.length >= 1 || index_href.test(document.referrer) == false ) ){
+  } else if ( ask_href.test(window.location.href) && ( parent.history.length >= 1 || referrer_href.test(document.referrer) == false ) ){
 		window.location = "/";
 	} else {
 		parent.history.back();

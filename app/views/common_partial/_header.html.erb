@@ -1,9 +1,12 @@
 <table id="main_header" cellspacing="0" cellpadding="0">
 	<tr>
 		<td style="width:60px;">
-			<a href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;">
-				<i class="fa fa-filter" style="color: #fff; font-size: 26px; padding-top: 12px;"></i>
-			</a>
+			{{ var index_href = /^http:\/\/vaskit.kr\// }}
+			{{ if ( index_href.test(window.location.href) ) { }}
+				<a href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-filter" style="color: #fff; font-size: 26px; padding-top: 12px;"></i></a>
+			{{ } else { }}
+      	<a href="#" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>
+			{{ } }}
 		</td>
 		<td style="width:100%;">
 			<a href="/" style="display:inline-block; margin-top:4px; padding:5px;">
