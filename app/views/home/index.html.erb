@@ -348,7 +348,7 @@
 			msg.hide();
 			msg_short.show();
 			msg_short.html(origin_string.substring(0,80).replace(new RegExp('\r?\n', 'g'), '<br>').replace(/(<br>)+/g,"<br>")+" ...");
-			hash_tagging(msg_short.text(), msg_short);
+			hash_tagging(origin_string.substring(0,80), msg_short);
 			msg_more.show();
 		};
 	}
