@@ -154,37 +154,19 @@
 				{{ } }}
 			</p>
 		</div>
-
-    {{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-    {{ if(already_vote != "" || my_ask) { }}
-      <div class="table_div" onclick="$('#comment_input').focus(); return false;" style="margin-bottom:0; height:40px; line-height:40px; color:#fff; background-color:rgba(238,110,1,0.7); font-size:13px; font-weight:bold; text-align:center; cursor:pointer;">
-        <span style="width:100%;">
-          <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
-        </span>
-        <span style="position:absolute; top:0; left:10px; width:40px; color:#fff;">
-          <i class="fa fa-comment" style="font-size:16px;"></i>
-          <span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
-        </span>
-        <span style="position:absolute; top:0; right:10px; width:40px; color:#fff;">
-          <span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-          <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
-        </span>
-      </div>
-    {{ }else{ }}
-      <div class="table_div" style="margin-bottom:0; height:40px; line-height:40px; border-bottom:1px solid #dbdbdb; color:#383838; background-color:#fff; font-size:13px; text-align:center;">
-        <span style="width:100%;">
-          <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
-        </span>
-        <span style="position:absolute; top:0; left:10px; width:40px; color:#666;">
-          <i class="fa fa-comment" style="font-size:16px;"></i>
-          <span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
-        </span>
-        <span style="position:absolute; top:0; right:10px; width:40px; color:#666;">
-          <span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-          <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
-        </span>
-      </div>
-    {{ } }}
+    <div id="comment_title" class="table_div" onclick="$('#comment_input').focus(); return false;">
+      <span style="width:100%;">
+        <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
+      </span>
+      <span style="position:absolute; top:0; left:10px; width:40px;">
+        <i class="fa fa-comment" style="font-size:16px;"></i>
+        <span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
+      </span>
+      <span style="position:absolute; top:0; right:10px; width:40px;">
+        <span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+        <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
+      </span>
+    </div>
 		<div id="ask_comment" style="position:relative; background-color:#fff; padding:10px 0; min-height:200px;">
       {{ for(var i=0; i < ask.comments.length; i++) {  }}
 				{{ comment = ask.comments[i] }}
@@ -656,6 +638,7 @@
 	        		notify("투표 완료");
               hover_action();
               graph_animation(data.ask.id);
+              $("#comment_title").addClass("already_vote");
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
@@ -703,10 +686,12 @@
     }
   });
 
+  if (already_vote != "" || my_ask) $("#comment_title").addClass("already_vote");
   if (my_ask) {
     $("#comment_input").attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
-    $("#comment_please span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
+    $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
   }
+
 
 	function send_comment(ask_id, ask_deal_id){
 			var content = $(".comment_box2").val();
