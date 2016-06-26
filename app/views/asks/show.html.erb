@@ -185,7 +185,7 @@
         </span>
       </div>
     {{ } }}
-		<div id="ask_comment" style="position:relative; background-color:#f0f2f4; padding:10px 0; min-height:200px;">
+		<div id="ask_comment" style="position:relative; background-color:#fff; padding:10px 0; min-height:200px;">
       {{ for(var i=0; i < ask.comments.length; i++) {  }}
 				{{ comment = ask.comments[i] }}
 				{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
@@ -518,16 +518,13 @@
   {{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
 	{{ if (ask.left_ask_deal_id == comment.ask_deal_id ){ }}
 		<div id="comment_{{= comment.id }}" style="width:100%; text-align:left;">
-			<div style="position:relative; margin:4px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
+			<div style="position:relative; margin:4px 0px 0 14px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
 				<span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
 			 	<a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; right:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:0 4px 4px 0; -moz-border-radius:0 4px 4px 0; -webkit-border-radius:0 4px 4px 0; display:none;">
           완료
         </a>
-
-				<div style="position: absolute; top:1px; left:-8px;">
-					<img style="width:8px;" src="/images/deal_detail/seg_comment_l.png">
-				</div>
+        <div style="position:absolute; top:6px; left:-7px; border-right:7px solid cornsilk; border-bottom:8px solid transparent;"></div>
 			</div>
       {{ if(already_like.length == 1){ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="color:#ee6e01; font-size:12px;">
@@ -574,16 +571,13 @@
           <i class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
         </a>
       {{ } }}
-      <div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
+      <div style="position:relative; margin:4px 14px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; -moz-border-radius:4px; -webkit-border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb;">
         <span class="comment_content" style="word-break:break-all;">{{=comment.content}}</span>
 				<textarea class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
         <a class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; left:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:4px 0 0 4px; -moz-border-radius:4px 0 0 4px; -webkit-border-radius:4px 0 0 4px; display:none;">
           완료
         </a>
-
-				<div style="position: absolute; top:1px; right:-8px;">
-					<img style="width:8px;" src="/images/deal_detail/seg_comment_r.png">
-				</div>
+        <div style="position:absolute; top:6px; right:-7px; border-left:7px solid cornsilk; border-bottom:8px solid transparent;"></div>
 			</div>
 			<p style="margin:0; padding:5px 25px 10px 0; font-size:12px; color:#9e9fa1;">
 			  {{ if ( comment.user_id == current_user_id ){ }}
