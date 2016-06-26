@@ -220,7 +220,7 @@
 						<a id="ask_deal_id_change" onclick="ask_deal_id_change(); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
 					</td>
 					<td style="width:100%; padding-right:7px;">
-						<textarea id="comment_input" class="comment_box2" placeholder="<% if {{= my_ask}} %><%= current_user.string_id %>님, 고민해결사님들께 한마디를 남겨보세요.<% elsif current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
+						<textarea id="comment_input" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
 					</td>
 					<td style="padding-right:12px;">
 						<a id="send_comment_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
