@@ -231,7 +231,7 @@ function hover_action(){
         $(this).prev().children(".card_image").addClass("img_hover");
         $(this).prev().children(".card_image_expander").addClass("img_hover");
         $(this).prev().children(".card_image_hover").fadeIn(100);
-        $(this).parent().parent().parent().find(".card_detail_table").clearQueue().slideDown(200);
+        $(this).parent().parent().parent().find(".card_detail_table").slideDown(200);
       },
       function(){
         $(this).prev().children(".card_image").removeClass("img_hover");
@@ -288,18 +288,18 @@ function tooltip_box() {
     $("p.output_field").on("click",function(){
       var tooltip_width = $(this).width();
       if ($(this).next().is(':hidden')) {
-        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200,function(){$(this).next().css("overflow","visible")});
+        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);
       } else if ($(this).next().is(':visible')) {
-        $(this).next().clearQueue().slideUp(200,function(){$(this).next().css("overflow","visible")});
+        $(this).next().clearQueue().slideUp(200);
       }
     });
   } else {
     $("p.output_field").hover(
       function(){
         var tooltip_width = $(this).width();
-        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200,function(){$(this).next().css("overflow","visible")});
+        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);
       }, function(){
-        $(this).next().clearQueue().delay(500).slideUp(200,function(){$(this).next().css("overflow","visible")});
+        $(this).next().clearQueue().delay(500).slideUp(200);
       });
   }
 }
