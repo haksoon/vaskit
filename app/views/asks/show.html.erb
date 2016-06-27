@@ -46,6 +46,7 @@
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
     <div style="padding:10px 10px 0px 10px; border-bottom:1px solid #dbdbdb;">
+      {{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
 			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
         <div class="table_div">
           <div class="ask_text_field left_input output_field" style="font-weight:bold;">
@@ -65,14 +66,18 @@
 					<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
         </div>
 			{{ } }}
-			{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
+			{{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "" ){ }}
         <div class="table_div">
-          <div class="ask_text_field left_input output_field"><p class="output_field">{{= ask.left_ask_deal.brand }}</p></div>
-          <div class="ask_text_field right_input output_field"><p class="output_field">{{= ask.right_ask_deal.brand }}</p></div>
+          <div class="ask_text_field left_input output_field">
+            {{ ask.left_ask_deal.brand == "" ? blank_field : }}<p class="output_field">{{= ask.left_ask_deal.brand }}</p>
+          </div>
+          <div class="ask_text_field right_input output_field">
+            {{ ask.right_ask_deal.brand == "" ? blank_field : }}<p class="output_field">{{= ask.right_ask_deal.brand }}</p>
+          </div>
           <span class="input_icon center_input"><i class="fa fa-tag"></i></span>
         </div>
 			{{ } }}
-			{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
+			{{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null ){ }}
         <div class="table_div">
           <div class="ask_text_field left_input output_field"><p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p></div>
           <div class="ask_text_field right_input output_field"><p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p></div>
