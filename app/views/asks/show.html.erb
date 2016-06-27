@@ -635,6 +635,7 @@
               var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
 	        		my_vote_count = my_vote_count + 1;
+              ask.left_ask_deal_id == already_vote[0].ask_deal_id ? $("#ask_deal_id_change").text("A") : $("#ask_deal_id_change").text("B");
 	        		notify("투표 완료");
               hover_action();
               graph_animation(data.ask.id);
