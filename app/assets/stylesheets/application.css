@@ -835,7 +835,6 @@ p.output_field {
 .tooltip_area {
 	position: absolute;
 	max-width: 100%;
-	min-height: 100%;
 	margin: 0 auto;
 	bottom: 105%;
 	font-size: 12px;
