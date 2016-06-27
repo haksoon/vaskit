@@ -290,7 +290,7 @@ function tooltip_box() {
       if ($(this).next().is(':hidden')) {
         $(this).next().css("width",tooltip_width).clearQueue().slideDown(200,function(){$(this).next().css("overflow","visible")});
       } else if ($(this).next().is(':visible')) {
-        $(this).next().clearQueue().slideUp(200);
+        $(this).next().clearQueue().slideUp(200,function(){$(this).next().css("overflow","visible")});
       }
     });
   } else {
@@ -299,7 +299,7 @@ function tooltip_box() {
         var tooltip_width = $(this).width();
         $(this).next().css("width",tooltip_width).clearQueue().slideDown(200,function(){$(this).next().css("overflow","visible")});
       }, function(){
-        $(this).next().clearQueue().delay(500).slideUp(200);
+        $(this).next().clearQueue().delay(500).slideUp(200,function(){$(this).next().css("overflow","visible")});
       });
   }
 }
