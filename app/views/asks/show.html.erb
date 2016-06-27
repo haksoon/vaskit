@@ -79,8 +79,12 @@
 			{{ } }}
 			{{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null ){ }}
         <div class="table_div">
-          {{ if (ask.left_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<div class="ask_text_field left_input output_field"><p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p></div>{{ } }}
-          {{ if (ask.right_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<div class="ask_text_field right_input output_field"><p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p></div>{{ } }}
+          <div class="ask_text_field left_input output_field">
+            {{ if (ask.left_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p>{{ } }}
+          </div>
+          <div class="ask_text_field right_input output_field">
+            {{ if (ask.right_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p>{{ } }}
+          </div>
           <span class="input_icon center_input"><i class="fa fa-won"></i></span>
         </div>
 			{{ } }}
