@@ -69,10 +69,10 @@
 			{{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "" ){ }}
         <div class="table_div">
           <div class="ask_text_field left_input output_field">
-            {{ ask.left_ask_deal.brand == "" ? blank_field : }}<p class="output_field">{{= ask.left_ask_deal.brand }}</p>
+            {{ ask.left_ask_deal.brand == "" ? blank_field : <p class="output_field">{{= ask.left_ask_deal.brand }}</p> }}
           </div>
           <div class="ask_text_field right_input output_field">
-            {{ ask.right_ask_deal.brand == "" ? blank_field : }}<p class="output_field">{{= ask.right_ask_deal.brand }}</p>
+            {{ ask.right_ask_deal.brand == "" ? blank_field : <p class="output_field">{{= ask.right_ask_deal.brand }}</p> }}
           </div>
           <span class="input_icon center_input"><i class="fa fa-tag"></i></span>
         </div>
