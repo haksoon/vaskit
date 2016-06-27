@@ -489,6 +489,9 @@ input:focus, select:focus, textarea:focus {
 	font-size: 13px;
 	line-height: 15px;
 	word-break:break-word;
+	white-space: normal;
+	text-overflow: initial;
+	overflow: auto;
 	vertical-align:middle;
 }
 

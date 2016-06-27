@@ -211,6 +211,7 @@
 		</div>
 	{{ } }}
 	<div class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
+		{{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
 		{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
 			<div class="table_div">
 				<div class="ask_text_field left_input output_field" style="font-weight:bold;">
@@ -230,35 +231,47 @@
 				<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
 			</div>
 		{{ } }}
-		{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
+		{{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "" ){ }}
 			<div class="table_div">
-				<div class="ask_text_field left_input output_field"><p class="output_field">{{= ask.left_ask_deal.brand }}</p></div>
-				<div class="ask_text_field right_input output_field"><p class="output_field">{{= ask.right_ask_deal.brand }}</p></div>
+				<div class="ask_text_field left_input output_field">
+					{{ if (ask.left_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.brand }}</p>{{ } }}
+				</div>
+				<div class="ask_text_field right_input output_field">
+					{{ if (ask.right_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.brand }}</p>{{ } }}
+				</div>
 				<span class="input_icon center_input"><i class="fa fa-tag"></i></span>
 			</div>
 		{{ } }}
-		{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
+		{{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null ){ }}
 			<div class="table_div">
-				<div class="ask_text_field left_input output_field"><p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p></div>
-				<div class="ask_text_field right_input output_field"><p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p></div>
+				<div class="ask_text_field left_input output_field">
+					{{ if (ask.left_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p>{{ } }}
+				</div>
+				<div class="ask_text_field right_input output_field">
+					{{ if (ask.right_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p>{{ } }}
+				</div>
 				<span class="input_icon center_input"><i class="fa fa-won"></i></span>
 			</div>
 		{{ } }}
 		{{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "" ){ }}
 			<div class="table_div">
 				<div class="ask_text_field left_input output_field">
-					<p class="output_field">
-						{{ var aLink = document.createElement("a") }}
-						{{ aLink.href = ask.left_ask_deal.link }}
-						<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
-					</p>
+					{{ if (ask.left_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
+						<p class="output_field">
+							{{ var aLink = document.createElement("a") }}
+							{{ aLink.href = ask.left_ask_deal.link }}
+							<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
+						</p>
+					{{ } }}
 				</div>
 				<div class="ask_text_field right_input output_field">
-					<p class="output_field">
-						{{ var bLink = document.createElement("a") }}
-						{{ bLink.href = ask.right_ask_deal.link }}
-						<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
-					<p>
+					{{ if (ask.right_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
+						<p class="output_field">
+							{{ var bLink = document.createElement("a") }}
+							{{ bLink.href = ask.right_ask_deal.link }}
+							<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
+						<p>
+					{{ } }}
 				</div>
 				<span class="input_icon center_input"><i class="fa fa-link"></i></span>
 			</div>

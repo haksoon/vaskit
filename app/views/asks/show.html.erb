@@ -114,42 +114,42 @@
       {{ if (ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") { }}
         <div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
       		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
-      			{{ if (ask.left_ask_deal.spec1 != "" && ask.right_ask_deal.spec1 != "" ){ }}
+      			{{ if (ask.left_ask_deal.spec1 != "" || ask.right_ask_deal.spec1 != "" ){ }}
         			<tr>
         				<td style="width:40%;">
-        					<p>{{= ask.left_ask_deal.spec1 }}</p>
+                  {{ if (ask.left_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec1 }}</p>{{ } }}
         				</td>
         				<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
-        					<p>{{= ask.spec1 }}</p>
+                  {{ if (ask.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec1 }}</p>{{ } }}
         				</td>
         				<td style="width:40%;">
-                  <p>{{= ask.right_ask_deal.spec1 }}</p>
+                  {{ if (ask.right_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec1 }}</p>{{ } }}
         				</td>
         			</tr>
       			{{ } }}
-      			{{ if (ask.left_ask_deal.spec2 != "" && ask.right_ask_deal.spec2 != "" ){ }}
+      			{{ if (ask.left_ask_deal.spec2 != "" || ask.right_ask_deal.spec2 != "" ){ }}
         			<tr>
         				<td style="width:40%; border-top:1px solid #dbdbdb;">
-        					<p>{{= ask.left_ask_deal.spec2 }}</p>
+        					{{ if (ask.left_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec2 }}</p>{{ } }}
         				</td>
         				<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
-        					<p>{{= ask.spec2 }}</p>
+        					{{ if (ask.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec2 }}</p>{{ } }}
         				</td>
         				<td style="width:40%; border-top:1px solid #dbdbdb;">
-        					<p>{{= ask.right_ask_deal.spec2 }}</p>
+        					{{ if (ask.right_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec2 }}</p>{{ } }}
         				</td>
         			</tr>
       			{{ } }}
-      			{{ if (ask.left_ask_deal.spec3 != "" && ask.right_ask_deal.spec3 != "" ){ }}
+      			{{ if (ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec3 != "" ){ }}
         			<tr>
         				<td style="width:40%; border-top:1px solid #dbdbdb;">
-        					<p>{{= ask.left_ask_deal.spec3 }}</p>
+        					{{ if (ask.left_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec3 }}</p>{{ } }}
         				</td>
         				<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
-        					<p>{{= ask.spec3 }}</p>
+        					{{ if (ask.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec3 }}</p>{{ } }}
         				</td>
         				<td style="width:40%; border-top:1px solid #dbdbdb;">
-        					<p>{{= ask.right_ask_deal.spec3 }}</p>
+        					{{ if (ask.right_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec3 }}</p>{{ } }}
         				</td>
         			</tr>
       			{{ } }}
