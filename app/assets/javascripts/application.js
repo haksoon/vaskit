@@ -69,7 +69,7 @@ function notify(flash_message){
 }
 
 function numberWithCommas(x) {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 //AJS추가(수정) - 상세화면 내부유입의 경우 창 닫기, 상세화면 외부유입의 경우 메인 페이지로 이동, 그 외의 경우 모두 뒤로 가기로 작동하도록 로직 수정
