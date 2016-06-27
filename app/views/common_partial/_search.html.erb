@@ -31,11 +31,7 @@
 </div>
 
 <script type="text/template" id="search-result-template">
-		{{ if(type == "user"){ }}
-			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
-				<i class="fa fa-user"></i>&nbsp;{{= keyword }}
-			</a>
-		{{ }else if(type == "hash_tag"){ }}
+		{{ if(type == "hash_tag"){ }}
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
 				<i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;{{= keyword }}
 			</a>
@@ -47,6 +43,10 @@
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
 				<i class="fa fa-tag"></i>&nbsp;{{= keyword }}
 			</a>
+		{{ }else if(type == "user"){ }}
+		<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
+			<i class="fa fa-user"></i>&nbsp;{{= keyword }}
+		</a>
 		{{ } }}
 </script>
 
@@ -173,10 +173,6 @@
 							}else{
 								var searchResultTemplate = _.template( $('#search-result-template').html() );
 
-								$.each(data.users, function( index, user ) {
-									$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: null}));
-								});
-
 								$.each(data.hash_tags, function( index, hash_tag ) {
 									$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
 								});
@@ -188,6 +184,11 @@
 								if (data.brand){
 									$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
 								}
+
+								$.each(data.users, function( index, user ) {
+									$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: null}));
+								});
+
 								$("#search_result").highlight($('#search_input').val());
 								navigate_by_mouse();
 							}
