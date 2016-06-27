@@ -114,7 +114,7 @@
       {{ if (ask.spec1 != "" || ask.spec2 != "" || ask.spec3 != "" || ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") { }}
         <div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
       		<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
-      			{{ if (ask.left_ask_deal.spec1 != "" || ask.right_ask_deal.spec1 != "" ){ }}
+      			{{ if (ask.spec1 != "" || ask.left_ask_deal.spec1 != "" || ask.right_ask_deal.spec1 != "" ){ }}
         			<tr>
         				<td style="width:40%;">
                   {{ if (ask.left_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec1 }}</p>{{ } }}
@@ -127,7 +127,7 @@
         				</td>
         			</tr>
       			{{ } }}
-      			{{ if (ask.left_ask_deal.spec2 != "" || ask.right_ask_deal.spec2 != "" ){ }}
+      			{{ if (ask.spec2 != "" || ask.left_ask_deal.spec2 != "" || ask.right_ask_deal.spec2 != "" ){ }}
         			<tr>
         				<td style="width:40%; border-top:1px solid #dbdbdb;">
         					{{ if (ask.left_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec2 }}</p>{{ } }}
@@ -140,7 +140,7 @@
         				</td>
         			</tr>
       			{{ } }}
-      			{{ if (ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec3 != "" ){ }}
+      			{{ if (ask.spec3 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec3 != "" ){ }}
         			<tr>
         				<td style="width:40%; border-top:1px solid #dbdbdb;">
         					{{ if (ask.left_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec3 }}</p>{{ } }}
@@ -159,7 +159,7 @@
     </div>
     <div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
-				{{ if( ask.message){ }}
+				{{ if(ask.message){ }}
 					{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
 					{{= ask_message }}
 				{{ }else{ }}

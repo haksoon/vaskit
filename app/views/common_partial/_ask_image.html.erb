@@ -19,7 +19,7 @@
       {{ ask_deal = ask.left_ask_deal }}
       {{ left_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
       {{ right_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
-    {{ }else{ }}
+    {{ } else { }}
       {{ ask_deal = ask.right_ask_deal }}
       {{ left_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
       {{ right_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
@@ -30,16 +30,16 @@
     </div>
     <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
     <div class="table_div" style="padding:10px; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
-      {{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
+      {{ if (ask.ask_deal.title != ""){ }}
         <p style="margin:5px auto; font-weight:bold;">{{= ask_deal.title }}</p>
       {{ } }}
-			{{ if (ask.left_ask_deal.brand != "" && ask.right_ask_deal.brand != "" ){ }}
+			{{ if (ask.ask_deal.brand != ""){ }}
         <p style="margin:5px auto; font-weight:normal;">{{= ask_deal.brand }}</p>
       {{ } }}
-			{{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null ){ }}
+			{{ if (ask.ask_deal.price != null){ }}
         <p style="margin:5px auto; font-weight:normal;">{{= numberWithCommas(ask_deal.price) }}원</p>
       {{ } }}
-      {{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "" ){ }}
+      {{ if (ask.ask_deal.link != ""){ }}
         {{ var aLink = document.createElement("a") }}
         {{ aLink.href= ask_deal.link }}
         <a href="{{=ask_deal.link }}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
