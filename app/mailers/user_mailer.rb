@@ -2,9 +2,9 @@
 class UserMailer < ActionMailer::Base
   default from: 'notice@vaskit.kr'
 
-  def welcome_email(user)
+  def welcome_email(user_email)
     @url  = 'http://vaskit.kr/etc/landing'
-    mail(to: user.email, subject: 'Welcome to VASKIT')
+    mail(to: user_email, subject: 'Welcome to VASKIT')
   end
 
   def send_notice(user, notice)

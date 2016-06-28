@@ -27,7 +27,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
     params[:user][:password_confirmation] = params[:user][:password]
     params[:user][:string_id] = User.get_uniq_string_id( params[:user][:email].split("@")[0] )
-    UserMailer.welcome_email(params[:user]).deliver_now
+    UserMailer.welcome_email(params[:user][:email]).deliver_now
     super
   end
 
