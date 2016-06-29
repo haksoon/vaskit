@@ -610,14 +610,10 @@
  	<% end %>
 
 	var asks = <%= raw @asks.to_json %>;
-	var detail_vote_count = <%= raw @detail_vote_count.to_json %>;
 
-	// var my_ask = false;
-	// if (current_user_id == asks[0].user_id){
-	//   my_ask = true;
-	// }
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var my_vote_count = <%= @my_votes.length %>;
+  var detail_vote_count = <%= raw @detail_vote_count.to_json %>;
 
   var my_like_comment = <%= raw @my_like_comment.to_json %>;
 
@@ -688,7 +684,7 @@
       notify("회원가입 후<br />의견을 남길 수 있습니다.");
       setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
       setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
-    } else if ( already_vote.length == 0 && current_user_id != asks[0].user_id ){
+    } else if ( already_vote.length == 0 && current_user_id != ask.user_id ){
       $("#comment_input").blur();
       notify("투표 참여 후<br />의견을 남길 수 있습니다.");
     } else {
@@ -702,8 +698,8 @@
     }
   });
 
-  if (already_vote != "" || current_user_id == asks[0].user_id) $("#comment_title").addClass("already_vote");
-  if (current_user_id == asks[0].user_id) {
+  if (already_vote != "" || current_user_id == ask.user_id) $("#comment_title").addClass("already_vote");
+  if (current_user_id == ask.user_id) {
     $("#comment_input").attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
     $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
   }
