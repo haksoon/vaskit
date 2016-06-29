@@ -737,7 +737,7 @@
 		show_report_popup();
 	}
 
-	function comment_del(comment_id, is_left){
+	function comment_del(ask_id, comment_id, is_left){
 	  if(confirm("의견을 정말로 삭제하시겠어요?")) {
 	    $.ajax({
         url: "/comments/"+comment_id+"/comment_del.json",
@@ -750,10 +750,10 @@
         success: function(data){
           $("#comment_"+comment_id).remove();
           if (is_left){
-            var left_ask_deal_comment_count = $("#left_ask_deal_comment_count");
+            var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+ask_id);
             left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) - 1 );
           }else{
-            var right_ask_deal_comment_count = $("#right_ask_deal_comment_count");
+            var right_ask_deal_comment_count = $("#right_ask_deal_comment_count_"+ask_id);
             right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) - 1 );
           }
           notify("삭제되었습니다");
