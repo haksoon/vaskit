@@ -51,7 +51,7 @@
 				알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
 			</div>
 			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px;">
-			<!-- <% if alrams.blank? %>
+			<% if alrams.blank? %>
 				<p style="padding:40px; margin:0; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
 			<% else %>
 				<% alrams.each do |alram| %>
@@ -96,7 +96,7 @@
 						</a>
 					<% end %>
 				<% end %>
-			<% end %> -->
+			<% end %>
 			</div>
 		</div>
 	</script>
