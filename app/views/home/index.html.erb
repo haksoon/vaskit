@@ -785,7 +785,6 @@
 		        },
 		        success: function(data){
 							show_detail_vote_count(ask_id);
-							if ($("#ask_detail_bg:visible")) $("#detail_vote_count_"+ask_id).slideDown(200);
 		        	my_votes.push(data.vote);
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
@@ -823,6 +822,7 @@
 			success: function(data){
 				var detailVoteCountTemplate = _.template($('#detail-vote-count-template').html());
 				$("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
+				if ($("#ask_detail_bg:visible")) $("#detail_vote_count_"+ask_id).slideDown(200);
 			},
 			beforeSend: function(){
 			},
