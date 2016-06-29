@@ -11,7 +11,6 @@ class HomeController < ApplicationController
       @my_votes = Vote.where(:visitor_id => @visitor.id)
       @my_like_comment = [] #AJS추가
     end
-    @detail_vote_count = @ask.detail_vote_count
 
     @type = params[:type]
 
