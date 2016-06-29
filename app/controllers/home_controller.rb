@@ -23,7 +23,7 @@ class HomeController < ApplicationController
       when "hash_tag"
         flash[:keyword] = params[:keyword] #AJS추가
         hash_tags = HashTag.where("keyword like ?", "%#{params[:keyword]}%" )
-        @asks = Ask.where(:id => hash_tags.map(&:ask_id) ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete])
+        @asks = Ask.where(:id => hash_tags.map(&:ask_id) ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ])
       when "ask_deal"
         flash[:keyword] = params[:keyword] #AJS추가
         ask_deals = AskDeal.where("title like ?", "%#{params[:keyword]}%" )
