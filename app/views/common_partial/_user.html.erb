@@ -8,10 +8,8 @@
 			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
 			<div style="box-sizing:border-box; width:100%; background-color:#f4f4f4; border:3px solid #998674; border-radius:5px; overflow:hidden;">
 			<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left;">
-				<span id="user_id" style="margin-left:12px; padding:4px 5px 1px; color:#998674; background-color:#fff; border-radius:5px;">
-					<i class="fa fa-user"></i>&nbsp;<%= current_user.string_id %>
-				</span>
-				<span style="margin-left:5px; font-size:13px; font-weight:normal; color:#dbdbdb;">
+				<span id="user_id" style="margin-left:12px; padding:4px 5px 1px; color:#998674; background-color:#fff; border-radius:5px;"></span>
+				<span id="user_path" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff;">
 					&gt;&nbsp;My Page
 				</span>
 				<a href="#" onclick="manage_on(); return false;" style="float:right; width:40px; height:40px; text-align:center; margin-right:2px; color:#fff; font-size:20px;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
@@ -134,7 +132,7 @@
 		<% end %>
 
 		$(window).resize(function(){
-	    var user_overlay_seg_height = $(window).height() - 160;
+	    var user_overlay_seg_height = $(window).height() - 190;
 			$("#user_overlay_seg").css("max-height",user_overlay_seg_height);
 	  }).resize();
 
@@ -161,7 +159,7 @@
 	      },
 	      success: function(data){
 					current_user_string_id = data.current_user_string_id;
-					$("#user_id").text(current_user_string_id[0].string_id);
+					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id[0].string_id);
 					my_ask_count = data.my_ask_count;
 					my_vote_count = data.my_vote_count;
 					my_comment_count = data.my_comment_count;
@@ -190,6 +188,7 @@
 		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
 
 		function manage_on() {
+			$("#user_path").append("&nbsp;&gt;&nbsp;Settings");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 		}
