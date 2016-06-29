@@ -8,7 +8,7 @@
 			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
 			<div style="box-sizing:border-box; width:100%; background-color:#f4f4f4; border:3px solid #998674; border-radius:5px; overflow:hidden;">
 			<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left;">
-				<span id="user_id" style="margin-left:12px; padding:4px 5px 1px; color:#998674; background-color:#fff; border-radius:5px;"></span>
+				<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:4px 5px 1px; color:#998674; background-color:#fff; border-radius:5px;"></a>
 				<span id="user_path" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff;">
 					&gt;&nbsp;My Page
 				</span>
@@ -45,9 +45,9 @@
 				</tr>
 			</table>
 			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px 5px 0 0;">
-				<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-				<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
-				<% end %>
+				{{ if (!is_new_alram) { }}
+					<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
+				{{ } }}
 				알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
 			</div>
 			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px;">
@@ -203,6 +203,7 @@
 					my_comment_count = data.my_comment_count;
 					in_progress_count = data.in_progress_count;
 					alram_count = data.alram_count;
+					is_new_alram = data.is_new_alram;
 					alrams = data.alrams;
 					$("#user_path").html("&gt;&nbsp;My Page");
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
@@ -229,7 +230,7 @@
 		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
 
 		function manage_on() {
-			$("#user_path").html("<span onclick='user_on();'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
+			$("#user_path").html("<span onclick='user_on();' style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 		}
@@ -252,6 +253,7 @@
 			        },
 			        success: function(data){
 			        	if (data.status == "success"){
+									$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+data.new_string_id);
 			        		notify("닉네임이 변경되었습니다.");
 			        	}else{
 			        		notify("이미 있는 닉네임입니다.");

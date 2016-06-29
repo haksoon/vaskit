@@ -11,9 +11,10 @@ class Users::SessionsController < Devise::SessionsController
       my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
       in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
       alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
+      is_new_alram = Alram.where(:user_id => current_user.id, :is_read => false).blank?
       @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15)
     end
-    render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count, :alrams => @alrams}
+    render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count, :is_new_alram => is_new_alram, :alrams => @alrams}
   end
 
   def create
@@ -38,13 +39,13 @@ class Users::SessionsController < Devise::SessionsController
 
   def change_nickname
     status = "success"
-    if User.find_by_string_id(params[:string_id])
+    new_string_id = params[:string_id]
+    if User.find_by_string_id(new_string_id)
       status = "fail"
     else
-      current_user.update(:string_id => params[:string_id])
+      current_user.update(:string_id => new_string_id)
     end
-
-    render :json => {:status => status}
+    render :json => {:status => status, :new_string_id => new_string_id}
   end
 
 
@@ -56,7 +57,6 @@ class Users::SessionsController < Devise::SessionsController
     else
       current_user.update(:receive_notice_email => true)
     end
-
     render :json => {:message => message}
   end
 
