@@ -606,6 +606,7 @@
  	<% if current_user %>
  		current_user_id = <%= current_user.id %>;
  	<% end %>
+
 	var asks = <%= raw @asks.to_json %>;
 	var detail_vote_count = <%= raw @detail_vote_count.to_json %>;
 
