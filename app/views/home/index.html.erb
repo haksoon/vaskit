@@ -671,7 +671,7 @@
 		        	if (data.message = "success"){
 		        		var comment = data.comment;
 		        		var askCommentTemplate = _.template($('#ask-comment-template').html());
-		        		$("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:ask, comment: comment}));
+		        		$("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:data.ask, comment: comment}));
 		        		notify("작성 완료");
 		        		$("#comment_input_"+ask_id).val("");
                 $("#no_comment_"+ask_id).hide();
