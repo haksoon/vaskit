@@ -612,8 +612,11 @@
 	 	}
 	}
 
+	var card_open_st
+
 	function card_detail_on(ask_id) {
-		$("#ask_detail_bg").show().on("click",function(){ card_detail_off(ask_id); return false; });
+		card_open_st = $(window).scrollTop();
+		$("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
 		$("#ask_"+ask_id).css("z-index","6");
 		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
 		$("#ask_"+ask_id+"_message_more").click();
@@ -624,9 +627,9 @@
 		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
 	}
 
-
 	function card_detail_off(ask_id) {
-		$("#ask_detail_bg").hide();
+		$("body").animate({scrollTop:card_open_st},250);
+		$("#ask_detail_bg").fadeOut(100);
 		$("#ask_"+ask_id).css("z-index","auto");
 		$("#ask_deal_"+ask_id+"_table").slideUp(200);
 		if ($("#ask_"+ask_id+"_message_text_shorten").text().length > 70) {
