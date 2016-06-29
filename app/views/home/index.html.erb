@@ -315,7 +315,7 @@
 				{{ } }}
 			{{ } }}
 			{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.be_completed == false ){ }}
-				<a class="vote_btn_{{=ask.id}} vote_btn left_btn" href="#" onclick="vote_ask_deal({{=left_ask_deal.id}}, true); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
+				<a class="vote_btn_{{=ask.id}} vote_btn left_btn" href="#" onclick="vote_ask_deal({{=ask.id}}, {{=left_ask_deal.id}}, true); return false;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 			{{ } }}
 		</div>
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:right;">
@@ -334,7 +334,7 @@
 				{{ } }}
 			{{ } }}
 			{{ if( ask.user_id != current_user_id && already_vote.length == 0 && ask.be_completed == false ){ }}
-				<a class="vote_btn_{{=ask.id}} vote_btn right_btn" href="#" onclick="vote_ask_deal({{=right_ask_deal.id}}, false); return false;" style="border-left:1px solid #fff;">투표하기&nbsp;<i class="fa fa-play"></i></a>
+				<a class="vote_btn_{{=ask.id}} vote_btn right_btn" href="#" onclick="vote_ask_deal({{=ask.id}}, {{=right_ask_deal.id}}, false); return false;" style="border-left:1px solid #fff;">투표하기&nbsp;<i class="fa fa-play"></i></a>
 			{{ } }}
 		</div>
 	</div>
@@ -698,6 +698,7 @@
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
 		comment_input_setting(ask.id, ask.user);
+		show_detail_vote_count(ask.id);
 	}
 
 	var ready = function() {
@@ -741,6 +742,7 @@
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
 								comment_input_setting(ask.id, ask.user);
+								show_detail_vote_count(ask.id);
     					}
 							hover_action();
 							tooltip_box();
@@ -767,7 +769,7 @@
 		};
 	}
 
-	function vote_ask_deal(ask_deal_id, is_left){
+	function vote_ask_deal(ask_id, ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
 	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
       setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
@@ -782,6 +784,7 @@
 		            return false;
 		        },
 		        success: function(data){
+							show_detail_vote_count(ask_id);
 		        	my_votes.push(data.vote);
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
@@ -807,20 +810,7 @@
 	 	}
 	}
 
-	var card_open_st
-
-	function card_detail_on(ask_id) {
-		card_open_st = $(window).scrollTop();
-		$("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
-		$("#ask_"+ask_id).css("z-index","6");
-		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
-		$("#ask_"+ask_id+"_message_more").click();
-		$("#ask_"+ask_id+"_comment").slideDown(200);
-		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_off("+ask_id+"); return false;");
-		$("#ask_"+ask_id+"_detail_on span:eq(0)").hide();
-		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
-		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
-
+	function show_detail_vote_count(ask_id) {
 		$.ajax({
 			url: "/home/show_detail.json",
 			type: "GET",
@@ -838,6 +828,21 @@
 			complete: function(){
 			}
 		});
+	}
+
+	var card_open_st
+
+	function card_detail_on(ask_id) {
+		card_open_st = $(window).scrollTop();
+		$("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
+		$("#ask_"+ask_id).css("z-index","6");
+		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
+		$("#ask_"+ask_id+"_message_more").click();
+		$("#ask_"+ask_id+"_comment").slideDown(200);
+		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_off("+ask_id+"); return false;");
+		$("#ask_"+ask_id+"_detail_on span:eq(0)").hide();
+		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
+		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
 	}
 
 	function card_detail_off(ask_id) {
