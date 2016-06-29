@@ -12,7 +12,7 @@
 				<span id="user_path" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff;">
 					&gt;&nbsp;My Page
 				</span>
-				<a href="#" onclick="manage_on(); return false;" style="float:right; width:40px; height:40px; text-align:center; margin-right:2px; color:#fff; font-size:20px;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
+				<a href="#" onclick="manage_on(); return false;" style="position:absolute; right:10px; width:40px; height:40px; text-align:center; color:#fff; font-size:20px;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
 			</p>
 			<div id="user_overlay_seg" style="max-height:300px; overflow-y:auto;"></div>
 			</div>
@@ -51,10 +51,10 @@
 				알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
 			</div>
 			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px;">
-			<% if @alrams.blank? %>
+			<% if alrams.blank? %>
 				<p style="padding:40px; margin:0; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
 			<% else %>
-				<% @alrams.each do |alram| %>
+				<% alrams.each do |alram| %>
 					<% if alram.alram_type.include?("vote_") %>
 						<a id="alram_<%=alram.id%>" onclick="alram_go_url(<%=alram.ask_id%>); return false;" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							회원님의 질문에 <span style="color:#998674;"><%= alram.alram_type.tr("vote_", "" )%>명</span>이 투표하였습니다. 중간점검 해보세요!
@@ -205,8 +205,9 @@
 					my_comment_count = data.my_comment_count;
 					in_progress_count = data.in_progress_count;
 					alram_count = data.alram_count;
+					$("#user_path").html("&gt;&nbsp;My Page");
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-					$("#user_overlay_seg").html(userOverlaySegTemplate());
+					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams}));
 				},
 				beforeSend: function(){
 	      },
