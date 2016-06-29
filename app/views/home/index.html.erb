@@ -100,7 +100,7 @@
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
-		<div id="ask_deal_{{=ask.id}}_table" class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
+		<div id="ask_deal_{{=ask.id}}_table" class="card_detail_table" style="padding:10px 10px 0px 10px; border-bottom:1px solid #dbdbdb; display:none;">
 			{{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
 			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
 				<div class="table_div">
