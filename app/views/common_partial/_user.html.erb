@@ -53,7 +53,16 @@
 			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px;">
 			{{ if (alrams == 0) { }}
 				<p style="padding:40px; margin:0; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
-		
+			{{ } else { }}
+				{{ for(var i=0; i < alrams.length; i++) { }}
+					{{ var alram = alrams[i] }}
+					{{ if (alram.alram_type.match("vote_")) { }}
+						<a id="alram_{{=alram.id}}" onclick="alram_go_url({{=alram.ask_id}}); return false;" style="background-color:{{= alram.is_read ? '#fff' : '#F9F1ED' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
+							회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표하였습니다. 중간점검 해보세요!
+							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:2px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
+						</a>
+					
+				{{ } }}
 			{{ } }}
 			</div>
 		</div>
