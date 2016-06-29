@@ -653,7 +653,7 @@
 	}
 
 	function send_comment(ask_id, ask_deal_id){
-			var content = $(".comment_box2").val();
+			var content = $("#comment_input_"+ask_id).val();
 			if( content == "" || content == null ){
 				notify('내용을 입력해주세요.');
 				return;
@@ -673,10 +673,10 @@
 		        		var askCommentTemplate = _.template($('#ask-comment-template').html());
 		        		$("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:ask, comment: comment}));
 		        		notify("작성 완료");
-		        		$(".comment_box2").val("");
+		        		$("#comment_input_"+ask_id).val("");
                 $("#no_comment_"+ask_id).hide();
-                $("#send_comment_btn").css("background-color","#dbdbdb");
-                $("#comment_input").blur();
+                $("#send_comment_btn_"+ask_id).css("background-color","#dbdbdb");
+                $("#comment_input_"+ask_id).blur();
 
 		        		if ($("#ask_deal_id_change_"+ask_id).html() == "A"){
 		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+data.comment.ask_id);
