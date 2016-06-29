@@ -1,4 +1,4 @@
-<div id="asks" style="padding:15px 12px;"></div>
+<div id="asks_detail" style="padding:15px 12px;"></div>
 
 <script type="text/template" id="ask-show-template">
   <div class="content_box">
@@ -620,10 +620,9 @@
 	var askShowTemplate = _.template( $('#ask-show-template').html() );
 	for(var i=0; i < asks.length; i++) {
 		var ask = asks[i]
-    $('#asks').append(askShowTemplate({ask: ask}));
+    $('#asks_detail').append(askShowTemplate({ask: ask}));
     hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 	}
-
 
 	function vote_ask_deal_show(ask_deal_id, is_left){
 		if (current_user_id == 0 && my_vote_count > 4){
