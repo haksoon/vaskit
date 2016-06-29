@@ -272,7 +272,7 @@
     </div>
   </div>
   {{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
-    <div id="main_vote_count">
+    <div id="main_vote_count_{{=ask.id}}">
       {{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
       {{ if (ask.user_id == current_user_id && total_count == 0){ }}
         {{ left_ratio = 0 }}
@@ -313,7 +313,7 @@
         </tr>
       </table>
     </div>
-    <div id="detail_vote_count" style="background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb;">
+    <div id="detail_vote_count_{{=ask.id}}" style="background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb;">
       {{ gender_total_count = detail_vote_count.left.male_count + detail_vote_count.left.female_count + detail_vote_count.right.male_count + detail_vote_count.right.female_count }}
       {{ if ( gender_total_count == 0 ){ }}
         {{ male_left_ratio = 0 }}
