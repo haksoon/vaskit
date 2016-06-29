@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   end
   resources :home do
     collection do
+      get 'show_detail'
       get 'set_category'
       get 'no_result'
     end
