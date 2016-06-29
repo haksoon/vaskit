@@ -503,55 +503,6 @@
 		abbreviate_msg(ask.message, ask.id);
 	}
 
-	function abbreviate_msg(origin_string, ask_id) {
-		var msg = $("#ask_"+ask_id+"_message_text");
-		var msg_short = $("#ask_"+ask_id+"_message_text_shorten");
-		var msg_more = $("#ask_"+ask_id+"_message_more");
-		if (origin_string.length > 80) {
-			msg.hide();
-			msg_short.show();
-			msg_short.html(origin_string.substring(0,80).replace(new RegExp('\r?\n', 'g'), '<br>').replace(/(<br>)+/g,"<br>")+" ...");
-			hash_tagging(origin_string.substring(0,80), msg_short);
-			msg_more.show();
-		};
-	}
-
-	function vote_ask_deal(ask_deal_id, is_left){
-	 	if (current_user_id == 0 && my_vote_count > 4){
-	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
-      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-			setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
-	 	}else{
-	 		$.ajax({
-		        url: "/votes.json",
-		        type: 'POST',
-		        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
-		        dataType: 'json',
-		        error: function(){
-		            return false;
-		        },
-		        success: function(data){
-		        	my_votes.push(data.vote);
-		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
-		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
-							graph_animation(data.ask.id);
-	        		notify("투표 완료");
-							hover_action();
-	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
-	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
-	        		my_vote_count = my_vote_count + 1;
-		        },
-		        beforeSend: function(){
-		       		$(".loading").show();
-		        },
-		        complete: function(){
-		        	$(".loading").hide();
-		        }
-			});
-	 	}
-	}
-
-
 	var ready = function() {
 		// if (asks.length == <%= Ask::ASK_PER %>){
 			setInterval("checkScroll()", 1000);
@@ -603,6 +554,291 @@
           }
 		});
 	  }
+	}
+
+	function abbreviate_msg(origin_string, ask_id) {
+		var msg = $("#ask_"+ask_id+"_message_text");
+		var msg_short = $("#ask_"+ask_id+"_message_text_shorten");
+		var msg_more = $("#ask_"+ask_id+"_message_more");
+		if (origin_string.length > 80) {
+			msg.hide();
+			msg_short.show();
+			msg_short.html(origin_string.substring(0,80).replace(new RegExp('\r?\n', 'g'), '<br>').replace(/(<br>)+/g,"<br>")+" ...");
+			hash_tagging(origin_string.substring(0,80), msg_short);
+			msg_more.show();
+		};
+	}
+
+	function vote_ask_deal(ask_deal_id, is_left){
+	 	if (current_user_id == 0 && my_vote_count > 4){
+	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
+      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
+			setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
+	 	}else{
+	 		$.ajax({
+		        url: "/votes.json",
+		        type: 'POST',
+		        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
+		        dataType: 'json',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+		        	my_votes.push(data.vote);
+		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
+		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
+							graph_animation(data.ask.id);
+	        		notify("투표 완료");
+							hover_action();
+	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
+	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
+	        		my_vote_count = my_vote_count + 1;
+		        },
+		        beforeSend: function(){
+		       		$(".loading").show();
+		        },
+		        complete: function(){
+		        	$(".loading").hide();
+		        }
+			});
+	 	}
+	}
+
+	function comment_input_by_key(){
+    var comment_message = $('#comment_input').val();
+    if(comment_message == "" || comment_message == undefined){
+      notify("내용을 입력해주세요.");
+    }else{
+      $("#send_comment_btn").click();
+    }
+  }
+
+  $('#comment_input').keypress(function(e) {
+    if (e.keyCode == '13') {
+      e.preventDefault();
+      comment_input_by_key();
+    }
+  });
+
+  $("#comment_input").on("click",function(){
+    if (current_user_id == 0){
+      $("#comment_input").blur();
+      notify("회원가입 후<br />의견을 남길 수 있습니다.");
+      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
+      setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
+    } else if ( already_vote.length == 0 && current_user_id != ask.user_id ){
+      $("#comment_input").blur();
+      notify("투표 참여 후<br />의견을 남길 수 있습니다.");
+    } else {
+      $("#comment_input").focus();
+    }
+  }).on("keyup",function(){
+    if( $("#comment_input").val().length > 0 ) {
+      $('#send_comment_btn').css('background-color','#ee6e01');
+    } else {
+      $('#send_comment_btn').css('background-color','#dbdbdb');
+    }
+  });
+
+  if (already_vote != "" || current_user_id == ask.user_id) $("#comment_title").addClass("already_vote");
+  if (current_user_id == ask.user_id) {
+    $("#comment_input").attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
+    $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
+  }
+
+
+	function send_comment(ask_id, ask_deal_id){
+			var content = $(".comment_box2").val();
+			if( content == "" || content == null ){
+				notify('내용을 입력해주세요.');
+				return;
+			}
+			$.ajax({
+		        url: "/comments.json",
+		        type: 'POST',
+		        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id },
+		        dataType: 'json',
+            async: false,  // 코멘트 중복 전송을 방지
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+		        	if (data.message = "success"){
+		        		var comment = data.comment;
+		        		var askCommentTemplate = _.template($('#ask-comment-template').html());
+		        		$("#ask_comment").append(askCommentTemplate({ask:ask, comment: comment}));
+		        		notify("작성 완료");
+		        		$(".comment_box2").val("");
+                $("#no_comment").hide();
+                $("#send_comment_btn").css("background-color","#dbdbdb");
+                $("#comment_input").blur();
+
+		        		if ($("#ask_deal_id_change").html() == "A"){
+		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count");
+		        			left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
+		        		}else{
+		        			var right_ask_deal_comment_count = $("#right_ask_deal_comment_count");
+		        			right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
+		        		}
+		        	}else{
+		        		notify("댓글은 회원만 작성 가능합니다");
+		        	}
+		        },
+		        beforeSend: function(){
+		       		$(".loading").show();
+		        },
+		        complete: function(){
+		        	$(".loading").hide();
+		        }
+			});
+	}
+
+	function comment_like(comment_id){
+		<% if current_user %>
+		$.ajax({
+	        url: "/comments/"+comment_id+"/like.json",
+	        type: 'POST',
+	        data: {'blank': 'blank'},
+	        dataType: 'json',
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+            var comment_like_icon = $("#comment_"+comment_id+" .fa")
+	        	var comment_count_span = $("#comment_"+comment_id+"_like_count");
+	        	if (data.already_like){
+	        		comment_count_span.html( parseInt(comment_count_span.html()) - 1 );
+              comment_count_span.css("color","#9d9ea1");
+              comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1");
+	        		notify("좋아요 취소");
+	        	}else{
+	        		comment_count_span.html( parseInt(comment_count_span.html()) + 1 );
+              comment_count_span.css("color","#ee6e01");
+              comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01");
+	        		notify("좋아요 완료");
+	        	}
+	        },
+	        beforeSend: function(){
+	       		$(".loading").show();
+	        },
+	        complete: function(){
+	        	$(".loading").hide();
+	        }
+		});
+		<% else %>
+			notify("회원가입 후<br />추천 할 수 있습니다")
+		<% end %>
+	}
+
+	function comment_report(comment_id, user_id){
+		show_more_popup('comment',comment_id, user_id, '', '');
+		show_report_popup();
+	}
+
+	function comment_del(comment_id, is_left){
+	  if(confirm("의견을 정말로 삭제하시겠어요?")) {
+	    $.ajax({
+        url: "/comments/"+comment_id+"/comment_del.json",
+        type: 'DELETE',
+        data: {'blank': 'blank'},
+        dataType: 'json',
+        error: function(){
+            return false;
+        },
+        success: function(data){
+          $("#comment_"+comment_id).remove();
+          if (is_left){
+            var left_ask_deal_comment_count = $("#left_ask_deal_comment_count");
+            left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) - 1 );
+          }else{
+            var right_ask_deal_comment_count = $("#right_ask_deal_comment_count");
+            right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) - 1 );
+          }
+          notify("삭제되었습니다");
+
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+	}
+
+	function comment_modify(comment_id){
+	  var comment_content = $("#comment_"+comment_id+" .comment_content");
+	  var modify_box_width = $($("#comment_"+comment_id+" div")[0]).width();
+	  var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
+	  var update_btn = $("#comment_"+comment_id+" .comment_update_btn");
+
+	  modify_box.show().focus();
+	  modify_box.css("width", modify_box_width).css("min-width","180px");
+
+	  update_btn.show();
+	  comment_content.hide();
+
+	  $("#comment_"+comment_id+" .comment_modify_btn").hide();
+	  $("#comment_"+comment_id+" .comment_modify_cancel_btn").show();
+	}
+
+	function comment_modify_cancel(comment_id){
+	  var comment_content = $("#comment_"+comment_id+" .comment_content");
+    var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
+    var update_btn = $("#comment_"+comment_id+" .comment_update_btn");
+
+    modify_box.hide();
+
+    update_btn.hide();
+    comment_content.show();
+
+    $("#comment_"+comment_id+" .comment_modify_btn").show();
+    $("#comment_"+comment_id+" .comment_modify_cancel_btn").hide();
+	}
+
+	function comment_update(comment_id){
+	  var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
+
+    var content = modify_box.val();
+    if( content == "" || content == null ){
+      notify('내용을 입력해주세요.');
+      return;
+    }
+    $.ajax({
+      url: "/comments/"+comment_id+".json",
+      type: 'PUT',
+      data: {'content': content},
+      dataType: 'json',
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        var comment_content = $("#comment_"+comment_id+" .comment_content");
+        var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
+        var update_btn = $("#comment_"+comment_id+" .comment_update_btn");
+        comment_content.html(content);
+        modify_box.val(content);
+        comment_modify_cancel(comment_id);
+        notify("수정 완료");
+      },
+      beforeSend: function(){
+        $(".loading").show();
+      },
+      complete: function(){
+        $(".loading").hide();
+      }
+    });
+	}
+
+	function ask_deal_id_change(){
+		if ($("#ask_deal_id_change").html() == "A"){
+			$("#ask_deal_id_change").html("B")
+			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].right_ask_deal.id+"); return false;");
+		}else{
+			$("#ask_deal_id_change").html("A")
+			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].left_ask_deal.id+"); return false;");
+		}
 	}
 
   hover_action();
