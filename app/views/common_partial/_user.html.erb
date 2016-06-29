@@ -61,7 +61,7 @@
 							회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표하였습니다. 중간점검 해보세요!
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:2px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
-					
+
 				{{ } }}
 			{{ } }}
 			</div>
@@ -173,10 +173,9 @@
 					in_progress_count = data.in_progress_count;
 					alram_count = data.alram_count;
 					alrams = data.alrams;
-					users = data.users;
 					$("#user_path").html("&gt;&nbsp;My Page");
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, users:users}));
+					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams}));
 				},
 				beforeSend: function(){
 	      },
