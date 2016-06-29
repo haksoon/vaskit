@@ -11,7 +11,7 @@ class Users::SessionsController < Devise::SessionsController
       my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
       in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
       alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
-      @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15)
+      @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15).as_json(:include => :user)
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count, :alrams => @alrams}
   end
