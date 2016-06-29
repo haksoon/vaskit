@@ -228,20 +228,20 @@
 			</p>
 		</div>
 		<div id="ask_{{=ask.id}}_comment" style="display:none;">
-      <div id="comment_title" class="table_div" onclick="$('#comment_input').focus(); return false;">
+      <div id="ask_{{=ask.id}}_comment_title" class="table_div" onclick="$('#comment_input').focus(); return false;">
         <span style="width:100%;">
           <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
         </span>
         <span style="position:absolute; top:0; left:10px; width:40px;">
           <i class="fa fa-comment" style="font-size:16px;"></i>
-          <span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
+          <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
         </span>
         <span style="position:absolute; top:0; right:10px; width:40px;">
-          <span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+          <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
           <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
         </span>
       </div>
-  		<div id="ask_comment" style="position:relative; background-color:#fff; padding:10px 0; min-height:200px;">
+  		<div id="ask_{{=ask.id}}_comment_list" style="position:relative; background-color:#fff; padding:10px 0; min-height:200px;">
         {{ for(var i=0; i < ask.comments.length; i++) {  }}
   				{{ comment = ask.comments[i] }}
   				{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
@@ -593,6 +593,8 @@
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
 	        		my_vote_count = my_vote_count + 1;
+							$("#ask_"+data.ask.id+"comment_title").addClass("already_vote");
+              ask.left_ask_deal_id == already_vote[0].ask_deal_id ? $("#ask_deal_id_change").text("A") : $("#ask_deal_id_change").text("B");
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
@@ -640,10 +642,10 @@
     }
   });
 
-  if (already_vote != "" || current_user_id == ask.user_id) $("#comment_title").addClass("already_vote");
+  if (already_vote != "" || current_user_id == ask.user_id) $("#ask_"+ask.id+"comment_title").addClass("already_vote");
   if (current_user_id == ask.user_id) {
     $("#comment_input").attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
-    $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
+    $("#ask_"+ask.id+"comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
   }
 
 
@@ -666,7 +668,7 @@
 		        	if (data.message = "success"){
 		        		var comment = data.comment;
 		        		var askCommentTemplate = _.template($('#ask-comment-template').html());
-		        		$("#ask_comment").append(askCommentTemplate({ask:ask, comment: comment}));
+		        		$("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:ask, comment: comment}));
 		        		notify("작성 완료");
 		        		$(".comment_box2").val("");
                 $("#no_comment").hide();
@@ -674,10 +676,10 @@
                 $("#comment_input").blur();
 
 		        		if ($("#ask_deal_id_change").html() == "A"){
-		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count");
+		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+data.comment.ask_id);
 		        			left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
 		        		}else{
-		        			var right_ask_deal_comment_count = $("#right_ask_deal_comment_count");
+		        			var right_ask_deal_comment_count = $("#right_ask_deal_comment_count_"+data.comment.ask_id);
 		        			right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
 		        		}
 		        	}else{

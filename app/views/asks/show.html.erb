@@ -168,7 +168,7 @@
 			</p>
 		</div>
     <div id="ask_{{=ask.id}}_comment">
-      <div id="comment_title" class="table_div" onclick="$('#comment_input').focus(); return false;">
+      <div id="ask_{{=ask.id}}_comment_title" class="table_div" onclick="$('#comment_input').focus(); return false;">
         <span style="width:100%;">
           <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
         </span>
@@ -643,13 +643,13 @@
 		        	my_votes.push(data.vote);
               var askDealTemplate = _.template( $('#ask-deal-template').html() );
               $('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
-              var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
-	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
-	        		my_vote_count = my_vote_count + 1;
 	        		notify("투표 완료");
               hover_action();
               graph_animation(data.ask.id);
-              $("#comment_title").addClass("already_vote");
+              var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
+              vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
+              my_vote_count = my_vote_count + 1;
+              $("#ask_"+data.ask.id+"comment_title").addClass("already_vote");
               ask.left_ask_deal_id == already_vote[0].ask_deal_id ? $("#ask_deal_id_change").text("A") : $("#ask_deal_id_change").text("B");
 		        },
 		        beforeSend: function(){
