@@ -64,7 +64,7 @@
 					{{ } else if (alram.alram_type.match("sub_comment_")) { }}
 						{{ comment_count = alram.alram_type.replace("sub_comment_","") }}
 						<a id="alram_{{=alram.id}}" onclick="alram_go_url({{=alram.ask_id}}); return false;" style="background-color:{{= alram.is_read ? '#fff' : '#F9F1ED' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
-						{{ if comment_count == 1 }}
+						{{ if (comment_count == 1) { }}
 							<span style="color:#998674;">누군가</span>가 회원님이 의견을 남긴 질문에 의견을 남겼습니다.
 						{{ } else { }}
 							<span style="color:#998674;">{{= comment_count - 1 }}명</span>이 회원님이 의견을 남긴 질문에 의견을 남겼습니다.
