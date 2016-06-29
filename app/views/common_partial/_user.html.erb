@@ -134,6 +134,9 @@
 			$("#user_overlay_seg").css("max-height",user_overlay_seg_height);
 	  }).resize();
 
+		var alrams = <%= raw @alrams.to_json %>;
+		var users = <%= raw @users.to_json %>;
+
 		function user_on(){
 			disableScroll();
 			$("#user_overlay").fadeIn(100);
