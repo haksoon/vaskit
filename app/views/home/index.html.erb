@@ -100,6 +100,118 @@
 			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
 	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
 		</div>
+		<div id="ask_deal_{{=ask.id}}_table" class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
+			{{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
+			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field" style="font-weight:bold;">
+						<p class="output_field">{{= ask.left_ask_deal.title }}</p>
+						<div class="tooltip_area">
+							<div class="tooltip_arrow bottom"></div>
+							<div class="tooltip_content">{{= ask.left_ask_deal.title }}</div>
+						</div>
+					</div>
+					<div class="ask_text_field right_input output_field" style="font-weight:bold;">
+						<p class="output_field">{{= ask.right_ask_deal.title }}</p>
+						<div class="tooltip_area">
+							<div class="tooltip_arrow bottom"></div>
+							<div class="tooltip_content">{{= ask.right_ask_deal.title }}</div>
+						</div>
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "" ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field">
+						{{ if (ask.left_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.brand }}</p>{{ } }}
+					</div>
+					<div class="ask_text_field right_input output_field">
+						{{ if (ask.right_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.brand }}</p>{{ } }}
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-tag"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field">
+						{{ if (ask.left_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p>{{ } }}
+					</div>
+					<div class="ask_text_field right_input output_field">
+						{{ if (ask.right_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p>{{ } }}
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-won"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "" ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field">
+						{{ if (ask.left_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
+							<p class="output_field">
+								{{ var aLink = document.createElement("a") }}
+								{{ aLink.href = ask.left_ask_deal.link }}
+								<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
+							</p>
+						{{ } }}
+					</div>
+					<div class="ask_text_field right_input output_field">
+						{{ if (ask.right_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
+							<p class="output_field">
+								{{ var bLink = document.createElement("a") }}
+								{{ bLink.href = ask.right_ask_deal.link }}
+								<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
+							<p>
+						{{ } }}
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-link"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.spec1 != "" || ask.spec2 != "" || ask.spec3 != "" || ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") { }}
+				<div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
+					<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
+						{{ if (ask.spec1 != "" || ask.left_ask_deal.spec1 != "" || ask.right_ask_deal.spec1 != "" ){ }}
+							<tr>
+								<td style="width:40%;">
+									{{ if (ask.left_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec1 }}</p>{{ } }}
+								</td>
+								<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+									{{ if (ask.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec1 }}</p>{{ } }}
+								</td>
+								<td style="width:40%;">
+									{{ if (ask.right_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec1 }}</p>{{ } }}
+								</td>
+							</tr>
+						{{ } }}
+						{{ if (ask.spec2 != "" || ask.left_ask_deal.spec2 != "" || ask.right_ask_deal.spec2 != "" ){ }}
+							<tr>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.left_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec2 }}</p>{{ } }}
+								</td>
+								<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
+									{{ if (ask.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec2 }}</p>{{ } }}
+								</td>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.right_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec2 }}</p>{{ } }}
+								</td>
+							</tr>
+						{{ } }}
+						{{ if (ask.spec3 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec3 != "" ){ }}
+							<tr>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.left_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec3 }}</p>{{ } }}
+								</td>
+								<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
+									{{ if (ask.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec3 }}</p>{{ } }}
+								</td>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.right_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec3 }}</p>{{ } }}
+								</td>
+							</tr>
+						{{ } }}
+					</table>
+				</div>
+			{{ } }}
+		</div>
 		<div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
 				<span id="ask_{{=ask.id}}_message_text">
@@ -115,6 +227,64 @@
 				<a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">펼치기&nbsp;<i class="fa fa-angle-down"></i></a>
 			</p>
 		</div>
+		<div id="ask_{{=ask.id}}_comment">
+      <div id="comment_title" class="table_div" onclick="$('#comment_input').focus(); return false;">
+        <span style="width:100%;">
+          <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
+        </span>
+        <span style="position:absolute; top:0; left:10px; width:40px;">
+          <i class="fa fa-comment" style="font-size:16px;"></i>
+          <span id="left_ask_deal_comment_count">{{=ask.left_ask_deal.comment_count}}</span>
+        </span>
+        <span style="position:absolute; top:0; right:10px; width:40px;">
+          <span id="right_ask_deal_comment_count">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+          <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
+        </span>
+      </div>
+  		<div id="ask_comment" style="position:relative; background-color:#fff; padding:10px 0; min-height:200px;">
+        {{ for(var i=0; i < ask.comments.length; i++) {  }}
+  				{{ comment = ask.comments[i] }}
+  				{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
+  		    {{= askCommentTemplate({ask:ask, comment: comment}) }}
+  			{{ } }}
+        {{ if(ask.comments.length == 0) { }}
+          <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
+        {{ } }}
+        {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
+          <div style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
+            <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
+              <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
+              <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
+            </p>
+          </div>
+        {{ } }}
+  		</div>
+  		<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
+  			{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
+  				{{ ask_deal_id = ask.left_ask_deal_id }}
+  				{{ ask_deal_text = "A" }}
+  			{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+  				{{ ask_deal_id = ask.left_ask_deal_id }}
+  				{{ ask_deal_text = "A" }}
+  			{{ }else{ }}
+  				{{ ask_deal_id = ask.right_ask_deal_id }}
+  				{{ ask_deal_text = "B" }}
+  			{{ } }}
+  			<tbody>
+  				<tr>
+  					<td style="padding:7px 7px 7px 12px;">
+  						<a id="ask_deal_id_change" onclick="ask_deal_id_change(); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
+  					</td>
+  					<td style="width:100%; padding-right:7px;">
+  						<textarea id="comment_input" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
+  					</td>
+  					<td style="padding-right:12px;">
+  						<a id="send_comment_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
+  					</td>
+  				</tr>
+  			</tbody>
+  		</table>
+    </div>
 		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank">
 			<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
 			<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
@@ -210,118 +380,6 @@
 			</table>
 		</div>
 	{{ } }}
-	<div id="ask_deal_{{=ask.id}}_table" class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
-		{{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
-		{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
-			<div class="table_div">
-				<div class="ask_text_field left_input output_field" style="font-weight:bold;">
-					<p class="output_field">{{= ask.left_ask_deal.title }}</p>
-					<div class="tooltip_area">
-						<div class="tooltip_arrow bottom"></div>
-						<div class="tooltip_content">{{= ask.left_ask_deal.title }}</div>
-					</div>
-				</div>
-				<div class="ask_text_field right_input output_field" style="font-weight:bold;">
-					<p class="output_field">{{= ask.right_ask_deal.title }}</p>
-					<div class="tooltip_area">
-						<div class="tooltip_arrow bottom"></div>
-						<div class="tooltip_content">{{= ask.right_ask_deal.title }}</div>
-					</div>
-				</div>
-				<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
-			</div>
-		{{ } }}
-		{{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "" ){ }}
-			<div class="table_div">
-				<div class="ask_text_field left_input output_field">
-					{{ if (ask.left_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.brand }}</p>{{ } }}
-				</div>
-				<div class="ask_text_field right_input output_field">
-					{{ if (ask.right_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.brand }}</p>{{ } }}
-				</div>
-				<span class="input_icon center_input"><i class="fa fa-tag"></i></span>
-			</div>
-		{{ } }}
-		{{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null ){ }}
-			<div class="table_div">
-				<div class="ask_text_field left_input output_field">
-					{{ if (ask.left_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p>{{ } }}
-				</div>
-				<div class="ask_text_field right_input output_field">
-					{{ if (ask.right_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p>{{ } }}
-				</div>
-				<span class="input_icon center_input"><i class="fa fa-won"></i></span>
-			</div>
-		{{ } }}
-		{{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "" ){ }}
-			<div class="table_div">
-				<div class="ask_text_field left_input output_field">
-					{{ if (ask.left_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
-						<p class="output_field">
-							{{ var aLink = document.createElement("a") }}
-							{{ aLink.href = ask.left_ask_deal.link }}
-							<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
-						</p>
-					{{ } }}
-				</div>
-				<div class="ask_text_field right_input output_field">
-					{{ if (ask.right_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
-						<p class="output_field">
-							{{ var bLink = document.createElement("a") }}
-							{{ bLink.href = ask.right_ask_deal.link }}
-							<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
-						<p>
-					{{ } }}
-				</div>
-				<span class="input_icon center_input"><i class="fa fa-link"></i></span>
-			</div>
-		{{ } }}
-		{{ if (ask.spec1 != "" || ask.spec2 != "" || ask.spec3 != "" || ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") { }}
-			<div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
-				<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
-					{{ if (ask.spec1 != "" || ask.left_ask_deal.spec1 != "" || ask.right_ask_deal.spec1 != "" ){ }}
-						<tr>
-							<td style="width:40%;">
-								{{ if (ask.left_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec1 }}</p>{{ } }}
-							</td>
-							<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
-								{{ if (ask.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec1 }}</p>{{ } }}
-							</td>
-							<td style="width:40%;">
-								{{ if (ask.right_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec1 }}</p>{{ } }}
-							</td>
-						</tr>
-					{{ } }}
-					{{ if (ask.spec2 != "" || ask.left_ask_deal.spec2 != "" || ask.right_ask_deal.spec2 != "" ){ }}
-						<tr>
-							<td style="width:40%; border-top:1px solid #dbdbdb;">
-								{{ if (ask.left_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec2 }}</p>{{ } }}
-							</td>
-							<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
-								{{ if (ask.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec2 }}</p>{{ } }}
-							</td>
-							<td style="width:40%; border-top:1px solid #dbdbdb;">
-								{{ if (ask.right_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec2 }}</p>{{ } }}
-							</td>
-						</tr>
-					{{ } }}
-					{{ if (ask.spec3 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec3 != "" ){ }}
-						<tr>
-							<td style="width:40%; border-top:1px solid #dbdbdb;">
-								{{ if (ask.left_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec3 }}</p>{{ } }}
-							</td>
-							<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
-								{{ if (ask.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec3 }}</p>{{ } }}
-							</td>
-							<td style="width:40%; border-top:1px solid #dbdbdb;">
-								{{ if (ask.right_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec3 }}</p>{{ } }}
-							</td>
-						</tr>
-					{{ } }}
-				</table>
-			</div>
-		{{ } }}
-	</div>
 </script>
 
 <script>
