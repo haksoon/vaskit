@@ -315,7 +315,6 @@
 		}
 
 		function alram_go_url(alram_id, ask_id){
-			window.open("/asks/" + ask_id);
 			$.ajax({
 						url: '/alrams/read.json',
 						type: 'PUT',
@@ -329,6 +328,7 @@
 						beforeSend: function(){
 						},
 						complete: function(){
+							window.open("/asks/" + ask_id);
 						}
 			});
 		}
