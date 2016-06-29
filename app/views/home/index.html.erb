@@ -273,7 +273,7 @@
   			<tbody>
   				<tr>
   					<td style="padding:7px 7px 7px 12px;">
-  						<a id="ask_deal_id_change_{{=ask.id}}" onclick="ask_deal_id_change({{=ask.id}}); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
+  						<a id="ask_deal_id_change_{{=ask.id}}" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
   					</td>
   					<td style="width:100%; padding-right:7px;">
   						<textarea id="comment_input_{{=ask.id}}" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
@@ -836,13 +836,13 @@
     });
 	}
 
-	function ask_deal_id_change(ask_id){
+	function ask_deal_id_change(ask_id, left_ask_deal_id, right_ask_deal_id){
 		if ($("#ask_deal_id_change_"+ask_id).html() == "A"){
 			$("#ask_deal_id_change_"+ask_id).html("B")
-			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].right_ask_deal.id+"); return false;");
+			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+right_ask_deal_id+"); return false;");
 		}else{
 			$("#ask_deal_id_change_"+ask_id).html("A")
-			$("#send_comment_btn").attr("onclick", "send_comment("+asks[0].id+", "+asks[0].left_ask_deal.id+"); return false;");
+			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+left_ask_deal_id+"); return false;");
 		}
 	}
 
