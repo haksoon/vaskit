@@ -596,6 +596,7 @@
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
 	        		my_vote_count = my_vote_count + 1;
 							$("#ask_"+data.ask.id+"_comment_title").addClass("already_vote");
+							$("#ask_"+data.ask.id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.');
 							var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === data.ask.id })
               if (data.ask.right_ask_deal_id == this_vote[0].ask_deal_id) ask_deal_id_change(data.ask.id, data.ask.left_ask_deal_id, data.ask.right_ask_deal_id);
 		        },
