@@ -698,10 +698,10 @@
     }
   });
 
-  if (already_vote != "" || current_user_id == ask.user_id) $("#comment_title").addClass("already_vote");
+  if (already_vote != "" || current_user_id == ask.user_id) $("#ask_"+ask.id+"_comment_title").addClass("already_vote");
   if (current_user_id == ask.user_id) {
     $("#comment_input").attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
-    $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
+    $("#ask_"+ask.id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
   }
 
 
