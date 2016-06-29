@@ -53,7 +53,7 @@
 			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px;">
 			{{ if (alrams == 0) { }}
 				<p style="padding:40px; margin:0; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
-			
+		
 			{{ } }}
 			</div>
 		</div>
@@ -134,9 +134,6 @@
 			$("#user_overlay_seg").css("max-height",user_overlay_seg_height);
 	  }).resize();
 
-		var alrams = <%= raw @alrams.to_json %>;
-		var users = <%= raw @users.to_json %>;
-
 		function user_on(){
 			disableScroll();
 			$("#user_overlay").fadeIn(100);
@@ -166,9 +163,11 @@
 					my_comment_count = data.my_comment_count;
 					in_progress_count = data.in_progress_count;
 					alram_count = data.alram_count;
+					alrams = data.alrams;
+					users = data.users;
 					$("#user_path").html("&gt;&nbsp;My Page");
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:data.alrams, users:data.users}));
+					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, users:users}));
 				},
 				beforeSend: function(){
 	      },
