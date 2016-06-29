@@ -5,6 +5,7 @@ class AlramsController < ApplicationController
     @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15)
   end
 
+  #AJS추가
   def read
     Alram.where(:id => params[:id], :is_read => false).each do |alram|
       alram.record_timestamps = false #updated_at 안바뀌게

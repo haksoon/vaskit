@@ -6,11 +6,11 @@ class Users::SessionsController < Devise::SessionsController
   def show
     if current_user
       current_user_string_id = User.where(:id => current_user.id).select(:string_id)
-      my_ask_count = Ask.where(:user_id => current_user.id).count #AJS추가
-      my_vote_count = Vote.where(:user_id => current_user.id).count #AJS추가
-      my_comment_count = Comment.where(:user_id => current_user.id).count #AJS추가
-      in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count #AJS추가
-      alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count #AJS추가
+      my_ask_count = Ask.where(:user_id => current_user.id).count
+      my_vote_count = Vote.where(:user_id => current_user.id).count
+      my_comment_count = Comment.where(:user_id => current_user.id).count
+      in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count
+      alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
       is_new_alram = Alram.where(:user_id => current_user.id, :is_read => false).blank?
       @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15)
     end
@@ -39,7 +39,7 @@ class Users::SessionsController < Devise::SessionsController
 
   def change_nickname
     status = "success"
-    new_string_id = params[:string_id]
+    new_string_id = params[:string_id] #AJS추가
     if User.find_by_string_id(new_string_id)
       status = "fail"
     else

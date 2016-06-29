@@ -20,9 +20,15 @@
 
 	<script type="text/template" id="user_overlay_seg_template">
 		<div style="padding:12px;">
-			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
+			{{ if (in_progress_count > 0) { }}
+			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background-color:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
 				<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;진행 중인 질문 ({{= in_progress_count }}개)
 			</a>
+			{{ }else{ }}
+			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
+				<i class="fa fa-circle-o-notch"></i>&nbsp;질문을 작성해보시겠어요?
+			</a>
+			{{ } }}
 			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
 				히스토리
 			</div>
@@ -95,7 +101,7 @@
 				{{ } }}
 			{{ } }}
 			</div>
-			<a href="#" onclick="all_read(); return false;" style="display:block; background-color:#998674; color:#fff; font-size:14px; line-height:40px; border-radius:0 0 5px 5px;">모두  읽음으로 표시</a>
+			<a href="#" onclick="all_read(); return false;" style="display:block; background-color:#998674; color:#fff; font-size:13px; line-height:40px; border-radius:0 0 5px 5px;">모두  읽음으로 표시</a>
 		</div>
 	</script>
 
