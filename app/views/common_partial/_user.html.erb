@@ -51,6 +51,54 @@
 				<% end %>
 				알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
 			</a>
+			<div id="alram_list" style="border-bottom:1px solid #dbdbdb;">
+			<% if @alrams.blank? %>
+				<p style="padding:40px; margin:0; font-size:20px; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
+			<% else %>
+				<% @alrams.each do |alram| %>
+					<% if alram.alram_type.include?("vote_") %>
+						<a id="alram_<%=alram.id%>" onclick="alram_go_url(<%=alram.ask_id%>); return false" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+							회원님의 질문에 <span style="color:#998675;"><%= alram.alram_type.tr("vote_", "" )%>명</span>이 투표하였습니다. 중간점검 해보세요!
+							<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.updated_at) %></p>
+						</a>
+					<% elsif alram.alram_type.include?("sub_comment_") %>
+						<% owner_user = User.find(alram.ask_owner_user_id) %>
+						<% send_user = User.find(alram.send_user_id) %>
+						<% comment_count = alram.alram_type.tr("sub_comment_","").to_i %>
+						<a id="alram_<%=alram.id%>" onclick="alram_go_url(<%=alram.ask_id%>); return false" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+						<% if comment_count == 1 %>
+							<span style="color:#998675;">@<%= send_user.string_id %></span>님도 <span style="color:#998675;">@<%=owner_user.string_id%></span>님의 질문에 의견을 남겼습니다.
+						<% else %>
+							<span style="color:#998675;">@<%= send_user.string_id %></span>님 외 <%= comment_count - 1 %>명도 <span style="color:#998675;">@<%=owner_user.string_id%></span>님의 질문에 의견을 남겼습니다.
+						<% end %>
+							<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.updated_at) %></p>
+						</a>
+					<% elsif alram.alram_type.include?("like_comment_") %>
+						<% send_user = User.find(alram.send_user_id) %>
+						<% comment_like_count = alram.alram_type.tr("like_comment_","").to_i %>
+						<a id="alram_<%=alram.id%>" onclick="alram_go_url(<%=alram.ask_id%>); return false" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+							<% if comment_like_count == 1 %>
+								<span style="color:#998675;">@<%= send_user.string_id %></span>님이 회원님의 의견을 좋아합니다.
+							<% else %>
+								<span style="color:#998675;">@<%= send_user.string_id %></span>님 외 <%= comment_like_count - 1 %>명이 회원님의 의견을 좋아합니다.
+							<% end %>
+							<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.updated_at) %></p>
+						</a>
+					<% elsif alram.alram_type.include?("comment_") %>
+						<% send_user = User.find(alram.send_user_id) %>
+						<% comment_count = alram.alram_type.tr("comment_","").to_i %>
+						<a id="alram_<%=alram.id%>" onclick="alram_go_url(<%=alram.ask_id%>); return false" style="background-color:<%= alram.is_read ? '#fff' : '#F9F1ED' %>; color:#383838; border-top:1px solid #dbdbdb; display:block; font-size:18px; line-height:22px; padding:16px; min-height:31px; text-align:left;">
+							<% if comment_count == 1 %>
+								<span style="color:#998675;">@<%= send_user.string_id %></span>님이 회원님의 질문에 의견을 남겼습니다.
+							<% else %>
+								<span style="color:#998675;">@<%= send_user.string_id %></span>님 외 <%= comment_count - 1 %>명이 회원님의 질문에 의견을 남겼습니다.
+							<% end %>
+							<p style="color:#9D9FA1; font-size:16px; margin:0 auto;"><%= get_past_time(alram.updated_at) %></p>
+						</a>
+					<% end %>
+				<% end %>
+			<% end %>
+			</div>
 		</div>
 	</script>
 
@@ -119,13 +167,6 @@
 		</div>
 	</script>
 
-	<script type="text/template" id="user_overlay_seg_template_alram">
-		<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">알림 피드</p>
-		<div style="padding:20px;">
-
-		</div>
-	</script>
-
 	<script>
 		<% if flash[:custom_notice] %>
 			notify('<%=flash[:custom_notice]%>');
@@ -182,19 +223,15 @@
 			$("#footer").fadeOut(300);
 			$("#menu_pc_bg").hide();
 			$("#menu_bg").fadeOut(300);
+			$("#user_path").html();
 			$("#user_overlay_seg").html();
 		}
 
 		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
 
 		function manage_on() {
-			$("#user_path").append("&nbsp;&gt;&nbsp;Settings");
+			$("#user_path").html("<span onclick='user_on();'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
-	    $("#user_overlay_seg").html(userOverlaySegTemplate());
-		}
-
-		function alram_on() {
-			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_alram').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 		}
 
