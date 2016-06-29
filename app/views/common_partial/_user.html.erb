@@ -46,7 +46,7 @@
 			</table>
 			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px 5px 0 0;">
 				{{ if (!is_new_alram) { }}
-					<img src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
+					<img id="new_alram" src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
 				{{ } }}
 				알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
 			</div>
@@ -305,6 +305,7 @@
 						},
 						success: function(data){
 							$("#alram_list a").css("background-color","#fff");
+							$("#new_alram").remove();
 							notify("모두 읽음 처리 완료");
 						},
 						beforeSend: function(){
@@ -326,6 +327,7 @@
 						},
 						success: function(data){
 							$("#alram_"+alram_id).css("background-color","#fff");
+							if(data.is_new_alram) $("#new_alram").remove();
 						},
 						beforeSend: function(){
 						},
