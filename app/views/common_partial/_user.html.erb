@@ -26,7 +26,7 @@
 			</a>
 			{{ }else{ }}
 			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
-				<i class="fa fa-circle-o-notch"></i>&nbsp;질문을 작성해보시겠어요?
+				<i class="fa fa-plus-circle"></i>&nbsp;새로운 질문을 작성해보시겠어요?
 			</a>
 			{{ } }}
 			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
@@ -50,13 +50,17 @@
 					<td style="width:5%;"></td>
 				</tr>
 			</table>
-			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px 5px 0 0;">
-				{{ if (!is_new_alram) { }}
-					<img id="new_alram" src="/images/header/new.png" style="position:relative; top:3px; width:16px;"/>
-				{{ } }}
-				알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
-			</div>
-			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px;">
+			{{ if (!is_new_alram) { }}
+				<div style="width:100%; background-color:rgba(238,110,1,0.8); text-align:left; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; padding:0 15px; box-sizing:border-box; border-radius:5px 5px 0 0;">
+					알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
+					<a id="all_read" href="#" onclick="all_read(); return false;" style="display:inline; color:#fff; font-size:12px; float:right;"><i class="fa fa-bookmark"></i>&nbsp;모두  읽음으로 표시</a>
+				</div>
+			{{ } else { }}
+				<div style="width:100%; background-color:#998674; text-align:left; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; padding:0 15px; box-sizing:border-box; border-radius:5px 5px 0 0;">
+					알림피드 ({{= alram_count > 15 ? "15개+" : alram_count+"개" }})
+				</div>
+			{{ } }}
+			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px; border-radius:0 0 5px 5px; overflow:hidden;">
 			{{ if (alrams == 0) { }}
 				<p style="padding:40px; margin:0; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
 			{{ } else { }}
@@ -101,7 +105,6 @@
 				{{ } }}
 			{{ } }}
 			</div>
-			<a href="#" onclick="all_read(); return false;" style="display:block; background-color:#998674; color:#fff; font-size:13px; line-height:40px; border-radius:0 0 5px 5px;">모두  읽음으로 표시</a>
 		</div>
 	</script>
 
@@ -311,7 +314,8 @@
 						},
 						success: function(data){
 							$("#alram_list a").css("background-color","#fff");
-							$("#new_alram").remove();
+							$("#all_read").parent().css("background-color","#998674");
+							$("#all_read").remove();
 							notify("모두 읽음 처리 완료");
 						},
 						beforeSend: function(){
@@ -333,7 +337,10 @@
 						},
 						success: function(data){
 							$("#alram_"+alram_id).css("background-color","#fff");
-							if(data.is_new_alram) $("#new_alram").remove();
+							if (data.is_new_alram) {
+								$("#all_read").parent().css("background-color","#998674");
+								$("#all_read").remove();
+							}
 						},
 						beforeSend: function(){
 						},
