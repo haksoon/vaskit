@@ -168,7 +168,7 @@
 		</div>
 	</div>
 	{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
-		<div id="main_vote_count">
+		<div id="main_vote_count_{{=ask.id}}">
 			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
 			{{ if (ask.user_id == current_user_id && total_count == 0){ }}
 				{{ left_ratio = 0 }}
@@ -210,7 +210,7 @@
 			</table>
 		</div>
 	{{ } }}
-	<div class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
+	<div id="ask_deal_{{=ask.id}}_table" class="card_detail_table" style="padding:10px 10px 0px 10px; display:none;">
 		{{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
 		{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
 			<div class="table_div">

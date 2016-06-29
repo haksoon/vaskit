@@ -249,8 +249,8 @@ function graph_animation(ask_deal_id) {
   var target_ask = "#ask_deal_"+ask_deal_id
 
   graph_width_adjust();
-  $(target_ask).find("#main_vote_count").find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
-  $(target_ask).find("#main_vote_count").find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
+  $(target_ask).find("#main_vote_count_"+ask_deal_id).find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
+  $(target_ask).find("#main_vote_count_"+ask_deal_id).find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
 
   var num_left_width = 0;
   var left_ratio_increase = setInterval( function() {
