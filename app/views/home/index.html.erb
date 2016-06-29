@@ -38,6 +38,7 @@
 
 
 <div id="asks" style="padding:12px 12px 0px;"></div>
+<div id="ask_detail_bg" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.7; z-index:12;"></div>
 <div class="home-float-btn-area">
 	<% if current_user %>
 		<a href="/asks/new" style="display:block;">
@@ -227,7 +228,7 @@
 				<a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">펼치기&nbsp;<i class="fa fa-angle-down"></i></a>
 			</p>
 		</div>
-		<div id="ask_{{=ask.id}}_comment">
+		<div id="ask_{{=ask.id}}_comment" style="display:none;">
       <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" onclick="$('#comment_input_{{=ask.id}}').focus(); return false;">
         <span style="width:100%;">
           <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
@@ -285,7 +286,7 @@
   			</tbody>
   		</table>
     </div>
-		<a class="card_detail" href="/asks/{{=ask.id}}" target="_blank">
+		<a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
 			<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
 			<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
 			<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
@@ -608,6 +609,35 @@
 		        }
 			});
 	 	}
+	}
+
+	function card_detail_on(ask_id) {
+		$("#ask_detail_bg").show().on("click",function(){ card_detail_off(ask_id); return false; });
+		$("#ask_"+ask_id).css("z-index","13");
+		$("#ask_deal_"+ask_id+"_table").show();
+		$("#ask_"+ask_id+"_message_text").show();
+		$("#ask_"+ask_id+"_message_text_shorten").hide();
+		$("#ask_"+ask_id+"_message_more").hide();
+		$("#ask_"+ask_id+"_comment").show();
+		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_off("+ask_id+"); return false;");
+		$("#ask_"+ask_id+"_detail_on span:eq(0)").hide();
+		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
+		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
+	}
+
+
+	function card_detail_off(ask_id) {
+		$("#ask_detail_bg").hide();
+		$("#ask_"+ask_id).css("z-index","auto");
+		$("#ask_deal_"+ask_id+"_table").hide();
+		$("#ask_"+ask_id+"_message_text").hide();
+		$("#ask_"+ask_id+"_message_text_shorten").show();
+		$("#ask_"+ask_id+"_message_more").show();
+		$("#ask_"+ask_id+"_comment").hide();
+		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_on("+ask_id+"); return false;");
+		$("#ask_"+ask_id+"_detail_on span:eq(0)").show();
+		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>');
+		$("#ask_"+ask_id+"_detail_on span:eq(2)").show();
 	}
 
 	function comment_input_by_key(ask_id){
