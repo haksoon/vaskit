@@ -597,7 +597,7 @@
 	        		my_vote_count = my_vote_count + 1;
 							$("#ask_"+data.ask.id+"_comment_title").addClass("already_vote");
 							var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === data.ask.id })
-              if (data.ask.right_ask_deal_id == this_vote[0].ask_deal_id) ask_deal_id_change(data.ask.id);
+              if (data.ask.right_ask_deal_id == this_vote[0].ask_deal_id) ask_deal_id_change(data.ask.id, data.ask.left_ask_deal_id, data.ask.right_ask_deal_id);
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
