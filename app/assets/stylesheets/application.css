@@ -310,13 +310,14 @@ input:focus, select:focus, textarea:focus {
 }*/
 
 .content_box {
-	 margin-bottom:15px;
-	 background-color:#fff;
-	 border-width:1px 3px 3px 1px;
-	 border-style:solid;
-	 border-color:#dbdbdb;
-   border-radius:0 0 0 3px;
-	 clear:both;
+	position:relative;
+	margin-bottom:15px;
+	background-color:#fff;
+	border-width:1px 3px 3px 1px;
+	border-style:solid;
+	border-color:#dbdbdb;
+  border-radius:0 0 0 3px;
+	clear:both;
 }
 .content_box::after {
   content:""; display:block; clear:both;
