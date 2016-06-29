@@ -167,9 +167,9 @@
 				{{ } }}
 			</p>
 		</div>
-    <div id="comment_title" class="table_div comment_title" onclick="$('#comment_input').focus(); return false;">
+    <div id="comment_title" class="table_div comment_title">
       <span style="width:100%;">
-        <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
+        <i class="fa fa-hand-o-up" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
       </span>
       <span style="position:absolute; top:0; left:10px; width:40px;">
         <i class="fa fa-comment" style="font-size:16px;"></i>
@@ -651,7 +651,8 @@
 	        		notify("투표 완료");
               hover_action();
               graph_animation(data.ask.id);
-              $("#comment_title").addClass("already_vote");
+              $("#comment_title").addClass("already_vote").attr("onclick","$('#comment_input').focus(); return false;");
+              $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.');
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
@@ -699,8 +700,12 @@
     }
   });
 
-  if (already_vote != "" || my_ask) $("#comment_title").addClass("already_vote");
+  if (already_vote != "" || my_ask) {
+    $("#comment_title").addClass("already_vote").attr("onclick","$('#comment_input').focus(); return false;");
+    $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.');
+  }
   if (my_ask) {
+    $("#comment_title").addClass("already_vote").attr("onclick","$('#comment_input').focus(); return false;");
     $("#comment_input").attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
     $("#comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
   }

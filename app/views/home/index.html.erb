@@ -231,7 +231,7 @@
 		<div id="ask_{{=ask.id}}_comment" style="display:none;">
       <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" onclick="$('#comment_input_{{=ask.id}}').focus(); return false;">
         <span style="width:100%;">
-          <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
+          <i class="fa fa-hand-o-up" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
         </span>
         <span style="position:absolute; top:0; left:10px; width:40px;">
           <i class="fa fa-comment" style="font-size:16px;"></i>
@@ -615,9 +615,9 @@
 	function card_detail_on(ask_id) {
 		$("#ask_detail_bg").show().on("click",function(){ card_detail_off(ask_id); return false; });
 		$("#ask_"+ask_id).css("z-index","13");
-		$("#ask_deal_"+ask_id+"_table").show();
+		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
 		$("#ask_"+ask_id+"_message_more").click();
-		$("#ask_"+ask_id+"_comment").show();
+		$("#ask_"+ask_id+"_comment").slideDown(200);
 		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_off("+ask_id+"); return false;");
 		$("#ask_"+ask_id+"_detail_on span:eq(0)").hide();
 		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
@@ -628,13 +628,13 @@
 	function card_detail_off(ask_id) {
 		$("#ask_detail_bg").hide();
 		$("#ask_"+ask_id).css("z-index","auto");
-		$("#ask_deal_"+ask_id+"_table").hide();
+		$("#ask_deal_"+ask_id+"_table").slideUp(200);
 		if ($("#ask_"+ask_id+"_message_text_shorten").text().length > 70) {
 			$("#ask_"+ask_id+"_message_text").hide();
 			$("#ask_"+ask_id+"_message_text_shorten").show();
 			$("#ask_"+ask_id+"_message_more").show();
 		}
-		$("#ask_"+ask_id+"_comment").hide();
+		$("#ask_"+ask_id+"_comment").slideUp(200);
 		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_on("+ask_id+"); return false;");
 		$("#ask_"+ask_id+"_detail_on span:eq(0)").show();
 		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>');
