@@ -74,6 +74,7 @@ Rails.application.routes.draw do
 
   resources :alrams do
     collection do
+      put 'read'
       put 'all_read'
     end
   end
