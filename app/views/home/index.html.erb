@@ -596,8 +596,8 @@
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
 	        		my_vote_count = my_vote_count + 1;
 							$("#ask_"+data.ask.id+"_comment_title").addClass("already_vote");
-							var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === data.ask.id })
-              if (data.ask.right_ask_deal_id == already_vote.ask_deal_id) ask_deal_id_change(data.ask.id);
+							var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === data.ask.id })
+              if (data.ask.right_ask_deal_id == this_vote[0].ask_deal_id) ask_deal_id_change(data.ask.id);
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
