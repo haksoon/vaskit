@@ -502,7 +502,7 @@
 		$('#asks').append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
-		comment_input_setting(ask.id);
+		comment_input_setting(ask.id, ask.user);
 	}
 
 	var ready = function() {
@@ -545,7 +545,7 @@
 				        $('#asks').append(askTemplate({ask: ask}));
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
-								comment_input_setting(ask.id);
+								comment_input_setting(ask.id, ask.user);
     					}
 							hover_action();
 							tooltip_box();
@@ -650,7 +650,7 @@
     }
   }
 
-	function comment_input_setting(ask_id) {
+	function comment_input_setting(ask_id, ask_user) {
 		$("#comment_input_"+ask_id).keypress(function(e) {
 			if (e.keyCode == '13') {
 				e.preventDefault();
@@ -665,7 +665,7 @@
 				notify("회원가입 후<br />의견을 남길 수 있습니다.");
 				setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
 				setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
-			} else if ( this_vote.length == 0 && current_user_id != ask.user_id ){
+			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
 				$("#comment_input_"+ask_id).blur();
 				notify("투표 참여 후<br />의견을 남길 수 있습니다.");
 			} else {
@@ -683,9 +683,9 @@
 			$("#ask_"+ask_id+"_comment_title").addClass("already_vote");
 			$("#ask_"+ask_id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.');
 		}
-		if (current_user_id == ask.user_id) {
+		if (current_user_id == ask_user.id) {
 			$("#ask_"+ask_id+"_comment_title").addClass("already_vote");
-			$("#comment_input_"+ask_id).attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
+			$("#comment_input_"+ask_id).attr("placeholder", ask_user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
 			$("#ask_"+ask_id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
 		}
 	}
