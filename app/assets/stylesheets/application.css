@@ -236,7 +236,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .home-float-btn-area {
-	z-index: 5;
+	z-index: 3;
 	/*animation: home-float-btn-area-ani 30s ease-out infinite;*/
 }
 /*@keyframes home-float-btn-area-ani {

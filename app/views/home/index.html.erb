@@ -38,7 +38,7 @@
 
 
 <div id="asks" style="padding:12px 12px 0px;"></div>
-<div id="ask_detail_bg" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.7; z-index:12;"></div>
+<div id="ask_detail_bg" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.7; z-index:5;"></div>
 <div class="home-float-btn-area">
 	<% if current_user %>
 		<a href="/asks/new" style="display:block;">
@@ -614,7 +614,7 @@
 
 	function card_detail_on(ask_id) {
 		$("#ask_detail_bg").show().on("click",function(){ card_detail_off(ask_id); return false; });
-		$("#ask_"+ask_id).css("z-index","13");
+		$("#ask_"+ask_id).css("z-index","6");
 		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
 		$("#ask_"+ask_id+"_message_more").click();
 		$("#ask_"+ask_id+"_comment").slideDown(200);
