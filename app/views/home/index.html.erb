@@ -501,6 +501,7 @@
 		$('#asks').append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
+		comment_input_setting(ask.id);
 	}
 
 	var ready = function() {
@@ -543,6 +544,7 @@
 				        $('#asks').append(askTemplate({ask: ask}));
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
+								comment_input_setting(ask.id);
     					}
 							hover_action();
 							tooltip_box();
@@ -606,48 +608,49 @@
 	 	}
 	}
 
-	function comment_input_by_key(){
-    var comment_message = $('#comment_input').val();
+	function comment_input_by_key(ask_id){
+    var comment_message = $("#comment_input_"+ask_id).val();
     if(comment_message == "" || comment_message == undefined){
       notify("내용을 입력해주세요.");
     }else{
-      $("#send_comment_btn").click();
+      $("#send_comment_btn_"+ask_id).click();
     }
   }
 
-  $('#comment_input').keypress(function(e) {
-    if (e.keyCode == '13') {
-      e.preventDefault();
-      comment_input_by_key();
-    }
-  });
+	function comment_input_setting(ask_id) {
+		$("#comment_input_"+ask_id).keypress(function(e) {
+			if (e.keyCode == '13') {
+				e.preventDefault();
+				comment_input_by_key(ask_id);
+			}
+		});
 
-  $("#comment_input").on("click",function(){
-    if (current_user_id == 0){
-      $("#comment_input").blur();
-      notify("회원가입 후<br />의견을 남길 수 있습니다.");
-      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-      setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
-    } else if ( already_vote.length == 0 && current_user_id != ask.user_id ){
-      $("#comment_input").blur();
-      notify("투표 참여 후<br />의견을 남길 수 있습니다.");
-    } else {
-      $("#comment_input").focus();
-    }
-  }).on("keyup",function(){
-    if( $("#comment_input").val().length > 0 ) {
-      $('#send_comment_btn').css('background-color','#ee6e01');
-    } else {
-      $('#send_comment_btn').css('background-color','#dbdbdb');
-    }
-  });
+		$("#comment_input_"+ask_id).on("click",function(){
+			if (current_user_id == 0){
+				$("#comment_input_"+ask_id).blur();
+				notify("회원가입 후<br />의견을 남길 수 있습니다.");
+				setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
+				setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
+			} else if ( already_vote.length == 0 && current_user_id != ask.user_id ){
+				$("#comment_input_"+ask_id).blur();
+				notify("투표 참여 후<br />의견을 남길 수 있습니다.");
+			} else {
+				$("#comment_input_"+ask_id).focus();
+			}
+		}).on("keyup",function(){
+			if( $("#comment_input_"+ask_id).val().length > 0 ) {
+				$("#send_comment_btn_"+ask_id).css('background-color','#ee6e01');
+			} else {
+				$("#send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
+			}
+		});
 
-  if (already_vote != "" || current_user_id == ask.user_id) $("#ask_"+ask.id+"_comment_title").addClass("already_vote");
-  if (current_user_id == ask.user_id) {
-    $("#comment_input").attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
-    $("#ask_"+ask.id+"comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
-  }
-
+		if (already_vote != "" || current_user_id == ask.user_id) $("#ask_"+ask_id+"_comment_title").addClass("already_vote");
+		if (current_user_id == ask.user_id) {
+			$("#comment_input_"+ask_id).attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
+			$("#ask_"+ask_id+"comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
+		}
+	}
 
 	function send_comment(ask_id, ask_deal_id){
 			var content = $(".comment_box2").val();
