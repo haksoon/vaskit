@@ -830,14 +830,14 @@
 					return false;
 			},
 			success: function(data){
-				var detailVoteCountTemplate = _.template($('#detail-vote-count-template').html({detail_vote_count: data.detail_vote_count}));
-				$("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate());
+				var detailVoteCountTemplate = _.template($('#detail-vote-count-template').html());
+				$("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
 			},
 			beforeSend: function(){
 			},
 			complete: function(){
 			}
-		})
+		});
 	}
 
 	function card_detail_off(ask_id) {
