@@ -822,7 +822,7 @@
 			success: function(data){
 				var detailVoteCountTemplate = _.template($('#detail-vote-count-template').html());
 				$("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
-				if ($("#ask_"+ask_id+"_comment:visible") != "") { $("#detail_vote_count_"+ask_id).slideDown(200); }
+				if ($("#ask_"+ask_id+"_comment:visible").length != 0) { $("#detail_vote_count_"+ask_id).slideDown(200); }
 			},
 			beforeSend: function(){
 			},
