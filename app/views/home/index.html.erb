@@ -380,7 +380,7 @@
 				</tr>
 			</table>
 		</div>
-		<div id="detail_vote_count_{{=ask.id}}" style="background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb;"></div>
+		<div id="detail_vote_count_{{=ask.id}}" style="background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb; display:none;"></div>
 	{{ } }}
 </script>
 
@@ -836,6 +836,7 @@
 		card_open_st = $(window).scrollTop();
 		$("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
 		$("#ask_"+ask_id).css("z-index","6");
+		$("#detail_vote_count_"+ask_id).slideDown(200);
 		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
 		$("#ask_"+ask_id+"_message_more").click();
 		$("#ask_"+ask_id+"_comment").slideDown(200);
@@ -849,6 +850,7 @@
 		$("body").animate({scrollTop:card_open_st},250);
 		$("#ask_detail_bg").fadeOut(100);
 		$("#ask_"+ask_id).css("z-index","auto");
+		$("#detail_vote_count_"+ask_id).slideUp(200);
 		$("#ask_deal_"+ask_id+"_table").slideUp(200);
 		if ($("#ask_"+ask_id+"_message_text_shorten").text().length > 70) {
 			$("#ask_"+ask_id+"_message_text").hide();
