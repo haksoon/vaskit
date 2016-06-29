@@ -7,20 +7,24 @@
 			</div>
 			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
 			<div style="box-sizing:border-box; width:100%; background-color:#f4f4f4; border:3px solid #998674; border-radius:5px; overflow:hidden;">
-				<div id="user_overlay_seg" style="max-height:300px; overflow-y:auto;">
-
-				</div>
+			<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left;">
+				<span style="margin-left:12px; padding:4px 5px 1px; color:#998674; background-color:#fff; border-radius:5px;">
+					<i class="fa fa-user"></i>{{= current_user_string_id[0].string_id }}
+				</span>
+				<span style="margin-left:5px; font-size:13px; font-weight:normal; color:#dbdbdb;">
+					&gt;&nbsp;My Page
+				</span>
+				<a href="#" onclick="manage_on(); return false;" style="float:right; width:40px; height:40px; text-align:center; margin-right:2px; color:#fff; font-size:20px;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
+			</p>
+			<div id="user_overlay_seg" style="max-height:300px; overflow-y:auto;"></div>
 			</div>
 	</div>
 
 	<script type="text/template" id="user_overlay_seg_template">
-		<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">마이 페이지</p>
-		<div style="padding:20px;">
-			<p style="margin:0; margin-bottom:16px; padding:0 10px; color:#666; text-align:center;">
-				<span style="color:#998674;">{{= current_user_id[0].string_id }}</span>님, 환영합니다!
-				<!-- <a href="/users/manage" style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a> -->
-				<a href="#" onclick="manage_on(); return "style="float:right;"><i class="fa fa-gear" style="color: #9d9ea1; font-size: 20px;"></i></a>
-			</p>
+		<div style="padding:12px;">
+			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
+				<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;진행 중인 질문 ({{= in_progress_count }}개)
+			</a>
 			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
 				히스토리
 			</div>
@@ -42,9 +46,6 @@
 					<td style="width:5%;"></td>
 				</tr>
 			</table>
-			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
-				진행 중인 질문 ({{= in_progress_count }}개)
-			</a>
 			<a href="/alrams" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;">
 			<!-- <a href="#" onclick="alram_on(); return false;" style="display:block; width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; border-radius:5px;"> -->
 				<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
@@ -56,8 +57,7 @@
 	</script>
 
 	<script type="text/template" id="user_overlay_seg_template_manage">
-		<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">계정 설정</p>
-		<div style="padding:20px;">
+		<div style="padding:12px;">
 			<p style="font-size:16px; font-weight:bold; color:#9d9ea0; margin:0; text-align:left;">계정 설정</p>
 			<table cellspacing="0" cellpadding="0" style="width:100%; margin-top:12px;">
 				<tr>
@@ -134,7 +134,7 @@
 		<% end %>
 
 		$(window).resize(function(){
-	    var user_overlay_seg_height = $(window).height() - 200;
+	    var user_overlay_seg_height = $(window).height() - 160;
 			$("#user_overlay_seg").css("max-height",user_overlay_seg_height);
 	  }).resize();
 
