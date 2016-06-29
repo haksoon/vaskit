@@ -227,10 +227,10 @@
 				<a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">펼치기&nbsp;<i class="fa fa-angle-down"></i></a>
 			</p>
 		</div>
-		<div id="ask_{{=ask.id}}_comment" style="display:none;">
+		<div id="ask_{{=ask.id}}_comment">
       <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" onclick="$('#comment_input').focus(); return false;">
         <span style="width:100%;">
-          <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.
+          <i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
         </span>
         <span style="position:absolute; top:0; left:10px; width:40px;">
           <i class="fa fa-comment" style="font-size:16px;"></i>
@@ -647,7 +647,10 @@
 			}
 		});
 
-		if (already_vote != "" || current_user_id == ask.user_id) $("#ask_"+ask_id+"_comment_title").addClass("already_vote");
+		if (this_vote != "" || current_user_id == ask.user_id) {
+			$("#ask_"+ask_id+"_comment_title").addClass("already_vote");
+			$("#ask_"+ask_id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.');
+		}
 		if (current_user_id == ask.user_id) {
 			$("#comment_input_"+ask_id).attr("placeholder", ask.user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
 			$("#ask_"+ask_id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
