@@ -2,8 +2,8 @@
 <div id="asks_detail" style="padding:15px 12px;"></div>
 
 <script type="text/template" id="ask-show-template">
-  <div class="content_box">
-    <div class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
+  <div id="ask_{{=ask.id}}" class="content_box">
+    <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
 			<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
 	    {{ if (ask.category) { }}
 	    	<span class="category" style="cursor:initial;">{{= ask.category.name }}</span>
@@ -17,7 +17,7 @@
 				{{ } }}
 			</div>
 	  </div>
-		<div class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
+		<div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
 			{{ if( ask.user){ }}
 				{{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
         {{ if ( !ask.user.gender){ }}
