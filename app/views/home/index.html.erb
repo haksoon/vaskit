@@ -335,15 +335,17 @@
  	<% end %>
 
 	var asks = <%= raw @asks.to_json %>;
+
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var my_vote_count = <%= @my_votes.length %>;
+
 	var askTemplate = _.template( $('#ask-template').html() );
 
 	<% unless @ranking_asks.blank? %>
-	var ranking_asks = <%= raw @ranking_asks.to_json %>;
-	for(var i=0; i < ranking_asks.length; i++) {
-		asks.unshift(ranking_asks[i])
-	}
+		var ranking_asks = <%= raw @ranking_asks.to_json %>;
+		for(var i=0; i < ranking_asks.length; i++) {
+			asks.unshift(ranking_asks[i])
+		}
 	<% end %>
 
 	for(var i=0; i < asks.length; i++) {
