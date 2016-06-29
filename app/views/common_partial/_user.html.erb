@@ -205,6 +205,7 @@
 					my_comment_count = data.my_comment_count;
 					in_progress_count = data.in_progress_count;
 					alram_count = data.alram_count;
+					alrams = data.alrams;
 					$("#user_path").html("&gt;&nbsp;My Page");
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
 					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams}));
