@@ -600,7 +600,7 @@
 							$("#ask_"+data.ask.id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.');
 							var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === data.ask.id })
               if (data.ask.right_ask_deal_id == this_vote[0].ask_deal_id) ask_deal_id_change(data.ask.id, data.ask.left_ask_deal_id, data.ask.right_ask_deal_id);
-							$("#comment_input_"+ask_id).bind("click");
+							$("#comment_input_"+data.ask.id).bind("click");
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
@@ -616,9 +616,7 @@
 		$("#ask_detail_bg").show().on("click",function(){ card_detail_off(ask_id); return false; });
 		$("#ask_"+ask_id).css("z-index","13");
 		$("#ask_deal_"+ask_id+"_table").show();
-		$("#ask_"+ask_id+"_message_text").show();
-		$("#ask_"+ask_id+"_message_text_shorten").hide();
-		$("#ask_"+ask_id+"_message_more").hide();
+		$("#ask_"+ask_id+"_message_more").click();
 		$("#ask_"+ask_id+"_comment").show();
 		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_off("+ask_id+"); return false;");
 		$("#ask_"+ask_id+"_detail_on span:eq(0)").hide();
@@ -631,9 +629,11 @@
 		$("#ask_detail_bg").hide();
 		$("#ask_"+ask_id).css("z-index","auto");
 		$("#ask_deal_"+ask_id+"_table").hide();
-		$("#ask_"+ask_id+"_message_text").hide();
-		$("#ask_"+ask_id+"_message_text_shorten").show();
-		$("#ask_"+ask_id+"_message_more").show();
+		if ($("#ask_"+ask_id+"_message_text_shorten").text().length > 70) {
+			$("#ask_"+ask_id+"_message_text").hide();
+			$("#ask_"+ask_id+"_message_text_shorten").show();
+			$("#ask_"+ask_id+"_message_more").show();
+		}
 		$("#ask_"+ask_id+"_comment").hide();
 		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_on("+ask_id+"); return false;");
 		$("#ask_"+ask_id+"_detail_on span:eq(0)").show();
