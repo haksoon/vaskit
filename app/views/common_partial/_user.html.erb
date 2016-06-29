@@ -104,7 +104,9 @@
 				{{ } }}
 			{{ } }}
 			</div>
-			<a id="all_read" href="#" onclick="all_read(); return false;" style="display:block; color:#ee6e01; font-size:12px; height:30px; line-height:40px; padding-right:15px;"><i class="fa fa-bookmark"></i>&nbsp;모두  읽음으로 표시</a>
+			{{ if (!is_new_alram) { }}
+				<a id="all_read" href="#" onclick="all_read(); return false;" style="display:block; color:#ee6e01; font-size:12px; height:30px; line-height:40px;"><i class="fa fa-bookmark"></i>&nbsp;모두  읽음으로 표시</a>
+			{{ } }}
 		</div>
 	</script>
 
