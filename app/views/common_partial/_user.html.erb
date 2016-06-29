@@ -324,11 +324,11 @@
 						},
 						success: function(data){
 							$("#alram_"+alram_id).css("background-color","#fff");
+							window.open("/asks/" + ask_id);
 						},
 						beforeSend: function(){
 						},
 						complete: function(){
-							window.open("/asks/" + ask_id);
 						}
 			});
 		}
