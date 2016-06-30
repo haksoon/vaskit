@@ -293,8 +293,10 @@
 			$("#user_overlay_seg").scrollTop(0);
 		}
 
+		var current_id = current_user_string_id[0].string_id
+
 		function ready_to_submit() {
-			if ( $("#string_id_input").val() != "" || $("#string_id_input").val() != current_user_string_id[0].string_id ) {
+			if ( $("#string_id_input").val() != "" && $("#string_id_input").val() != current_id ) {
 				$("#string_id_change_btn").css("background-color","#ee6e01");
 			} else {
 				$("#string_id_change_btn").css("background-color","#9d9ea1");
@@ -322,6 +324,7 @@
 			        success: function(data){
 			        	if (data.status == "success"){
 									$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+data.new_string_id);
+									current_id = data.new_string_id;
 			        		notify("닉네임이 변경되었습니다.");
 			        	}else{
 			        		notify("이미 있는 닉네임입니다.");

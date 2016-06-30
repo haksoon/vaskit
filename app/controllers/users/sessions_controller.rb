@@ -5,7 +5,7 @@ class Users::SessionsController < Devise::SessionsController
   #AJS추가
   def get_user_data
     if current_user
-      current_user_string_id = User.where(:id => current_user.id).select(:string_id)
+      current_user_string_id = User.where(:id => current_user.id).select(:string_id) # TODO: string_id 값만 가져오게 보완 필요
       my_ask_count = Ask.where(:user_id => current_user.id).count
       my_vote_count = Vote.where(:user_id => current_user.id).count
       my_comment_count = Comment.where(:user_id => current_user.id).count
@@ -16,8 +16,8 @@ class Users::SessionsController < Devise::SessionsController
       @owner_users = []
       @send_users = []
       @alrams.each do |alram|
-        @owner_users << User.where(:id => alram.ask_owner_user_id).select(:string_id)
-        @send_users << User.where(:id => alram.send_user_id).select(:string_id)
+        @owner_users << User.where(:id => alram.ask_owner_user_id).select(:string_id) # TODO: 중첩배열이 아닌 객체 배열로 보완 필요
+        @send_users << User.where(:id => alram.send_user_id).select(:string_id) # TODO: 중첩배열이 아닌 객체 배열로 보완 필요
       end
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count,
