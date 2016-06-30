@@ -13,8 +13,12 @@ class Users::SessionsController < Devise::SessionsController
       alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
       is_new_alram = Alram.where(:user_id => current_user.id, :is_read => false).blank?
       @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15)
-      @owner_users = User.where(:id => @alrams.ask_owner_user_id)
-      @send_users = User.where(:id => @alrams.send_user_id)
+      @alrams.each do |alram|
+        @owner_users = User.where(:id => alram.ask_owner_user_id)
+      end
+      @alrams.each do |alram|
+        @send_users = User.where(:id => alram.send_user_id)
+      end
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count,
       :is_new_alram => is_new_alram, :alrams => @alrams, :owner_users => @owner_users, :send_users => @send_users}
