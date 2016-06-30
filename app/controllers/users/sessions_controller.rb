@@ -16,10 +16,8 @@ class Users::SessionsController < Devise::SessionsController
       @owner_users = []
       @send_users = []
       @alrams.each do |alram|
-        owner_user = User.where(:id => alram.ask_owner_user_id).select(:string_id)
-        send_user = User.where(:id => alram.send_user_id).select(:string_id)
-        @owner_users = owner_user
-        @send_users = send_user
+        @owner_users << User.where(:id => alram.ask_owner_user_id).select(:string_id)
+        @send_users << User.where(:id => alram.send_user_id).select(:string_id)
       end
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count,
