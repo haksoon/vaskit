@@ -121,7 +121,7 @@
 			<p style="margin:0; padding:10px; color:#666;"><i class="fa fa-user"></i>&nbsp;닉네임 변경</p>
 			<div class="table_div" style="margin-bottom:0;">
 				<input id="string_id_input" type="text" class="comment_box" placeholder="닉네임을 입력해주세요." value="<%= current_user.string_id %>" style="padding-right:60px;" />
-				<a id="send_comment_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; display:inline-block; width:50px; height:40px; line-height:40px; text-align:center; background-color:#9d9ea1; color:#fff;">변경</a>
+				<a id="string_id_change_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; display:inline-block; width:50px; height:40px; line-height:40px; text-align:center; background-color:#9d9ea1; color:#fff;">변경</a>
 			</div>
 			<a href="/users/edit" style="color:#666; display:inline-block; padding:10px;"><i class="fa fa-lock"></i>&nbsp;비밀번호 변경</a>
 		</div>
@@ -219,6 +219,7 @@
 
 			$("#user_path").html("&gt;&nbsp;My Page");
 			$("#manage_on").css("transform","scale(1)");
+			$("#user_overlay_seg").scrollTop(0);
 		}
 
 		function user_off(){
@@ -234,12 +235,73 @@
 
 		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
 
+		function all_read(){
+			$.ajax({
+						url: '/alrams/all_read.json',
+						type: 'PUT',
+						data: {'blank':'blank'},
+						error: function(){
+								return false;
+						},
+						success: function(data){
+							$("#alram_list a").css("background-color","#fff");
+							$("#alram_feed_count").html("0개");
+							$("#alram_feed").css("background-color","#998674");
+							$("#all_read").remove();
+							alram_check();
+							notify("모두 읽음 처리 완료");
+						},
+						beforeSend: function(){
+							$(".loading").show();
+						},
+						complete: function(){
+							$(".loading").hide();
+						}
+			});
+		}
+
+		function alram_go_url(alram_id, ask_id){
+			$.ajax({
+						url: '/alrams/read.json',
+						type: 'PUT',
+						data: {'id': alram_id},
+						error: function(){
+								return false;
+						},
+						success: function(data){
+							$("#alram_"+alram_id).css("background-color","#fff");
+							$("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
+							if (data.is_no_alram) {
+								$("#alram_feed").css("background-color","#998674");
+								$("#all_read").remove();
+								alram_check();
+							}
+						},
+						beforeSend: function(){
+						},
+						complete: function(){
+						}
+			});
+			window.open("/asks/" + ask_id);
+		}
+
 		function manage_on() {
 			$("#user_path").html("<span onclick='user_on();' style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
 			$("#manage_on").css("transform","scale(0)");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
+			$("#user_overlay_seg").scrollTop(0);
 		}
+
+		function ready_to_submit() {
+			if ( $("#string_id_input").val() != "" || $("#string_id_input").val() != current_user_string_id[0].string_id ) {
+				$("#string_id_change_btn").css("background-color","#ee6e01");
+			} else {
+				$("#string_id_change_btn").css("background-color","#9d9ea1");
+			}
+		}
+
+		$("#string_id_input").attr("onkeyup","ready_to_submit(); return false;");
 
 		function change_string_id(){
 			var english = /^[a-z0-9]*$/;
@@ -299,56 +361,6 @@
 	            	$(".loading").hide();
 	            }
 			});
-		}
-
-		function all_read(){
-			$.ajax({
-						url: '/alrams/all_read.json',
-						type: 'PUT',
-						data: {'blank':'blank'},
-						error: function(){
-								return false;
-						},
-						success: function(data){
-							$("#alram_list a").css("background-color","#fff");
-							$("#alram_feed_count").html("0개");
-							$("#alram_feed").css("background-color","#998674");
-							$("#all_read").remove();
-							alram_check();
-							notify("모두 읽음 처리 완료");
-						},
-						beforeSend: function(){
-							$(".loading").show();
-						},
-						complete: function(){
-							$(".loading").hide();
-						}
-			});
-		}
-
-		function alram_go_url(alram_id, ask_id){
-			$.ajax({
-						url: '/alrams/read.json',
-						type: 'PUT',
-						data: {'id': alram_id},
-						error: function(){
-								return false;
-						},
-						success: function(data){
-							$("#alram_"+alram_id).css("background-color","#fff");
-							$("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
-							if (data.is_no_alram) {
-								$("#alram_feed").css("background-color","#998674");
-								$("#all_read").remove();
-								alram_check();
-							}
-						},
-						beforeSend: function(){
-						},
-						complete: function(){
-						}
-			});
-			window.open("/asks/" + ask_id);
 		}
 
 	</script>
