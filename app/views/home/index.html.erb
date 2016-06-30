@@ -835,7 +835,7 @@
 		card_open_st = $(window).scrollTop();
 		$("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
 		$("#ask_"+ask_id).css("z-index","6");
-		$("#detail_vote_count_"+ask_id).slideDown(200);
+		show_detail_vote_count(ask_id);
 		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
 		$("#ask_"+ask_id+"_message_more").click();
 		$("#ask_"+ask_id+"_comment").slideDown(200);

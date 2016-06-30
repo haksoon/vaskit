@@ -14,9 +14,9 @@
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 28px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
 					<% if Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px; transition:transform .5s; transform:scale(0);"/>
+						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:9px; right:12px; width:14px; transition:transform .5s; transform:scale(0);"/>
 					<% else %>
-						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px; transition:transform .5s; transform:scale(1);"/>
+						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:9px; right:12px; width:14px; transition:transform .5s; transform:scale(1);"/>
 					<% end %>
 				</a>
 			<% else %>
