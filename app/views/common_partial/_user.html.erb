@@ -68,7 +68,7 @@
 					{{ if (alram.alram_type.match("vote_")) { }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : '#F9F1ED' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							<i class="fa fa-check-circle" style="color: #666;"></i>&nbsp;회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표하였습니다. 중간점검 해보세요!
-							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:2px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
+							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } else if (alram.alram_type.match("sub_comment_")) { }}
 						{{ comment_count = alram.alram_type.replace("sub_comment_","") }}
@@ -78,7 +78,7 @@
 						{{ } else { }}
 							<i class="fa fa-comments" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= comment_count }}명</span>이 회원님이 의견을 남긴 질문에 의견을 남겼습니다.
 						{{ } }}
-							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:2px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
+							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } else if (alram.alram_type.match("like_comment_")) { }}
 						{{ comment_like_count = alram.alram_type.replace("like_comment_","") }}
@@ -88,7 +88,7 @@
 							{{ } else { }}
 								<i class="fa fa-heart" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= comment_like_count }}명</span>이 회원님의 의견을 좋아합니다.
 							{{ } }}
-							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:2px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
+							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } else if (alram.alram_type.match("comment_")) { }}
 						{{ comment_count = alram.alram_type.replace("comment_","") }}
@@ -98,7 +98,7 @@
 							{{ } else { }}
 								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= comment_count }}명</span>이 회원님의 질문에 의견을 남겼습니다.
 							{{ } }}
-							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:2px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
+							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } }}
 				{{ } }}
