@@ -841,8 +841,12 @@ p.output_field {
 	font-size: 12px;
 	font-weight: normal;
 	text-align: center;
-	display: none;
+	transition: transform .2s;
+	transform: scale(0) translateY(-100%);
 	z-index:1;
+}
+.tooltip_area.tooltip_open {
+	transform: scale(1) translateY(0%);
 }
 .tooltip_content {
   padding: 10px;

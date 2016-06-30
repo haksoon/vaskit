@@ -287,19 +287,16 @@ function tooltip_box() {
   if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     $("p.output_field").on("click",function(){
       var tooltip_width = $(this).width();
-      if ($(this).next().is(':hidden')) {
-        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);
-      } else if ($(this).next().is(':visible')) {
-        $(this).next().clearQueue().slideUp(200);
+      $(this).next().css("width",tooltip_width).clearQueue().toggleClass("tooltip_open");
       }
     });
   } else {
     $("p.output_field").hover(
       function(){
         var tooltip_width = $(this).width();
-        $(this).next().css("width",tooltip_width).clearQueue().slideDown(200);
+        $(this).next().css("width",tooltip_width).clearQueue().addClass("tooltip_open");
       }, function(){
-        $(this).next().clearQueue().delay(500).slideUp(200);
+        $(this).next().clearQueue().delay(500).removeClass("tooltip_open");;
       });
   }
 }
