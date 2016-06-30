@@ -158,7 +158,6 @@ function get_past_time(time){
     }
 }
 
-
 var keys = {37: 1, 38: 1, 39: 1, 40: 1};
 
 function preventDefault(e) {
@@ -360,7 +359,7 @@ void function $getLines($){
 
 // AJS추가 : just for fun...
 console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
-console.log("%c이 문구를 보고 계신 바로 당신만을 애타게 찾고 있었습니다!\n3개월 전만 해도 회계사였는데 여기까지 혼자 공부하면서 왔습니다 ㅠ\n이제는 도움이 필요합니다. 도와주세요...", "font-size:1.5em; color:#666;");
+// console.log("%c이 문구를 보고 계신 바로 당신만을 애타게 찾고 있었습니다!\n3개월 전만 해도 회계사였는데 여기까지 혼자 공부하면서 왔습니다 ㅠ\n이제는 도움이 필요합니다. 도와주세요...", "font-size:1.5em; color:#666;");
 
 $( document ).ready(function() {
   $("select").on("change",function(){
