@@ -116,7 +116,7 @@
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px 12px 0;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
 				계정 설정
-				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; float: right;"><%= current_user.email %></span>
+				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">웰컴! <%= current_user.email %></span>
 			</p>
 			<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-user"></i>&nbsp;닉네임 변경</p>
 			<div class="table_div" style="margin-bottom:0;">
@@ -127,7 +127,10 @@
 			<!-- <a href="/users/edit" style="color:#666; display:inline-block; padding:10px;"><i class="fa fa-lock"></i>&nbsp;비밀번호 변경</a> -->
 		</div>
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px;">
-			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">알림 설정</p>
+			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
+				알림 설정
+				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">...귀찮게 하지 않을게요!</span>
+			</p>
 			<div>
 				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-envelope-o"></i>&nbsp;이메일 알림</p>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
@@ -160,7 +163,10 @@
 			</div>
 		</div>
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px;">
-			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">접근 금지&nbsp;<i class="fa fa-ban"></i></p>
+			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
+				접근 금지&nbsp;<i class="fa fa-ban"></i>
+				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">지...금 절 떠나려는건가요?!!</span>
+			</p>
 			<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#666; display:inline-block; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-sign-out"></i>&nbsp;로그아웃</a>
 			<a href="#" onclick="alert('준비중입니다. 회원탈퇴가 꼭 필요하신 경우 VASKIT 고객센터 notice@vaskit.kr로 연락 부탁드립니다.')" style="color:#9d9ea1; display:inline-block; padding:0 10px; height:40px; line-height:40px; float:right;"><i class="fa fa-plug"></i>&nbsp;회원 탈퇴</a>
 		</div>
