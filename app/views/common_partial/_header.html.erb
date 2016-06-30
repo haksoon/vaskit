@@ -14,9 +14,9 @@
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 28px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
 					<% if Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px; display:none;"/>
+						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px; transition:transform .5s; transform:scale(0);"/>
 					<% else %>
-						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px;"/>
+						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px; transition:transform .5s; transform:scale(1);"/>
 					<% end %>
 				</a>
 			<% else %>
@@ -53,7 +53,7 @@
 	      return false;
 	    },
 	    success: function(data){
-				!data.is_no_alram ? $("#new_alram_icon").show() : $("#new_alram_icon").hide();
+				!data.is_no_alram ? $("#new_alram_icon").css("transform","scale(1)") : $("#new_alram_icon").css("transform","scale(0)");
 	    },
 	    beforeSend: function(){
 	    },
