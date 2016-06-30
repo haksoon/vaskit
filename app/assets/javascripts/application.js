@@ -142,7 +142,8 @@ function get_past_time(time){
     month  = Math.floor(diff/1000/60/60/24/30),
    	week = Math.floor(diff/1000/60/60/24/7),
     day  = Math.floor(diff/1000/60/60/24),
-    hour = Math.floor(diff/1000/60/60);
+    hour = Math.floor(diff/1000/60/60),
+    min = Math.floor(diff/1000/60);
     ret = 0;
 
     if (month != 0){
@@ -153,6 +154,20 @@ function get_past_time(time){
     	return day + "일 전";
     }else if(hour != 0){
     	return hour + "시간 전";
+    }else if(min != 0){
+      if(min<60 && min>=50) {
+        return "50분 전";
+      }else if(min<50 && min>=40){
+        return "40분 전";
+      }else if(min<40 && min>=30){
+        return "30분 전";
+      }else if(min<30 && min>=20){
+        return "20분 전";
+      }else if(min<20 && min>=10){
+        return "10분 전";
+      }else{
+      	return "방금 전";
+      }
     }else{
     	return "방금 전";
     }
