@@ -129,6 +129,17 @@
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">알림 설정</p>
 			<div>
+				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-envelope-o"></i>&nbsp;이메일 알림</p>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-bullhorn"></i>&nbsp;주요 공지사항</span>
+					<a id="receive_notice_btn" href="#" onclick="toggle_receive_notice(); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/<%= current_user.receive_notice_email ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트</span>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/off_btn.png" style="display:block; width:40px;"></a>
+				</div>
+			</div>
+			<div>
 				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-bell-o"></i>&nbsp;VASKIT 알림</p>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-check-circle-o"></i>&nbsp;나의 질문 득표 알림</span>
@@ -145,17 +156,6 @@
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-comments-o"></i>&nbsp;나의 의견 댓글 알림</span>
 					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
-				</div>
-			</div>
-			<div>
-				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-envelope-o"></i>&nbsp;이메일 알림</p>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-bullhorn"></i>&nbsp;주요 공지사항</span>
-					<a id="receive_notice_btn" href="#" onclick="toggle_receive_notice(); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/<%= current_user.receive_notice_email ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
-				</div>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/off_btn.png" style="display:block; width:40px;"></a>
 				</div>
 			</div>
 		</div>
