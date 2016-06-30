@@ -39,7 +39,8 @@ Rails.application.routes.draw do
     get 'users/facebook', :to => "users/facebook#auth"
     # get 'users/check_email', :to => "users/sessions#check_email"
     get 'users/check_email', :to => "users/registrations#check_email" #AJS추가
-    get 'users/show', :to => "users/sessions#show" #AJS추가
+    get 'users/get_user_data', :to => "users/sessions#get_user_data" #AJS추가
+    get 'users/alram_check', :to => "users/sessions#alram_check" #AJS추가
     get 'users/manage', :to => "users/sessions#manage"
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
     put 'users/toggle_receive_notice', :to => "users/sessions#toggle_receive_notice"

@@ -362,6 +362,58 @@ void function $getLines($){
 console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
 console.log("%c이 문구를 보고 계신 바로 당신만을 애타게 찾고 있었습니다!\n3개월 전만 해도 회계사였는데 여기까지 혼자 공부하면서 왔습니다 ㅠ\n이제는 도움이 필요합니다. 도와주세요...", "font-size:1.5em; color:#666;");
 
+// AJS추가 : 유저 ID, 관련 정보 불러오기
+function get_user_data() {
+  $.ajax({
+    url: "/users/get_user_data.json",
+    type: "GET",
+    data: {},
+    dataType: 'json',
+    error: function(){
+      return false;
+    },
+    success: function(data){
+      current_user_string_id = data.current_user_string_id;
+      my_ask_count = data.my_ask_count;
+      my_vote_count = data.my_vote_count;
+      my_comment_count = data.my_comment_count;
+      in_progress_count = data.in_progress_count;
+      alram_count = data.alram_count;
+      is_no_alram = data.is_no_alram;
+      alrams = data.alrams;
+      owner_users = data.owner_users;
+      send_users = data.send_users;
+    },
+    beforeSend: function(){
+    },
+    complete: function(){
+    }
+  });
+}
+
+// AJS추가 : 유저 알림 정보 불러오기
+function alram_check() {
+  $.ajax({
+    url: "/users/alram_check.json",
+    type: "GET",
+    data: {},
+    dataType: 'json',
+    error: function(){
+      return false;
+    },
+    success: function(data){
+      is_no_alram = data.is_no_alram;
+      alrams = data.alrams;
+      owner_users = data.owner_users;
+      send_users = data.send_users;
+    },
+    beforeSend: function(){
+    },
+    complete: function(){
+    }
+  });
+}
+
 $( document ).ready(function() {
   $("select").on("change",function(){
     if( $(this).val() != "" ) {

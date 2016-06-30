@@ -50,7 +50,7 @@
 					<td style="width:5%;"></td>
 				</tr>
 			</table>
-			{{ if (!is_new_alram) { }}
+			{{ if (!is_no_alram) { }}
 				<div id="alram_feed" style="width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; padding:0 15px; box-sizing:border-box; border-radius:5px 5px 0 0;">
 					알림피드 (<span id="alram_feed_count">{{= alram_count > 15 ? "15개+" : alram_count+"개" }}</span>)
 				</div>
@@ -106,7 +106,7 @@
 				{{ } }}
 			{{ } }}
 			</div>
-			{{ if (!is_new_alram) { }}
+			{{ if (!is_no_alram) { }}
 				<a id="all_read" href="#" onclick="all_read(); return false;" style="display:block; color:#ee6e01; font-size:12px; height:30px; line-height:40px;"><i class="fa fa-bookmark"></i>&nbsp;모두  읽음으로 표시</a>
 			{{ } }}
 		</div>
@@ -199,38 +199,14 @@
 			$('#search_input').val("");
 			$("#keyword_reset_btn").hide();
 
+			get_user_data();
+			alram_check();
 
-			$.ajax({
-				url: "/users/show.json",
-	      type: "GET",
-	      data: {},
-	      dataType: 'json',
-	      error: function(){
-	          return false;
-	      },
-	      success: function(data){
-					current_user_string_id = data.current_user_string_id;
-					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id[0].string_id);
-					my_ask_count = data.my_ask_count;
-					my_vote_count = data.my_vote_count;
-					my_comment_count = data.my_comment_count;
-					in_progress_count = data.in_progress_count;
-					alram_count = data.alram_count;
-					is_new_alram = data.is_new_alram;
-					alrams = data.alrams;
-					owner_users = data.owner_users;
-					send_users = data.send_users;
-					$("#user_path").html("&gt;&nbsp;My Page");
-					$("#manage_on").css("transform","scale(1)");
-					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams}));
-				},
-				beforeSend: function(){
-	      },
-	      complete: function(){
-	      }
-			})
-
+			$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id[0].string_id);
+			$("#user_path").html("&gt;&nbsp;My Page");
+			$("#manage_on").css("transform","scale(1)");
+			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
+			$("#user_overlay_seg").html(userOverlaySegTemplate());
 		}
 
 		function user_off(){
@@ -347,7 +323,7 @@
 						success: function(data){
 							$("#alram_"+alram_id).css("background-color","#fff");
 							$("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
-							if (data.is_new_alram) {
+							if (data.is_no_alram) {
 								$("#alram_feed").css("background-color","#998674");
 								$("#all_read").remove();
 							}
