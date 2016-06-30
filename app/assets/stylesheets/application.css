@@ -200,6 +200,9 @@ input:focus, select:focus, textarea:focus {
 	background-color: rgba(238,110,1,0.8);
 	top: 1px; right: 0px;
 }
+.search_focus {
+	background-color: #f4f4f4;
+}
 
 .chat_bubble {
 	margin:15px 12px 0px;
