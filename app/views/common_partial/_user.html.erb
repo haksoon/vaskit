@@ -221,6 +221,7 @@
 					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id[0].string_id);
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
 					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, owner_users:owner_users, send_users:send_users}));
+					alram_check();
 		    },
 		    beforeSend: function(){
 		    },
@@ -240,6 +241,7 @@
 			$("#menu_bg").fadeOut(300);
 			$("#user_path").html();
 			$("#user_overlay_seg").html();
+			alram_check();
 		}
 
 		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
@@ -324,7 +326,7 @@
 							$("#alram_feed_count").html("0개");
 							$("#alram_feed").css("background-color","#998674");
 							$("#all_read").remove();
-							$("#new_alram_icon").hide();
+							alram_check();
 							notify("모두 읽음 처리 완료");
 						},
 						beforeSend: function(){
@@ -350,7 +352,7 @@
 							if (data.is_no_alram) {
 								$("#alram_feed").css("background-color","#998674");
 								$("#all_read").remove();
-								$("#new_alram_icon").hide();
+								alram_check();
 							}
 						},
 						beforeSend: function(){
