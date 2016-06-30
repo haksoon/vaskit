@@ -113,67 +113,55 @@
 	</script>
 
 	<script type="text/template" id="user_overlay_seg_template_manage">
-		<div style="padding:12px;">
-			<p style="font-size:16px; font-weight:bold; color:#9d9ea0; margin:0; text-align:left;">계정 설정</p>
-			<table cellspacing="0" cellpadding="0" style="width:100%; margin-top:12px;">
-				<tr>
-					<td>
-						<a style="width:50px; height:32px; line-height:32px; color:#383838;font-size:14px; display:inline-block; text-align:left;">닉네임</a>
-					</td>
-					<td style="width:100%;">
-						<input id="string_id_input" type="text" class="comment_box" placeholder="닉네임을 입력해주세요." value="<%= current_user.string_id %>" style="height:40px;" />
-					</td>
-					<td style="">
-						<a id="send_comment_btn" href="#" onclick="change_string_id(); return false;" style="width:50px; height:40px; line-height:40px; background-color:#998675; display:inline-block; color:#fff; font-size:13px;">변경</a>
-					</td>
-				</tr>
-				<tr>
-					<td style="padding-top:8px;">
-						<a style="width:50px; height:32px; line-height:32px; color:#383838;font-size:14px; display:inline-block; text-align:left; ">이메일</a>
-					</td>
-					<td colspan="2" style="width:100%; padding-top:8px;">
-						<input type="text" class="comment_box" style="height:40px; border-right:1px solid #dbdbdb;" disabled value="<%= current_user.email %>"/>
-					</td>
-				</tr>
-			</table>
-
-			<a href="/users/edit" style="color:#ee6e01; font-size:12px; text-align:left; display:block; padding:14px 0 30px 0;">비밀번호 변경</a>
-			<p style="font-size:16px; font-weight:bold; color:#9d9ea0; margin:0; text-align:left;">알림 설정</p>
-			<p style="font-size:12px; color:#383838; margin:0; padding:10px 0 0 0; text-align:left;">이메일 알림</p>
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px 12px 0;">
+			<p style="font-size:15px; font-weight:bold; color:#666; margin:0; padding:15px 10px 5px; border-bottom:1px solid #998674;">
+				계정 설정
+				<span style="font-size:12px; font-weight:normal; font-style:italic; float: right;"><%= current_user.email %></span>
+			</p>
+			<p style="margin:0; padding:10px; color:#666;"><i class="fa fa-user"></i>&nbsp;닉네임 변경</p>
+			<div class="table_div" style="margin-bottom:0;">
+				<input id="string_id_input" type="text" class="comment_box" placeholder="닉네임을 입력해주세요." value="<%= current_user.string_id %>" style="padding-right:60px;" />
+				<a id="send_comment_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; display:inline-block; width:50px; height:40px; line-height:40px; background-color:#9d9ea1; color:#fff;">변경</a>
+			</div>
+			<a href="/users/edit" style="color:#666; display:inline-block; padding:10px;"><i class="fa fa-lock"></i>&nbsp;비밀번호 변경</a>
 		</div>
-		<div style="background-color:#fff; padding:10px 0; text-align:left; border-top:1px solid #dbdbdb; position:relative;">
-			<span style="font-size:12px; color:#383838; margin:0; text-align:left; margin-left:14px;">주요 공지사항</span>
-			<a id="receive_notice_btn" href="#" onclick="toggle_receive_notice(); return false;" style="position:absolute; top:6px; right:14px;"><img src="/images/etc/<%= current_user.receive_notice_email ? "on" : "off" %>_btn.png" style="width:40px;"></a>
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px;">
+			<p style="font-size:15px; font-weight:bold; color:#666; margin:0; padding:15px 10px 5px; border-bottom:1px solid #998674;">알림 설정</p>
+			<div>
+				<p style="margin:0; padding:10px; color:#666;"><i class="fa fa-bell-o"></i>&nbsp;VASKIT 알림</p>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#9d9ea1;"><i class="fa fa-check-circle"></i>&nbsp;나의 질문 득표 알림</span>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#9d9ea1;"><i class="fa fa-send-o"></i>&nbsp;나의 질문 댓글 알림</span>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#9d9ea1;"><i class="fa fa-heart-o"></i>&nbsp;나의 의견 좋아요 알림</span>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
+					<span style="font-size:12px; color:#9d9ea1;"><i class="fa fa-comments"></i>&nbsp;나의 의견 댓글 알림</span>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+				</div>
+			</div>
+			<div>
+				<p style="margin:0; padding:10px; color:#666;"><i class="fa fa-envelope-o"></i>&nbsp;이메일 알림</p>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#9d9ea1;"><i class="fa fa-bullhorn"></i>&nbsp;주요 공지사항</span>
+					<a id="receive_notice_btn" href="#" onclick="toggle_receive_notice(); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/<%= current_user.receive_notice_email ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
+					<span style="font-size:12px; color:#9d9ea1;"><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트</span>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/off_btn.png" style="display:block; width:40px;"></a>
+				</div>
+			</div>
 		</div>
-
-		<div style="background-color:#fff; padding:10px 0; text-align:left; border-top:1px solid #dbdbdb; position:relative;">
-			<span style="font-size:12px; color:#383838; margin:0; text-align:left; margin-left:14px;">주간 리포트</span>
-			<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:6px; right:14px;"><img src="/images/etc/off_btn.png" style="width:40px;"></a>
-		</div>
-
-		<div style="padding:14px 14px 10px 14px; text-align:left; border-top:1px solid #dbdbdb;">
-			<p style="font-size:12px; color:#383838; margin:0; text-align:left;">VASKIT 알림</p>
-		</div>
-
-
-		<div style="background-color:#fff; padding:10px 0; text-align:left; border-top:1px solid #dbdbdb; position:relative;">
-			<span style="font-size:12px; color:#383838; margin:0; text-align:left; margin-left:14px;">나의 질문 득표 알림</span>
-			<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:6px; right:14px;"><img src="/images/etc/off_btn.png" style="width:40px;"></a>
-		</div>
-
-		<div style="background-color:#fff; padding:10px 0; text-align:left; border-top:1px solid #dbdbdb; position:relative;">
-			<span style="font-size:12px; color:#383838; margin:0; text-align:left; margin-left:14px;">나의 질문 댓글 알림</span>
-			<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:6px; right:14px;"><img src="/images/etc/off_btn.png" style="width:40px;"></a>
-		</div>
-
-		<div style="background-color:#fff; padding:10px 0; text-align:left; border-top:1px solid #dbdbdb; border-bottom:1px solid #dbdbdb; position:relative;">
-			<span style="font-size:12px; color:#383838; margin:0; text-align:left; margin-left:14px;">기타 알림</span>
-			<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:6px; right:14px;"><img src="/images/etc/off_btn.png" style="width:40px;"></a>
-		</div>
-
-		<div style="padding:14px 14px 10px 14px;">
-			<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; display:block; padding-top:30px;">로그아웃</a>
-			<a href="#" onclick="alert('준비중입니다. 회원탈퇴가 꼭 필요하신 경우 VASKIT 고객센터 notice@vaskit.kr로 연락 부탁드립니다.')" style="color:#ee6e01; font-size:12px; text-align:left; display:block; padding:6px 0 30px 0;">회원 탈퇴</a>
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px;">
+			<p style="font-size:15px; font-weight:bold; color:#666; margin:0; padding:15px 10px 5px; border-bottom:1px solid #998674;">접근 금지</p>
+			<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#666; display:inline-block; padding:10px;">로그아웃</a>
+			<a href="#" onclick="alert('준비중입니다. 회원탈퇴가 꼭 필요하신 경우 VASKIT 고객센터 notice@vaskit.kr로 연락 부탁드립니다.')" style="color:#666; display:inline-block; padding:10px; float:right;"><i class="fa fa-plug"></i>&nbsp;회원 탈퇴</a>
 		</div>
 	</script>
 
