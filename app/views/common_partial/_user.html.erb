@@ -216,6 +216,8 @@
 					alram_count = data.alram_count;
 					is_new_alram = data.is_new_alram;
 					alrams = data.alrams;
+					owner_users = data.owner_users;
+					send_users = data.send_users;
 					$("#user_path").html("&gt;&nbsp;My Page");
 					$("#manage_on").css("transform","scale(1)");
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
