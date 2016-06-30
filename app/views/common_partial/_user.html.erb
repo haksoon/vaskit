@@ -69,16 +69,16 @@
 					{{ var send_user = send_users[i][0] }}
 					{{ if (alram.alram_type.match("vote_")) { }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : '#F9F1ED' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
-							<i class="fa fa-check-circle" style="color: #666;"></i>&nbsp;회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표하였습니다. 중간점검 해보세요!
+							<i class="fa fa-check-circle-o" style="color: #666;"></i>&nbsp;회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표하였습니다. 중간점검 해보세요!
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } else if (alram.alram_type.match("sub_comment_")) { }}
 						{{ comment_count = alram.alram_type.replace("sub_comment_","") }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : '#F9F1ED' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 						{{ if (comment_count == 1) { }}
-							<i class="fa fa-comments" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님도 <span style="color:#998674;">{{= owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
+							<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님도 <span style="color:#998674;">{{= owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
 						{{ } else { }}
-							<i class="fa fa-comments" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= comment_count - 1 }}명</span>이 <span style="color:#998674;">{{= owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
+							<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= comment_count - 1 }}명</span>이 <span style="color:#998674;">{{= owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
 						{{ } }}
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
@@ -86,9 +86,9 @@
 						{{ comment_like_count = alram.alram_type.replace("like_comment_","") }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : '#F9F1ED' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							{{ if (comment_like_count == 1) { }}
-								<i class="fa fa-heart" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 의견을 좋아합니다.
+								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 의견을 좋아합니다.
 							{{ } else { }}
-								<i class="fa fa-heart" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= comment_like_count - 1 }}명</span>이 회원님의 의견을 좋아합니다.
+								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= comment_like_count - 1 }}명</span>이 회원님의 의견을 좋아합니다.
 							{{ } }}
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
@@ -131,7 +131,7 @@
 			<div>
 				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-bell-o"></i>&nbsp;VASKIT 알림</p>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-check-circle"></i>&nbsp;나의 질문 득표 알림</span>
+					<span style="font-size:12px; color:#666;"><i class="fa fa-check-circle-o"></i>&nbsp;나의 질문 득표 알림</span>
 					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
@@ -143,7 +143,7 @@
 					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-comments"></i>&nbsp;나의 의견 댓글 알림</span>
+					<span style="font-size:12px; color:#666;"><i class="fa fa-comments-o"></i>&nbsp;나의 의견 댓글 알림</span>
 					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 			</div>
