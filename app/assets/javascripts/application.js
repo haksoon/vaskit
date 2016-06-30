@@ -288,8 +288,7 @@ function tooltip_box() {
     $("p.output_field").on("click",function(){
       var tooltip_width = $(this).width();
       $(this).next().css("width",tooltip_width).clearQueue().toggleClass("tooltip_open");
-      }
-    });
+    })
   } else {
     $("p.output_field").hover(
       function(){
@@ -297,7 +296,8 @@ function tooltip_box() {
         $(this).next().css("width",tooltip_width).clearQueue().addClass("tooltip_open");
       }, function(){
         $(this).next().clearQueue().delay(500).removeClass("tooltip_open");;
-      });
+      }
+    );
   }
 }
 
