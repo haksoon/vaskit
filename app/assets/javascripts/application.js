@@ -142,8 +142,7 @@ function get_past_time(time){
     month  = Math.floor(diff/1000/60/60/24/30),
    	week = Math.floor(diff/1000/60/60/24/7),
     day  = Math.floor(diff/1000/60/60/24),
-    hour = Math.floor(diff/1000/60/60),
-    min = Math.floor(diff/1000/60);
+    hour = Math.floor(diff/1000/60/60);
     ret = 0;
 
     if (month != 0){
@@ -154,8 +153,6 @@ function get_past_time(time){
     	return day + "일 전";
     }else if(hour != 0){
     	return hour + "시간 전";
-    }else if(min != 0){
-      return min + "분 전";
     }else{
     	return "방금 전";
     }
