@@ -13,8 +13,10 @@
 				<a href="#" onclick="user_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 28px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
-					<% unless Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px;"/>
+					<% if Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
+						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px; display:none;"/>
+					<% else %>
+						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:7px; right:9px; width:14px;"/>
 					<% end %>
 				</a>
 			<% else %>
@@ -39,4 +41,31 @@
 	} else {
 		$("#main_header tr td:eq(0)").html('<a href="#" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>');
 	};
+
+	// AJS추가 : 유저 알림 정보 불러오기
+	function alram_check() {
+	  $.ajax({
+	    url: "/users/alram_check.json",
+	    type: "GET",
+	    data: {},
+	    dataType: 'json',
+	    error: function(){
+	      return false;
+	    },
+	    success: function(data){
+	      is_no_alram = data.is_no_alram;
+	      if (!is_no_alram) {
+	        $("#new_alram_icon").show();
+	      } else {
+	        $("#new_alram_icon").hide();
+	      }
+	    },
+	    beforeSend: function(){
+	    },
+	    complete: function(){
+	    }
+	  });
+	}
+	setInterval("alram_check()", 60000);
+
 </script>
