@@ -295,7 +295,7 @@ function tooltip_box() {
         var tooltip_width = $(this).width();
         $(this).next().css("width",tooltip_width).clearQueue().addClass("tooltip_open");
       }, function(){
-        $(this).next().clearQueue().delay(500).removeClass("tooltip_open");;
+        $(this).next().clearQueue().delay(500).removeClass("tooltip_open");
       }
     );
   }
