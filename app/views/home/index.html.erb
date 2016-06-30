@@ -91,6 +91,7 @@
 				<a href="/?keyword={{= ask.user.string_id }}&type=user"><p style="margin:3px 0 0 0; color:#998675; font-size:17px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</p></a>
 				<span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
 					<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
+					<i class="fa fa-clock-o" style="font-size:13px; margin:0 3px 0 5px;"></i>{{= get_past_time(ask.created_at) }}
 				</span>
 				{{ if (ask.be_completed == true) { }}
 					<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
