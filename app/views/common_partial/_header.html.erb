@@ -53,7 +53,7 @@
 	      return false;
 	    },
 	    success: function(data){
-				!data.is_no_alram ? $("#new_alram_icon").css("transform","scale(1)") : $("#new_alram_icon").css("transform","scale(0)");
+				data.alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)") : $("#new_alram_icon").css("transform","scale(0)");
 	    },
 	    beforeSend: function(){
 	    },

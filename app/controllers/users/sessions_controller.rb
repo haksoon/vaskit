@@ -11,7 +11,6 @@ class Users::SessionsController < Devise::SessionsController
       my_comment_count = Comment.where(:user_id => current_user.id).count
       in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count
       alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
-      is_no_alram = Alram.where(:user_id => current_user.id, :is_read => false).blank?
       @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(15)
       @owner_users = []
       @send_users = []
@@ -21,13 +20,13 @@ class Users::SessionsController < Devise::SessionsController
       end
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count,
-      :is_no_alram => is_no_alram, :alrams => @alrams, :owner_users => @owner_users, :send_users => @send_users}
+      :alrams => @alrams, :owner_users => @owner_users, :send_users => @send_users}
   end
 
   #AJS 추가
   def alram_check
-    is_no_alram = Alram.where(:user_id => current_user.id, :is_read => false).blank?
-    render :json => {:is_no_alram => is_no_alram}
+    alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
+    render :json => {:alram_count => alram_count}
   end
 
   def create

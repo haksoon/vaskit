@@ -50,7 +50,7 @@
 					<td style="width:5%;"></td>
 				</tr>
 			</table>
-			{{ if (!is_no_alram) { }}
+			{{ if (alram_count > 0) { }}
 				<div id="alram_feed" style="width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; padding:0 15px; box-sizing:border-box; border-radius:5px 5px 0 0;">
 					알림피드 (<span id="alram_feed_count">{{= alram_count > 15 ? "15개+" : alram_count+"개" }}</span>)
 				</div>
@@ -106,7 +106,7 @@
 				{{ } }}
 			{{ } }}
 			</div>
-			{{ if (!is_no_alram) { }}
+			{{ if (alram_count > 0) { }}
 				<a id="all_read" href="#" onclick="all_read(); return false;" style="display:block; color:#ee6e01; font-size:12px; height:30px; line-height:40px;"><i class="fa fa-bookmark"></i>&nbsp;모두  읽음으로 표시</a>
 			{{ } }}
 		</div>
@@ -212,7 +212,6 @@
 		      my_comment_count = data.my_comment_count;
 		      in_progress_count = data.in_progress_count;
 		      alram_count = data.alram_count;
-		      is_no_alram = data.is_no_alram;
 		      alrams = data.alrams;
 		      owner_users = data.owner_users;
 		      send_users = data.send_users;
@@ -281,7 +280,7 @@
 						success: function(data){
 							$("#alram_"+alram_id).css("background-color","#fff");
 							$("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
-							if (data.is_no_alram) {
+							if (data.alram_count == 0) {
 								$("#alram_feed").css("background-color","#998674");
 								$("#all_read").remove();
 								alram_check();
