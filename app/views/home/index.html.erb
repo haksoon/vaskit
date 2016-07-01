@@ -834,11 +834,8 @@
 	// var card_open_height
 
 	function card_detail_on(ask_id) {
-		card_open_st = $("#ask_"+ask_id).offset().top - 60;
-		$("body").animate({scrollTop:card_open_st},250, function(){
-			$("#search").animate({"top":"-50px"},0);
-			$(".home-float-btn-area").animate({"bottom":"-85px"},0);
-		});
+		card_open_st = $("#ask_"+ask_id).offset().top - 110;
+		$("body").animate({scrollTop:card_open_st},250);
 		// $("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
 		// $("#ask_"+ask_id).css("z-index","6");
 		show_detail_vote_count(ask_id);
@@ -855,7 +852,7 @@
 	}
 
 	function card_detail_off(ask_id) {
-		$("body").animate({scrollTop:card_open_st - 50},250);
+		$("body").animate({scrollTop:card_open_st},250);
 		// $("#ask_detail_bg").fadeOut(100);
 		// $("#ask_"+ask_id).css("z-index","auto");
 		$("#detail_vote_count_"+ask_id).slideUp(200);
