@@ -499,14 +499,14 @@
 			<tr>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-left" style="width:{{= Math.round(male_left_ratio)}}%; background-color:{{= (male_left_ratio > male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }}">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{=detail_vote_count.left.mail_count}}명</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; {{=gender_male_css}}">{{=detail_vote_count.left.male_count}}명</span>
 				</td>
 				<td class="vote-result-td-title" style="{{=gender_male_css }}">
 					남자
 				</td>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-right" style="width:{{= Math.round(male_right_ratio) }}%; background-color:{{= (male_left_ratio < male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-weight:{{=right_font_weight}}; color:{{=right_background}};">{{=detail_vote_count.right.mail_count}}명</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; {{=gender_male_css}}">{{=detail_vote_count.right.male_count}}명</span>
 				</td>
 			</tr>
 			<tr>
