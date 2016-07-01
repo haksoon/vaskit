@@ -14,9 +14,9 @@
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 28px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
 					<% if Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:9px; right:12px; width:14px; transition:transform .5s; transform:scale(0);"/>
+						<span id="new_alram_icon" style="position:absolute; top:9px; right:10px; width:10px; height:10px; line-height:10px; text-align:center; background-color:#ee6e01; border-radius:10px; font-size:10px; font-weight:bold; color:#fff; padding:3px 2px 1px; transition:transform .5s; transform:scale(0);"></span>
 					<% else %>
-						<img id="new_alram_icon" src="/images/header/new.png" style="position:absolute; top:9px; right:12px; width:14px; transition:transform .5s; transform:scale(1);"/>
+						<span id="new_alram_icon" style="position:absolute; top:9px; right:10px; width:10px; height:10px; line-height:10px; text-align:center; background-color:#ee6e01; border-radius:10px; font-size:10px; font-weight:bold; color:#fff; padding:3px 2px 1px; transition:transform .5s; transform:scale(1);"></span>
 					<% end %>
 				</a>
 			<% else %>
@@ -53,7 +53,8 @@
 	      return false;
 	    },
 	    success: function(data){
-				data.alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)") : $("#new_alram_icon").css("transform","scale(0)");
+				alram_count = data.alram_count > 15 ? "15+" : alram_count
+				data.alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count) : $("#new_alram_icon").css("transform","scale(0)").text("");
 	    },
 	    beforeSend: function(){
 	    },
@@ -61,6 +62,7 @@
 	    }
 	  });
 	}
+	alram_check();
 	setInterval("alram_check()", 60000);
 
 </script>
