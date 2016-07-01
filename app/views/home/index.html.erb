@@ -835,7 +835,6 @@
 
 	function card_detail_on(ask_id) {
 		card_open_st = $("#ask_"+ask_id).offset().top - 60;
-		card_open_height = $("#ask_"+ask_id).outerHeight();
 		$("body").animate({scrollTop:card_open_st},250);
 		$("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
 		$("#ask_"+ask_id).css("z-index","6");
@@ -849,6 +848,7 @@
 		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
 		$("#search").hide();
 		$(".home-float-btn-area").hide();
+		card_open_height = $("#ask_"+ask_id).outerHeight();
 	}
 
 	function card_detail_off(ask_id) {
