@@ -499,14 +499,12 @@
 			<tr>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-left" style="width:{{= Math.round(male_left_ratio)}}%; background-color:{{= (male_left_ratio > male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }}">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; {{= (male_left_ratio > male_right_ratio) ? 'color:#ffcc5a; font-weight:bold;' : 'color:#cbcbcb;' }}">{{=detail_vote_count.left.male_count}}명</span>
 				</td>
 				<td class="vote-result-td-title" style="{{=gender_male_css }}">
 					남자
 				</td>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-right" style="width:{{= Math.round(male_right_ratio) }}%; background-color:{{= (male_left_ratio < male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; {{= (male_left_ratio < male_right_ratio) ? 'color:#ffcc5a; font-weight:bold;' : 'color:#cbcbcb;' }}">{{=detail_vote_count.right.male_count}}명</span>
 				</td>
 			</tr>
 			<tr>
