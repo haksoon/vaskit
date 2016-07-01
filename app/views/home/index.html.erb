@@ -872,10 +872,12 @@
 	}
 
 	function card_detail_off_by_scroll(ask_id) {
-		$(window).scroll(function(){
-			card_open_height = $("#ask_"+ask_id).outerHeight();
-
-		})
+		if ($("#ask_"+ask_id).css("z-index") == "6") {
+			$(window).scroll(function(){
+				card_open_height = $("#ask_"+ask_id).outerHeight();
+				console.log(card_open_height);
+			})
+		}
 	}
 
 	function comment_input_by_key(ask_id){
