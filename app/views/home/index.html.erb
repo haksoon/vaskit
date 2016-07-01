@@ -835,9 +835,10 @@
 
 	function card_detail_on(ask_id) {
 		card_open_st = $("#ask_"+ask_id).offset().top - 60;
-		$("body").animate({scrollTop:card_open_st},250)
-		$("#search").stop().animate({"top":"-50px"},0);
-		$(".home-float-btn-area").stop().animate({"bottom":"-85px"},0);
+		$("body").animate({scrollTop:card_open_st},250, function(){
+			$("#search").stop().animate({"top":"-50px"},0);
+			$(".home-float-btn-area").stop().animate({"bottom":"-85px"},0);
+		});
 		// $("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
 		// $("#ask_"+ask_id).css("z-index","6");
 		show_detail_vote_count(ask_id);
