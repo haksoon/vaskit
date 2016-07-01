@@ -216,7 +216,6 @@
 		      alrams = data.alrams;
 		      owner_users = data.owner_users;
 		      send_users = data.send_users;
-					owner = data.owner;
 					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id_now);
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
 					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, owner_users:owner_users, send_users:send_users}));

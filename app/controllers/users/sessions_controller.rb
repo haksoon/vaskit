@@ -18,11 +18,10 @@ class Users::SessionsController < Devise::SessionsController
       @alrams.each do |alram|
         @owner_users << User.where(:id => alram.ask_owner_user_id).select(:string_id) # TODO: 중첩배열이 아닌 객체 배열로 보완 필요
         @send_users << User.where(:id => alram.send_user_id).select(:string_id) # TODO: 중첩배열이 아닌 객체 배열로 보완 필요
-        @owner << User.join(Alram).where(:id => alram.ask_owner_user_id).select(:string_id)
       end
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count, :alram_count => alram_count,
-      :is_no_alram => is_no_alram, :alrams => @alrams, :owner_users => @owner_users, :send_users => @send_users, :owner => @owner}
+      :is_no_alram => is_no_alram, :alrams => @alrams, :owner_users => @owner_users, :send_users => @send_users}
   end
 
   #AJS 추가
