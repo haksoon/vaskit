@@ -97,7 +97,7 @@
 				<span class="seperate_line"></span>
 			</div>
 			<span id="card_overlay_open" class="input_icon left_input" onclick="<% if @ask.id %> hide_card_overlay(); <% else %> show_card_overlay(); <% end %> return false;" style="position:relative; display:block; width: inherit; height: 40px; line-height: 40px; border-right-width: 3px; border-bottom-width: 3px; border-radius: 5px; background-color:<% if @ask.id %>#f4f4f4<% else %>#fff<% end %>; padding-left: 2px; cursor:pointer; font-size:13px; overflow:hidden;">
-				제품 정보 <% if @ask.id %>닫기<% else %>열기<% end %>&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
+				<% if @ask.id %>닫기<% else %>직접 입력하기<% end %>&nbsp;<i class="fa <% if @ask.id %> fa-angle-double-up <% else %> fa-angle-double-down <% end %>" style="font-size:15px;"></i>
 			</span>
 		</div>
 		<div style="display:none;">
@@ -244,14 +244,14 @@
 
 	function show_card_overlay() {
 		$("#card_overlay").slideDown(500, function(){
-			$("#card_overlay_open").html("제품 정보 닫기&nbsp;<i class='fa fa-angle-double-up' style='font-size:15px;'></i>");
+			$("#card_overlay_open").html("닫기&nbsp;<i class='fa fa-angle-double-up' style='font-size:15px;'></i>");
 			$("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
 		});
 	}
 
 	function hide_card_overlay() {
 		$("#card_overlay").slideUp(500, function(){
-			$("#card_overlay_open").html("제품 정보 열기&nbsp;<i class='fa fa-angle-double-down' style='font-size:15px;'></i>");
+			$("#card_overlay_open").html("직접 입력하기&nbsp;<i class='fa fa-angle-double-down' style='font-size:15px;'></i>");
 			$("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
 		});
 	}

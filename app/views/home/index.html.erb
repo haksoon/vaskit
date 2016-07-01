@@ -32,7 +32,7 @@
 	<%= render :partial => "common_partial/header", :locals => {:title => ""} %>
 	<%= render :partial => "common_partial/search" %>
 	<p class="chat_bubble" style="margin-top:65px;">
-		투표하기 버튼을 눌러 투표에 참여해보세요! Let's VASKIT!
+		결정장애에 걸린 많은 이들을 도와주세요! Let's VASKIT!
 	</p>
 <% end %>
 
@@ -499,12 +499,14 @@
 			<tr>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-left" style="width:{{= Math.round(male_left_ratio)}}%; background-color:{{= (male_left_ratio > male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }}">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{=detail_vote_count.left.mail_count}}%</span>
 				</td>
 				<td class="vote-result-td-title" style="{{=gender_male_css }}">
 					남자
 				</td>
 				<td class="vote-result-td">
 					<span class="vote-result-bar-right" style="width:{{= Math.round(male_right_ratio) }}%; background-color:{{= (male_left_ratio < male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-weight:{{=left_font_weight}}; color:{{=left_background}};">{{=detail_vote_count.right.mail_count}}%</span>
 				</td>
 			</tr>
 			<tr>
