@@ -831,10 +831,11 @@
 	}
 
 	var card_open_st
+	var card_open_height
 
 	function card_detail_on(ask_id) {
-		// card_open_st = $(window).scrollTop();
 		card_open_st = $("#ask_"+ask_id).offset().top - 60;
+		card_open_height = $("#ask_"+ask_id).outerHeight();
 		$("body").animate({scrollTop:card_open_st},250);
 		$("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
 		$("#ask_"+ask_id).css("z-index","6");
@@ -847,11 +848,10 @@
 		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
 		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
 		$("#search").hide();
-		$("#home-float-btn-area").hide();
+		$(".home-float-btn-area").hide();
 	}
 
 	function card_detail_off(ask_id) {
-		// $("body").animate({scrollTop:card_open_st},250);
 		$("body").animate({scrollTop:card_open_st - 50},250);
 		$("#ask_detail_bg").fadeOut(100);
 		$("#ask_"+ask_id).css("z-index","auto");
@@ -868,7 +868,13 @@
 		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>');
 		$("#ask_"+ask_id+"_detail_on span:eq(2)").show();
 		$("#search").show();
-		$("#home-float-btn-area").show();
+		$(".home-float-btn-area").show();
+	}
+
+	function card_detail_off_by_scroll(ask_id) {
+		$(window).scroll(function(){
+
+		})
 	}
 
 	function comment_input_by_key(ask_id){
