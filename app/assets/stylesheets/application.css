@@ -430,6 +430,7 @@ input:focus, select:focus, textarea:focus {
 	color:#666;
 	background-color:#fff;
 	font-size:13px;
+	border-top:1px solid #dbdbdb;
 }
 .comment_title.already_vote {
 	color:#fff;
