@@ -79,7 +79,7 @@ function back_button(){
   if ( ask_href.test(window.location.href) && parent.history.length == 1 && referrer_href.test(document.referrer) ) {
     window.close();
   } else if ( ask_href.test(window.location.href) && ( parent.history.length >= 1 || referrer_href.test(document.referrer) == false ) ){
-		window.location = "/";
+		document.location.href = "/";
 	} else {
 		parent.history.back();
 	}
