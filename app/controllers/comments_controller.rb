@@ -39,7 +39,7 @@ class CommentsController < ApplicationController
       message = "not_user"
     end
     comment = comment.as_json(:include => [:user])
-    render :json => {:message => message, :comment => comment} #AJS추가(수정) :ask params는 불필요해서 제거
+    render :json => {:message => message, :comment => comment, :ask => ask}
   end
 
   #어드민에서 삭제
