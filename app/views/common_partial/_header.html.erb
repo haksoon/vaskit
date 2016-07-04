@@ -35,7 +35,7 @@
 <%= render :partial => "common_partial/user" %>
 
 <script>
-	if ( window.location.href == "http://vaskit.kr/" || window.location.href == "http://www.vaskit.kr/" ) {
+	if ( window.location.pathname == "/" ) {
 		$("#main_header tr td:eq(0)").html('<a href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-filter" style="color: #fff; font-size: 26px; padding-top: 12px;"></i></a>');
 	} else {
 		$("#main_header tr td:eq(0)").html('<a href="#" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>');

@@ -648,7 +648,7 @@
 		if (current_user_id == 0 && my_vote_count > 4){
 	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
       setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-			setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
+			setTimeout('window.location.assign("/etc/landing")',2500);
 	 	}else{
 	 		$.ajax({
 		        url: "/votes.json",
@@ -704,7 +704,7 @@
       $("#comment_input").blur();
       notify("회원가입 후<br />의견을 남길 수 있습니다.");
       setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-      setTimeout('window.location.assign("http://vaskit.kr/etc/landing")',2500);
+      setTimeout('window.location.assign("/etc/landing")',2500);
     } else if ( already_vote.length == 0 && !my_ask ){
       $("#comment_input").blur();
       notify("투표 참여 후<br />의견을 남길 수 있습니다.");
