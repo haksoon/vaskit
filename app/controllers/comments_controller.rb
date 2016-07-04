@@ -6,9 +6,10 @@ class CommentsController < ApplicationController
     ask_id = params[:ask_id]
     ask_deal_id = params[:ask_deal_id]
     content = params[:content]
+    comment_id = params[:comment_id] #AJS추가
     message = "success"
     if current_user
-      comment = Comment.create(:user_id => current_user.id, :ask_id => ask_id, :ask_deal_id => ask_deal_id, :content => content)
+      comment = Comment.create(:user_id => current_user.id, :ask_id => ask_id, :ask_deal_id => ask_deal_id, :content => content, :comment_id => comment_id) #AJS추가
       ask = Ask.find(ask_id)
       if ask.user_id != comment.user_id
         alram = Alram.where(:user_id => ask.user_id, :ask_id => ask.id).where("alram_type like ?", "comment_%").first
@@ -38,7 +39,7 @@ class CommentsController < ApplicationController
       message = "not_user"
     end
     comment = comment.as_json(:include => [:user])
-    render :json => {:message => message, :comment => comment, :ask => ask}
+    render :json => {:message => message, :comment => comment} #AJS추가(수정) :ask params는 불필요해서 제거
   end
 
   #어드민에서 삭제
