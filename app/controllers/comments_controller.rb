@@ -39,6 +39,7 @@ class CommentsController < ApplicationController
       message = "not_user"
     end
     comment = comment.as_json(:include => [:user])
+    ask = ask.as_json(:include => [:comments])
     render :json => {:message => message, :comment => comment, :ask => ask}
   end
 

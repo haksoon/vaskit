@@ -1114,9 +1114,8 @@
 		        },
 		        success: function(data){
 		        	if (data.message = "success"){
-		        		var comment = data.comment;
 		        		var askCommentTemplate = _.template($('#ask-comment-template').html());
-		        		$("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:ask, comment:comment}));
+		        		$("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:data.ask, comment:data.comment}));
 		        		notify("작성 완료");
 		        		$("#comment_input_"+ask_id).val("");
                 $("#no_comment_"+ask_id).hide();
@@ -1332,9 +1331,8 @@
 		        },
 		        success: function(data){
 		        	if (data.message = "success"){
-		        		var comment = data.comment;
 		        		var replyCommentTemplate = _.template($('#reply-comment-template').html());
-		        		$("#comment_"+comment_id+"_reply_list").append(replyCommentTemplate({ask:data.ask, comment:comment}));
+		        		$("#comment_"+comment_id+"_reply_list").append(replyCommentTemplate({ask:data.ask, comment:data.comment}));
 		        		notify("작성 완료");
 								comment_reply_cancel(comment_id);
 		        		$("#reply_comment_input_"+comment_id).val("");
