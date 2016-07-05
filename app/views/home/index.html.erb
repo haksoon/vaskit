@@ -1176,7 +1176,7 @@
 	        }
 		});
 		<% else %>
-			notify("회원가입 후<br />추천 할 수 있습니다")
+			notify("회원가입 후<br />추천할 수 있습니다")
 		<% end %>
 	}
 
@@ -1204,7 +1204,7 @@
             var right_ask_deal_comment_count = $("#right_ask_deal_comment_count_"+ask_id);
             right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) - 1 );
           }
-          notify("삭제되었습니다");
+          notify("의견이 삭제되었습니다");
 
         },
         beforeSend: function(){
@@ -1282,27 +1282,31 @@
 	}
 
 	function comment_reply(comment_id){
-	  var reply_box_width = $($("#comment_"+comment_id+" div")[0]).outerWidth() + 15;
-	  var reply_box = $("#comment_"+comment_id+" .comment_reply_box");
+		<% if current_user %>
+		  var reply_box_width = $($("#comment_"+comment_id+" div")[0]).outerWidth() + 15;
+		  var reply_box = $("#comment_"+comment_id+" .comment_reply_box");
 
-	  reply_box.slideDown(100);
-		reply_box.find("textarea").focus();
-	  reply_box.css("width", reply_box_width).css("max-width", reply_box_width).css("min-width","180px");
+		  reply_box.slideDown(100);
+			reply_box.find("textarea").focus();
+		  reply_box.css("width", reply_box_width).css("max-width", reply_box_width).css("min-width","180px");
 
-	  $("#comment_"+comment_id+" .comment_reply_btn").hide();
-	  $("#comment_"+comment_id+" .comment_reply_cancel_btn").show();
+		  $("#comment_"+comment_id+" .comment_reply_btn").hide();
+		  $("#comment_"+comment_id+" .comment_reply_cancel_btn").show();
 
-		$("#reply_comment_input_"+comment_id).on("keyup",function(e){
-			if (e.keyCode == "13") {
-				e.preventDefault();
-				$("#send_reply_comment_btn_"+comment_id).click();
-			}
-			if( $("#reply_comment_input_"+comment_id).val().length > 0 ) {
-				$("#send_reply_comment_btn_"+comment_id).css('background-color','#ee6e01');
-			} else {
-				$("#send_reply_comment_btn_"+comment_id).css('background-color','#dbdbdb');
-			}
-		});
+			$("#reply_comment_input_"+comment_id).on("keyup",function(e){
+				if (e.keyCode == "13") {
+					e.preventDefault();
+					$("#send_reply_comment_btn_"+comment_id).click();
+				}
+				if( $("#reply_comment_input_"+comment_id).val().length > 0 ) {
+					$("#send_reply_comment_btn_"+comment_id).css('background-color','#ee6e01');
+				} else {
+					$("#send_reply_comment_btn_"+comment_id).css('background-color','#dbdbdb');
+				}
+			});
+		<% else %>
+			notify("댓글은 회원만 작성 가능합니다")
+		<% end %>
 	}
 
 	function comment_reply_cancel(comment_id){
