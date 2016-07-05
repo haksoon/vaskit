@@ -393,15 +393,25 @@
 			<div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin-bottom:0px;">
 				<div style="position:relative; margin:5px 0px 0 15px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
 					<span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:left; float:left;">
-						{{=comment.content}}
+						<span>{{=comment.content}}</span>
 						<span style="color:#9d9ea1; margin-left:5px; font-size:11px; float:right; padding-top:1px;">
 							<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 						</span>
 					</span>
-					<textarea id="comment_modify_box_{{=comment.id}}" class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
-				 	<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; right:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:0 4px 4px 0; display:none;">
-	          완료
-	        </a>
+					<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
+						<tbody>
+							<tr>
+								<td style="width:100%;">
+									<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
+								</td>
+								<td style="width:50px;">
+									<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0 2px 2px 0;">
+										완료
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 	        <div style="position:absolute; top:6px; left:-7px; border-right:7px solid cornsilk; border-bottom:8px solid transparent;"></div>
 				</div>
 	      {{ if(already_like.length == 1){ }}
@@ -446,7 +456,7 @@
 						{{= replyCommentTemplate({ask:ask, comment:reply_comment}) }}
 					{{ } }}
 				</div>
-				<div class="comment_reply_box" style="position:relative; float:left; margin:0px 0px 10px 30px; width: 60%; max-width:60%; height:40px; display:inline-block; text-align:left; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; display:none;">
+				<div id="reply_comment_box_{{=comment.id}}" style="position:relative; float:left; margin:0px 0px 10px 30px; width: 60%; max-width:60%; height:40px; display:inline-block; text-align:left; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; display:none;">
 					<table cellpadding="0" cellspacing="0">
 						<tbody>
 							<tr>
@@ -479,15 +489,25 @@
 	      {{ } }}
 	      <div style="position:relative; margin:5px 15px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
 	        <span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:right; float:right;">
-						{{=comment.content}}
+						<span>{{=comment.content}}</span>
 						<span style="color:#9d9ea1; margin-right:5px; font-size:11px; float:left; padding-top:1px;">
 							<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 						</span>
 					</span>
-					<textarea id="comment_modify_box_{{=comment.id}}" class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
-	        <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; left:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:4px 0 0 4px; display:none;">
-	          완료
-	        </a>
+					<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
+						<tbody>
+							<tr>
+								<td style="width:50px;">
+									<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:2px 0 0 2px;">
+										완료
+									</a>
+								</td>
+								<td style="width:100%;">
+									<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 	        <div style="position:absolute; top:6px; right:-7px; border-left:7px solid cornsilk; border-bottom:8px solid transparent;"></div>
 				</div>
 				<p style="margin:0; padding:5px 25px 10px 0; font-size:12px;">
@@ -521,7 +541,7 @@
 						{{= replyCommentTemplate({ask:ask, comment:reply_comment}) }}
 					{{ } }}
 				</div>
-				<div class="comment_reply_box" style="position:relative; float:right; margin:0px 30px 10px 0px; width: 60%; min-width:100%; max-width:100%; max-width:60%; height:40px; display:inline-block; text-align:left; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; display:none;">
+				<div id="reply_comment_box_{{=comment.id}}" style="position:relative; float:right; margin:0px 30px 10px 0px; width: 60%; min-width:100%; max-width:100%; max-width:60%; height:40px; display:inline-block; text-align:left; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; display:none;">
 					<table cellpadding="0" cellspacing="0">
 						<tbody>
 							<tr>
@@ -549,15 +569,25 @@
 		<div id="comment_{{=comment.id}}" style="width:100%; text-align:left; padding-left:5px; box-sizing:border-box;">
 			<div style="position:relative; margin:0px 0px 0 15px; max-width:60%; display:inline-block; text-align:left; background-color:ghostwhite; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
 				<span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:left; float:left;">
-					{{=comment.content}}
+					<span>{{=comment.content}}</span>
 					<span style="color:#9d9ea1; margin-left:5px; font-size:11px; float:right; padding-top:1px;">
 						<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 					</span>
 				</span>
-				<textarea id="comment_modify_box_{{=comment.id}}" class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
-			 	<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; right:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:0 4px 4px 0; display:none;">
-          완료
-        </a>
+				<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
+					<tbody>
+						<tr>
+							<td style="width:100%;">
+								<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
+							</td>
+							<td style="width:50px;">
+								<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0 2px 2px 0;">
+									완료
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
         <div style="position:absolute; top:-6px; left:7px; border-bottom:7px solid ghostwhite; border-right:8px solid transparent;"></div>
 			</div>
       {{ if(already_like.length == 1){ }}
@@ -605,15 +635,25 @@
       {{ } }}
       <div style="position:relative; margin:0px 15px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:ghostwhite; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
         <span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:right; float:right;">
-					{{=comment.content}}
+					<span>{{=comment.content}}</span>
 					<span style="color:#9d9ea1; margin-right:5px; font-size:11px; float:left; padding-top:1px;">
 						<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 					</span>
 				</span>
-				<textarea id="comment_modify_box_{{=comment.id}}" class="comment_modify_box" placeholder="의견을 입력해주세요.">{{=comment.content}}</textarea>
-        <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; position: absolute; top:0px; left:-58px; width:60px; height:57px; background-color:#ee6e01; color:#fff; text-align:center; line-height:57px; font-size:12px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; border-radius:4px 0 0 4px; display:none;">
-          완료
-        </a>
+				<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
+					<tbody>
+						<tr>
+							<td style="width:50px;">
+								<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:2px 0 0 2px;">
+									완료
+								</a>
+							</td>
+							<td style="width:100%;">
+								<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
+							</td>
+						</tr>
+					</tbody>
+				</table>
         <div style="position:absolute; top:-6px; right:7px; border-bottom:7px solid ghostwhite; border-left:8px solid transparent;"></div>
 			</div>
 			<p style="margin:0; padding:5px 25px 10px 0; font-size:12px;">
@@ -1145,36 +1185,36 @@
 
 	function comment_like(comment_id){
 		<% if current_user %>
-		$.ajax({
-	        url: "/comments/"+comment_id+"/like.json",
-	        type: 'POST',
-	        data: {'blank': 'blank'},
-	        dataType: 'json',
-	        error: function(){
-	            return false;
-	        },
-	        success: function(data){
-            var comment_like_icon = $("#comment_"+comment_id+"_like_icon")
-	        	var comment_count_span = $("#comment_"+comment_id+"_like_count");
-	        	if (data.already_like){
-	        		comment_count_span.html( parseInt(comment_count_span.html()) - 1 );
-              comment_count_span.css("color","#9d9ea1");
-              comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1");
-	        		notify("좋아요 취소");
-	        	}else{
-	        		comment_count_span.html( parseInt(comment_count_span.html()) + 1 );
-              comment_count_span.css("color","#ee6e01");
-              comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01");
-	        		notify("좋아요 완료");
-	        	}
-	        },
-	        beforeSend: function(){
-	       		$(".loading").show();
-	        },
-	        complete: function(){
-	        	$(".loading").hide();
-	        }
-		});
+			$.ajax({
+		        url: "/comments/"+comment_id+"/like.json",
+		        type: 'POST',
+		        data: {'blank': 'blank'},
+		        dataType: 'json',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+	            var comment_like_icon = $("#comment_"+comment_id+"_like_icon")
+		        	var comment_count_span = $("#comment_"+comment_id+"_like_count");
+		        	if (data.already_like){
+		        		comment_count_span.html( parseInt(comment_count_span.html()) - 1 );
+	              comment_count_span.css("color","#9d9ea1");
+	              comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1");
+		        		notify("좋아요 취소");
+		        	}else{
+		        		comment_count_span.html( parseInt(comment_count_span.html()) + 1 );
+	              comment_count_span.css("color","#ee6e01");
+	              comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01");
+		        		notify("좋아요 완료");
+		        	}
+		        },
+		        beforeSend: function(){
+		       		$(".loading").show();
+		        },
+		        complete: function(){
+		        	$(".loading").hide();
+		        }
+			});
 		<% else %>
 			notify("회원가입 후<br />추천할 수 있습니다")
 		<% end %>
@@ -1218,90 +1258,122 @@
 	}
 
 	function comment_modify(comment_id){
-	  var comment_content = $("#comment_content_"+comment_id);
-	  var modify_box_width = $("#comment_content_"+comment_id).parent().outerWidth();
-	  var modify_box = $("#comment_modify_box_"+comment_id);
-	  var update_btn = $("#comment_update_btn_"+comment_id);
+		var comment_content = $("#comment_content_"+comment_id);
+		var comment_text = comment_content.find("span:eq(0)").text();
+		var modify_box = $("#comment_modify_box_"+comment_id);
+		var modify_input = $("#comment_modify_input_"+comment_id);
+		var update_btn = $("#comment_update_btn_"+comment_id);
 
-	  modify_box.show().focus();
-	  modify_box.css("width", modify_box_width).css("min-width","180px");
+		var modify_box_width = $($("#comment_"+comment_id+" div")[0]).outerWidth() + 15;
 
-	  update_btn.show();
-	  comment_content.hide();
+		comment_content.hide();
+		modify_box.show();
+		modify_input.val(comment_text).focus();
+		modify_box.css("width", modify_box_width).css("max-width", modify_box_width).css("min-width","180px");
 
-	  $("#comment_modify_btn_"+comment_id).hide();
-	  $("#comment_modify_cancel_btn_"+comment_id).show();
+		$("#comment_modify_btn_"+comment_id).hide();
+		$("#comment_modify_cancel_btn_"+comment_id).show();
+
+		modify_input.on("keypress",function(e){
+			if (e.keyCode == "13") {
+				e.preventDefault();
+				update_btn.click();
+			}
+		}).on("keyup",function(){
+			if( modify_input.val().length > 0 && modify_input.val() != comment_text ) {
+				update_btn.css('background-color','#ee6e01');
+			} else {
+				update_btn.css('background-color','#dbdbdb');
+			}
+		});
 	}
 
 	function comment_modify_cancel(comment_id){
 		var comment_content = $("#comment_content_"+comment_id);
+		var comment_text = comment_content.find("span:eq(0)").text();
 		var modify_box = $("#comment_modify_box_"+comment_id);
-	  var update_btn = $("#comment_update_btn_"+comment_id);
+		var modify_input = $("#comment_modify_input_"+comment_id);
+		var update_btn = $("#comment_update_btn_"+comment_id);
 
-    modify_box.hide();
-
-    update_btn.hide();
-    comment_content.show();
+		comment_content.show();
+		modify_box.hide();
+		modify_input.val(comment_text).blur();
+		update_btn.css("background-color","#dbdbdb");
 
 		$("#comment_modify_btn_"+comment_id).show();
-	  $("#comment_modify_cancel_btn_"+comment_id).hide();
+		$("#comment_modify_cancel_btn_"+comment_id).hide();
 	}
 
 	function comment_update(comment_id){
-	  var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
+		var comment_content = $("#comment_content_"+comment_id);
+		var comment_text = comment_content.find("span:eq(0)").text();
+		var modify_box = $("#comment_modify_box_"+comment_id);
+		var modify_input = $("#comment_modify_input_"+comment_id);
+		var update_btn = $("#comment_update_btn_"+comment_id);
 
-    var content = modify_box.val();
+    var content = modify_input.val();
     if( content == "" || content == null ){
       notify('내용을 입력해주세요.');
       return;
-    }
-    $.ajax({
-      url: "/comments/"+comment_id+".json",
-      type: 'PUT',
-      data: {'content': content},
-      dataType: 'json',
-      error: function(){
-        return false;
-      },
-      success: function(data){
-        var comment_content = $("#comment_"+comment_id+" .comment_content");
-        var modify_box = $("#comment_"+comment_id+" .comment_modify_box");
-        var update_btn = $("#comment_"+comment_id+" .comment_update_btn");
-        comment_content.html(content);
-        modify_box.val(content);
-        comment_modify_cancel(comment_id);
-        notify("수정 완료");
-      },
-      beforeSend: function(){
-        $(".loading").show();
-      },
-      complete: function(){
-        $(".loading").hide();
-      }
-    });
+    } else if ( content == comment_text ) {
+			notify('내용을 수정해주세요.');
+      return;
+		} else {
+			$.ajax({
+				url: "/comments/"+comment_id+".json",
+				type: 'PUT',
+				data: {'content': content},
+				dataType: 'json',
+				error: function(){
+					return false;
+				},
+				success: function(data){
+					comment_content.find("span:eq(0)").html(content);
+					comment_content.show();
+					modify_box.hide();
+					modify_input.html(comment_content.find("span:eq(0)").text()).blur();
+					update_btn.css("background-color","#dbdbdb");
+
+					$("#comment_modify_btn_"+comment_id).show();
+					$("#comment_modify_cancel_btn_"+comment_id).hide();
+
+					notify("수정 완료");
+				},
+				beforeSend: function(){
+					$(".loading").show();
+				},
+				complete: function(){
+					$(".loading").hide();
+				}
+			});
+		}
 	}
 
 	function comment_reply(comment_id){
 		<% if current_user %>
-		  var reply_box_width = $($("#comment_"+comment_id+" div")[0]).outerWidth() + 15;
-		  var reply_box = $("#comment_"+comment_id+" .comment_reply_box");
+		  var reply_box = $("#reply_comment_box_"+comment_id);
+			var reply_input = $("#reply_comment_input_"+comment_id);
+			var update_btn = $("#send_reply_comment_btn_"+comment_id);
+
+			var reply_box_width = $($("#comment_"+comment_id+" div")[0]).outerWidth() + 15;
 
 		  reply_box.slideDown(100);
-			reply_box.find("textarea").focus();
+			reply_input.focus();
 		  reply_box.css("width", reply_box_width).css("max-width", reply_box_width).css("min-width","180px");
 
-		  $("#comment_"+comment_id+" .comment_reply_btn").hide();
-		  $("#comment_"+comment_id+" .comment_reply_cancel_btn").show();
+		  $("#comment_reply_btn_"+comment_id).hide();
+		  $("#comment_reply_cancel_btn_"+comment_id).show();
 
-			$("#reply_comment_input_"+comment_id).on("keyup",function(e){
+			reply_input.on("keypress",function(e){
 				if (e.keyCode == "13") {
 					e.preventDefault();
-					$("#send_reply_comment_btn_"+comment_id).click();
+					update_btn.click();
 				}
-				if( $("#reply_comment_input_"+comment_id).val().length > 0 ) {
-					$("#send_reply_comment_btn_"+comment_id).css('background-color','#ee6e01');
+			}).on("keyup",function(){
+				if( reply_input.val().length > 0 ) {
+					update_btn.css('background-color','#ee6e01');
 				} else {
-					$("#send_reply_comment_btn_"+comment_id).css('background-color','#dbdbdb');
+					update_btn.css('background-color','#dbdbdb');
 				}
 			});
 		<% else %>
@@ -1310,13 +1382,16 @@
 	}
 
 	function comment_reply_cancel(comment_id){
-    var reply_box = $("#comment_"+comment_id+" .comment_reply_box");
+		var reply_box = $("#reply_comment_box_"+comment_id);
+		var reply_input = $("#reply_comment_input_"+comment_id);
+		var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
     reply_box.slideUp(100);
-		reply_box.find("textarea").blur();
+		reply_input.blur();
+		update_btn.css("background-color","#dbdbdb");
 
-    $("#comment_"+comment_id+" .comment_reply_btn").show();
-    $("#comment_"+comment_id+" .comment_reply_cancel_btn").hide();
+		$("#comment_reply_btn_"+comment_id).show();
+		$("#comment_reply_cancel_btn_"+comment_id).hide();
 	}
 
 	function send_reply_comment(ask_id, ask_deal_id, comment_id, is_left){
