@@ -426,6 +426,18 @@
 	        </a>
 	      {{ } }}
 				<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9d9ea1; margin-right:3px;">
+					{{ gender_css = "color:#0389ed;" }}
+				  {{ if (!comment.user.gender) { }}
+				    {{ gender_css = "color:#ea065e;" }}
+				  {{ } }}
+				  <span style="margin:0 3px 0 0; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
+						{{ if (comment.user.gender){ }}
+							<i class="fa fa-male" style="margin-right:-2px;"></i>
+						{{ }else{ }}
+							<i class="fa fa-female" style="margin-right:-2px;"></i>
+						{{ } }}
+						{{= get_user_ages(comment.user.birthday) }}
+					</span>
 					<span style="color:#998674; margin-right:3px;">{{=comment.user.string_id}}</span>
 					{{ if ( comment.user_id == current_user_id ){ }}
 	          <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
@@ -535,6 +547,18 @@
 	          </a>
 	        {{ } }}
 					<span style="color:#998674; margin-left:3px;">{{=comment.user.string_id}}</span>
+					{{ gender_css = "color:#0389ed;" }}
+				  {{ if (!comment.user.gender) { }}
+				    {{ gender_css = "color:#ea065e;" }}
+				  {{ } }}
+				  <span style="margin:0 0 0 3px; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
+						{{= get_user_ages(comment.user.birthday) }}
+						{{ if (comment.user.gender){ }}
+							<i class="fa fa-male" style="margin-left:-2px;"></i>
+						{{ }else{ }}
+							<i class="fa fa-female" style="margin-left:-2px;"></i>
+						{{ } }}
+					</span>
 				</p>
 			</div>
 			<div id="comment_{{=comment.id}}_reply_list">
@@ -606,6 +630,18 @@
         </a>
       {{ } }}
 			<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9d9ea1; margin-right:3px;">
+				{{ gender_css = "color:#0389ed;" }}
+				{{ if (!comment.user.gender) { }}
+					{{ gender_css = "color:#ea065e;" }}
+				{{ } }}
+				<span style="margin:0 3px 0 0; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
+					{{ if (comment.user.gender){ }}
+						<i class="fa fa-male" style="margin-right:-2px;"></i>
+					{{ }else{ }}
+						<i class="fa fa-female" style="margin-right:-2px;"></i>
+					{{ } }}
+					{{= get_user_ages(comment.user.birthday) }}
+				</span>
 				<span style="color:#998674; margin-right:3px;">{{=comment.user.string_id}}</span>
 				{{ if ( comment.user_id == current_user_id ){ }}
           <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
@@ -677,6 +713,18 @@
           </a>
         {{ } }}
 				<span style="color:#998674; margin-left:3px;">{{=comment.user.string_id}}</span>
+				{{ gender_css = "color:#0389ed;" }}
+				{{ if (!comment.user.gender) { }}
+					{{ gender_css = "color:#ea065e;" }}
+				{{ } }}
+				<span style="margin:0 0 0 3px; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
+					{{= get_user_ages(comment.user.birthday) }}
+					{{ if (comment.user.gender){ }}
+						<i class="fa fa-male" style="margin-left:-2px;"></i>
+					{{ }else{ }}
+						<i class="fa fa-female" style="margin-left:-2px;"></i>
+					{{ } }}
+				</span>
 			</p>
 		</div>
 	{{ } }}
@@ -1121,6 +1169,8 @@
 			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
 				$("#comment_input_"+ask_id).blur();
 				notify("투표 참여 후<br />의견을 남길 수 있습니다.");
+				var card_open_st = $("#ask_"+ask_id).offset().top - 110;
+				$("body").animate({scrollTop:card_open_st},250);
 			} else {
 				$("#comment_input_"+ask_id).focus();
 			}
@@ -1358,6 +1408,8 @@
 		if (current_user_id == 0){
 			notify("회원가입 후<br />의견을 남길 수 있습니다.");
 		} else if ( this_vote.length == 0 && current_user_id != ask_user_id ) {
+			var card_open_st = $("#ask_"+ask_id).offset().top - 110;
+			$("body").animate({scrollTop:card_open_st},250);
 			notify("투표 참여 후<br />의견을 남길 수 있습니다.");
 		} else {
 			var reply_box = $("#reply_comment_box_"+comment_id);
