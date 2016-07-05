@@ -16,6 +16,8 @@
 				</div>
 				<span class="input_icon left_input" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i></span>
 			</div>
+			<div id="text_counter" style="float:right; margin:5px 5px 0 0; height: 15px; text-align: center; font-size: 12px; color:#9d9ea1;">0</div>
+			<div id="text_counter_info" style="float:right; margin:5px 5px 0 0; height: 15px; text-align: center; font-size: 12px; color:#9d9ea1; display:none;">기본화면에는 80자까지 표시됩니다&nbsp;<i class="fa fa-hand-o-right"></i></div>
 		</div>
 
 		<div class="content_box" style="padding:10px;">
@@ -682,5 +684,18 @@
 	$("#right_deal_title").attr("onkeyup","ready_to_submit(); return false;");
   $("#new_ask").on("change",function(){ ready_to_submit(); })
 	$("#edit_ask").on("change",function(){ ready_to_submit(); })
+
+	// 입력중 텍스트 길이 표시
+	$('#ask_message').keyup(function () {
+		var inputLength = $(this).val().length;
+	 		$('#text_counter').html(inputLength);
+		if ( inputLength <= 80) {
+			$('#text_counter').css('color','#9d9ea1');
+			$('#text_counter_info').hide();
+		} else if ( inputLength > 80) {
+			$('#text_counter').css('color','#ee6e01');
+			$('#text_counter_info').show();
+		}
+	});
 
 </script>
