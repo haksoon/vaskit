@@ -187,7 +187,7 @@
 			notify('<%=flash[:custom_notice]%>');
 		<% end %>
 
-		var current_user_string_id_now
+		var current_user_string_id
 
 		$(window).resize(function(){
 	    var user_overlay_seg_height = $(window).height() - 190;
@@ -215,7 +215,7 @@
 		      return false;
 		    },
 		    success: function(data){
-		      current_user_string_id = data.current_user_string_id;
+					current_user_string_id = data.current_user_string_id;
 		      my_ask_count = data.my_ask_count;
 		      my_vote_count = data.my_vote_count;
 		      my_comment_count = data.my_comment_count;
@@ -224,7 +224,7 @@
 		      alrams = data.alrams;
 		      owner_users = data.owner_users;
 		      send_users = data.send_users;
-					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id_now);
+					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
 					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, owner_users:owner_users, send_users:send_users}));
 					alram_check();
@@ -314,7 +314,7 @@
 		}
 
 		function ready_to_submit() {
-			if ( $("#string_id_input").val() != "" && $("#string_id_input").val() != current_user_string_id_now ) {
+			if ( $("#string_id_input").val() != "" && $("#string_id_input").val() != current_user_string_id ) {
 				$("#string_id_change_btn").css("background-color","#ee6e01");
 			} else {
 				$("#string_id_change_btn").css("background-color","#9d9ea1");
@@ -326,7 +326,7 @@
 			var string_id = $("#string_id_input").val();
 			if ( string_id == "" || string_id == null ){
 				notify("변경할 닉네임을 입력해 주세요.");
-			} else if ( string_id == current_user_string_id_now ) {
+			} else if ( string_id == current_user_string_id ) {
 				notify("닉네임이 변경되지 않았습니다.");
 			} else if( !english.test(string_id) ) {
 				notify("닉네임은 영문 소문자 및 숫자만 입력 가능합니다.");
@@ -340,8 +340,8 @@
 			        },
 			        success: function(data){
 			        	if (data.status == "success"){
-									current_user_string_id_now = data.new_string_id;
-									$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id_now);
+									current_user_string_id = data.new_string_id;
+									$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
 									$("#string_id_change_btn").css("background-color","#9d9ea1");
 			        		notify("닉네임이 변경되었습니다.");
 			        	} else {
