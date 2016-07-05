@@ -261,62 +261,6 @@
           </div>
         {{ } }}
   		</div>
-			<!-- {{ if( (already_vote.length == 0 || ask.user_id == current_user_id) || (ask.left_ask_deal_id == already_vote[0].ask_deal_id) ){ }}
-				{{ ask_deal_id = ask.left_ask_deal_id }}
-				<div id="comment_new" style="width:100%; text-align:left; padding:10px 0;">
-					<p style="margin:0; padding:5px 0 0 25px; font-size:12px; color:#9d9ea1; margin-right:3px;">
-						<span style="color:#998674; margin-right:3px;"><%= current_user.string_id %></span>
-					</p>
-					<div style="position:relative;margin:4px 0px 0 14px; width: 60%; max-width:60%; height:40px; display:inline-block; text-align:left; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:middle;">
-						<table cellpadding="0" cellspacing="0">
-							<tbody>
-								<tr>
-									<td style="width:100%;">
-										<textarea class="comment_modify_box" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:5px; border-radius:2px 0 0 2px;"></textarea>
-									</td>
-									<td style="width:50px;">
-										<a class="" href="#" onclick="return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0 2px 2px 0;">
-											입력
-										</a>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div style="position:absolute;top:6px;left:-7px;border-right: 7px solid #ffcc5a;border-bottom:8px solid transparent;"></div>
-					</div>
-					<a id="ask_deal_id_change_{{=ask.id}}" href="#" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" style="color:#9d9ea1; font-size:12px;">
-						<i class="fa fa-arrow-circle-right" style="margin:0 3px; color:#ee6e01; font-size:14px; vertical-align:middle;"></i>
-					</a>
-				</div>
-			{{ }else{ }}
-				{{ ask_deal_id = ask.right_ask_deal_id }}
-				<div id="comment_new" style="width:100%; text-align:right; padding:10px 0;">
-					<p style="margin:0; padding:5px 25px 0 0; font-size:12px; color:#9d9ea1; margin-left:3px;">
-						<span style="color:#998674; margin-left:3px;"><%= current_user.string_id %></span>
-					</p>
-					<div style="position:relative; margin:4px 14px 0 0px; width: 60%; max-width:60%; height:40px; display:inline-block; text-align:right; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:middle;">
-						<table cellpadding="0" cellspacing="0">
-							<tbody>
-								<tr>
-									<td style="width:50px;">
-										<a class="" href="#" onclick="return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:2px 0 0 2px;">
-											입력
-										</a>
-									</td>
-									<td style="width:100%;">
-										<textarea class="comment_modify_box" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:5px; border-radius:2px 0 0 2px;"></textarea>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<div style="position:absolute; top:6px; right:-7px; border-left:7px solid #ffcc5a; border-bottom:8px solid transparent;"></div>
-					</div>
-					<a id="ask_deal_id_change_{{=ask.id}}" href="#" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" style="color:#9d9ea1; font-size:12px;">
-						<i class="fa fa-arrow-circle-left" style="margin:0 3px; color:#ee6e01; font-size:14px; vertical-align:middle;"></i>
-					</a>
-				</div>
-			{{ } }} -->
-
   		<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
   			{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
   				{{ ask_deal_id = ask.left_ask_deal_id }}
