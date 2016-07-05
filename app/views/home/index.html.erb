@@ -442,7 +442,7 @@
 	            <i class="fa fa-ban" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">신고</span>
 	          </a>
 					{{ } }}
-					<a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
+					<a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
 	          <i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin-top:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">답글</span>
 					</a>
 					<a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
@@ -513,7 +513,7 @@
 	        <div style="position:absolute; top:6px; right:-7px; border-left:7px solid cornsilk; border-bottom:8px solid transparent;"></div>
 				</div>
 				<p style="margin:0; padding:5px 25px 10px 0; font-size:12px;">
-					<a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
+					<a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
 	          <i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin-top:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">답글</span>
 					</a>
 					<a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
@@ -1352,20 +1352,26 @@
 		}
 	}
 
-	function comment_reply(comment_id){
-		<% if current_user %>
-		  var reply_box = $("#reply_comment_box_"+comment_id);
+	function comment_reply(ask_id, comment_id){
+		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
+		var ask_user_id = $.grep(asks, function(obj) {return obj.id == ask_id})[0].user_id;
+		if (current_user_id == 0){
+			notify("회원가입 후<br />의견을 남길 수 있습니다.");
+		} else if ( this_vote.length == 0 && current_user_id != ask_user_id ) {
+			notify("투표 참여 후<br />의견을 남길 수 있습니다.");
+		} else {
+			var reply_box = $("#reply_comment_box_"+comment_id);
 			var reply_input = $("#reply_comment_input_"+comment_id);
 			var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
 			var reply_box_width = $($("#comment_"+comment_id+" div")[0]).outerWidth() + 15;
 
-		  reply_box.slideDown(100);
+			reply_box.slideDown(100);
 			reply_input.focus();
-		  reply_box.css("width",reply_box_width).css("max-width",reply_box_width).css("min-width","60%");
+			reply_box.css("width",reply_box_width).css("max-width",reply_box_width).css("min-width","60%");
 
-		  $("#comment_reply_btn_"+comment_id).hide();
-		  $("#comment_reply_cancel_btn_"+comment_id).show();
+			$("#comment_reply_btn_"+comment_id).hide();
+			$("#comment_reply_cancel_btn_"+comment_id).show();
 
 			reply_input.on("keypress",function(e){
 				if (e.keyCode == "13") {
@@ -1379,9 +1385,7 @@
 					update_btn.css('background-color','#dbdbdb');
 				}
 			});
-		<% else %>
-			notify("댓글은 회원만 작성 가능합니다")
-		<% end %>
+		}
 	}
 
 	function comment_reply_cancel(comment_id){
