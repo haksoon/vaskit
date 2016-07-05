@@ -5,7 +5,7 @@ class Users::SessionsController < Devise::SessionsController
   #AJS추가
   def get_user_data
     if current_user
-      current_user_string_id = User.where(:id => current_user.id).select(:string_id) # TODO: string_id 값만 가져오게 보완 필요
+      current_user_string_id = User.where(:id => current_user.id).pluck(:string_id)
       my_ask_count = Ask.where(:user_id => current_user.id).count
       my_vote_count = Vote.where(:user_id => current_user.id).count
       my_comment_count = Comment.where(:user_id => current_user.id).count
@@ -25,7 +25,9 @@ class Users::SessionsController < Devise::SessionsController
 
   #AJS 추가
   def alram_check
-    alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
+    if current_user
+      alram_count = Alram.where(:user_id => current_user.id, :is_read => false).count
+    end
     render :json => {:alram_count => alram_count}
   end
 
