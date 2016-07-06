@@ -58,7 +58,7 @@
 <% end %>
 
 <script type="text/template" id="ask-template">
-	<div id="ask_box_{{=ask.id}}" class="ask_box" style="transition:transform .3s; width:100%; height:0; transform:rotateX(90deg); transform-origin:top;">
+	<div id="ask_box_{{=ask.id}}" class="ask_box" style="transition:transform .3s; width:100%; height:0; transform:rotateX(90deg); transform-origin:center center; float:left;">
 		<div id="ask_{{=ask.id}}" class="content_box">
 			<div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
 				<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
@@ -1130,9 +1130,11 @@
 	}
 
 	var card_open_st
+	var is_card_opened = false;
 
 	function card_detail_on(ask_id) {
 		is_more_asks = false;
+		is_card_opened = true;
 		$("#endless_loading").hide();
 
 		card_open_st = $("#ask_"+ask_id).offset().top - 60;
@@ -1150,10 +1152,12 @@
 		$("#search").hide();
 		$(".home-float-btn-area").hide();
 
-		$(".ask_box").css("transform","rotateX(90deg)").css("height","0").css("float","left");
-		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%").css("float","none");
+		$(".ask_box").css("transform","rotateX(90deg)").css("height","0");
+		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%");
 		$("body").animate({scrollTop:0},200);
 
+		$("#main_header").css("position","relative");
+		$("#wrap").css("padding-top","0");
 		$("#category_button:visible").hide();
 		$("#back_button").show().attr("onclick","card_detail_off("+ask_id+"); return false;");
 		$(".chat_bubble").css("margin-top","15px").text("상세화면입니다.");
@@ -1176,15 +1180,18 @@
 		$("#search").show();
 		$(".home-float-btn-area").show();
 
-		$(".ask_box").css("transform","rotateX(0deg)").css("height","100%").css("float","none");
-		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%").css("float","none");
+		$(".ask_box").css("transform","rotateX(0deg)").css("height","100%");
+		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%");
 		$("body").animate({scrollTop:card_open_st},250);
 
+		$("#main_header").css("position","fixed");
+		$("#wrap").css("padding-top","50px");
 		$("#back_button").hide().attr("onclick","back_button(); return false;");
 		main_header_left_button();
 		$(".chat_bubble").css("margin-top","65px").text("결정장애에 걸린 많은 이들을 도와주세요! Let's VASKIT!");
 
 		is_more_asks = true;
+		is_card_opened = false;
 		$("#endless_loading").show();
 	}
 
