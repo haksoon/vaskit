@@ -51,6 +51,13 @@
 </script>
 
 <script>
+	$(".search_bar").hover(function(){
+		$("#search").find(".search_bar").css("border-color","#ee6e01");
+		$("#search").find(".search_btn").css("background-color","rgba(238,110,1,0.8)");
+	},function(){
+		$("#search").find(".search_bar").css("border-color","#998674");
+		$("#search").find(".search_btn").css("background-color","#998674");
+	});
 
 	function search_input_on(){
 		disableScroll();

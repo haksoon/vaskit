@@ -23,6 +23,7 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 ga('create', 'UA-75373901-1', 'auto');
+ga('require', 'displayfeatures'); //인구통계보고서 사용하도록 설정
 ga('send', 'pageview');
 // ga
 
