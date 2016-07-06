@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  	<title>VASKIT</title>
+  	<title>VASKIT테스트</title>
 
     <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
@@ -52,9 +52,16 @@
   			var uniq_key = new Date() + Math.random();
   			$.cookie('uniq_key' , "<%= @uniq_key %>", { expires : 30000, path : '/' });
   		<% end %>
-  		window.onbeforeunload = function(){
-  			window.scrollTo(0,0);
-  		}
+  		// window.onbeforeunload = function(){
+  		// 	window.scrollTo(0,0);
+  		// }
+      history.pushState(null, null, "");
+      window.onpopstate = function(event){
+        event.preventDefault();
+        console.log(event);
+        history.pushState(null, null, "");
+    		card_detail_off(event.currentTarget.opened_ask_id);
+    	}
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
