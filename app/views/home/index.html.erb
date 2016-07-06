@@ -595,6 +595,7 @@
 	{{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
 	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
 		<div id="comment_{{=comment.id}}" style="width:100%; text-align:left; padding-left:5px; box-sizing:border-box;">
+			<span><i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:10px -15px 0px 15px; color:#dbdbdb;"></i></span>
 			<div style="position:relative; margin:0px 0px 0 15px; max-width:60%; display:inline-block; text-align:left; background-color:ghostwhite; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
 				<span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:left; float:left;">
 					<span>{{=comment.content}}</span>
@@ -616,7 +617,6 @@
 						</tr>
 					</tbody>
 				</table>
-        <div style="position:absolute; top:-6px; left:7px; border-bottom:7px solid ghostwhite; border-right:8px solid transparent;"></div>
 			</div>
       {{ if(already_like.length == 1){ }}
         <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#ee6e01; font-size:12px;">
@@ -694,8 +694,8 @@
 						</tr>
 					</tbody>
 				</table>
-        <div style="position:absolute; top:-6px; right:7px; border-bottom:7px solid ghostwhite; border-left:8px solid transparent;"></div>
 			</div>
+			<span><i class="fa fa-reply" style="margin-right:1px; transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:10px 15px 0px -15px; color:#dbdbdb;"></i></span>
 			<p style="margin:0; padding:5px 25px 10px 0; font-size:12px;">
 			  {{ if ( comment.user_id == current_user_id ){ }}
 			    <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="color:#9d9ea1; margin-left:3px;">
@@ -1154,7 +1154,7 @@
 		// $("#ask_"+ask_id).css("z-index","auto");
 		$("#detail_vote_count_"+ask_id).slideUp(200);
 		$("#ask_deal_"+ask_id+"_table").slideUp(200);
-		if ($("#ask_"+ask_id+"_message_text_shorten").text().length > 70) {
+		if ($("#ask_"+ask_id+"_message_text_shorten").text().indexOf("...") != -1) {
 			$("#ask_"+ask_id+"_message_text").hide();
 			$("#ask_"+ask_id+"_message_text_shorten").show();
 			$("#ask_"+ask_id+"_message_more").show();

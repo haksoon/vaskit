@@ -172,6 +172,7 @@ input:focus, select:focus, textarea:focus {
 	color: #998674;
 	font-size: 13px;
 	text-align: left;
+	cursor: text;
 }
 .search_bar.search_on {
 	padding-left: 30px;
