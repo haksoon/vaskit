@@ -287,7 +287,8 @@
   			</tbody>
   		</table>
     </div>
-		<a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
+		<!-- <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;"> -->
+		<a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="/asks/{{=ask.id}}">
 			<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
 			<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
 			<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
