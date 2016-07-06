@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  	<title>VASKIT테스트</title>
+  	<title>VASKIT</title>
 
     <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
@@ -57,10 +57,14 @@
   		// }
       history.pushState(null, null, "");
       window.onpopstate = function(event){
-        event.preventDefault();
-        console.log(event);
+        // event.preventDefault();
+        // console.log(event);
+        if (is_ask_image_opened) {
+          ask_image_off();
+        } else if (is_card_opened) {
+          card_detail_off(event.currentTarget.opened_ask_id);
+        };
         history.pushState(null, null, "");
-    		card_detail_off(event.currentTarget.opened_ask_id);
     	}
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">

@@ -49,7 +49,10 @@
 </script>
 
 <script>
+  var is_ask_image_opened = false;
+
   function ask_image_on(ask_id, is_left){
+    is_ask_image_opened = true;
     disableScroll();
     $("#ask_image_overlay").fadeIn(100);
     $("#ask_image_bg").fadeIn(100);
@@ -58,12 +61,17 @@
     var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
     $("#ask_image_seg").html(askImageSegTemplate({ask:ask, is_left:is_left}));
     $("#ask_image_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","initial");
+
+    history.pushState(null, null, "#ask_"+ask_id+"_image_on");
   }
 
   function ask_image_off(){
+    is_ask_image_opened = false;
     enableScroll();
     $("#ask_image_overlay").fadeOut(300);
     $("#ask_image_bg").fadeOut(300);
+
+    history.pushState(null, null, "");
   }
 
   $(window).resize(function(){
