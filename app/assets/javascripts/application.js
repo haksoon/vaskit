@@ -258,19 +258,19 @@ function hover_action(){
 };
 
 // AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
-function graph_animation(ask_deal_id) {
+function graph_animation(ask_id) {
   var timing = 30
-  var target_ask = "#ask_deal_"+ask_deal_id
+  var target_ask = "#ask_deal_"+ask_id
 
   graph_width_adjust();
-  $(target_ask).find("#main_vote_count_"+ask_deal_id).find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
-  $(target_ask).find("#main_vote_count_"+ask_deal_id).find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
+  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
+  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
 
   var num_left_width = 0;
   var left_ratio_increase = setInterval( function() {
     if(num_left_width < left_ratio_full) {
       num_left_width++;
-      $(target_ask).find(".vote-result-num-left").text(num_left_width+"%");
+      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-left").text(num_left_width+"%");
     } else {
       clearInterval(left_ratio_increase);
     }
@@ -280,7 +280,7 @@ function graph_animation(ask_deal_id) {
   var right_ratio_increase = setInterval( function() {
     if(num_right_width < right_ratio_full) {
       num_right_width++;
-      $(target_ask).find(".vote-result-num-right").text(num_right_width+"%");
+      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-right").text(num_right_width+"%");
     } else {
       clearInterval(right_ratio_increase);
     }
