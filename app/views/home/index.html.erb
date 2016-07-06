@@ -1156,8 +1156,6 @@
 		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%");
 		$("body").animate({scrollTop:0},200);
 
-		$("#main_header").css("position","relative");
-		$("#wrap").css("padding-top","0");
 		$("#category_button:visible").hide();
 		$("#back_button").show().attr("onclick","card_detail_off("+ask_id+"); return false;");
 		$(".chat_bubble").css("margin-top","15px").text("상세화면입니다.");
@@ -1184,8 +1182,6 @@
 		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%");
 		$("body").animate({scrollTop:card_open_st},250);
 
-		$("#main_header").css("position","fixed");
-		$("#wrap").css("padding-top","50px");
 		$("#back_button").hide().attr("onclick","back_button(); return false;");
 		main_header_left_button();
 		$(".chat_bubble").css("margin-top","65px").text("결정장애에 걸린 많은 이들을 도와주세요! Let's VASKIT!");
