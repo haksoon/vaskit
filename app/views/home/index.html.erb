@@ -58,7 +58,7 @@
 <% end %>
 
 <script type="text/template" id="ask-template">
-	<div id="ask_box_{{=ask.id}}" class="ask_box" style="transition:transform .3s; width:100%; float:left; transform:rotateX(90deg); transform-origin:top;">
+	<div id="ask_box_{{=ask.id}}" class="ask_box" style="transition:transform .3s; width:100%; height:0; float:left; transform:rotateX(90deg); transform-origin:top;">
 		<div id="ask_{{=ask.id}}" class="content_box">
 			<div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
 				<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
@@ -994,7 +994,7 @@
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
 		comment_input_setting(ask.id, ask.user);
-		$("#ask_box_"+ask.id).css("transform","rotateX(0deg)");
+		$("#ask_box_"+ask.id).css("transform","rotateX(0deg)").css("height","100%");
 	}
 
 	var check_scroll
@@ -1039,7 +1039,7 @@
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
 								comment_input_setting(ask.id, ask.user);
-								$("#ask_box_"+ask.id).css("transform","rotateX(0deg)");
+								$("#ask_box_"+ask.id).css("transform","rotateX(0deg)").css("height","100%");
     					}
 							hover_action();
 							tooltip_box();
