@@ -1219,10 +1219,8 @@
 		$("#back_button").show().attr("onclick","card_detail_off("+ask_id+"); return false;");
 		$(".chat_bubble").css("margin-top","15px").text("상세화면입니다.");
 
-		var state = { 'ask_id': ask_id };
-		var title = ask_id+"의 상세화면";
 		var url = '/asks/'+ask_id;
-		history.pushState(state, title, url);
+		history.pushState(null, null, url);
 	}
 
 	function card_detail_off(ask_id) {
