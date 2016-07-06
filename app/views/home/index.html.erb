@@ -37,7 +37,8 @@
 <% end %>
 
 
-<div id="asks" class="table_div" style="padding:12px 12px 0px; margin-bottom:0;"></div>
+<div id="asks" style="padding:12px 12px 0px;"></div>
+<!-- <div id="ask_detail_bg" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.7; z-index:5;"></div> -->
 <div class="home-float-btn-area">
 	<% if current_user %>
 		<a href="/asks/new" style="display:block;">
@@ -58,241 +59,239 @@
 <% end %>
 
 <script type="text/template" id="ask-template">
-	<div id="ask_box_{{=ask.id}}" class="ask_box" style="transition:transform .3s; width:100%; height:0; transform:rotateX(90deg); transform-origin:center center; float:left;">
-		<div id="ask_{{=ask.id}}" class="content_box">
-			<div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
-				<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
-		    {{ if (ask.category) { }}
-		    	<span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
-		    {{ }else{ }}
-		    	<span class="category none" onclick="category_on(); return false;">관심사 미설정</span>
-		    {{ } }}
-				<div style="position:absolute; bottom:0; right:0;">
-					<a class="share_icon" style="width:80px;" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
-					{{ if (ask.be_completed == false){ }}
-		        <a class="more_icon" style="width:70px;" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
+	<div id="ask_{{=ask.id}}" class="content_box">
+		<div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
+			<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
+	    {{ if (ask.category) { }}
+	    	<span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
+	    {{ }else{ }}
+	    	<span class="category none" onclick="category_on(); return false;">관심사 미설정</span>
+	    {{ } }}
+			<div style="position:absolute; bottom:0; right:0;">
+				<a class="share_icon" style="width:80px;" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
+				{{ if (ask.be_completed == false){ }}
+	        <a class="more_icon" style="width:70px;" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
+				{{ } }}
+			</div>
+	  </div>
+		<div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
+			{{ if (ask.user) { }}
+			  {{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
+			  {{ if (!ask.user.gender) { }}
+			    {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
+			  {{ } }}
+			  <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px 4px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">
+					{{ if (ask.user.gender){ }}
+						<i class="fa fa-male" style="margin-right:-2px;"></i>
+					{{ }else{ }}
+						<i class="fa fa-female" style="margin-right:-2px;"></i>
 					{{ } }}
-				</div>
-		  </div>
-			<div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
-				{{ if (ask.user) { }}
-				  {{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
-				  {{ if (!ask.user.gender) { }}
-				    {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
-				  {{ } }}
-				  <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px 4px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">
-						{{ if (ask.user.gender){ }}
-							<i class="fa fa-male" style="margin-right:-2px;"></i>
-						{{ }else{ }}
-							<i class="fa fa-female" style="margin-right:-2px;"></i>
-						{{ } }}
-						{{= get_user_ages(ask.user.birthday) }}
-					</p>
-					<a href="/?keyword={{= ask.user.string_id }}&type=user"><p style="margin:3px 0 0 0; color:#998675; font-size:17px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</p></a>
-					<span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
-						<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
-						<i class="fa fa-clock-o" style="font-size:13px; margin:0 3px 0 5px;"></i>{{= get_past_time(ask.created_at) }}
-					</span>
-					{{ if (ask.be_completed == true) { }}
-						<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
-					{{ } }}
-				{{ } }}
-			</div>
-			<div id="ask_deal_{{=ask.id}}" style="position:relative;">
-				{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
-		    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
-			</div>
-			<div id="ask_deal_{{=ask.id}}_table" class="card_detail_table" style="padding:10px 10px 0px 10px; border-bottom:1px solid #dbdbdb; display:none;">
-				{{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
-				{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
-					<div class="table_div">
-						<div class="ask_text_field left_input output_field" style="font-weight:bold;">
-							<p class="output_field">{{= ask.left_ask_deal.title }}</p>
-							<div class="tooltip_area">
-								<div class="tooltip_arrow bottom"></div>
-								<div class="tooltip_content">{{= ask.left_ask_deal.title }}</div>
-							</div>
-						</div>
-						<div class="ask_text_field right_input output_field" style="font-weight:bold;">
-							<p class="output_field">{{= ask.right_ask_deal.title }}</p>
-							<div class="tooltip_area">
-								<div class="tooltip_arrow bottom"></div>
-								<div class="tooltip_content">{{= ask.right_ask_deal.title }}</div>
-							</div>
-						</div>
-						<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
-					</div>
-				{{ } }}
-				{{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "" ){ }}
-					<div class="table_div">
-						<div class="ask_text_field left_input output_field">
-							{{ if (ask.left_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.brand }}</p>{{ } }}
-						</div>
-						<div class="ask_text_field right_input output_field">
-							{{ if (ask.right_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.brand }}</p>{{ } }}
-						</div>
-						<span class="input_icon center_input"><i class="fa fa-tag"></i></span>
-					</div>
-				{{ } }}
-				{{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null ){ }}
-					<div class="table_div">
-						<div class="ask_text_field left_input output_field">
-							{{ if (ask.left_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p>{{ } }}
-						</div>
-						<div class="ask_text_field right_input output_field">
-							{{ if (ask.right_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p>{{ } }}
-						</div>
-						<span class="input_icon center_input"><i class="fa fa-won"></i></span>
-					</div>
-				{{ } }}
-				{{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "" ){ }}
-					<div class="table_div">
-						<div class="ask_text_field left_input output_field">
-							{{ if (ask.left_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
-								<p class="output_field">
-									{{ var aLink = document.createElement("a") }}
-									{{ aLink.href = ask.left_ask_deal.link }}
-									<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
-								</p>
-							{{ } }}
-						</div>
-						<div class="ask_text_field right_input output_field">
-							{{ if (ask.right_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
-								<p class="output_field">
-									{{ var bLink = document.createElement("a") }}
-									{{ bLink.href = ask.right_ask_deal.link }}
-									<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
-								<p>
-							{{ } }}
-						</div>
-						<span class="input_icon center_input"><i class="fa fa-link"></i></span>
-					</div>
-				{{ } }}
-				{{ if (ask.spec1 != "" || ask.spec2 != "" || ask.spec3 != "" || ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") { }}
-					<div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
-						<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
-							{{ if (ask.spec1 != "" || ask.left_ask_deal.spec1 != "" || ask.right_ask_deal.spec1 != "" ){ }}
-								<tr>
-									<td style="width:40%;">
-										{{ if (ask.left_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec1 }}</p>{{ } }}
-									</td>
-									<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
-										{{ if (ask.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec1 }}</p>{{ } }}
-									</td>
-									<td style="width:40%;">
-										{{ if (ask.right_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec1 }}</p>{{ } }}
-									</td>
-								</tr>
-							{{ } }}
-							{{ if (ask.spec2 != "" || ask.left_ask_deal.spec2 != "" || ask.right_ask_deal.spec2 != "" ){ }}
-								<tr>
-									<td style="width:40%; border-top:1px solid #dbdbdb;">
-										{{ if (ask.left_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec2 }}</p>{{ } }}
-									</td>
-									<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
-										{{ if (ask.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec2 }}</p>{{ } }}
-									</td>
-									<td style="width:40%; border-top:1px solid #dbdbdb;">
-										{{ if (ask.right_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec2 }}</p>{{ } }}
-									</td>
-								</tr>
-							{{ } }}
-							{{ if (ask.spec3 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec3 != "" ){ }}
-								<tr>
-									<td style="width:40%; border-top:1px solid #dbdbdb;">
-										{{ if (ask.left_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec3 }}</p>{{ } }}
-									</td>
-									<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
-										{{ if (ask.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec3 }}</p>{{ } }}
-									</td>
-									<td style="width:40%; border-top:1px solid #dbdbdb;">
-										{{ if (ask.right_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec3 }}</p>{{ } }}
-									</td>
-								</tr>
-							{{ } }}
-						</table>
-					</div>
-				{{ } }}
-			</div>
-			<div class="table_div" style="margin-bottom:0; padding:15px;">
-				<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
-					<span id="ask_{{=ask.id}}_message_text">
-						{{ if( ask.message){ }}
-							{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
-							{{= ask_message }}
-						{{ }else{ }}
-							저의 결정장애 극복을 도와주세요! 둘 중에 뭐를 사야 하죠?
-						{{ } }}
-					</span>
-					<span id="ask_{{=ask.id}}_message_text_shorten" style="display:none;">
-					</span>
-					<a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">펼치기&nbsp;<i class="fa fa-angle-down"></i></a>
+					{{= get_user_ages(ask.user.birthday) }}
 				</p>
-			</div>
-			<div id="ask_{{=ask.id}}_comment" style="display:none;">
-	      <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" onclick="$('#comment_input_{{=ask.id}}').click(); return false;">
-	        <span style="width:100%;">
-	          <i class="fa fa-hand-o-up" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
-	        </span>
-	        <span style="position:absolute; top:0; left:10px; width:40px;">
-	          <i class="fa fa-comment" style="font-size:16px;"></i>
-	          <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
-	        </span>
-	        <span style="position:absolute; top:0; right:10px; width:40px;">
-	          <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-	          <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
-	        </span>
-	      </div>
-	  		<div id="ask_{{=ask.id}}_comment_list" class="table_div" style="position:relative; background-color:#fff; padding:0; margin:0; min-height:200px;">
-	        {{ for(var i=0; i < ask.comments.length; i++) {  }}
-	  				{{ comment = ask.comments[i] }}
-	  				{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
-	  		    {{= askCommentTemplate({ask:ask, comment:comment}) }}
-	  			{{ } }}
-	        {{ if(ask.comments.length == 0) { }}
-	          <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
-	        {{ } }}
-	        {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
-	          <div id="visitor_comment_overlay_{{=ask.id}}" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
-	            <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
-	              <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
-	              <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
-	            </p>
-	          </div>
-	        {{ } }}
-	  		</div>
-	  		<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
-	  			{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
-	  				{{ ask_deal_id = ask.left_ask_deal_id }}
-	  				{{ ask_deal_text = "A" }}
-	  			{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-	  				{{ ask_deal_id = ask.left_ask_deal_id }}
-	  				{{ ask_deal_text = "A" }}
-	  			{{ }else{ }}
-	  				{{ ask_deal_id = ask.right_ask_deal_id }}
-	  				{{ ask_deal_text = "B" }}
-	  			{{ } }}
-	  			<tbody>
-	  				<tr>
-	  					<td style="padding:7px 7px 7px 12px;">
-	  						<a id="ask_deal_id_change_{{=ask.id}}" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
-	  					</td>
-	  					<td style="width:100%; padding-right:7px;">
-	  						<textarea id="comment_input_{{=ask.id}}" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
-	  					</td>
-	  					<td style="padding-right:12px;">
-	  						<a id="send_comment_btn_{{=ask.id}}" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
-	  					</td>
-	  				</tr>
-	  			</tbody>
-	  		</table>
-	    </div>
-			<a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
-				<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
-				<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
-				<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
-			</a>
+				<a href="/?keyword={{= ask.user.string_id }}&type=user"><p style="margin:3px 0 0 0; color:#998675; font-size:17px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</p></a>
+				<span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
+					<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
+					<i class="fa fa-clock-o" style="font-size:13px; margin:0 3px 0 5px;"></i>{{= get_past_time(ask.created_at) }}
+				</span>
+				{{ if (ask.be_completed == true) { }}
+					<div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
+				{{ } }}
+			{{ } }}
 		</div>
+		<div id="ask_deal_{{=ask.id}}" style="position:relative;">
+			{{ var askDealTemplate = _.template($('#ask-deal-template').html()) }}
+	    {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
+		</div>
+		<div id="ask_deal_{{=ask.id}}_table" class="card_detail_table" style="padding:10px 10px 0px 10px; border-bottom:1px solid #dbdbdb; display:none;">
+			{{ var blank_field = '<p class="output_field" style="color:#9d9ea1;">-</p>' }}
+			{{ if (ask.left_ask_deal.title != "" && ask.right_ask_deal.title != "" ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field" style="font-weight:bold;">
+						<p class="output_field">{{= ask.left_ask_deal.title }}</p>
+						<div class="tooltip_area">
+							<div class="tooltip_arrow bottom"></div>
+							<div class="tooltip_content">{{= ask.left_ask_deal.title }}</div>
+						</div>
+					</div>
+					<div class="ask_text_field right_input output_field" style="font-weight:bold;">
+						<p class="output_field">{{= ask.right_ask_deal.title }}</p>
+						<div class="tooltip_area">
+							<div class="tooltip_arrow bottom"></div>
+							<div class="tooltip_content">{{= ask.right_ask_deal.title }}</div>
+						</div>
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-cube"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "" ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field">
+						{{ if (ask.left_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.brand }}</p>{{ } }}
+					</div>
+					<div class="ask_text_field right_input output_field">
+						{{ if (ask.right_ask_deal.brand == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.brand }}</p>{{ } }}
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-tag"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field">
+						{{ if (ask.left_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.left_ask_deal.price) }}원</p>{{ } }}
+					</div>
+					<div class="ask_text_field right_input output_field">
+						{{ if (ask.right_ask_deal.price == null) { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= numberWithCommas(ask.right_ask_deal.price) }}원</p>{{ } }}
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-won"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "" ){ }}
+				<div class="table_div">
+					<div class="ask_text_field left_input output_field">
+						{{ if (ask.left_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
+							<p class="output_field">
+								{{ var aLink = document.createElement("a") }}
+								{{ aLink.href = ask.left_ask_deal.link }}
+								<a href="{{= ask.left_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
+							</p>
+						{{ } }}
+					</div>
+					<div class="ask_text_field right_input output_field">
+						{{ if (ask.right_ask_deal.link == "") { }} {{= blank_field }} {{ } else { }}
+							<p class="output_field">
+								{{ var bLink = document.createElement("a") }}
+								{{ bLink.href = ask.right_ask_deal.link }}
+								<a href="{{= ask.right_ask_deal.link }}" target="_blank" style="color:#ee6e01;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= bLink.host }}</a>
+							<p>
+						{{ } }}
+					</div>
+					<span class="input_icon center_input"><i class="fa fa-link"></i></span>
+				</div>
+			{{ } }}
+			{{ if (ask.spec1 != "" || ask.spec2 != "" || ask.spec3 != "" || ask.left_ask_deal.spec1 != "" || ask.left_ask_deal.spec2 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec1 != "" || ask.right_ask_deal.spec2 != "" || ask.right_ask_deal.spec3 != "") { }}
+				<div class="table_div" style="border:1px solid #dbdbdb; border-radius:5px; overflow:hidden;">
+					<table class="deal_spec_detail" cellspacing="0" cellpadding="0" style="width:100%;">
+						{{ if (ask.spec1 != "" || ask.left_ask_deal.spec1 != "" || ask.right_ask_deal.spec1 != "" ){ }}
+							<tr>
+								<td style="width:40%;">
+									{{ if (ask.left_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec1 }}</p>{{ } }}
+								</td>
+								<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb;">
+									{{ if (ask.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec1 }}</p>{{ } }}
+								</td>
+								<td style="width:40%;">
+									{{ if (ask.right_ask_deal.spec1 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec1 }}</p>{{ } }}
+								</td>
+							</tr>
+						{{ } }}
+						{{ if (ask.spec2 != "" || ask.left_ask_deal.spec2 != "" || ask.right_ask_deal.spec2 != "" ){ }}
+							<tr>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.left_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec2 }}</p>{{ } }}
+								</td>
+								<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
+									{{ if (ask.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec2 }}</p>{{ } }}
+								</td>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.right_ask_deal.spec2 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec2 }}</p>{{ } }}
+								</td>
+							</tr>
+						{{ } }}
+						{{ if (ask.spec3 != "" || ask.left_ask_deal.spec3 != "" || ask.right_ask_deal.spec3 != "" ){ }}
+							<tr>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.left_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.left_ask_deal.spec3 }}</p>{{ } }}
+								</td>
+								<td style="width:20%; background-color:#f4f4f4; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; border-top:1px solid #dbdbdb;">
+									{{ if (ask.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.spec3 }}</p>{{ } }}
+								</td>
+								<td style="width:40%; border-top:1px solid #dbdbdb;">
+									{{ if (ask.right_ask_deal.spec3 == "") { }} {{= blank_field }} {{ } else { }}<p class="output_field">{{= ask.right_ask_deal.spec3 }}</p>{{ } }}
+								</td>
+							</tr>
+						{{ } }}
+					</table>
+				</div>
+			{{ } }}
+		</div>
+		<div class="table_div" style="margin-bottom:0; padding:15px;">
+			<p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
+				<span id="ask_{{=ask.id}}_message_text">
+					{{ if( ask.message){ }}
+						{{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
+						{{= ask_message }}
+					{{ }else{ }}
+						저의 결정장애 극복을 도와주세요! 둘 중에 뭐를 사야 하죠?
+					{{ } }}
+				</span>
+				<span id="ask_{{=ask.id}}_message_text_shorten" style="display:none;">
+				</span>
+				<a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">펼치기&nbsp;<i class="fa fa-angle-down"></i></a>
+			</p>
+		</div>
+		<div id="ask_{{=ask.id}}_comment" style="display:none;">
+      <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" onclick="$('#comment_input_{{=ask.id}}').click(); return false;">
+        <span style="width:100%;">
+          <i class="fa fa-hand-o-up" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
+        </span>
+        <span style="position:absolute; top:0; left:10px; width:40px;">
+          <i class="fa fa-comment" style="font-size:16px;"></i>
+          <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
+        </span>
+        <span style="position:absolute; top:0; right:10px; width:40px;">
+          <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+          <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
+        </span>
+      </div>
+  		<div id="ask_{{=ask.id}}_comment_list" class="table_div" style="position:relative; background-color:#fff; padding:0; margin:0; min-height:200px;">
+        {{ for(var i=0; i < ask.comments.length; i++) {  }}
+  				{{ comment = ask.comments[i] }}
+  				{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
+  		    {{= askCommentTemplate({ask:ask, comment:comment}) }}
+  			{{ } }}
+        {{ if(ask.comments.length == 0) { }}
+          <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
+        {{ } }}
+        {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
+          <div id="visitor_comment_overlay_{{=ask.id}}" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
+            <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
+              <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
+              <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
+            </p>
+          </div>
+        {{ } }}
+  		</div>
+  		<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
+  			{{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
+  				{{ ask_deal_id = ask.left_ask_deal_id }}
+  				{{ ask_deal_text = "A" }}
+  			{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+  				{{ ask_deal_id = ask.left_ask_deal_id }}
+  				{{ ask_deal_text = "A" }}
+  			{{ }else{ }}
+  				{{ ask_deal_id = ask.right_ask_deal_id }}
+  				{{ ask_deal_text = "B" }}
+  			{{ } }}
+  			<tbody>
+  				<tr>
+  					<td style="padding:7px 7px 7px 12px;">
+  						<a id="ask_deal_id_change_{{=ask.id}}" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="width:30px; height:32px; line-height:32px; border:1px solid #dbdbdb; color:#4b3d3d; display:inline-block; font-size:14px;">{{=ask_deal_text}}</a>
+  					</td>
+  					<td style="width:100%; padding-right:7px;">
+  						<textarea id="comment_input_{{=ask.id}}" class="comment_box2" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>"></textarea>
+  					</td>
+  					<td style="padding-right:12px;">
+  						<a id="send_comment_btn_{{=ask.id}}" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="width:50px; height:34px; line-height:34px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
+  					</td>
+  				</tr>
+  			</tbody>
+  		</table>
+    </div>
+		<a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
+			<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
+			<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
+			<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
+		</a>
 	</div>
 </script>
 
@@ -994,13 +993,11 @@
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
 		comment_input_setting(ask.id, ask.user);
-		$("#ask_box_"+ask.id).css("transform","rotateX(0deg)").css("height","100%");
 	}
 
-	var check_scroll
 	var ready = function() {
 		// if (asks.length == <%= Ask::ASK_PER %>){
-			check_scroll = setInterval("checkScroll()", 1000);
+			setInterval("checkScroll()", 1000);
 		// }
 	};
 
@@ -1039,7 +1036,6 @@
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
 								comment_input_setting(ask.id, ask.user);
-								$("#ask_box_"+ask.id).css("transform","rotateX(0deg)").css("height","100%");
     					}
 							hover_action();
 							tooltip_box();
@@ -1129,16 +1125,14 @@
 		});
 	}
 
-	var card_open_st
-	var is_card_opened = false;
+	// var card_open_st
+	// var card_open_height
 
 	function card_detail_on(ask_id) {
-		is_more_asks = false;
-		is_card_opened = true;
-		$("#endless_loading").hide();
-
-		card_open_st = $("#ask_"+ask_id).offset().top - 60;
-
+		var card_open_st = $("#ask_"+ask_id).offset().top - 60;
+		if ($(window).scrollTop() < card_open_st ) $("body").animate({scrollTop:card_open_st},250);
+		// $("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
+		// $("#ask_"+ask_id).css("z-index","6");
 		show_detail_vote_count(ask_id);
 		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
 		$("#ask_"+ask_id+"_message_more").click();
@@ -1147,21 +1141,17 @@
 		$("#ask_"+ask_id+"_detail_on span:eq(0)").hide();
 		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
 		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
+		// $("#search").hide();
+		// $(".home-float-btn-area").hide();
+		// card_detail_off_by_scroll(ask_id);
 		btn_text_hide_all(ask_id);
-
-		$("#search").hide();
-		$(".home-float-btn-area").hide();
-
-		$(".ask_box").css("transform","rotateX(90deg)").css("height","0");
-		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%").css("float","none");
-		$("body").animate({scrollTop:0},200);
-
-		$("#category_button:visible").hide();
-		$("#back_button").show().attr("onclick","card_detail_off("+ask_id+"); return false;");
-		$(".chat_bubble").css("margin-top","15px").text("상세화면입니다.");
 	}
 
 	function card_detail_off(ask_id) {
+		var card_open_st = $("#ask_"+ask_id).offset().top - 110;
+		$("body").animate({scrollTop:card_open_st},250);
+		// $("#ask_detail_bg").fadeOut(100);
+		// $("#ask_"+ask_id).css("z-index","auto");
 		$("#detail_vote_count_"+ask_id).slideUp(200);
 		$("#ask_deal_"+ask_id+"_table").slideUp(200);
 		if ($("#ask_"+ask_id+"_message_text_shorten").text().length > 70) {
@@ -1174,22 +1164,19 @@
 		$("#ask_"+ask_id+"_detail_on span:eq(0)").show();
 		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>');
 		$("#ask_"+ask_id+"_detail_on span:eq(2)").show();
-
-		$("#search").show();
-		$(".home-float-btn-area").show();
-
-		$(".ask_box").css("transform","rotateX(0deg)").css("height","100%");
-		$("#ask_box_"+ask_id).css("transform","rotateX(0deg)").css("height","100%").css("float","left");
-		$("body").animate({scrollTop:card_open_st},250);
-
-		$("#back_button").hide().attr("onclick","back_button(); return false;");
-		main_header_left_button();
-		$(".chat_bubble").css("margin-top","65px").text("결정장애에 걸린 많은 이들을 도와주세요! Let's VASKIT!");
-
-		is_more_asks = true;
-		is_card_opened = false;
-		$("#endless_loading").show();
+		// $("#search").show();
+		// $(".home-float-btn-area").show();
+		// card_detail_off_by_scroll(ask_id);
 	}
+
+	// function card_detail_off_by_scroll(ask_id) {
+	// 	if ($("#ask_"+ask_id).css("z-index") == "6") {
+	// 		$(window).scroll(function(){
+	// 			card_open_height = $("#ask_"+ask_id).outerHeight();
+	// 			console.log(card_open_height);
+	// 		})
+	// 	}
+	// }
 
 	function comment_input_by_key(ask_id){
     var comment_message = $("#comment_input_"+ask_id).val();
