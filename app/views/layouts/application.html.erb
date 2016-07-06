@@ -55,16 +55,17 @@
   		// window.onbeforeunload = function(){
   		// 	window.scrollTo(0,0);
   		// }
-      history.pushState(null, null, "");
+      history.pushState(null, null, "/");
       window.onpopstate = function(event){
-        event.preventDefault();
+        // event.preventDefault();
         // console.log(event);
         if (is_ask_image_opened) {
           ask_image_off();
+          history.pushState(null, null, "");
         } else if (is_card_opened) {
           card_detail_off(event.currentTarget.opened_ask_id);
+          history.pushState(null, null, "/");
         };
-        history.pushState(null, null, "");
     	}
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">

@@ -62,7 +62,7 @@
     $("#ask_image_seg").html(askImageSegTemplate({ask:ask, is_left:is_left}));
     $("#ask_image_box").outerHeight() > $(window).height() ? $("#ask_image_seg").css("height","100%") : $("#ask_image_seg").css("height","initial");
 
-    history.pushState(null, null, "#ask_"+ask_id+"_image_on");
+    history.pushState(null, null, "");
   }
 
   function ask_image_off(){
