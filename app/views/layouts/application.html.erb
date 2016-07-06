@@ -57,7 +57,7 @@
   		// }
       history.pushState(null, null, "");
       window.onpopstate = function(event){
-        // event.preventDefault();
+        event.preventDefault();
         // console.log(event);
         if (is_ask_image_opened) {
           ask_image_off();
