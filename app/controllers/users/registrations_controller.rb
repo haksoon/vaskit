@@ -11,7 +11,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def check_email #AJS추가
     user_email_input = params[:user_email_input]
-    is_new_email = true if User.find_by_email(params[:user_email_input]).blank?
+    is_new_email = true if User.find_by_email(user_email_input).blank?
     render :json => {:is_new_email => is_new_email}
   end
 

@@ -330,11 +330,15 @@
   $("#sign_up_form").on("change",function(){ ready_to_submit(); })
 
 	function sign_up_submit(){ //submit 전에 value 체크
-		if ($("#user_email").val() == ""){
-			notify('이메일을 입력해주세요.');
+    if ($("#user_email").val() == ""){
+			notify('이메일을 입력해주세요');
       $("#user_email").focus().select();
 			return;
-		}
+		} else if ($("#email_checker i").hasClass("fa-exclamation-triangle")) {
+      notify('이메일을 확인해 주세요');
+			$("#user_email").focus().select();
+      return false;
+    }
 
 		<% unless resource.facebook_id %>
 			if ($("#user_password").val() == ""){

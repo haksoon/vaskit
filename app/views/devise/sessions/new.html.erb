@@ -104,16 +104,22 @@
   $("#user_password").attr("onkeyup","ready_to_submit(); return false;");
   $("#sign_in_form").on("change",function(){ ready_to_submit(); })
 
-	function sign_in_submit(){
+  function sign_in_submit(){
 		if ($("#user_email").val() == ""){
-			notify('이메일을 입력해 주세요.');
-			return;
-		}
+			notify('이메일을 입력해 주세요');
+			$("#user_email").focus().select();
+      return false;
+		} else if ($("#email_checker i").hasClass("fa-exclamation-triangle")) {
+      notify('이메일을 확인해 주세요');
+			$("#user_email").focus().select();
+      return false;
+    }
 
 		<% unless resource.facebook_id %>
 			if ($("#user_password").val() == ""){
 				notify('비밀번호를 입력해 주세요.');
-				return;
+				$("#user_password").focus().select();
+        return false;
 			}
 		<% end %>
 
