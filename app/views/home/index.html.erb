@@ -1217,7 +1217,7 @@
 
 		$("#category_button:visible").hide();
 		$("#back_button").show().attr("onclick","card_detail_off("+ask_id+"); return false;");
-		$(".chat_bubble").css("margin-top","15px").text("상세화면입니다.");
+		$(".chat_bubble").css("margin-top","15px");
 
 		var url = '/asks/'+ask_id;
 		history.pushState(null, null, url);
@@ -1245,14 +1245,14 @@
 		$("body").animate({scrollTop:card_open_st},250);
 
 		$("#back_button").hide().attr("onclick","back_button(); return false;");
-		main_header_left_button();
-		$(".chat_bubble").css("margin-top","65px").text("결정장애에 걸린 많은 이들을 도와주세요! Let's VASKIT!");
+		$(".chat_bubble").css("margin-top","65px");
 
 		is_more_asks = true;
 		is_card_opened = false;
 		$("#endless_loading").show();
 
 		history.pushState(null, null, "/");
+		main_header_left_button();
 	}
 
 	function comment_input_by_key(ask_id){
