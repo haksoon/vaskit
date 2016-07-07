@@ -457,7 +457,7 @@
 	            <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
 	          </a>
 	          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-	            <i class="fa fa-remove" style="color:#ee6e01; margin-right:1px;"></i>취소
+	            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
 	          </a>
 	          <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="color:#9d9ea1; margin-right:3px;">
 	            <i class="fa fa-trash" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">삭제</span>
@@ -471,7 +471,7 @@
 	          <i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin-top:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">답글</span>
 					</a>
 					<a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-						<i class="fa fa-remove" style="color:#ee6e01; margin-right:1px;"></i>취소
+						<span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
 					</a>
 				</p>
 			</div>
@@ -542,7 +542,7 @@
 	          <i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin-top:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">답글</span>
 					</a>
 					<a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-						<i class="fa fa-remove" style="color:#ee6e01; margin-right:1px;"></i>취소
+						<span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
 					</a>
 				  {{ if ( comment.user_id == current_user_id ){ }}
 				    <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="color:#9d9ea1; margin-left:3px;">
@@ -552,7 +552,7 @@
 	            <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
 	          </a>
 	          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-left:3px; display:none;">
-	            <i class="fa fa-remove" style="color:#ee6e01; margin-right:1px;"></i>취소
+	            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
 	          </a>
 	        {{ }else{ }}
 	          <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9d9ea1; margin-left:3px;">
@@ -661,7 +661,7 @@
             <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
           </a>
           <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-            <i class="fa fa-remove" style="color:#ee6e01; margin-right:1px;"></i>취소
+            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
           </a>
           <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="color:#9d9ea1; margin-right:3px;">
             <i class="fa fa-trash" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">삭제</span>
@@ -718,7 +718,7 @@
             <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
           </a>
           <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-left:3px; display:none;">
-            <i class="fa fa-remove" style="color:#ee6e01; margin-right:1px;"></i>취소
+            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
           </a>
         {{ }else{ }}
           <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9d9ea1; margin-left:3px;">
