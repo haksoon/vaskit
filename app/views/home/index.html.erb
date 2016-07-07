@@ -1170,10 +1170,11 @@
 		if ($("#ask_deal_"+ask_id+"_table:hidden")) $("#ask_deal_"+ask_id+"_table").slideDown(200);
 		$("#ask_"+ask_id+"_message_more").click();
 		$("#ask_"+ask_id+"_comment").slideDown(200);
+		$("#ask_"+ask_id+"_comment_preview").slideUp(200);
 		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_off("+ask_id+"); return false;");
-		$("#ask_"+ask_id+"_detail_on span:eq(0)").hide();
-		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
-		$("#ask_"+ask_id+"_detail_on span:eq(2)").hide();
+		$("#ask_"+ask_id+"_detail_on div:eq(1) span:eq(0)").hide();
+		$("#ask_"+ask_id+"_detail_on div:eq(1) span:eq(1)").html('<i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>');
+		$("#ask_"+ask_id+"_detail_on div:eq(1) span:eq(2)").hide();
 		// $("#search").hide();
 		// $(".home-float-btn-area").hide();
 		// card_detail_off_by_scroll(ask_id);
@@ -1193,10 +1194,11 @@
 			$("#ask_"+ask_id+"_message_more").show();
 		}
 		$("#ask_"+ask_id+"_comment").slideUp(200);
+		$("#ask_"+ask_id+"_comment_preview").slideDown(200);
 		$("#ask_"+ask_id+"_detail_on").attr("onclick","card_detail_on("+ask_id+"); return false;");
-		$("#ask_"+ask_id+"_detail_on span:eq(0)").show();
-		$("#ask_"+ask_id+"_detail_on span:eq(1)").html('<i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>');
-		$("#ask_"+ask_id+"_detail_on span:eq(2)").show();
+		$("#ask_"+ask_id+"_detail_on div:eq(1) span:eq(0)").show();
+		$("#ask_"+ask_id+"_detail_on div:eq(1) span:eq(1)").html('<i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>');
+		$("#ask_"+ask_id+"_detail_on div:eq(1) span:eq(2)").show();
 		// $("#search").show();
 		// $(".home-float-btn-area").show();
 		// card_detail_off_by_scroll(ask_id);
