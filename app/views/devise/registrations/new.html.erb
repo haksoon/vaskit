@@ -218,22 +218,18 @@
         var tooltip_width = $("#user_email").width();
         var tooltip_area = $("#user_email").parent().find(".tooltip_area");
         var tooltip_content = $("#user_email").parent().find(".tooltip_content");
+        tooltip_area.clearQueue().removeClass("tooltip_open");
         if ( $("#user_email").val() == "" ) {
           $("#email_checker").html("");
         } else {
           var reg = /^[0-9a-zA-Z-_.]+@[a-z0-9]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
-          if ( reg.test($("#user_email").val()) ) {
-            $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
-          } else {
+          if ( !reg.test($("#user_email").val()) ) {
             $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+          } else if (!data.is_new_email) {
+            $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
+          } else {
+            $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
           }
-        }
-        if (data.is_new_email) {
-          tooltip_area.clearQueue().removeClass("tooltip_open");
-        } else {
-          $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
-          tooltip_area.css("width",tooltip_width).addClass("tooltip_open")
-          tooltip_content.text("이미 존재하는 이메일입니다");
         }
       },
       beforeSend: function(){
@@ -249,7 +245,8 @@
     var tooltip_area = $("#user_email").parent().find(".tooltip_area");
     var tooltip_content = $("#user_email").parent().find(".tooltip_content");
     if ( $("#email_checker i").hasClass("fa-exclamation-triangle") ) {
-      return false;
+      tooltip_area.css("width",tooltip_width).addClass("tooltip_open")
+      tooltip_content.text("이미 존재하는 이메일입니다");
     } else if ( $("#email_checker i").hasClass("fa-remove") ) {
       tooltip_area.css("width",tooltip_width).addClass("tooltip_open")
       tooltip_content.text("이메일 형식이 아닌 것 같습니다.");
