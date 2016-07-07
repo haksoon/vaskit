@@ -395,10 +395,10 @@ input:focus, select:focus, textarea:focus {
 	text-align: center;
 	transition: all .2s;
 }
-.share_icon:hover, .more_icon:hover { color:#998674; font-weight:bold; }
+.share_icon:hover, .more_icon:hover { background-color:#f4f4f4; color:#998674; }
 
-.card_detail { box-sizing:border-box; height:40px; line-height:40px; display:block; border-top:1px solid #dbdbdb; color:#9d9ea1; font-size:13px; transition:all .2s; }
-.card_detail:hover { color:#998674; font-weight:bold; }
+.card_detail { box-sizing:border-box; line-height:40px; display:block; border-top:1px solid #dbdbdb; color:#9d9ea1; font-size:13px; transition:all .2s; }
+.card_detail:hover { background-color:#f4f4f4; color:#666; }
 
 .vote-result-td {
 	width:50%;

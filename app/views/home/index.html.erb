@@ -288,10 +288,23 @@
   		</table>
     </div>
 		<a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
-			<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
-			<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
-			<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
-		</a>
+				{{ if (ask.comments.length > 0) { }}
+				<div id="ask_{{=ask.id}}_comment_preview" class="table_div" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
+					<ul style="width:100%; margin:0; padding:0; list-style:none;">
+						{{ for(var i=0; i < ask.comments.length; i++) {  }}
+						{{ comment = ask.comments[i] }}
+						{{ var askCommentPreviewTemplate = _.template($('#ask-comment-preview-template').html()) }}
+						{{= askCommentPreviewTemplate({ask:ask, comment:comment}) }}
+						{{ } }}
+					</ul>
+				</div>
+				{{ } }}
+				<div>
+					<span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
+					<span><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
+					<span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
+				</div>
+			</a>
 	</div>
 </script>
 
@@ -960,6 +973,24 @@
 	</table>
 </script>
 
+<script type="text/template" id="ask-comment-preview-template">
+	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
+		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:left;">
+			<span style="display:block; padding:0 15px;">
+				<i class="fa fa-comment" style="float:left; padding:7px 5px 0 0;"></i>
+				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
+			</span>
+		</li>
+	{{ }else{ }}
+		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:right;">
+			<span style="display:block; padding:0 15px;">
+				<i class="fa fa-comment" style="float:right; padding:7px 5px 0 0; transform:rotateY(180deg)"></i>
+				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
+			</span>
+		</li>
+	{{ } }}
+</script>
+
 <script>
 	<% if flash[:ask_create] %>
 		notify('<%=flash[:ask_create]%>');
@@ -993,6 +1024,7 @@
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
 		comment_input_setting(ask.id, ask.user);
+		if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
 	}
 
 	var ready = function() {
@@ -1036,6 +1068,7 @@
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
 								comment_input_setting(ask.id, ask.user);
+								if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
     					}
 							hover_action();
 							tooltip_box();
@@ -1056,7 +1089,7 @@
 		if (origin_string.length > 80) {
 			msg.hide();
 			msg_short.show();
-			msg_short.html(origin_string.substring(0,80).replace(new RegExp('\r?\n', 'g'), '<br>').replace(/(<br>)+/g,"<br>")+" ...");
+			msg_short.html(origin_string.substring(0,80).replace(new RegExp('\r?\n', 'g'), '<br>').replace(/(<br>)+/g,"<br>")+"&nbsp;&middot;&middot;&middot;");
 			hash_tagging(origin_string.substring(0,80), msg_short);
 			msg_more.show();
 		};
