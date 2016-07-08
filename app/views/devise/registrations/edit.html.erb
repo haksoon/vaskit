@@ -1,5 +1,14 @@
 <%= render :partial => "common_partial/header", :locals => {:title => "비밀번호 변경"}%>
 
+<% if current_user.sign_up_type == "facebook" %>
+	<div style="position:relative;">
+		<p class="chat_bubble">
+			<i class="fa fa-info-circle"></i>&nbsp;<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="font-weight:bold; color:#4b3d3d;">VASKIT</span>에 페이스북으로 가입하셨습니다.<br>
+			 새로운 비밀번호를 설정하실 경우에도 여전히 페이스북 로그인이 가능하며,<br>
+			 그 외에도 페이스북 가입 이메일(<i><%= current_user.email %></i>)을 사용하여 로그인이 가능하오니 이용에 참고하시기 바랍니다. 감사합니다.
+		</p>
+	</div>
+<% end %>
 <div class="content_box" style="padding:10px; margin:15px 12px 15px; text-align:left;">
 	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
 		<% unless current_user.sign_up_type == "facebook" %>
