@@ -13,6 +13,7 @@ class AsksController < ApplicationController
       end
     end
     @asks = Ask.where(:id => @ask.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
+    # @detail_vote_count = @ask.detail_vote_count #AJS추가(삭제)
     if current_user
       @my_votes = Vote.where(:user_id => current_user.id)
       @my_like_ask = AskLike.where(:user_id => current_user.id) #AJS추가
