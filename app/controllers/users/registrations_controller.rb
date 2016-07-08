@@ -61,7 +61,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   protected
   def update_resource(resource, params)
-    resource.update_without_password(params)
+    resource.update_with_password(params)
   end
 
   def after_create_path_for(resource)
@@ -70,7 +70,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_update_path_for(resource)
-    "/"
+    "/users/edit"
   end
 
 
