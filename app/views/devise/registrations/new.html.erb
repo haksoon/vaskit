@@ -206,38 +206,38 @@
   }
 
   function email_check() {
-    $.ajax({
-      url: "/users/check_email.json",
-      type: "GET",
-      data: {'user_email_input': $('#user_email').val() },
-      dataType: 'json',
-      error: function(){
-          return false;
-      },
-      success: function(data){
-        var tooltip_width = $("#user_email").width();
-        var tooltip_area = $("#user_email").parent().find(".tooltip_area");
-        var tooltip_content = $("#user_email").parent().find(".tooltip_content");
-        tooltip_area.clearQueue().removeClass("tooltip_open");
-        if ( $("#user_email").val() == "" ) {
-          $("#email_checker").html("");
-        } else {
-          var reg = /^[0-9a-zA-Z-_.]+@[a-z0-9]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
-          if ( !reg.test($("#user_email").val()) ) {
-            $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
-          } else if (!data.is_new_email) {
+    var tooltip_width = $("#user_email").width();
+    var tooltip_area = $("#user_email").parent().find(".tooltip_area");
+    var tooltip_content = $("#user_email").parent().find(".tooltip_content");
+    tooltip_area.clearQueue().removeClass("tooltip_open");
+    var reg = /^[0-9a-zA-Z-_.]+@[a-z0-9]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
+    if ( $("#user_email").val() == "" ) {
+      $("#email_checker").html("");
+    } else if ( !reg.test($("#user_email").val()) ) {
+      $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+    } else {
+      $.ajax({
+        url: "/users/check_email.json",
+        type: "GET",
+        data: {'user_email_input': $('#user_email').val() },
+        dataType: 'json',
+        error: function(){
+            return false;
+        },
+        success: function(data){
+          if (!data.is_new_email) {
             $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
           } else {
             $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
           }
+        },
+        beforeSend: function(){
+          $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
+        },
+        complete: function(){
         }
-      },
-      beforeSend: function(){
-        $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
-      },
-      complete: function(){
-      }
-    })
+      })
+    }
   }
 
   function email_check_tooltip() {

@@ -39,16 +39,16 @@
 				<tr>
 					<td style="width:5%;"></td>
 					<td style="width:30%; padding:10px 0;">
-						<a href="/?type=my_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_ask_count }}</a>
-						<a href="/?type=my_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Asks</a>
+						<a href="/?type=my_ask" style="display:block; color:#666; font-size:22px; line-height:24px; margin:0;">{{= my_ask_count }}</a>
+						<a href="/?type=my_ask" style="display:block; color:#9d9ea1; font-size:12px; line-height:12px; margin:0;">Asks</a>
 					</td>
 					<td style="width:30%;">
-						<a href="/?type=vote_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_vote_count }}</a>
-						<a href="/?type=vote_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Votes</a>
+						<a href="/?type=vote_ask" style="display:block; color:#666; font-size:22px; line-height:24px; margin:0;">{{= my_vote_count }}</a>
+						<a href="/?type=vote_ask" style="display:block; color:#9d9ea1; font-size:12px; line-height:12px; margin:0;">Votes</a>
 					</td>
 					<td style="width:30%;">
-						<a href="/?type=comment_ask" style="display:block; color:#383838; font-size:22px; line-height:24px; margin:0;">{{= my_comment_count }}</a>
-						<a href="/?type=comment_ask" style="display:block; color:#9e9fa1; font-size:12px; line-height:12px; margin:0;">Comments</a>
+						<a href="/?type=comment_ask" style="display:block; color:#666; font-size:22px; line-height:24px; margin:0;">{{= my_comment_count }}</a>
+						<a href="/?type=comment_ask" style="display:block; color:#9d9ea1; font-size:12px; line-height:12px; margin:0;">Comments</a>
 					</td>
 					<td style="width:5%;"></td>
 				</tr>
@@ -64,20 +64,20 @@
 			{{ } }}
 			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px; border-radius:0 0 5px 5px; overflow:hidden;">
 			{{ if (alrams == 0) { }}
-				<p style="padding:40px; margin:0; color:#383838; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
+				<p style="padding:40px; margin:0; color:#666; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
 			{{ } else { }}
 				{{ for(var i=0; i < alrams.length; i++) { }}
 					{{ var alram = alrams[i] }}
 					{{ var owner_user = owner_users[i][0] }}
 					{{ var send_user = send_users[i][0] }}
 					{{ if (alram.alram_type.match("vote_")) { }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							<i class="fa fa-check-circle-o" style="color: #666;"></i>&nbsp;회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표하였습니다. 중간점검 해보세요!
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } else if (alram.alram_type.match("like_ask_")) { }}
 						{{ ask_like_count = alram.alram_type.replace("like_ask_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							{{ if (ask_like_count == 1) { }}
 								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 질문을 좋아합니다.
 							{{ } else { }}
@@ -87,7 +87,7 @@
 						</a>
 					{{ } else if (alram.alram_type.match("sub_comment_")) { }}
 						{{ sub_comment_count = alram.alram_type.replace("sub_comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 						{{ if (sub_comment_count == 1) { }}
 							<i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님도 <span style="color:#998674;">{{= owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
 						{{ } else { }}
@@ -97,7 +97,7 @@
 						</a>
 					{{ } else if (alram.alram_type.match("like_comment_")) { }}
 						{{ comment_like_count = alram.alram_type.replace("like_comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							{{ if (comment_like_count == 1) { }}
 								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 의견을 좋아합니다.
 							{{ } else { }}
@@ -107,7 +107,7 @@
 						</a>
 					{{ } else if (alram.alram_type.match("reply_comment_")) { }}
 						{{ reply_comment_count = alram.alram_type.replace("reply_comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							{{ if (reply_comment_count == 1) { }}
 							<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 의견에 댓글을 남겼습니다.
 							{{ } else { }}
@@ -117,7 +117,7 @@
 						</a>
 					{{ } else if (alram.alram_type.match("comment_")) { }}
 						{{ comment_count = alram.alram_type.replace("comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#383838; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-top:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left;">
 							{{ if (comment_count == 1) { }}
 								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 질문에 의견을 남겼습니다.
 							{{ } else { }}
