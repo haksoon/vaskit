@@ -54,11 +54,11 @@
   		<% end %>
       window.onbeforeunload = function(){
         if (is_ask_image_opened) {
-          return '취소 버튼을 누르시면 이미지가 닫힙니다 :)\n';
           ask_image_off();
+          return '취소 버튼을 누르시면 이미지가 닫힙니다 :)\n';
         } else if (is_card_opened) {
-          return '취소 버튼을 누르시면 상세화면이 닫힙니다 :)\n';
           card_detail_off(opened_ask_id);
+          return '취소 버튼을 누르시면 상세화면이 닫힙니다 :)\n';
         } else {
           parent.history.back();
         }
