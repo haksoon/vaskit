@@ -1147,8 +1147,12 @@
 
 	// var card_open_st
 	// var card_open_height
+	var is_card_opened = false;
+	var opened_ask_id
 
 	function card_detail_on(ask_id) {
+		is_card_opened = true;
+		opened_ask_id = ask_id;
 		var card_open_st = $("#ask_"+ask_id).offset().top - 60;
 		if ($(window).scrollTop() < card_open_st ) $("body").animate({scrollTop:card_open_st},250);
 		// $("#ask_detail_bg").fadeIn(100).on("click",function(){ card_detail_off(ask_id); return false; });
@@ -1169,6 +1173,7 @@
 	}
 
 	function card_detail_off(ask_id) {
+		is_card_opened = false;
 		var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 		$("body").animate({scrollTop:card_open_st},250);
 		// $("#ask_detail_bg").fadeOut(100);
