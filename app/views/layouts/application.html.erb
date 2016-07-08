@@ -69,17 +69,11 @@
             }
           }
         }
-      }).on("backbutton",function(e){
-        if (is_ask_image_opened) {
-          ask_image_off();
-          return false;
-        } else if (is_card_opened) {
-          card_detail_off(opened_ask_id);
-          return false;
-        } else {
-          parent.history.back();
-        }
       });
+      function onDeviceReady() {
+        document.addEventListener("backbutton", onBackKeyDown, false);
+      }
+      onDeviceReady();
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
