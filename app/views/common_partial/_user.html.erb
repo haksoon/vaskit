@@ -302,7 +302,7 @@
 						},
 						success: function(data){
 							$("#alram_"+alram_id).css("background-color","#fff");
-							$("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
+							if (parseInt($("#alram_feed_count").html()) > 0) $("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
 							if (data.alram_count == 0) {
 								$("#alram_feed").css("background-color","#998674");
 								$("#all_read").remove();

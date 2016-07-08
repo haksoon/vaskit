@@ -25,7 +25,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
     params[:user][:remember_me] = true
 
-    params[:user][:password_confirmation] = params[:user][:password]
+    # params[:user][:password_confirmation] = params[:user][:password] #AJS추가(삭제)
     params[:user][:string_id] = User.get_uniq_string_id( params[:user][:email].split("@")[0] )
     super
   end
