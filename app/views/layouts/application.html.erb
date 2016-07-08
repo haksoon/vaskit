@@ -57,7 +57,7 @@
   		}
       $(document).keydown(function(e){
         if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-          if(e.keyCode === 8){
+          if(e.keyCode === 8 || e.keyCode === 27){
             if (is_ask_image_opened) {
               ask_image_off();
             }
