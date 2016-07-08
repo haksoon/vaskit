@@ -41,7 +41,7 @@ Rails.application.routes.draw do
     get 'users/check_email', :to => "users/registrations#check_email" #AJS추가
     get 'users/get_user_data', :to => "users/sessions#get_user_data" #AJS추가
     get 'users/alram_check', :to => "users/sessions#alram_check" #AJS추가
-    get 'users/manage', :to => "users/sessions#manage"
+    # get 'users/manage', :to => "users/sessions#manage"
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
     put 'users/toggle_receive_notice', :to => "users/sessions#toggle_receive_notice"
     delete 'users/:id', :to => "users/registrations#destroy"
