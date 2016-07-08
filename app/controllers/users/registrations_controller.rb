@@ -39,13 +39,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params[:user][:sign_up_type] = "both"
     end
     if current_user.valid_password?(params[:user][:current_password])
-      flash[:custom_notice] = "기존 비밀번호를 잘못 입력하였습니다"
-    elsif params[:user][:password] != params[:user][:password_confirmation]
-      flash[:custom_notice] = "신규 비밀번호와 비밀번호 확인란이 일치하지 않습니다"
-    elsif params[:user][:password].length < 8
-      flash[:custom_notice] = "비밀번호는 8자 이상으로 해주세요"
+      if params[:user][:password] != params[:user][:password_confirmation]
+        flash[:custom_notice] = "신규 비밀번호와 비밀번호 확인란이 일치하지 않습니다"
+      elsif params[:user][:password].length < 8
+        flash[:custom_notice] = "비밀번호는 8자 이상으로 해주세요"
+      else
+        flash[:custom_notice] = "비밀번호가 변경되었습니다"
+      end
     else
-      flash[:custom_notice] = "비밀번호 변경 성공"
+      flash[:custom_notice] = "기존 비밀번호를 잘못 입력하였습니다"
     end
     super
   end

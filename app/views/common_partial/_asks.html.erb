@@ -704,10 +704,11 @@
 	{{ gender_female_css = "" }}
 	{{ gender_male_background_css = "" }}
 	{{ gender_female_background_css = "" }}
-	{{ if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) < (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
+	{{ if( (gender_total_count != 0 && (detail_vote_count.left.male_count + detail_vote_count.right.male_count) <= (detail_vote_count.left.female_count + detail_vote_count.right.female_count)) ){ }}
 		{{ gender_female_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ gender_female_background_css = "background-color:rgba(255,228,169,0.7);" }}
-	{{ }else if( (detail_vote_count.left.male_count + detail_vote_count.right.male_count) > (detail_vote_count.left.female_count + detail_vote_count.right.female_count) ){ }}
+  {{ } }}
+	{{ if( (gender_total_count != 0 && (detail_vote_count.left.male_count + detail_vote_count.right.male_count) >= (detail_vote_count.left.female_count + detail_vote_count.right.female_count)) ){ }}
 		{{ gender_male_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ gender_male_background_css = "background-color:rgba(255,228,169,0.7);" }}
 	{{ } }}
@@ -715,28 +716,28 @@
 		<tbody>
 			<tr style="{{=gender_male_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(male_left_ratio)}}%; background-color:{{= (male_left_ratio > male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }}">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (male_left_ratio > male_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.male_count ==0) ? "-" : detail_vote_count.left.male_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(male_left_ratio)}}%; background-color:{{= (male_left_ratio >= male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }}">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (male_left_ratio >= male_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.male_count ==0) ? "-" : detail_vote_count.left.male_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{=gender_male_css}}">
 					남자
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(male_right_ratio) }}%; background-color:{{= (male_left_ratio < male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (male_left_ratio < male_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.male_count ==0) ? "-" : detail_vote_count.right.male_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(male_right_ratio) }}%; background-color:{{= (male_left_ratio <= male_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (male_left_ratio <= male_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.male_count ==0) ? "-" : detail_vote_count.right.male_count+"명"}}</span>
 				</td>
 			</tr>
 			<tr style="{{=gender_female_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(female_left_ratio) }}%; background-color:{{= (female_left_ratio > female_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (female_left_ratio > female_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.female_count ==0) ? "-" : detail_vote_count.left.female_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(female_left_ratio) }}%; background-color:{{= (female_left_ratio >= female_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (female_left_ratio >= female_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.female_count ==0) ? "-" : detail_vote_count.left.female_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{=gender_female_css}}">
 					여자
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(female_right_ratio) }}%; background-color: {{= (female_left_ratio < female_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (female_left_ratio < female_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.female_count ==0) ? "-" : detail_vote_count.right.female_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(female_right_ratio) }}%; background-color: {{= (female_left_ratio <= female_right_ratio) ? '#ffcc5a;' : '#cbcbcb;' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (female_left_ratio <= female_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.female_count ==0) ? "-" : detail_vote_count.right.female_count+"명"}}</span>
 				</td>
 			</tr>
 		</tbody>
@@ -796,26 +797,36 @@
 	{{ age_30_3_count = detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count }}
 	{{ etc_count = detail_vote_count.left.etc_count + detail_vote_count.right.etc_count }}
 	{{ age_count_arr = [ age_20_1_count, age_20_2_count, age_20_3_count, age_30_1_count, age_30_2_count, age_30_3_count, etc_count] }}
-	{{ max_index = age_count_arr.indexOf(Math.max.apply(window,age_count_arr)) }}
-	{{ if( max_index == 0 ){ }}
+	{{ max_count = Math.max.apply(window,age_count_arr) }}
+  {{ max_count_index_array = [] }}
+  {{ for(i=0; i < age_count_arr.length; i++) { }}
+    {{ if (max_count !=0 && age_count_arr[i] == max_count) max_count_index_array.push(i) }}
+  {{ } }}
+	{{ if( max_count_index_array.indexOf(0) != -1 ){ }}
 		{{ age_20_1_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ age_20_1_background_css = "background-color:rgba(255,228,169,0.7);" }}
-	{{ }else if( max_index == 1 ){ }}
+	{{ } }}
+  {{ if( max_count_index_array.indexOf(1) != -1 ){ }}
 		{{ age_20_2_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ age_20_2_background_css = "background-color:rgba(255,228,169,0.7);" }}
-	{{ }else if( max_index == 2 ){ }}
+  {{ } }}
+	{{ if( max_count_index_array.indexOf(2) != -1 ){ }}
 		{{ age_20_3_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ age_20_3_background_css = "background-color:rgba(255,228,169,0.7);" }}
-	{{ }else if( max_index == 3 ){ }}
+  {{ } }}
+	{{ if( max_count_index_array.indexOf(3) != -1 ){ }}
 		{{ age_30_1_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ age_30_1_background_css = "background-color:rgba(255,228,169,0.7);" }}
-	{{ }else if( max_index == 4 ){ }}
+  {{ } }}
+	{{ if( max_count_index_array.indexOf(4) != -1 ){ }}
 		{{ age_30_2_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ age_30_2_background_css = "background-color:rgba(255,228,169,0.7);" }}
-	{{ }else if( max_index == 5 ){ }}
+  {{ } }}
+	{{ if( max_count_index_array.indexOf(5) != -1 ){ }}
 		{{ age_30_3_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ age_30_3_background_css = "background-color:rgba(255,228,169,0.7);" }}
-	{{ }else if( max_index == 6 ){ }}
+  {{ } }}
+	{{ if( max_count_index_array.indexOf(6) != -1 ){ }}
 		{{ etc_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ etc_background_css = "background-color:rgba(255,228,169,0.7);" }}
 	{{ } }}
@@ -823,93 +834,93 @@
 		<tbody>
 			<tr style="{{=age_20_1_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(age_20_1_left_ratio) }}%; background-color:{{= (age_20_1_left_ratio > age_20_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_20_1_left_ratio > age_20_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_20_1_count ==0) ? "-" : detail_vote_count.left.age_20_1_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(age_20_1_left_ratio) }}%; background-color:{{= (age_20_1_left_ratio >= age_20_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_20_1_left_ratio >= age_20_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_20_1_count ==0) ? "-" : detail_vote_count.left.age_20_1_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{= age_20_1_css }}">
 					20초
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(age_20_1_right_ratio) }}%; background-color:{{= (age_20_1_left_ratio < age_20_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_20_1_left_ratio < age_20_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_20_1_count ==0) ? "-" : detail_vote_count.right.age_20_1_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(age_20_1_right_ratio) }}%; background-color:{{= (age_20_1_left_ratio <= age_20_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_20_1_left_ratio <= age_20_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_20_1_count ==0) ? "-" : detail_vote_count.right.age_20_1_count+"명"}}</span>
 				</td>
 			</tr>
 			<tr style="{{=age_20_2_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(age_20_2_left_ratio) }}%; background-color:{{= (age_20_2_left_ratio > age_20_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_20_2_left_ratio > age_20_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_20_2_count ==0) ? "-" : detail_vote_count.left.age_20_2_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(age_20_2_left_ratio) }}%; background-color:{{= (age_20_2_left_ratio >= age_20_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_20_2_left_ratio >= age_20_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_20_2_count ==0) ? "-" : detail_vote_count.left.age_20_2_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{= age_20_2_css }}">
 					20중
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(age_20_2_right_ratio) }}%; background-color:{{= (age_20_2_left_ratio < age_20_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_20_2_left_ratio < age_20_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_20_2_count ==0) ? "-" : detail_vote_count.right.age_20_2_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(age_20_2_right_ratio) }}%; background-color:{{= (age_20_2_left_ratio <= age_20_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_20_2_left_ratio <= age_20_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_20_2_count ==0) ? "-" : detail_vote_count.right.age_20_2_count+"명"}}</span>
 				</td>
 			</tr>
 			<tr style="{{=age_20_3_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(age_20_3_left_ratio) }}%; background-color:{{= (age_20_3_left_ratio > age_20_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_20_3_left_ratio > age_20_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_20_3_count ==0) ? "-" : detail_vote_count.left.age_20_3_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(age_20_3_left_ratio) }}%; background-color:{{= (age_20_3_left_ratio >= age_20_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_20_3_left_ratio >= age_20_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_20_3_count ==0) ? "-" : detail_vote_count.left.age_20_3_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{= age_20_3_css }}">
 					20후
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(age_20_3_right_ratio) }}%; background-color:{{= (age_20_3_left_ratio < age_20_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_20_3_left_ratio < age_20_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_20_3_count ==0) ? "-" : detail_vote_count.right.age_20_3_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(age_20_3_right_ratio) }}%; background-color:{{= (age_20_3_left_ratio <= age_20_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_20_3_left_ratio <= age_20_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_20_3_count ==0) ? "-" : detail_vote_count.right.age_20_3_count+"명"}}</span>
 				</td>
 			</tr>
 			<tr style="{{=age_30_1_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(age_30_1_left_ratio) }}%; background-color:{{= (age_30_1_left_ratio > age_30_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_30_1_left_ratio > age_30_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_30_1_count ==0) ? "-" : detail_vote_count.left.age_30_1_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(age_30_1_left_ratio) }}%; background-color:{{= (age_30_1_left_ratio >= age_30_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_30_1_left_ratio >= age_30_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_30_1_count ==0) ? "-" : detail_vote_count.left.age_30_1_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{= age_30_1_css }}">
 					30초
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(age_30_1_right_ratio) }}%; background-color:{{= (age_30_1_left_ratio < age_30_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_30_1_left_ratio < age_30_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_30_1_count ==0) ? "-" : detail_vote_count.right.age_30_1_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(age_30_1_right_ratio) }}%; background-color:{{= (age_30_1_left_ratio <= age_30_1_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_30_1_left_ratio <= age_30_1_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_30_1_count ==0) ? "-" : detail_vote_count.right.age_30_1_count+"명"}}</span>
 				</td>
 			</tr>
 			<tr style="{{=age_30_2_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(age_30_2_left_ratio) }}%; background-color:{{= (age_30_2_left_ratio > age_30_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_30_2_left_ratio > age_30_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_30_2_count ==0) ? "-" : detail_vote_count.left.age_30_2_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(age_30_2_left_ratio) }}%; background-color:{{= (age_30_2_left_ratio >= age_30_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_30_2_left_ratio >= age_30_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_30_2_count ==0) ? "-" : detail_vote_count.left.age_30_2_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{= age_30_2_css }}">
 					30중
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(age_30_2_right_ratio) }}%; background-color:{{= (age_30_2_left_ratio < age_30_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_30_2_left_ratio < age_30_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_30_2_count ==0) ? "-" : detail_vote_count.right.age_30_2_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(age_30_2_right_ratio) }}%; background-color:{{= (age_30_2_left_ratio <= age_30_2_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_30_2_left_ratio <= age_30_2_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_30_2_count ==0) ? "-" : detail_vote_count.right.age_30_2_count+"명"}}</span>
 				</td>
 			</tr>
 			<tr style="{{=age_30_3_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio > age_30_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_30_3_left_ratio > age_30_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_30_3_count ==0) ? "-" : detail_vote_count.left.age_30_3_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio >= age_30_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (age_30_3_left_ratio >= age_30_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.age_30_3_count ==0) ? "-" : detail_vote_count.left.age_30_3_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{= age_30_3_css }}">
 					30후
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio < age_30_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_30_3_left_ratio < age_30_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_30_3_count ==0) ? "-" : detail_vote_count.right.age_30_3_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(age_30_3_left_ratio) }}%; background-color:{{= (age_30_3_left_ratio <= age_30_3_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (age_30_3_left_ratio <= age_30_3_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.age_30_3_count ==0) ? "-" : detail_vote_count.right.age_30_3_count+"명"}}</span>
 				</td>
 			</tr>
 			<tr style="{{=etc_background_css}}">
 				<td class="vote-result-td">
-					<span class="vote-result-bar-left" style="width:{{= Math.round(etc_left_ratio) }}%; background-color:{{= (etc_left_ratio > etc_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (etc_left_ratio > etc_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.etc_count ==0) ? "-" : detail_vote_count.left.etc_count+"명"}}</span>
+					<span class="vote-result-bar-left" style="width:{{= Math.round(etc_left_ratio) }}%; background-color:{{= (etc_left_ratio >= etc_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-left" style="float:right; margin-right:3px; font-size:11px; padding-top:1px; {{= (etc_left_ratio >= etc_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.left.etc_count ==0) ? "-" : detail_vote_count.left.etc_count+"명"}}</span>
 				</td>
 				<td class="vote-result-td-title" style="{{= etc_css }}">
 					기타
 				</td>
 				<td class="vote-result-td">
-					<span class="vote-result-bar-right" style="width:{{= Math.round(etc_right_ratio) }}%; background-color:{{= (etc_left_ratio < etc_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
-					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (etc_left_ratio < etc_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.etc_count ==0) ? "-" : detail_vote_count.right.etc_count+"명"}}</span>
+					<span class="vote-result-bar-right" style="width:{{= Math.round(etc_right_ratio) }}%; background-color:{{= (etc_left_ratio <= etc_right_ratio) ? '#ffcc5a;' : '#cbcbcb' }};">&nbsp;</span>
+					<span class="vote-result-num-right" style="float:left; margin-left:3px; font-size:11px; padding-top:1px; {{= (etc_left_ratio <= etc_right_ratio) ? 'color:#ffcc5a;' : 'color:#cbcbcb;' }}">{{= (detail_vote_count.right.etc_count ==0) ? "-" : detail_vote_count.right.etc_count+"명"}}</span>
 				</td>
 			</tr>
 		</tbody>

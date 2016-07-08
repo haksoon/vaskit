@@ -5,7 +5,7 @@ class Users::SessionsController < Devise::SessionsController
   #AJS추가
   def get_user_data
     if current_user
-      current_user_string_id = User.where(:id => current_user.id).pluck(:string_id)
+      current_user_string_id = User.find_by_id(current_user.id).string_id
       my_ask_count = Ask.where(:user_id => current_user.id).count
       my_vote_count = Vote.where(:user_id => current_user.id).count
       my_comment_count = Comment.where(:user_id => current_user.id).count
