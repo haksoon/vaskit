@@ -1,0 +1,11 @@
+class CreateAskLikes < ActiveRecord::Migration
+  def change
+    create_table :ask_likes do |t|
+      t.integer :user_id
+      t.integer :ask_id
+
+      t.timestamps null: false
+    end
+    add_column :asks, :like_count, :integer, :default => 0
+  end
+end
