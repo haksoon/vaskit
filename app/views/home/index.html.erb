@@ -61,7 +61,10 @@
 <script type="text/template" id="ask-template">
 	<div id="ask_{{=ask.id}}" class="content_box">
 		<div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
-			<span class="input_icon left_input" onclick="category_on(); return false;" style="border:none; border-radius:0; background-color:rgba(153,134,116,0.8); color:#fff; cursor:pointer;"><i class="fa fa-filter"></i></span>
+			{{ already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
+				<span class="input_icon left_input" onclick="ask_like({{=ask.id}}); return false;" style="border:none; border-radius:0; border-right:1px solid #dbdbdb; background-color:#fff; color:#ee065e; cursor:pointer;">
+					<i id="ask_{{=ask.id}}_like_icon" class="fa {{= already_like_ask.length == 1 ? 'fa-heart' : 'fa-heart-o'}}"></i>
+				</span>
 	    {{ if (ask.category) { }}
 	    	<span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
 	    {{ }else{ }}
@@ -1002,6 +1005,7 @@
  	<% end %>
 
 	var asks = <%= raw @asks.to_json %>;
+	var my_like_ask = <%= raw @my_like_ask.to_json %>;
 
 	var my_votes = <%= raw @my_votes.to_json %>;
 	var my_vote_count = <%= @my_votes.length %>;
@@ -1156,6 +1160,38 @@
 			complete: function(){
 			}
 		});
+	}
+
+	function ask_like(ask_id){
+		<% if current_user %>
+			$.ajax({
+		        url: "/home/"+ask_id+"/like.json",
+		        type: 'POST',
+		        data: {'blank': 'blank'},
+		        dataType: 'json',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+	            var ask_like_icon = $("#ask_"+ask_id+"_like_icon")
+		        	if (data.already_like){
+	              ask_like_icon.removeClass("fa-heart").addClass("fa-heart-o");
+		        		notify("좋아요 취소");
+		        	} else {
+	              ask_like_icon.removeClass("fa-heart-o").addClass("fa-heart");
+		        		notify("좋아요 완료");
+		        	}
+		        },
+		        beforeSend: function(){
+		       		$(".loading").show();
+		        },
+		        complete: function(){
+		        	$(".loading").hide();
+		        }
+			});
+		<% else %>
+			notify("회원가입 후<br />관심글로 설정할 수 있습니다")
+		<% end %>
 	}
 
 	// var card_open_st

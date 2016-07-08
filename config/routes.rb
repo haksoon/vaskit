@@ -60,6 +60,9 @@ Rails.application.routes.draw do
       get 'set_category'
       get 'no_result'
     end
+    member do
+      post 'like'
+    end
   end
 
   resources :inquiry

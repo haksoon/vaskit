@@ -6,9 +6,11 @@ class HomeController < ApplicationController
     if current_user
       @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id)
       @my_votes = Vote.where(:user_id => current_user.id)
+      @my_like_ask = AskLike.where(:user_id => current_user.id) #AJS추가
       @my_like_comment = CommentLike.where(:user_id => current_user.id) #AJS추가
     elsif @visitor
       @my_votes = Vote.where(:visitor_id => @visitor.id)
+      @my_like_ask = [] #AJS추가
       @my_like_comment = [] #AJS추가
     end
 
@@ -40,6 +42,8 @@ class HomeController < ApplicationController
         @asks = Ask.where(:id => Comment.where(:user_id => current_user.id).map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ])
       when "my_ask_in_progress"
         @asks = Ask.where(:user_id => current_user.id, :be_completed => false).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ])
+      when "my_like_ask"
+        @asks = Ask.where(:id => @my_like_ask.map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ])
       when "none" #통합 검색
         keyword = params[:keyword]
         flash[:keyword] = params[:keyword] #AJS추가
@@ -134,6 +138,31 @@ class HomeController < ApplicationController
   def no_result
     @user_categories = []
     @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id) if current_user
+  end
+
+  #POST /home/like
+  def like
+    already_like = false
+    ask = Ask.find(params[:id])
+    ask_like = AskLike.where(:user_id => current_user.id, :ask_id => params[:id]).first
+    if ask_like
+      already_like = true
+      ask_like.delete
+      ask.update(:like_count => ask.like_count - 1)
+    else
+      ask_like = AskLike.create(:user_id => current_user.id, :ask_id => params[:id])
+      ask.update(:like_count => ask.like_count + 1)
+
+      if ask.user_id != ask_like.user_id && Alram.where(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id).blank?
+        alram = Alram.where(:user_id => ask.user_id, :ask_id => ask.id).where("alram_type like ?", "like_ask_%").first
+        if alram
+          alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "like_ask_" + AskLike.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
+        else
+          Alram.create(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id, :alram_type => "like_ask_" + AskLike.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
+        end
+      end
+    end
+    render :json => {:already_like => already_like}
   end
 
 end
