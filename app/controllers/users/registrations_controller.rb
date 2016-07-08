@@ -39,13 +39,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params[:user][:sign_up_type] = "both"
     end
     if current_user.valid_password?(params[:user][:current_password])
-      flash[:custom_notice] = "기존 비밀번호를 잘못 입력하였습니다"
-    elsif params[:user][:password] != params[:user][:password_confirmation]
-      flash[:custom_notice] = "신규 비밀번호와 비밀번호 확인란이 일치하지 않습니다"
-    elsif params[:user][:password].length < 8
-      flash[:custom_notice] = "비밀번호는 8자 이상으로 해주세요"
+      if params[:user][:password] != params[:user][:password_confirmation]
+        flash[:custom_notice] = "신규 비밀번호와 비밀번호 확인란이 일치하지 않습니다"
+      elsif params[:user][:password].length < 8
+        flash[:custom_notice] = "비밀번호는 8자 이상으로 해주세요"
+      else
+        flash[:custom_notice] = "비밀번호가 변경되었습니다"
+      end
     else
-      flash[:custom_notice] = "비밀번호가 변경되었습니다"
+      flash[:custom_notice] = "기존 비밀번호를 잘못 입력하였습니다"
     end
     super
   end
@@ -59,7 +61,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   protected
   def update_resource(resource, params)
-    resource.update_without_password(params)
+    resource.update_with_password(params)
   end
 
   def after_create_path_for(resource)
@@ -68,7 +70,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_update_path_for(resource)
-    "/"
+    "/users/edit"
   end
 
 
@@ -77,7 +79,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       u.permit(:email, :password, :password_confirmation, :remember_me, :sign_up_type, :string_id, :name, :gender, :birthday, :facebook_id, :agree_access_term)
     end
     devise_parameter_sanitizer.for(:account_update) do |u|
-      u.permit(:email, :password, :password_confirmation, :remember_me, :sign_up_type, :string_id, :name, :gender, :birthday, :facebook_id, :agree_access_term)
+      u.permit(:email, :current_password, :password, :password_confirmation, :remember_me, :sign_up_type, :string_id, :name, :gender, :birthday, :facebook_id, :agree_access_term)
     end
   end
 end
