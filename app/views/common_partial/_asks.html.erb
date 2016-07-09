@@ -173,7 +173,7 @@
 			</p>
 		</div>
 		<div id="ask_{{=ask.id}}_comment" style="display:none;">
-      <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" onclick="$('#comment_input_{{=ask.id}}').click(); return false;">
+      <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" onclick="$('#comment_input_{{=ask.id}}').click(); return false;" style="margin-bottom:0;">
         <span style="width:100%;">
           <i class="fa fa-hand-o-up" style="font-size:16px;"></i>&nbsp;먼저 투표에 참여해주세요.
         </span>
@@ -187,21 +187,20 @@
         </span>
       </div>
   		<div id="ask_{{=ask.id}}_comment_list" class="table_div" style="position:relative; background-color:#fff; padding:0; margin:0; min-height:200px;">
-        {{ for(var i=0; i < ask.comments.length; i++) {  }}
-  				{{ comment = ask.comments[i] }}
-  				{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
-  		    {{= askCommentTemplate({ask:ask, comment:comment}) }}
-  			{{ } }}
-        {{ if(ask.comments.length == 0) { }}
-          <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px;" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
-        {{ } }}
-        {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
-          <div id="visitor_comment_overlay_{{=ask.id}}" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
-            <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
-              <span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
-              <span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
-            </p>
-          </div>
+				{{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
+					<div id="visitor_comment_overlay_{{=ask.id}}" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
+						<p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
+							<span style="background-color:#ee6e01; border-radius:3px; padding:3px 5px 1px;">VASKIT회원</span>이 되시면<br>모든 의견을 자유롭게 볼 수 있어요!<br><br>
+							<span style="background-color:#4b3d3d; border-radius:3px; padding:3px 5px 1px;">비회원</span>은 투표에 참여한 후에만<br>의견을 확인하실 수 있답니다 :)
+						</p>
+					</div>
+				{{ }else{ }}
+					<p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px; display:{{= ask.comments.length == 0 ? 'block' : 'none' }};" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
+					{{ for(var i=0; i < ask.comments.length; i++) {  }}
+						{{ comment = ask.comments[i] }}
+						{{ var askCommentTemplate = _.template($('#ask-comment-template').html()) }}
+						{{= askCommentTemplate({ask:ask, comment:comment}) }}
+					{{ } }}
         {{ } }}
   		</div>
   		<table cellspacing="0" cellpadding="0" style="width:100%; border-top:1px solid #dbdbdb; background-color:#fff;">
@@ -235,9 +234,9 @@
 				<div id="ask_{{=ask.id}}_comment_preview" class="table_div" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
 					<ul style="width:100%; margin:0; padding:0; list-style:none;">
 						{{ for(var i=0; i < ask.comments.length; i++) {  }}
-						{{ comment = ask.comments[i] }}
-						{{ var askCommentPreviewTemplate = _.template($('#ask-comment-preview-template').html()) }}
-						{{= askCommentPreviewTemplate({ask:ask, comment:comment}) }}
+							{{ comment = ask.comments[i] }}
+							{{ var askCommentPreviewTemplate = _.template($('#ask-comment-preview-template').html()) }}
+							{{= askCommentPreviewTemplate({ask:ask, comment:comment}) }}
 						{{ } }}
 					</ul>
 				</div>
@@ -1081,6 +1080,11 @@
               if (data.ask.right_ask_deal_id == this_vote[0].ask_deal_id) ask_deal_id_change(data.ask.id, data.ask.left_ask_deal_id, data.ask.right_ask_deal_id);
 							$("#comment_input_"+data.ask.id).unbind("click");
 							$("#visitor_comment_overlay_"+ask_id).hide();
+							for(var i=0; i < data.ask.comments.length; i++) {
+                comment = data.ask.comments[i]
+                var askCommentTemplate = _.template($('#ask-comment-template').html());
+		        		$("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:data.ask, comment:comment}));
+              }
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
@@ -1355,7 +1359,10 @@
             return false;
         },
         success: function(data){
-          $("#comment_"+comment_id).remove();
+					$("#comment_"+comment_id).remove();
+          $("#comment_"+comment_id+"_reply_list").remove();
+          $("#reply_comment_box_"+comment_id).parent().remove();
+          if ( $("#ask_"+ask_id+"_comment_list").children().length == 1 ) $("#no_comment_"+ask_id).show();
           if (is_left){
             var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+ask_id);
             left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) - 1 );
