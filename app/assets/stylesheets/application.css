@@ -30,12 +30,10 @@ body {
 	background-color :#f4f4f4;
 	margin:0 auto;
   font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
-  // font-family: verdana, arial, helvetica, sans-serif;
 }
 
 p, ol, ul, td {
   font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
-  // font-family: verdana, arial, helvetica, sans-serif;
 }
 
 * {
@@ -409,7 +407,7 @@ input:focus, select:focus, textarea:focus {
 	transition: all .2s;
 }
 .like_icon:hover { background-color:#fcf2d3; }
-.share_icon:hover, .more_icon:hover { background-color:#f4f4f4; color:#998674; }
+.share_icon:hover, .more_icon:hover { background-color:#fcf2d3; color:#998674; }
 
 .card_detail { box-sizing:border-box; line-height:40px; display:block; border-top:1px solid #dbdbdb; color:#9d9ea1; font-size:13px; transition:all .2s; }
 .card_detail:hover { background-color:#f4f4f4; color:#666; }
