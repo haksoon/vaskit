@@ -1603,31 +1603,4 @@
 		setTimeout('window.location.assign("/etc/landing")',2500);
 	}
 
-	window.onbeforeunload = function(){
-		if (is_ask_image_opened) {
-			ask_image_off();
-			return '취소 버튼을 누르시면 이미지가 닫힙니다 :)\n';
-		} else if (is_card_opened) {
-			card_detail_off(opened_ask_id);
-			return '취소 버튼을 누르시면 상세화면이 닫힙니다 :)\n';
-		} else {
-			parent.history.back();
-		}
-	}
-	$(document).keydown(function(e){
-		if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-			if(e.keyCode === 8 || e.keyCode === 27){
-				if (is_ask_image_opened) {
-					ask_image_off();
-					return false;
-				} else if (is_card_opened) {
-					card_detail_off(opened_ask_id);
-					return false;
-				} else {
-					parent.history.back();
-				}
-			}
-		}
-	});
-
 </script>
