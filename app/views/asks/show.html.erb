@@ -1,32 +1,44 @@
 <%= render :partial => "common_partial/header", :locals => {:title => ""} %>
-<div id="asks" style="padding:12px 12px 0px;"></div>
+<div id="asks" class="table_div" style="padding:12px 12px 0px; margin-bottom:0;"></div>
 <%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/ask_image" %>
 <%= render :partial => "common_partial/more_popup" %>
 <%= render :partial => "common_partial/share_popup" %>
 <script>
-  card_detail_on(ask.id);
-  $("#back_button").attr("onclick","back_button(); return false;");
+  show_detail_vote_count(ask.id);
+  if ($("#ask_deal_"+ask.id+"_table:hidden")) $("#ask_deal_"+ask.id+"_table").show();
+  $("#ask_"+ask.id+"_message_more").click();
+  $("#ask_"+ask.id+"_comment").show();
+  $("#ask_"+ask.id+"_comment_preview").hide();
+  btn_text_hide_all(ask.id);
+  $("#ask_box_"+ask.id).css("transform","rotateX(0deg)").css("height","100%");
   $("#ask_"+ask.id+"_detail_on").hide();
 
-  window.onbeforeunload = function(){
+  // history.pushState(null, null, null);
+	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
 			ask_image_off();
-			return '취소 버튼을 누르시면 이미지가 닫힙니다 :)\n';
+			return false;
+		} else if (is_card_opened) {
+			card_detail_off(opened_ask_id);
+			return false;
 		} else {
-			parent.history.back();
-		}
-	}
-	$(document).keydown(function(e){
-		if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-			if(e.keyCode === 8 || e.keyCode === 27){
-				if (is_ask_image_opened) {
-					ask_image_off();
-					return false;
-				} else {
-					parent.history.back();
-				}
-			}
+			back_button();
 		}
 	});
+	// $(document).keydown(function(e){
+	// 	if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+	// 		if(e.keyCode === 8 || e.keyCode === 27){
+	// 			if (is_ask_image_opened) {
+	// 				ask_image_off();
+	// 				return false;
+	// 			} else if (is_card_opened) {
+	// 				card_detail_off(opened_ask_id);
+	// 				return false;
+	// 			} else {
+	// 				return null;
+	// 			}
+	// 		}
+	// 	}
+	// });
 </script>

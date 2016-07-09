@@ -37,7 +37,7 @@
 <% end %>
 
 
-<div id="asks" style="padding:12px 12px 0px;"></div>
+<div id="asks" class="table_div" style="padding:12px 12px 0px; margin-bottom:0;"></div>
 <div class="home-float-btn-area">
 	<% if current_user %>
 		<a href="/asks/new" style="display:block;">
@@ -58,32 +58,35 @@
 <% end %>
 
 <script>
-	window.onbeforeunload = function(){
+	history.pushState(null, null, null);
+	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
 			ask_image_off();
-			return '취소 버튼을 누르시면 이미지가 닫힙니다 :)\n';
+			return false;
 		} else if (is_card_opened) {
 			card_detail_off(opened_ask_id);
-			return '취소 버튼을 누르시면 상세화면이 닫힙니다 :)\n';
+			return false;
 		} else {
-			parent.history.back();
-		}
-	}
-	$(document).keydown(function(e){
-		if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-			if(e.keyCode === 8 || e.keyCode === 27){
-				if (is_ask_image_opened) {
-					ask_image_off();
-					return false;
-				} else if (is_card_opened) {
-					card_detail_off(opened_ask_id);
-					return false;
-				} else {
-					parent.history.back();
-				}
-			}
+			back_button();
 		}
 	});
+	// $(document).keydown(function(e){
+	// 	if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+	// 		if(e.keyCode === 8 || e.keyCode === 27){
+	// 			if (is_ask_image_opened) {
+	// 				ask_image_off();
+	// 				return false;
+	// 			} else if (is_card_opened) {
+	// 				card_detail_off(opened_ask_id);
+	// 				return false;
+	// 			} else {
+	// 				return null;
+	// 			} else {
+	// 				back_button();
+	// 			}
+	// 		}
+	// 	}
+	// });
 </script>
 
 <%= render :partial => "common_partial/asks" %>
