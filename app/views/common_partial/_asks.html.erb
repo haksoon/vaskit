@@ -1244,7 +1244,7 @@
 
 		$(".ask_box").css("transform","scale(0)").css("height","0");
 		$("#ask_box_"+ask_id).css("transform","scale(1)").css("height","100%");
-		$("body").animate({scrollTop:0},200);
+		$("body").animate({scrollTop:0},250);
 
 		$("#category_button:visible").hide();
 		$("#back_button").show().attr("onclick","card_detail_off("+ask_id+"); return false;");
@@ -1271,7 +1271,7 @@
 
 		$(".ask_box").css("transform","scale(1)").css("height","100%");
 		$("#ask_box_"+ask_id).css("transform","scale(1)").css("height","100%");
-		$("body").animate({scrollTop:card_open_st},250);
+		$("body").animate({scrollTop:card_open_st},0);
 
 		$("#back_button").hide().attr("onclick","back_button(); return false;");
 		$(".chat_bubble").css("margin-top","65px");
