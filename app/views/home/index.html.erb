@@ -58,7 +58,7 @@
 <% end %>
 
 <script>
-	history.pushState(null, null, null);
+	history.pushState(null, null, "#welcome");
 	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
 			ask_image_off();
