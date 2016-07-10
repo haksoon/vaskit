@@ -1242,8 +1242,8 @@
 		$("#search").hide();
 		$(".home-float-btn-area").hide();
 
+		$("#ask_box_"+ask_id).removeClass("ask_box");
 		$(".ask_box").css("transform","scale(0)").css("height","0");
-		$("#ask_box_"+ask_id).css("transform","scale(1)").css("height","100%");
 		$("body").animate({scrollTop:0},250);
 
 		$("#category_button:visible").hide();
@@ -1270,7 +1270,7 @@
 		$(".home-float-btn-area").show();
 
 		$(".ask_box").css("transform","scale(1)").css("height","100%");
-		$("#ask_box_"+ask_id).css("transform","scale(1)").css("height","100%");
+    $("#ask_box_"+ask_id).addClass("ask_box")
 		$("body").animate({scrollTop:card_open_st},0);
 
 		$("#back_button").hide().attr("onclick","back_button(); return false;");
