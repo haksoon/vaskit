@@ -62,20 +62,28 @@
 	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
 			ask_image_off();
+			return false;
 		} else if (is_category_opened) {
 			category_off();
+			return false;
 		} else if (is_user_setting_opened) {
 			manage_off();
+			return false;
 		} else if (is_user_opened) {
 			user_off();
+			return false;
 		} else if (is_search_input_opened) {
 			search_input_off();
+			return false;
 		} else if (is_share_popup_opened) {
 			hide_share_popup();
+			return false;
 		} else if (is_more_popup_opened) {
 			hide_more_popup();
+			return false;
 		} else if (is_card_opened) {
 			card_detail_off(opened_ask_id);
+			return false;
 		} else {
 			return false;
 		}
