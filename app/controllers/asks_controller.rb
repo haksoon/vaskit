@@ -215,7 +215,7 @@ class AsksController < ApplicationController
 
   #GET /asks/:id/ask_complete
   def ask_complete
-
+    @detail_vote_count = @ask.detail_vote_count #AJS추가
   end
 
   #GET /asks/:id/create_complete
