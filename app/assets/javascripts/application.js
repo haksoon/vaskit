@@ -318,7 +318,7 @@ function tooltip_box() {
 
 // AJS추가 : 해쉬태그 하이라이트 별도 함수로 지정
 function hash_tagging(origin_string, target_element) {
-  var hash_tags = origin_string.match(/#(\S+)/g);
+  var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
   if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
   $.each(hash_tags, function( index, hash_tag ) {
     hash_tag = hash_tag.replace(",","");
