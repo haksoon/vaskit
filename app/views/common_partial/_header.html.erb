@@ -63,7 +63,7 @@
 	    success: function(data){
 				alram_count = data.alram_count > 15 ? "15+" : data.alram_count;
 				data.alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count) : $("#new_alram_icon").css("transform","scale(0)").text("");
-				if (last_alram_count != null && alram_count > last_alram_count) notify('새로운 알림이 있어요<br>확인해 보세요!');
+				if (last_alram_count != null && alram_count > last_alram_count && $("#user_overlay:hidden").length == 1) notify('새로운 알림이 있어요<br>확인해 보세요!');
 	    },
 	    beforeSend: function(){
 	    },
