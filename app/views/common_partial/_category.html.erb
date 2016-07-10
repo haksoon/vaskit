@@ -1,6 +1,6 @@
 <div id="category_overlay">
 	<div style="position:absolute; top:-55px; left:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
-		<a href="#" onclick="category_off(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;">
+		<a href="#" onclick="history.back(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;">
 			<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
 		</a>
 	</div>
@@ -75,10 +75,13 @@
 </div>
 
 <script>
+	var is_category_opened = false;
 
 	var user_categories = <%=raw @user_categories.to_json %>;
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 	function category_on(){
+		history.pushState(null, null, "#category_setting");
+    is_category_opened = true;
 		disableScroll();
 		$("#category_overlay").fadeIn(100);
 		$("#footer").fadeIn(100);
@@ -92,6 +95,7 @@
 	}
 
 	function category_off(){
+		is_category_opened = false;
 		enableScroll();
 		$("#category_overlay").fadeOut(300);
 		$("#footer").fadeOut(300);
@@ -99,8 +103,6 @@
 		$("#menu_bg").fadeOut(300);
 		category_reset();
 	}
-
-	$("#menu_bg, #menu_pc_bg").on("click",function(){ category_off(); return false; });
 
 	function category_toggle(category_id){
 

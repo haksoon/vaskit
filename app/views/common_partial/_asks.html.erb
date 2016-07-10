@@ -305,7 +305,7 @@
           <span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
         </div>
       </a>
-      <a id="ask_{{=ask.id}}_detail_off" class="card_detail" href="#" onclick="card_detail_off({{=ask.id}}); return false;" style="display:none; background-color:#f4f4f4;">
+      <a id="ask_{{=ask.id}}_detail_off" class="card_detail" href="#" onclick="history.back(); return false;" style="display:none; background-color:#f4f4f4;">
         <span><i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>
       </a>
     </div>
@@ -1247,7 +1247,7 @@
 		$("body").animate({scrollTop:0},250);
 
 		$("#category_button:visible").hide();
-		$("#back_button").show().attr("onclick","card_detail_off("+ask_id+"); return false;");
+		$("#back_button").show().attr("onclick","history.back(); return false;");
 		$(".chat_bubble").css("margin-top","15px");
 
     history.pushState(null, null, "#"+ask_id+"_detail");

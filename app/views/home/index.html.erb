@@ -62,36 +62,54 @@
 	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
 			ask_image_off();
-			return false;
+		} else if (is_category_opened) {
+			category_off();
+		} else if (is_user_setting_opened) {
+			manage_off();
+		} else if (is_user_opened) {
+			user_off();
+		} else if (is_search_input_opened) {
+			search_input_off();
+		} else if (is_share_popup_opened) {
+			hide_share_popup();
+		} else if (is_more_popup_opened) {
+			hide_more_popup();
 		} else if (is_card_opened) {
 			card_detail_off(opened_ask_id);
-			return false;
 		} else {
-			back_button();
+			return false;
 		}
 	});
-	// $(document).keydown(function(e){
-	// 	if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-	// 		if(e.keyCode === 8 || e.keyCode === 27){
-	// 			if (is_ask_image_opened) {
-	// 				ask_image_off();
-	// 				return false;
-	// 			} else if (is_card_opened) {
-	// 				card_detail_off(opened_ask_id);
-	// 				return false;
-	// 			} else {
-	// 				return null;
-	// 			} else {
-	// 				back_button();
-	// 			}
-	// 		}
-	// 	}
-	// });
+	$(document).keydown(function(e){
+		if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+			if(e.keyCode === 27){
+				if (is_ask_image_opened) {
+					history.back();
+				} else if (is_category_opened) {
+					history.back();
+				} else if (is_user_setting_opened) {
+					history.back();
+				} else if (is_user_opened) {
+					history.back();
+				} else if (is_search_input_opened) {
+					history.back();
+				} else if (is_share_popup_opened) {
+					history.back();
+				} else if (is_more_popup_opened) {
+					history.back();
+				} else if (is_card_opened) {
+					history.back();
+				}	else {
+					return false;
+				}
+			}
+		}
+	});
 </script>
 
-<%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/category" %>
-<%= render :partial => "common_partial/footer" %>
+<%= render :partial => "common_partial/asks" %>
+<%= render :partial => "common_partial/ask_image" %>
 <%= render :partial => "common_partial/more_popup" %>
 <%= render :partial => "common_partial/share_popup" %>
-<%= render :partial => "common_partial/ask_image" %>
+<%= render :partial => "common_partial/footer" %>

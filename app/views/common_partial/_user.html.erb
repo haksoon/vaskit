@@ -1,7 +1,7 @@
 <% if current_user %>
 	<div id="user_overlay">
 			<div style="position:absolute; top:-55px; right:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
-				<a href="#" onclick="user_off(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+				<a href="#" onclick="history.back(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
 					<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
 				</a>
 			</div>
@@ -209,6 +209,8 @@
 			notify('<%=flash[:custom_notice]%>');
 		<% end %>
 
+		var is_user_opened = false;
+		var is_user_setting_opened = false;
 		var current_user_string_id
 
 		$(window).resize(function(){
@@ -255,6 +257,9 @@
 		    beforeSend: function(){
 		    },
 		    complete: function(){
+					history.pushState(null, null, "#"+current_user_string_id);
+			    is_user_opened = true;
+					is_user_setting_opened = false;
 		    }
 		  });
 
@@ -264,6 +269,8 @@
 		}
 
 		function user_off(){
+			is_user_opened = false;
+			is_user_setting_opened = false;
 			enableScroll();
 			$("#user_overlay").fadeOut(300);
 			$("#footer").fadeOut(300);
@@ -273,8 +280,6 @@
 			$("#user_overlay_seg").html();
 			alram_check();
 		}
-
-		$("#menu_bg, #menu_pc_bg").on("click",function(){ user_off(); return false; });
 
 		function all_read(){
 			$.ajax({
@@ -327,13 +332,33 @@
 		}
 
 		function manage_on() {
-			$("#user_path").html("<span onclick='user_on();' style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
+			history.pushState(null, null, "#"+current_user_string_id+"_setting");
+			is_user_setting_opened = true;
+			$("#user_path").html("<span onclick='history.back();' style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
 			$("#manage_on").css("transform","scale(0)");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 			$("#user_overlay_seg").scrollTop(0);
 
 			$("#string_id_input").attr("onkeyup","ready_to_submit(); return false;");
+
+			$("#menu_pc_bg").show();
+			$("#menu_bg").show();
+		}
+
+		function manage_off() {
+			is_user_setting_opened = false;
+
+			$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
+			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
+			$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, owner_users:owner_users, send_users:send_users}));
+			alram_check();
+			$("#user_path").html("&gt;&nbsp;My Page");
+			$("#manage_on").css("transform","scale(1)");
+			$("#user_overlay_seg").scrollTop(0);
+
+			$("#menu_pc_bg").show();
+			$("#menu_bg").show();
 		}
 
 		function ready_to_submit() {
