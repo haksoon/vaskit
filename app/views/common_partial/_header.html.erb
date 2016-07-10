@@ -50,6 +50,7 @@
 	main_header_left_button();
 
 	// AJS추가 : 유저 알림 정보 불러오기
+	var last_alram_count;
 	function alram_check() {
 	  $.ajax({
 	    url: "/users/alram_check.json",
@@ -62,10 +63,12 @@
 	    success: function(data){
 				alram_count = data.alram_count > 15 ? "15+" : data.alram_count;
 				data.alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count) : $("#new_alram_icon").css("transform","scale(0)").text("");
+				if (last_alram_count != null && alram_count > last_alram_count) notify('새로운 알림이 있어요<br>확인해 보세요!');
 	    },
 	    beforeSend: function(){
 	    },
 	    complete: function(){
+				last_alram_count = alram_count;
 	    }
 	  });
 	}
