@@ -4,8 +4,8 @@
 	<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님, 투표 결과는 만족스러우셨나요?<br />
 	만족도 별점과 함께 고객님께서 구매를 결정한 제품을 알려주시면 서비스 개선에 큰 도움이 됩니다.
 </p>
-
-<div class="star_rating_wrap table_div">
+<span style="display:block; color:#9d9ea1; font-size:12px; padding-top:5px;">VASKIT 투표의 만족도를 알려주세요!&nbsp;<i class="fa fa-smile-o"></i></span>
+<div class="star_rating_wrap table_div" style="margin:5px 12px 12px;">
 	<ul>
 		<li data-value="1"><i class="fa fa-star-o"></i></li>
 		<li data-value="2"><i class="fa fa-star-o"></i></li>
@@ -14,7 +14,8 @@
 		<li data-value="5"><i class="fa fa-star-o"></i></li>
 	</ul>
 </div>
-<div class="content_box" style="margin:12px;">
+<span style="display:block; color:#9d9ea1; font-size:12px; padding-top:5px;">이미지를 눌러 구매 결정제품을 선택해 주세요!</span>
+<div class="content_box" style="margin:5px 12px 12px;">
 	<div id="ask_deal_table" class="card_detail_table" style="padding: 10px 10px 0px;">
     <div class="table_div">
       <div class="ask_text_field left_input output_field" style="font-weight:bold;">
@@ -38,7 +39,7 @@
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:left;">
 			<a href="#" onclick="select_ask_deal(<%=@ask.left_ask_deal.id%>, true); return false;">
 				<img src='<%= @ask.left_ask_deal.image.url(:normal) %>' class="card_image"/>
-				<a href="#" onclick="return false;" id="left_select_div" class="card_image_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; border:5px solid #ee6e01; box-sizing:border-box; display:none;">
+				<a href="#" onclick="return false;" id="left_select_div" class="card_image_overlay" style="border:5px solid #ee6e01; box-sizing:border-box; display:none;">
 					<img src="/images/home/vote_result_check.png" style="width:50%; margin-top:25%;">
 				</a>
 			</a>
@@ -46,7 +47,7 @@
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:right;">
 			<a href="#" onclick="select_ask_deal(<%=@ask.right_ask_deal.id%>, false); return false;">
 				<img src='<%= @ask.right_ask_deal.image.url(:normal) %>' class="card_image"/>
-				<a href="#" onclick="return false;" id="right_select_div" class="card_image_overlay" style="position:absolute; top:0; left:0; width:100%; height:100%; border:5px solid #ee6e01; box-sizing:border-box; display:none;">
+				<a href="#" onclick="return false;" id="right_select_div" class="card_image_overlay" style="border:5px solid #ee6e01; box-sizing:border-box; display:none;">
 					<img src="/images/home/vote_result_check.png" style="width:50%; margin-top:25%;">
 				</a>
 			</a>
@@ -351,9 +352,28 @@
 	var star_point;
 	var selected_ask_deal_id;
 
-	hover_action();
 	graph_width_adjust();
 	tooltip_box();
+	if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+    // return false;
+  } else {
+    $(".card_image").hover(
+      function(){
+        $(this).addClass("img_hover");
+      },
+      function(){
+        $(this).removeClass("img_hover");
+      }
+    );
+    $(".card_image_overlay").hover(
+      function(){
+        $(this).prev().children(".card_image").addClass("img_hover");
+      },
+      function(){
+        $(this).prev().children(".card_image").removeClass("img_hover");
+      }
+    );
+  }
 	var finalVoteCountTemplate = _.template($('#final-vote-count-template').html());
 	$("#final_vote_count").append(finalVoteCountTemplate());
 
@@ -441,7 +461,7 @@
 
 	function updateStarPoint(){
 		star_point = $(".star_rating_wrap > ul > li").data("value");
-		if (selected_ask_deal_id != null) $("#ask_complete_submit_btn").css("background-color","#ee6e01");
+		if (selected_ask_deal_id != null) ready_to_submit();
 	}
 
 	function select_ask_deal(ask_deal_id, is_left){
@@ -449,11 +469,16 @@
 		$("#left_select_div").hide();
 		$("#right_select_div").hide();
 		if (is_left){
-			$("#left_select_div").fadeIn(200);
+			$("#left_select_div").show();
 		}else{
-			$("#right_select_div").fadeIn(200);
+			$("#right_select_div").show();
 		}
-		if (star_point != null) $("#ask_complete_submit_btn").css("background-color","#ee6e01");
+		if (star_point != null) ready_to_submit();
+	}
+
+	function ready_to_submit() {
+		$("#ask_complete_submit_btn").css("background-color","#ee6e01");
+		$("body").animate({scrollTop:$(window).height()},200);
 	}
 
 	function submit_complete(){
