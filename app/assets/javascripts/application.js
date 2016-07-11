@@ -23,7 +23,6 @@ m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
 })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
 ga('create', 'UA-75373901-1', 'auto');
-ga('require', 'displayfeatures'); //인구통계보고서 사용하도록 설정
 ga('send', 'pageview');
 // ga
 
@@ -122,7 +121,6 @@ function get_user_ages(birthday){
   }
 }
 
-
 function truncate(string){
    if (string.length > 40)
       return string.substring(0,40)+'...';
@@ -174,21 +172,21 @@ function get_past_time(time){
     }
 }
 
-var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-
-function preventDefault(e) {
-  e = e || window.event;
-  if (e.preventDefault)
-      e.preventDefault();
-  e.returnValue = false;
-}
-
-function preventDefaultForScrollKeys(e) {
-    if (keys[e.keyCode]) {
-        preventDefault(e);
-        return false;
-    }
-}
+// var keys = {37: 1, 38: 1, 39: 1, 40: 1};
+//
+// function preventDefault(e) {
+//   e = e || window.event;
+//   if (e.preventDefault)
+//       e.preventDefault();
+//   e.returnValue = false;
+// }
+//
+// function preventDefaultForScrollKeys(e) {
+//     if (keys[e.keyCode]) {
+//         preventDefault(e);
+//         return false;
+//     }
+// }
 
 function disableScroll() {
   // if (window.addEventListener) // older FF
@@ -214,12 +212,12 @@ function enableScroll() {
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
 // 모바일의 경우 호버 액션은 실행되지 않도록 제어
-function hover_action(){
+function hover_action(ask_id){
   if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    $(".card_image_expander").addClass("img_hover");
+    $("#ask_"+ask_id).find(".card_image_expander").addClass("img_hover");
     return false;
   } else {
-    $(".card_image").hover(
+    $("#ask_"+ask_id).find(".card_image").hover(
       function(){
         $(this).addClass("img_hover");
         $(this).parent().children(".card_image_expander").addClass("img_hover");
@@ -229,7 +227,7 @@ function hover_action(){
         $(this).parent().children(".card_image_expander").removeClass("img_hover");
       }
     );
-    $(".card_image_overlay").hover(
+    $("#ask_"+ask_id).find(".card_image_overlay").hover(
       function(){
         $(this).addClass("img_hover");
         $(this).prev().children(".card_image").addClass("img_hover");
@@ -241,12 +239,12 @@ function hover_action(){
         $(this).prev().children(".card_image_expander").removeClass("img_hover");
       }
     );
-    $(".vote_btn").hover(
+    $("#ask_"+ask_id).find(".vote_btn").hover(
       function(){
         $(this).prev().children(".card_image").addClass("img_hover");
         $(this).prev().children(".card_image_expander").addClass("img_hover");
         $(this).prev().children(".card_image_hover").fadeIn(100);
-        $(this).parent().parent().parent().parent().find(".card_detail_table").slideDown(200);
+        // $(this).parent().parent().parent().parent().find(".card_detail_table").slideDown(200);
       },
       function(){
         $(this).prev().children(".card_image").removeClass("img_hover");
@@ -260,32 +258,36 @@ function hover_action(){
 
 // AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
 function graph_animation(ask_id) {
-  var timing = 30
-  var target_ask = "#ask_deal_"+ask_id
+  var timing = 30;
+  var target_ask = "#ask_deal_"+ask_id;
 
-  graph_width_adjust();
-  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-left").css("width","3px").animate({width:left_ratio+"%"}, timing * left_ratio);
-  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-right").css("width","3px").animate({width:right_ratio+"%"}, timing * right_ratio);
-
-  var num_left_width = 0;
-  var left_ratio_increase = setInterval( function() {
-    if(num_left_width < left_ratio_full) {
-      num_left_width++;
-      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-left").text(num_left_width+"%");
-    } else {
-      clearInterval(left_ratio_increase);
+  // var total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count;
+  //
+  // var left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80);
+  // var left_ratio_full = Math.round(ask.left_ask_deal.vote_count/total_count * 100);
+  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-left").css("width","3px").animate({"width":left_ratio+"%"}, timing * left_ratio);
+  $({ val : 0 }).animate({ val : left_ratio_full }, {
+    duration: timing * left_ratio,
+    step: function() {
+      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-left").text(Math.round(this.val)+"%");
+    },
+    complete: function() {
+      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-left").text(Math.round(this.val)+"%");
     }
-  }, timing * left_ratio / left_ratio_full );
+  });
 
-  var num_right_width = 0;
-  var right_ratio_increase = setInterval( function() {
-    if(num_right_width < right_ratio_full) {
-      num_right_width++;
-      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-right").text(num_right_width+"%");
-    } else {
-      clearInterval(right_ratio_increase);
+  // var right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80);
+  // var right_ratio_full = Math.round(ask.right_ask_deal.vote_count/total_count * 100);
+  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-right").css("width","3px").animate({"width":right_ratio+"%"}, timing * right_ratio);
+  $({ val : 0 }).animate({ val : right_ratio_full }, {
+    duration: timing * right_ratio,
+    step: function() {
+      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-right").text(Math.round(this.val)+"%");
+    },
+    complete: function() {
+      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-right").text(Math.round(this.val)+"%");
     }
-  }, timing * right_ratio / right_ratio_full );
+  });
 }
 
 function graph_width_adjust() {
@@ -298,14 +300,14 @@ function graph_width_adjust() {
 }
 
 // AJS추가 : 제품명 툴팁박스 추가
-function tooltip_box() {
+function tooltip_box(ask_id) {
   if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    $("p.output_field").on("click",function(){
+    $("#ask_"+ask_id).find("p.output_field").on("click",function(){
       var tooltip_width = $(this).width();
       $(this).next().css("width",tooltip_width).clearQueue().toggleClass("tooltip_open");
     })
   } else {
-    $("p.output_field").hover(
+    $("#ask_"+ask_id).find("p.output_field").hover(
       function(){
         var tooltip_width = $(this).width();
         $(this).next().css("width",tooltip_width).clearQueue().addClass("tooltip_open");

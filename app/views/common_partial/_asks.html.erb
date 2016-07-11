@@ -1,5 +1,5 @@
 <script type="text/template" id="ask-template">
-  <div id="ask_box_{{=ask.id}}" class="ask_box" style="transition:transform .3s; width:100%; height:0; transform:scale(0); transform-origin:center center; float:left; clear:both;">
+  <div id="ask_box_{{=ask.id}}" class="ask_box">
     <div id="ask_{{=ask.id}}" class="content_box">
       <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
         {{ already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
@@ -329,7 +329,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay">
-						<img src="/images/home/vote_result_check.png" style="width:50%; margin-top:25%;">
+						<img src="/images/home/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
 					</a>
 				{{ } }}
 			{{ } }}
@@ -348,7 +348,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, false); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, false ); return false;" class="card_image_overlay">
-						<img src="/images/home/vote_result_check.png" style="width:50%; margin-top:25%;">
+						<img src="/images/home/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
 					</a>
 				{{ } }}
 			{{ } }}
@@ -1041,15 +1041,18 @@
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
 		comment_input_setting(ask.id, ask.user);
-		$("#ask_box_"+ask.id).css("transform","scale(1)").css("height","100%");
 		if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
+    hover_action(ask.id);
+    tooltip_box(ask.id);
 	}
+
+  graph_width_adjust();
 
 	var check_scroll
 	var ready = function() {
-		// if (asks.length == <%= Ask::ASK_PER %>){
+		if (asks.length == <%= Ask::ASK_PER %>){
 			check_scroll = setInterval("checkScroll()", 1000);
-		// }
+		}
 	};
 
 	$(document).ready(ready);
@@ -1087,17 +1090,15 @@
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
 								comment_input_setting(ask.id, ask.user);
-								$("#ask_box_"+ask.id).css("transform","scale(1)").css("height","100%");
 								if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
+                hover_action(ask.id);
+                tooltip_box(ask.id);
     					}
-							hover_action();
-							tooltip_box();
 	        	}
 	        },
 	        beforeSend: function(){
           },
           complete: function(){
-            history.pushState(null, null, null);
           }
 		});
 	  }
@@ -1131,13 +1132,9 @@
 		            return false;
 		        },
 		        success: function(data){
-							show_detail_vote_count(ask_id);
 		        	my_votes.push(data.vote);
 		        	var askDealTemplate = _.template( $('#ask-deal-template').html() );
 		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
-							graph_animation(data.ask.id);
-	        		notify("투표 완료");
-							hover_action();
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
 	        		my_vote_count = my_vote_count + 1;
@@ -1154,12 +1151,16 @@
                   $("#ask_"+ask_id+"_comment_list").append(askCommentTemplate({ask:data.ask, comment:comment}));
                 }
               }
+              notify("투표 완료");
 		        },
 		        beforeSend: function(){
 		       		$(".loading").show();
 		        },
 		        complete: function(){
 		        	$(".loading").hide();
+              graph_animation(ask_id);
+              show_detail_vote_count(ask_id);
+              hover_action(ask_id);
 		        }
 			});
 	 	}
@@ -1219,7 +1220,6 @@
 	}
 
 	var card_open_st
-	var is_card_opened = false;
 	var opened_ask_id
 
 	function card_detail_on(ask_id) {
@@ -1243,8 +1243,8 @@
 		$(".home-float-btn-area").hide();
 
 		$("#ask_box_"+ask_id).removeClass("ask_box");
-		$(".ask_box").css("transform","scale(0)").css("height","0");
-		$("body").animate({scrollTop:0},250);
+    $(".ask_box").hide();
+		$("html, body").animate({scrollTop:0},250);
 
 		$("#category_button:visible").hide();
 		$("#back_button").show().attr("onclick","history.back(); return false;");
@@ -1269,9 +1269,9 @@
 		$("#search").show();
 		$(".home-float-btn-area").show();
 
-		$(".ask_box").css("transform","scale(1)").css("height","100%");
+		$(".ask_box").show();
     $("#ask_box_"+ask_id).addClass("ask_box")
-		$("body").animate({scrollTop:card_open_st},0);
+		$("html, body").animate({scrollTop:card_open_st},0);
 
 		$("#back_button").hide().attr("onclick","back_button(); return false;");
 		$(".chat_bubble").css("margin-top","65px");
@@ -1666,10 +1666,6 @@
 			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+left_ask_deal_id+"); return false;");
 		}
 	}
-
-  hover_action();
-	tooltip_box();
-	graph_width_adjust();
 
 	function visitor_new_ask() {
 		notify('회원가입 후<br />질문을 올릴 수 있습니다.');

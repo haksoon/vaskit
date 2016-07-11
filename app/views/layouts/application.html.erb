@@ -52,13 +52,21 @@
   			var uniq_key = new Date() + Math.random();
   			$.cookie('uniq_key' , "<%= @uniq_key %>", { expires : 30000, path : '/' });
   		<% end %>
+      var is_ask_image_opened = false;
+      var is_category_opened = false;
+      var is_user_setting_opened = false;
+      var is_user_opened = false;
+      var is_search_input_opened = false;
+      var is_share_popup_opened = false;
+      var is_more_popup_opened = false;
+      var is_card_opened = false;
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body data-no-turbolink="true">
 	<div id="flash" class="flash_html" style="display:none;"></div>
 	<div class="loading" style="display:none;">
-    	<div><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading...</div>
+  	<div><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading...</div>
 	</div>
 	<div id="wrap">
 		<%= yield %>

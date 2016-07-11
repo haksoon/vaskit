@@ -57,6 +57,13 @@
 	</p>
 <% end %>
 
+<%= render :partial => "common_partial/category" %>
+<%= render :partial => "common_partial/asks" %>
+<%= render :partial => "common_partial/ask_image" %>
+<%= render :partial => "common_partial/more_popup" %>
+<%= render :partial => "common_partial/share_popup" %>
+<%= render :partial => "common_partial/footer" %>
+
 <script>
 	history.pushState(null, null, "#welcome");
 	$(window).bind("hashchange", function(){
@@ -106,10 +113,3 @@
 		}
 	});
 </script>
-
-<%= render :partial => "common_partial/category" %>
-<%= render :partial => "common_partial/asks" %>
-<%= render :partial => "common_partial/ask_image" %>
-<%= render :partial => "common_partial/more_popup" %>
-<%= render :partial => "common_partial/share_popup" %>
-<%= render :partial => "common_partial/footer" %>

@@ -32,9 +32,7 @@
 </div>
 
 <script>
-
 	var report_type;
-  var is_more_popup_opened = false;
 
 	function show_more_popup(target, target_id, ask_user_id, current_user_id){
     history.pushState(null, null, "#more_"+ask_deal_id);
@@ -159,7 +157,7 @@
 		var vote_count_span = $("#ask_"+ask.id+"_vote_count");
 		vote_count_span.html( parseInt(vote_count_span.html()) - 1 + "표" );
 
-		hover_action();
+		hover_action(ask_id);
     history.back();
 	}
 
