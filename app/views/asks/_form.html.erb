@@ -388,7 +388,7 @@
 					complete: function(){
 						$(".loading").hide();
 						var scroll_top = $("#card_overlay").offset().top;
-						$("body").animate({scrollTop:scroll_top-165},500);
+						$("html, body").animate({scrollTop:scroll_top-165},500);
 						ready_to_submit();
 					}
 		});
@@ -428,7 +428,7 @@
 					complete: function(){
 						$(".loading").hide();
 						var scroll_top = $("#card_overlay").offset().top;
-						$("body").animate({scrollTop:scroll_top-165},500);
+						$("html, body").animate({scrollTop:scroll_top-165},500);
 						ready_to_submit();
 					}
 		});

@@ -80,6 +80,8 @@
 	function category_on(){
 		history.pushState(null, null, "#category_setting");
     is_category_opened = true;
+		overlay_st = $(window).scrollTop();
+
 		disableScroll();
 		$("#category_overlay").fadeIn(100);
 		$("#footer").fadeIn(100);
@@ -94,6 +96,8 @@
 
 	function category_off(){
 		is_category_opened = false;
+    $("html, body").animate({scrollTop:overlay_st},0);
+
 		enableScroll();
 		$("#category_overlay").fadeOut(300);
 		$("#footer").fadeOut(300);

@@ -62,22 +62,26 @@
 	function search_input_on(){
 		history.pushState(null, null, "#search_anything_u_want");
 		is_search_input_opened = true;
+		overlay_st = $(window).scrollTop();
+
 		disableScroll();
 		$("#search").hide();
 		$("#search_overlay").show();
 		$("#menu_pc_bg").show();
 		$("#menu_bg").show();
 		$('#search_input').focus().select();
+		keyword_reset();
 	}
 
 	function search_input_off(){
 		is_search_input_opened = false;
+    $("html, body").animate({scrollTop:overlay_st},0);
+
 		enableScroll();
 		$("#search").show();
 		$("#search_overlay").hide();
 		$("#menu_pc_bg").hide();
 		$("#menu_bg").hide();
-		keyword_reset();
 	}
 
 	function keyword_reset(){

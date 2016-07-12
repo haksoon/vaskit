@@ -258,6 +258,7 @@
 					history.pushState(null, null, "#"+current_user_string_id);
 			    is_user_opened = true;
 					is_user_setting_opened = false;
+					overlay_st = $(window).scrollTop();
 		    }
 		  });
 
@@ -269,6 +270,8 @@
 		function user_off(){
 			is_user_opened = false;
 			is_user_setting_opened = false;
+	    $("html, body").animate({scrollTop:overlay_st},0);
+
 			enableScroll();
 			$("#user_overlay").fadeOut(300);
 			$("#footer").fadeOut(300);

@@ -65,6 +65,11 @@
 <%= render :partial => "common_partial/footer" %>
 
 <script>
+	if (document.location.search == "") {
+		is_search_result_opened = false;
+	} else {
+		is_search_result_opened = true;
+	}
 	history.pushState(null, null, "#welcome");
 	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
@@ -83,6 +88,8 @@
 			hide_more_popup();
 		} else if (is_card_opened) {
 			card_detail_off(opened_ask_id);
+		} else if (is_search_result_opened) {
+			history.back();
 		} else {
 			return false;
 		}

@@ -69,8 +69,8 @@
 
 	function hide_more_popup(){
     is_more_popup_opened = false;
-		$("body").animate({scrollTop:overlay_st},0);
-		
+    $("html, body").animate({scrollTop:overlay_st},0);
+
 		enableScroll();
 		$("#ask_edit_btn").show();
 		$("#ask_report_btn").show();
