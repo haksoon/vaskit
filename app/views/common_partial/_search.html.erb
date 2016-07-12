@@ -62,7 +62,7 @@
 	function search_input_on(){
 		history.pushState(null, null, "#search_anything_u_want");
 		is_search_input_opened = true;
-		overlay_st = $(window).scrollTop();
+		overlay_st = window.scrollY;
 
 		disableScroll();
 		$("#search").hide();
@@ -75,7 +75,7 @@
 
 	function search_input_off(){
 		is_search_input_opened = false;
-    $("html, body").animate({scrollTop:overlay_st},0);
+    window.scrollTo(0,overlay_st);
 
 		enableScroll();
 		$("#search").show();

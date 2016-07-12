@@ -52,8 +52,9 @@
   function ask_image_on(ask_id, ask_deal_id, is_left){
     history.pushState(null, null, "#"+ask_deal_id+"_image");
     is_ask_image_opened = true;
+    ask_image_open_st = window.scrollY;
+
     disableScroll();
-    ask_image_open_st = $(window).scrollTop();
     $("#ask_image_overlay").fadeIn(100);
     $("#ask_image_bg").fadeIn(100);
 
@@ -65,8 +66,9 @@
 
   function ask_image_off(){
     is_ask_image_opened = false;
+    window.scrollTo(0,ask_image_open_st);
+
     enableScroll();
-    $("html, body").animate({scrollTop:ask_image_open_st},0);
     $("#ask_image_overlay").fadeOut(300);
     $("#ask_image_bg").fadeOut(300);
   }

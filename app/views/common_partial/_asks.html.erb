@@ -1271,7 +1271,7 @@
 
 		$(".ask_box").show();
     $("#ask_box_"+ask_id).addClass("ask_box")
-		$("html, body").animate({scrollTop:card_open_st},0);
+    window.scrollTo(0,card_open_st);
 
 		$("#back_button").hide().attr("onclick","back_button(); return false;");
 		$(".chat_bubble").css("margin-top","65px");
