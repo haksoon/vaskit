@@ -258,16 +258,6 @@
 		});
 	}
 
-	function hide_search_deal_popup(){
-		$("#search_deal_popup").hide();
-		$("#search_deal_popup_bg").hide();
-		$("#search_deal_result").hide();
-		$("#deal_search_keyword").val("");
-		$("#naver_deals").html("");
-		$("#naver_images").html("");
-		$("#deal_search_btn").attr("onclick","").css("background-color","#dbdbdb");
-	}
-
 	function show_search_deal_popup(is_left){
 		$("#search_deal_popup_bg").show();
 		$("#search_deal_popup").show();
@@ -280,6 +270,20 @@
 			$("#search_deal_title").html("CARD B 검색해서 입력하기");
 			show_card_overlay();
 		}
+	}
+
+	$(window).resize(function(){
+		$("#search_result_div").css("max-height", $(window).height() -260 );
+	}).resize();
+
+	function hide_search_deal_popup(){
+		$("#search_deal_popup").hide();
+		$("#search_deal_popup_bg").hide();
+		$("#search_deal_result").hide();
+		$("#deal_search_keyword").val("");
+		$("#naver_deals").html("");
+		$("#naver_images").html("");
+		$("#deal_search_btn").attr("onclick","").css("background-color","#dbdbdb");
 	}
 
 	function show_naver_deals(){
@@ -600,7 +604,7 @@
 
 	$("#ask_category_id").find("option:eq(0)").attr("disabled",true);
 	$("#ask_category_id").one("focus",function(){ $(this).css("color","#666"); });
-	
+
 	//콤마찍기
 	function comma(str) {
     str = String(str);
