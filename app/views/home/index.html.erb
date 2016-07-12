@@ -68,6 +68,10 @@
 	if (document.location.search == "") {
 		is_search_result_opened = false;
 		history.pushState(null, null, "#welcome");
+		window.onbeforeunload = function(){
+      page_st = $(window).scrollTop();
+      window.scrollTo(0,0);
+    }
 	} else {
 		is_search_result_opened = true;
 		history.replaceState(null, null, "#search_result");
