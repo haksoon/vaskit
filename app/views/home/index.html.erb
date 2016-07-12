@@ -70,7 +70,7 @@
 		history.pushState(null, null, "#welcome");
 		window.onbeforeunload = function(){
       page_st = $(window).scrollTop();
-      window.scrollTo(0,0);
+      window.scrollTo(0,page_st);
     }
 	} else {
 		is_search_result_opened = true;
