@@ -70,7 +70,7 @@
 		history.pushState(null, null, "#welcome");
 	} else {
 		is_search_result_opened = true;
-		history.pushState(null, null, "#search_result");
+		history.replaceState(null, null, "#search_result");
 	}
 	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
