@@ -88,7 +88,10 @@
       }
     })(document,window.navigator,"standalone")
 
-    window.onbeforeunload = function(){ $("html, body").animate({scrollTop:overlay_st},0); }
+    window.onbeforeunload = function(){
+      overlay_st = $(window).scrollTop();
+      $("html, body").animate({scrollTop:overlay_st},0);
+    }
   </script>
 </body>
 </html>
