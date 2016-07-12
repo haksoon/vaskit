@@ -37,6 +37,8 @@
 	function show_more_popup(target, target_id, ask_user_id, current_user_id){
     history.pushState(null, null, "#more_"+ask_deal_id);
     is_more_popup_opened = true;
+		overlay_st = $(window).scrollTop();
+
 	  if (target == 'comment'){
 	    var already_vote = [];
 	  }else{
@@ -67,6 +69,8 @@
 
 	function hide_more_popup(){
     is_more_popup_opened = false;
+		$("body").animate({scrollTop:overlay_st},0);
+		
 		enableScroll();
 		$("#ask_edit_btn").show();
 		$("#ask_report_btn").show();
