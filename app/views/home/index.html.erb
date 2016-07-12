@@ -68,7 +68,6 @@
 	if (document.location.search == "") {
 		is_search_result_opened = false;
 		history.pushState(null, null, "#welcome");
-		$("html, body").animate({scrollTop:overlay_st},0);
 	} else {
 		is_search_result_opened = true;
 		history.replaceState(null, null, "#search_result");

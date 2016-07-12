@@ -62,6 +62,7 @@
       var is_more_popup_opened = false;
       var is_card_opened = false;
       var overlay_st = 0;
+      var page_st = 0;
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
@@ -89,8 +90,8 @@
     })(document,window.navigator,"standalone")
 
     window.onbeforeunload = function(){
-      overlay_st = $(window).scrollTop();
-      window.scrollTo(0,0);
+      page_st = $(window).scrollTop();
+      $("html, body").animate({scrollTop:page_st},0);
     }
   </script>
 </body>
