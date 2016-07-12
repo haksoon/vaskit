@@ -89,6 +89,7 @@
     })(document,window.navigator,"standalone")
 
     window.onbeforeunload = function(){
+      history.replaceState(null, null, null);
       overlay_st = $(window).scrollTop();
       $("html, body").animate({scrollTop:overlay_st},0);
     }
