@@ -1099,7 +1099,7 @@
 	        beforeSend: function(){
           },
           complete: function(){
-            window.scrollTo(0,page_st);
+            if (page_st != null) window.scrollTo(0,page_st);
           }
 		});
 	  }
