@@ -67,10 +67,11 @@
 <script>
 	if (document.location.search == "") {
 		is_search_result_opened = false;
+		history.pushState(null, null, "#welcome");
 	} else {
 		is_search_result_opened = true;
+		history.pushState(null, null, "#search_result");
 	}
-	history.pushState(null, null, "#welcome");
 	$(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
 			ask_image_off();
