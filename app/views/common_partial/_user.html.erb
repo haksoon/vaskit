@@ -161,7 +161,7 @@
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/off_btn.png" style="display:block; width:40px;"></a>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/off_btn.png" style="display:block; width:40px;"></a>
 				</div>
 			</div>
 			<div>
@@ -169,28 +169,28 @@
 				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;">나의 질문 관련 알림</p>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-check-circle-o"></i>&nbsp;득표수 알림</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-send-o"></i>&nbsp;새로운 의견 알림</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;">나의 의견 관련 알림</p>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-comments-o"></i>&nbsp;답글 알림</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-comment-o"></i>&nbsp;다른 의견 알림</span>
-					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/etc/on_btn.png" style="display:block; width:40px;"></a>
+					<a href="#" onclick="notify('준비중입니다'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
 				</div>
 			</div>
 		</div>
@@ -417,10 +417,10 @@
 		        },
 		        success: function(data){
 		        	if (data.message == "receive"){
-		        		$("#receive_notice_btn img").attr("src","/images/etc/on_btn.png");
+		        		$("#receive_notice_btn img").attr("src","/images/custom/on_btn.png");
 		        		notify("이메일 받기 완료");
 		        	}else{
-		        		$("#receive_notice_btn img").attr("src","/images/etc/off_btn.png");
+		        		$("#receive_notice_btn img").attr("src","/images/custom/off_btn.png");
 		        		notify("이메일 받기 취소");
 		        	}
 		        },

@@ -422,20 +422,19 @@ input:focus, select:focus, textarea:focus {
 .vote-result-bar-left {
 	float:right;
 	margin:4px 0 6px;
-	min-width:3px; height:5px;
-	-webkit-border-radius:5px 0 0 5px;
-	   -moz-border-radius:5px 0 0 5px;
-	        border-radius:5px 0 0 5px;
+	min-width:3px;
+	max-width:calc(100% - 40px);
+	height:5px;
+  border-radius:5px 0 0 5px;
 }
 .vote-result-bar-right {
 	float:left;
 	margin:4px 0 6px;
-	min-width:3px; height:5px;
-	-webkit-border-radius:0 5px 5px 0;
-	   -moz-border-radius:0 5px 5px 0;
-	        border-radius:0 5px 5px 0;
+	min-width:3px;
+	height:5px;
+	max-width:calc(100% - 40px);
+	border-radius:0 5px 5px 0;
 }
-
 
 .comment_title {
 	margin-bottom:0;
@@ -553,7 +552,7 @@ img.cover {
 	-webkit-appearance: none;
 	   -moz-appearance: none;
 	        appearance: none;
-	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 100% 50%;
+	background: #fff url("/images/custom/dropdown_arrow.png") no-repeat 100% 50%;
 	background-size: 10px 6px;
 	background-origin: content-box;
 	font-size:13px;
@@ -610,7 +609,7 @@ img.cover {
 	padding-left: 50px;
   border: 1px solid #dbdbdb;
 	border-radius: 5px;
-	background: #fff url("/images/common/dropdown_arrow.png") no-repeat 100% 50%;
+	background: #fff url("/images/custom/dropdown_arrow.png") no-repeat 100% 50%;
 	background-size: 10px 6px;
 	background-origin: content-box;
 	color: #ccc;
@@ -767,17 +766,17 @@ p.output_field {
 }
 
 .input_icon {
-    position: absolute;
-    top: 0px;
-    width: 40px;
-    height: 40px;
-		box-sizing: border-box;
-    text-align: center;
-    line-height: 40px;
-    color: #666;
-    font-size: 15px;
-    background-color: #f4f4f4;
-    border: 1px solid #dbdbdb;
+  position: absolute;
+  top: 0px;
+  width: 40px;
+  height: 40px;
+	box-sizing: border-box;
+  text-align: center;
+  line-height: 40px;
+  color: #666;
+  font-size: 15px;
+  background-color: #f4f4f4;
+  border: 1px solid #dbdbdb;
 }
 .input_icon.left_input {
 	left: 0px;

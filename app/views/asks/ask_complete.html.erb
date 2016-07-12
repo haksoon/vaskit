@@ -40,7 +40,7 @@
 			<a href="#" onclick="select_ask_deal(<%=@ask.left_ask_deal.id%>, true); return false;">
 				<img src='<%= @ask.left_ask_deal.image.url(:normal) %>' class="card_image"/>
 				<a href="#" onclick="return false;" id="left_select_div" class="card_image_overlay" style="border:5px solid #ee6e01; box-sizing:border-box; display:none;">
-					<img src="/images/home/vote_result_check.png" style="width:50%; margin-top:25%;">
+					<img src="/images/custom/vote_result_check.png" style="width:50%; margin-top:25%;">
 				</a>
 			</a>
 		</div>
@@ -48,7 +48,7 @@
 			<a href="#" onclick="select_ask_deal(<%=@ask.right_ask_deal.id%>, false); return false;">
 				<img src='<%= @ask.right_ask_deal.image.url(:normal) %>' class="card_image"/>
 				<a href="#" onclick="return false;" id="right_select_div" class="card_image_overlay" style="border:5px solid #ee6e01; box-sizing:border-box; display:none;">
-					<img src="/images/home/vote_result_check.png" style="width:50%; margin-top:25%;">
+					<img src="/images/custom/vote_result_check.png" style="width:50%; margin-top:25%;">
 				</a>
 			</a>
 		</div>
@@ -352,7 +352,6 @@
 	var star_point;
 	var selected_ask_deal_id;
 
-	graph_width_adjust();
 	tooltip_box();
 	if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
     // return false;

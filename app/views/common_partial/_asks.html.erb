@@ -329,7 +329,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay">
-						<img src="/images/home/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
+						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
 					</a>
 				{{ } }}
 			{{ } }}
@@ -348,7 +348,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, false); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, false ); return false;" class="card_image_overlay">
-						<img src="/images/home/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
+						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
 					</a>
 				{{ } }}
 			{{ } }}
@@ -1045,8 +1045,6 @@
     hover_action(ask.id);
     tooltip_box(ask.id);
 	}
-
-  graph_width_adjust();
 
 	var check_scroll
 	var ready = function() {

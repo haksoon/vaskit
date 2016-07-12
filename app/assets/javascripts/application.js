@@ -46,7 +46,7 @@ function get_image_url(data, model_name, extention){
 	  	return image_url;
 	}
 	catch(err) {
-	    return "/images/ask/card_image_preview.png";
+	    return "/images/custom/card_image_preview.png";
 	}
 }
 
@@ -288,15 +288,6 @@ function graph_animation(ask_id) {
       $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-right").text(Math.round(this.val)+"%");
     }
   });
-}
-
-function graph_width_adjust() {
-  $(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
-	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
-  $(window).resize(function(){
-    $(".vote-result-bar-left").css("max-width",$(".vote-result-td").width()-40);
-  	$(".vote-result-bar-right").css("max-width",$(".vote-result-td").width()-40);
-	}).resize();
 }
 
 // AJS추가 : 제품명 툴팁박스 추가
