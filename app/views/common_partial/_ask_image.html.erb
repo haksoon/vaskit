@@ -55,6 +55,7 @@
     disableScroll();
     $("#ask_image_overlay").fadeIn(100);
     $("#ask_image_bg").fadeIn(100);
+    $("#ask_image_overlay").scrollTop(0);
 
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
