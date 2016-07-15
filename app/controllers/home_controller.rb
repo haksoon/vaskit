@@ -162,7 +162,7 @@ class HomeController < ApplicationController
         end
       end
     end
-    render :json => {:already_like => already_like}
+    render :json => {:already_like => already_like, :ask_like => ask_like}
   end
 
 end

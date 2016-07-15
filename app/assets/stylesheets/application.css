@@ -70,6 +70,10 @@ input:focus, select:focus, textarea:focus {
 	position:relative;
 	border-bottom:3px solid #dbdbdb;
 	box-sizing:border-box;
+
+	/*height: 100%;
+	overflow-y: auto;
+	-webkit-overflow-scrolling: touch;*/
 }
 
 #main_header {
@@ -116,6 +120,26 @@ input:focus, select:focus, textarea:focus {
 	z-index: 13;
 	display: none;
 }
+
+/*#category_overlay {
+	position: fixed;
+	top: 50px;
+	height: calc(100% - 135px);
+	box-sizing: border-box;
+	width: inherit;
+	z-index: 13;
+	display: none;
+}
+
+#user_overlay {
+	position: fixed;
+	top: 50px;
+	height: calc(100% - 50px);
+	box-sizing: border-box;
+	width: inherit;
+	z-index: 13;
+	display: none;
+}*/
 
 #search_overlay {
 	position: fixed;
@@ -314,7 +338,6 @@ input:focus, select:focus, textarea:focus {
 
 .content_box {
 	position:relative;
-	margin-bottom:15px;
 	background-color:#fff;
 	border-width:1px 3px 3px 1px;
 	border-style:solid;

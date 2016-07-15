@@ -68,8 +68,7 @@ class CommentsController < ApplicationController
     if comment.user_id == current_user.id
       comment.destroy
     end
-
-    render :json => {:status => "success" }
+    render :json => {:status => "success", :comment => comment}
   end
 
 
@@ -101,7 +100,7 @@ class CommentsController < ApplicationController
         end
       end
     end
-    render :json => {:already_like => already_like}
+    render :json => {:already_like => already_like, :comment_like => comment_like}
   end
 
 end

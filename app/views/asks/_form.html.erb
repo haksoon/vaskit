@@ -2,7 +2,7 @@
 
 <div style="background:#f4f4f4; padding:15px 12px 40px; text-align:left;">
 	<%= form_for(@ask) do |f| %>
-		<div class="content_box" style="padding:10px;">
+		<div class="content_box" style="padding:10px; margin-bottom:15px;">
 			<div class="table_div">
 				<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "어떤 제품/서비스의 구매를 고민중이신가요?" }, :class => "category_select" %>
 				<span class="input_icon left_input" onclick="$('#ask_category_id').focus().select(); return false;"><i class="fa fa-filter"></i></span>
@@ -20,7 +20,7 @@
 			<div id="text_counter" style="float:right; margin:5px 5px 0 0; height: 15px; text-align: center; font-size: 12px; color:#9d9ea1;">0 글자</div>
 		</div>
 
-		<div class="content_box" style="padding:10px;">
+		<div class="content_box" style="padding:10px; margin-bottom:15px;">
 			<div class="table_div">
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;" style="float:left;">
 					<i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD A 검색하기
@@ -676,7 +676,7 @@
 	// 제출버튼 필수입력필드 입력해야 활성화되도록
 	function ready_to_submit() {
     if (
-			$("#ask_category_id").val() != "" && $("#ask_message").val() != "" &&
+			$("#ask_category_id").val() != null && $("#ask_message").val() != "" &&
 			$("#left_deal_image_btn img").attr("src") != "/images/custom/card_image_preview.png" && $("#right_deal_image_btn img").attr("src") != "/images/custom/card_image_preview.png" &&
 			$("#left_deal_title").val() != "" && $("#right_deal_title").val() != ""
     ) {

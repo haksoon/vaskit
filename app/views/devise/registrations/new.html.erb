@@ -310,6 +310,9 @@
     }
   }
 
+  $("#user_birthday_1i, #user_birthday_2i, #user_birthday_3i").find("option:eq(0)").attr("disabled",true);
+	$("#user_birthday_1i, #user_birthday_2i, #user_birthday_3i").one("focus",function(){ $(this).css("color","#666"); });
+
   function ready_to_submit() {
     if (
       $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()

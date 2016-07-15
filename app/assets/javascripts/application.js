@@ -27,7 +27,7 @@ ga('send', 'pageview');
 // ga
 
 function nearBottomOfPage() {
-  return scrollDistanceFromBottom() < 150;
+  return scrollDistanceFromBottom() < 500;
 }
 
 function scrollDistanceFromBottom(argument) {
@@ -258,35 +258,31 @@ function hover_action(ask_id){
 
 // AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
 function graph_animation(ask_id) {
-  var timing = 30;
-  var target_ask = "#ask_deal_"+ask_id;
+  var timing = 30,
+      l_bar = $("#left_bar_"+ask_id),
+      l_num = $("#left_num_"+ask_id),
+      l_tim = timing * left_ratio,
+      r_bar = $("#right_bar_"+ask_id),
+      r_num = $("#right_num_"+ask_id),
+      r_tim = timing * right_ratio;
+  // var percent_number_step = $.animateNumber.numberStepFactories.append('%');
 
-  // var total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count;
-  //
-  // var left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80);
-  // var left_ratio_full = Math.round(ask.left_ask_deal.vote_count/total_count * 100);
-  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-left").css("width","3px").animate({"width":left_ratio+"%"}, timing * left_ratio);
+  // l_bar.css("width","3px").velocity({"width":left_ratio+"%"}, l_tim);
+  // l_num.animateNumber({ number: left_ratio_full, numberStep: percent_number_step }, l_tim);
+  l_bar.css("width","3px").animate({"width":left_ratio+"%"}, l_tim);
   $({ val : 0 }).animate({ val : left_ratio_full }, {
-    duration: timing * left_ratio,
-    step: function() {
-      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-left").text(Math.round(this.val)+"%");
-    },
-    complete: function() {
-      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-left").text(Math.round(this.val)+"%");
-    }
+    duration: l_tim,
+    step: function() { l_num.text(Math.round(this.val)+"%") },
+    complete: function() { l_num.text(Math.round(this.val)+"%") }
   });
 
-  // var right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80);
-  // var right_ratio_full = Math.round(ask.right_ask_deal.vote_count/total_count * 100);
-  $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-bar-right").css("width","3px").animate({"width":right_ratio+"%"}, timing * right_ratio);
+  // r_bar.css("width","3px").velocity({"width":right_ratio+"%"}, r_tim);
+  // r_num.animateNumber({ number: right_ratio_full, numberStep: percent_number_step }, r_tim);
+  r_bar.css("width","3px").animate({"width":right_ratio+"%"}, r_tim);
   $({ val : 0 }).animate({ val : right_ratio_full }, {
-    duration: timing * right_ratio,
-    step: function() {
-      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-right").text(Math.round(this.val)+"%");
-    },
-    complete: function() {
-      $(target_ask).find("#main_vote_count_"+ask_id).find(".vote-result-num-right").text(Math.round(this.val)+"%");
-    }
+    duration: r_tim,
+    step: function() { r_num.text(Math.round(this.val)+"%") },
+    complete: function() { r_num.text(Math.round(this.val)+"%") }
   });
 }
 
@@ -326,45 +322,45 @@ function hash_tagging(origin_string, target_element) {
 }
 
 // AJS추가 : 텍스트 라인 세기
-void function $getLines($){
-    function countLines($element){
-        var lines          = 0;
-        var greatestOffset = void 0;
-        $element.find('character').each(function(){
-            if(!greatestOffset || this.offsetTop > greatestOffset){
-                greatestOffset = this.offsetTop;
-                ++lines;
-            }
-        });
-        return lines;
-    }
-    $.fn.getLines = function $getLines(){
-        var lines = 0;
-        var clean = this;
-        var dirty = this.clone();
-        (function wrapCharacters(fragment){
-            var parent = fragment;
-            $(fragment).contents().each(function(){
-                if(this.nodeType === Node.ELEMENT_NODE){
-                    wrapCharacters(this);
-                }
-                else if(this.nodeType === Node.TEXT_NODE){
-                    void function replaceNode(text){
-                        var characters = document.createDocumentFragment();
-                        text.nodeValue.replace(/[\s\S]/gm, function wrapCharacter(character){
-                            characters.appendChild($('<character>' + character + '</>')[0]);
-                        });
-                        parent.replaceChild(characters, text);
-                    }(this);
-                }
-            });
-        }(dirty[0]));
-        clean.replaceWith(dirty);
-        lines = countLines(dirty);
-        dirty.replaceWith(clean);
-        return lines;
-    };
-}(jQuery);
+// void function $getLines($){
+//     function countLines($element){
+//         var lines          = 0;
+//         var greatestOffset = void 0;
+//         $element.find('character').each(function(){
+//             if(!greatestOffset || this.offsetTop > greatestOffset){
+//                 greatestOffset = this.offsetTop;
+//                 ++lines;
+//             }
+//         });
+//         return lines;
+//     }
+//     $.fn.getLines = function $getLines(){
+//         var lines = 0;
+//         var clean = this;
+//         var dirty = this.clone();
+//         (function wrapCharacters(fragment){
+//             var parent = fragment;
+//             $(fragment).contents().each(function(){
+//                 if(this.nodeType === Node.ELEMENT_NODE){
+//                     wrapCharacters(this);
+//                 }
+//                 else if(this.nodeType === Node.TEXT_NODE){
+//                     void function replaceNode(text){
+//                         var characters = document.createDocumentFragment();
+//                         text.nodeValue.replace(/[\s\S]/gm, function wrapCharacter(character){
+//                             characters.appendChild($('<character>' + character + '</>')[0]);
+//                         });
+//                         parent.replaceChild(characters, text);
+//                     }(this);
+//                 }
+//             });
+//         }(dirty[0]));
+//         clean.replaceWith(dirty);
+//         lines = countLines(dirty);
+//         dirty.replaceWith(clean);
+//         return lines;
+//     };
+// }(jQuery);
 
 // AJS추가 : just for fun...
 console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
