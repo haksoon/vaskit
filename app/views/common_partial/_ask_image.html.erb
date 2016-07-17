@@ -155,6 +155,7 @@
 	}
 
 	function askImgTouchMoveListener(e){
+    e.preventDefault();
 		cardFlip(e.originalEvent.touches[0].clientX);
 	}
 
