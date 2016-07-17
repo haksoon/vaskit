@@ -4,51 +4,52 @@
   <div style="display:table; width:100%; height:100%;">
     <div style="display:table-cell; text-align:center; vertical-align:middle;">
       <div style="padding:12px 12px 0; text-align:right;"><span style="display:inline-block; color:#fff; font-size:40px; width:40px; height:40px; text-align:center;">&times;</span></div>
-      <div id="ask_image_seg" class="table_div" style="padding:0 12px 12px; margin-bottom:0; display:inline-block; height:initial;"></div>
+      <div id="ask_image_seg" class="table_div" style="padding:0 12px 12px; margin-bottom:0; display:block; height:645px;"></div>
     </div>
   </div>
 </div>
 
 <script type="text/template" id="ask-image-seg-template">
-  <div id="ask_image_box">
-    {{ if (is_left){ }}
-      {{ ask_deal = ask.left_ask_deal }}
-      {{ left_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
-      {{ right_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
-    {{ } else { }}
-      {{ ask_deal = ask.right_ask_deal }}
-      {{ left_css = "background-color:#9d9ea1; color:#fff; font-weight:normal;" }}
-      {{ right_css = "background-color:#f4f4f4; color:#ee6e01; font-weight:bold;" }}
-    {{ } }}
-    <div class="table_div" style="margin-bottom:0;">
-      <a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; {{= left_css }} ">CARD A</a>
-      <a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; {{= right_css }}">CARD B</a>
-    </div>
-    <img src='{{= get_image_url(ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
-    <div class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
-      {{ if (ask_deal.title != ""){ }}
-        <p style="margin:5px auto; font-weight:bold;">{{= ask_deal.title }}</p>
-      {{ } }}
-			{{ if (ask_deal.brand != ""){ }}
-        <p style="margin:5px auto; font-weight:normal;">{{= ask_deal.brand }}</p>
-      {{ } }}
-			{{ if (ask_deal.price != null){ }}
-        <p style="margin:5px auto; font-weight:normal;">{{= numberWithCommas(ask_deal.price) }}원</p>
-      {{ } }}
-      {{ if (ask_deal.link != ""){ }}
+  <div id="ask_image_box" style="position:relative; perspective:2000px;">
+    <div id="card_front" style="position:absolute; top:0; left:0; transform:rotateY(90deg); -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s; perspective:0px;">
+      <div class="table_div" style="margin-bottom:0;">
+        <a href="#" onclick="return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD A</a>
+        <a href="#" onclick="ask_image_flip(true); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; background-color:#9d9ea1; color:#fff; font-weight:normal;">CARD B</a>
+      </div>
+      <img class="card_expanded_image" src='{{= get_image_url(ask.left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+      <div class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
+        <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.left_ask_deal.title != "" ? ask.left_ask_deal.title : "-"}}</p>
+        <p style="margin:5px auto; font-weight:normal;">{{= ask.left_ask_deal.brand != "" ? ask.left_ask_deal.brand : "-" }}</p>
+        <p style="margin:5px auto; font-weight:normal;">{{= ask.left_ask_deal.price != null ? numberWithCommas(ask.left_ask_deal.price)+"원" : "-" }}</p>
         {{ var aLink = document.createElement("a") }}
-        {{ aLink.href= ask_deal.link }}
-        <a href="{{=ask_deal.link }}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= aLink.host }}</a>
-      {{ } }}
+        {{ aLink.href= ask.left_ask_deal.link }}
+        <a href="{{=ask.left_ask_deal.link}}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= ask.left_ask_deal.link != "" ? aLink.host : "-" }}</a>
+      </div>
+    </div>
+    <div id="card_back" style="position:absolute; top:0; left:0; transform:rotateY(-90deg); -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s; perspective:0px;">
+      <div class="table_div" style="margin-bottom:0;">
+        <a href="#" onclick="ask_image_flip(false); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; background-color:#9d9ea1; color:#fff; font-weight:normal;">CARD A</a>
+        <a href="#" onclick="return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD B</a>
+      </div>
+      <img class="card_expanded_image" src='{{= get_image_url(ask.right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
+      <div class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
+        <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.right_ask_deal.title != "" ? ask.right_ask_deal.title : "-"}}</p>
+        <p style="margin:5px auto; font-weight:normal;">{{= ask.right_ask_deal.brand != "" ? ask.right_ask_deal.brand : "-" }}</p>
+        <p style="margin:5px auto; font-weight:normal;">{{= ask.right_ask_deal.price != null ? numberWithCommas(ask.right_ask_deal.price)+"원" : "-" }}</p>
+        {{ var bLink = document.createElement("a") }}
+        {{ bLink.href= ask.left_ask_deal.link }}
+        <a href="{{=ask.right_ask_deal.link}}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= ask.right_ask_deal.link != "" ? bLink.host : "-" }}</a>
+      </div>
     </div>
   </div>
 </script>
 
 <script>
-  var ask_image_open_st
+  var ask_image_open_st;
+  var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
 
   function ask_image_on(ask_id, ask_deal_id, is_left){
-    history.pushState(null, null, "#"+ask_deal_id+"_image");
+    history.pushState(null, null, "#"+ask_id+"_image");
     is_ask_image_opened = true;
     ask_image_open_st = window.scrollY;
 
@@ -58,8 +59,26 @@
     $("#ask_image_overlay").scrollTop(0);
 
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
-    var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
-    $("#ask_image_seg").html(askImageSegTemplate({ask:ask, is_left:is_left}));
+    $("#ask_image_seg").html(askImageSegTemplate({ask:ask}));
+    $("#ask_image_seg").css("height",$("#ask_image_box .card_front").height());
+
+    if (is_left) {
+      $("#card_front").css("transform","rotateY(0deg)");
+      $("#card_back").css("transform","rotateY(-180deg)");
+    } else {
+      $("#card_front").css("transform","rotateY(180deg)");
+      $("#card_back").css("transform","rotateY(0deg)");
+    }
+  }
+
+  function ask_image_flip(is_left){
+    if (is_left) {
+      $("#card_front").css("transform","rotateY(180deg)");
+      $("#card_back").css("transform","rotateY(0deg)");
+    } else {
+      $("#card_front").css("transform","rotateY(0deg)");
+      $("#card_back").css("transform","rotateY(-180deg)");
+    }
   }
 
   function ask_image_off(){
@@ -70,4 +89,87 @@
     $("#ask_image_overlay").fadeOut(300);
     $("#ask_image_bg").fadeOut(300);
   }
+
+  var askImgMouseTarget; // Mouse/Touch event target
+
+	$(function(){
+		// bind events
+		$("#ask_image_seg").each(function(){
+			$(this).bind("mousedown", askImgMouseDownListener);
+			$(this).bind("touchstart", askImgTouchStartListener);
+			$(this).bind("touchmove", askImgTouchMoveListener);
+			$(this).bind("touchend", askImgTouchEndListener);
+		});
+	});
+
+	function askImgMouseDownListener(e){
+		askImgMouseTarget = $(e.currentTarget);
+
+		// unbind and bind mouse events to prevent repeated binding
+		$(document).unbind("mousemove", askImgMouseMoveListener);
+		$(document).unbind("mouseup", askImgMouseUpListener);
+		$(document).bind("mousemove", askImgMouseMoveListener);
+		$(document).bind("mouseup", askImgMouseUpListener);
+		// unbind touch events
+		askImgMouseTarget.unbind("touchstart", askImgTouchStartListener);
+		askImgMouseTarget.unbind("touchmove", askImgTouchMoveListener);
+		askImgMouseTarget.unbind("touchend", askImgTouchEndListener);
+	}
+
+	function askImgMouseMoveListener(e){
+		e.preventDefault();
+		cardFlip(e.pageX);
+	}
+
+	function askImgMouseUpListener(e){
+		e.preventDefault();
+		updateCard();
+
+		// unbind mouse events
+		$(document).unbind("mousemove", askImgMouseMoveListener);
+		$(document).unbind("mouseup", askImgMouseUpListener);
+	}
+
+	function askImgTouchStartListener(e){
+		askImgMouseTarget = $(e.currentTarget);
+
+		askImgMouseTarget.unbind("mousedown", askImgMouseDownListener);
+	}
+
+	function askImgTouchMoveListener(e){
+		e.preventDefault();
+		cardFlip(e.originalEvent.touches[0].clientX);
+	}
+
+	function askImgTouchEndListener(e){
+		updateCard();
+	}
+
+	function cardFlip(x){
+    var askImg = $("#ask_image_seg"),
+        askImgWidth = askImg.outerWidth(),
+        askImgOffset = askImg.offset().left,
+        askImgA = $("#card_front"),
+        askImgB = $("#card_back");
+    var rotateY = (x - askImgOffset) * 180 / askImgWidth;
+		askImgA.css("transform","rotateY("+(rotateY+0)+"deg)");
+    askImgB.css("transform","rotateY("+(rotateY-180)+"deg)");
+    if (rotateY < 90) {
+      askImgA.addClass("on");
+      askImgB.removeClass("on");
+    } else {
+      askImgA.removeClass("on");
+      askImgB.addClass("on");
+    }
+	}
+
+	function updateCard(){
+    if ($("#card_front").hasClass("on")) {
+      $("#card_front").css("transform","rotateY(0deg)");
+      $("#card_back").css("transform","rotateY(-180deg)");
+    } else if (($("#card_back").hasClass("on"))) {
+      $("#card_front").css("transform","rotateY(180deg)");
+      $("#card_back").css("transform","rotateY(0deg)");
+    }
+	}
 </script>
