@@ -63,21 +63,21 @@
     $("#ask_image_seg").css("height",$("#ask_image_box .card_front").height());
 
     if (is_left) {
-      $("#card_front").css("transform","rotateY(0deg)");
-      $("#card_back").css("transform","rotateY(-180deg)");
+      $("#card_front").css("transform","rotateY(0deg)").addClass("on");
+      $("#card_back").css("transform","rotateY(-180deg)").removeClass("on");
     } else {
-      $("#card_front").css("transform","rotateY(180deg)");
-      $("#card_back").css("transform","rotateY(0deg)");
+      $("#card_front").css("transform","rotateY(180deg)").removeClass("on");
+      $("#card_back").css("transform","rotateY(0deg)").addClass("on");
     }
   }
 
   function ask_image_flip(is_left){
     if (is_left) {
-      $("#card_front").css("transform","rotateY(180deg)");
-      $("#card_back").css("transform","rotateY(0deg)");
+      $("#card_front").css("transform","rotateY(180deg)").removeClass("on");
+      $("#card_back").css("transform","rotateY(0deg)").addClass("on");
     } else {
-      $("#card_front").css("transform","rotateY(0deg)");
-      $("#card_back").css("transform","rotateY(-180deg)");
+      $("#card_front").css("transform","rotateY(0deg)").addClass("on");
+      $("#card_back").css("transform","rotateY(-180deg)").removeClass("on");
     }
   }
 
@@ -104,6 +104,7 @@
 
 	function askImgMouseDownListener(e){
 		askImgMouseTarget = $(e.currentTarget);
+    cardFlipReady();
 
 		// unbind and bind mouse events to prevent repeated binding
 		$(document).unbind("mousemove", askImgMouseMoveListener);
@@ -132,6 +133,7 @@
 
 	function askImgTouchStartListener(e){
 		askImgMouseTarget = $(e.currentTarget);
+    cardFlipReady();
 
 		askImgMouseTarget.unbind("mousedown", askImgMouseDownListener);
 	}
@@ -144,6 +146,16 @@
 	function askImgTouchEndListener(e){
 		updateCard();
 	}
+
+  function cardFlipReady(){
+    if ($("#card_front").hasClass("on")) {
+      $("#card_front").css("transform","rotateY(10deg)");
+      $("#card_back").css("transform","rotateY(-170deg)");
+    } else if (($("#card_back").hasClass("on"))) {
+      $("#card_front").css("transform","rotateY(170deg)");
+      $("#card_back").css("transform","rotateY(-10deg)");
+    }
+  }
 
 	function cardFlip(x){
     var askImg = $("#ask_image_seg"),
@@ -165,11 +177,11 @@
 
 	function updateCard(){
     if ($("#card_front").hasClass("on")) {
-      $("#card_front").css("transform","rotateY(0deg)");
-      $("#card_back").css("transform","rotateY(-180deg)");
+      $("#card_front").css("transform","rotateY(0deg)").addClass("on");
+      $("#card_back").css("transform","rotateY(-180deg)").removeClass("on");
     } else if (($("#card_back").hasClass("on"))) {
-      $("#card_front").css("transform","rotateY(180deg)");
-      $("#card_back").css("transform","rotateY(0deg)");
+      $("#card_front").css("transform","rotateY(180deg)").removeClass("on");
+      $("#card_back").css("transform","rotateY(0deg)").addClass("on");
     }
 	}
 </script>
