@@ -18,12 +18,20 @@
       </div>
       <img class="card_expanded_image" src='{{= get_image_url(ask.left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
       <div class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
-        <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.left_ask_deal.title != "" ? ask.left_ask_deal.title : "-"}}</p>
-        <p style="margin:5px auto; font-weight:normal;">{{= ask.left_ask_deal.brand != "" ? ask.left_ask_deal.brand : "-" }}</p>
-        <p style="margin:5px auto; font-weight:normal;">{{= ask.left_ask_deal.price != null ? numberWithCommas(ask.left_ask_deal.price)+"원" : "-" }}</p>
-        {{ var aLink = document.createElement("a") }}
-        {{ aLink.href= ask.left_ask_deal.link }}
-        <a href="{{=ask.left_ask_deal.link}}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= ask.left_ask_deal.link != "" ? aLink.host : "-" }}</a>
+        {{ if (ask.left_ask_deal.title != "" || ask.right_ask_deal.title != "") { }}
+          <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.left_ask_deal.title != "" ? ask.left_ask_deal.title : "-"}}</p>
+        {{ } }}
+        {{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "") { }}
+          <p style="margin:5px auto; font-weight:normal;">{{= ask.left_ask_deal.brand != "" ? ask.left_ask_deal.brand : "-" }}</p>
+        {{ } }}
+        {{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null) { }}
+          <p style="margin:5px auto; font-weight:normal;">{{= ask.left_ask_deal.price != null ? numberWithCommas(ask.left_ask_deal.price)+"원" : "-" }}</p>
+        {{ } }}
+        {{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "") { }}
+          {{ var aLink = document.createElement("a") }}
+          {{ aLink.href= ask.left_ask_deal.link }}
+          <a href="{{=ask.left_ask_deal.link}}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= ask.left_ask_deal.link != "" ? aLink.host : "-" }}</a>
+        {{ } }}
       </div>
     </div>
     <div id="card_back" style="position:absolute; top:0; left:0; transform:rotateY(-90deg); -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s; perspective:0px;">
@@ -33,12 +41,20 @@
       </div>
       <img class="card_expanded_image" src='{{= get_image_url(ask.right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
       <div class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
-        <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.right_ask_deal.title != "" ? ask.right_ask_deal.title : "-"}}</p>
-        <p style="margin:5px auto; font-weight:normal;">{{= ask.right_ask_deal.brand != "" ? ask.right_ask_deal.brand : "-" }}</p>
-        <p style="margin:5px auto; font-weight:normal;">{{= ask.right_ask_deal.price != null ? numberWithCommas(ask.right_ask_deal.price)+"원" : "-" }}</p>
-        {{ var bLink = document.createElement("a") }}
-        {{ bLink.href= ask.left_ask_deal.link }}
-        <a href="{{=ask.right_ask_deal.link}}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= ask.right_ask_deal.link != "" ? bLink.host : "-" }}</a>
+        {{ if (ask.left_ask_deal.title != "" || ask.right_ask_deal.title != "") { }}
+          <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.right_ask_deal.title != "" ? ask.right_ask_deal.title : "-"}}</p>
+        {{ } }}
+        {{ if (ask.left_ask_deal.brand != "" || ask.right_ask_deal.brand != "") { }}
+          <p style="margin:5px auto; font-weight:normal;">{{= ask.right_ask_deal.brand != "" ? ask.right_ask_deal.brand : "-" }}</p>
+        {{ } }}
+        {{ if (ask.left_ask_deal.price != null || ask.right_ask_deal.price != null) { }}
+          <p style="margin:5px auto; font-weight:normal;">{{= ask.right_ask_deal.price != null ? numberWithCommas(ask.right_ask_deal.price)+"원" : "-" }}</p>
+        {{ } }}
+        {{ if (ask.left_ask_deal.link != "" || ask.right_ask_deal.link != "") { }}
+          {{ var bLink = document.createElement("a") }}
+          {{ bLink.href= ask.right_ask_deal.link }}
+          <a href="{{=ask.right_ask_deal.link}}" target="_blank" style="color:#ee6e01; margin:5px auto; display:block;"><i class="fa fa-external-link" style="color: #ee6e01; font-size: 12px; font-weight: bold;"></i>&nbsp;{{= ask.right_ask_deal.link != "" ? bLink.host : "-" }}</a>
+        {{ } }}
       </div>
     </div>
   </div>

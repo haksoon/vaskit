@@ -1,5 +1,5 @@
 <%= render :partial => "common_partial/header", :locals => {:title => ""} %>
-<div id="asks" class="table_div" style="padding:12px 12px 0px; margin-bottom:0;"></div>
+<div id="asks" class="table_div"></div>
 <%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/ask_image" %>
 <%= render :partial => "common_partial/more_popup" %>
@@ -7,15 +7,17 @@
 
 <script>
   show_detail_vote_count(ask.id);
-  if ($("#ask_deal_"+ask.id+"_table:hidden")) $("#ask_deal_"+ask.id+"_table").show();
+  $("#ask_deal_"+ask.id+"_table").html(askDealTableTemplate({ask: ask}));
+  tooltip_box(ask.id);
   $("#ask_"+ask.id+"_message_more").click();
-  $("#ask_"+ask.id+"_comment").show();
-  $("#ask_"+ask.id+"_comment_preview").hide();
+  $("#ask_"+ask.id+"_comment").html(askCommentTemplate({ask: ask}));
   btn_text_hide_all(ask.id);
-  $("#ask_box_"+ask.id).css("transform","rotateX(0deg)").css("height","100%");
-  $("#ask_"+ask.id+"_detail_on").hide();
+  comment_input_setting(ask.id, ask.user);
+  $("#ask_"+ask.id+"_detail_btn").remove();
+  $("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").show();
 
-  // history.pushState(null, null, null);
+
+  history.pushState(null, null, null);
   $(window).bind("hashchange", function(){
 		if (is_ask_image_opened) {
 			ask_image_off();
