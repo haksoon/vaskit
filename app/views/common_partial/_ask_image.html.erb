@@ -107,6 +107,8 @@
   }
 
   var askImgMouseTarget; // Mouse/Touch event target
+  var askImgMouseStart;
+  var askImgMouseEnd;
 
 	$(function(){
 		// bind events
@@ -121,6 +123,7 @@
 	function askImgMouseDownListener(e){
 		askImgMouseTarget = $(e.currentTarget);
     cardFlipReady();
+    askImgMouseStart = e.pageX;
 
 		// unbind and bind mouse events to prevent repeated binding
 		$(document).unbind("mousemove", askImgMouseMoveListener);
@@ -135,12 +138,13 @@
 
 	function askImgMouseMoveListener(e){
 		e.preventDefault();
+    askImgMouseEnd = e.pageX;
 		cardFlip(e.pageX);
 	}
 
 	function askImgMouseUpListener(e){
 		e.preventDefault();
-		updateCard();
+		updateCard(askImgMouseStart, askImgMouseEnd);
 
 		// unbind mouse events
 		$(document).unbind("mousemove", askImgMouseMoveListener);
@@ -150,17 +154,19 @@
 	function askImgTouchStartListener(e){
 		askImgMouseTarget = $(e.currentTarget);
     cardFlipReady();
+    askImgMouseStart = e.originalEvent.touches[0].clientX;
 
 		askImgMouseTarget.unbind("mousedown", askImgMouseDownListener);
 	}
 
 	function askImgTouchMoveListener(e){
     e.preventDefault();
-		cardFlip(e.originalEvent.touches[0].clientX);
+    askImgMouseEnd = e.originalEvent.touches[0].clientX;
+    cardFlip(e.originalEvent.touches[0].clientX);
 	}
 
 	function askImgTouchEndListener(e){
-		updateCard();
+    updateCard(askImgMouseStart, askImgMouseEnd);
 	}
 
   function cardFlipReady(){
@@ -191,13 +197,23 @@
     }
 	}
 
-	function updateCard(){
-    if ($("#card_front").hasClass("on")) {
-      $("#card_front").css("transform","rotateY(0deg)").addClass("on");
-      $("#card_back").css("transform","rotateY(-180deg)").removeClass("on");
-    } else if (($("#card_back").hasClass("on"))) {
-      $("#card_front").css("transform","rotateY(180deg)").removeClass("on");
-      $("#card_back").css("transform","rotateY(0deg)").addClass("on");
+  function updateCard(askImgMouseStart, askImgMouseEnd){
+    var askImgA = $("#card_front"),
+        askImgB = $("#card_back");
+    if (askImgMouseStart > askImgMouseEnd) {
+      askImgA.css("transform","rotateY(0deg)").addClass("on");
+      askImgB.css("transform","rotateY(-180deg)").removeClass("on");
+    } else if (askImgMouseStart < askImgMouseEnd) {
+      askImgA.css("transform","rotateY(180deg)").removeClass("on");
+      askImgB.css("transform","rotateY(0deg)").addClass("on");
+    } else if (askImgMouseStart = askImgMouseEnd) {
+      if (askImgA.hasClass("on")) {
+        askImgA.css("transform","rotateY(0deg)").addClass("on");
+        askImgB.css("transform","rotateY(-180deg)").removeClass("on");
+      } else if (askImgB.hasClass("on")) {
+        askImgA.css("transform","rotateY(180deg)").removeClass("on");
+        askImgB.css("transform","rotateY(0deg)").addClass("on");
+      }
     }
 	}
 </script>
