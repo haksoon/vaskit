@@ -337,10 +337,12 @@
 	        	show_naver_deals();
 	        },
 	        beforeSend: function(){
-	        	$(".loading").show();
+						progressStart();
+	        	// $(".loading").show();
           },
           complete: function(){
-          	$(".loading").hide();
+						progressEnd();
+          	// $(".loading").hide();
           }
 		});
 	}
@@ -383,10 +385,12 @@
 	        	hide_search_deal_popup();
 					},
 					beforeSend: function(){
-						$(".loading").show();
+						progressStart();
+						// $(".loading").show();
 					},
 					complete: function(){
-						$(".loading").hide();
+						progressEnd();
+						// $(".loading").hide();
 						var scroll_top = $("#card_overlay").offset().top;
 						$("html, body").animate({scrollTop:scroll_top-165},500);
 						ready_to_submit();
@@ -423,10 +427,12 @@
 	        	hide_search_deal_popup();
 					},
 	        beforeSend: function(){
-						$(".loading").show();
+						progressStart();
+						// $(".loading").show();
 					},
 					complete: function(){
-						$(".loading").hide();
+						progressEnd();
+						// $(".loading").hide();
 						var scroll_top = $("#card_overlay").offset().top;
 						$("html, body").animate({scrollTop:scroll_top-165},500);
 						ready_to_submit();
@@ -455,10 +461,12 @@
 						 $("#left_deal_image_id").val(data.id);
 		       },
 					 beforeSend: function(){
-						 $(".loading").show();
+						 progressStart();
+						 //  $(".loading").show();
 					 },
 					 complete: function(){
-						 $(".loading").hide();
+						 progressEnd();
+						 //  $(".loading").hide();
 						 ready_to_submit();
 					 }
 		    }).fail(function (data) {}).done(function () {});
@@ -487,10 +495,12 @@
 						 $("#right_deal_image_id").val(data.id);
 		       },
 			  	 beforeSend: function(){
-						 $(".loading").show();
+						 progressStart();
+						 // $(".loading").show();
            },
            complete: function(){
-						 $(".loading").hide();
+						 progressEnd();
+						 // $(".loading").hide();
 						 ready_to_submit();
            }
 		    }).fail(function (data) {}).done(function () {});

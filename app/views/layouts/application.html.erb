@@ -71,6 +71,9 @@
   	<div><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading...</div>
 	</div>
 	<div id="wrap">
+    <div style="position:fixed; top:0px; width:inherit; z-index:30;">
+      <span id="progress_bar" style="display:none; width:0%; height:5px; background-color:#ee6e01;">&nbsp;</span>
+    </div>
 		<%= yield %>
 	</div>
   <!-- Webapp Transition hotfix -->

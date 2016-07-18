@@ -299,10 +299,12 @@
 							notify("모두 읽음 처리 완료");
 						},
 						beforeSend: function(){
-							$(".loading").show();
+							progressStart();
+							// $(".loading").show();
 						},
 						complete: function(){
-							$(".loading").hide();
+              progressEnd();
+							// $(".loading").hide();
 						}
 			});
 		}
@@ -398,10 +400,12 @@
 			        	}
 			        },
 			        beforeSend: function(){
-			        	$(".loading").show();
+								progressStart();
+			        	// $(".loading").show();
 		          },
 		          complete: function(){
-		            $(".loading").hide();
+	              progressEnd();
+		            // $(".loading").hide();
 		          }
 				});
 			}
@@ -425,11 +429,13 @@
 		        	}
 		        },
 		        beforeSend: function(){
-		        	$(".loading").show();
-	            },
-	            complete: function(){
-	            	$(".loading").hide();
-	            }
+							progressStart();
+		        	// $(".loading").show();
+            },
+            complete: function(){
+              progressEnd();
+            	// $(".loading").hide();
+            }
 			});
 		}
 

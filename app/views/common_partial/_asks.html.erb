@@ -979,7 +979,7 @@
       <span><i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>
     </a>
   {{ }else{ }}
-    <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
+    <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); ga('send', 'event', 'ask', 'detail_view', '{{=ask.id}}', 1); return false;">
       {{ if (ask.comments.length > 0) { }}
       <div id="ask_{{=ask.id}}_comment_preview" class="table_div" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
         <ul style="width:100%; margin:0; padding:0; list-style:none;">
@@ -1130,8 +1130,10 @@
 	        	}
 	        },
 	        beforeSend: function(){
+            progressStart();
           },
           complete: function(){
+            progressEnd();
             // for(var i=0; i < asks.length; i++) {
           	// 	ask = asks[i]
             //   $("#ask_box_"+ask.id).height($("#ask_"+ask.id).outerHeight());
@@ -1177,6 +1179,7 @@
 
               if (is_card_opened) {
                 $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: data.ask}));
+                btn_text_hide_all(data.ask.id);
                 comment_input_setting(data.ask.id, data.ask.user);
                 show_detail_vote_count(ask_id);
                 if ($("#visitor_comment_overlay_"+ask_id).length == 1) {
@@ -1189,10 +1192,12 @@
               }
 		        },
 		        beforeSend: function(){
-		       		$(".loading").show();
+              progressStart();
+		       		// $(".loading").show();
 		        },
 		        complete: function(){
-		        	$(".loading").hide();
+              progressEnd();
+		        	// $(".loading").hide();
               graph_animation(ask_id);
               hover_action(ask_id);
 		        }
@@ -1243,10 +1248,12 @@
 		        	}
 		        },
 		        beforeSend: function(){
-		       		$(".loading").show();
+              progressStart();
+		       		// $(".loading").show();
 		        },
 		        complete: function(){
-		        	$(".loading").hide();
+              progressEnd();
+		        	// $(".loading").hide();
 		        }
 			});
 		<% else %>
@@ -1410,10 +1417,12 @@
 		        	}
 		        },
 		        beforeSend: function(){
-		       		$(".loading").show();
+              progressStart();
+		       		// $(".loading").show();
 		        },
 		        complete: function(){
-		        	$(".loading").hide();
+              progressEnd();
+		        	// $(".loading").hide();
 		        }
 			});
 	}
@@ -1446,10 +1455,12 @@
 		        	}
 		        },
 		        beforeSend: function(){
-		       		$(".loading").show();
+              progressStart();
+		       		// $(".loading").show();
 		        },
 		        complete: function(){
-		        	$(".loading").hide();
+              progressEnd();
+		        	// $(".loading").hide();
 		        }
 			});
 		<% else %>
@@ -1490,10 +1501,12 @@
           notify("의견이 삭제되었습니다");
         },
         beforeSend: function(){
-          $(".loading").show();
+          progressStart();
+          // $(".loading").show();
         },
         complete: function(){
-          $(".loading").hide();
+          progressEnd();
+          // $(".loading").hide();
         }
       });
     }
@@ -1580,10 +1593,12 @@
 					notify("수정 완료");
 				},
 				beforeSend: function(){
-					$(".loading").show();
+          progressStart();
+					// $(".loading").show();
 				},
 				complete: function(){
-					$(".loading").hide();
+          progressEnd();
+					// $(".loading").hide();
 				}
 			});
 		}
@@ -1680,10 +1695,12 @@
 		        	}
 		        },
 		        beforeSend: function(){
-		       		$(".loading").show();
+              progressStart();
+		       		// $(".loading").show();
 		        },
 		        complete: function(){
-		        	$(".loading").hide();
+              progressEnd();
+		        	// $(".loading").hide();
 		        }
 			});
 	}

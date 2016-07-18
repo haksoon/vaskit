@@ -366,6 +366,17 @@ function hash_tagging(origin_string, target_element) {
 console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
 // console.log("%c이 문구를 보고 계신 바로 당신만을 애타게 찾고 있었습니다!\n3개월 전만 해도 회계사였는데 여기까지 혼자 공부하면서 왔습니다 ㅠ\n이제는 도움이 필요합니다. 도와주세요...", "font-size:1.5em; color:#666;");
 
+function progressStart() {
+  $("#progress_bar").clearQueue().css("display","block").animate({width:"90%"},1000);
+}
+function progressEnd() {
+  $("#progress_bar").stop().animate({width:"100%"},100,function(){
+    $("#progress_bar").delay(300).animate({height:"0px"},100,function(){
+      $("#progress_bar").css({width:"0%", height:"5px", display:"none"});
+    });
+  });
+}
+
 $( document ).ready(function() {
   $("select").on("change",function(){
     if( $(this).val() != "" ) {

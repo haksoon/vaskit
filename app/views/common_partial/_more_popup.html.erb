@@ -141,10 +141,12 @@
 	        	}
 	        },
 	        beforeSend: function(){
-	       		$(".loading").show();
+						progressStart();
+	       		// $(".loading").show();
 	        },
 	        complete: function(){
-	        	$(".loading").hide();
+						progressEnd();
+	        	// $(".loading").hide();
             history.back();
 	        }
 		});
