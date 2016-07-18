@@ -1177,9 +1177,8 @@
 
               if (is_card_opened) {
                 $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: data.ask}));
+                comment_input_setting(data.ask.id, data.ask.user);
                 show_detail_vote_count(ask_id);
-                if (data.ask.right_ask_deal_id == ask_deal_id) ask_deal_id_change(data.ask.id, data.ask.left_ask_deal_id, data.ask.right_ask_deal_id);
-                $("#comment_input_"+data.ask.id).unbind("click");
                 if ($("#visitor_comment_overlay_"+ask_id).length == 1) {
                   $("#visitor_comment_overlay_"+ask_id).remove();
                   for(var i=0; i < data.ask.comments.length; i++) {
