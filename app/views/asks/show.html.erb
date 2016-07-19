@@ -11,6 +11,10 @@
   tooltip_box(ask.id);
   $("#ask_"+ask.id+"_message_more").click();
   $("#ask_"+ask.id+"_comment").html(askCommentTemplate({ask: ask}));
+  for (i=0; i<ask.comments.length; i++) {
+    var comment = ask.comments[i];
+    link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'));
+  };
   btn_text_hide_all(ask.id);
   comment_input_setting(ask.id, ask.user);
   $("#ask_"+ask.id+"_detail_btn").remove();
