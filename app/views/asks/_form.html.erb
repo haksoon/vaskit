@@ -136,16 +136,10 @@
 				CARD A 검색해서 입력하기
 			</p>
 			<div style="background-color:#f4f4f4; padding:12px;">
-				<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff;">
-					<tr>
-						<td style="width:100%;">
-							<input id="deal_search_keyword" type="text" class="comment_box" placeholder="제품명을 입력해주세요." style="background-color:#fff;"/>
-						</td>
-						<td>
-							<a id="deal_search_btn" href="#" style="width:50px; height:40px; line-height:40px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
-						</td>
-					</tr>
-				</table>
+				<div class="table_div" style="margin-bottom:0px; border:1px solid #dbdbdb;">
+					<input id="deal_search_keyword" type="text" class="etc_input_box" placeholder="제품명을 입력해주세요." style="background-color:#fff;"/>
+					<a id="deal_search_btn" href="#" style="position:absolute; top:0; right:0; width:50px; height:40px; line-height:40px; background-color:#dbdbdb; display:inline-block; text-align:center; color:#fff; font-size:13px;">입력</a>
+				</div>
 				<div id="search_deal_result" style="display:none;">
 					<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff; border-top:1px solid #3b3d3d; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; margin-top:10px;">
 						<tr>
@@ -265,7 +259,7 @@
 		$("#deal_search_keyword").focus().select();
 		$("#deal_search_keyword").on("keyup",function(){
 			if( $("#deal_search_keyword").val().length > 0 ) {
-				$('#deal_search_btn').css('background-color','#ee6e01');
+				$('#deal_search_btn').css('background-color','#f18b33');
 			} else {
 				$('#deal_search_btn').css('background-color','#dbdbdb');
 			}

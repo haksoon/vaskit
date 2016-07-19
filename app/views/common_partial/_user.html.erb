@@ -142,9 +142,9 @@
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">웰컴! <%= current_user.email %></span>
 			</p>
 			<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-user"></i>&nbsp;닉네임 변경</p>
-			<div class="table_div" style="margin-bottom:0;">
-				<input id="string_id_input" type="text" class="comment_box" placeholder="닉네임을 입력해주세요." value="<%= current_user.string_id %>" style="padding-right:60px;" />
-				<a id="string_id_change_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; display:inline-block; width:50px; height:40px; line-height:40px; text-align:center; background-color:#9d9ea1; color:#fff;">변경</a>
+			<div class="table_div" style="margin-bottom:0px; border:1px solid #dbdbdb;">
+				<input id="string_id_input" type="text" class="etc_input_box" placeholder="닉네임을 입력해주세요." value="<%= current_user.string_id %>" style="background-color:#fff;"/>
+				<a id="string_id_change_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; width:50px; height:40px; line-height:40px; background-color:#dbdbdb; display:inline-block; text-align:center; color:#fff; font-size:13px;">변경</a>
 			</div>
 			<a href="/users/edit" style="color:#666; display:inline-block; padding:0 10px; height:40px; line-height:40px; float:right;"><i class="fa fa-lock"></i>&nbsp;비밀번호 변경</a>
 		</div>
@@ -366,7 +366,7 @@
 
 		function ready_to_submit() {
 			if ( $("#string_id_input").val() != "" && $("#string_id_input").val() != current_user_string_id ) {
-				$("#string_id_change_btn").css("background-color","#ee6e01");
+				$("#string_id_change_btn").css("background-color","#f18b33");
 			} else {
 				$("#string_id_change_btn").css("background-color","#9d9ea1");
 			}
