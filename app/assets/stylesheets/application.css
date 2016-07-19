@@ -620,6 +620,13 @@ img.cover {
 .hash_tag:hover, .hash_tag:focus, .hash_tag:active {
 	background-color:#ffe4a9;
 }
+.link{
+	color:#998674;
+	transition:background-color .2s;
+}
+.link:hover, .link:focus, .link:active {
+	background-color:#ffe4a9;
+}
 
 
 /* 질문하기 화면 */

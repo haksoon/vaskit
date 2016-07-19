@@ -313,10 +313,21 @@ function hash_tagging(origin_string, target_element) {
     hash_tag = hash_tag.replace(",","");
     target_element.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
     hash_tag = hash_tag.replace('#', '').replace("?","");
-    $.each( target_element.find("."+index), function( index2, element ){
+    $.each( target_element.find(".hash_tag."+index), function( index2, element ){
       // if ( $(element).parent().prop('nodeName') == "SPAN"){
         $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
       // }
+    });
+  });
+}
+
+function link_tagging(origin_string, target_element) {
+  var links = origin_string.match(/(http(s)?:\/\/)([\S]*)/g);
+  if (links != null) links.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+  $.each(links, function( index, link ) {
+    target_element.highlight(link, { element:'a', className: 'link '+index});
+    $.each( target_element.find(".link."+index), function( index2, element ){
+      $(element).attr({href:link, target:"_blank"});
     });
   });
 }

@@ -135,11 +135,11 @@
 			<p id="search_deal_title" style="background-color:#4b3d3d; font-size:15px; color:#FFF; height:40px; line-height:40px; margin:0;">
 				CARD A 검색해서 입력하기
 			</p>
-			<div style="background-color:#f4f4f4; padding:10px 14px;">
+			<div style="background-color:#f4f4f4; padding:12px;">
 				<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff;">
 					<tr>
 						<td style="width:100%;">
-							<input id="deal_search_keyword" type="text" class="comment_box" placeholder="제품명을 입력해주세요." onkeyup="$('#deal_search_btn').css('background-color','#ee6e01'); return false;" style="background-color:#fff;"/>
+							<input id="deal_search_keyword" type="text" class="comment_box" placeholder="제품명을 입력해주세요." style="background-color:#fff;"/>
 						</td>
 						<td>
 							<a id="deal_search_btn" href="#" style="width:50px; height:40px; line-height:40px; background-color:#dbdbdb; display:inline-block; color:#fff; font-size:13px;">입력</a>
@@ -150,12 +150,12 @@
 					<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff; border-top:1px solid #3b3d3d; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; margin-top:10px;">
 						<tr>
 							<td style="width:50%;">
-								<a id="naver_deals_btn" href="#" onclick="show_naver_deals(); return false;" style="font-size:14px; color:#383838; line-height:38px; display:block; background-color:#fff; ">
+								<a id="naver_deals_btn" href="#" onclick="show_naver_deals(); return false;" style="font-size:13px; color:#383838; line-height:38px; display:block; background-color:#fff; ">
 									쇼핑 검색결과
 								</a>
 							</td>
 							<td style="width:50%;">
-								<a id="naver_images_btn" href="#"  onclick="show_naver_images(); return false;" style="font-size:14px; color:#383838; line-height:38px; display:block; border-bottom:1px solid #dbdbdb; border-left:1px solid #dbdbdb;  background-color:#f4f4f4;">
+								<a id="naver_images_btn" href="#"  onclick="show_naver_images(); return false;" style="font-size:13px; color:#383838; line-height:38px; display:block; border-bottom:1px solid #dbdbdb; border-left:1px solid #dbdbdb;  background-color:#f4f4f4;">
 									이미지 검색결과
 								</a>
 							</td>
@@ -259,9 +259,17 @@
 	}
 
 	function show_search_deal_popup(is_left){
+		disableScroll();
 		$("#search_deal_popup_bg").show();
 		$("#search_deal_popup").show();
 		$("#deal_search_keyword").focus().select();
+		$("#deal_search_keyword").on("keyup",function(){
+			if( $("#deal_search_keyword").val().length > 0 ) {
+				$('#deal_search_btn').css('background-color','#ee6e01');
+			} else {
+				$('#deal_search_btn').css('background-color','#dbdbdb');
+			}
+		});
 		$("#deal_search_btn").attr("onclick", "deal_search("+is_left+"); return false;");
 		if (is_left){
 			$("#search_deal_title").html("CARD A 검색해서 입력하기");
@@ -277,6 +285,7 @@
 	}).resize();
 
 	function hide_search_deal_popup(){
+		enableScroll();
 		$("#search_deal_popup").hide();
 		$("#search_deal_popup_bg").hide();
 		$("#search_deal_result").hide();
@@ -325,14 +334,14 @@
 		        	var naverImageTemplate = _.template( $('#naver-image-template').html() );
 				    	$('#naver_images').html(naverImageTemplate({image_items: image_items, is_left: is_left}));
 	        	} else {
-	        		$('#naver_images').html("<p style='line-height:150px; color:#383838;'>이미지 검색결과가 없습니다.</p>");
+	        		$('#naver_images').html("<p style='line-height:150px; color:#383838; font-size:13px;'>이미지 검색결과가 없습니다.</p>");
 	        	}
 	        	items = data.shop_result.rss.channel.item;
 	        	if (items != null ){
 		        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
 				    	$('#naver_deals').html( naverDealTemplate({item: items, is_left: is_left}) );
 	        	} else {
-	        		$('#naver_deals').html("<p style='line-height:150px; color:#383838;'>상품 검색결과가 없습니다.</p>");
+	        		$('#naver_deals').html("<p style='line-height:150px; color:#383838; font-size:13px;'>상품 검색결과가 없습니다.</p>");
 	        	}
 	        	show_naver_deals();
 	        },
@@ -466,7 +475,7 @@
 					 },
 					 complete: function(){
 						 progressEnd();
-						 //  $(".loading").hide();
+				 		 //  $(".loading").hide();
 						 ready_to_submit();
 					 }
 		    }).fail(function (data) {}).done(function () {});

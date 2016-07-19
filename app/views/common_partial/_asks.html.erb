@@ -637,8 +637,8 @@
 		{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
 			<div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin-bottom:0px;">
 				<div style="position:relative; margin:5px 0px 0 15px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-					<span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:left; float:left;">
-						<span>{{=comment.content}}</span>
+					<span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:left; float:left;">
+						<span class="comment_content">{{=comment.content}}</span>
 						<span style="color:#9d9ea1; margin-left:5px; font-size:11px; float:right; padding-top:1px;">
 							<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 						</span>
@@ -746,8 +746,8 @@
 	        </a>
 	      {{ } }}
 	      <div style="position:relative; margin:5px 15px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-	        <span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:right; float:right;">
-						<span>{{=comment.content}}</span>
+	        <span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:right; float:right;">
+						<span class="comment_content">{{=comment.content}}</span>
 						<span style="color:#9d9ea1; margin-right:5px; font-size:11px; float:left; padding-top:1px;">
 							<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 						</span>
@@ -840,8 +840,8 @@
 		<div id="comment_{{=comment.id}}" style="width:100%; text-align:left; padding-left:5px; box-sizing:border-box;">
 			<span><i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:10px -15px 0px 15px; color:#dbdbdb;"></i></span>
 			<div style="position:relative; margin:0px 0px 0 15px; max-width:60%; display:inline-block; text-align:left; background-color:ghostwhite; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-				<span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:left; float:left;">
-					<span>{{=comment.content}}</span>
+				<span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:left; float:left;">
+					<span class="comment_content">{{=comment.content}}</span>
 					<span style="color:#9d9ea1; margin-left:5px; font-size:11px; float:right; padding-top:1px;">
 						<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 					</span>
@@ -917,8 +917,8 @@
         </a>
       {{ } }}
       <div style="position:relative; margin:0px 15px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:ghostwhite; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-        <span id="comment_content_{{=comment.id}}" class="comment_content" style="word-break:break-all; text-align:right; float:right;">
-					<span>{{=comment.content}}</span>
+        <span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:right; float:right;">
+					<span class="comment_content">{{=comment.content}}</span>
 					<span style="color:#9d9ea1; margin-right:5px; font-size:11px; float:left; padding-top:1px;">
 						<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
 					</span>
@@ -979,7 +979,7 @@
       <span><i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>
     </a>
   {{ }else{ }}
-    <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); ga('send', 'event', 'ask', 'detail_view', '{{=ask.id}}', 1); return false;">
+    <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
       {{ if (ask.comments.length > 0) { }}
       <div id="ask_{{=ask.id}}_comment_preview" class="table_div" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
         <ul style="width:100%; margin:0; padding:0; list-style:none;">
@@ -1060,6 +1060,7 @@
 		ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
+    link_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 		abbreviate_msg(ask.message, ask.id);
     hover_action(ask.id);
     // if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
@@ -1123,6 +1124,7 @@
     						ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
 								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
+                link_tagging(ask.message, $("#ask_"+ask.id+"_message"));
 								abbreviate_msg(ask.message, ask.id);
                 hover_action(ask.id);
 								// if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
@@ -1134,6 +1136,7 @@
           },
           complete: function(){
             progressEnd();
+            ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
             // for(var i=0; i < asks.length; i++) {
           	// 	ask = asks[i]
             //   $("#ask_box_"+ask.id).height($("#ask_"+ask.id).outerHeight());
@@ -1152,6 +1155,7 @@
 			msg_short.show();
 			msg_short.html(origin_string.substring(0,80).replace(new RegExp('\r?\n', 'g'), '<br>').replace(/(<br>)+/g,"<br>")+"&nbsp;&middot;&middot;&middot;");
 			hash_tagging(origin_string.substring(0,80), msg_short);
+      link_tagging(origin_string.substring(0,80), msg_short);
 			msg_more.show();
 		};
 	}
@@ -1179,16 +1183,14 @@
 
               if (is_card_opened) {
                 $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: data.ask}));
+                for (i=0; i<data.ask.comments.length; i++) {
+                  var comment = data.ask.comments[i];
+                  link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'));
+                };
                 btn_text_hide_all(data.ask.id);
                 comment_input_setting(data.ask.id, data.ask.user);
                 show_detail_vote_count(ask_id);
-                if ($("#visitor_comment_overlay_"+ask_id).length == 1) {
-                  $("#visitor_comment_overlay_"+ask_id).remove();
-                  for(var i=0; i < data.ask.comments.length; i++) {
-                    comment = data.ask.comments[i]
-                    $("#ask_"+ask_id+"_comment_list").append(askCommentListTemplate({ask:data.ask, comment:comment}));
-                  }
-                }
+                $("#visitor_comment_overlay_"+ask_id).remove();
               }
 		        },
 		        beforeSend: function(){
@@ -1279,6 +1281,10 @@
     tooltip_box(ask_id);
     $("#ask_"+ask_id+"_message_more").click();
     $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: ask}));
+    for (i=0; i<ask.comments.length; i++) {
+      var comment = ask.comments[i];
+      link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'));
+    };
     btn_text_hide_all(ask_id);
     comment_input_setting(ask_id, ask.user);
     $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
@@ -1295,6 +1301,9 @@
 		$("#category_button:visible").hide();
 		$("#back_button").show().attr("onclick","history.back(); return false;");
 		$(".chat_bubble").css("margin-top","15px");
+
+    ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask_id.toString(), 1);
+    ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
 	}
 
 	function card_detail_off(ask_id) {
@@ -1396,6 +1405,7 @@
 		        	if (data.message = "success"){
                 ask.comments.push(data.comment);
 		        		$("#ask_"+ask_id+"_comment_list").append(askCommentListTemplate({ask:data.ask, comment:data.comment}));
+                link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'));
 		        		notify("작성 완료");
 		        		$("#comment_input_"+ask_id).val("");
                 $("#no_comment_"+ask_id).hide();
@@ -1582,6 +1592,7 @@
 				},
 				success: function(data){
 					comment_content.find("span:eq(0)").html(content);
+          link_tagging(content, $('#comment_content_'+comment_id+' .comment_content'));
 					comment_content.show();
 					modify_box.hide();
 					modify_input.html(comment_content.find("span:eq(0)").text()).blur();
@@ -1674,6 +1685,7 @@
 		        	if (data.message = "success"){
                 ask.comments.push(data.comment);
 		        		$("#comment_"+comment_id+"_reply_list").append(replyCommentListTemplate({ask:data.ask, comment:data.comment}));
+                link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'));
 		        		notify("작성 완료");
 								comment_reply_cancel(comment_id);
 		        		$("#reply_comment_input_"+comment_id).val("");
