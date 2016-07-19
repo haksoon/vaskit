@@ -47,20 +47,18 @@
       </div>
       <div id="detail_vote_count_{{=ask.id}}" class="table_div" style="display:none; margin-bottom:0px; background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb;"></div>
       <div id="ask_deal_{{=ask.id}}_table" class="table_div" style="display:none; margin-bottom:0px; border-bottom:1px solid #dbdbdb;"></div>
-      <div class="table_div" style="margin-bottom:0; padding:15px;">
-        <p id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2;">
-          <span id="ask_{{=ask.id}}_message_text">
-            {{ if( ask.message){ }}
-              {{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
-              {{= ask_message }}
-            {{ }else{ }}
-              저의 결정장애 극복을 도와주세요! 둘 중에 뭐를 사야 하죠?
-            {{ } }}
-          </span>
-          <span id="ask_{{=ask.id}}_message_text_shorten" style="display:none;">
-          </span>
-          <a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:0 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">펼치기&nbsp;<i class="fa fa-angle-down"></i></a>
-        </p>
+      <div id="ask_{{=ask.id}}_message" style="margin:0; color:#383838; font-size:13px; line-height:2; padding:15px;">
+        <div id="ask_{{=ask.id}}_message_text">
+          {{ if( ask.message){ }}
+            {{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
+            {{= ask_message }}
+          {{ }else{ }}
+            저의 결정장애 극복을 도와주세요! 둘 중에 뭐를 사야 하죠?
+          {{ } }}
+        </div>
+        <div id="ask_{{=ask.id}}_message_text_shorten" style="display:none;">
+        </div>
+        <a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:-25px 5px 0; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;">펼치기&nbsp;<i class="fa fa-angle-down"></i></a>
       </div>
       <div id="ask_{{=ask.id}}_comment" class="table_div" style="display:none; margin-bottom:0px;"></div>
       <div id="ask_{{=ask.id}}_detail_btn" class="table_div" style="margin-bottom:0px;">
