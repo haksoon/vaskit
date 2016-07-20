@@ -106,7 +106,7 @@
   			<% else %>
   				<%= f.hidden_field :birthday %>
   			<% end %>
-  			<% if resource.gender.blank? %>
+  			<% unless resource.gender == true || resource.gender == false %>
           <table cellspacing="0" cellpadding="0" style="width:100%; margin-bottom:10px;">
             <tr>
               <td style="width:50%; text-align:left;">
@@ -394,7 +394,7 @@
           return;
         }
       <% end %>
-      <% if resource.gender.blank? %>
+      <% unless resource.gender == true || resource.gender == false %>
         if ($("#user_gender").val() == ""){
           notify('성별을 선택해주세요');
           return;
