@@ -304,13 +304,13 @@
     if (
       <% if resource.facebook_id.blank? %>
         $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()
-        && $("#user_birthday_1i").val() != "" && $("#user_birthday_2i").val() != "" && $("#user_birthday_3i").val() != "" && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
+        && $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
       <% else %>
         <% if resource.email.blank? %>
           $("#user_email").val() != ""
         <% end %>
         <% if resource.birthday.blank? %>
-          $("#user_birthday_1i").val() != "" && $("#user_birthday_2i").val() != "" && $("#user_birthday_3i").val() != ""
+          $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null
         <% end %>
         <% if resource.gender.blank? %>
           $("#user_gender").val() != ""
@@ -352,17 +352,17 @@
         $("#user_password_confirmation").focus().select();
   			return;
   		}
-      if ($("#user_birthday_1i").val() == ""){
+      if ($("#user_birthday_1i").val() == null){
         notify('생년월일을 입력해주세요');
         $("#user_birthday_1i").focus().select();
         return;
       }
-      if ($("#user_birthday_2i").val() == ""){
+      if ($("#user_birthday_2i").val() == null){
         notify('생년월일을 입력해주세요');
         $("#user_birthday_2i").focus().select();
         return;
       }
-      if ($("#user_birthday_3i").val() == ""){
+      if ($("#user_birthday_3i").val() == null){
         notify('생년월일을 입력해주세요');
         $("#user_birthday_3i").focus().select();
         return;
@@ -385,17 +385,17 @@
         }
       <% end %>
       <% if resource.birthday.blank? %>
-        if ($("#user_birthday_1i").val() == ""){
+        if ($("#user_birthday_1i").val() == null){
           notify('생년월일을 입력해주세요');
           $("#user_birthday_1i").focus().select();
           return;
         }
-        if ($("#user_birthday_2i").val() == ""){
+        if ($("#user_birthday_2i").val() == null){
           notify('생년월일을 입력해주세요');
           $("#user_birthday_2i").focus().select();
           return;
         }
-        if ($("#user_birthday_3i").val() == ""){
+        if ($("#user_birthday_3i").val() == null){
           notify('생년월일을 입력해주세요');
           $("#user_birthday_3i").focus().select();
           return;
