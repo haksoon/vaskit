@@ -18,13 +18,13 @@ class Users::FacebookController < Devise::PasswordsController
       unless graph_user["gender"].blank?
         if graph_user["gender"] == "남성"
           gender = true
-        else   
+        else
           gender = false
         end
-      end  
+      end
       birthday = nil
       birthday = Date.strptime(graph_user["birthday"], "%m/%d/%Y") unless graph_user["birthday"].blank?
-      
+
       user = User.where(:facebook_id => facebook_id).first
       user = User.where("email = ? AND facebook_id = ''", email).first if user.blank?
       if user.blank?
@@ -34,7 +34,7 @@ class Users::FacebookController < Devise::PasswordsController
           sign_in user
           redirect_to root_path
         else
-          redirect_to new_user_registration_path(:email => email, :name => name, :facebook_id => facebook_id, :gender => gender, :birthday => birthday)
+          redirect_to new_user_registration_path(:email => email, :name => name, :facebook_id => facebook_id, :gender => gender, :birthday => birthday, :password => "is_facebook", :password_confirmation => "is_facebook")
         end
       elsif user && user.sign_up_type == "email"
         user.update(:facebook_id => facebook_id, :sign_up_type => "both", :remember_me => true)
@@ -47,10 +47,5 @@ class Users::FacebookController < Devise::PasswordsController
       end
     end
   end
-  
+
 end
-
-
-
-
-
