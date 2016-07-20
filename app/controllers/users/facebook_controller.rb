@@ -34,7 +34,7 @@ class Users::FacebookController < Devise::PasswordsController
           sign_in user
           redirect_to root_path
         else
-          redirect_to new_user_registration_path(:email => email, :name => name, :facebook_id => facebook_id, :gender => gender, :birthday => birthday, :password => "is_facebook", :password_confirmation => "is_facebook")
+          redirect_to new_user_registration_path(:email => email, :name => name, :facebook_id => facebook_id, :gender => gender, :birthday => birthday)
         end
       elsif user && user.sign_up_type == "email"
         user.update(:facebook_id => facebook_id, :sign_up_type => "both", :remember_me => true)

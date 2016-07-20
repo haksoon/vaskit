@@ -20,12 +20,13 @@ class Users::RegistrationsController < Devise::RegistrationsController
       params[:user][:sign_up_type] = "email"
     else
       params[:user][:password] = "is_facebook"
+      params[:user][:password_confirmation] = params[:user][:password]
       params[:user][:sign_up_type] = "facebook"
       params[:user][:agree_access_term] = true
     end
     params[:user][:remember_me] = true
 
-    params[:user][:password_confirmation] = params[:user][:password]
+    # params[:user][:password_confirmation] = params[:user][:password]
     params[:user][:string_id] = User.get_uniq_string_id( params[:user][:email].split("@")[0] )
     super
   end
