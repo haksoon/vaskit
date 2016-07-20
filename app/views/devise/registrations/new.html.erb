@@ -4,9 +4,15 @@
 
 <div id="login_screen">
   <p class="chat_bubble" style="margin-bottom:15px;">
-    지금 회원가입하시면 나의 고민에 대한 질문을 올리거나,<br>
-    남의 고민에 대한 의견을 남길 수 있습니다. 히스토리도 남길 수 있어요.<br>
-    어서 VASKIT하러 가자구요! 현기증 난단 말이에요~
+    <% if resource.facebook_id.blank? %>
+      회원가입하시면 당신만의 고민을 털어놓을 수 있어요.<br>
+      투표나 의견도 마음껏 참여하실 수 있고, 나만의 히스토리도 남길 수 있어요.<br>
+      어서 VASKIT하러 가자구요! 현기증 난단 말이에요~
+    <% else %>
+      페이스북에서 전달받지 못한 추가 입력정보를 입력하는 단계입니다.<br>
+      투표 결과의 통계 분석을 위해 연령, 성별 정보를 필요로 하니 양해 부탁드립니다.<br>
+      어서 VASKIT하러 가자구요! 현기증 난단 말이에요~
+    <% end %>
   </p>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), :html => {:id => "sign_up_form"}) do |f| %>
@@ -79,7 +85,7 @@
   		<% else %>
   			<% if resource.email.blank? %>
           <div style="position:relative;">
-            <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+            <%= f.email_field :email, :placeholder => "이메일주소를 입력해주세요.", :class => "registrations_input" %>
             <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
             <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
             <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
@@ -89,9 +95,11 @@
   			<% end %>
         <%= f.hidden_field :password %>
         <%= f.hidden_field :password_confirmation %>
-        <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
-          <i class="fa fa-plus"></i>&nbsp;추가 입력정보
-        </p>
+        <% if resource.birthday.blank? || (resource.gender != true && resource.gender != false) %>
+          <p style="margin: 10px 0; text-align: center; color: #9d9ea1; font-size: 13px;">
+            <i class="fa fa-plus"></i>&nbsp;추가 입력정보
+          </p>
+        <% end %>
   			<% if resource.birthday.blank? %>
           <table cellspacing="0" cellpadding="0" style="width:100%; text-align:center; margin-bottom:0px;">
             <tr>
@@ -123,7 +131,7 @@
           </table>
   	 		<% end %>
   			<a id="register_btn" href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
-  				<i class="fa fa-users"></i>&nbsp;회원가입
+  				<i class="fa fa-facebook"></i>&nbsp;페이스북 로그인
   			</a>
         <div style="display:none;">
           <%= f.check_box :agree_access_term, {:checked=>true} %>
@@ -307,14 +315,19 @@
         $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()
         && $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
       <% else %>
-        $("#user_email").val() != "" && $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null && $("#user_gender").val() != ""
+        $("#user_email").val() != "" && ($("#user_birthday").val() != "" || ($("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null)) && $("#user_gender").val() != ""
       <% end %>
     ) {
-      $("#register_btn").css("background-color","#ee6e01");
+      <% if resource.facebook_id.blank? %>
+        $("#register_btn").css("background-color","#ee6e01");
+      <% else %>
+        $("#register_btn").css("background-color","#3b589e");
+      <% end %>
     } else {
       $("#register_btn").css("background-color","#9d9ea1");
     }
   }
+  ready_to_submit();
 
   $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
   $("#user_email").attr("onblur","email_check_tooltip(); return false;");
