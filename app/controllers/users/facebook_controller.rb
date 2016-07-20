@@ -25,8 +25,6 @@ class Users::FacebookController < Devise::PasswordsController
       birthday = nil
       birthday = Date.strptime(graph_user["birthday"], "%m/%d/%Y") unless graph_user["birthday"].blank?
 
-      testing = User.where(:id => graph)
-      testing2 = User.where(:id => graph_user)
       user = User.where(:facebook_id => facebook_id).first
       user = User.where("email = ? AND facebook_id = ''", email).first if user.blank?
       if user.blank?
