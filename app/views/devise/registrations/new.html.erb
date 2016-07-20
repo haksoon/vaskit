@@ -306,15 +306,7 @@
         $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()
         && $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
       <% else %>
-        <% if resource.email.blank? %>
-          $("#user_email").val() != ""
-        <% end %>
-        <% if resource.birthday.blank? %>
-          $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null
-        <% end %>
-        <% if resource.gender.blank? %>
-          $("#user_gender").val() != ""
-        <% end %>
+        $("#user_email").val() != "" && $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null && $("#user_gender").val() != ""
       <% end %>
     ) {
       $("#register_btn").css("background-color","#ee6e01");
