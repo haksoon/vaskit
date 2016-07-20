@@ -972,6 +972,7 @@
 
 	var askTemplate = _.template($('#ask-template').html()),
       askDealTemplate = _.template($('#ask-deal-template').html());
+      detailVoteCountTemplate = _.template($('#detail-vote-count-template').html()),
       askDealTableTemplate = _.template($('#ask-deal-table-template').html()),
       askCommentTemplate = _.template($('#ask-comment-template').html()),
       askCommentListTemplate = _.template($('#ask-comment-list-template').html()),
@@ -1147,8 +1148,8 @@
 					return false;
 			},
 			success: function(data){
-				var detailVoteCountTemplate = _.template($('#detail-vote-count-template').html());
-				if (is_card_opened && already_vote.length == 1) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
+        var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+				if (is_card_opened && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
 			},
 			beforeSend: function(){
 			},
