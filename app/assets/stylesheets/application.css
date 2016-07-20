@@ -548,8 +548,23 @@ img.cover {
 	transform-origin: bottom center;
 }
 @keyframes cover_ani {
-	0% { transform: rotateZ(2deg); }
-	100% { transform: rotateZ(-2deg); }
+	0% { transform: rotateZ(1deg); }
+	100% { transform: rotateZ(-1deg); }
+}
+a.login_btn {
+	display:block;
+	margin:0 auto;
+	margin-top:15px;
+	width:90%;
+	max-width:350px;
+	height:50px;
+	line-height:50px;
+	font-size:15px;
+	border-radius:2px;
+	transition:all .2s;
+}
+a.login_btn:hover {
+	border-radius:10px;
 }
 
 .registrations_input{

@@ -3,23 +3,22 @@
 
 <div id="login_screen" style="position:absolute; top:0; width:inherit; height:inherit; min-height:100%; background-color:#fff;">
 	<div class="table_div" style="margin-top:50px;">
-		<img style="display:block; margin:20px auto; width:200px;" src="/images/logo/logo_2.png">
+		<img style="display:block; margin:20px auto; width:220px;" src="/images/logo/logo_2.png">
 		<span style="font-size:18px; font-weight:bold; color:#ee6e01; margin-right:50px;">둘 중에 뭐 사지?</span><br/>
 		<span style="font-size:18px; font-weight:bold; color:#ee6e01; margin-left:50px;">#고민고민하지마</span><br/>
-		<span style="display:block; font-size:14px; color:#998674; line-height:20px; margin-top:10px;">우리의 고민거리에 대해<br/>다함께 이야기를 나누어볼까요?</span>
 	</div>
-	<a class="login_btn" href="#" onclick="webLoginWithFB(); return false;" style="background:#3b589e; color:#fff; margin-top:20px;">
-		<i class="fa fa-facebook"></i>&nbsp;페이스북 로그인
+	<div style="position:relative; width: 100%; height: 120px; background: #ffcc5a; margin-top: 150px;">
+		<img class="cover" src="/images/logo/cover.png" style="position: absolute; left:50%; bottom: -2px; margin-left: -125px; max-height: 250px;" />
+	</div>
+	<a class="login_btn" href="#" onclick="webLoginWithFB(); return false;" style="background:#4267b2; color:#fff; margin-top:20px;">
+		<i class="fa fa-facebook-square" style="font-size:18px; margin-right:3px;"></i>&nbsp;페이스북 로그인
 	</a>
-	<a class="login_btn" href="/users/sign_up" style="background:#ee6e01; color:#fff;">
+	<a class="login_btn" href="/users/sign_up" style="background:rgba(238,110,1,0.9); color:#fff;">
 		<i class="fa fa-users"></i>&nbsp;회원가입<small>&nbsp;/sign-up</small>
 	</a>
-	<a class="login_btn" href="/users/sign_in" style="background:#fff; color:#383838; border:1px solid #dbdbdb; ">
+	<a class="login_btn" href="/users/sign_in" style="background:#fff; color:#666; border:1px solid #dbdbdb; ">
 		<i class="fa fa-sign-in"></i>&nbsp;로그인<small>&nbsp;/sign-in</small>
 	</a>
-	<div style="position:relative; width: 100%; height: 200px; background: #ffcc5a; margin-top: 120px;">
-		<img class="cover" src="/images/logo/cover.png" style="position: absolute; left:50%; bottom: -2px; margin-left: -150px; max-height: 300px;" />
-	</div>
 	<p style="font-size:12px; color:#9d9ea1; margin:10px 0 50px 0;">
 		<i class="fa fa-info-circle"></i>&nbsp;가입 시
 		<a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
@@ -33,19 +32,3 @@
 		window.location = 'https://www.facebook.com/dialog/oauth?client_id=<%=Facebook::CONFIG["app_id"]%>&redirect_uri=<%=CONFIG["host"]%>/users/facebook&scope=email,public_profile,user_birthday';
 	}
 </script>
-
-<style type="text/css">
-	a.login_btn {
-		display:block;
-		margin:0 auto; margin-top:10px;
-		width:250px; height:40px; line-height:40px;
-		font-size:14px; font-weight:bold;
-		-webkit-border-radius:50px;
-		   -moz-border-radius:50px;
-		        border-radius:50px;
-		transition:all .2s;
-	}
-	a.login_btn:hover {
-		width:200px;
-	}
-</style>
