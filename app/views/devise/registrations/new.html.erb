@@ -82,6 +82,7 @@
             <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
             <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
             <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
+            <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
           </div>
   			<% else %>
   				<%= f.hidden_field :email %>
