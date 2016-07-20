@@ -70,6 +70,12 @@
   			<a id="register_btn" href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
   				<i class="fa fa-users"></i>&nbsp;회원가입
   			</a>
+        <div style="display:none;">
+          <%= f.check_box :agree_access_term, {:checked=>false} %>
+       		<%= f.hidden_field :facebook_id %>
+       		<%= f.hidden_field :name %>
+       		<%= f.hidden_field :gender %>
+        </div>
   		<% else %>
   			<% if resource.email.blank? %>
           <div style="position:relative;">
@@ -99,7 +105,6 @@
   			<% else %>
   				<%= f.hidden_field :birthday %>
   			<% end %>
-
   			<% if resource.gender.blank? %>
           <table cellspacing="0" cellpadding="0" style="width:100%; margin-bottom:10px;">
             <tr>
@@ -116,25 +121,16 @@
             </tr>
           </table>
   	 		<% end %>
-        <p style="margin:20px 0 0 0; font-size:12px; text-align:left; color:#9d9ea1;">
-          <span style="display:inline-block; vertical-align:middle;">
-            <a id="agree_access_term_btn" href="#" onclick="access_term_agree(); return false;">
-      				<i class="fa fa-square" style="font-size: 14px; color: #ffe4a9; text-shadow: 1px 1px 0 #ffcc5a; margin-right:5px;"></i>
-      			</a>
-          </span>
-          <a href="#" onclick="access_term_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
-      		<a href="#" onclick="privacy_policy_on(); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
-        </p>
   			<a id="register_btn" href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
   				<i class="fa fa-users"></i>&nbsp;회원가입
   			</a>
+        <div style="display:none;">
+          <%= f.check_box :agree_access_term, {:checked=>true} %>
+       		<%= f.hidden_field :facebook_id %>
+       		<%= f.hidden_field :name %>
+       		<%= f.hidden_field :gender %>
+        </div>
    		<% end %>
-      <div style="display:none;">
-        <%= f.check_box :agree_access_term, {:checked=>false} %>
-     		<%= f.hidden_field :facebook_id %>
-     		<%= f.hidden_field :name %>
-     		<%= f.hidden_field :gender %>
-      </div>
   	</div>
     <div class="content_box" style="margin:5px 12px 30px; padding:5px 10px; color:#9d9ea1; font-size:12px; text-align:left; line-height:1.5; background-color:#ededed;">
       <i class="fa fa-info-circle" style="padding-bottom: 5px; font-weight: bold;">&nbsp;걱정마세요!</i>
@@ -306,8 +302,20 @@
 
   function ready_to_submit() {
     if (
-      $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()
-      && $("#user_birthday_1i").val() != "" && $("#user_birthday_2i").val() != "" && $("#user_birthday_3i").val() != "" && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
+      <% if resource.facebook_id.blank? %>
+        $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()
+        && $("#user_birthday_1i").val() != "" && $("#user_birthday_2i").val() != "" && $("#user_birthday_3i").val() != "" && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
+      <% else %>
+        <% if resource.email.blank? %>
+          $("#user_email").val() != ""
+        <% end %>
+        <% if resource.birthday.blank? %>
+          $("#user_birthday_1i").val() != "" && $("#user_birthday_2i").val() != "" && $("#user_birthday_3i").val() != ""
+        <% end %>
+        <% if resource.gender.blank? %>
+          $("#user_gender").val() != ""
+        <% end %>
+      <% end %>
     ) {
       $("#register_btn").css("background-color","#ee6e01");
     } else {
@@ -324,53 +332,82 @@
   $("#sign_up_form").on("change",function(){ ready_to_submit(); })
 
 	function sign_up_submit(){ //submit 전에 value 체크
-		if ($("#user_email").val() == ""){
-			notify('이메일을 입력해주세요');
-      $("#user_email").focus().select();
-			return;
-		} else if ($("#email_checker i").hasClass("fa-exclamation-triangle")) {
-      notify('이메일을 확인해 주세요');
-			$("#user_email").focus().select();
-      return false;
-    }
-
-		<% unless resource.facebook_id %>
-			if ($("#user_password").val() == ""){
-				notify('비밀번호를 입력해주세요');
+    <% if resource.facebook_id.blank? %>
+  		if ($("#user_email").val() == ""){
+  			notify('이메일을 입력해주세요');
+        $("#user_email").focus().select();
+  			return;
+  		} else if ($("#email_checker i").hasClass("fa-exclamation-triangle")) {
+        notify('이메일을 확인해 주세요');
+  			$("#user_email").focus().select();
+        return false;
+      }
+  		if ($("#user_password").val() == ""){
+  			notify('비밀번호를 입력해주세요');
         $("#user_password").focus().select();
-				return;
-			}
+  			return;
+  		}
       if ($("#user_password").val() != $("#user_password_confirmation").val()){
-				notify('비밀번호를 확인해주세요');
+  			notify('비밀번호를 확인해주세요');
         $("#user_password_confirmation").focus().select();
-				return;
-			}
-		<% end %>
+  			return;
+  		}
+      if ($("#user_birthday_1i").val() == ""){
+        notify('생년월일을 입력해주세요');
+        $("#user_birthday_1i").focus().select();
+        return;
+      }
+      if ($("#user_birthday_2i").val() == ""){
+        notify('생년월일을 입력해주세요');
+        $("#user_birthday_2i").focus().select();
+        return;
+      }
+      if ($("#user_birthday_3i").val() == ""){
+        notify('생년월일을 입력해주세요');
+        $("#user_birthday_3i").focus().select();
+        return;
+      }
 
-    if ($("#user_birthday_1i").val() == ""){
-      notify('생년월일을 입력해주세요');
-      $("#user_birthday_1i").focus().select();
-      return;
-    }
-    if ($("#user_birthday_2i").val() == ""){
-      notify('생년월일을 입력해주세요');
-      $("#user_birthday_2i").focus().select();
-      return;
-    }
-    if ($("#user_birthday_3i").val() == ""){
-      notify('생년월일을 입력해주세요');
-      $("#user_birthday_3i").focus().select();
-      return;
-    }
-
-		if ($("#user_gender").val() == ""){
-			notify('성별을 선택해주세요');
-			return;
-		}
-		if ( $("#user_agree_access_term").prop("checked") !== true ){
-			notify('회원약관에 동의해주세요');
-			return;
-		}
+  		if ($("#user_gender").val() == ""){
+  			notify('성별을 선택해주세요');
+  			return;
+  		}
+  		if ( $("#user_agree_access_term").prop("checked") !== true ){
+  			notify('회원약관에 동의해주세요');
+  			return;
+  		}
+    <% else %>
+      <% if resource.email.blank? %>
+        if ($("#user_email").val() == ""){
+          notify('이메일을 입력해주세요');
+          $("#user_email").focus().select();
+          return;
+        }
+      <% end %>
+      <% if resource.birthday.blank? %>
+        if ($("#user_birthday_1i").val() == ""){
+          notify('생년월일을 입력해주세요');
+          $("#user_birthday_1i").focus().select();
+          return;
+        }
+        if ($("#user_birthday_2i").val() == ""){
+          notify('생년월일을 입력해주세요');
+          $("#user_birthday_2i").focus().select();
+          return;
+        }
+        if ($("#user_birthday_3i").val() == ""){
+          notify('생년월일을 입력해주세요');
+          $("#user_birthday_3i").focus().select();
+          return;
+        }
+      <% end %>
+      <% if resource.gender.blank? %>
+        if ($("#user_gender").val() == ""){
+          notify('성별을 선택해주세요');
+          return;
+        }
+      <% end %>
+    <% end %>
 
 		$("#sign_up_form").submit();
 	}
