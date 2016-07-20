@@ -10,7 +10,7 @@ class Users::FacebookController < Devise::PasswordsController
       response = JSON.parse(Net::HTTP.get(uri))
       access_token = response["access_token"]
       graph = Koala::Facebook::API.new(access_token) #이미지 저장해야됨.
-      graph_user = graph.get_object("me?fields=email,name,gender,user_birthday", {:locale => "ko_KR"}, :api_version => "v2.6")
+      graph_user = graph.get_object("me?fields=email,name,gender,birthday", {:locale => "ko_KR"}, :api_version => "v2.5")
       email = graph_user["email"]
       name = graph_user["name"]
       facebook_id = graph_user["id"]
@@ -23,7 +23,7 @@ class Users::FacebookController < Devise::PasswordsController
         end
       end
       birthday = nil
-      birthday = Date.strptime(graph_user["user_birthday"], "%m/%d/%Y") unless graph_user["user_birthday"].blank?
+      birthday = Date.strptime(graph_user["birthday"], "%m/%d/%Y") unless graph_user["birthday"].blank?
 
       user = User.where(:facebook_id => facebook_id).first
       user = User.where("email = ? AND facebook_id = ''", email).first if user.blank?
