@@ -67,9 +67,12 @@ Rails.application.routes.draw do
 
   resources :inquiry
 
+  get 'landing', :to => "etc#landing" #AJS추가 랜딩페이지 URL 변경
   resources :etc do
     collection do
       get 'landing'
+      get 'access_term'
+      get 'privacy_policy'
       get 'inquiry'
       post 'create_inquiry'
     end

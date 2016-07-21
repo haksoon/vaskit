@@ -20,7 +20,7 @@
       </div>
       <div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
         {{ if (ask.user) { }}
-          {{ gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
+          {{ var gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
           {{ if (!ask.user.gender) { }}
             {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
           {{ } }}
@@ -50,7 +50,7 @@
       <div id="ask_{{=ask.id}}_message" class="table_div" style="margin-bottom:0px; color:#383838; font-size:13px; line-height:2; padding:15px;">
         <div id="ask_{{=ask.id}}_message_text">
           {{ if( ask.message){ }}
-            {{ ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
+            {{ var ask_message = ask.message.replace(new RegExp('\r?\n', 'g'), '<br />') }}
             {{= ask_message }}
           {{ }else{ }}
             저의 결정장애 극복을 도와주세요! 둘 중에 뭐를 사야 하죠?
@@ -68,9 +68,9 @@
 </script>
 
 <script type="text/template" id="ask-deal-template">
-	{{ left_ask_deal = ask.left_ask_deal }}
-	{{ right_ask_deal = ask.right_ask_deal }}
-	{{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+	{{ var left_ask_deal = ask.left_ask_deal }}
+	{{ var right_ask_deal = ask.right_ask_deal }}
+	{{ var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
 	<div class="table_div" style="margin-bottom:0;">
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:left;">
 			<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;">
@@ -513,7 +513,7 @@
 </script>
 
 <script type="text/template" id="ask-comment-template">
-  {{ already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+  {{ var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
   <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title {{= already_vote.length == 1 ? 'already_vote' : '' }}" onclick="$('#comment_input_{{=ask.id}}').click(); return false;" style="margin:0;">
     <span style="width:100%;">
        <i class="fa {{= already_vote.length == 1 ? 'fa-keyboard-o' : 'fa-hand-o-up' }}" style="font-size:16px;"></i>&nbsp;{{= already_vote.length == 1 ? '당신의 의견을 남겨주세요.' : '먼저 투표에 참여해주세요.' }}
@@ -538,7 +538,7 @@
       </div>
     {{ }else{ }}
       {{ for(var i=0; i < ask.comments.length; i++) {  }}
-        {{ comment = ask.comments[i] }}
+        {{ var comment = ask.comments[i] }}
         {{= askCommentListTemplate({ask:ask, comment:comment}) }}
       {{ } }}
     {{ } }}
@@ -561,7 +561,7 @@
 </script>
 
 <script type="text/template" id="ask-comment-list-template">
-  {{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
+  {{ var already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
 	{{ var reply_comments = $.grep(ask.comments, function(obj) {return obj.comment_id == comment.id}) }}
 	{{ if (comment.comment_id == null){ }}
 		{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
@@ -601,7 +601,7 @@
 	        </a>
 	      {{ } }}
 				<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9d9ea1; margin-right:3px;">
-					{{ gender_css = "color:#0389ed;" }}
+					{{ var gender_css = "color:#0389ed;" }}
 				  {{ if (!comment.user.gender) { }}
 				    {{ gender_css = "color:#ea065e;" }}
 				  {{ } }}
@@ -639,7 +639,7 @@
 			</div>
 			<div id="comment_{{=comment.id}}_reply_list">
 				{{ for(var i=0; i < reply_comments.length; i++) { }}
-					{{ reply_comment = reply_comments[i] }}
+					{{ var reply_comment = reply_comments[i] }}
 					{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
 				{{ } }}
 			</div>
@@ -721,7 +721,7 @@
 	          </a>
 	        {{ } }}
 					<span style="color:#998674; margin-left:3px;">{{=comment.user.string_id}}</span>
-					{{ gender_css = "color:#0389ed;" }}
+					{{ var gender_css = "color:#0389ed;" }}
 				  {{ if (!comment.user.gender) { }}
 				    {{ gender_css = "color:#ea065e;" }}
 				  {{ } }}
@@ -737,7 +737,7 @@
 			</div>
 			<div id="comment_{{=comment.id}}_reply_list">
 				{{ for(var i=0; i < reply_comments.length; i++) {  }}
-					{{ reply_comment = reply_comments[i] }}
+					{{ var reply_comment = reply_comments[i] }}
 					{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
 				{{ } }}
 			</div>
@@ -765,7 +765,7 @@
 </script>
 
 <script type="text/template" id="reply-comment-list-template">
-	{{ already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
+	{{ var already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
 	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
 		<div id="comment_{{=comment.id}}" style="width:100%; text-align:left; padding-left:5px; box-sizing:border-box;">
 			<span><i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:10px -15px 0px 15px; color:#dbdbdb;"></i></span>
@@ -803,7 +803,7 @@
         </a>
       {{ } }}
 			<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9d9ea1; margin-right:3px;">
-				{{ gender_css = "color:#0389ed;" }}
+				{{ var gender_css = "color:#0389ed;" }}
 				{{ if (!comment.user.gender) { }}
 					{{ gender_css = "color:#ea065e;" }}
 				{{ } }}
@@ -886,7 +886,7 @@
           </a>
         {{ } }}
 				<span style="color:#998674; margin-left:3px;">{{=comment.user.string_id}}</span>
-				{{ gender_css = "color:#0389ed;" }}
+				{{ var gender_css = "color:#0389ed;" }}
 				{{ if (!comment.user.gender) { }}
 					{{ gender_css = "color:#ea065e;" }}
 				{{ } }}
@@ -914,12 +914,8 @@
       <div id="ask_{{=ask.id}}_comment_preview" class="table_div" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
         <ul style="width:100%; margin:0; padding:0; list-style:none;">
           {{ //for(var i=0; i < ask.comments.length; i++) {  }}
-            {{ //comment = ask.comments[i] }}
-            {{ preview_comments = ask.comments }}
-            {{ fav_comment = preview_comments.sort(function(a,b){ }}
-              {{  return a.like_count < b.like_count ? 1 : a.like_count > b.like_count ? -1 : 0; }}
-            {{ })[0] }}
-            {{ comment = fav_comment.like_count > 0 ? fav_comment : ask.comments[ask.comments.length - 1] }}
+            {{ //var comment = ask.comments[i] }}
+            {{ var comment = ask.comments[ask.comments.length-1] }}
             {{= askCommentPreviewTemplate({ask:ask, comment:comment}) }}
           {{ //} }}
         </ul>
@@ -1095,7 +1091,7 @@
 	 	if (current_user_id == 0 && my_vote_count > 4){
 	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
       setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-			setTimeout('window.location.assign("/etc/landing")',2500);
+			setTimeout('window.location.assign("/landing")',2500);
 	 	}else{
 	 		$.ajax({
 		        url: "/votes.json",
@@ -1149,6 +1145,7 @@
 			},
 			success: function(data){
         var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+        var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 				if (is_card_opened && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
 			},
 			beforeSend: function(){
@@ -1289,7 +1286,7 @@
 				$("#comment_input_"+ask_id).blur();
 				notify("회원가입 후<br />의견을 남길 수 있습니다.");
 				setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-				setTimeout('window.location.assign("/etc/landing")',2500);
+				setTimeout('window.location.assign("/landing")',2500);
 			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
 				$("#comment_input_"+ask_id).blur();
 				notify("투표 참여 후<br />의견을 남길 수 있습니다.");
@@ -1677,7 +1674,7 @@
 	function visitor_new_ask() {
 		notify('회원가입 후<br />질문을 올릴 수 있습니다.');
 		setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-		setTimeout('window.location.assign("/etc/landing")',2500);
+		setTimeout('window.location.assign("/landing")',2500);
 	}
 
 </script>

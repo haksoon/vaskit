@@ -1,9 +1,9 @@
-<div id="access_term" style="margin-top:-50px; width:inherit; background-color:#f4f4f4; text-align:left; display:none;">
+<div id="access_term" style="margin-top:-50px; width:inherit; background-color:#f4f4f4; text-align:left;">
   <div style="position:fixed; width:inherit; height:40px; padding-top:10px; background-color:#998674; color:#f4f4f4; z-index:1;">
 		<div style="padding:7px 15px;">
 			<h1 style="display:inline-block; margin:0; padding-top:1px; font-size:22px;">이용약관</h1>
       <span>/terms of service</span>
-			<a href="#" onclick="access_term_off(); return false;"><span style="float:right; font-size:28px; color:#f4f4f4;">&times;</span></a>
+			<a href="#" onclick="history.back(); return false;"><span style="float:right; font-size:28px; color:#f4f4f4;">&times;</span></a>
 		</div>
 	</div>
 	<div style="padding-top:50px; background-color:#f4f4f4; color:#383838; font-size:14px;">
@@ -334,18 +334,6 @@
 		<p>감사합니다.</p>
 	</div>
 </div>
-
-<script>
-	function access_term_on() {
-		$("#login_screen").fadeOut(100);
-		$("#access_term").fadeIn(100);
-		$(window).scrollTop(0);
-	}
-	function access_term_off() {
-		$("#login_screen").fadeIn(100);
-		$("#access_term").fadeOut(100);
-	}
-</script>
 
 <style type="text/css">
   h3.title {
