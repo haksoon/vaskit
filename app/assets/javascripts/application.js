@@ -388,6 +388,66 @@ function progressEnd() {
   });
 }
 
+function welcome() {
+  var device = "unknown",
+      browser = "unknown",
+      ua = navigator.userAgent,
+      p = navigator.platform;
+
+  if (ua.match(/iPhone/i)) {
+    device = "iPhone";
+  } else if (ua.match(/Android/i)) {
+    device = "Android";
+  } else if (p.match(/Win|Windows/i)) {
+    device = "Windows";
+  } else if (p.match(/Mac|MacIntel/i)) {
+    device = "Mac";
+  } else if (p.match(/Linux/i)) {
+    device = "Linux";
+  } else if (ua.match(/iPod|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)) {
+    device = "mobile_etc";
+  }
+
+  if (ua.match(/NAVER/i)) {
+    browser = "NaverAPP";
+  } else if (ua.match(/Daum/i)) {
+    browser = "DaumAPP";
+  } else if (ua.match(/KAKAOTALK|KAKAOSTORY/i)) {
+    browser = "KakaoAPP";
+  } else if (ua.match(/Facebook|FB/i)) {
+    browser = "FacebookAPP";
+  } else if (ua.match(/MSIE|Trident/i)) {
+    browser = "IE";
+  } else if (ua.match(/Edge/i)) {
+    browser = "Edge";
+  } else if (ua.match(/Opera|OPR|OPiOS/i)) {
+    browser = "Opera";
+  } else if (ua.match(/Chrome|CriOS/i)) {
+    browser = "Chrome";
+  } else if (ua.match(/Firefox|FxiOS/i)) {
+    browser = "FireFox";
+  } else if (ua.match(/Safari/i)) {
+    browser = "Safari";
+  }
+
+  $.ajax({
+        url: "/home/welcome.json",
+        type: 'POST',
+        data: {'device': device, 'browser': browser},
+        dataType: 'json',
+        error: function(){
+            return false;
+        },
+        success: function(data){
+        },
+        beforeSend: function(){
+        },
+        complete: function(){
+          alert(ua);
+        }
+  });
+}
+
 $( document ).ready(function() {
   $("select").on("change",function(){
     if( $(this).val() != "" ) {

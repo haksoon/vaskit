@@ -1023,6 +1023,7 @@
 	var currentPage = 1
   if (currentPage == 1) {
     ga('send', 'event', '유저별/첫페이지 로딩 횟수', 'first_page_loading_per_user', current_user_id.toString(), 1);
+    welcome();
   }
 	var is_more_asks = true;
 	function checkScroll() {

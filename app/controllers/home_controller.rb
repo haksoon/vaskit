@@ -165,4 +165,18 @@ class HomeController < ApplicationController
     render :json => {:already_like => already_like, :ask_like => ask_like}
   end
 
+  #POST /home/welcome > visit check
+  def welcome
+    device = params[:device] unless params[:device].blank?
+    browser = params[:browser] unless params[:browser].blank?
+    if current_user
+      user_id = current_user.id
+      UserVisit.create(:user_id => user_id, :device => device, :browser => browser)
+    elsif @visitor
+      visitor_id = @visitor.id
+      UserVisit.create(:visitor_id => visitor_id, :device => device, :browser => browser)
+    end
+    render :json => {}
+  end
+
 end
