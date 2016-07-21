@@ -313,7 +313,13 @@
         $("#user_email").val() != "" && $("#user_password").val() != "" && $("#user_password").val().length >= 8 && $("#user_password").val() == $("#user_password_confirmation").val()
         && $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null && $("#user_gender").val() != "" && $("#user_agree_access_term").prop("checked") == true
       <% else %>
-        $("#user_email").val() != "" && ($("#user_birthday").val() != "" || ($("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null)) && $("#user_gender").val() != ""
+        $("#user_email").val() != "" &&
+        <% if resource.birthday.blank? %>
+          $("#user_birthday_1i").val() != null && $("#user_birthday_2i").val() != null && $("#user_birthday_3i").val() != null
+        <% else %>
+          $("#user_birthday").val() != ""
+        <% end %>
+        && $("#user_gender").val() != ""
       <% end %>
     ) {
       <% if resource.facebook_id.blank? %>
