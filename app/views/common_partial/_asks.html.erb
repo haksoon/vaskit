@@ -1010,7 +1010,6 @@
     // });
 	}
 
-
 	var check_scroll
 	var ready = function() {
 		if (asks.length == <%= Ask::ASK_PER %>){
@@ -1022,6 +1021,9 @@
 	$(document).on('page:load', ready);
 
 	var currentPage = 1
+  if (currentPage == 1) {
+    ga('send', 'event', '유저별/첫페이지 로딩 횟수', 'first_page_loading_per_user', current_user_id.toString(), 1);
+  }
 	var is_more_asks = true;
 	function checkScroll() {
 	  if (window.location.pathname == "/" && nearBottomOfPage() && is_more_asks) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
@@ -1064,6 +1066,7 @@
           complete: function(){
             progressEnd();
             ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
+            ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
             // for(var i=0; i < asks.length; i++) {
           	// 	ask = asks[i]
             //   $("#ask_box_"+ask.id).height($("#ask_"+ask.id).outerHeight());
