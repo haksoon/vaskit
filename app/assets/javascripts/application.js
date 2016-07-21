@@ -443,7 +443,6 @@ function welcome() {
         beforeSend: function(){
         },
         complete: function(){
-          alert(ua);
         }
   });
 }
