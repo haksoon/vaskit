@@ -18,7 +18,7 @@
   	<div class="content_box" style="padding:10px; margin:0px 12px 15px; text-align:left;">
   		<% if resource.facebook_id.blank? %>
         <div style="position:relative;">
-  			  <%= f.email_field :email, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+  			  <%= f.email_field :email, autofocus: true, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
           <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
           <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
           <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
@@ -83,7 +83,7 @@
   		<% else %>
   			<% if resource.email.blank? %>
           <div style="position:relative;">
-            <%= f.email_field :email, :placeholder => "이메일주소를 입력해주세요.", :class => "registrations_input" %>
+            <%= f.email_field :email, autofocus: true, :placeholder => "이메일주소를 입력해주세요.", :class => "registrations_input" %>
             <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
             <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
             <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
@@ -334,7 +334,7 @@
   ready_to_submit();
 
   $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
-  $("#user_email").attr("onblur","email_check_tooltip(); return false;");
+  $("#user_email").attr("onblur","email_check(); email_check_tooltip(); return false;");
   $("#user_password").attr("onkeyup","password_check(); password_confirmation_check(); ready_to_submit(); return false;");
   $("#user_password").attr("onblur","password_check_tooltip(); return false;");
   $("#user_password_confirmation").attr("onkeyup","password_confirmation_check(); ready_to_submit(); return false;");

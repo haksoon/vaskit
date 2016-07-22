@@ -23,7 +23,7 @@
 			<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
 				<% unless current_user.sign_up_type == "facebook" %>
 					<div style="position:relative;">
-			  		<%= f.password_field :current_password, :placeholder => "기존 비밀번호를 입력해주세요", :class => "registrations_input" %>
+			  		<%= f.password_field :current_password, autofocus: true, :placeholder => "기존 비밀번호를 입력해주세요", :class => "registrations_input" %>
 						<span class="input_icon left_input" onclick="$('#user_current_password').focus(); return false;"><i class="fa fa-unlock"></i></span>
 						<span id="current_password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"><i class="fa fa-question-circle"></i></span>
 						<div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>

@@ -8,7 +8,7 @@
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:id => "sign_in_form"}) do |f| %>
 	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
     <div style="position:relative;">
-		  <%= f.email_field :email, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+		  <%= f.email_field :email, autofocus: true, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
       <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
       <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
       <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
@@ -100,7 +100,7 @@
   }
 
   $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
-  $("#user_email").attr("onblur","email_check_tooltip(); return false;");
+  $("#user_email").attr("onblur","email_check(); email_check_tooltip(); return false;");
   $("#user_password").attr("onkeyup","ready_to_submit(); return false;");
   $("#sign_in_form").on("change",function(){ ready_to_submit(); })
 

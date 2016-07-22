@@ -8,7 +8,7 @@
 <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
 	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
     <div style="position:relative;">
-      <%= f.password_field :password, :autocomplete => "off", :placeholder => "새로이 설정하실 비밀번호를 입력해주세요", :class => "registrations_input" %>
+      <%= f.password_field :password, autofocus: true, :autocomplete => "off", :placeholder => "새로이 설정하실 비밀번호를 입력해주세요", :class => "registrations_input" %>
       <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
       <span id="password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
       <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
