@@ -13,8 +13,6 @@ class Users::PasswordsController < Devise::PasswordsController
     self.resource = resource_class.send_reset_password_instructions(resource_params)
     yield resource if block_given?
 
-    debugger
-
     if successfully_sent?(resource)
       flash[:custom_notice] = "입력하신 이메일로 비밀번호 변경 안내를 보내드렸습니다"
       respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
