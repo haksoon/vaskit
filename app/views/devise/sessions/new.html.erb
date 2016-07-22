@@ -6,7 +6,6 @@
 </p>
 
 <%= form_for(resource, as: resource_name, url: session_path(resource_name), :html => {:id => "sign_in_form"}) do |f| %>
-  	<%= devise_error_messages! %>
 	<div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
     <div style="position:relative;">
 		  <%= f.email_field :email, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
@@ -22,23 +21,23 @@
 			<i class="fa fa-sign-in"></i>&nbsp;로그인
 		</a>
 	</div>
+  <a href="/users/password/new" style="display:block; margin:0 25px 15px; color:#666; font-size:13px; text-align:left;"><i class='fa fa-envelope-o'></i>&nbsp;비밀번호를 잊으셨나요?</a>
 	<%= f.hidden_field :remember_me, :value => 1 %>
 <% end %>
 
 
 <script>
-
   <% if flash[:custom_notice] != nil %>
       notify("<%=flash[:custom_notice]%>");
   <% end %>
 
   $("#main_header td").eq(2).css("visibility","hidden");
 
-	$('#user_password').keypress(function(e) {
+	$('.registrations_input').keypress(function(e) {
 		if (e.keyCode == '13') {
-        	e.preventDefault();
-        	sign_in_submit();
-      	}
+    	e.preventDefault();
+    	sign_in_submit();
+  	}
 	});
 
   function email_check() {
@@ -71,6 +70,7 @@
           $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
         },
         complete: function(){
+          ready_to_submit();
         }
       })
     }
@@ -92,8 +92,8 @@
   }
 
   function ready_to_submit() {
-    if ( $("#user_email").val() != "" && $("#user_password").val() != "" ) {
-      $("#login_btn").css("background-color","#ee6e01");
+    if ( $("#email_checker i").hasClass("fa-check") && $("#user_password").val() != "" && $("#user_password").val().length >= 8 ) {
+      $("#login_btn").css("background-color","#f18b33");
     } else {
       $("#login_btn").css("background-color","#9d9ea1");
     }
@@ -105,25 +105,15 @@
   $("#sign_in_form").on("change",function(){ ready_to_submit(); })
 
 	function sign_in_submit(){
-		if ($("#user_email").val() == ""){
-			notify('이메일을 입력해 주세요');
-			$("#user_email").focus().select();
-      return false;
-		} else if ($("#email_checker i").hasClass("fa-exclamation-triangle")) {
-      notify('이메일을 확인해 주세요');
-			$("#user_email").focus().select();
-      return false;
+    if ($("#email_checker i").hasClass("fa-check") != true) {
+      notify('가입되지 않은 이메일 주소입니다<br>이메일을 확인해 주세요');
+      $("#user_email").focus().select();
+    } else if ($("#user_password").val() == ""){
+      notify('비밀번호를 입력해 주세요.');
+      $("#user_password").focus().select();
+    } else {
+      $("#sign_in_form").submit();
     }
-
-		<% unless resource.facebook_id %>
-			if ($("#user_password").val() == ""){
-				notify('비밀번호를 입력해 주세요.');
-				$("#user_password").focus().select();
-        return false;
-			}
-		<% end %>
-
-		$("#sign_in_form").submit();
 	}
 
 </script>

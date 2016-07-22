@@ -1,16 +1,98 @@
-<h2>Forgot your password?</h2>
+<%= render :partial => "common_partial/header", :locals => {:title => "비밀번호 재설정"} %>
 
-<%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= devise_error_messages! %>
+<p class="chat_bubble">
+  가입하셨던 이메일 주소를 입력해주세요.<br>
+  고객님의 이메일로 비밀번호 재설정을 할 수 있는 링크를 보내드립니다.
+</p>
 
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+<div style="width:inherit; background-color:#f4f4f4; text-align:center;">
+  <div class="content_box" style="padding:10px; margin:15px 12px; text-align:left;">
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <div style="position:relative;">
+  		  <%= f.email_field :email, :placeholder => "가입하신 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+        <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
+        <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
+        <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
+      </div>
+      <a id="submit_btn" href="#" onclick="password_reset_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
+  			<i class="fa fa-envelope"></i>&nbsp;이메일 받기
+  		</a>
+    <% end %>
   </div>
+</div>
 
-  <div class="actions">
-    <%= f.submit "Send me reset password instructions" %>
-  </div>
-<% end %>
+<script>
+  $("#main_header td").eq(2).css("visibility","hidden");
 
-<%= render "devise/shared/links" %>
+  $('#user_email').keypress(function(e) {
+		if (e.keyCode == '13') {
+    	e.preventDefault();
+    	password_reset_submit();
+  	}
+	});
+
+  function email_check() {
+    var tooltip_width = $("#user_email").width();
+    var tooltip_area = $("#user_email").parent().find(".tooltip_area");
+    var tooltip_content = $("#user_email").parent().find(".tooltip_content");
+    tooltip_area.clearQueue().removeClass("tooltip_open");
+    var reg = /^[0-9a-zA-Z-_.]+@[a-z0-9]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
+    if ( $("#user_email").val() == "" ) {
+      $("#email_checker").html("");
+    } else if ( !reg.test($("#user_email").val()) ) {
+      $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+    } else {
+      $.ajax({
+        url: "/users/check_email.json",
+        type: "GET",
+        data: {'user_email_input': $('#user_email').val() },
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          if (data.is_new_email) {
+            $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
+            $("#submit_btn").css("background-color","#9d9ea1");
+          } else {
+            $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
+            $("#submit_btn").css("background-color","#f18b33");
+          }
+        },
+        beforeSend: function(){
+          $("#email_checker").html("<i class='fa fa-spinner fa-spin' style='color: gray;'></i>");
+          $("#submit_btn").css("background-color","#9d9ea1");
+        },
+        complete: function(){
+        }
+      })
+    }
+  }
+
+  function email_check_tooltip() {
+    var tooltip_width = $("#user_email").width();
+    var tooltip_area = $("#user_email").parent().find(".tooltip_area");
+    var tooltip_content = $("#user_email").parent().find(".tooltip_content");
+    if ( $("#email_checker i").hasClass("fa-exclamation-triangle") ) {
+      tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
+      tooltip_content.text("가입되지 않은 이메일입니다");
+    } else if ( $("#email_checker i").hasClass("fa-remove") ) {
+      tooltip_area.css("width",tooltip_width).addClass("tooltip_open")
+      tooltip_content.text("이메일 형식이 아닌 것 같습니다.");
+    } else {
+      tooltip_area.clearQueue().removeClass("tooltip_open");
+    }
+  }
+
+  $("#user_email").attr("onkeyup","email_check(); return false;");
+  $("#user_email").attr("onblur","email_check_tooltip(); return false;");
+
+  function password_reset_submit(){
+    if ($("#email_checker i").hasClass("fa-check")) {
+      $("#new_user").submit();
+    } else {
+      notify('가입되지 않은 이메일 주소입니다<br>이메일을 확인해 주세요');
+      $("#user_email").focus().select();
+    }
+	}
+</script>
