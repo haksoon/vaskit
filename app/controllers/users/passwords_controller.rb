@@ -1,5 +1,5 @@
 class Users::PasswordsController < Devise::PasswordsController
-  prepend_before_action :require_no_authentication
+  # prepend_before_action :require_no_authentication
   # Render the #edit only if coming from a reset password email link
   append_before_action :assert_reset_token_passed, only: :edit
 
@@ -13,7 +13,10 @@ class Users::PasswordsController < Devise::PasswordsController
     self.resource = resource_class.send_reset_password_instructions(resource_params)
     yield resource if block_given?
 
+    debugger
+
     if successfully_sent?(resource)
+      flash[:custom_notice] = "입력하신 이메일로 비밀번호 변경 안내를 보내드렸습니다"
       respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
     else
       respond_with(resource)
@@ -23,7 +26,6 @@ class Users::PasswordsController < Devise::PasswordsController
   # GET /resource/password/edit?reset_password_token=abcdef
   def edit
     self.resource = resource_class.new
-    set_minimum_password_length
     resource.reset_password_token = params[:reset_password_token]
   end
 
@@ -33,21 +35,16 @@ class Users::PasswordsController < Devise::PasswordsController
     if resource.sign_up_type == "facebook"
       resource.update(:sign_up_type => "both")
     end
-
     yield resource if block_given?
 
     if resource.errors.empty?
-      resource.unlock_access! if unlockable?(resource)
       if Devise.sign_in_after_reset_password
-        flash_message = resource.active_for_authentication? ? :updated : :updated_not_active
-        set_flash_message!(:notice, flash_message)
         sign_in(resource_name, resource)
       else
-        set_flash_message!(:notice, :updated_not_active)
+        flash[:custom_notice] = "새로운 비밀번호를 가지고 로그인해주세요"
       end
       respond_with resource, location: after_resetting_password_path_for(resource)
     else
-      set_minimum_password_length
       respond_with resource
     end
   end
@@ -65,17 +62,9 @@ class Users::PasswordsController < Devise::PasswordsController
     # Check if a reset_password_token is provided in the request
     def assert_reset_token_passed
       if params[:reset_password_token].blank?
-        set_flash_message(:alert, :no_token)
+        flash[:custom_notice] = "비밀번호 재설정 기한이 경과하였으니 다시 시도해주세요"
         redirect_to new_session_path(resource_name)
       end
-    end
-
-    # Check if proper Lockable module methods are present & unlock strategy
-    # allows to unlock resource on password reset
-    def unlockable?(resource)
-      resource.respond_to?(:unlock_access!) &&
-        resource.respond_to?(:unlock_strategy_enabled?) &&
-        resource.unlock_strategy_enabled?(:email)
     end
 
     def translation_scope
