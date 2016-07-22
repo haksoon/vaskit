@@ -1,43 +1,63 @@
-<%= render :partial => "common_partial/header", :locals => {:title => "비밀번호 변경"}%>
-
-<% if current_user.sign_up_type == "facebook" %>
-	<div style="position:relative;">
-		<p class="chat_bubble">
-			<i class="fa fa-info-circle"></i>&nbsp;<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="font-weight:bold; color:#4b3d3d;">VASKIT</span>에 페이스북으로 가입하셨습니다.<br>
-			 새로운 비밀번호를 설정하실 경우에도 여전히 페이스북 로그인이 가능하며,<br>
-			 그 외에도 페이스북 가입 이메일(<i><%= current_user.email %></i>)을 사용하여 로그인이 가능하오니 이용에 참고하시기 바랍니다. 감사합니다.
-		</p>
+<div style="margin-top:-50px; width:inherit; background-color:#f4f4f4; text-align:left;">
+	<div style="position:fixed; width:inherit; height:40px; padding-top:10px; background-color:#998674; color:#f4f4f4; z-index:1;">
+		<div style="padding:7px 15px;">
+			<h1 style="display:inline-block; margin:0; padding-top:1px; font-size:22px;">비밀번호 변경</h1>
+			<a href="#" onclick="window.close(); return false;"><span style="float:right; font-size:28px; color:#f4f4f4;">&times;</span></a>
+		</div>
 	</div>
-<% end %>
-<div class="content_box" style="padding:10px; margin:15px 12px 15px; text-align:left;">
-	<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
-		<% unless current_user.sign_up_type == "facebook" %>
-			<div style="position:relative;">
-	  		<%= f.password_field :current_password, :placeholder => "기존 비밀번호를 입력해주세요", :class => "registrations_input" %>
-				<span class="input_icon left_input" onclick="$('#user_current_password').focus(); return false;"><i class="fa fa-unlock"></i></span>
-				<span id="current_password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"><i class="fa fa-question-circle"></i></span>
-				<div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
-			</div>
-  	<% end %>
+	<div style="padding-top:50px;">
 		<div style="position:relative;">
-  		<%= f.password_field :password, :autocomplete => "off", :placeholder => "새로이 설정하실 비밀번호를 입력해주세요", :class => "registrations_input" %>
-			<span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
-			<span id="password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
-			<div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
+			<p class="chat_bubble">
+				<% if current_user.sign_up_type == "facebook" || current_user.sign_up_type == "both" %>
+					<i class="fa fa-info-circle"></i>&nbsp;<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="font-weight:bold; color:#4b3d3d;">VASKIT</span>에 페이스북으로 가입하셨습니다.<br>
+					새로운 비밀번호를 설정하실 경우에도 여전히 페이스북 로그인이 가능하며,<br>
+					페이스북 가입 이메일(<i><%= current_user.email %></i>)을 사용하여도 로그인이 가능하오니 이용에 참고하시기 바랍니다. 감사합니다.
+				<% else %>
+					<i class="fa fa-info-circle"></i>&nbsp;<span style="color:#998674;"><%= current_user.string_id %></span>님은 <span style="font-weight:bold; color:#4b3d3d;">VASKIT</span>에 이메일로 가입하셨습니다.<br>
+					새로운 비밀번호를 설정하신 경우에도 여전히 로그인은 유지되며,<br>
+					이후 다시 로그인을 할 때 변경된 새로운 비밀번호를 사용하여 로그인이 가능하오니 이용에 참고하시기 바랍니다. 감사합니다.
+				<% end %>
+			</p>
 		</div>
-		<div style="position:relative;">
-  		<%= f.password_field :password_confirmation, :autocomplete => "off", :placeholder => "새로이 입력하신 비밀번호를 확인해주세요", :class => "registrations_input" %>
-			<span class="input_icon left_input" onclick="$('#user_password_confirmation').focus(); return false;"><i class="fa fa-check"></i></span>
-			<span id="password_confirmation_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
-			<div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
+		<div class="content_box" style="padding:10px; margin:15px 12px 15px; text-align:left;">
+			<%= form_for(resource, :as => resource_name, :url => registration_path(resource_name), :html => { :method => :put }) do |f| %>
+				<% unless current_user.sign_up_type == "facebook" %>
+					<div style="position:relative;">
+			  		<%= f.password_field :current_password, :placeholder => "기존 비밀번호를 입력해주세요", :class => "registrations_input" %>
+						<span class="input_icon left_input" onclick="$('#user_current_password').focus(); return false;"><i class="fa fa-unlock"></i></span>
+						<span id="current_password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"><i class="fa fa-question-circle"></i></span>
+						<div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
+					</div>
+		  	<% end %>
+				<div style="position:relative;">
+		  		<%= f.password_field :password, :autocomplete => "off", :placeholder => "새로이 설정하실 비밀번호를 입력해주세요", :class => "registrations_input" %>
+					<span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
+					<span id="password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
+					<div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
+				</div>
+				<div style="position:relative;">
+		  		<%= f.password_field :password_confirmation, :autocomplete => "off", :placeholder => "새로이 입력하신 비밀번호를 확인해주세요", :class => "registrations_input" %>
+					<span class="input_icon left_input" onclick="$('#user_password_confirmation').focus(); return false;"><i class="fa fa-check"></i></span>
+					<span id="password_confirmation_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
+					<div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
+				</div>
+			  <a id="submit_btn" href="#" onclick="edit_password_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
+					<i class="fa fa-lock"></i>&nbsp;비밀번호 변경하기
+				</a>
+			<% end %>
 		</div>
-	  <a id="submit_btn" href="#" onclick="edit_password_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
-			<i class="fa fa-lock"></i>&nbsp;비밀번호 변경하기
-		</a>
-	<% end %>
+	</div>
 </div>
 
 <script>
+	<% if flash[:custom_notice] %>
+		notify('<%=flash[:custom_notice]%>');
+		<% if flash[:custom_notice] == "비밀번호가 변경되었습니다" %>
+			alert('<%=flash[:custom_notice]%>');
+			window.close();
+		<% end %>
+	<% end %>
+
 	function current_password_check() {
 		var tooltip_width = $("#user_current_password").width();
 		var tooltip_area = $("#user_current_password").parent().find(".tooltip_area");

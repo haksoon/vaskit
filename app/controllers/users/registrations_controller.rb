@@ -70,7 +70,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def after_update_path_for(resource)
-    "/users/edit"
+    "/users/change_password"
   end
 
 
