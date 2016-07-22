@@ -14,7 +14,7 @@ class Users::PasswordsController < Devise::PasswordsController
     yield resource if block_given?
 
     if successfully_sent?(resource)
-      flash[:custom_notice] = "입력하신 이메일로 비밀번호 변경 안내를 보내드렸습니다"
+      flash[:custom_notice] = "비밀번호 변경 안내를\\n입력하신 이메일로 보내드렸습니다"
       respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
     else
       respond_with(resource)
@@ -39,7 +39,7 @@ class Users::PasswordsController < Devise::PasswordsController
       if Devise.sign_in_after_reset_password
         sign_in(resource_name, resource)
       else
-        flash[:custom_notice] = "새로운 비밀번호를 가지고 로그인해주세요"
+        flash[:custom_notice] = "새로운 비밀번호를\\n입력하여 로그인해주세요"
       end
       respond_with resource, location: after_resetting_password_path_for(resource)
     else
@@ -60,7 +60,7 @@ class Users::PasswordsController < Devise::PasswordsController
     # Check if a reset_password_token is provided in the request
     def assert_reset_token_passed
       if params[:reset_password_token].blank?
-        flash[:custom_notice] = "비밀번호 재설정 기한이 경과하였으니 다시 시도해주세요"
+        flash[:custom_notice] = "비밀번호 재설정 기한이\\n만료되었습니다\\n다시 시도해주세요"
         redirect_to new_session_path(resource_name)
       end
     end

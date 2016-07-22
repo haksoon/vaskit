@@ -206,7 +206,7 @@
 
 	<script>
 		<% if flash[:custom_notice] %>
-			notify('<%=flash[:custom_notice]%>');
+			notify('<%=flash[:custom_notice]%>'.replace('\n','<br>'));
 		<% end %>
 
 		var current_user_string_id

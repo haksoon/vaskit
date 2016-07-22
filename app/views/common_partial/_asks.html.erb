@@ -950,7 +950,7 @@
 
 <script>
 	<% if flash[:ask_create] %>
-		notify('<%=flash[:ask_create]%>');
+		notify('<%=flash[:ask_create]%>'.replace('\n','<br>'));
 	<% end %>
 
 	var current_user_id = 0;

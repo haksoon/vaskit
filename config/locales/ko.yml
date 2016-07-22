@@ -6,6 +6,9 @@ ko:
     sessions:
       user:
         signed_in: ""
+    mailer:
+      reset_password_instructions:
+        subject: "[VASKIT] 비밀번호 변경 안내"
   views:
     pagination:
       first: "&laquo; 처음"
@@ -105,7 +108,7 @@ ko:
     order:
     - :year
     - :month
-    - :day 
+    - :day
   activerecord:
     attributes:
       user:
@@ -170,11 +173,10 @@ ko:
     destroy: "삭제"
     back: "뒤로가기"
     logout: "로그아웃"
-    
+
     wedding_hall:
-      new_wedding_hall: "웨딩홀 추가"  
+      new_wedding_hall: "웨딩홀 추가"
     marriage:
       new_marriage: "예식 추가"
     talk:
       new_talk: "메세지 추가"
-      
