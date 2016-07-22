@@ -8,7 +8,7 @@
 				</a>
       </td>
     	<td style="width:25%">
-				<a href="/etc/inquiry" style="color: #998674; display: block;">
+				<a href="#" onclick="window.open('/etc/inquiry', 'VASKIT Contact Us', 'width=500, height=450'); return false;" style="color: #998674; display: block;">
 					<i class="fa fa-phone"></i>
 					<br>Contact Us
 				</a>
@@ -20,7 +20,7 @@
 				</a>
       </td>
 			<td style="width:25%">
-				<a href="#" onclick="notify('준비중입니다.'); return false;" style="color: #998674; display: block;">
+				<a href="#" onclick="window.open('/etc/help', 'VASKIT FAQ & Help', 'width=500, height=800'); return false;" style="color: #998674; display: block;">
 					<i class="fa fa-question-circle"></i>
 					<br>Help
 				</a>
@@ -29,24 +29,3 @@
 	</table>
 	<div id="footer_seg" class="table_div" style="margin-bottom: 0; background-color: #fff; border-width: 0 3px; border-style: solid; border-color: #998674;"></div>
 </div>
-
-<script type="text/template" id="footer_seg_template_1">
-	ABOUT US
-</script>
-<script type="text/template" id="footer_seg_template_2">
-	CONTACT US
-</script>
-<script type="text/template" id="footer_seg_template_3">
-	TERMS
-</script>
-<script type="text/template" id="footer_seg_template_4">
-	HELP
-</script>
-
-
-<script>
-	function footer_menu_on(index) {
-		var footerSegTemplate = _.template($('#footer_seg_template_'+index).html());
-		$("#footer_seg").html(footerSegTemplate());
-	}
-</script>

@@ -75,6 +75,7 @@ Rails.application.routes.draw do
       get 'access_term'
       get 'privacy_policy'
       get 'inquiry'
+      get 'help'
       post 'create_inquiry'
     end
   end

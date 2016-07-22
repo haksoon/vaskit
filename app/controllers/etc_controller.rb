@@ -11,12 +11,14 @@ class EtcController < ApplicationController
   end
 
   def inquiry
-
   end
 
   def create_inquiry
     Inquiry.create(:user_id => current_user.id, :message => params[:message], :contact => params[:contact])
     render :json => {:status => "success" }
+  end
+
+  def help
   end
 
   def user
