@@ -152,15 +152,25 @@
 			}
   	<% end %>
 		if ($("#user_password").val() == ""){
-			notify('새로이 설정하실 비밀번호를 입력해주세요');
+			notify('새로이 설정하실<br>비밀번호를 입력해주세요');
 			$("#user_password").focus().select();
 			return;
 		}
 		if ($("#user_password").val() != $("#user_password_confirmation").val()){
-			notify('새로이 입력하신 비밀번호를 확인해주세요');
+			notify('새로이 입력하신<br>비밀번호를 확인해주세요');
+			$("#user_password_confirmation").val("");
 			$("#user_password_confirmation").focus().select();
 			return;
 		}
+		<% unless current_user.sign_up_type == "facebook" %>
+			if ($("#user_current_password").val() == $("#user_password").val()){
+				notify('새로이 설정하실 비밀번호는<br>기존의 비밀번호와<br>다르게 설정하셔야 합니다.');
+				$("#user_password").val("");
+				$("#user_password_confirmation").val("");
+				$("#user_password").focus().select();
+				return;
+			}
+  	<% end %>
 
 		$("#edit_user").submit();
 	}
