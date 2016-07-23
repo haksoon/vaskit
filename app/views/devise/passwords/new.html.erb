@@ -31,6 +31,7 @@
   	}
 	});
 
+  var valid_email = false;
   function email_check() {
     var tooltip_width = $("#user_email").width();
     var tooltip_area = $("#user_email").parent().find(".tooltip_area");
@@ -39,8 +40,10 @@
     var reg = /^[0-9a-zA-Z-_.]+@[a-z0-9]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
     if ( $("#user_email").val() == "" ) {
       $("#email_checker").html("");
+      valid_email = false;
     } else if ( !reg.test($("#user_email").val()) ) {
       $("#email_checker").html("<i class='fa fa-remove' style='color: red;'></i>");
+      valid_email = false;
     } else {
       $.ajax({
         url: "/users/check_email.json",
@@ -54,9 +57,11 @@
           if (data.is_new_email) {
             $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
             $("#submit_btn").css("background-color","#9d9ea1");
+            valid_email = false;
           } else {
             $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
             $("#submit_btn").css("background-color","#f18b33");
+            valid_email = true;
           }
         },
         beforeSend: function(){
@@ -88,7 +93,7 @@
   $("#user_email").attr("onblur","email_check(); email_check_tooltip(); return false;");
 
   function password_reset_submit(){
-    if ($("#email_checker i").hasClass("fa-check")) {
+    if (valid_email) {
       $("#new_user").submit();
     } else {
       notify('가입되지 않은 이메일 주소입니다<br>이메일을 확인해 주세요');
