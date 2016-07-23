@@ -88,7 +88,7 @@
 		$('#search_input').val("");
 		$('#search_result').html("");
 		$("#keyword_reset_btn").hide();
-		select_num = 0;
+		select_num = -1;
 	}
 
 	function search_by_key(){
@@ -102,41 +102,38 @@
 		}
 	}
 
-	var select_num = 0;
+	var select_num = -1;
 	function navigate_by_key(is_down) {
-		if (is_down == true) {
+		var search_result_length = $("#search_result a").length;
+		var focus_height = $(".search_focus").outerHeight();
+		var vp_height = $("#search_result").innerHeight();
+		if (is_down) {
+			if (select_num == search_result_length - 1) {
+				select_num = 0;
+				$("#search_result").scrollTop(0);
+			} else {
+				select_num = select_num + 1;
+			}
 			$("#search_result a").removeClass("search_focus");
 			$("#search_result a").eq(select_num).addClass("search_focus");
-			var focus_position = $("#search_result a").eq(select_num).position().top;
-			var focus_height = $("#search_result a").eq(select_num).outerHeight();
-			var list_scrolltop = $("#search_result").scrollTop();
-			var list_height = $("#search_result").height();
-			if ( select_num == 0 ) {
-				$("#search_result").scrollTop(0)
-			} else if ( list_height + list_scrolltop < focus_position + focus_height ) {
-				$("#search_result").scrollTop(focus_position + focus_height - list_height);
-			}
-			if ( select_num < $("#search_result a").length - 1 ) {
-				select_num = select_num + 1;
-			} else {
-				select_num = 0;
+			var focus_bottom = focus_height * (select_num + 1);
+			var vp_top = $("#search_result").scrollTop();
+			if (focus_bottom > vp_top + vp_height) {
+				$("#search_result").scrollTop(focus_bottom-vp_height);
 			}
 		} else {
-			$("#search_result a").removeClass("search_focus");
-			if ( select_num > 0 ) {
-				select_num = select_num - 1;
+			if (select_num == 0) {
+				select_num = search_result_length - 1;
+				$("#search_result").scrollTop(focus_height * search_result_length);
 			} else {
-				select_num = $("#search_result a").length - 1;
+				select_num = select_num - 1;
 			}
+			$("#search_result a").removeClass("search_focus");
 			$("#search_result a").eq(select_num).addClass("search_focus");
-			var focus_position = $("#search_result a").eq(select_num).position().top;
-			var focus_height = $("#search_result a").eq(select_num).outerHeight();
-			var list_scrolltop = $("#search_result").scrollTop();
-			var list_height = $("#search_result").height();
-			if ( select_num == $("#search_result a").length - 1 ) {
-				$("#search_result").scrollTop(focus_position + focus_height - list_height);
-			} else if ( list_scrolltop > focus_position ) {
-				$("#search_result").scrollTop(focus_position);
+			var focus_top = focus_height * select_num;
+			var vp_top = $("#search_result").scrollTop();
+			if (focus_top < vp_top) {
+				$("#search_result").scrollTop(focus_top);
 			}
 		}
 	}
@@ -149,7 +146,21 @@
 		})
 	}
 
-	$('#search_input').keyup(function(e) {
+	$('#search_input').keydown(function(e){
+		if (e.keyCode == '13') {
+			e.preventDefault();
+			search_by_key();
+		} else if (e.keyCode == '27') {
+			e.preventDefault();
+			keyword_reset();
+		} else if (e.keyCode == '40') {
+			e.preventDefault();
+			navigate_by_key(true);
+		} else if (e.keyCode == '38') {
+			e.preventDefault();
+			navigate_by_key(false);
+		}
+	}).keyup(function(e) {
 		$("#keyword_reset_btn").show();
 		if ( $("#search_input").val() == "" ) $("#keyword_reset_btn").hide();
 		$.ajax({
@@ -161,52 +172,42 @@
 	            return false;
 	        },
 	        success: function(data){
-						if (e.keyCode == '13') {
-				    	e.preventDefault();
-				    	search_by_key();
-				  	} else if (e.keyCode == '27') {
-							e.preventDefault();
-							keyword_reset();
-						} else if (e.keyCode == '40') {
-							e.preventDefault();
-							navigate_by_key(true);
-						} else if (e.keyCode == '38') {
-							e.preventDefault();
-							navigate_by_key(false);
-						} else {
-							$('#search_result').html("");
-							select_num = 0;
+						$('#search_result').html("");
+						select_num = -1;
 
-							if (data.is_empty_result){
-								if ($('#search_input').val() != ""){
-									var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다.</span>";
-									$('#search_result').html(empty_span);
-								}
-							}else{
-								var searchResultTemplate = _.template( $('#search-result-template').html() );
-
-								$.each(data.hash_tags, function( index, hash_tag ) {
-									$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
-								});
-
-								if (data.ask_deal){
-									$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
-								}
-
-								if (data.brand){
-									$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
-								}
-
-								$.each(data.users, function( index, user ) {
-									$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: null}));
-								});
-
-								$("#search_result").highlight($('#search_input').val());
-								navigate_by_mouse();
+						if (data.is_empty_result){
+							if ($('#search_input').val() != ""){
+								var empty_span = "<span style='display:block; border-bottom:1px solid #cecfd1; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다.</span>";
+								$('#search_result').html(empty_span);
 							}
+						} else {
+							var searchResultTemplate = _.template( $('#search-result-template').html() );
+
+							$.each(data.hash_tags, function( index, hash_tag ) {
+								$('#search_result').append(searchResultTemplate({keyword: hash_tag.keyword, type: 'hash_tag', id: null}));
+							});
+
+							if (data.ask_deal){
+								$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'ask_deal', id: null}));
+							}
+
+							if (data.brand){
+								$('#search_result').append(searchResultTemplate({keyword: $('#search_input').val(), type: 'brand', id: null}));
+							}
+
+							$.each(data.users, function( index, user ) {
+								$('#search_result').append(searchResultTemplate({keyword: user.string_id, type: 'user', id: null}));
+							});
+
+							$("#search_result").highlight($('#search_input').val());
+							navigate_by_mouse();
 						}
 	        },
 	        beforeSend: function(){
+						var keys = [13, 27, 40, 39, 38, 37]
+						if ($.inArray(e.keyCode, keys) != -1) {
+							return false;
+						}
 	        },
 	        complete: function(){
 	        }
