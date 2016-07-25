@@ -112,7 +112,7 @@
 				select_num = 0;
 				$("#search_result").scrollTop(0);
 			} else {
-				select_num = select_num + 1;
+				select_num += 1;
 			}
 			$("#search_result a").removeClass("search_focus");
 			$("#search_result a").eq(select_num).addClass("search_focus");
@@ -126,7 +126,7 @@
 				select_num = search_result_length - 1;
 				$("#search_result").scrollTop(focus_height * search_result_length);
 			} else {
-				select_num = select_num - 1;
+				select_num -= 1;
 			}
 			$("#search_result a").removeClass("search_focus");
 			$("#search_result a").eq(select_num).addClass("search_focus");
