@@ -1233,6 +1233,7 @@
 		card_open_st = $("#ask_"+ask_id).offset().top - 60;
 
     ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    $("#mini_new_comment_"+ask_id).slideUp(200);
     show_detail_vote_count(ask_id);
     $("#ask_deal_"+ask_id+"_table").html(askDealTableTemplate({ask: ask}));
     tooltip_box(ask_id);
