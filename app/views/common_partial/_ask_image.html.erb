@@ -11,8 +11,8 @@
 </div>
 
 <script type="text/template" id="ask-image-seg-template">
-  <div id="ask_image_box" style="position:relative; perspective:2000px;">
-    <div id="card_front" style="position:absolute; top:0; left:0; transform:rotateY(90deg); -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s; perspective:0px;">
+  <div id="ask_image_box" style="position:relative; perspective:2000px; -webkit-perspective:2000px;">
+    <div id="card_front" style="position:absolute; top:0; left:0; transform:rotateY(90deg); -webkit-transform:rotateY(90deg); -moz-backface-visibility:hidden; -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s; perspective:0px; -webkit-perspective:0px;">
       <div class="table_div" style="margin-bottom:0;">
         <a href="#" onclick="return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD A</a>
         <a href="#" onclick="ask_image_flip(true); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; background-color:#9d9ea1; color:#fff; font-weight:normal;">CARD B</a>
@@ -35,7 +35,7 @@
         {{ } }}
       </div>
     </div>
-    <div id="card_back" style="position:absolute; top:0; left:0; transform:rotateY(-90deg); -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s; perspective:0px;">
+    <div id="card_back" style="position:absolute; top:0; left:0; transform:rotateY(-90deg); -webkit-transform:rotateY(-90deg); -moz-backface-visibility:hidden; -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s; perspective:0px; -webkit-perspective:0px;">
       <div class="table_div" style="margin-bottom:0;">
         <a href="#" onclick="ask_image_flip(false); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; background-color:#9d9ea1; color:#fff; font-weight:normal;">CARD A</a>
         <a href="#" onclick="return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD B</a>
@@ -68,7 +68,7 @@
   function ask_image_on(ask_id, ask_deal_id, is_left){
     history.pushState(null, null, "#"+ask_id+"_image");
     is_ask_image_opened = true;
-    ask_image_open_st = window.scrollY;
+    ask_image_open_st = $(window).scrollTop();
 
     disableScroll();
     $("#ask_image_overlay").fadeIn(100);
@@ -80,21 +80,21 @@
     $("#ask_image_seg").css("height",$("#card_front").height());
 
     if (is_left) {
-      $("#card_front").css("transform","rotateY(0deg)").addClass("on");
-      $("#card_back").css("transform","rotateY(-180deg)").removeClass("on");
+      $("#card_front").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+      $("#card_back").css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
     } else {
-      $("#card_front").css("transform","rotateY(180deg)").removeClass("on");
-      $("#card_back").css("transform","rotateY(0deg)").addClass("on");
+      $("#card_front").css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
+      $("#card_back").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
     }
   }
 
   function ask_image_flip(is_left){
     if (is_left) {
-      $("#card_front").css("transform","rotateY(180deg)").removeClass("on");
-      $("#card_back").css("transform","rotateY(0deg)").addClass("on");
+      $("#card_front").css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
+      $("#card_back").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
     } else {
-      $("#card_front").css("transform","rotateY(0deg)").addClass("on");
-      $("#card_back").css("transform","rotateY(-180deg)").removeClass("on");
+      $("#card_front").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+      $("#card_back").css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
     }
   }
 
@@ -107,114 +107,118 @@
     $("#ask_image_bg").fadeOut(300);
   }
 
-  var askImgMouseTarget; // Mouse/Touch event target
-  var askImgMouseStart;
-  var askImgMouseEnd;
+  if (!navigator.userAgent.match(/MSIE|Trident/i)) {
 
-	$(function(){
-		// bind events
-		$("#ask_image_seg").each(function(){
-			$(this).bind("mousedown", askImgMouseDownListener);
-			$(this).bind("touchstart", askImgTouchStartListener);
-			$(this).bind("touchmove", askImgTouchMoveListener);
-			$(this).bind("touchend", askImgTouchEndListener);
-		});
-	});
+    var askImgMouseTarget; // Mouse/Touch event target
+    var askImgMouseStart;
+    var askImgMouseEnd;
 
-	function askImgMouseDownListener(e){
-		askImgMouseTarget = $(e.currentTarget);
-    cardFlipReady();
-    askImgMouseStart = e.pageX;
+  	$(function(){
+  		// bind events
+  		$("#ask_image_seg").each(function(){
+  			$(this).bind("mousedown", askImgMouseDownListener);
+  			$(this).bind("touchstart", askImgTouchStartListener);
+  			$(this).bind("touchmove", askImgTouchMoveListener);
+  			$(this).bind("touchend", askImgTouchEndListener);
+  		});
+  	});
 
-		// unbind and bind mouse events to prevent repeated binding
-		$(document).unbind("mousemove", askImgMouseMoveListener);
-		$(document).unbind("mouseup", askImgMouseUpListener);
-		$(document).bind("mousemove", askImgMouseMoveListener);
-		$(document).bind("mouseup", askImgMouseUpListener);
-		// unbind touch events
-		askImgMouseTarget.unbind("touchstart", askImgTouchStartListener);
-		askImgMouseTarget.unbind("touchmove", askImgTouchMoveListener);
-		askImgMouseTarget.unbind("touchend", askImgTouchEndListener);
-	}
+  	function askImgMouseDownListener(e){
+  		askImgMouseTarget = $(e.currentTarget);
+      cardFlipReady();
+      askImgMouseStart = e.pageX;
 
-	function askImgMouseMoveListener(e){
-		e.preventDefault();
-    askImgMouseEnd = e.pageX;
-		cardFlip(e.pageX);
-	}
+  		// unbind and bind mouse events to prevent repeated binding
+  		$(document).unbind("mousemove", askImgMouseMoveListener);
+  		$(document).unbind("mouseup", askImgMouseUpListener);
+  		$(document).bind("mousemove", askImgMouseMoveListener);
+  		$(document).bind("mouseup", askImgMouseUpListener);
+  		// unbind touch events
+  		askImgMouseTarget.unbind("touchstart", askImgTouchStartListener);
+  		askImgMouseTarget.unbind("touchmove", askImgTouchMoveListener);
+  		askImgMouseTarget.unbind("touchend", askImgTouchEndListener);
+  	}
 
-	function askImgMouseUpListener(e){
-		e.preventDefault();
-		updateCard(askImgMouseStart, askImgMouseEnd);
+  	function askImgMouseMoveListener(e){
+  		e.preventDefault();
+      askImgMouseEnd = e.pageX;
+  		cardFlip(e.pageX);
+  	}
 
-		// unbind mouse events
-		$(document).unbind("mousemove", askImgMouseMoveListener);
-		$(document).unbind("mouseup", askImgMouseUpListener);
-	}
+  	function askImgMouseUpListener(e){
+  		e.preventDefault();
+  		updateCard(askImgMouseStart, askImgMouseEnd);
 
-	function askImgTouchStartListener(e){
-		askImgMouseTarget = $(e.currentTarget);
-    cardFlipReady();
-    askImgMouseStart = e.originalEvent.touches[0].clientX;
+  		// unbind mouse events
+  		$(document).unbind("mousemove", askImgMouseMoveListener);
+  		$(document).unbind("mouseup", askImgMouseUpListener);
+  	}
 
-		askImgMouseTarget.unbind("mousedown", askImgMouseDownListener);
-	}
+  	function askImgTouchStartListener(e){
+  		askImgMouseTarget = $(e.currentTarget);
+      cardFlipReady();
+      askImgMouseStart = e.originalEvent.touches[0].clientX;
 
-	function askImgTouchMoveListener(e){
-    e.preventDefault();
-    askImgMouseEnd = e.originalEvent.touches[0].clientX;
-    cardFlip(e.originalEvent.touches[0].clientX);
-	}
+  		askImgMouseTarget.unbind("mousedown", askImgMouseDownListener);
+  	}
 
-	function askImgTouchEndListener(e){
-    updateCard(askImgMouseStart, askImgMouseEnd);
-	}
+  	function askImgTouchMoveListener(e){
+      e.preventDefault();
+      askImgMouseEnd = e.originalEvent.touches[0].clientX;
+      cardFlip(e.originalEvent.touches[0].clientX);
+  	}
 
-  function cardFlipReady(){
-    if ($("#card_front").hasClass("on")) {
-      $("#card_front").css("transform","rotateY(10deg)");
-      $("#card_back").css("transform","rotateY(-170deg)");
-    } else if (($("#card_back").hasClass("on"))) {
-      $("#card_front").css("transform","rotateY(170deg)");
-      $("#card_back").css("transform","rotateY(-10deg)");
-    }
-  }
+  	function askImgTouchEndListener(e){
+      updateCard(askImgMouseStart, askImgMouseEnd);
+  	}
 
-	function cardFlip(x){
-    var askImg = $("#ask_image_seg"),
-        askImgWidth = askImg.outerWidth(),
-        askImgOffset = askImg.offset().left,
-        askImgA = $("#card_front"),
-        askImgB = $("#card_back");
-    var rotateY = (x - askImgOffset) * 180 / askImgWidth;
-		askImgA.css("transform","rotateY("+(rotateY+0)+"deg)");
-    askImgB.css("transform","rotateY("+(rotateY-180)+"deg)");
-    if (rotateY < 90) {
-      askImgA.addClass("on");
-      askImgB.removeClass("on");
-    } else {
-      askImgA.removeClass("on");
-      askImgB.addClass("on");
-    }
-	}
-
-  function updateCard(askImgMouseStart, askImgMouseEnd){
-    var askImgA = $("#card_front"),
-        askImgB = $("#card_back");
-    if (askImgMouseStart > askImgMouseEnd) {
-      askImgA.css("transform","rotateY(0deg)").addClass("on");
-      askImgB.css("transform","rotateY(-180deg)").removeClass("on");
-    } else if (askImgMouseStart < askImgMouseEnd) {
-      askImgA.css("transform","rotateY(180deg)").removeClass("on");
-      askImgB.css("transform","rotateY(0deg)").addClass("on");
-    } else if (askImgMouseStart = askImgMouseEnd) {
-      if (askImgA.hasClass("on")) {
-        askImgA.css("transform","rotateY(0deg)").addClass("on");
-        askImgB.css("transform","rotateY(-180deg)").removeClass("on");
-      } else if (askImgB.hasClass("on")) {
-        askImgA.css("transform","rotateY(180deg)").removeClass("on");
-        askImgB.css("transform","rotateY(0deg)").addClass("on");
+    function cardFlipReady(){
+      if ($("#card_front").hasClass("on")) {
+        $("#card_front").css("transform","rotateY(10deg)").css("-webkit-transform","rotateY(10deg)");
+        $("#card_back").css("transform","rotateY(-170deg)").css("-webkit-transform","rotateY(-170deg)");
+      } else if (($("#card_back").hasClass("on"))) {
+        $("#card_front").css("transform","rotateY(170deg)").css("-webkit-transform","rotateY(170deg)");
+        $("#card_back").css("transform","rotateY(-10deg)").css("-webkit-transform","rotateY(-10deg)");
       }
     }
-	}
+
+  	function cardFlip(x){
+      var askImg = $("#ask_image_seg"),
+          askImgWidth = askImg.outerWidth(),
+          askImgOffset = askImg.offset().left,
+          askImgA = $("#card_front"),
+          askImgB = $("#card_back");
+      var rotateY = (x - askImgOffset) * 180 / askImgWidth;
+  		askImgA.css("transform","rotateY("+(rotateY+0)+"deg)").css("-webkit-transform","rotateY("+(rotateY+0)+"deg)");
+      askImgB.css("transform","rotateY("+(rotateY-180)+"deg)").css("-webkit-transform","rotateY("+(rotateY-180)+"deg)");
+      if (rotateY < 90) {
+        askImgA.addClass("on");
+        askImgB.removeClass("on");
+      } else {
+        askImgA.removeClass("on");
+        askImgB.addClass("on");
+      }
+  	}
+
+    function updateCard(askImgMouseStart, askImgMouseEnd){
+      var askImgA = $("#card_front"),
+          askImgB = $("#card_back");
+      if (askImgMouseStart > askImgMouseEnd) {
+        askImgA.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+        askImgB.css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
+      } else if (askImgMouseStart < askImgMouseEnd) {
+        askImgA.css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
+        askImgB.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+      } else if (askImgMouseStart = askImgMouseEnd) {
+        if (askImgA.hasClass("on")) {
+          askImgA.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+          askImgB.css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
+        } else if (askImgB.hasClass("on")) {
+          askImgA.css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
+          askImgB.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+        }
+      }
+  	}
+
+  }
 </script>

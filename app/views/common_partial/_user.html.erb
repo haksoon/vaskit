@@ -258,12 +258,12 @@
 					history.pushState(null, null, "#"+current_user_string_id);
 			    is_user_opened = true;
 					is_user_setting_opened = false;
-					overlay_st = window.scrollY;
+					overlay_st = $(window).scrollTop();
 		    }
 		  });
 
 			$("#user_path").html("&gt;&nbsp;My Page");
-			$("#manage_on").css("transform","scale(1)");
+			$("#manage_on").css("transform","scale(1)").css("-webkit-transform","scale(1)");
 			$("#user_overlay_seg").scrollTop(0);
 		}
 
@@ -338,7 +338,7 @@
 			history.pushState(null, null, "#"+current_user_string_id+"_setting");
 			is_user_setting_opened = true;
 			$("#user_path").html("<span onclick='history.back();' style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
-			$("#manage_on").css("transform","scale(0)");
+			$("#manage_on").css("transform","scale(0)").css("-webkit-transform","scale(0)");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 			$("#user_overlay_seg").scrollTop(0);
@@ -357,7 +357,7 @@
 			$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, owner_users:owner_users, send_users:send_users}));
 			alram_check();
 			$("#user_path").html("&gt;&nbsp;My Page");
-			$("#manage_on").css("transform","scale(1)");
+			$("#manage_on").css("transform","scale(1)").css("-webkit-transform","scale(1)");
 			$("#user_overlay_seg").scrollTop(0);
 
 			$("#menu_pc_bg").show();

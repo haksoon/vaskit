@@ -80,7 +80,7 @@
 	function category_on(){
 		history.pushState(null, null, "#category_setting");
     is_category_opened = true;
-		overlay_st = window.scrollY;
+		overlay_st = $(window).scrollTop();
 
 		disableScroll();
 		$("#category_overlay").fadeIn(100);

@@ -6,7 +6,7 @@
 		<% if @type == "user" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;유저 검색 결과입니다.
 		<% elsif @type == "hash_tag" %>
-			<span style="color:#998674; font-weight:bold;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;해쉬태그 검색 결과입니다.
+			<span style="color:#998674; font-weight:bold;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg); -webkit-transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;해쉬태그 검색 결과입니다.
 		<% elsif @type == "ask_deal" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-cube"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;제품명 검색 결과입니다.
 		<% elsif @type == "brand" %>
@@ -73,6 +73,7 @@
 		history.replaceState(null, null, "#search_result");
 	}
 	$(window).bind("hashchange", function(){
+		// welcome();
 		if (is_ask_image_opened) {
 			ask_image_off();
 		} else if (is_category_opened) {

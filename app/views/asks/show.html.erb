@@ -13,9 +13,8 @@
   $("#ask_"+ask.id+"_comment").html(askCommentTemplate({ask: ask}));
   for (i=0; i<ask.comments.length; i++) {
     var comment = ask.comments[i];
-    link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'));
+    link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
   };
-  btn_text_hide_all(ask.id);
   comment_input_setting(ask.id, ask.user);
   $("#ask_"+ask.id+"_detail_btn").remove();
   $("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").show();

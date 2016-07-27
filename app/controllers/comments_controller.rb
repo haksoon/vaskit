@@ -66,9 +66,14 @@ class CommentsController < ApplicationController
   def comment_del
     comment = Comment.find_by_id(params[:id])
     if comment.user_id == current_user.id
-      comment.destroy
+      comment.update(:is_deleted => 1)
+      if Comment.where(:comment_id => params[:id]).blank?
+        status = "success"
+      else
+        status = "reply_exist"
+      end
     end
-    render :json => {:status => "success", :comment => comment}
+    render :json => {:status => status, :comment => comment}
   end
 
 

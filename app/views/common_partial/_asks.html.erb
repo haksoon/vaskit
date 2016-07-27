@@ -45,7 +45,7 @@
       <div id="ask_deal_{{=ask.id}}" class="table_div" style="margin-bottom:0px;">
         {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
       </div>
-      <div id="detail_vote_count_{{=ask.id}}" class="table_div" style="display:none; margin-bottom:0px; background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb;"></div>
+      <div id="detail_vote_count_{{=ask.id}}" class="table_div" style="display:none; margin-bottom:0px; background-color:#f0f2f4; color:#666; font-size: 12px;"></div>
       <div id="ask_deal_{{=ask.id}}_table" class="table_div" style="display:none; margin-bottom:0px; border-bottom:1px solid #dbdbdb;"></div>
       <div id="ask_{{=ask.id}}_message" class="table_div" style="margin-bottom:0px; color:#383838; font-size:13px; line-height:2; padding:15px;">
         <div id="ask_{{=ask.id}}_message_text">
@@ -59,7 +59,7 @@
         <span id="ask_{{=ask.id}}_message_text_shorten" style="display:none;"></span>
         <a id="ask_{{=ask.id}}_message_more" href="#" style="float:right; margin:0px 5px; color:#998674; cursor:pointer; display:none;" onclick="$('#ask_{{=ask.id}}_message_text').show(); $('#ask_{{=ask.id}}_message_text_shorten').hide(); $(this).hide(); return false;"><i class="fa fa-angle-down">&nbsp;more</i></a>
       </div>
-      <div id="ask_{{=ask.id}}_comment" class="table_div" style="display:none; margin-bottom:0px;"></div>
+      <div id="ask_{{=ask.id}}_comment" class="table_div" style="display:none; margin-bottom:0px; overflow:hidden;"></div>
       <div id="ask_{{=ask.id}}_detail_btn" class="table_div" style="margin-bottom:0px;">
         {{= askDetailBtnTemplate({ask: ask}) }}
       </div>
@@ -154,6 +154,23 @@
 			</table>
 		</div>
 	{{ } }}
+  {{ if( ask.user_id != current_user_id && (already_vote.length != 0 || ask.be_completed)){ }}
+    {{ if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+      {{ var ask_deal_id = ask.left_ask_deal_id }}
+      {{ var is_left = true }}
+    {{ }else{ }}
+      {{ var ask_deal_id = ask.right_ask_deal_id }}
+      {{ var is_left = false }}
+    {{ } }}
+    <div id="mini_new_comment_{{=ask.id}}" class="table_div" style="background-color:rgba(153, 134, 116, 0.1); text-align:left; margin-bottom:0; display:none;">
+      <div id="mini_comment_input_box_{{=ask.id}}" style="border:1px solid #ee6e01; background-color:#fff; transition:all .5s; transform:rotateX(180deg); -webkit-transform:rotateX(180deg); -webkit-backface-visibility:hidden; backface-visibility:hidden;">
+        <textarea id="mini_comment_input_{{=ask.id}}" class="comment_box" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:10px 70px 10px 40px; width:100%; min-width:100%; max-width:100%; height:40px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=is_left ? 'left' : 'right'}};"></textarea>
+        <a id="mini_ask_deal_id_change_{{=ask.id}}" onclick="mini_ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}, {{=is_left}}); return false;" href="#" style="position:absolute; top:0px; left:0px; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; font-size:14px;"><i class="fa fa-align-{{=is_left ? 'left' : 'right'}}"></i></a>
+        <a id="mini_send_comment_btn_{{=ask.id}}" class="comment_update_btn" href="#" onclick="mini_send_comment({{=ask.id}}, {{=ask_deal_id}}, {{=is_left}}); return false;" style="position:absolute; top:0; right:0; display:block; width:60px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">보내기</a>
+      </div>
+      <div id="mini_comment_notify_{{=ask.id}}" class="comment_title already_vote" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#f3994d; transition:all .5s; transform:rotateX(0deg); -webkit-transform:rotateX(0deg); -webkit-backface-visibility:hidden; backface-visibility:hidden;">당신의 의견을 남겨주세요&nbsp;<i class="fa fa-keyboard-o" style="font-size:16px;"></i></div>
+    </div>
+  {{ } }}
 </script>
 
 <script type="text/template" id="detail-vote-count-template">
@@ -182,7 +199,7 @@
 		{{ gender_male_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ gender_male_background_css = "background-color:rgba(255,228,169,0.7);" }}
 	{{ } }}
-	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px; border-bottom:1px solid #dbdbdb;">
+	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px; border-top:1px solid #dbdbdb; border-bottom:1px solid #dbdbdb;">
 		<tbody>
 			<tr style="{{=gender_male_background_css}}">
 				<td class="vote-result-td">
@@ -300,7 +317,7 @@
 		{{ etc_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ etc_background_css = "background-color:rgba(255,228,169,0.7);" }}
 	{{ } }}
-	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px;">
+	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px; border-bottom:1px solid #dbdbdb;">
 		<tbody>
 			<tr style="{{=age_20_1_background_css}}">
 				<td class="vote-result-td">
@@ -514,20 +531,44 @@
 
 <script type="text/template" id="ask-comment-template">
   {{ var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-  <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title {{= already_vote.length == 1 ? 'already_vote' : '' }}" onclick="$('#comment_input_{{=ask.id}}').click(); return false;" style="margin:0;">
-    <span style="width:100%;">
-       <i class="fa {{= already_vote.length == 1 ? 'fa-keyboard-o' : 'fa-hand-o-up' }}" style="font-size:16px;"></i>&nbsp;{{= already_vote.length == 1 ? '당신의 의견을 남겨주세요.' : '먼저 투표에 참여해주세요.' }}
-    </span>
-    <span style="position:absolute; top:0; left:10px; width:40px;">
-      <i class="fa fa-comment" style="font-size:16px;"></i>
-      <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
-    </span>
-    <span style="position:absolute; top:0; right:10px; width:40px;">
-      <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-      <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg);"></i>
-    </span>
-  </div>
-  <div id="ask_{{=ask.id}}_comment_list" class="table_div" style="position:relative; background-color:#fff; padding:10px 0; margin:0; min-height:200px;">
+  {{ if (ask.user_id == current_user_id) { }}
+    <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title my_vote" onclick="comment_title_open({{=ask.id}}); return false;" style="margin:0;">
+      <span style="width:100%;">어떤 의견이 달렸을까요?&nbsp;<i class="fa fa-users" style="font-size:16px;"></i></span>
+      <span style="position:absolute; top:0; left:10px; width:40px;">
+        <i class="fa fa-comment" style="font-size:16px;"></i>
+        <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
+      </span>
+      <span style="position:absolute; top:0; right:10px; width:40px;">
+        <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+        <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
+      </span>
+    </div>
+  {{ } else if (already_vote.length != 0) { }}
+    <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title already_vote" onclick="comment_title_open({{=ask.id}}); return false;" style="margin:0;">
+      <span style="width:100%;">당신의 의견을 남겨주세요&nbsp;<i class="fa fa-keyboard-o" style="font-size:16px;"></i></span>
+      <span style="position:absolute; top:0; left:10px; width:40px;">
+        <i class="fa fa-comment" style="font-size:16px;"></i>
+        <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
+      </span>
+      <span style="position:absolute; top:0; right:10px; width:40px;">
+        <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+        <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
+      </span>
+    </div>
+  {{ } else if (already_vote.length == 0) { }}
+    <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" style="margin:0;">
+      <span style="width:100%;">먼저 투표에 참여해주세요&nbsp;<i class="fa fa-hand-o-up" style="font-size:16px;"></i></span>
+      <span style="position:absolute; top:0; left:10px; width:40px;">
+        <i class="fa fa-comment" style="font-size:16px;"></i>
+        <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
+      </span>
+      <span style="position:absolute; top:0; right:10px; width:40px;">
+        <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+        <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
+      </span>
+    </div>
+  {{ } }}
+  <div id="ask_{{=ask.id}}_comment_list" class="table_div" style="position:relative; background-color:rgba(153, 134, 116, 0.1); padding:5px 0; margin:0; min-height:200px; border-top:1px solid #dbdbdb;">
     <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px; display:{{= ask.comments.length == 0 ? 'block' : 'none' }};" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
     {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
       <div id="visitor_comment_overlay_{{=ask.id}}" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
@@ -543,369 +584,273 @@
       {{ } }}
     {{ } }}
   </div>
-  <div class="table_div" style="margin-bottom:0px; border:1px solid #{{= already_vote.length == 0 ? 'dbdbdb' : 'f18b33' }}; border-width:{{= already_vote.length == 0 ? '1px 0px' : '1px' }};">
-    {{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
-      {{ ask_deal_id = ask.left_ask_deal_id }}
-      {{ ask_deal_text = "left" }}
-    {{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-      {{ ask_deal_id = ask.left_ask_deal_id }}
-      {{ ask_deal_text = "left" }}
-    {{ }else{ }}
-      {{ ask_deal_id = ask.right_ask_deal_id }}
-      {{ ask_deal_text = "right" }}
-    {{ } }}
-    <a id="ask_deal_id_change_{{=ask.id}}" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="position:absolute; top:0px; left:0px; width:40px; height:40px; line-height:40px; color:#{{= already_vote.length == 0 ? 'dbdbdb' : 'ee6e01' }}; background-color:#fff; font-size:14px;"><i class="fa fa-align-{{=ask_deal_text}}"></i></a>
-    <textarea id="comment_input_{{=ask.id}}" class="comment_box" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="background-color:#fff;"></textarea>
-    <a id="send_comment_btn_{{=ask.id}}" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="position:absolute; top:0px; right:0px; width:50px; height:40px; line-height:40px; background-color:#dbdbdb; color:#fff; font-size:12px;">입력</a>
+  {{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
+    {{ ask_deal_id = ask.left_ask_deal_id }}
+    {{ ask_deal_text = "left" }}
+  {{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
+    {{ ask_deal_id = ask.left_ask_deal_id }}
+    {{ ask_deal_text = "left" }}
+  {{ }else{ }}
+    {{ ask_deal_id = ask.right_ask_deal_id }}
+    {{ ask_deal_text = "right" }}
+  {{ } }}
+  <div id="new_comment" class="table_div" style="background-color:rgba(153, 134, 116, 0.1); background-color:#ededed; border-top:1px solid #dbdbdb; padding:10px 0px; margin-bottom:0;">
+    <a id="ask_deal_id_change_{{=ask.id}}_right" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; right:0%; margin-top:-20px; margin-right:{{= ask_deal_text == 'left' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-right"></i></a>
+    <a id="ask_deal_id_change_{{=ask.id}}_left" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; left:0%; margin-top:-20px; margin-left:{{= ask_deal_text == 'right' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-left"></i></a>
+    <div id="comment_input_box_{{=ask.id}}" style="border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; padding:9px 10px; background-color:#fff; width:60%; margin:{{= ask_deal_text == 'left' ? '0 auto 0 10px' : '0 10px 0 auto' }}; transition:all .5s;">
+      <textarea id="comment_input_{{=ask.id}}" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:120px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+      <a id="send_comment_btn_{{=ask.id}}" class="comment_update_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+        댓글 남기기
+      </a>
+      <div class="tooltip_area" style="width:60%;">
+        <div class="tooltip_arrow bottom"></div>
+        <div class="tooltip_content" style="text-align:left; line-height:1.5;">
+          - URL 입력시 자동으로 링크가 생성됩니다<br>
+          - 이미지 URL을 입력하시면 이미지가 보여집니다<br>
+          - 엔터키가 줄바꿈으로 변경되었습니다<br>
+          - 컨트롤+엔터 입력시 보내기가 가능합니다
+        </div>
+      </div>
+    </div>
   </div>
 </script>
 
 <script type="text/template" id="ask-comment-list-template">
   {{ var already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
-	{{ var reply_comments = $.grep(ask.comments, function(obj) {return obj.comment_id == comment.id}) }}
-	{{ if (comment.comment_id == null){ }}
+	{{ var reply_comments = $.grep(ask.comments, function(obj) {return (obj.comment_id == comment.id && obj.is_deleted == false)}) }}
+	{{ if (comment.comment_id == null && (comment.is_deleted == false || reply_comments.length > 0)){ }}
 		{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
-			<div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin-bottom:0px;">
-				<div style="position:relative; margin:5px 0px 0 15px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-					<span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:left; float:left;">
-						<span class="comment_content">{{=comment.content}}</span>
-						<span style="color:#9d9ea1; margin-left:5px; font-size:11px; float:right; padding-top:1px;">
-							<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
-						</span>
-					</span>
-					<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
-						<tbody>
-							<tr>
-								<td style="width:100%;">
-									<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
-								</td>
-								<td style="width:50px;">
-									<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0 2px 2px 0;">
-										완료
-									</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-	        <div style="position:absolute; top:6px; left:-7px; border-right:7px solid cornsilk; border-bottom:8px solid transparent;"></div>
-				</div>
-	      {{ if(already_like.length == 1){ }}
-	        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#ee6e01; font-size:12px;">
-	          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart" style="color:#ee6e01; margin-left:1px;"></i>
-	          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-	        </a>
-	      {{ }else{ }}
-	        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#9d9ea1; font-size:12px;">
-	          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
-	          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-	        </a>
-	      {{ } }}
-				<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9d9ea1; margin-right:3px;">
-					{{ var gender_css = "color:#0389ed;" }}
-				  {{ if (!comment.user.gender) { }}
-				    {{ gender_css = "color:#ea065e;" }}
-				  {{ } }}
-				  <span style="margin:0 3px 0 0; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
-						{{ if (comment.user.gender){ }}
-							<i class="fa fa-male" style="margin-right:-2px;"></i>
-						{{ }else{ }}
-							<i class="fa fa-female" style="margin-right:-2px;"></i>
-						{{ } }}
-						{{= get_user_ages(comment.user.birthday) }}
-					</span>
-					<span style="color:#998674; margin-right:3px;">{{=comment.user.string_id}}</span>
-					{{ if ( comment.user_id == current_user_id ){ }}
-	          <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
-	            <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
-	          </a>
-	          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-	            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
-	          </a>
-	          <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="color:#9d9ea1; margin-right:3px;">
-	            <i class="fa fa-trash" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">삭제</span>
-	          </a>
-					{{ }else{ }}
-					  <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
-	            <i class="fa fa-ban" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">신고</span>
-	          </a>
-					{{ } }}
-					<a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
-	          <i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin-top:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">답글</span>
-					</a>
-					<a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-						<span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
-					</a>
-				</p>
-			</div>
+      <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
+        {{ if (comment.is_deleted == false) { }}
+          <div id="comment_content_{{=comment.id}}" style="text-align:left;">
+    				<div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+  						<span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
+              <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
+                <div style="display:inline-block; width:60%; float:left; text-align:left;">
+                  <span style="float:left; margin-right:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                  <div style="float:left;">
+                    {{ if ( comment.user_id == current_user_id ){ }}
+                      <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-right:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
+                      <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
+                    {{ }else{ }}
+                      <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                    {{ } }}
+                  </div>
+                </div>
+                <div style="display:inline-block; width:40%; float:right; text-align:right;">
+                  <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                  <span style="float:right; margin-left:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
+                </div>
+              </div>
+  					</div>
+            <div id="comment_menu_{{=comment.id}}" style="position:relative; display:inline-block; text-align:left; font-size:12px;">
+              <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:block; padding:0 5px 10px 0; color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}};">
+                <i id="comment_{{=comment.id}}_like_icon" class="fa {{= already_like.length == 1 ? 'fa-heart' : 'fa-heart-o'}}" style="color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}}; margin-left:1px;"></i>
+                <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+              </a>
+              <a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="display:block; padding:0 5px 10px 0; color:#666;">
+                <i class="fa fa-reply" style="margin:1px 3px 0px 2px; transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:text-top;"></i>답글
+              </a>
+            </div>
+  				</div>
+          <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
+            <div style="position:relative; margin:0 0 0 10px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+              <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+                수정하기
+              </a>
+            </div>
+            <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
+          </div>
+        {{ }else{ }}
+          <div id="comment_content_{{=comment.id}}" style="text-align:left;">
+            <div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+              삭제된 댓글입니다.
+            </div>
+          </div>
+        {{ } }}
+      </div>
 			<div id="comment_{{=comment.id}}_reply_list">
 				{{ for(var i=0; i < reply_comments.length; i++) { }}
 					{{ var reply_comment = reply_comments[i] }}
 					{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
 				{{ } }}
 			</div>
-			<div class="table_div" style="margin-bottom:0px;">
-				<div id="reply_comment_box_{{=comment.id}}" style="position:relative; float:left; margin:0px 0px 10px 30px; width: 60%; max-width:60%; height:40px; display:inline-block; text-align:left; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; display:none;">
-					<table cellpadding="0" cellspacing="0">
-						<tbody>
-							<tr>
-								<td style="width:100%;">
-									<textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:5px; width:100%; min-width:100%; max-width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:2px 0 0 2px;"></textarea>
-								</td>
-								<td style="width:50px;">
-									<a href="#" id="send_reply_comment_btn_{{=comment.id}}" onclick="send_reply_comment({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=comment.id}}, true); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0 2px 2px 0;">
-										입력
-									</a>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div style="position:absolute; top:-6px; left:7px; border-bottom:7px solid #ffcc5a; border-right:8px solid transparent;"></div>
-				</div>
-			</div>
+      <div id="reply_comment_box_{{=comment.id}}" style="text-align:left; padding:5px 0; display:none;">
+        <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+        <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+          <textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0px; font-size:13px; line-height:20px; text-align:left;"></textarea>
+          <a id="send_reply_comment_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="send_reply_comment({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=comment.id}}, true); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0px; transition:all .5s;">
+            답글 남기기
+          </a>
+        </div>
+        <a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
+      </div>
 		{{ }else{ }}
-			<div id="comment_{{=comment.id}}" class="table_div" style="width:100%; text-align:right; margin-bottom:0px;">
-	      {{ if(already_like.length == 1){ }}
-	        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#ee6e01; font-size:12px;">
-	          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-	          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart" style="color:#ee6e01; margin-right:3px;"></i>
-	        </a>
-	      {{ }else{ }}
-	        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#9d9ea1; font-size:12px;">
-	          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-	          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
-	        </a>
-	      {{ } }}
-	      <div style="position:relative; margin:5px 15px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:cornsilk; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-	        <span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:right; float:right;">
-						<span class="comment_content">{{=comment.content}}</span>
-						<span style="color:#9d9ea1; margin-right:5px; font-size:11px; float:left; padding-top:1px;">
-							<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
-						</span>
-					</span>
-					<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
-						<tbody>
-							<tr>
-								<td style="width:50px;">
-									<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:2px 0 0 2px;">
-										완료
-									</a>
-								</td>
-								<td style="width:100%;">
-									<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-	        <div style="position:absolute; top:6px; right:-7px; border-left:7px solid cornsilk; border-bottom:8px solid transparent;"></div>
-				</div>
-				<p style="margin:0; padding:5px 25px 10px 0; font-size:12px;">
-					<a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
-	          <i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin-top:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">답글</span>
-					</a>
-					<a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-						<span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
-					</a>
-				  {{ if ( comment.user_id == current_user_id ){ }}
-				    <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="color:#9d9ea1; margin-left:3px;">
-	            <i class="fa fa-trash" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">삭제</span>
-	          </a>
-	          <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="color:#9d9ea1; margin-left:3px;">
-	            <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
-	          </a>
-	          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-left:3px; display:none;">
-	            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
-	          </a>
-	        {{ }else{ }}
-	          <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9d9ea1; margin-left:3px;">
-							<i class="fa fa-ban" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">신고</span>
-	          </a>
-	        {{ } }}
-					<span style="color:#998674; margin-left:3px;">{{=comment.user.string_id}}</span>
-					{{ var gender_css = "color:#0389ed;" }}
-				  {{ if (!comment.user.gender) { }}
-				    {{ gender_css = "color:#ea065e;" }}
-				  {{ } }}
-				  <span style="margin:0 0 0 3px; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
-						{{= get_user_ages(comment.user.birthday) }}
-						{{ if (comment.user.gender){ }}
-							<i class="fa fa-male" style="margin-left:-2px;"></i>
-						{{ }else{ }}
-							<i class="fa fa-female" style="margin-left:-2px;"></i>
-						{{ } }}
-					</span>
-				</p>
-			</div>
+      <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:right; margin:0; padding:5px 0;">
+        {{ if (comment.is_deleted == false) { }}
+          <div id="comment_content_{{=comment.id}}" style="text-align:right;">
+            <div id="comment_menu_{{=comment.id}}" style="position:relative; display:inline-block; text-align:right; font-size:12px;">
+              <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:block; padding:0 0 10px 5px; color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}};">
+                <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+                <i id="comment_{{=comment.id}}_like_icon" class="fa {{= already_like.length == 1 ? 'fa-heart' : 'fa-heart-o'}}" style="color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}}; margin-right:1px;"></i>
+              </a>
+              <a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="display:block; padding:0 0 10px 5px; color:#666;">
+                답글<i class="fa fa-reply" style="margin:1px 2px 0px 3px; transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:text-top;"></i>
+              </a>
+            </div>
+            <div style="position:relative; margin:0 10px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+              <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
+              <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
+                <div style="display:inline-block; width:60%; float:right; text-align:right;">
+                  <span style="float:right; margin-left:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                  <div style="float:right;">
+                    {{ if ( comment.user_id == current_user_id ){ }}
+                      <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
+                      <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-left:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
+                    {{ }else{ }}
+                      <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                    {{ } }}
+                  </div>
+                </div>
+                <div style="display:inline-block; width:40%; float:left; text-align:left;">
+                  <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                  <span style="float:left; margin-right:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="comment_modify_box_{{=comment.id}}" style="text-align:right; display:none;">
+            <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
+            <div style="position:relative; margin:0 10px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+              <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+                수정하기
+              </a>
+            </div>
+          </div>
+        {{ }else{ }}
+          <div id="comment_content_{{=comment.id}}" style="text-align:right;">
+            <div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+              삭제된 댓글입니다.
+            </div>
+          </div>
+        {{ } }}
+      </div>
 			<div id="comment_{{=comment.id}}_reply_list">
 				{{ for(var i=0; i < reply_comments.length; i++) {  }}
 					{{ var reply_comment = reply_comments[i] }}
 					{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
 				{{ } }}
 			</div>
-			<div class="table_div" style="margin-bottom:0px;">
-				<div id="reply_comment_box_{{=comment.id}}" style="position:relative; float:right; margin:0px 30px 10px 0px; width: 60%; min-width:100%; max-width:100%; max-width:60%; height:40px; display:inline-block; text-align:left; background-color:#ffcc5a; font-size:13px; line-height:18px; color:#383838; padding:6px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; display:none;">
-					<table cellpadding="0" cellspacing="0">
-						<tbody>
-							<tr>
-								<td style="width:50px;">
-									<a href="#" id="send_reply_comment_btn_{{=comment.id}}" onclick="send_reply_comment({{=ask.id}}, {{=ask.right_ask_deal_id}}, {{=comment.id}}, false); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:2px 0 0 2px;">
-										입력
-									</a>
-								</td>
-								<td style="width:100%;">
-									<textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;"></textarea>
-								</td>
-							</tr>
-						</tbody>
-					</table>
-					<div style="position:absolute; top:-6px; right:7px; border-bottom:7px solid #ffcc5a; border-left:8px solid transparent;"></div>
-				</div>
-			</div>
+      <div id="reply_comment_box_{{=comment.id}}" style="text-align:right; padding:5px 0; display:none;">
+        <a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
+        <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+          <textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0px; font-size:13px; line-height:20px; text-align:right;"></textarea>
+          <a id="send_reply_comment_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="send_reply_comment({{=ask.id}}, {{=ask.right_ask_deal_id}}, {{=comment.id}}, false); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0px; transition:all .5s;">
+            답글 남기기
+          </a>
+        </div>
+        <span><i class="fa fa-reply" style="transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:15px 15px 0px 5px; color:#666;"></i></span>
+      </div>
 		{{ } }}
 	{{ } }}
 </script>
 
 <script type="text/template" id="reply-comment-list-template">
 	{{ var already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
-	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
-		<div id="comment_{{=comment.id}}" style="width:100%; text-align:left; padding-left:5px; box-sizing:border-box;">
-			<span><i class="fa fa-reply" style="margin-right:1px; transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:10px -15px 0px 15px; color:#dbdbdb;"></i></span>
-			<div style="position:relative; margin:0px 0px 0 15px; max-width:60%; display:inline-block; text-align:left; background-color:ghostwhite; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-right:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-				<span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:left; float:left;">
-					<span class="comment_content">{{=comment.content}}</span>
-					<span style="color:#9d9ea1; margin-left:5px; font-size:11px; float:right; padding-top:1px;">
-						<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
-					</span>
-				</span>
-				<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
-					<tbody>
-						<tr>
-							<td style="width:100%;">
-								<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
-							</td>
-							<td style="width:50px;">
-								<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0 2px 2px 0;">
-									완료
-								</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-      {{ if(already_like.length == 1){ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#ee6e01; font-size:12px;">
-          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart" style="color:#ee6e01; margin-left:1px;"></i>
-          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-        </a>
-      {{ }else{ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#9e9fa1; font-size:12px;">
-          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart-o" style="color:#9d9ea1; margin-left:1px;"></i>
-          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-        </a>
-      {{ } }}
-			<p style="margin:0; padding:5px 0 10px 25px; font-size:12px; color:#9d9ea1; margin-right:3px;">
-				{{ var gender_css = "color:#0389ed;" }}
-				{{ if (!comment.user.gender) { }}
-					{{ gender_css = "color:#ea065e;" }}
-				{{ } }}
-				<span style="margin:0 3px 0 0; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
-					{{ if (comment.user.gender){ }}
-						<i class="fa fa-male" style="margin-right:-2px;"></i>
-					{{ }else{ }}
-						<i class="fa fa-female" style="margin-right:-2px;"></i>
-					{{ } }}
-					{{= get_user_ages(comment.user.birthday) }}
-				</span>
-				<span style="color:#998674; margin-right:3px;">{{=comment.user.string_id}}</span>
-				{{ if ( comment.user_id == current_user_id ){ }}
-          <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
-            <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
-          </a>
-          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-right:3px; display:none;">
-            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
-          </a>
-          <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="color:#9d9ea1; margin-right:3px;">
-            <i class="fa fa-trash" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">삭제</span>
-          </a>
-				{{ }else{ }}
-				  <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9d9ea1; margin-right:3px;">
-            <i class="fa fa-ban" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">신고</span>
-          </a>
-				{{ } }}
-			</p>
-		</div>
-	{{ }else{ }}
-		<div id="comment_{{= comment.id }}" style="width:100%; text-align:right; padding-right:5px; box-sizing:border-box;">
-      {{ if(already_like.length == 1){ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#ee6e01; font-size:12px;">
-          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart" style="color:#ee6e01; margin-right:3px;"></i>
-        </a>
-      {{ }else{ }}
-        <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:inline-block; padding-bottom:5px; color:#9e9fa1; font-size:12px;">
-          <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
-          <i id="comment_{{=comment.id}}_like_icon" class="fa fa-heart-o" style="color:#9d9ea1; margin-right:3px;"></i>
-        </a>
-      {{ } }}
-      <div style="position:relative; margin:0px 15px 0 0px; max-width:60%; display:inline-block; text-align:left; background-color:ghostwhite; font-size:13px; line-height:18px; color:#383838; padding:6px 10px; word-break:break-all; border-radius:4px; border-left:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
-        <span id="comment_content_{{=comment.id}}" style="word-break:break-all; text-align:right; float:right;">
-					<span class="comment_content">{{=comment.content}}</span>
-					<span style="color:#9d9ea1; margin-right:5px; font-size:11px; float:left; padding-top:1px;">
-						<i class="fa fa-clock-o" style="margin-right:1px;"></i>{{= get_past_time(comment.created_at)}}
-					</span>
-				</span>
-				<table id="comment_modify_box_{{=comment.id}}" cellpadding="0" cellspacing="0" style="display:none;">
-					<tbody>
-						<tr>
-							<td style="width:50px;">
-								<a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:50px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:2px 0 0 2px;">
-									완료
-								</a>
-							</td>
-							<td style="width:100%;">
-								<textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." style="display:block; padding:5px; width:100%; min-height:40px; max-height:40px; height:40px; box-sizing:border-box; border:none; color:#666; background-color:#fff; border-radius:0 2px 2px 0;">{{=comment.content}}</textarea>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<span><i class="fa fa-reply" style="margin-right:1px; transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:10px 15px 0px -15px; color:#dbdbdb;"></i></span>
-			<p style="margin:0; padding:5px 25px 10px 0; font-size:12px;">
-			  {{ if ( comment.user_id == current_user_id ){ }}
-			    <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="color:#9d9ea1; margin-left:3px;">
-            <i class="fa fa-trash" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">삭제</span>
-          </a>
-          <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="color:#9d9ea1; margin-left:3px;">
-            <i class="fa fa-pencil" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">수정</span>
-          </a>
-          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="color:#ee6e01; margin-left:3px; display:none;">
-            <span style="color:#ee6e01; margin-right:1px;">&times;</span>취소
-          </a>
-        {{ }else{ }}
-          <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="color:#9d9ea1; margin-left:3px;">
-						<i class="fa fa-ban" style="margin-right:1px;"></i><span class="btn_text_{{=comment.id}}" style="display:none;">신고</span>
-          </a>
-        {{ } }}
-				<span style="color:#998674; margin-left:3px;">{{=comment.user.string_id}}</span>
-				{{ var gender_css = "color:#0389ed;" }}
-				{{ if (!comment.user.gender) { }}
-					{{ gender_css = "color:#ea065e;" }}
-				{{ } }}
-				<span style="margin:0 0 0 3px; font-size:10px; font-weight:bold; opacity:0.8; {{= gender_css}}">
-					{{= get_user_ages(comment.user.birthday) }}
-					{{ if (comment.user.gender){ }}
-						<i class="fa fa-male" style="margin-left:-2px;"></i>
-					{{ }else{ }}
-						<i class="fa fa-female" style="margin-left:-2px;"></i>
-					{{ } }}
-				</span>
-			</p>
-		</div>
-	{{ } }}
+  {{ if (comment.is_deleted == false) { }}
+  	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
+      <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
+        <div id="comment_content_{{=comment.id}}" style="text-align:left;">
+          <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+          <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+            <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
+            <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
+              <div style="display:inline-block; width:60%; float:left; text-align:left;">
+                <span style="float:left; margin-right:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                <div style="float:left;">
+                  {{ if ( comment.user_id == current_user_id ){ }}
+                    <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-right:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
+                    <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
+                  {{ }else{ }}
+                    <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                  {{ } }}
+                </div>
+              </div>
+              <div style="display:inline-block; width:40%; float:right; text-align:right;">
+                <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                <span style="float:right; margin-left:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
+              </div>
+            </div>
+          </div>
+          <div id="comment_menu_{{=comment.id}}" style="position:relative; display:inline-block; text-align:left; font-size:12px;">
+            <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:block; padding:0 5px 10px 0; color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}};">
+              <i id="comment_{{=comment.id}}_like_icon" class="fa {{= already_like.length == 1 ? 'fa-heart' : 'fa-heart-o'}}" style="color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}}; margin-left:1px;"></i>
+              <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+            </a>
+          </div>
+        </div>
+        <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
+          <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+          <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+            <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+              수정하기
+            </a>
+          </div>
+          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
+        </div>
+      </div>
+  	{{ }else{ }}
+      <div id="comment_{{=comment.id}}" class="table_div" style="width:100%; text-align:right; margin:0; padding:5px 0;">
+        <div id="comment_content_{{=comment.id}}" style="text-align:right;">
+          <div id="comment_menu_{{=comment.id}}" style="position:relative; display:inline-block; text-align:right; font-size:12px;">
+            <a href="#" onclick="comment_like({{=comment.id}}); return false;" style="display:block; padding:0 0 10px 5px; color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}};">
+              <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
+              <i id="comment_{{=comment.id}}_like_icon" class="fa {{= already_like.length == 1 ? 'fa-heart' : 'fa-heart-o'}}" style="color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}}; margin-right:1px;"></i>
+            </a>
+          </div>
+          <div style="position:relative; margin:0 0px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+            <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
+            <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
+              <div style="display:inline-block; width:60%; float:right; text-align:right;">
+                <span style="float:right; margin-left:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                <div style="float:right;">
+                  {{ if ( comment.user_id == current_user_id ){ }}
+                    <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
+                    <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-left:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
+                  {{ }else{ }}
+                    <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                  {{ } }}
+                </div>
+              </div>
+              <div style="display:inline-block; width:40%; float:left; text-align:left;">
+                <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                <span style="float:left; margin-right:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
+              </div>
+            </div>
+          </div>
+          <span><i class="fa fa-reply" style="transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:15px 15px 0px 5px; color:#666;"></i></span>
+        </div>
+        <div id="comment_modify_box_{{=comment.id}}" style="text-align:right; display:none;">
+          <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
+          <div style="position:relative; margin:0 0px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+            <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+              수정하기
+            </a>
+          </div>
+          <span><i class="fa fa-reply" style="transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:15px 15px 0px 5px; color:#666;"></i></span>
+        </div>
+  		</div>
+  	{{ } }}
+  {{ } }}
 </script>
 
 <script type="text/template" id="ask-detail-btn-template">
   {{ if (is_card_opened) { }}
-    <a id="ask_{{=ask.id}}_detail_off" class="card_detail" href="#" onclick="history.back(); return false;" style="background-color:#f4f4f4; border-top:none;">
+    <a id="ask_{{=ask.id}}_detail_off" class="card_detail" href="#" onclick="history.back(); return false;">
       <span style="font-size:12px;"><i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>
     </a>
   {{ }else{ }}
@@ -924,7 +869,7 @@
       <div>
         <span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
         <span style="font-size:12px;"><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
-        <span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg);"></i></span>
+        <span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i></span>
       </div>
     </a>
   {{ } }}
@@ -941,7 +886,7 @@
 	{{ }else{ }}
 		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:right;">
 			<span style="display:block; padding:0 15px;">
-				<i class="fa fa-comment" style="float:right; padding:7px 5px 0 0; transform:rotateY(180deg)"></i>
+				<i class="fa fa-comment" style="float:right; padding:7px 5px 0 0; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
 				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
 			</span>
 		</li>
@@ -986,35 +931,18 @@
 	for(var i=0; i < asks.length; i++) {
 		ask = asks[i]
 		$('#asks').append(askTemplate({ask: ask}));
-		hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
-    link_tagging(ask.message, $("#ask_"+ask.id+"_message"));
+		hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+    link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
 		abbreviate_msg(ask.message, ask.id);
     hover_action(ask.id);
     // if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
-
-    // $("#ask_box_"+ask.id).headroom({
-    //   "offset": $("#ask_box_"+ask.id).offset().top + $("#ask_box_"+ask.id).height(),
-    //   "tolerance": $("#ask_box_"+ask.id).height(),
-    //   "classes" : {
-    //     "initial" : "",
-    //     "pinned" : "slideDown",
-    //     "unpinned" : "slideUp",
-    //     "top" : "on-top",
-    //     "notTop" : "on-not-top",
-    //     "bottom" : "on-bottom",
-    //     "notBottom" : "on-not-bottom"
-    //   },
-    //   "onNotTop" : function() {
-    //     $(this).html("");
-    //   }
-    // });
 	}
 
 	var check_scroll
 	var ready = function() {
-		// if (asks.length == <%= Ask::ASK_PER %>){
+		if (asks.length >= <%= Ask::ASK_PER %>){
 			check_scroll = setInterval("checkScroll()", 1000);
-		// }
+		}
 	};
 
 	$(document).ready(ready);
@@ -1053,8 +981,8 @@
 	        		for(var i=0; i < more_asks.length; i++) {
     						ask = more_asks[i]
 				        $('#asks').append(askTemplate({ask: ask}));
-								hash_tagging(ask.message, $("#ask_"+ask.id+"_message"));
-                link_tagging(ask.message, $("#ask_"+ask.id+"_message"));
+								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+                link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
 								abbreviate_msg(ask.message, ask.id);
                 hover_action(ask.id);
 								// if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
@@ -1117,25 +1045,117 @@
                 $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: data.ask}));
                 for (i=0; i<data.ask.comments.length; i++) {
                   var comment = data.ask.comments[i];
-                  link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'));
+                  link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
                 };
-                btn_text_hide_all(data.ask.id);
                 comment_input_setting(data.ask.id, data.ask.user);
                 $("#visitor_comment_overlay_"+ask_id).remove();
               }
 		        },
 		        beforeSend: function(){
               progressStart();
-		       		// $(".loading").show();
 		        },
 		        complete: function(){
               progressEnd();
-		        	// $(".loading").hide();
               graph_animation(ask_id);
               hover_action(ask_id);
+              mini_comment(ask_id);
 		        }
 			});
 	 	}
+	}
+
+  function mini_comment(ask_id) {
+    if (!is_card_opened) {
+      $("#mini_new_comment_"+ask_id).slideDown(200);
+      setTimeout(function(){
+        $("#mini_comment_input_box_"+ask_id).css("transform","rotateX(0deg)").css("-webkit-transform","rotateX(0deg)");
+        $("#mini_comment_notify_"+ask_id).css("transform","rotateX(180deg)").css("-webkit-transform","rotateX(180deg)");
+      },1000);
+      $("#mini_comment_input_box_"+ask_id)
+
+
+      var keyPressed = [];
+      var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
+
+      $("#mini_comment_input_"+ask_id).on("click",function(){
+        if (current_user_id == 0){
+          $(this).blur();
+          notify("회원가입 후<br />의견을 남길 수 있습니다.");
+          setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
+          setTimeout('window.location.assign("/landing")',2500);
+        } else {
+          $(this).focus();
+        }
+      }).keydown(function(e) {
+        keyPressed[e.keyCode] = true;
+        if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
+          e.preventDefault();
+          $("#mini_send_comment_btn_"+ask_id).click();
+          keyPressed = [];
+        }
+      }).keyup(function(e) {
+        keyPressed[e.keyCode] = false;
+        if( $(this).val().length > 0 ) {
+          $("#mini_send_comment_btn_"+ask_id).css('background-color','#f18b33');
+        } else {
+          $("#mini_send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
+        }
+      });
+    }
+  }
+
+  function mini_ask_deal_id_change(ask_id, left_ask_deal_id, right_ask_deal_id, is_left){
+		if (is_left){
+      $("#mini_ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-left").addClass("fa-align-right");
+      $("#mini_comment_input_"+ask_id).css("textAlign","right").focus();
+      $("#mini_ask_deal_id_change_"+ask_id).attr("onclick", "mini_ask_deal_id_change("+ask_id+", "+left_ask_deal_id+", "+right_ask_deal_id+", false); return false;");
+      $("#mini_send_comment_btn_"+ask_id).attr("onclick", "mini_send_comment("+ask_id+", "+right_ask_deal_id+", false); return false;");
+		} else {
+      $("#mini_ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-right").addClass("fa-align-left");
+      $("#mini_comment_input_"+ask_id).css("textAlign","left").focus();
+      $("#mini_ask_deal_id_change_"+ask_id).attr("onclick", "mini_ask_deal_id_change("+ask_id+", "+left_ask_deal_id+", "+right_ask_deal_id+", true); return false;");
+			$("#mini_send_comment_btn_"+ask_id).attr("onclick", "mini_send_comment("+ask_id+", "+left_ask_deal_id+", true); return false;");
+		}
+	}
+
+  function mini_send_comment(ask_id, ask_deal_id, is_left){
+			var content = $("#mini_comment_input_"+ask_id).val();
+			if( content == "" || content == null ){
+				notify('내용을 입력해주세요.');
+				return;
+			}
+			$.ajax({
+		        url: "/comments.json",
+		        type: 'POST',
+		        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id},
+		        dataType: 'json',
+            async: false,  // 코멘트 중복 전송을 방지
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+              var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+		        	if (data.message = "success"){
+                ask.comments.push(data.comment);
+                if (is_left) {
+                  ask.left_ask_deal.comment_count += 1;
+                } else {
+                  ask.right_ask_deal.comment_count += 1;
+                }
+		        		notify("작성 완료");
+		        		$("#mini_new_comment_"+ask_id).slideUp(200);
+                $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
+		        	}else{
+		        		notify("댓글은 회원만 작성 가능합니다");
+		        	}
+		        },
+		        beforeSend: function(){
+              progressStart();
+		        },
+		        complete: function(){
+              progressEnd();
+		        }
+			});
 	}
 
 	function show_detail_vote_count(ask_id) {
@@ -1195,6 +1215,11 @@
 		<% end %>
 	}
 
+  function comment_title_open(ask_id) {
+    $("html, body").animate({scrollTop:$(document).height()},200);
+    $("#comment_input_"+ask_id).focus();
+  }
+
 	var card_open_st
 	var opened_ask_id
 
@@ -1215,9 +1240,8 @@
     $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: ask}));
     for (i=0; i<ask.comments.length; i++) {
       var comment = ask.comments[i];
-      link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'));
+      link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
     };
-    btn_text_hide_all(ask_id);
     comment_input_setting(ask_id, ask.user);
     $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
 
@@ -1277,45 +1301,44 @@
   }
 
 	function comment_input_setting(ask_id, ask_user) {
-		$("#comment_input_"+ask_id).keypress(function(e) {
-			if (e.keyCode == '13') {
-				e.preventDefault();
-				comment_input_by_key(ask_id);
-			}
-		});
+    var keyPressed = [];
+		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 
-		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id })
 		$("#comment_input_"+ask_id).on("click",function(){
 			if (current_user_id == 0){
-				$("#comment_input_"+ask_id).blur();
+				$(this).blur();
 				notify("회원가입 후<br />의견을 남길 수 있습니다.");
 				setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
 				setTimeout('window.location.assign("/landing")',2500);
 			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
-				$("#comment_input_"+ask_id).blur();
+				$(this).blur();
 				notify("투표 참여 후<br />의견을 남길 수 있습니다.");
 				var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 				$("html, body").animate({scrollTop:card_open_st},250);
 			} else {
-				$("#comment_input_"+ask_id).focus();
+				$(this).focus();
 			}
-		}).on("keyup",function(){
-			if( $("#comment_input_"+ask_id).val().length > 0 ) {
-				$("#send_comment_btn_"+ask_id).css('background-color','#f18b33');
-			} else {
-				$("#send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
-			}
-		});
-
-		if (this_vote != "") {
-			$("#ask_"+ask_id+"_comment_title").addClass("already_vote");
-			$("#ask_"+ask_id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;당신의 의견을 남겨주세요.');
-		}
-		if (current_user_id == ask_user.id) {
-			$("#ask_"+ask_id+"_comment_title").addClass("already_vote");
-			$("#comment_input_"+ask_id).attr("placeholder", ask_user.string_id+"님, 고민해결사님들께 한마디 전해보세요!");
-			$("#ask_"+ask_id+"_comment_title span:eq(0)").html('<i class="fa fa-keyboard-o" style="font-size:16px;"></i>&nbsp;어떤 의견이 달렸을까요?');
-		}
+		}).keydown(function(e) {
+      keyPressed[e.keyCode] = true;
+      if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
+        e.preventDefault();
+        comment_input_by_key(ask_id);
+        keyPressed = [];
+      }
+    }).keyup(function(e) {
+      keyPressed[e.keyCode] = false;
+      if( $(this).val().length > 0 ) {
+        $("#send_comment_btn_"+ask_id).css('background-color','#f18b33');
+        $(this).parent().find(".tooltip_area").css("transform","scale(0) translateY(-100%)");
+      } else {
+        $("#send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
+        $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
+      }
+		}).on('input',function(e){
+      $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
+    }).on('focus',function(){
+      $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
+    });
 	}
 
 	function send_comment(ask_id, ask_deal_id){
@@ -1337,7 +1360,7 @@
 		        	if (data.message = "success"){
                 ask.comments.push(data.comment);
 		        		$("#ask_"+ask_id+"_comment_list").append(askCommentListTemplate({ask:data.ask, comment:data.comment}));
-                link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'));
+                link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'), true);
 		        		notify("작성 완료");
 		        		$("#comment_input_"+ask_id).val("");
                 $("#no_comment_"+ask_id).hide();
@@ -1353,18 +1376,16 @@
 		        			right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
                   ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count + 1;
 		        		}
-								btn_text_hide(data.comment.id);
 		        	}else{
 		        		notify("댓글은 회원만 작성 가능합니다");
 		        	}
 		        },
 		        beforeSend: function(){
               progressStart();
-		       		// $(".loading").show();
 		        },
 		        complete: function(){
               progressEnd();
-		        	// $(".loading").hide();
+              $("#comment_input_"+ask_id).height(0);
 		        }
 			});
 	}
@@ -1387,22 +1408,17 @@
 		        		comment_count_span.html( parseInt(comment_count_span.html()) - 1 );
 	              comment_count_span.css("color","#9d9ea1");
 	              comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1");
-		        		notify("좋아요 취소");
 		        	}else{
                 my_like_comment.push(data.comment_like);
 		        		comment_count_span.html( parseInt(comment_count_span.html()) + 1 );
 	              comment_count_span.css("color","#ee6e01");
 	              comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01");
-		        		notify("좋아요 완료");
+                comment_like_icon.animate({"marginBottom":"10px"},300,"swing",function(){ $(this).animate({"marginBottom":"0px"},100) });
 		        	}
 		        },
 		        beforeSend: function(){
-              progressStart();
-		       		// $(".loading").show();
 		        },
 		        complete: function(){
-              progressEnd();
-		        	// $(".loading").hide();
 		        }
 			});
 		<% else %>
@@ -1427,9 +1443,13 @@
         },
         success: function(data){
           ask.comments.pop(data.comment);
-          $("#comment_"+comment_id).remove();
-          $("#comment_"+comment_id+"_reply_list").remove();
-          $("#reply_comment_box_"+comment_id).parent().remove();
+          if (data.status == "success") {
+            $("#comment_"+comment_id).remove();
+            $("#comment_"+comment_id+"_reply_list").remove();
+          } else if (data.status == "reply_exist") {
+            $("#comment_content_"+comment_id).nextAll().remove();
+            $("#comment_content_"+comment_id).html('<div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">삭제된 댓글입니다.</div>');
+          }
           if ( $("#ask_"+ask_id+"_comment_list").children().length == 1 ) $("#no_comment_"+ask_id).show();
           if (is_left){
             var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+ask_id);
@@ -1444,56 +1464,80 @@
         },
         beforeSend: function(){
           progressStart();
-          // $(".loading").show();
         },
         complete: function(){
           progressEnd();
-          // $(".loading").hide();
         }
       });
     }
 	}
 
+  var comment_id_in_progress = null;
+  var comment_id_in_progress_type = null;
+  var comment_content_origin = null;
 	function comment_modify(comment_id){
+    if (comment_id_in_progress) {
+      if (confirm('기존에 작성중인 내용은 삭제됩니다. 진행하시겠어요?')) {
+        if (comment_id_in_progress_type == "modify") comment_modify_cancel(comment_id_in_progress);
+        if (comment_id_in_progress_type == "reply") comment_reply_cancel(comment_id_in_progress);
+        comment_id_in_progress = comment_id;
+        comment_id_in_progress_type = "modify";
+      } else {
+        return false;
+      }
+    } else {
+      comment_id_in_progress = comment_id;
+      comment_id_in_progress_type = "modify";
+    }
+
 		var comment_content = $("#comment_content_"+comment_id);
-		var comment_text = comment_content.find("span:eq(0)").text();
+    var height = comment_content.find(".comment_content").height();
 		var modify_box = $("#comment_modify_box_"+comment_id);
 		var modify_input = $("#comment_modify_input_"+comment_id);
 		var update_btn = $("#comment_update_btn_"+comment_id);
 
+    comment_content_origin = modify_input.val();
 		comment_content.hide();
 		modify_box.show();
-		modify_input.val(comment_text).focus();
-		modify_box.css("width","100%").css("max-width","100%").css("min-width","100%");
+    modify_input.height(height).focus();
 
 		$("#comment_modify_btn_"+comment_id).hide();
 		$("#comment_modify_cancel_btn_"+comment_id).show();
 
-		modify_input.on("keypress",function(e){
-			if (e.keyCode == "13") {
-				e.preventDefault();
-				update_btn.click();
-			}
-		}).on("keyup",function(){
-			if( modify_input.val().length > 0 && modify_input.val() != comment_text ) {
-				update_btn.css('background-color','#ee6e01');
+    var keyPressed = [];
+    modify_input.keydown(function(e) {
+      keyPressed[e.keyCode] = true;
+      if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
+        keyPressed = [];
+        e.preventDefault();
+        update_btn.click();
+      }
+    }).keyup(function(e) {
+      keyPressed[e.keyCode] = false;
+      if( modify_input.val().length > 0 && modify_input.val() != comment_content_origin ) {
+				update_btn.css('background-color','#f18b33');
 			} else {
 				update_btn.css('background-color','#dbdbdb');
-			}
-		});
+			};
+    }).on('input',function(e){
+      $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
+    });
 	}
 
 	function comment_modify_cancel(comment_id){
+    comment_id_in_progress = null;
+    comment_id_in_progress_type = null;
 		var comment_content = $("#comment_content_"+comment_id);
-		var comment_text = comment_content.find("span:eq(0)").text();
 		var modify_box = $("#comment_modify_box_"+comment_id);
 		var modify_input = $("#comment_modify_input_"+comment_id);
 		var update_btn = $("#comment_update_btn_"+comment_id);
 
 		comment_content.show();
 		modify_box.hide();
-		modify_input.val(comment_text).blur();
+    modify_input.val(comment_content_origin);
+    modify_input.blur();
 		update_btn.css("background-color","#dbdbdb");
+    comment_content_origin = null;
 
 		$("#comment_modify_btn_"+comment_id).show();
 		$("#comment_modify_cancel_btn_"+comment_id).hide();
@@ -1501,19 +1545,19 @@
 
 	function comment_update(comment_id){
 		var comment_content = $("#comment_content_"+comment_id);
-		var comment_text = comment_content.find("span:eq(0)").text();
+		var comment_text = comment_content.find(".comment_content").text();
 		var modify_box = $("#comment_modify_box_"+comment_id);
 		var modify_input = $("#comment_modify_input_"+comment_id);
 		var update_btn = $("#comment_update_btn_"+comment_id);
 
     var content = modify_input.val();
     if( content == "" || content == null ){
-      notify('내용을 입력해주세요.');
+      notify('내용을 입력해주세요');
       return;
-    } else if ( content == comment_text ) {
-			notify('내용을 수정해주세요.');
+    } else if ( content == comment_content_origin ) {
+      notify('내용을 수정해주세요');
       return;
-		} else {
+    } else {
 			$.ajax({
 				url: "/comments/"+comment_id+".json",
 				type: 'PUT',
@@ -1523,11 +1567,12 @@
 					return false;
 				},
 				success: function(data){
-					comment_content.find("span:eq(0)").html(content);
-          link_tagging(content, $('#comment_content_'+comment_id+' .comment_content'));
+					comment_content.find(".comment_content").html(content.replace(new RegExp('\r?\n', 'g'), '<br />'));
+          link_tagging(content, $('#comment_content_'+comment_id+' .comment_content'), true);
 					comment_content.show();
 					modify_box.hide();
-					modify_input.html(comment_content.find("span:eq(0)").text()).blur();
+          modify_box.parent().css("borderColor","#dbdbdb");
+          modify_input.val(comment_content.find(".comment_content").html().replace(new RegExp('<br>', 'g'), '\n')).blur();
 					update_btn.css("background-color","#dbdbdb");
 
 					$("#comment_modify_btn_"+comment_id).show();
@@ -1537,61 +1582,80 @@
 				},
 				beforeSend: function(){
           progressStart();
-					// $(".loading").show();
 				},
 				complete: function(){
           progressEnd();
-					// $(".loading").hide();
+          comment_id_in_progress = null;
+          comment_id_in_progress_type = null;
+          comment_content_origin = null;
 				}
 			});
 		}
 	}
 
 	function comment_reply(ask_id, comment_id){
+    if (comment_id_in_progress) {
+      if (confirm('기존에 작성중인 내용은 삭제됩니다. 진행하시겠어요?')) {
+        if (comment_id_in_progress_type == "modify") comment_modify_cancel(comment_id_in_progress);
+        if (comment_id_in_progress_type == "reply") comment_reply_cancel(comment_id_in_progress);
+        comment_id_in_progress = comment_id;
+        comment_id_in_progress_type = "reply";
+      } else {
+        return false;
+      }
+    }
+
 		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 		var ask_user_id = $.grep(asks, function(obj) {return obj.id == ask_id})[0].user_id;
 		if (current_user_id == 0){
-			notify("회원가입 후<br />의견을 남길 수 있습니다.");
+			notify("회원가입 후<br />의견을 남길 수 있습니다");
 		} else if ( this_vote.length == 0 && current_user_id != ask_user_id ) {
 			var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 			$("html, body").animate({scrollTop:card_open_st},250);
-			notify("투표 참여 후<br />의견을 남길 수 있습니다.");
+			notify("투표 참여 후<br />의견을 남길 수 있습니다");
 		} else {
+      comment_id_in_progress = comment_id;
+      comment_id_in_progress_type = "reply";
 			var reply_box = $("#reply_comment_box_"+comment_id);
 			var reply_input = $("#reply_comment_input_"+comment_id);
 			var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
-			var reply_box_width = $($("#comment_"+comment_id+" div")[0]).outerWidth() + 15;
-
 			reply_box.slideDown(100);
 			reply_input.focus();
-			reply_box.css("width",reply_box_width).css("max-width",reply_box_width).css("min-width","60%");
 
 			$("#comment_reply_btn_"+comment_id).hide();
 			$("#comment_reply_cancel_btn_"+comment_id).show();
 
-			reply_input.on("keypress",function(e){
-				if (e.keyCode == "13") {
-					e.preventDefault();
-					update_btn.click();
-				}
-			}).on("keyup",function(){
-				if( reply_input.val().length > 0 ) {
-					update_btn.css('background-color','#ee6e01');
+      var keyPressed = [];
+      reply_input.keydown(function(e) {
+        keyPressed[e.keyCode] = true;
+        if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
+          keyPressed = [];
+          e.preventDefault();
+          update_btn.click();
+        }
+      }).keyup(function(e) {
+        keyPressed[e.keyCode] = false;
+        if( reply_input.val().length > 0 ) {
+					update_btn.css('background-color','#f18b33');
 				} else {
 					update_btn.css('background-color','#dbdbdb');
 				}
-			});
+      }).on('input',function(e){
+        $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
+      });
 		}
 	}
 
 	function comment_reply_cancel(comment_id){
+    comment_id_in_progress = null;
+    comment_id_in_progress_type = null;
 		var reply_box = $("#reply_comment_box_"+comment_id);
 		var reply_input = $("#reply_comment_input_"+comment_id);
 		var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
     reply_box.slideUp(100);
-		reply_input.blur();
+		reply_input.blur().val("");
 		update_btn.css("background-color","#dbdbdb");
 
 		$("#comment_reply_btn_"+comment_id).show();
@@ -1599,78 +1663,73 @@
 	}
 
 	function send_reply_comment(ask_id, ask_deal_id, comment_id, is_left){
-			var content = $("#reply_comment_input_"+comment_id).val();
-			if( content == "" || content == null ){
-				notify('내용을 입력해주세요.');
-				return false;
-			}
-			$.ajax({
-		        url: "/comments.json",
-		        type: 'POST',
-		        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id, 'comment_id':comment_id },
-		        dataType: 'json',
-            async: false,  // 코멘트 중복 전송을 방지
-		        error: function(){
-		            return false;
-		        },
-		        success: function(data){
-		        	if (data.message = "success"){
-                ask.comments.push(data.comment);
-		        		$("#comment_"+comment_id+"_reply_list").append(replyCommentListTemplate({ask:data.ask, comment:data.comment}));
-                link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'));
-		        		notify("작성 완료");
-								comment_reply_cancel(comment_id);
-		        		$("#reply_comment_input_"+comment_id).val("");
-                $("#send_reply_comment_btn_"+comment_id).css("background-color","#dbdbdb");
-                $("#reply_comment_input_"+comment_id).blur();
-
-		        		if (is_left){
-		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+data.comment.ask_id);
-		        			left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
-                  ask.left_ask_deal.comment_count = ask.left_ask_deal.comment_count + 1;
-		        		}else{
-		        			var right_ask_deal_comment_count = $("#right_ask_deal_comment_count_"+data.comment.ask_id);
-		        			right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
-                  ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count + 1;
-		        		}
-								btn_text_hide(data.comment.id);
-		        	}else{
-		        		notify("댓글은 회원만 작성 가능합니다");
-		        	}
-		        },
-		        beforeSend: function(){
-              progressStart();
-		       		// $(".loading").show();
-		        },
-		        complete: function(){
-              progressEnd();
-		        	// $(".loading").hide();
-		        }
-			});
-	}
-
-	function btn_text_hide(comment_id) {
-		if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-			$("#comment_"+comment_id).children("p").find(".btn_text_"+comment_id).show();
+		var content = $("#reply_comment_input_"+comment_id).val();
+		if( content == "" || content == null ){
+			notify('내용을 입력해주세요');
+			return false;
 		} else {
-			$("#comment_"+comment_id).hover(function(){$(this).children("p").find(".btn_text_"+comment_id).show()},function(){$(this).children("p").find(".btn_text_"+comment_id).hide()});
-		}
-	}
-	function btn_text_hide_all(ask_id) {
-		var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
-		for (var i=0; i < ask.comments.length; i++) {
-			btn_text_hide(ask.comments[i].id);
-		}
+      $.ajax({
+        url: "/comments.json",
+        type: 'POST',
+        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id, 'comment_id':comment_id },
+        dataType: 'json',
+        async: false,  // 코멘트 중복 전송을 방지
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          if (data.message = "success"){
+            ask.comments.push(data.comment);
+            $("#comment_"+comment_id+"_reply_list").append(replyCommentListTemplate({ask:data.ask, comment:data.comment}));
+            link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'), true);
+            notify("작성 완료");
+            comment_reply_cancel(comment_id);
+            $("#reply_comment_input_"+comment_id).val("");
+            $("#send_reply_comment_btn_"+comment_id).css("background-color","#dbdbdb");
+            $("#reply_comment_input_"+comment_id).blur();
+
+            if (is_left){
+              var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+data.comment.ask_id);
+              left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
+              ask.left_ask_deal.comment_count = ask.left_ask_deal.comment_count + 1;
+            }else{
+              var right_ask_deal_comment_count = $("#right_ask_deal_comment_count_"+data.comment.ask_id);
+              right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
+              ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count + 1;
+            }
+          }else{
+            notify("댓글은 회원만 작성 가능합니다");
+          }
+        },
+        beforeSend: function(){
+          progressStart();
+        },
+        complete: function(){
+          progressEnd();
+          comment_id_in_progress = null;
+          comment_id_in_progress_type = null;
+        }
+      });
+    }
 	}
 
 	function ask_deal_id_change(ask_id, left_ask_deal_id, right_ask_deal_id){
+    var margin = $("#new_comment").width() - $("#comment_input_box_"+ask_id).outerWidth() - 10;
 		if (ask_deal_text == "left"){
+      $("#ask_deal_id_change_"+ask_id+"_right").css("marginRight","-50px");
+      $("#ask_deal_id_change_"+ask_id+"_left").css("marginLeft","10px");
+
+      $("#comment_input_box_"+ask_id).css("margin","0 10px 0 "+margin+"px");
+      $("#comment_input_"+ask_id).css("textAlign","right");
       ask_deal_text = "right";
-			$("#ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-left").addClass("fa-align-right");
-			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+right_ask_deal_id+"); return false;");
-		}else{
+      $("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+right_ask_deal_id+"); return false;");
+		} else {
+      $("#ask_deal_id_change_"+ask_id+"_right").css("marginRight","10px");
+      $("#ask_deal_id_change_"+ask_id+"_left").css("marginLeft","-50px");
+
+      $("#comment_input_box_"+ask_id).css("margin","0 "+margin+"px 0 10px");
+      $("#comment_input_"+ask_id).css("textAlign","left");
       ask_deal_text = "left";
-			$("#ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-right").addClass("fa-align-left");
 			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+left_ask_deal_id+"); return false;");
 		}
 	}

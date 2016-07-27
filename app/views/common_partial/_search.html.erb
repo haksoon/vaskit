@@ -33,7 +33,7 @@
 <script type="text/template" id="search-result-template">
 		{{ if(type == "hash_tag"){ }}
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
-				<i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;{{= keyword }}
+				<i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg); -webkit-transform:rotateY(180deg) skewY(18deg);"></i>&nbsp;{{= keyword }}
 			</a>
 		{{ }else if(type == "ask_deal"){ }}
 			<a href="/?keyword={{=keyword}}&type={{=type}}" style="display:block; border-bottom:1px solid #cecfd1; margin:0; padding:8px 8px 8px 12px; color:#666;">
@@ -62,7 +62,7 @@
 	function search_input_on(){
 		history.pushState(null, null, "#search_anything_u_want");
 		is_search_input_opened = true;
-		overlay_st = window.scrollY;
+		overlay_st = $(window).scrollTop();
 
 		disableScroll();
 		$("#search").hide();

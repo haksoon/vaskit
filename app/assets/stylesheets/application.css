@@ -276,8 +276,8 @@ input:focus, select:focus, textarea:focus {
     100% { transform:rotateX(0deg); }
 }*/
 .home-float-btn-area:hover, .home-float-btn-area:active, .home-float-btn-area:focus { animation:none; }
-.home-float-btn-area:hover .home-float-btn, .home-float-btn-area:active .home-float-btn, .home-float-btn-area:focus .home-float-btn { box-shadow: 0px 0px 30px rgba(238,110,1,0.8); animation:none; opacity:0; transform:rotateX(180deg); }
-.home-float-btn-area:hover .home-float-btn-text, .home-float-btn-area:active .home-float-btn-text, .home-float-btn-area:focus .home-float-btn-text { box-shadow: 0px 0px 30px rgba(238,110,1,0.8); animation:none; opacity:1; transform:rotateX(0deg);  }
+.home-float-btn-area:hover .home-float-btn, .home-float-btn-area:active .home-float-btn, .home-float-btn-area:focus .home-float-btn { box-shadow: 0px 0px 30px rgba(238,110,1,0.8); animation:none; opacity:0; transform:rotateX(180deg); -webkit-transform:rotateX(180deg); }
+.home-float-btn-area:hover .home-float-btn-text, .home-float-btn-area:active .home-float-btn-text, .home-float-btn-area:focus .home-float-btn-text { box-shadow: 0px 0px 30px rgba(238,110,1,0.8); animation:none; opacity:1; transform:rotateX(0deg); -webkit-transform:rotateX(0deg); }
 
 .home-float-btn {
 	position: relative;
@@ -322,6 +322,7 @@ input:focus, select:focus, textarea:focus {
   border-radius: 35px;
   box-shadow: 0px 0px 10px rgba(0,0,0,0.4);
   transform: rotateX(180deg);
+	-webkit-transform: rotateX(180deg);
 	opacity: 0;
 	transition:all .6s;
   /*animation: home-btn-text-ani 30s ease-out infinite;*/
@@ -357,6 +358,7 @@ input:focus, select:focus, textarea:focus {
 }
 .card_image.img_hover {
 	transform:scale(1.02);
+	-webkit-transform:scale(1.02);
 }
 .card_image_expander {
 	margin:0;
@@ -465,46 +467,24 @@ input:focus, select:focus, textarea:focus {
 	line-height:40px;
 	text-align:center;
 	border-bottom:1px solid #dbdbdb;
-	color:#666;
+	color:#9d9ea1;
 	background-color:#fff;
 	font-size:13px;
 	border-top:1px solid #dbdbdb;
+}
+.comment_title.my_vote {
+	color:#fff;
+	background-color:#ffcc5a;
+	font-weight:bold;
+	border:none;
+	cursor:pointer;
 }
 .comment_title.already_vote {
 	color:#fff;
 	background-color:rgba(238,110,1,0.7);
 	font-weight:bold;
-	cursor:pointer;
-}
-.comment_box{
-	display:block;
-	box-sizing: border-box;
-	width:100%;
-	min-width:100%;
-	max-width:100%;
-	height:40px;
-	min-height:40px;
-	max-height:40px;
-	padding:12px 55px 12px 40px;
-	font-size:12px;
-	color:#393939;
 	border:none;
-	-webkit-appearance: none;
-	border-radius:0;
-	-webkit-border-radius:0px;
-}
-.comment_modify_box{
-  width:100%;
-  min-height:40px;
-  border:none;
-  -webkit-box-sizing: border-box;
-	        box-sizing: border-box;
-  font-size:12px;
-  color:#666;
-  height:34px;
-  -webkit-appearance: none;
-  -webkit-border-radius:0px;
-  display:none;
+	cursor:pointer;
 }
 .etc_input_box{
 	width: 100%;
@@ -546,10 +526,11 @@ input:focus, select:focus, textarea:focus {
 img.cover {
 	animation: cover_ani 1.5s ease-in-out infinite alternate;
 	transform-origin: bottom center;
+	-webkit-transform-origin: bottom center;
 }
 @keyframes cover_ani {
-	0% { transform: rotateZ(1deg); }
-	100% { transform: rotateZ(-1deg); }
+	0% { transform: rotateZ(1deg); -webkit-transform: rotateZ(1deg); }
+	100% { transform: rotateZ(-1deg); -webkit-transform: rotateZ(-1deg); }
 }
 a.login_btn {
 	display:block;
@@ -908,10 +889,12 @@ p.output_field {
 	text-align: center;
 	transition: transform .2s;
 	transform: scale(0) translateY(-100%);
+	-webkit-transform: scale(0) translateY(-100%);
 	z-index:1;
 }
 .tooltip_area.tooltip_open {
 	transform: scale(1) translateY(0%);
+	-webkit-transform: scale(1) translateY(0%);
 }
 .tooltip_content {
   padding: 10px;
@@ -926,6 +909,8 @@ p.output_field {
   border-width: 5px;
   border-style: solid;
   border-color: #333;
+	left: 50%;
+	margin-left: -5px;
 }
 .tooltip_arrow.bottom {
   bottom: -5px;
@@ -938,7 +923,7 @@ p.output_field {
 .star_rating_wrap { margin:12px; padding:5px; background-color:#fff; border:1px solid #dbdbdb; border-right-width:3px; border-bottom-width:3px; }
 .star_rating_wrap ul { width:50%; min-width:200px; margin:0 auto; padding:0; list-style:none; }
 .star_rating_wrap ul li { width:20%; min-width:40px; float:left; line-height:40px; font-size:20px; color:#9d9ea1; transition:transform .2s; }
-.star_rating_wrap ul li.on { color:#ee6e01; transform:scale(1.25); }
+.star_rating_wrap ul li.on { color:#ee6e01; transform:scale(1.25); -webkit-transform:scale(1.25); }
 
 #flash, .loading {
 	position:fixed;

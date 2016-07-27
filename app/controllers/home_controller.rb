@@ -169,11 +169,16 @@ class HomeController < ApplicationController
   def welcome
     device = params[:device] unless params[:device].blank?
     browser = params[:browser] unless params[:browser].blank?
+    # href = params[:href] unless params[:href].blank?
+    # action = params[:action] unless params[:action].blank?
+    # referrer = params[:referrer] unless params[:referrer].blank?
     if current_user
       user_id = current_user.id
       UserVisit.create(:user_id => user_id, :device => device, :browser => browser)
+      # UserVisit.create(:user_id => user_id, :device => device, :browser => browser, :href => href, :action => action, :referrer => referrer)
     elsif @visitor
       visitor_id = @visitor.id
+      # UserVisit.create(:visitor_id => visitor_id, :device => device, :browser => browser, :href => href, :action => action, :referrer => referrer)
       UserVisit.create(:visitor_id => visitor_id, :device => device, :browser => browser)
     end
     render :json => {}

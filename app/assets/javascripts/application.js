@@ -321,15 +321,35 @@ function hash_tagging(origin_string, target_element) {
   });
 }
 
-function link_tagging(origin_string, target_element) {
-  var links = origin_string.match(/(http(s)?:\/\/)([\S]*)/g);
-  if (links != null) links.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-  $.each(links, function( index, link ) {
-    target_element.highlight(link, { element:'a', className: 'link '+index});
-    $.each( target_element.find(".link."+index), function( index2, element ){
-      $(element).attr({href:link, target:"_blank"});
+function link_tagging(origin_string, target_element, img_preview) {
+  var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
+  if (links != null) {
+    links.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
+    var link_tags = [];
+    var img_tags = [];
+    var img_reg = /\.(jpg|jpeg|gif|bmp|png)/;
+    $.each(links, function(index, link) {
+      if (img_reg.test(link)) {
+        img_tags[img_tags.length] = link;
+      } else {
+        link_tags[link_tags.length] = link;
+      }
     });
-  });
+    if (img_preview) {
+      $.each(img_tags, function( index, img ) {
+        target_element.highlight(img, {element:'img', className: 'img '+index});
+        $.each( target_element.find(".img."+index), function( index2, element ){
+          $(element).attr({src:img, style:"width:100%;"});
+        });
+      });
+    }
+    $.each(links, function( index, link ) {
+      target_element.highlight(link, {element:'a', className: 'link '+index});
+      $.each( target_element.find(".link."+index), function( index2, element ){
+        $(element).attr({href:link, target:"_blank"});
+      });
+    });
+  }
 }
 
 // AJS추가 : 텍스트 라인 세기
@@ -391,6 +411,9 @@ function progressEnd() {
 function welcome() {
   var device = "unknown",
       browser = "unknown",
+      // href = document.location.href,
+      // action = document.location.hash,
+      // referrer = document.referrer,
       ua = navigator.userAgent,
       p = navigator.platform;
 
@@ -434,6 +457,7 @@ function welcome() {
         url: "/home/welcome.json",
         type: 'POST',
         data: {'device': device, 'browser': browser},
+        // data: {'device': device, 'browser': browser, 'href': href, 'action': action, 'referrer': referrer},
         dataType: 'json',
         error: function(){
             return false;
