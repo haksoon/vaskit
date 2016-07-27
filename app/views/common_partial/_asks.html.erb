@@ -1338,6 +1338,8 @@
       $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
     }).on('focus',function(){
       $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
+    }).on('blur',function(){
+      $(this).parent().find(".tooltip_area").css("transform","scale(0) translateY(-100%)");
     });
 	}
 
