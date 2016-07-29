@@ -81,13 +81,10 @@
 		// welcome();
 		if (is_ask_image_opened) {
 			ask_image_off();
-		} else if (is_category_opened) {
+		} else if (is_category_opened || is_user_setting_opened || is_user_opened || is_search_input_opened) {
 			category_off();
-		} else if (is_user_setting_opened) {
 			manage_off();
-		} else if (is_user_opened) {
 			user_off();
-		} else if (is_search_input_opened) {
 			search_input_off();
 		} else if (is_share_popup_opened) {
 			hide_share_popup();
