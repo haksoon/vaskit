@@ -55,6 +55,8 @@ class HomeController < ApplicationController
         brand_ask_ids = Ask.where("left_ask_deal_id in (?) OR right_ask_deal_id in (?)", brand_ask_deal_ids, brand_ask_deal_ids).pluck(:id)
         ask_ids = (user_ask_ids + hash_tag_ask_ids + title_ask_ids + brand_ask_ids).uniq
         @asks = Ask.where(:id => ask_ids ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ])
+      when "vote_yet"
+        @asks = Ask.where(:be_completed => false).where("id not in (?) AND user_id not in (?)", @my_votes.map(&:ask_id), current_user.id).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ])
       else
         if @user_categories.blank? || @user_categories.length == 12 #전체 카테고리
           if @my_votes.blank?

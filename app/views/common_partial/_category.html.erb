@@ -1,92 +1,117 @@
 <div id="category_overlay">
-	<div style="position:absolute; top:-55px; left:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
+	<div style="position:absolute; top:-50px; left:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
 		<a href="#" onclick="history.back(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;">
 			<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
 		</a>
 	</div>
 	<div style="position:absolute; top:-10px; left:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
-	<div style="box-sizing:border-box; width:100%; background-color:#f4f4f4; border:3px solid #998674; border-radius:5px; overflow:hidden;">
-		<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center;">관심사 설정</p>
-		<div style="padding:10px 8px;">
-			<table cellspacing="0" cellpadding="4">
-				<tr>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(2); return false;"><img id="category_img_2" style="width:100%; display:block;" src="/images/category/2_<%= @user_categories.include?(2) ? 'on' : "off" %>.png"></a>
-					</td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(3); return false;"><img id="category_img_3" style="width:100%; display:block;" src="/images/category/3_<%= @user_categories.include?(3) ? 'on' : "off" %>.png"></a>
-					</td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(6); return false;"><img id="category_img_6" style="width:100%; display:block;" src="/images/category/6_<%= @user_categories.include?(6) ? 'on' : "off" %>.png"></a>
-					</td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(8); return false;"><img id="category_img_8" style="width:100%; display:block;" src="/images/category/8_<%= @user_categories.include?(8) ? 'on' : "off" %>.png"></a>
-					</td>
-				</tr>
-				<tr>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(1); return false;"><img id="category_img_1" style="width:100%; display:block;" src="/images/category/1_<%= @user_categories.include?(1) ? 'on' : "off" %>.png"></a>
-					</td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(7); return false;"><img id="category_img_7" style="width:100%; display:block;" src="/images/category/7_<%= @user_categories.include?(7) ? 'on' : "off" %>.png"></a>
-					</td>
-				  <td style="width:25%;">
-            <a href="#" onclick="category_toggle(4); return false;"><img id="category_img_4" style="width:100%; display:block;" src="/images/category/4_<%= @user_categories.include?(4) ? 'on' : "off" %>.png"></a>
-          </td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(5); return false;"><img id="category_img_5" style="width:100%; display:block;" src="/images/category/5_<%= @user_categories.include?(5) ? 'on' : "off" %>.png"></a>
-					</td>
-				</tr>
-				<tr>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(9); return false;"><img id="category_img_9" style="width:100%; display:block;" src="/images/category/9_<%= @user_categories.include?(9) ? 'on' : "off" %>.png"></a>
-					</td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(10); return false;"><img id="category_img_10" style="width:100%; display:block;" src="/images/category/10_<%= @user_categories.include?(10) ? 'on' : "off" %>.png"></a>
-					</td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(11); return false;"><img id="category_img_11" style="width:100%; display:block;" src="/images/category/11_<%= @user_categories.include?(11) ? 'on' : "off" %>.png"></a>
-					</td>
-					<td style="width:25%;">
-						<a href="#" onclick="category_toggle(12); return false;"><img id="category_img_12" style="width:100%; display:block;" src="/images/category/12_<%= @user_categories.include?(12) ? 'on' : "off" %>.png"></a>
-					</td>
-				</tr>
-			</table>
+	<div id="category_overlay_title" style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center; border:5px solid #998674; border-bottom:none;">MENU</div>
+	<div id="category_overlay_wrap" style="box-sizing:border-box; width:100%; height:calc(100% - 45px); background-color:#f4f4f4; border:5px solid #998674; border-top:none; overflow:hidden;">
+		<div id="category_overlay_seg" style="height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;">
+			<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
+				<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
+					VASKIT 활동
+					<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">Let's VASKIT!</span>
+				</p>
+				<a href="/asks/new" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
+					<i class="fa fa-plus-circle"></i>&nbsp;당신의 고민을 이야기해주세요!
+				</a>
+				<a href="/?type=vote_yet" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:40px; position:relative; margin:10px 0 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box;">
+					<i class="fa fa-sort-amount-asc"></i>&nbsp;참여하지 않은 카드만 보여주세요
+				</a>
+			</div>
+			<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
+				<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
+					관심사 설정
+					<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">보고싶은 것만 보자구요~</span>
+				</p>
+				<div class="table_div" style="margin:10px 0 4px;">
+					<a href="#" onclick="category_toggle(2); return false;"><img id="category_img_2" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 3px 0 0px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(2) ? '0' : '360' %>deg);" src="/images/category/2_<%= @user_categories.include?(2) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(3); return false;"><img id="category_img_3" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 2px 0 1px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(3) ? '0' : '360' %>deg);" src="/images/category/3_<%= @user_categories.include?(3) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(6); return false;"><img id="category_img_6" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 1px 0 2px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(6) ? '0' : '360' %>deg);" src="/images/category/6_<%= @user_categories.include?(6) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(8); return false;"><img id="category_img_8" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 0px 0 3px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(8) ? '0' : '360' %>deg);" src="/images/category/8_<%= @user_categories.include?(8) ? 'on' : "off" %>.png"></a>
+				</div>
+				<div class="table_div" style="margin:4px 0;">
+					<a href="#" onclick="category_toggle(1); return false;"><img id="category_img_1" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 3px 0 0px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(1) ? '0' : '360' %>deg);" src="/images/category/1_<%= @user_categories.include?(1) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(7); return false;"><img id="category_img_7" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 2px 0 1px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(7) ? '0' : '360' %>deg);" src="/images/category/7_<%= @user_categories.include?(7) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(4); return false;"><img id="category_img_4" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 1px 0 2px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(4) ? '0' : '360' %>deg);" src="/images/category/4_<%= @user_categories.include?(4) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(5); return false;"><img id="category_img_5" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 0px 0 3px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(5) ? '0' : '360' %>deg);" src="/images/category/5_<%= @user_categories.include?(5) ? 'on' : "off" %>.png"></a>
+				</div>
+				<div class="table_div" style="margin:4px 0;">
+					<a href="#" onclick="category_toggle(9); return false;"><img id="category_img_9" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 3px 0 0px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(9) ? '0' : '360' %>deg);" src="/images/category/9_<%= @user_categories.include?(9) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(10); return false;"><img id="category_img_10" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 2px 0 1px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(10) ? '0' : '360' %>deg);" src="/images/category/10_<%= @user_categories.include?(10) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(11); return false;"><img id="category_img_11" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 1px 0 2px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(11) ? '0' : '360' %>deg);" src="/images/category/11_<%= @user_categories.include?(11) ? 'on' : "off" %>.png"></a>
+					<a href="#" onclick="category_toggle(12); return false;"><img id="category_img_12" style="display:block; width:25%; height:auto; float:left; box-sizing:border-box; padding:0 0px 0 3px; transition:transform .5s; transform:rotateY(<%= @user_categories.include?(12) ? '0' : '360' %>deg);" src="/images/category/12_<%= @user_categories.include?(12) ? 'on' : "off" %>.png"></a>
+				</div>
+				<a href="#" onclick="select_all_toggle(); return false;" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:40px; position:relative; margin:4px 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box;">
+					<span style="color:#9d9ea1">All</span>
+					<span id="category_all_span">
+						<%= @user_categories.length == 12 ? '전체해제' : '전체선택' %>
+					</span>
+				</a>
+				<a id="category_submit_btn" href="#" onclick="submit_category(); return false;" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:40px; position:relative; margin:4px 0 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box; transition:all .5s;">
+					<i class="fa fa-bookmark" style="color:#9d9ea1;"></i>&nbsp;적용하기
+				</a>
+			</div>
+			<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
+				<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
+					기타 메뉴
+					<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">궁금하신 점이 있으신가요?</span>
+				</p>
+				<ul style="margin:0; padding:0; list-style:none; font-size:12px;">
+					<li style="height:40px; line-height:40px; border:1px solid #dbdbdb; border-top:none; background-color:#fff; padding:0px 10px;">
+						<a href="http://blog.naver.com/vaskit" target="_blank" style="color:#666;"><i class="fa fa-child" style="display:inline-block; width:15px; text-align:center; "></i>&nbsp;About Us</a>
+					</li>
+					<li style="height:40px; line-height:40px; border:1px solid #dbdbdb; border-top:none; background-color:#fff; padding:0px 10px;">
+						<a href="#" onclick="window.open('/etc/inquiry', 'VASKIT Contact Us', 'width=500, height=650'); return false;" style="color:#666;"><i class="fa fa-phone" style="display:inline-block; width:15px; text-align:center; "></i>&nbsp;Contact Us</a>
+					</li>
+					<li style="height:40px; line-height:40px; border:1px solid #dbdbdb; border-top:none; background-color:#fff; padding:0px 10px;">
+						<a href="#" onclick="window.open('/etc/access_term', 'VASKIT 이용약관', 'width=500, height=800'); return false;" style="color:#666;"><i class="fa fa-tasks" style="display:inline-block; width:15px; text-align:center; "></i>&nbsp;이용약관</a>
+					</li>
+					<li style="height:40px; line-height:40px; border:1px solid #dbdbdb; border-top:none; background-color:#fff; padding:0px 10px;">
+						<a href="#" onclick="window.open('/etc/privacy_policy', 'VASKIT 개인정보취급정책', 'width=500, height=800'); return false;" style="color:#666;"><i class="fa fa-tasks" style="display:inline-block; width:15px; text-align:center; transform:rotateY(180deg);"></i>&nbsp;개인정보 취급정책</a>
+					</li>
+					<li style="height:40px; line-height:40px; border:1px solid #dbdbdb; border-top:none; background-color:#fff; padding:0px 10px;">
+						<a href="#" onclick="window.open('/etc/help', 'VASKIT FAQ & Help', 'width=500, height=800'); return false;" style="color:#666;"><i class="fa fa-question-circle" style="display:inline-block; width:15px; text-align:center; "></i>&nbsp;FAQ &amp; HELP</a>
+					</li>
+				</ul>
+				<p style="margin:0; padding:10px 15px; font-size:12px; color:#9d9ea1;">
+					VASKIT을 이용하시면서 불편하신 점이 있으시다면<br>
+					<a href="mailto:help@vaskit.kr" style="color:#ee6e01; text-decoration:underline;">help@vaskit.kr</a>로 언제든지 연락 주세요!
+				</p>
+			</div>
 		</div>
-		<p style="margin:0; padding:0px 15px 10px; font-size:12px; color:#9d9ea1;"><i class="fa fa-info-circle" style="font-size:13px;"></i>&nbsp;본인의 관심사만 선택하여 둘러볼 수 있습니다.</p>
-		<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff; border-top:1px solid #dbdbdb; text-align:center;">
-			<tr>
-				<td style="width:50%;">
-					<a href="#" onclick="select_all_toggle(); return false;" style="display:block; width:100%; padding:14px 0; color:#383838; font-size:14px; border-right:1px solid #dbdbdb;">
-						<img src="/images/category/all.png"  style="width:18px; margin-bottom:-1px; "/>
-						<span id="category_all_span">
-							<%= @user_categories.length == 12 ? '전체해제' : '전체선택' %>
-						</span>
-					</a>
-				</td>
-				<td style="width:50%;">
-					<a href="#" onclick="submit_category(); return false;" style="display:block; width:100%; padding:14px 0; color:#ee6e01; font-size:14px;">
-						<i class="fa fa-bookmark"></i>&nbsp;적용하기
-					</a>
-				</td>
-			</tr>
-		</table>
 	</div>
 </div>
+
+<style>
+	.menu_list {
+		height: 40px;
+		line-height: 40px;
+		border-bottom: 1px solid #dbdbdb;
+		padding: 0 10px;
+	}
+	.category_list {
+		padding: 0 10px 0 45px;
+		position: relative;
+	}
+</style>
 
 <script>
 	var user_categories = <%=raw @user_categories.to_json %>;
 	var change_user_categories = <%=raw @user_categories.to_json %>;
+
 	function category_on(){
-		history.pushState(null, null, "#category_setting");
+		// history.pushState(null, null, "#category_setting");
+		document.location.hash == "#welcome" ? history.pushState(null, null, "#category_setting") : history.replaceState(null, null, "#category_setting");
     is_category_opened = true;
 		overlay_st = $(window).scrollTop();
 
 		disableScroll();
 		$("#category_overlay").fadeIn(100);
-		$("#footer").fadeIn(100);
 		$("#menu_pc_bg").show();
 		$("#menu_bg").fadeIn(100);
+		$("#category_overlay_seg").scrollTop(0);
 
 		$("#user_overlay").hide();
 		$("#search_overlay").hide();
@@ -100,24 +125,31 @@
 
 		enableScroll();
 		$("#category_overlay").fadeOut(300);
-		$("#footer").fadeOut(300);
 		$("#menu_pc_bg").hide();
 		$("#menu_bg").fadeOut(300);
 		category_reset();
 	}
 
 	function category_toggle(category_id){
-
 		<% if current_user %>
 			if($.inArray(category_id, change_user_categories) > -1){
-				$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_off.png");
+				$("#category_img_"+category_id).css("transform","rotateY(360deg)").attr("src","/images/category/"+category_id+"_off.png");
 				change_user_categories = jQuery.grep(change_user_categories, function(value) { return value != category_id; });
-			}else{
-				$("#category_img_"+category_id).attr("src","/images/category/"+category_id+"_on.png");
-				change_user_categories.push(category_id)
+			} else {
+				$("#category_img_"+category_id).css("transform","rotateY(0deg)").attr("src","/images/category/"+category_id+"_on.png");
+				change_user_categories.push(category_id);
 			}
 			if (change_user_categories.length == 12){
 				$("#category_all_span").html("전체해제");
+			} else {
+				$("#category_all_span").html("전체선택");
+			}
+			if (user_categories.sort().join() != change_user_categories.sort().join()) {
+				$("#category_submit_btn").css({"backgroundColor":"#f18b33","borderColor":"#f18b33","color":"#fff"});
+				$("#category_submit_btn").find("i").css({"color":"#fff"});
+			} else {
+				$("#category_submit_btn").css({"backgroundColor":"#fff","borderColor":"#dbdbdb","color":"#666"});
+				$("#category_submit_btn").find("i").css({"color":"#9d9ea1"});
 			}
 		<% else %>
 		 	notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
@@ -127,13 +159,19 @@
 	}
 
 	function category_reset(){
-		change_user_categories = user_categories;
-		for(var i=0; i < 12; i++) {
-			index = i + 1;
-			if($.inArray(index, change_user_categories) > -1){
-				$("#category_img_"+index).attr("src","/images/category/"+index+"_on.png");
-			}else{
-				$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
+		if (user_categories.sort().join() != change_user_categories.sort().join()) {
+			if (confirm('관심사 설정을 저장하시겠어요?')) {
+				submit_category();
+			} else {
+				change_user_categories = user_categories;
+				for(var i=0; i < 12; i++) {
+					index = i + 1;
+					if($.inArray(index, change_user_categories) > -1){
+						$("#category_img_"+index).attr("src","/images/category/"+index+"_on.png");
+					}else{
+						$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
+					}
+				}
 			}
 		}
 	}
@@ -145,15 +183,22 @@
 				change_user_categories = []
 				for(var i=0; i < 12; i++) {
 					index = i + 1;
-					$("#category_img_"+index).attr("src","/images/category/"+index+"_off.png");
+					$("#category_img_"+index).css("transform","rotateY(360deg)").attr("src","/images/category/"+index+"_off.png");
 				}
 			}else{
 				$("#category_all_span").html("전체해제");
 				change_user_categories = [1,2,3,4,5,6,7,8,9,10,11,12];
 				for(var i=0; i < 12; i++) {
 					index = i + 1;
-					$("#category_img_"+index).attr("src","/images/category/"+index+"_on.png");
+					$("#category_img_"+index).css("transform","rotateY(0deg)").attr("src","/images/category/"+index+"_on.png");
 				}
+			}
+			if (user_categories.sort().join() != change_user_categories.sort().join()) {
+				$("#category_submit_btn").css({"backgroundColor":"#f18b33","borderColor":"#f18b33","color":"#fff"});
+				$("#category_submit_btn").find("i").css({"color":"#fff"});
+			} else {
+				$("#category_submit_btn").css({"backgroundColor":"#fff","borderColor":"#dbdbdb","color":"#666"});
+				$("#category_submit_btn").find("i").css({"color":"#9d9ea1"});
 			}
 		<% else %>
       notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
@@ -164,7 +209,11 @@
 
 	function submit_category(){
 		<% if current_user %>
-			window.location = "/home/set_category?category_ids="+change_user_categories;
+			if (user_categories.sort().join() != change_user_categories.sort().join()) {
+				window.location = "/home/set_category?category_ids="+change_user_categories;
+			} else {
+				notify('변경된 내용이 없습니다');
+			}
 		<% else %>
       notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
       setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);

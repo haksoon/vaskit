@@ -1,38 +1,42 @@
 <% if current_user %>
 	<div id="user_overlay">
-			<div style="position:absolute; top:-55px; right:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
-				<a href="#" onclick="history.back(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
-					<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
-				</a>
-			</div>
-			<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
-			<div style="box-sizing:border-box; width:100%; background-color:#f4f4f4; border:3px solid #998674; border-radius:5px; overflow:hidden;">
-			<p style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left;">
-				<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:6px 6px 3px; color:#998674; background-color:#fff; border-radius:5px;"></a>
-				<span id="user_path" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff;">
-					&gt;&nbsp;My Page
-				</span>
-				<a id="manage_on" href="#" onclick="manage_on(); return false;" style="position:absolute; right:10px; width:40px; height:40px; text-align:center; color:#fff; font-size:20px; transition:transform .2s;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
-			</p>
-			<div id="user_overlay_seg" style="max-height:300px; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
-			</div>
+		<div style="position:absolute; top:-50px; right:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
+			<a href="#" onclick="history.back(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+				<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
+			</a>
+		</div>
+		<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
+		<div id="user_overlay_title" style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left; border:5px solid #998674; border-bottom:none;">
+			<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:6px 6px 3px; color:#998674; background-color:#fff; border-radius:5px;"></a>
+			<span id="user_path" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff;">
+				&gt;&nbsp;My Page
+			</span>
+			<a id="manage_on" href="#" onclick="manage_on(); return false;" style="position:absolute; right:10px; width:40px; height:40px; text-align:center; color:#fff; font-size:20px; transition:transform .2s;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
+		</div>
+		<div id="user_overlay_wrap" style="box-sizing:border-box; width:100%; height:calc(100% - 45px); background-color:#f4f4f4; border:5px solid #998674; border-top:none; overflow:hidden;">
+			<div id="user_overlay_seg" style="height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
+		</div>
 	</div>
 
 	<script type="text/template" id="user_overlay_seg_template">
-		<div style="padding:12px;">
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 0;">
+			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
+				나의 활동이력
+				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">당신의 발자취&nbsp;<i class="fa fa-paw"></i></span>
+			</p>
 			{{ if (in_progress_count > 0) { }}
-			<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background-color:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
-				<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;진행 중인 질문 ({{= in_progress_count }}개)
-			</a>
+				<a href="/?type=my_ask_in_progress" style="display:block; width:100%; background-color:#998675; text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
+					<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;진행 중인 질문 ({{= in_progress_count }}개)
+				</a>
 			{{ }else{ }}
-			<a href="/asks/new" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
-				<i class="fa fa-plus-circle"></i>&nbsp;새로운 질문을 작성해보시겠어요?
-			</a>
+				<a href="/asks/new" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
+					<i class="fa fa-plus-circle"></i>&nbsp;새로운 질문을 작성해보시겠어요?
+				</a>
 			{{ } }}
-			<a href="/?type=my_like_ask" style="display:block; width:100%; background-color:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-bottom:16px; border-radius:5px;">
+			<a href="/?type=my_like_ask" style="display:block; width:100%; background-color:#998675; text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
 				<i class="fa fa-heart"></i>&nbsp;관심 있는 질문 ({{= my_like_ask_count }}개)
 			</a>
-			<div style="width:100%; background:#998675; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
+			<div style="width:100%; background:#998675; text-align:center; color:#fff; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
 				히스토리
 			</div>
 			<table cellspacing="0" cellpadding="0" style="border:1px solid #dbdbdb; border-top:none; width:100%; text-align:center; background-color:#fff; border-radius:0 0 5px 5px;">
@@ -53,18 +57,15 @@
 					<td style="width:5%;"></td>
 				</tr>
 			</table>
-			{{ if (alram_count > 0) { }}
-				<div id="alram_feed" style="width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; padding:0 15px; box-sizing:border-box; border-radius:5px 5px 0 0;">
-					알림피드 (<span id="alram_feed_count">{{= alram_count > 15 ? "15개+" : alram_count+"개" }}</span>)
-				</div>
-			{{ } else { }}
-				<div id="alram_feed" style="width:100%; background-color:#998674; text-align:center; color:#fff; font-size:14px; line-height:40px; position:relative; margin-top:16px; padding:0 15px; box-sizing:border-box; border-radius:5px 5px 0 0;">
-					알림피드 (<span id="alram_feed_count">{{= alram_count > 15 ? "15개+" : alram_count+"개" }}</span>)
-				</div>
-			{{ } }}
-			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; font-size:14px; border-radius:0 0 5px 5px; overflow:hidden;">
+		</div>
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
+			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
+				알림피드 <span id="alram_feed_count" style="font-size:12px; color:{{= alram_count > 0 ? '#ee6e01' : '#666' }}; font-weight:normal;">{{= alram_count == 0 ? '' : (alram_count > 15 ? "15개+" : alram_count+"개") }}</span>
+				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">다른 이들과 소통해보세요!</span>
+			</p>
+			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; border-radius:0 0 5px 5px; overflow:hidden;">
 			{{ if (alrams == 0) { }}
-				<p style="padding:40px; margin:0; color:#666; background-color:#fff; border-top:1px solid #dbdbdb;">알림피드가 없습니다.</p>
+				<p style="padding:40px; margin:0; font-size:13px; text-align:center; color:#666; background-color:#fff;">새로운 알림피드가 없습니다.</p>
 			{{ } else { }}
 				{{ for(var i=0; i < alrams.length; i++) { }}
 					{{ var alram = alrams[i] }}
@@ -130,13 +131,13 @@
 			{{ } }}
 			</div>
 			{{ if (alram_count > 0) { }}
-				<a id="all_read" href="#" onclick="all_read(); return false;" style="display:block; color:#ee6e01; font-size:12px; height:30px; line-height:40px;"><i class="fa fa-bookmark"></i>&nbsp;모두  읽음으로 표시</a>
+				<a id="all_read" href="#" onclick="all_read(); return false;" style="display:block; color:#ee6e01; font-size:12px; height:30px; line-height:40px; text-align:center;"><i class="fa fa-bookmark"></i>&nbsp;모두  읽음으로 표시</a>
 			{{ } }}
 		</div>
 	</script>
 
 	<script type="text/template" id="user_overlay_seg_template_manage">
-		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px 12px 0;">
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 0;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
 				계정 설정
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">웰컴! <%= current_user.email %></span>
@@ -148,7 +149,7 @@
 			</div>
 			<a href="#" onclick="window.open('/users/change_password', 'VASKIT 비밀번호 변경', 'width=500, height=420'); return false;" style="color:#666; display:inline-block; padding:0 10px; height:40px; line-height:40px; float:right;"><i class="fa fa-lock"></i>&nbsp;비밀번호 변경</a>
 		</div>
-		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px;">
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
 				알림 설정
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">...귀찮게 하지 않을게요!</span>
@@ -194,7 +195,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:12px;">
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
 				접근 금지&nbsp;<i class="fa fa-ban"></i>
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">지...금 절 떠나려는건가요?!!</span>
@@ -211,15 +212,9 @@
 
 		var current_user_string_id
 
-		$(window).resize(function(){
-	    var user_overlay_seg_height = $(window).height() - 190;
-			$("#user_overlay_seg").css("max-height",user_overlay_seg_height);
-	  }).resize();
-
 		function user_on(){
 			disableScroll();
 			$("#user_overlay").fadeIn(100);
-			$("#footer").fadeIn(100);
 			$("#menu_pc_bg").show();
 			$("#menu_bg").fadeIn(100);
 
@@ -255,7 +250,8 @@
 		    beforeSend: function(){
 		    },
 		    complete: function(){
-					history.pushState(null, null, "#"+current_user_string_id);
+					// history.pushState(null, null, "#"+current_user_string_id);
+					document.location.hash == "#welcome" ? history.pushState(null, null, "#"+current_user_string_id) : history.replaceState(null, null, "#"+current_user_string_id);
 			    is_user_opened = true;
 					is_user_setting_opened = false;
 					overlay_st = $(window).scrollTop();
@@ -274,7 +270,6 @@
 
 			enableScroll();
 			$("#user_overlay").fadeOut(300);
-			$("#footer").fadeOut(300);
 			$("#menu_pc_bg").hide();
 			$("#menu_bg").fadeOut(300);
 			$("#user_path").html();
@@ -300,11 +295,9 @@
 						},
 						beforeSend: function(){
 							progressStart();
-							// $(".loading").show();
 						},
 						complete: function(){
               progressEnd();
-							// $(".loading").hide();
 						}
 			});
 		}
@@ -335,9 +328,9 @@
 		}
 
 		function manage_on() {
-			history.pushState(null, null, "#"+current_user_string_id+"_setting");
-			is_user_setting_opened = true;
-			$("#user_path").html("<span onclick='history.back();' style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
+			// history.pushState(null, null, "#"+current_user_string_id+"_setting");
+			// is_user_setting_opened = true;
+			$("#user_path").html("<span style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
 			$("#manage_on").css("transform","scale(0)").css("-webkit-transform","scale(0)");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
@@ -350,7 +343,7 @@
 		}
 
 		function manage_off() {
-			is_user_setting_opened = false;
+			// is_user_setting_opened = false;
 
 			$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
@@ -401,11 +394,9 @@
 			        },
 			        beforeSend: function(){
 								progressStart();
-			        	// $(".loading").show();
 		          },
 		          complete: function(){
 	              progressEnd();
-		            // $(".loading").hide();
 		          }
 				});
 			}
@@ -430,11 +421,9 @@
 		        },
 		        beforeSend: function(){
 							progressStart();
-		        	// $(".loading").show();
             },
             complete: function(){
               progressEnd();
-            	// $(".loading").hide();
             }
 			});
 		}
