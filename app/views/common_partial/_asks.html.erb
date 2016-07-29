@@ -595,9 +595,9 @@
     {{ ask_deal_text = "right" }}
   {{ } }}
   <div id="new_comment" class="table_div" style="background-color:rgba(153, 134, 116, 0.1); background-color:#ededed; border-top:1px solid #dbdbdb; padding:10px 0px; margin-bottom:0;">
-    <a id="ask_deal_id_change_{{=ask.id}}_right" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; right:0%; margin-top:-20px; margin-right:{{= ask_deal_text == 'left' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-right"></i></a>
-    <a id="ask_deal_id_change_{{=ask.id}}_left" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; left:0%; margin-top:-20px; margin-left:{{= ask_deal_text == 'right' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-left"></i></a>
-    <div id="comment_input_box_{{=ask.id}}" style="border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; padding:9px 10px; background-color:#fff; width:60%; margin:{{= ask_deal_text == 'left' ? '0 auto 0 10px' : '0 10px 0 auto' }}; transition:all .5s;">
+    <a id="ask_deal_id_change_{{=ask.id}}_right" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; right:0%; margin-top:-20px; margin-right:{{= ask_deal_text == 'left' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-right"></i></a>
+    <a id="ask_deal_id_change_{{=ask.id}}_left" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; left:0%; margin-top:-20px; margin-left:{{= ask_deal_text == 'right' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-left"></i></a>
+    <div id="comment_input_box_{{=ask.id}}" style="border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; padding:9px 10px; background-color:#fff; width:60%; margin:{{= ask_deal_text == 'left' ? '0 auto 0 10px' : '0 10px 0 auto' }}; transition:all .5s;">
       <textarea id="comment_input_{{=ask.id}}" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:120px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
       <a id="send_comment_btn_{{=ask.id}}" class="comment_update_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
         댓글 남기기
@@ -1339,8 +1339,14 @@
       $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
     }).on('focus',function(){
       $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
+      $("#comment_input_box_"+ask_id).css("borderColor","#ee6e01");
+      $("#ask_deal_id_change_"+ask_id+"_left").css("color","#ee6e01");
+      $("#ask_deal_id_change_"+ask_id+"_right").css("color","#ee6e01");
     }).on('blur',function(){
       $(this).parent().find(".tooltip_area").css("transform","scale(0) translateY(-100%)");
+      $("#comment_input_box_"+ask_id).css("borderColor","#dbdbdb");
+      $("#ask_deal_id_change_"+ask_id+"_left").css("color","#9d9ea1");
+      $("#ask_deal_id_change_"+ask_id+"_right").css("color","#9d9ea1");
     });
 	}
 
@@ -1723,7 +1729,7 @@
       $("#ask_deal_id_change_"+ask_id+"_left").css("marginLeft","10px");
 
       $("#comment_input_box_"+ask_id).css("margin","0 10px 0 "+margin+"px");
-      $("#comment_input_"+ask_id).css("textAlign","right");
+      $("#comment_input_"+ask_id).css("textAlign","right").focus();
       ask_deal_text = "right";
       $("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+right_ask_deal_id+"); return false;");
 		} else {
@@ -1731,7 +1737,7 @@
       $("#ask_deal_id_change_"+ask_id+"_left").css("marginLeft","-50px");
 
       $("#comment_input_box_"+ask_id).css("margin","0 "+margin+"px 0 10px");
-      $("#comment_input_"+ask_id).css("textAlign","left");
+      $("#comment_input_"+ask_id).css("textAlign","left").focus();
       ask_deal_text = "left";
 			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+left_ask_deal_id+"); return false;");
 		}
