@@ -1021,9 +1021,7 @@
 
 	function vote_ask_deal(ask_id, ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
-	 		notify("회원가입 후<br />투표를 진행할 수 있습니다.");
-      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-			setTimeout('window.location.assign("/landing")',2500);
+	 		visitor_notify("회원가입 후<br>투표를 진행할 수 있습니다");
 	 	}else{
 	 		$.ajax({
 		        url: "/votes.json",
@@ -1080,9 +1078,7 @@
       $("#mini_comment_input_"+ask_id).on("click",function(){
         if (current_user_id == 0){
           $(this).blur();
-          notify("회원가입 후<br />의견을 남길 수 있습니다.");
-          setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-          setTimeout('window.location.assign("/landing")',2500);
+          visitor_notify("회원가입 후<br>의견을 남길 수 있습니다");
         } else {
           $(this).focus();
         }
@@ -1211,7 +1207,7 @@
 		        }
 			});
 		<% else %>
-			notify("회원가입 후<br />관심글로 설정할 수 있습니다")
+			visitor_notify("회원가입 후<br>관심글로 설정할 수 있습니다")
 		<% end %>
 	}
 
@@ -1308,9 +1304,7 @@
 		$("#comment_input_"+ask_id).on("click",function(){
 			if (current_user_id == 0){
 				$(this).blur();
-				notify("회원가입 후<br />의견을 남길 수 있습니다.");
-				setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-				setTimeout('window.location.assign("/landing")',2500);
+				visitor_notify("회원가입 후<br>의견을 남길 수 있습니다");
 			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
 				$(this).blur();
 				notify("투표 참여 후<br />의견을 남길 수 있습니다.");
@@ -1431,7 +1425,7 @@
 		        }
 			});
 		<% else %>
-			notify("회원가입 후<br />추천할 수 있습니다")
+			visitor_notify("회원가입 후<br>추천할 수 있습니다")
 		<% end %>
 	}
 
@@ -1617,7 +1611,7 @@
 		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 		var ask_user_id = $.grep(asks, function(obj) {return obj.id == ask_id})[0].user_id;
 		if (current_user_id == 0){
-			notify("회원가입 후<br />의견을 남길 수 있습니다");
+			visitor_notify("회원가입 후<br>의견을 남길 수 있습니다");
 		} else if ( this_vote.length == 0 && current_user_id != ask_user_id ) {
 			var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 			$("html, body").animate({scrollTop:card_open_st},250);
@@ -1741,12 +1735,6 @@
       ask_deal_text = "left";
 			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+left_ask_deal_id+"); return false;");
 		}
-	}
-
-	function visitor_new_ask() {
-		notify('회원가입 후<br />질문을 올릴 수 있습니다.');
-		setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-		setTimeout('window.location.assign("/landing")',2500);
 	}
 
 </script>

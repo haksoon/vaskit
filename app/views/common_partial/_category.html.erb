@@ -13,10 +13,18 @@
 					VASKIT 활동
 					<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">Let's VASKIT!</span>
 				</p>
+				<% if current_user %>
 				<a href="/asks/new" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
+				<% else %>
+				<a href="#" onclick="visitor_notify('회원가입 후<br>질문 작성이 가능합니다'); return false;" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
+				<% end %>
 					<i class="fa fa-plus-circle"></i>&nbsp;당신의 고민을 이야기해주세요!
 				</a>
+				<% if current_user %>
 				<a href="/?type=vote_yet" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:40px; position:relative; margin:10px 0 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box;">
+				<% else %>
+				<a href="#" onclick="visitor_notify('회원가입 후<br>이용이 가능합니다'); return false;" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:40px; position:relative; margin:10px 0 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box;">
+				<% end %>
 					<i class="fa fa-sort-amount-asc"></i>&nbsp;참여하지 않은 카드만 보여주세요
 				</a>
 			</div>
@@ -84,19 +92,6 @@
 	</div>
 </div>
 
-<style>
-	.menu_list {
-		height: 40px;
-		line-height: 40px;
-		border-bottom: 1px solid #dbdbdb;
-		padding: 0 10px;
-	}
-	.category_list {
-		padding: 0 10px 0 45px;
-		position: relative;
-	}
-</style>
-
 <script>
 	var user_categories = <%=raw @user_categories.to_json %>;
 	var change_user_categories = <%=raw @user_categories.to_json %>;
@@ -152,9 +147,7 @@
 				$("#category_submit_btn").find("i").css({"color":"#9d9ea1"});
 			}
 		<% else %>
-		 	notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
-			setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-			setTimeout('window.location.assign("/landing")',2500);
+		 	visitor_notify("회원가입 후<br>관심사를 설정할 수 있습니다");
 		<% end %>
 	}
 
@@ -201,9 +194,7 @@
 				$("#category_submit_btn").find("i").css({"color":"#9d9ea1"});
 			}
 		<% else %>
-      notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
-      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-      setTimeout('window.location.assign("/landing")',2500);
+      visitor_notify("회원가입 후<br>관심사를 설정할 수 있습니다");
 		<% end %>
 	}
 
@@ -215,9 +206,7 @@
 				notify('변경된 내용이 없습니다');
 			}
 		<% else %>
-      notify("회원가입 후<br />관심사를 설정할 수 있습니다.");
-      setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다.')",1500);
-      setTimeout('window.location.assign("/landing")',2500);
+      visitor_notify("회원가입 후<br>관심사를 설정할 수 있습니다");
 		<% end %>
 	}
 

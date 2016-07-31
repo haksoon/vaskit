@@ -68,6 +68,12 @@ function notify(flash_message){
     }, 2000);
 }
 
+function visitor_notify(message) {
+  notify(message);
+  setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다')",1500);
+  setTimeout('window.location.assign("/landing")',2500);
+}
+
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
