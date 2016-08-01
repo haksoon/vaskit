@@ -569,7 +569,8 @@
     </div>
   {{ } }}
   <div id="ask_{{=ask.id}}_comment_list" class="table_div" style="position:relative; background-color:rgba(153, 134, 116, 0.1); padding:5px 0; margin:0; min-height:200px; border-top:1px solid #dbdbdb;">
-    <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px; display:{{= ask.comments.length == 0 ? 'block' : 'none' }};" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
+    {{ var origin_comments = $.grep(ask.comments, function(obj) { return (obj.ask_id == ask.id && obj.comment_id == null && obj.is_deleted === false) }) }}
+    <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px; display:{{= origin_comments.length == 0 ? 'block' : 'none' }};" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
     {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
       <div id="visitor_comment_overlay_{{=ask.id}}" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
         <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
@@ -578,8 +579,8 @@
         </p>
       </div>
     {{ }else{ }}
-      {{ for(var i=0; i < ask.comments.length; i++) {  }}
-        {{ var comment = ask.comments[i] }}
+      {{ for(var i=0; i < origin_comments.length; i++) {  }}
+        {{ var comment = origin_comments[i] }}
         {{= askCommentListTemplate({ask:ask, comment:comment}) }}
       {{ } }}
     {{ } }}
@@ -855,12 +856,13 @@
     </a>
   {{ }else{ }}
     <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
-      {{ if (ask.comments.length > 0) { }}
+      {{ var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false }) }}
+      {{ if (comments.length > 0) { }}
       <div id="ask_{{=ask.id}}_comment_preview" class="table_div" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
         <ul style="width:100%; margin:0; padding:0; list-style:none;">
-          {{ //for(var i=0; i < ask.comments.length; i++) {  }}
-            {{ //var comment = ask.comments[i] }}
-            {{ var comment = ask.comments[ask.comments.length-1] }}
+          {{ //for(var i=0; i < comments.length; i++) {  }}
+            {{ //var comment = comments[i] }}
+            {{ var comment = comments[comments.length-1] }}
             {{= askCommentPreviewTemplate({ask:ask, comment:comment}) }}
           {{ //} }}
         </ul>
@@ -1449,6 +1451,7 @@
           if (data.status == "success") {
             $("#comment_"+comment_id).remove();
             $("#comment_"+comment_id+"_reply_list").remove();
+            $("#reply_comment_box_"+comment_id).remove();
           } else if (data.status == "reply_exist") {
             $("#comment_content_"+comment_id).nextAll().remove();
             $("#comment_content_"+comment_id).html('<div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">삭제된 댓글입니다.</div>');

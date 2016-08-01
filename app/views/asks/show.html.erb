@@ -6,6 +6,7 @@
 <%= render :partial => "common_partial/share_popup" %>
 
 <script>
+  is_card_opened = true;
   show_detail_vote_count(ask.id);
   $("#ask_deal_"+ask.id+"_table").html(askDealTableTemplate({ask: ask}));
   tooltip_box(ask.id);
