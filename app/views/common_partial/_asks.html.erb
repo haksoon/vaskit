@@ -1,6 +1,6 @@
 <script type="text/template" id="ask-template">
-  <div id="ask_box_{{=ask.id}}" class="ask_box" style="margin:15px 12px;">
-    <div id="ask_{{=ask.id}}" class="content_box">
+  <div id="ask_box_{{=ask.id}}" class="ask_box">
+    <div id="ask_{{=ask.id}}" class="content_box" style="margin:15px 12px;">
       <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
         {{ var already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
           <span class="like_icon" onclick="ask_like({{=ask.id}}); return false;">
@@ -858,7 +858,7 @@
     <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
       {{ var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false }) }}
       {{ if (comments.length > 0) { }}
-      <div id="ask_{{=ask.id}}_comment_preview" class="table_div" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
+      <div id="ask_{{=ask.id}}_comment_preview" class="table_div comment_preview" style="margin-bottom:0; border-bottom:1px solid #f4f4f4; height:30px; overflow:hidden;">
         <ul style="width:100%; margin:0; padding:0; list-style:none;">
           {{ //for(var i=0; i < comments.length; i++) {  }}
             {{ //var comment = comments[i] }}
@@ -930,82 +930,210 @@
 		}
 	<% end %>
 
+  var currentPage = 1;
+  $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px;'></div>");
 	for(var i=0; i < asks.length; i++) {
 		ask = asks[i]
-		$('#asks').append(askTemplate({ask: ask}));
+		// $('#asks').append(askTemplate({ask: ask}));
+    $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
 		hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
     link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
 		abbreviate_msg(ask.message, ask.id);
     hover_action(ask.id);
-    // if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
+    // var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false });
+    // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
 	}
 
-	var check_scroll
-	var ready = function() {
-		if (asks.length >= <%= Ask::ASK_PER %>){
-			check_scroll = setInterval("checkScroll()", 1000);
-		}
-	};
+	// var check_scroll
+	// var ready = function() {
+	// 	if (asks.length >= <%= Ask::ASK_PER %>){
+	// 		check_scroll = setInterval("checkScroll()", 1000);
+	// 	}
+	// };
+  //
+	// $(document).ready(ready);
+	// $(document).on('page:load', ready);
 
-	$(document).ready(ready);
-	$(document).on('page:load', ready);
-
-	var currentPage = 1
   if (currentPage == 1) {
     ga('send', 'event', '유저별/첫페이지 로딩 횟수', 'first_page_loading_per_user', current_user_id.toString(), 1);
     welcome();
   }
 	var is_more_asks = true;
-	function checkScroll() {
-	  if (window.location.pathname == "/" && nearBottomOfPage() && is_more_asks) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
-	    currentPage ++;
+	// function checkScroll() {
+	//   if (window.location.pathname == "/" && nearBottomOfPage() && is_more_asks) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
+	//     currentPage ++;
+  //
+	//     $.ajax({
+	//         url: window.location.href,
+	//         data: {'page': currentPage},
+	//         dataType: "json",
+	//         type: 'GET',
+	//         error: function(){
+	//             return false;
+	//         },
+	//         success: function(data){
+	//         	var more_asks = data.asks;
+	//         	$.merge(asks, more_asks);
+  //
+	//         	if ( more_asks.length == 0 ) {
+	//         		is_more_asks = false;
+	//         		$("#endless_loading").hide();
+	//         	} else {
+	//         		if( more_asks.length < <%= Ask::ASK_PER %> ){
+	//         			is_more_asks = false;
+	//         			$("#endless_loading").hide();
+	//         		}
+  //
+  //             // test
+  //             // var h = $("#asks_now").height();
+  //             // var e = $("#asks_next").html();
+  //             // $("#asks_prev").before("<div id='page"+(currentPage-1)+"' style='height:"+h+"px; margin:15px 12px;'></div>");
+  //             // $("#asks_now").empty();
+  //             // $("#asks_now").append(e);
+  //             // $("#asks_next").empty();
+  //             // test
+  //
+  //             $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px; border-bottom:1px solid red;'></div>");
+	//         		for(var i=0; i < more_asks.length; i++) {
+  //   						ask = more_asks[i]
+	// 			        // $('#asks').append(askTemplate({ask: ask}));
+  //               $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
+  //               // $('#asks_next').append(askTemplate({ask: ask}));
+	// 							hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+  //               link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+	// 							abbreviate_msg(ask.message, ask.id);
+  //               hover_action(ask.id);
+	// 							// if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
+  //   					}
+	//         	}
+	//         },
+	//         beforeSend: function(){
+  //           progressStart();
+  //         },
+  //         complete: function(){
+  //           progressEnd();
+  //           ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
+  //           ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
+  //           // for(var i=0; i < asks.length; i++) {
+  //         	// 	ask = asks[i]
+  //           //   $("#ask_box_"+ask.id).height($("#ask_"+ask.id).outerHeight());
+  //           // }
+  //         }
+	// 	  });
+  //   }
+	// }
 
-	    $.ajax({
-	        url: window.location.href,
-	        data: {'page': currentPage},
-	        dataType: "json",
-	        type: 'GET',
-	        error: function(){
-	            return false;
-	        },
-	        success: function(data){
-	        	var more_asks = data.asks;
-	        	$.merge(asks, more_asks);
+  !(function ask_hide(){
+	  var didScroll;
+	  var lastScrollTop = 0;
+    var vp_page = {};
+    var vp_content = {};
 
-	        	if ( more_asks.length == 0 ) {
-	        		is_more_asks = false;
-	        		$("#endless_loading").hide();
-	        	} else {
-	        		if( more_asks.length < <%= Ask::ASK_PER %> ){
-	        			is_more_asks = false;
-	        			$("#endless_loading").hide();
-	        		}
-	        		for(var i=0; i < more_asks.length; i++) {
-    						ask = more_asks[i]
-				        $('#asks').append(askTemplate({ask: ask}));
-								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-                link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-								abbreviate_msg(ask.message, ask.id);
-                hover_action(ask.id);
-								// if (ask.comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
-    					}
-	        	}
-	        },
-	        beforeSend: function(){
-            progressStart();
-          },
-          complete: function(){
-            progressEnd();
-            ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
-            ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
-            // for(var i=0; i < asks.length; i++) {
-          	// 	ask = asks[i]
-            //   $("#ask_box_"+ask.id).height($("#ask_"+ask.id).outerHeight());
-            // }
+		$(window).scroll(function(event){
+			didScroll = true;
+		});
+
+    setInterval(function() {
+      if (didScroll && !is_card_opened && asks.length >= <%= Ask::ASK_PER %>) {
+        hasScrolled();
+        didScroll = false;
+      }
+    }, 1000);
+
+    var more_load = true;
+	  function hasScrolled() {
+	      var st = $(this).scrollTop();
+        var vp = $(this).height();
+	      if (st > lastScrollTop){
+          if (window.location.pathname == "/" && nearBottomOfPage() && is_more_asks && more_load) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
+      	    currentPage ++;
+
+      	    $.ajax({
+      	        url: window.location.href,
+      	        data: {'page': currentPage},
+      	        dataType: "json",
+      	        type: 'GET',
+      	        error: function(){
+      	            return false;
+      	        },
+      	        success: function(data){
+      	        	var more_asks = data.asks;
+      	        	$.merge(asks, more_asks);
+
+      	        	if ( more_asks.length == 0 ) {
+      	        		is_more_asks = false;
+      	        		$("#endless_loading").hide();
+      	        	} else {
+      	        		if( more_asks.length < <%= Ask::ASK_PER %> ){
+      	        			is_more_asks = false;
+      	        			$("#endless_loading").hide();
+      	        		}
+                    $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px;'></div>");
+      	        		for(var i=0; i < more_asks.length; i++) {
+          						ask = more_asks[i];
+                      $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
+      								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+                      link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+      								abbreviate_msg(ask.message, ask.id);
+                      hover_action(ask.id);
+                      // var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false });
+                      // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
+          					}
+      	        	}
+      	        },
+      	        beforeSend: function(){
+                  // progressStart();
+                  more_load = false;
+                  // console.log("로딩중...");
+                },
+                complete: function(){
+                  // progressEnd();
+                  ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
+                  ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
+                  more_load = true;
+                  // console.log("로딩완료!");
+                }
+      		  });
+          } else if(more_load) {
+            for (var i=0; i<currentPage; i++){
+              if ($("#page"+i).position().top < st + vp + vp) {
+                vp_page[i] = "on";
+              }
+              if ($("#page"+i).position().top + $("#page"+i).height() < Math.max(st - vp, 0)) {
+                vp_page[i] = "off";
+              }
+            }
+            // console.log(vp_page);
           }
-		  });
-    }
-	}
+	      } else if (st < lastScrollTop) {
+          for (var i=0; i<currentPage; i++){
+            if ($("#page"+i).position().top + $("#page"+i).height() > Math.max(st - vp, 0)) {
+              vp_page[i] = "on";
+            }
+            if ($("#page"+i).position().top > st + vp + vp) {
+              vp_page[i] = "off";
+            }
+          }
+          // console.log(vp_page);
+	      }
+
+        for (var i=0; i<currentPage; i++) {
+          if (vp_page[i] == "off" && $("#page"+i).html() != "") {
+            $("#page"+i).height($("#page"+i).height());
+            vp_content[i] = $("#page"+i).html();
+            $("#page"+i).empty();
+            // console.log(i+"번째 페이지 비우기 완료");
+          }
+          if (vp_page[i] == "on" && $("#page"+i).html() == "") {
+            $("#page"+i).height("inherit");
+            $("#page"+i).html(vp_content[i]);
+            // console.log(i+"번째 페이지 채우기 완료");
+          }
+        }
+
+	      lastScrollTop = st;
+	  }
+	})();
 
 	function abbreviate_msg(origin_string, ask_id) {
 		var msg = $("#ask_"+ask_id+"_message_text");
@@ -1221,14 +1349,56 @@
 	var card_open_st
 	var opened_ask_id
 
-	function card_detail_on(ask_id) {
+	// function card_detail_on(ask_id) {
+  //   history.pushState(null, null, "#"+ask_id+"_detail");
+	// 	is_more_asks = false;
+	// 	is_card_opened = true;
+	// 	opened_ask_id = ask_id;
+	// 	$("#endless_loading").hide();
+  //
+	// 	card_open_st = $("#ask_"+ask_id).offset().top - 60;
+  //
+  //   ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+  //   $("#mini_new_comment_"+ask_id).slideUp(200);
+  //   show_detail_vote_count(ask_id);
+  //   $("#ask_deal_"+ask_id+"_table").html(askDealTableTemplate({ask: ask}));
+  //   tooltip_box(ask_id);
+  //   $("#ask_"+ask_id+"_message_more").click();
+  //   $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: ask}));
+  //   for (i=0; i<ask.comments.length; i++) {
+  //     var comment = ask.comments[i];
+  //     link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
+  //   };
+  //   comment_input_setting(ask_id, ask.user);
+  //   $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
+  //
+  //   $("#search").hide();
+  //   $(".home-float-btn-area").hide();
+  //
+  //   $("#ask_box_"+ask_id).removeClass("ask_box");
+  //   $(".ask_box").hide();
+  //   $("html, body").animate({scrollTop:0},0,function(){
+  //     $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideDown(200);
+  //   });
+  //
+	// 	$("#category_button:visible").hide();
+	// 	$("#back_button").show().attr("onclick","history.back(); return false;");
+	// 	$(".chat_bubble").css("margin-top","15px");
+  //
+  //   ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask_id.toString(), 1);
+  //   ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
+	// }
+
+  function card_detail_on(ask_id) {
     history.pushState(null, null, "#"+ask_id+"_detail");
 		is_more_asks = false;
 		is_card_opened = true;
 		opened_ask_id = ask_id;
+    card_open_st = $("#ask_"+ask_id).offset().top - 60;
+    // card_open_st = $(window).scrollTop();
 		$("#endless_loading").hide();
-
-		card_open_st = $("#ask_"+ask_id).offset().top - 60;
+    $("#asks").hide();
+    $("#ask_detail").show().html($("#ask_"+ask_id));
 
     ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     $("#mini_new_comment_"+ask_id).slideUp(200);
@@ -1247,8 +1417,8 @@
     $("#search").hide();
     $(".home-float-btn-area").hide();
 
-    $("#ask_box_"+ask_id).removeClass("ask_box");
-    $(".ask_box").hide();
+    // $("#ask_box_"+ask_id).removeClass("ask_box");
+    // $(".ask_box").hide();
     $("html, body").animate({scrollTop:0},0,function(){
       $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideDown(200);
     });
@@ -1261,10 +1431,42 @@
     ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
 	}
 
-	function card_detail_off(ask_id) {
+  // function card_detail_off(ask_id) {
+  //   is_more_asks = true;
+  //   is_card_opened = false;
+	// 	$("#endless_loading").show();
+  //
+  //   $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideUp(200, function(){
+  //     $("#detail_vote_count_"+ask_id).html("");
+  //     $("#ask_deal_"+ask_id+"_table").html("");
+  //     $("#ask_"+ask_id+"_comment").html("");
+  //   });
+  //   if ($("#ask_"+ask_id+"_message_text_shorten").text().indexOf("·") != -1) {
+  //     $("#ask_"+ask_id+"_message_text").hide();
+  //     $("#ask_"+ask_id+"_message_text_shorten").show();
+  //     $("#ask_"+ask_id+"_message_more").show();
+  //   }
+  //   $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
+  //
+	// 	$("#search").show();
+	// 	$(".home-float-btn-area").show();
+  //
+  //   $(".ask_box").show();
+  //   $("#ask_box_"+ask_id).addClass("ask_box")
+  //   window.scrollTo(0,card_open_st);
+  //
+	// 	$("#back_button").hide().attr("onclick","back_button(); return false;");
+	// 	main_header_left_button();
+  //   $(".chat_bubble").css("margin-top","65px");
+	// }
+
+  function card_detail_off(ask_id) {
     is_more_asks = true;
     is_card_opened = false;
-		$("#endless_loading").show();
+    $("#endless_loading").show();
+    $("#asks").show();
+    $("#ask_box_"+ask_id).html($("#ask_"+ask_id));
+    $("#ask_detail").empty();
 
     $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideUp(200, function(){
       $("#detail_vote_count_"+ask_id).html("");
@@ -1278,17 +1480,17 @@
     }
     $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
 
-		$("#search").show();
-		$(".home-float-btn-area").show();
+    $("#search").show();
+    $(".home-float-btn-area").show();
 
-    $(".ask_box").show();
-    $("#ask_box_"+ask_id).addClass("ask_box")
+    // $(".ask_box").show();
+    // $("#ask_box_"+ask_id).addClass("ask_box")
     window.scrollTo(0,card_open_st);
 
-		$("#back_button").hide().attr("onclick","back_button(); return false;");
-		main_header_left_button();
+    $("#back_button").hide().attr("onclick","back_button(); return false;");
+    main_header_left_button();
     $(".chat_bubble").css("margin-top","65px");
-	}
+  }
 
 	function comment_input_by_key(ask_id){
     var comment_message = $("#comment_input_"+ask_id).val();
@@ -1303,7 +1505,7 @@
     var keyPressed = [];
 		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 
-		$("#comment_input_"+ask_id).on("click",function(){
+		$("#comment_input_"+ask_id).on("focus",function(){
 			if (current_user_id == 0){
 				$(this).blur();
 				visitor_notify("회원가입 후<br>의견을 남길 수 있습니다");
@@ -1313,9 +1515,19 @@
 				var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 				$("html, body").animate({scrollTop:card_open_st},250);
 			} else {
-				$(this).focus();
+        $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
+        $("#comment_input_box_"+ask_id).css("borderColor","#ee6e01");
+        $("#ask_deal_id_change_"+ask_id+"_left").css("color","#ee6e01");
+        $("#ask_deal_id_change_"+ask_id+"_right").css("color","#ee6e01");
 			}
-		}).keydown(function(e) {
+    }).on('input',function(e){
+      $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
+    }).on('blur',function(){
+      $(this).parent().find(".tooltip_area").css("transform","scale(0) translateY(-100%)");
+      $("#comment_input_box_"+ask_id).css("borderColor","#dbdbdb");
+      $("#ask_deal_id_change_"+ask_id+"_left").css("color","#9d9ea1");
+      $("#ask_deal_id_change_"+ask_id+"_right").css("color","#9d9ea1");
+    }).keydown(function(e) {
       keyPressed[e.keyCode] = true;
       if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
         e.preventDefault();
@@ -1331,19 +1543,7 @@
         $("#send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
         $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
       }
-		}).on('input',function(e){
-      $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
-    }).on('focus',function(){
-      $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
-      $("#comment_input_box_"+ask_id).css("borderColor","#ee6e01");
-      $("#ask_deal_id_change_"+ask_id+"_left").css("color","#ee6e01");
-      $("#ask_deal_id_change_"+ask_id+"_right").css("color","#ee6e01");
-    }).on('blur',function(){
-      $(this).parent().find(".tooltip_area").css("transform","scale(0) translateY(-100%)");
-      $("#comment_input_box_"+ask_id).css("borderColor","#dbdbdb");
-      $("#ask_deal_id_change_"+ask_id+"_left").css("color","#9d9ea1");
-      $("#ask_deal_id_change_"+ask_id+"_right").css("color","#9d9ea1");
-    });
+		});
 	}
 
 	function send_comment(ask_id, ask_deal_id){
