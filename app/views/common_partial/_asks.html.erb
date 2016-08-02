@@ -1094,7 +1094,8 @@
                   // console.log("로딩완료!");
                 }
       		  });
-          } else if(more_load) {
+          }
+          if (more_load) {
             for (var i=0; i<currentPage; i++){
               if ($("#page"+i).position().top < st + vp + vp) {
                 vp_page[i] = "on";
