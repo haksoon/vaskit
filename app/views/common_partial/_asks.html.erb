@@ -1046,8 +1046,16 @@
         var vp = $(this).height();
 	      if (st > lastScrollTop){
           if (window.location.pathname == "/" && nearBottomOfPage() && is_more_asks && more_load) { // 크롬에서 javascript 코드를 캐시하는거 같아서 url 분석해서 ask인 경우에만 작동하도록 변경
-      	    currentPage ++;
+            for (var i=0; i<currentPage; i++){
+              if ($("#page"+i).position().top < st + vp + vp) {
+                vp_page[i] = "on";
+              }
+              if ($("#page"+i).position().top + $("#page"+i).height() < Math.max(st - vp, 0)) {
+                vp_page[i] = "off";
+              }
+            }
 
+            currentPage ++;
       	    $.ajax({
       	        url: window.location.href,
       	        data: {'page': currentPage},
@@ -1094,8 +1102,7 @@
                   // console.log("로딩완료!");
                 }
       		  });
-          }
-          if (more_load) {
+          } else if (more_load) {
             for (var i=0; i<currentPage; i++){
               if ($("#page"+i).position().top < st + vp + vp) {
                 vp_page[i] = "on";
