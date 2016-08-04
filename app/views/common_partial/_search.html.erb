@@ -95,7 +95,7 @@
 	function search_by_key(){
 		var search_key = $('#search_input').val();
 		if(search_key == "" || search_key == undefined){
-			notify("검색어를 입력하세요.");
+			notify("검색어를 입력해주세요");
 		} else if ( $("#search_result a").hasClass("search_focus") ) {
 			window.location = $("#search_result a.search_focus").attr("href");
 		}else {

@@ -2,6 +2,7 @@
 class HomeController < ApplicationController
 
   def index
+    welcome
     @user_categories = []
     if current_user
       @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id)
@@ -167,23 +168,58 @@ class HomeController < ApplicationController
     render :json => {:already_like => already_like, :ask_like => ask_like}
   end
 
-  #POST /home/welcome > visit check
   def welcome
-    device = params[:device] unless params[:device].blank?
-    browser = params[:browser] unless params[:browser].blank?
-    # href = params[:href] unless params[:href].blank?
-    # action = params[:action] unless params[:action].blank?
-    # referrer = params[:referrer] unless params[:referrer].blank?
+    referer_host = request.referer ? URI(request.referer).host : "None"
+    referer = request.referer ? URI(request.referer) : "None"
+    ua = request.headers['User-Agent']
+
+    if ua.match(/iPhone/i)
+      device = "iPhone"
+    elsif ua.match(/Android/i)
+      device = "Android"
+    elsif ua.match(/Win|Windows/i)
+      device = "Windows"
+    elsif ua.match(/Mac|MacIntel/i)
+      device = "Mac"
+    elsif ua.match(/Linux/i)
+      device = "Linux"
+    elsif ua.match(/iPod|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)
+      device = "mobile_etc"
+    else
+      device = "unknown"
+    end
+
+    if ua.match(/NAVER/i)
+      browser = "NaverAPP"
+    elsif ua.match(/Daum/i)
+      browser = "DaumAPP"
+    elsif ua.match(/KAKAOTALK|KAKAOSTORY/i)
+      browser = "KakaoAPP"
+    elsif ua.match(/Facebook|FB/i)
+      browser = "FacebookAPP"
+    elsif ua.match(/MSIE|Trident/i)
+      browser = "IE"
+    elsif ua.match(/Edge/i)
+      browser = "Edge"
+    elsif ua.match(/Opera|OPR|OPiOS/i)
+      browser = "Opera"
+    elsif ua.match(/Chrome|CriOS/i)
+      browser = "Chrome"
+    elsif ua.match(/Firefox|FxiOS/i)
+      browser = "FireFox"
+    elsif ua.match(/Safari/i)
+      browser = "Safari"
+    else
+      browser = "unknown"
+    end
+
     if current_user
       user_id = current_user.id
-      UserVisit.create(:user_id => user_id, :device => device, :browser => browser)
-      # UserVisit.create(:user_id => user_id, :device => device, :browser => browser, :href => href, :action => action, :referrer => referrer)
+      UserVisit.create(:user_id => user_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
     elsif @visitor
       visitor_id = @visitor.id
-      # UserVisit.create(:visitor_id => visitor_id, :device => device, :browser => browser, :href => href, :action => action, :referrer => referrer)
-      UserVisit.create(:visitor_id => visitor_id, :device => device, :browser => browser)
+      UserVisit.create(:visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
     end
-    render :json => {}
   end
 
 end

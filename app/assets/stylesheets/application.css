@@ -385,7 +385,7 @@ input:focus, select:focus, textarea:focus {
   background-color: #fff;
   border-right: 1px solid #dbdbdb;
   cursor: pointer;
-	transition: all .2s;
+	transition: all .5s;
 }
 .share_icon, .more_icon {
 	float: left;
@@ -398,10 +398,8 @@ input:focus, select:focus, textarea:focus {
 	background-color: #fff;
 	font-size: 12px;
 	text-align: center;
-	transition: all .2s;
 }
-.like_icon:hover { background-color:#fcf2d3; }
-.share_icon:hover, .more_icon:hover { background-color:#fcf2d3; color:#998674; }
+.share_icon:hover, .more_icon:hover { border-left-width:2px; border-top:1px solid #dbdbdb; color:#998674; }
 
 .card_detail { box-sizing:border-box; line-height:40px; display:block; border-top:1px solid #dbdbdb; color:#9d9ea1; font-size:13px; transition:all .2s; }
 .card_detail:hover { background-color:#f4f4f4; color:#666; }

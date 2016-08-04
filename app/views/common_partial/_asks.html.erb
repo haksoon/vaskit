@@ -3,7 +3,7 @@
     <div id="ask_{{=ask.id}}" class="content_box" style="margin:15px 12px;">
       <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
         {{ var already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
-          <span class="like_icon" onclick="ask_like({{=ask.id}}); return false;">
+          <span class="like_icon" onclick="ask_like({{=ask.id}}); return false;" onmouseover="$(this).children().animateCss('tada');">
             <i id="ask_{{=ask.id}}_like_icon" class="fa {{= already_like_ask.length == 1 ? 'fa-heart' : 'fa-heart-o'}}"></i>
           </span>
         {{ if (ask.category) { }}
@@ -34,7 +34,7 @@
           </p>
           <a href="/?keyword={{= ask.user.string_id }}&type=user"><p style="margin:3px 0 0 0; color:#998675; font-size:17px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</p></a>
           <span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
-            <i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
+            <i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count" style="display:inline-block;">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
             <i class="fa fa-clock-o" style="font-size:13px; margin:0 3px 0 5px;"></i>{{= get_past_time(ask.created_at) }}
           </span>
           {{ if (ask.be_completed == true) { }}
@@ -46,7 +46,9 @@
         {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
       </div>
       <div id="detail_vote_count_{{=ask.id}}" class="table_div" style="display:none; margin-bottom:0px; background-color:#f0f2f4; color:#666; font-size: 12px;"></div>
-      <div id="ask_deal_{{=ask.id}}_table" class="table_div" style="display:none; margin-bottom:0px; border-bottom:1px solid #dbdbdb;"></div>
+      <div id="ask_deal_{{=ask.id}}_table" class="table_div" style="display:none; margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
+        {{= askDealTableTemplate({ask: ask}) }}
+      </div>
       <div id="ask_{{=ask.id}}_message" class="table_div" style="margin-bottom:0px; color:#383838; font-size:13px; line-height:2; padding:15px;">
         <div id="ask_{{=ask.id}}_message_text">
           {{ if( ask.message){ }}
@@ -162,7 +164,7 @@
       {{ var ask_deal_id = ask.right_ask_deal_id }}
       {{ var is_left = false }}
     {{ } }}
-    <div id="mini_new_comment_{{=ask.id}}" class="table_div" style="background-color:rgba(153, 134, 116, 0.1); text-align:left; margin-bottom:0; display:none;">
+    <div id="mini_new_comment_{{=ask.id}}" class="table_div" style="background-color:#f18b33; text-align:left; margin-bottom:0; display:none;">
       <div id="mini_comment_input_box_{{=ask.id}}" style="border:1px solid #ee6e01; background-color:#fff; transition:all .5s; transform:rotateX(180deg); -webkit-transform:rotateX(180deg); -webkit-backface-visibility:hidden; backface-visibility:hidden;">
         <textarea id="mini_comment_input_{{=ask.id}}" class="comment_box" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:10px 70px 10px 40px; width:100%; min-width:100%; max-width:100%; height:40px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=is_left ? 'left' : 'right'}};"></textarea>
         <a id="mini_ask_deal_id_change_{{=ask.id}}" onclick="mini_ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}, {{=is_left}}); return false;" href="#" style="position:absolute; top:0px; left:0px; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; font-size:14px;"><i class="fa fa-align-{{=is_left ? 'left' : 'right'}}"></i></a>
@@ -536,10 +538,10 @@
       <span style="width:100%;">어떤 의견이 달렸을까요?&nbsp;<i class="fa fa-users" style="font-size:16px;"></i></span>
       <span style="position:absolute; top:0; left:10px; width:40px;">
         <i class="fa fa-comment" style="font-size:16px;"></i>
-        <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
+        <span id="left_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.left_ask_deal.comment_count}}</span>
       </span>
       <span style="position:absolute; top:0; right:10px; width:40px;">
-        <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+        <span id="right_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
         <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
       </span>
     </div>
@@ -548,10 +550,10 @@
       <span style="width:100%;">당신의 의견을 남겨주세요&nbsp;<i class="fa fa-keyboard-o" style="font-size:16px;"></i></span>
       <span style="position:absolute; top:0; left:10px; width:40px;">
         <i class="fa fa-comment" style="font-size:16px;"></i>
-        <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
+        <span id="left_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.left_ask_deal.comment_count}}</span>
       </span>
       <span style="position:absolute; top:0; right:10px; width:40px;">
-        <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+        <span id="right_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
         <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
       </span>
     </div>
@@ -560,17 +562,17 @@
       <span style="width:100%;">먼저 투표에 참여해주세요&nbsp;<i class="fa fa-hand-o-up" style="font-size:16px;"></i></span>
       <span style="position:absolute; top:0; left:10px; width:40px;">
         <i class="fa fa-comment" style="font-size:16px;"></i>
-        <span id="left_ask_deal_comment_count_{{=ask.id}}">{{=ask.left_ask_deal.comment_count}}</span>
+        <span id="left_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.left_ask_deal.comment_count}}</span>
       </span>
       <span style="position:absolute; top:0; right:10px; width:40px;">
-        <span id="right_ask_deal_comment_count_{{=ask.id}}">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
+        <span id="right_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
         <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
       </span>
     </div>
   {{ } }}
   <div id="ask_{{=ask.id}}_comment_list" class="table_div" style="position:relative; background-color:rgba(153, 134, 116, 0.1); padding:5px 0; margin:0; min-height:200px; border-top:1px solid #dbdbdb;">
-    {{ var origin_comments = $.grep(ask.comments, function(obj) { return (obj.ask_id == ask.id && obj.comment_id == null && obj.is_deleted === false) }) }}
-    <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px; display:{{= origin_comments.length == 0 ? 'block' : 'none' }};" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
+    {{ var origin_comments = $.grep(ask.comments, function(obj) { return (obj.ask_id == ask.id && obj.comment_id == null) }) }}
+    <p style="position: absolute; top: 50%; left: 50%; color: #9d9ea1; font-size: 13px; width: 200px; margin-top: -16px; margin-left: -100px; display:{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count == 0 ? 'block' : 'none' }};" id="no_comment_{{=ask.id}}">아직 남겨진 의견이 없네요.<br>소중한 한마디 부탁드립니다:)</p>
     {{ if(current_user_id == 0 && ask.user_id != current_user_id && already_vote.length == 0){ }}
       <div id="visitor_comment_overlay_{{=ask.id}}" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:black; opacity:0.92;">
         <p style="position:relative; top:50%; margin:-75px 0 0 0; color:#fff; font-size:15px; text-align:center; line-height:2; opacity:1;">
@@ -585,9 +587,12 @@
       {{ } }}
     {{ } }}
   </div>
-  {{ if(already_vote.length == 0 || ask.user_id == current_user_id){ }}
+  {{ if(ask.user_id == current_user_id){ }}
     {{ ask_deal_id = ask.left_ask_deal_id }}
     {{ ask_deal_text = "left" }}
+  {{ } else if(already_vote.length == 0){ }}
+    {{ ask_deal_id = ask.left_ask_deal_id }}
+    {{ ask_deal_text = "center" }}
   {{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
     {{ ask_deal_id = ask.left_ask_deal_id }}
     {{ ask_deal_text = "left" }}
@@ -596,10 +601,10 @@
     {{ ask_deal_text = "right" }}
   {{ } }}
   <div id="new_comment" class="table_div" style="background-color:rgba(153, 134, 116, 0.1); background-color:#ededed; border-top:1px solid #dbdbdb; padding:10px 0px; margin-bottom:0;">
-    <a id="ask_deal_id_change_{{=ask.id}}_right" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; right:0%; margin-top:-20px; margin-right:{{= ask_deal_text == 'left' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-right"></i></a>
-    <a id="ask_deal_id_change_{{=ask.id}}_left" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; left:0%; margin-top:-20px; margin-left:{{= ask_deal_text == 'right' ? '10px' : '-50px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-left"></i></a>
-    <div id="comment_input_box_{{=ask.id}}" style="border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; padding:9px 10px; background-color:#fff; width:60%; margin:{{= ask_deal_text == 'left' ? '0 auto 0 10px' : '0 10px 0 auto' }}; transition:all .5s;">
-      <textarea id="comment_input_{{=ask.id}}" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:120px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+    <a id="ask_deal_id_change_{{=ask.id}}_right" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; right:0%; margin-top:-20px; margin-right:{{= ask_deal_text == 'right' ? '-50px' : '10px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-right"></i></a>
+    <a id="ask_deal_id_change_{{=ask.id}}_left" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; left:0%; margin-top:-20px; margin-left:{{= ask_deal_text == 'left' ? '-50px' : '10px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-left"></i></a>
+    <div id="comment_input_box_{{=ask.id}}" style="border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; padding:9px 10px; background-color:#fff; width:60%; margin:{{= ask_deal_text == 'left' ? '0 auto 0 10px' : ( ask_deal_text == 'right' ? '0 10px 0 auto' : '0 auto') }}; transition:all .5s;">
+      <textarea id="comment_input_{{=ask.id}}" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
       <a id="send_comment_btn_{{=ask.id}}" class="comment_update_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
         댓글 남기기
       </a>
@@ -619,8 +624,8 @@
 <script type="text/template" id="ask-comment-list-template">
   {{ var already_like = $.grep(my_like_comment, function(obj) { return obj.comment_id === comment.id }) }}
 	{{ var reply_comments = $.grep(ask.comments, function(obj) {return (obj.comment_id == comment.id && obj.is_deleted == false)}) }}
-	{{ if (comment.comment_id == null && (comment.is_deleted == false || reply_comments.length > 0)){ }}
-		{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
+  {{ if (comment.is_deleted == false || reply_comments.length > 0){ }}
+  	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
       <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
         {{ if (comment.is_deleted == false) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:left;">
@@ -663,7 +668,7 @@
             </div>
             <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
           </div>
-        {{ }else{ }}
+        {{ } else if (reply_comments.length > 0) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:left;">
             <div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
               삭제된 댓글입니다.
@@ -671,12 +676,12 @@
           </div>
         {{ } }}
       </div>
-			<div id="comment_{{=comment.id}}_reply_list">
-				{{ for(var i=0; i < reply_comments.length; i++) { }}
-					{{ var reply_comment = reply_comments[i] }}
-					{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
-				{{ } }}
-			</div>
+  		<div id="comment_{{=comment.id}}_reply_list">
+  			{{ for(var i=0; i < reply_comments.length; i++) { }}
+  				{{ var reply_comment = reply_comments[i] }}
+  				{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
+  			{{ } }}
+  		</div>
       <div id="reply_comment_box_{{=comment.id}}" style="text-align:left; padding:5px 0; display:none;">
         <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
         <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
@@ -687,7 +692,7 @@
         </div>
         <a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
       </div>
-		{{ }else{ }}
+  	{{ }else{ }}
       <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:right; margin:0; padding:5px 0;">
         {{ if (comment.is_deleted == false) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:right;">
@@ -730,7 +735,7 @@
               </a>
             </div>
           </div>
-        {{ }else{ }}
+        {{ } else if (reply_comments.length > 0) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:right;">
             <div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
               삭제된 댓글입니다.
@@ -738,12 +743,12 @@
           </div>
         {{ } }}
       </div>
-			<div id="comment_{{=comment.id}}_reply_list">
-				{{ for(var i=0; i < reply_comments.length; i++) {  }}
-					{{ var reply_comment = reply_comments[i] }}
-					{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
-				{{ } }}
-			</div>
+  		<div id="comment_{{=comment.id}}_reply_list">
+  			{{ for(var i=0; i < reply_comments.length; i++) {  }}
+  				{{ var reply_comment = reply_comments[i] }}
+  				{{= replyCommentListTemplate({ask:ask, comment:reply_comment}) }}
+  			{{ } }}
+  		</div>
       <div id="reply_comment_box_{{=comment.id}}" style="text-align:right; padding:5px 0; display:none;">
         <a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
         <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
@@ -754,8 +759,8 @@
         </div>
         <span><i class="fa fa-reply" style="transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:15px 15px 0px 5px; color:#666;"></i></span>
       </div>
-		{{ } }}
-	{{ } }}
+  	{{ } }}
+  {{ } }}
 </script>
 
 <script type="text/template" id="reply-comment-list-template">
@@ -956,7 +961,7 @@
 
   if (currentPage == 1) {
     ga('send', 'event', '유저별/첫페이지 로딩 횟수', 'first_page_loading_per_user', current_user_id.toString(), 1);
-    welcome();
+    // welcome();
   }
 	var is_more_asks = true;
 	// function checkScroll() {
@@ -1159,7 +1164,7 @@
 
 	function vote_ask_deal(ask_id, ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
-	 		visitor_notify("회원가입 후<br>투표를 진행할 수 있습니다");
+	 		visitor_notify("더 많은 투표는<br>회원만 가능합니다");
 	 	}else{
 	 		$.ajax({
 		        url: "/votes.json",
@@ -1171,9 +1176,9 @@
 		        },
 		        success: function(data){
 		        	my_votes.push(data.vote);
-		        	$('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask }));
+              $('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask}));
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
-	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" );
+	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" ).animateCss("tada"); //animateCss추가
 	        		my_vote_count = my_vote_count + 1;
 
               if (is_card_opened) {
@@ -1202,13 +1207,12 @@
 
   function mini_comment(ask_id) {
     if (!is_card_opened) {
-      $("#mini_new_comment_"+ask_id).slideDown(200);
+      // $("#mini_new_comment_"+ask_id).slideDown(200); //animateCss추가
+      $("#mini_new_comment_"+ask_id).slideDown(200).animateCss("flipInX"); //animateCss추가
       setTimeout(function(){
         $("#mini_comment_input_box_"+ask_id).css("transform","rotateX(0deg)").css("-webkit-transform","rotateX(0deg)");
         $("#mini_comment_notify_"+ask_id).css("transform","rotateX(180deg)").css("-webkit-transform","rotateX(180deg)");
-      },1000);
-      $("#mini_comment_input_box_"+ask_id)
-
+      },1500);
 
       var keyPressed = [];
       var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
@@ -1216,7 +1220,7 @@
       $("#mini_comment_input_"+ask_id).on("click",function(){
         if (current_user_id == 0){
           $(this).blur();
-          visitor_notify("회원가입 후<br>의견을 남길 수 있습니다");
+          visitor_notify("의견 작성은<br>회원만 가능합니다");
         } else {
           $(this).focus();
         }
@@ -1240,11 +1244,13 @@
 
   function mini_ask_deal_id_change(ask_id, left_ask_deal_id, right_ask_deal_id, is_left){
 		if (is_left){
+      $("#mini_comment_input_box_"+ask_id).animateCss("flipInY"); //animateCss추가
       $("#mini_ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-left").addClass("fa-align-right");
       $("#mini_comment_input_"+ask_id).css("textAlign","right").focus();
       $("#mini_ask_deal_id_change_"+ask_id).attr("onclick", "mini_ask_deal_id_change("+ask_id+", "+left_ask_deal_id+", "+right_ask_deal_id+", false); return false;");
       $("#mini_send_comment_btn_"+ask_id).attr("onclick", "mini_send_comment("+ask_id+", "+right_ask_deal_id+", false); return false;");
 		} else {
+      $("#mini_comment_input_box_"+ask_id).animateCss("flipInY"); //animateCss추가
       $("#mini_ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-right").addClass("fa-align-left");
       $("#mini_comment_input_"+ask_id).css("textAlign","left").focus();
       $("#mini_ask_deal_id_change_"+ask_id).attr("onclick", "mini_ask_deal_id_change("+ask_id+", "+left_ask_deal_id+", "+right_ask_deal_id+", true); return false;");
@@ -1255,7 +1261,7 @@
   function mini_send_comment(ask_id, ask_deal_id, is_left){
 			var content = $("#mini_comment_input_"+ask_id).val();
 			if( content == "" || content == null ){
-				notify('내용을 입력해주세요.');
+				notify('의견을 입력해주세요');
 				return;
 			}
 			$.ajax({
@@ -1276,11 +1282,15 @@
                 } else {
                   ask.right_ask_deal.comment_count += 1;
                 }
-		        		notify("작성 완료");
-		        		$("#mini_new_comment_"+ask_id).slideUp(200);
+		        		// notify("작성 완료");
+                $("#mini_comment_input_box_"+ask_id).css("transform","rotateX(180deg)").css("-webkit-transform","rotateX(180deg)");
+                $("#mini_comment_notify_"+ask_id).text("복 받으실 거에요!").css("transform","rotateX(0deg)").css("-webkit-transform","rotateX(0deg)");
+                // $("#mini_new_comment_"+ask_id).animateCssRemove("pulse"); //animateCss추가
+                $("#mini_new_comment_"+ask_id).delay(1000).slideUp(500);
                 $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
+                $("#ask_"+ask_id+"_comment_preview").animateCss("flipInY"); //animateCss추가
 		        	}else{
-		        		notify("댓글은 회원만 작성 가능합니다");
+		        		visitor_notify("의견 작성은<br>회원만 가능합니다");
 		        	}
 		        },
 		        beforeSend: function(){
@@ -1304,7 +1314,8 @@
 			success: function(data){
         var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
         var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
-				if (is_card_opened && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
+        if (is_card_opened && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count})).animateCss("flipInX"); //animateCss추가
+        console.log(data.detail_vote_count);
 			},
 			beforeSend: function(){
 			},
@@ -1327,12 +1338,14 @@
 	            var ask_like_icon = $("#ask_"+ask_id+"_like_icon")
 		        	if (data.already_like){
                 my_like_ask.pop(data.ask_like);
-	              ask_like_icon.removeClass("fa-heart").addClass("fa-heart-o");
-		        		notify("좋아요 취소");
+                // ask_like_icon.removeClass("fa-heart").addClass("fa-heart-o"); //animateCss추가
+	              ask_like_icon.removeClass("fa-heart").addClass("fa-heart-o").animateCss("bounceIn"); //animateCss추가
+		        		// notify("좋아요 취소");
 		        	} else {
                 my_like_ask.push(data.ask_like);
-	              ask_like_icon.removeClass("fa-heart-o").addClass("fa-heart");
-		        		notify("좋아요 완료");
+                // ask_like_icon.removeClass("fa-heart-o").addClass("fa-heart"); //animateCss추가
+	              ask_like_icon.removeClass("fa-heart-o").addClass("fa-heart").animateCss("bounceIn"); //animateCss추가
+		        		// notify("좋아요 완료");
 		        	}
 		        },
 		        beforeSend: function(){
@@ -1345,7 +1358,7 @@
 		        }
 			});
 		<% else %>
-			visitor_notify("회원가입 후<br>관심글로 설정할 수 있습니다")
+			visitor_notify("관심 질문 등록은<br>회원만 가능합니다");
 		<% end %>
 	}
 
@@ -1411,7 +1424,8 @@
     ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     $("#mini_new_comment_"+ask_id).slideUp(200);
     show_detail_vote_count(ask_id);
-    $("#ask_deal_"+ask_id+"_table").html(askDealTableTemplate({ask: ask}));
+    // $("#ask_deal_"+ask_id+"_table").html(askDealTableTemplate({ask: ask}));
+    $("#ask_deal_"+ask_id+"_table").slideDown(200);
     tooltip_box(ask_id);
     $("#ask_"+ask_id+"_message_more").click();
     $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: ask}));
@@ -1428,7 +1442,7 @@
     // $("#ask_box_"+ask_id).removeClass("ask_box");
     // $(".ask_box").hide();
     $("html, body").animate({scrollTop:0},0,function(){
-      $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideDown(200);
+      $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideDown(500);
     });
 
 		$("#category_button:visible").hide();
@@ -1476,9 +1490,9 @@
     $("#ask_box_"+ask_id).html($("#ask_"+ask_id));
     $("#ask_detail").empty();
 
-    $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideUp(200, function(){
+    $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideUp(500, function(){
       $("#detail_vote_count_"+ask_id).html("");
-      $("#ask_deal_"+ask_id+"_table").html("");
+      // $("#ask_deal_"+ask_id+"_table").html("");
       $("#ask_"+ask_id+"_comment").html("");
     });
     if ($("#ask_"+ask_id+"_message_text_shorten").text().indexOf("·") != -1) {
@@ -1503,7 +1517,7 @@
 	function comment_input_by_key(ask_id){
     var comment_message = $("#comment_input_"+ask_id).val();
     if(comment_message == "" || comment_message == undefined){
-      notify("내용을 입력해주세요.");
+      notify("의견을 입력해주세요");
     }else{
       $("#send_comment_btn_"+ask_id).click();
     }
@@ -1516,10 +1530,10 @@
 		$("#comment_input_"+ask_id).on("focus",function(){
 			if (current_user_id == 0){
 				$(this).blur();
-				visitor_notify("회원가입 후<br>의견을 남길 수 있습니다");
+				visitor_notify("의견 작성은<br>회원만 가능합니다");
 			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
 				$(this).blur();
-				notify("투표 참여 후<br />의견을 남길 수 있습니다.");
+				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
 				var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 				$("html, body").animate({scrollTop:card_open_st},250);
 			} else {
@@ -1557,7 +1571,7 @@
 	function send_comment(ask_id, ask_deal_id){
 			var content = $("#comment_input_"+ask_id).val();
 			if( content == "" || content == null ){
-				notify('내용을 입력해주세요.');
+				notify('의견을 입력해주세요');
 				return;
 			}
 			$.ajax({
@@ -1573,8 +1587,9 @@
 		        	if (data.message = "success"){
                 ask.comments.push(data.comment);
 		        		$("#ask_"+ask_id+"_comment_list").append(askCommentListTemplate({ask:data.ask, comment:data.comment}));
+                $("#comment_"+data.comment.id).animateCss("flipInX"); //animateCss추가
                 link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'), true);
-		        		notify("작성 완료");
+		        		// notify("작성 완료");
 		        		$("#comment_input_"+ask_id).val("");
                 $("#no_comment_"+ask_id).hide();
                 $("#send_comment_btn_"+ask_id).css("background-color","#dbdbdb");
@@ -1582,15 +1597,15 @@
 
 		        		if (ask_deal_text == "left"){
 		        			var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+data.comment.ask_id);
-		        			left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
+		        			left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 ).animateCss("tada"); //animateCss추가
                   ask.left_ask_deal.comment_count = ask.left_ask_deal.comment_count + 1;
 		        		}else{
 		        			var right_ask_deal_comment_count = $("#right_ask_deal_comment_count_"+data.comment.ask_id);
-		        			right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
+		        			right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 ).animateCss("tada"); //animateCss추가
                   ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count + 1;
 		        		}
 		        	}else{
-		        		notify("댓글은 회원만 작성 가능합니다");
+		        		visitor_notify("의견 작성은<br>회원만 가능합니다");
 		        	}
 		        },
 		        beforeSend: function(){
@@ -1620,13 +1635,15 @@
                 my_like_comment.pop(data.comment_like);
 		        		comment_count_span.html( parseInt(comment_count_span.html()) - 1 );
 	              comment_count_span.css("color","#9d9ea1");
-	              comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1");
+                // comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1"); //animateCss추가
+	              comment_like_icon.removeClass("fa-heart").addClass("fa-heart-o").css("color","#9d9ea1").animateCss("bounceIn"); //animateCss추가
 		        	}else{
                 my_like_comment.push(data.comment_like);
 		        		comment_count_span.html( parseInt(comment_count_span.html()) + 1 );
 	              comment_count_span.css("color","#ee6e01");
-	              comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01");
-                comment_like_icon.animate({"marginBottom":"10px"},300,"swing",function(){ $(this).animate({"marginBottom":"0px"},100) });
+                // comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01"); //animateCss추가
+                // comment_like_icon.animate({"marginBottom":"10px"},300,"swing",function(){ $(this).animate({"marginBottom":"0px"},100) }); //animateCss추가
+	              comment_like_icon.removeClass("fa-heart-o").addClass("fa-heart").css("color","#ee6e01").animateCss("bounceIn"); //animateCss추가
 		        	}
 		        },
 		        beforeSend: function(){
@@ -1635,7 +1652,7 @@
 		        }
 			});
 		<% else %>
-			visitor_notify("회원가입 후<br>추천할 수 있습니다")
+			visitor_notify("의견 추천은<br>추천할 수 있습니다");
 		<% end %>
 	}
 
@@ -1657,14 +1674,15 @@
         success: function(data){
           ask.comments.pop(data.comment);
           if (data.status == "success") {
-            $("#comment_"+comment_id).remove();
+            // $("#comment_"+comment_id).remove(); //animateCss추가
+            $("#comment_"+comment_id).animateCssRemove("flipOutX"); //animateCss추가
             $("#comment_"+comment_id+"_reply_list").remove();
             $("#reply_comment_box_"+comment_id).remove();
           } else if (data.status == "reply_exist") {
             $("#comment_content_"+comment_id).nextAll().remove();
-            $("#comment_content_"+comment_id).html('<div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">삭제된 댓글입니다.</div>');
+            // $("#comment_content_"+comment_id).html('<div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">삭제된 댓글입니다.</div>'); //animateCss추가
+            $("#comment_content_"+comment_id).html('<div style="position:relative; margin:0 10px 0 10px; padding:10px; background-color:#f0f2f4; color:#9d9ea1; width:60%; display:inline-block; font-size:13px; line-height:20px; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">삭제된 댓글입니다.</div>').animateCss("flipInX"); //animateCss추가
           }
-          if ( $("#ask_"+ask_id+"_comment_list").children().length == 1 ) $("#no_comment_"+ask_id).show();
           if (is_left){
             var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+ask_id);
             left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) - 1 );
@@ -1674,7 +1692,8 @@
             right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) - 1 );
             ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count - 1;
           }
-          notify("의견이 삭제되었습니다");
+          if ( ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count == 0 ) $("#no_comment_"+ask_id).show().animateCss("flipInX");
+          // notify("의견이 삭제되었습니다");
         },
         beforeSend: function(){
           progressStart();
@@ -1712,7 +1731,8 @@
 
     comment_content_origin = modify_input.val();
 		comment_content.hide();
-		modify_box.show();
+		// modify_box.show(); //animateCss추가
+    modify_box.show().animateCss("flipInX"); //animateCss추가
     modify_input.height(height).focus();
 
 		$("#comment_modify_btn_"+comment_id).hide();
@@ -1746,7 +1766,8 @@
 		var modify_input = $("#comment_modify_input_"+comment_id);
 		var update_btn = $("#comment_update_btn_"+comment_id);
 
-		comment_content.show();
+    // comment_content.show(); //animateCss추가
+    comment_content.show().animateCss("fadeIn"); //animateCss추가
 		modify_box.hide();
     modify_input.val(comment_content_origin);
     modify_input.blur();
@@ -1766,10 +1787,10 @@
 
     var content = modify_input.val();
     if( content == "" || content == null ){
-      notify('내용을 입력해주세요');
+      notify('의견을 입력해주세요');
       return;
     } else if ( content == comment_content_origin ) {
-      notify('내용을 수정해주세요');
+      notify('내용이 수정되지 않았습니다');
       return;
     } else {
 			$.ajax({
@@ -1783,7 +1804,8 @@
 				success: function(data){
 					comment_content.find(".comment_content").html(content.replace(new RegExp('\r?\n', 'g'), '<br />'));
           link_tagging(content, $('#comment_content_'+comment_id+' .comment_content'), true);
-					comment_content.show();
+					// comment_content.show(); //animateCss추가
+          comment_content.show().animateCss("flipInX"); //animateCss추가
 					modify_box.hide();
           modify_box.parent().css("borderColor","#dbdbdb");
           modify_input.val(comment_content.find(".comment_content").html().replace(new RegExp('<br>', 'g'), '\n')).blur();
@@ -1792,7 +1814,7 @@
 					$("#comment_modify_btn_"+comment_id).show();
 					$("#comment_modify_cancel_btn_"+comment_id).hide();
 
-					notify("수정 완료");
+					// notify("수정 완료");
 				},
 				beforeSend: function(){
           progressStart();
@@ -1822,11 +1844,11 @@
 		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 		var ask_user_id = $.grep(asks, function(obj) {return obj.id == ask_id})[0].user_id;
 		if (current_user_id == 0){
-			visitor_notify("회원가입 후<br>의견을 남길 수 있습니다");
+			visitor_notify("의견 작성은<br>회원만 가능합니다");
 		} else if ( this_vote.length == 0 && current_user_id != ask_user_id ) {
 			var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 			$("html, body").animate({scrollTop:card_open_st},250);
-			notify("투표 참여 후<br />의견을 남길 수 있습니다");
+			notify("투표 참여 후에<br>의견을 남길 수 있습니다");
 		} else {
       comment_id_in_progress = comment_id;
       comment_id_in_progress_type = "reply";
@@ -1834,7 +1856,9 @@
 			var reply_input = $("#reply_comment_input_"+comment_id);
 			var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
-			reply_box.slideDown(100);
+      // reply_box.show().animateCss("flipInX"); //animateCss추가
+      // reply_box.slideDown(100); //animateCss추가
+      reply_box.slideDown(100).animateCss("flipInX"); //animateCss추가
 			reply_input.focus();
 
 			$("#comment_reply_btn_"+comment_id).hide();
@@ -1879,7 +1903,7 @@
 	function send_reply_comment(ask_id, ask_deal_id, comment_id, is_left){
 		var content = $("#reply_comment_input_"+comment_id).val();
 		if( content == "" || content == null ){
-			notify('내용을 입력해주세요');
+			notify('의견을 입력해주세요');
 			return false;
 		} else {
       $.ajax({
@@ -1895,8 +1919,9 @@
           if (data.message = "success"){
             ask.comments.push(data.comment);
             $("#comment_"+comment_id+"_reply_list").append(replyCommentListTemplate({ask:data.ask, comment:data.comment}));
+            $("#comment_"+data.comment.id).animateCss("flipInX"); //animateCss추가
             link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'), true);
-            notify("작성 완료");
+            // notify("작성 완료");
             comment_reply_cancel(comment_id);
             $("#reply_comment_input_"+comment_id).val("");
             $("#send_reply_comment_btn_"+comment_id).css("background-color","#dbdbdb");
@@ -1904,15 +1929,15 @@
 
             if (is_left){
               var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+data.comment.ask_id);
-              left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 );
+              left_ask_deal_comment_count.html( parseInt(left_ask_deal_comment_count.html()) + 1 ).animateCss("tada"); //animateCss추가
               ask.left_ask_deal.comment_count = ask.left_ask_deal.comment_count + 1;
             }else{
               var right_ask_deal_comment_count = $("#right_ask_deal_comment_count_"+data.comment.ask_id);
-              right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 );
+              right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 ).animateCss("tada"); //animateCss추가
               ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count + 1;
             }
           }else{
-            notify("댓글은 회원만 작성 가능합니다");
+            visitor_notify("의견 작성은<br>회원만 가능합니다");
           }
         },
         beforeSend: function(){
@@ -1929,18 +1954,20 @@
 
 	function ask_deal_id_change(ask_id, left_ask_deal_id, right_ask_deal_id){
     var margin = $("#new_comment").width() - $("#comment_input_box_"+ask_id).outerWidth() - 10;
-		if (ask_deal_text == "left"){
+		if (ask_deal_text == "center") {
+      notify("투표 참여 후에<br>의견을 남길 수 있습니다");
+      var card_open_st = $("#ask_"+ask_id).offset().top - 110;
+      $("html, body").animate({scrollTop:card_open_st},250);
+    } else if (ask_deal_text == "left") {
       $("#ask_deal_id_change_"+ask_id+"_right").css("marginRight","-50px");
       $("#ask_deal_id_change_"+ask_id+"_left").css("marginLeft","10px");
-
       $("#comment_input_box_"+ask_id).css("margin","0 10px 0 "+margin+"px");
       $("#comment_input_"+ask_id).css("textAlign","right").focus();
       ask_deal_text = "right";
       $("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+right_ask_deal_id+"); return false;");
-		} else {
+		} else if (ask_deal_text == "right") {
       $("#ask_deal_id_change_"+ask_id+"_right").css("marginRight","10px");
       $("#ask_deal_id_change_"+ask_id+"_left").css("marginLeft","-50px");
-
       $("#comment_input_box_"+ask_id).css("margin","0 "+margin+"px 0 10px");
       $("#comment_input_"+ask_id).css("textAlign","left").focus();
       ask_deal_text = "left";

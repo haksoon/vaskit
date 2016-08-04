@@ -60,7 +60,6 @@ Rails.application.routes.draw do
       get 'show_detail'
       get 'set_category'
       get 'no_result'
-      post 'welcome'
     end
     member do
       post 'like'

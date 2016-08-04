@@ -92,7 +92,7 @@
 			$("#more_title").html("신고하기");
 			$("#more_popup").css("margin-top", "-190px");
 		<% else %>
-			visitor_notify("회원가입 후<br>신고를 제출할 수 있습니다");
+			visitor_notify("신고접수는 회원만 가능합니다");
 		<% end %>
 	}
 
@@ -122,7 +122,7 @@
 			notify("신고 항목을 선택해주세요");
 			return;
 		}else if(report_type == 4 && report_message == ""){
-			notify("신고 내용을 입력해주세요");
+			notify("신고하실 내용을 입력해주세요");
 			return;
 		}
 		$.ajax({
@@ -135,9 +135,9 @@
 	        },
 	        success: function(data){
 	        	if (data.already_report){
-	        		notify("이미 신고했습니다");
+	        		notify("이미 신고하신 항목입니다");
 	        	}else{
-	        		notify("신고 완료되었습니다");
+	        		notify("신고가 정상적으로 접수되었습니다<br>감사합니다!");
 	        	}
 	        },
 	        beforeSend: function(){
@@ -157,8 +157,8 @@
 	  var change_votes = $.grep(my_votes, function(obj) { return obj.ask_id != ask.id });
 	  my_votes = change_votes;
 	  var askDealTemplate = _.template($('#ask-deal-template').html())
-    $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask}));
-    notify("다시 투표해주세요");
+    $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask})).animateCss("flipInX");
+    // notify("다시 투표해주세요");
 
 		var vote_count_span = $("#ask_"+ask.id+"_vote_count");
 		vote_count_span.html( parseInt(vote_count_span.html()) - 1 + "표" );

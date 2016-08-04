@@ -225,7 +225,7 @@
 	function deal_search_by_key(){
 		var deal_search_keyword = $('#deal_search_keyword').val();
 		if(deal_search_keyword == "" || deal_search_keyword == undefined){
-			notify("제품명을 입력해주세요.");
+			notify("검색하실 제품명을 입력해주세요");
 		}else{
 			$("#deal_search_btn").click();
 		}
@@ -528,7 +528,7 @@
 
 	function submit_form(){
 		if ( $("#ask_category_id").val() == "" || $("#ask_category_id").val() == null ){
-			notify('관심사 카테고리를 설정해주세요');
+			notify('제품 카테고리를 설정해주세요');
 			$("#ask_category_id").focus().select();
 			return;
 		}
@@ -540,25 +540,25 @@
 		}
 
 		if ( $("#left_deal_image_btn img").attr("src") == "/images/custom/card_image_preview.png"){
-			notify('CARD A 이미지를 추가해주세요.');
+			notify('CARD A 이미지를 추가해주세요');
 			$("#card_a_img_overlay").css("background-color","#fdf8f3");
 			return;
 		}
 
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
-			notify('CARD A 제품명을 입력해주세요.');
+			notify('CARD A 제품명을 입력해주세요');
 			$("#left_deal_title").focus().select();
 			return;
 		}
 
 		if ( $("#right_deal_image_btn img").attr("src") == "/images/custom/card_image_preview.png"){
-			notify('CARD B 이미지를 추가해주세요.');
+			notify('CARD B 이미지를 추가해주세요');
 			$("#card_b_img_overlay").css("background-color","#fdf8f3");
 			return;
 		}
 
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
-			notify('CARD B 제품명을 입력해주세요.');
+			notify('CARD B 제품명을 입력해주세요');
 			$("#right_deal_title").focus().select();
 			return;
 		}
@@ -576,7 +576,7 @@
 
 	function edit_form(){
 		if ( $("#ask_category_id").val() == "" || $("#ask_category_id").val() == null ){
-			notify('관심사 카테고리를 설정해주세요');
+			notify('제품 카테고리를 설정해주세요');
 			$("#ask_category_id").focus().select();
 			return;
 		}
@@ -588,13 +588,13 @@
 		}
 
 		if ( $("#left_deal_title").val() == "" || $("#left_deal_title").val() == null ){
-			notify('CARD A 제품명을 입력해주세요.');
+			notify('CARD A 제품명을 입력해주세요');
 			$("#left_deal_title").focus().select();
 			return;
 		}
 
 		if ( $("#right_deal_title").val() == "" || $("#right_deal_title").val() == null ){
-			notify('CARD B 제품명을 입력해주세요.');
+			notify('CARD B 제품명을 입력해주세요');
 			$("#right_deal_title").focus().select();
 			return;
 		}

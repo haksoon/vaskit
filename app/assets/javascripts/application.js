@@ -70,9 +70,10 @@ function notify(flash_message){
 
 function visitor_notify(message) {
   notify(message);
-  setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다')",1500);
+  setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다&middot;&middot;&middot;')",1500);
   setTimeout('window.location.assign("/landing")',2500);
 }
+
 
 function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -414,68 +415,27 @@ function progressEnd() {
   });
 }
 
-function welcome() {
-  var device = "unknown",
-      browser = "unknown",
-      // href = document.location.href,
-      // action = document.location.hash,
-      // referrer = document.referrer,
-      ua = navigator.userAgent,
-      p = navigator.platform;
-
-  if (ua.match(/iPhone/i)) {
-    device = "iPhone";
-  } else if (ua.match(/Android/i)) {
-    device = "Android";
-  } else if (p.match(/Win|Windows/i)) {
-    device = "Windows";
-  } else if (p.match(/Mac|MacIntel/i)) {
-    device = "Mac";
-  } else if (p.match(/Linux/i)) {
-    device = "Linux";
-  } else if (ua.match(/iPod|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)) {
-    device = "mobile_etc";
-  }
-
-  if (ua.match(/NAVER/i)) {
-    browser = "NaverAPP";
-  } else if (ua.match(/Daum/i)) {
-    browser = "DaumAPP";
-  } else if (ua.match(/KAKAOTALK|KAKAOSTORY/i)) {
-    browser = "KakaoAPP";
-  } else if (ua.match(/Facebook|FB/i)) {
-    browser = "FacebookAPP";
-  } else if (ua.match(/MSIE|Trident/i)) {
-    browser = "IE";
-  } else if (ua.match(/Edge/i)) {
-    browser = "Edge";
-  } else if (ua.match(/Opera|OPR|OPiOS/i)) {
-    browser = "Opera";
-  } else if (ua.match(/Chrome|CriOS/i)) {
-    browser = "Chrome";
-  } else if (ua.match(/Firefox|FxiOS/i)) {
-    browser = "FireFox";
-  } else if (ua.match(/Safari/i)) {
-    browser = "Safari";
-  }
-
-  $.ajax({
-        url: "/home/welcome.json",
-        type: 'POST',
-        data: {'device': device, 'browser': browser},
-        // data: {'device': device, 'browser': browser, 'href': href, 'action': action, 'referrer': referrer},
-        dataType: 'json',
-        error: function(){
-            return false;
-        },
-        success: function(data){
-        },
-        beforeSend: function(){
-        },
-        complete: function(){
-        }
-  });
-}
+// animateCSS
+$.fn.extend({
+    animateCss: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).removeClass('animated ' + animationName);
+        });
+    },
+    animateCssHide: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).hide().removeClass('animated ' + animationName);
+        });
+    },
+    animateCssRemove: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).remove();
+        });
+    }
+});
 
 $( document ).ready(function() {
   $("select").on("change",function(){

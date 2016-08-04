@@ -147,7 +147,7 @@
 				$("#category_submit_btn").find("i").css({"color":"#9d9ea1"});
 			}
 		<% else %>
-		 	visitor_notify("회원가입 후<br>관심사를 설정할 수 있습니다");
+		 	visitor_notify("관심사 설정은<br>회원만 가능합니다");
 		<% end %>
 	}
 
@@ -194,7 +194,7 @@
 				$("#category_submit_btn").find("i").css({"color":"#9d9ea1"});
 			}
 		<% else %>
-      visitor_notify("회원가입 후<br>관심사를 설정할 수 있습니다");
+      visitor_notify("관심사 설정은<br>회원만 가능합니다");
 		<% end %>
 	}
 
@@ -203,10 +203,10 @@
 			if (user_categories.sort().join() != change_user_categories.sort().join()) {
 				window.location = "/home/set_category?category_ids="+change_user_categories;
 			} else {
-				notify('변경된 내용이 없습니다');
+				notify("변경된 내용이 없습니다");
 			}
 		<% else %>
-      visitor_notify("회원가입 후<br>관심사를 설정할 수 있습니다");
+      visitor_notify("관심사 설정은<br>회원만 가능합니다");
 		<% end %>
 	}
 

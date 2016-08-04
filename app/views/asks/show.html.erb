@@ -26,8 +26,8 @@
 		if (is_ask_image_opened) {
 			ask_image_off();
     } else if (is_user_setting_opened || is_user_opened) {
-			manage_off();
-			user_off();
+			if (is_user_setting_opened) manage_off();
+			if (is_user_opened) user_off();
 		} else if (is_share_popup_opened) {
 			hide_share_popup();
 		} else if (is_more_popup_opened) {
