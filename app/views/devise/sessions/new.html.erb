@@ -33,6 +33,7 @@
 <script>
   <% if flash[:custom_notice] != nil %>
     notify("<%=flash[:custom_notice]%>".replace('\n','<br>'));
+    email_check();
     $("#user_password").focus().select();
   <% end %>
 
