@@ -213,13 +213,9 @@ class HomeController < ApplicationController
       browser = "unknown"
     end
 
-    if current_user
-      user_id = current_user.id
-      UserVisit.create(:user_id => user_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
-    elsif @visitor
-      visitor_id = @visitor.id
-      UserVisit.create(:visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
-    end
+    user_id = current_user.id unless current_user.blank?
+    visitor_id = @visitor.id
+    UserVisit.create(:user_id => user_id, :visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
   end
 
 end
