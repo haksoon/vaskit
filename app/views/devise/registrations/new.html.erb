@@ -18,19 +18,19 @@
   	<div class="content_box" style="padding:10px; margin:0px 12px 15px; text-align:left;">
   		<% if resource.facebook_id.blank? %>
         <div style="position:relative;">
-  			  <%= f.email_field :email, autofocus: true, :placeholder => "가입하실 이메일주소를 입력해주세요.", :class => "registrations_input" %>
+  			  <%= f.email_field :email, autofocus: true, :placeholder => "가입하실 이메일주소를 입력해주세요", :class => "registrations_input" %>
           <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
           <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
           <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
         </div>
         <div style="position:relative;">
-  			  <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요.", :class => "registrations_input" %>
+  			  <%= f.password_field :password, :placeholder => "설정하실 비밀번호를 입력해주세요", :class => "registrations_input" %>
           <span class="input_icon left_input" onclick="$('#user_password').focus(); return false;"><i class="fa fa-key"></i></span>
           <span id="password_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
           <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
         </div>
         <div style="position:relative;">
-          <%= f.password_field :password_confirmation, :placeholder => "입력하신 비밀번호를 확인해주세요.", :class => "registrations_input" %>
+          <%= f.password_field :password_confirmation, :placeholder => "입력하신 비밀번호를 확인해주세요", :class => "registrations_input" %>
           <span class="input_icon left_input" onclick="$('#user_password_confirmation').focus(); return false;"><i class="fa fa-check"></i></span>
           <span id="password_confirmation_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
           <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
@@ -69,7 +69,7 @@
       			</a>
           </span>
           <a href="#" onclick="window.open('/etc/access_term', 'VASKIT 이용약관', 'width=500, height=800'); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">이용약관</a> 및
-      		<a href="#" onclick="window.open('/etc/privacy_policy', 'VASKIT 개인정보취급정책', 'width=500, height=800'); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다.
+      		<a href="#" onclick="window.open('/etc/privacy_policy', 'VASKIT 개인정보취급정책', 'width=500, height=800'); return false;" style="color:#9d9ea1; font-weight:bold; border-bottom:1px solid #dbdbdb;">개인정보취급정책</a>에 동의합니다
         </p>
   			<a id="register_btn" href="#" onclick="sign_up_submit(); return false;" style="display:block; margin:10px 0 0px; height:40px; background-color:#9d9ea1; color:#fff; font-size:14px; line-height:40px; text-align:center; border-radius:5px; transition:all .3s;">
   				<i class="fa fa-users"></i>&nbsp;회원가입
@@ -83,7 +83,7 @@
   		<% else %>
   			<% if resource.email.blank? %>
           <div style="position:relative;">
-            <%= f.email_field :email, autofocus: true, :placeholder => "이메일주소를 입력해주세요.", :class => "registrations_input" %>
+            <%= f.email_field :email, autofocus: true, :placeholder => "가입하실 이메일주소를 입력해주세요", :class => "registrations_input" %>
             <span class="input_icon left_input" onclick="$('#user_email').focus(); return false;"><i class="fa fa-envelope-o"></i></span>
             <span id="email_checker" style="position: absolute; top: 0; right: 5px; width: 20px; height: 40px; line-height: 40px; text-align: center; font-size: 12px; color: #cbcbcb;"></span>
             <div class="tooltip_area" style="margin-left:50px;"><div class="tooltip_arrow bottom"></div><div class="tooltip_content"></div></div>
@@ -221,6 +221,7 @@
         success: function(data){
           if (!data.is_new_email) {
             $("#email_checker").html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
+            if ($("#user_email:focus").length == 0) email_check_tooltip();
           } else {
             $("#email_checker").html("<i class='fa fa-check' style='color: green;'></i>");
           }
@@ -239,11 +240,11 @@
     var tooltip_area = $("#user_email").parent().find(".tooltip_area");
     var tooltip_content = $("#user_email").parent().find(".tooltip_content");
     if ( $("#email_checker i").hasClass("fa-exclamation-triangle") ) {
-      tooltip_area.css("width",tooltip_width).addClass("tooltip_open")
-      tooltip_content.text("이미 존재하는 이메일입니다");
+      tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
+      tooltip_content.text("이미 가입한 이메일입니다");
     } else if ( $("#email_checker i").hasClass("fa-remove") ) {
-      tooltip_area.css("width",tooltip_width).addClass("tooltip_open")
-      tooltip_content.text("이메일 형식이 아닌 것 같습니다.");
+      tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
+      tooltip_content.text("이메일 형식이 아닌 것 같습니다");
     } else {
       tooltip_area.clearQueue().removeClass("tooltip_open");
     }
@@ -273,7 +274,7 @@
       tooltip_area.clearQueue().removeClass("tooltip_open");
     } else if ( $("#user_password").val().length < 8 ) {
       tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
-      tooltip_content.text("비밀번호는 8자리 이상으로 설정해주세요.");
+      tooltip_content.text("비밀번호는 8자리 이상으로 설정해주세요");
     }
   }
 
@@ -300,7 +301,7 @@
       tooltip_area.clearQueue().removeClass("tooltip_open");
     } else if ( $("#user_password").val() != $("#user_password_confirmation").val()  ) {
       tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
-      tooltip_content.text("입력하신 비밀번호가 일치하지 않습니다.");
+      tooltip_content.text("입력하신 비밀번호가 일치하지 않습니다");
     }
   }
 
@@ -334,11 +335,11 @@
   ready_to_submit();
 
   $("#user_email").attr("onkeyup","email_check(); ready_to_submit(); return false;");
-  $("#user_email").attr("onblur","email_check(); email_check_tooltip(); return false;");
+  $("#user_email").attr("onblur","email_check(); email_check_tooltip(); ready_to_submit(); return false;");
   $("#user_password").attr("onkeyup","password_check(); password_confirmation_check(); ready_to_submit(); return false;");
-  $("#user_password").attr("onblur","password_check_tooltip(); return false;");
+  $("#user_password").attr("onblur","password_check_tooltip(); ready_to_submit(); return false;");
   $("#user_password_confirmation").attr("onkeyup","password_confirmation_check(); ready_to_submit(); return false;");
-  $("#user_password_confirmation").attr("onblur","password_confirmation_check_tooltip(); return false;");
+  $("#user_password_confirmation").attr("onblur","password_confirmation_check_tooltip(); ready_to_submit(); return false;");
   $("#sign_up_form").on("change",function(){ ready_to_submit(); })
 
 	function sign_up_submit(){ //submit 전에 value 체크

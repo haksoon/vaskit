@@ -73,7 +73,7 @@
 			tooltip_area.clearQueue().removeClass("tooltip_open");
 		} else {
 			tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
-			tooltip_content.text("고객님의 비밀번호는 암호화 되어있어 저희도 알 수 없습니다.");
+			tooltip_content.text("고객님의 비밀번호는 암호화 되어있어 저희도 알 수 없습니다");
 		}
 	}
 
@@ -101,7 +101,7 @@
 			tooltip_area.clearQueue().removeClass("tooltip_open");
 		} else if ( $("#user_password").val().length < 8 ) {
 			tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
-			tooltip_content.text("비밀번호는 8자리 이상으로 설정해주세요.");
+			tooltip_content.text("비밀번호는 8자리 이상으로 설정해주세요");
 		}
 	}
 
@@ -128,7 +128,7 @@
 			tooltip_area.clearQueue().removeClass("tooltip_open");
 		} else if ( $("#user_password").val() != $("#user_password_confirmation").val()  ) {
 			tooltip_area.css("width",tooltip_width).addClass("tooltip_open");
-			tooltip_content.text("입력하신 비밀번호가 일치하지 않습니다.");
+			tooltip_content.text("입력하신 비밀번호가 일치하지 않습니다");
 		}
 	}
 
