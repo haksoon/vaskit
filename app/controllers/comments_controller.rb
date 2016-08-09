@@ -37,7 +37,7 @@ class CommentsController < ApplicationController
         end
 
       #대댓글의 경우 알람 별도로 추가
-      else
+      elsif comment_id != nil
         original_comment = Comment.find(comment_id)
         if original_comment.user_id != comment.user_id
           alram = Alram.where(:user_id => original_comment.user_id, :ask_id => ask.id).where("alram_type like ?", "reply_comment_%").first

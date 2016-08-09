@@ -604,7 +604,15 @@
     <a id="ask_deal_id_change_{{=ask.id}}_right" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; right:0%; margin-top:-20px; margin-right:{{= ask_deal_text == 'right' ? '-50px' : '10px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-right"></i></a>
     <a id="ask_deal_id_change_{{=ask.id}}_left" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; left:0%; margin-top:-20px; margin-left:{{= ask_deal_text == 'left' ? '-50px' : '10px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-left"></i></a>
     <div id="comment_input_box_{{=ask.id}}" style="border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; padding:9px 10px; background-color:#fff; width:60%; margin:{{= ask_deal_text == 'left' ? '0 auto 0 10px' : ( ask_deal_text == 'right' ? '0 10px 0 auto' : '0 auto') }}; transition:all .5s;">
-      <textarea id="comment_input_{{=ask.id}}" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+      <% if current_user %>
+        {{ if (ask.user_id == current_user_id) { }}
+          <textarea id="comment_input_{{=ask.id}}" placeholder="<%= current_user.string_id %>님! 많은 고민해결사님들께 한마디 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+        {{ } else { }}
+          <textarea id="comment_input_{{=ask.id}}" placeholder="고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+        {{ } }}
+      <% else %>
+        <textarea id="comment_input_{{=ask.id}}" placeholder="회원가입하시고 의견을 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+      <% end %>
       <a id="send_comment_btn_{{=ask.id}}" class="comment_update_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
         댓글 남기기
       </a>
@@ -629,7 +637,10 @@
       <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
         {{ if (comment.is_deleted == false) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:left;">
-    				<div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+    				<div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              {{ if (comment.user_id == ask.user_id){ }}
+                <span style="display: inline-block; float: right; padding: 5px 30px 0px; margin-top: -5px; margin-right: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              {{ } }}
   						<span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
               <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
                 <div style="display:inline-block; width:60%; float:left; text-align:left;">
@@ -661,7 +672,7 @@
   				</div>
           <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
             <div style="position:relative; margin:0 0 0 10px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
               <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
                 수정하기
               </a>
@@ -705,7 +716,10 @@
                 답글<i class="fa fa-reply" style="margin:1px 2px 0px 3px; transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:text-top;"></i>
               </a>
             </div>
-            <div style="position:relative; margin:0 10px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+            <div style="position:relative; margin:0 10px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              {{ if (comment.user_id == ask.user_id){ }}
+                <span style="display: inline-block; float: left; padding: 5px 30px 0px; margin-top: -5px; margin-left: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              {{ } }}
               <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
               <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
                 <div style="display:inline-block; width:60%; float:right; text-align:right;">
@@ -729,7 +743,7 @@
           <div id="comment_modify_box_{{=comment.id}}" style="text-align:right; display:none;">
             <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
             <div style="position:relative; margin:0 10px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
               <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
                 수정하기
               </a>
@@ -770,7 +784,10 @@
       <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
         <div id="comment_content_{{=comment.id}}" style="text-align:left;">
           <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
-          <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+          <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            {{ if (comment.user_id == ask.user_id){ }}
+              <span style="display: inline-block; float: right; padding: 5px 30px 0px; margin-top: -5px; margin-right: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+            {{ } }}
             <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
             <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
               <div style="display:inline-block; width:60%; float:left; text-align:left;">
@@ -800,7 +817,7 @@
         <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
           <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
             <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
               수정하기
             </a>
@@ -817,7 +834,10 @@
               <i id="comment_{{=comment.id}}_like_icon" class="fa {{= already_like.length == 1 ? 'fa-heart' : 'fa-heart-o'}}" style="color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}}; margin-right:1px;"></i>
             </a>
           </div>
-          <div style="position:relative; margin:0 0px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom;">
+          <div style="position:relative; margin:0 0px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            {{ if (comment.user_id == ask.user_id){ }}
+              <span style="display: inline-block; float: left; padding: 5px 30px 0px; margin-top: -5px; margin-left: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+            {{ } }}
             <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
             <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
               <div style="display:inline-block; width:60%; float:right; text-align:right;">
@@ -842,7 +862,7 @@
         <div id="comment_modify_box_{{=comment.id}}" style="text-align:right; display:none;">
           <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
           <div style="position:relative; margin:0 0px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요." rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
             <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
               수정하기
             </a>
@@ -1315,7 +1335,7 @@
         var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
         var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
         if (is_card_opened && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count})).animateCss("flipInX"); //animateCss추가
-        console.log(data.detail_vote_count);
+        // console.log(data.detail_vote_count);
 			},
 			beforeSend: function(){
 			},

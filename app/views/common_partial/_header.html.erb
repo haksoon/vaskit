@@ -17,11 +17,7 @@
 				<a href="#" onclick="user_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
 					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 28px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
-					<% if Alram.where(:user_id => current_user.id, :is_read => false).blank? %>
-						<span id="new_alram_icon" style="position:absolute; top:9px; right:10px; width:10px; height:10px; line-height:10px; text-align:center; background-color:#ee6e01; border-radius:10px; font-size:10px; font-weight:bold; color:#fff; padding:3px 2px 1px; transition:transform .5s; transform:scale(0); -webkit-transform:scale(0);"></span>
-					<% else %>
-						<span id="new_alram_icon" style="position:absolute; top:9px; right:10px; width:10px; height:10px; line-height:10px; text-align:center; background-color:#ee6e01; border-radius:10px; font-size:10px; font-weight:bold; color:#fff; padding:3px 2px 1px; transition:transform .5s; transform:scale(1); -webkit-transform:scale(1);"></span>
-					<% end %>
+					<span id="new_alram_icon" style="position:absolute; top:9px; right:10px; width:10px; height:10px; line-height:10px; text-align:center; background-color:#ee6e01; border-radius:10px; font-size:10px; font-weight:bold; color:#fff; padding:3px 2px 1px; transition:transform .5s; transform:scale(0); -webkit-transform:scale(0);"></span>
 				</a>
 			<% else %>
 				<a href="/landing" style="display: block; box-sizing: border-box; width: 60px; height: 50px; padding-top: 14px; padding-right: 10px;">
@@ -51,8 +47,9 @@
 	main_header_left_button();
 
 	// AJS추가 : 유저 알림 정보 불러오기
+	var alram_count;
+	var last_alram_count;
 	<% if current_user %>
-		var last_alram_count;
 		function alram_check() {
 		  $.ajax({
 		    url: "/users/alram_check.json",
@@ -63,8 +60,8 @@
 		      return false;
 		    },
 		    success: function(data){
-					alram_count = data.alram_count > 15 ? "15+" : data.alram_count;
-					data.alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count) : $("#new_alram_icon").css("transform","scale(0)").text("");
+					alram_count = data.alram_count;
+					alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count) : $("#new_alram_icon").css("transform","scale(0)").text(alram_count);
 					if (last_alram_count != null && alram_count > last_alram_count && $("#user_overlay:hidden").length == 1) notify('새로운 알림이 있어요<br>확인해 보세요!');
 		    },
 		    beforeSend: function(){
