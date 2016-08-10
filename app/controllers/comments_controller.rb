@@ -7,9 +7,16 @@ class CommentsController < ApplicationController
     ask_deal_id = params[:ask_deal_id]
     content = params[:content]
     comment_id = params[:comment_id] #AJS추가
-    message = "success"
+    comment_image = nil
+
+    comment_preview_image = PreviewImage.find_by_id(params[:image_id])
+    if comment_preview_image
+      comment_image = comment_preview_image.image
+    end
+
     if current_user
-      comment = Comment.create(:user_id => current_user.id, :ask_id => ask_id, :ask_deal_id => ask_deal_id, :content => content, :comment_id => comment_id)
+      comment = Comment.create(:user_id => current_user.id, :ask_id => ask_id, :ask_deal_id => ask_deal_id, :content => content, :comment_id => comment_id, :image => comment_image)
+
       ask = Ask.find(ask_id)
       if comment_id == nil
         if ask.user_id != comment.user_id
@@ -49,6 +56,7 @@ class CommentsController < ApplicationController
         end
       end
 
+      message = "success"
     else
       message = "not_user"
     end
@@ -79,8 +87,24 @@ class CommentsController < ApplicationController
 
   def update
     comment = Comment.find_by_id(params[:id])
-    comment.update(:content => params[:content])
-    render :json => {:status => "success" }
+    comment_preview_image = PreviewImage.find_by_id(params[:image_id])
+    status = "success"
+    if comment_preview_image
+      comment_image = comment_preview_image.image
+      if comment_preview_image.id == params[:image_id]
+        comment.update(:content => params[:content])
+      else
+        comment.update(:content => params[:content], :image => comment_image)
+      end
+    else
+      if params[:image_id] == "image_delete"
+        comment.update(:content => params[:content], :image => comment_image)
+      else
+        comment.update(:content => params[:content])
+      end
+      status = "no_image"
+    end
+    render :json => {:status => status, :comment => comment}
   end
 
 

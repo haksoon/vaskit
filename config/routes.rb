@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :preview_images do
     collection do
       post 'create_by_naver'
+      post 'comment_images'
     end
   end
   resources :share_logs

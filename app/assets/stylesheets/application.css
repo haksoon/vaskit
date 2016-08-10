@@ -21,7 +21,7 @@ html{
 
 a:link, a:visited, a:hover, a:active { text-decoration:none; }
 
-img{ border:none; }
+img{ border:none; display:block; }
 
 body {
 	overflow-y: scroll;

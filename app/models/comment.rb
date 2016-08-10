@@ -1,6 +1,13 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
 
+  has_attached_file :image, :styles => { :normal => "300>x" },
+                    :url  => "/assets/comments/:id/:style/:basename.:extension",
+                    :path => ":rails_root/public/assets/comments/:id/:style/:basename.:extension",
+                    :default_url => "/images/common/profile_photo.png"
+  validates_attachment_size :image, :less_than => 20.megabytes
+  validates_attachment_content_type :image, :content_type => ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
+
   after_create :ask_deal_comment_count
   after_update :ask_deal_comment_count
   before_destroy :ask_deal_comment_count

@@ -85,7 +85,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay">
-						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
+						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin:25%;">
 					</a>
 				{{ } }}
 			{{ } }}
@@ -104,7 +104,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false ); return false;" class="card_image_overlay">
-						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin-top:25%;">
+						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin:25%;">
 					</a>
 				{{ } }}
 			{{ } }}
@@ -604,6 +604,11 @@
     <a id="ask_deal_id_change_{{=ask.id}}_right" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; right:0%; margin-top:-20px; margin-right:{{= ask_deal_text == 'right' ? '-50px' : '10px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-right"></i></a>
     <a id="ask_deal_id_change_{{=ask.id}}_left" onclick="ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}); return false;" href="#" style="display:inline-block; position:absolute; top:50%; left:0%; margin-top:-20px; margin-left:{{= ask_deal_text == 'left' ? '-50px' : '10px' }}; width:40px; height:40px; line-height:40px; text-align:center; color:#9d9ea1; background-color:#fff; border-radius:20px; font-size:16px; transition:all .5s;"><i class="fa fa-angle-double-left"></i></a>
     <div id="comment_input_box_{{=ask.id}}" style="border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; padding:9px 10px; background-color:#fff; width:60%; margin:{{= ask_deal_text == 'left' ? '0 auto 0 10px' : ( ask_deal_text == 'right' ? '0 10px 0 auto' : '0 auto') }}; transition:all .5s;">
+        <img id="attached_comment_image_{{=ask.id}}" src="" style="max-width:100%; margin-bottom:10px; display:none;">
+        <div id="attached_edit_{{=ask.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:none;">
+          <a href="#" onclick="$('#comment_image_upload_{{=ask.id}}').click(); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:left;">변경하기</a>
+          <a href="#" onclick="comment_image_delete({{=ask.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
+        </div>
       <% if current_user %>
         {{ if (ask.user_id == current_user_id) { }}
           <textarea id="comment_input_{{=ask.id}}" placeholder="<%= current_user.string_id %>님! 많은 고민해결사님들께 한마디 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
@@ -613,12 +618,20 @@
       <% else %>
         <textarea id="comment_input_{{=ask.id}}" placeholder="회원가입하시고 의견을 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
       <% end %>
+      <div style="display:none;">
+        <input type="file" name="comment_image" id="comment_image_upload_{{=ask.id}}" accept="image/*" onchange="comment_image_upload({{=ask.id}}); return false;">
+        <input type="hidden" name="comment_image_id" id="comment_image_id_{{=ask.id}}">
+      </div>
+      <a id="comment_image_btn_{{=ask.id}}" href="#" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#fff; color:#666; border:1px solid #dbdbdb; box-sizing:border-box; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+        <i class="fa fa-image"></i>&nbsp;이미지 첨부하기
+      </a>
       <a id="send_comment_btn_{{=ask.id}}" class="comment_update_btn" href="#" onclick="send_comment({{=ask.id}}, {{=ask_deal_id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
         댓글 남기기
       </a>
       <div class="tooltip_area" style="width:60%;">
         <div class="tooltip_arrow bottom"></div>
         <div class="tooltip_content" style="text-align:left; line-height:1.5;">
+          - 이미지 첨부 기능이 추가되었습니다 <span style="color: #ffcc5a;font-weight: bold;">new!</span><br>
           - URL 입력시 자동으로 링크가 생성됩니다<br>
           - 이미지 URL을 입력하시면 이미지가 보여집니다<br>
           - 엔터키가 줄바꿈으로 변경되었습니다<br>
@@ -638,8 +651,15 @@
         {{ if (comment.is_deleted == false) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:left;">
     				<div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-              {{ if (comment.user_id == ask.user_id){ }}
-                <span style="display: inline-block; float: right; padding: 5px 30px 0px; margin-top: -5px; margin-right: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              {{ if (comment.user_id == current_user_id) { }}
+                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+              {{ } else if (comment.user_id == ask.user_id) { }}
+                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              {{ } }}
+              {{ if (comment.image_file_name != null) { }}
+                <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+              {{ }else{ }}
+                <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
               {{ } }}
   						<span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
               <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
@@ -672,7 +692,23 @@
   				</div>
           <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
             <div style="position:relative; margin:0 0 0 10px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+              {{ if (comment.image_file_name != null) { }}
+                <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+              {{ }else{ }}
+                <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
+              {{ } }}
+              <div id="modify_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:{{=comment.image_file_name != null ? 'block' : 'none'}};">
+                <a href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:left;">변경하기</a>
+                <a href="#" onclick="modify_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
+              </div>
+              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; min-height:20px; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+              <div style="display:none;">
+                <input type="file" name="modify_comment_image" id="modify_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="modify_comment_image_upload({{=comment.id}}); return false;">
+                <input type="hidden" name="modify_comment_image_id" id="modify_comment_image_id_{{=comment.id}}">
+              </div>
+              <a id="modify_comment_image_btn_{{=comment.id}}" href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="display:{{=comment.image_file_name != null ? 'none' : 'block'}}; width:100%; height:40px; margin-top:10px; background-color:#fff; color:#666; border:1px solid #dbdbdb; box-sizing:border-box; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+                <i class="fa fa-image"></i>&nbsp;이미지 첨부하기
+              </a>
               <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
                 수정하기
               </a>
@@ -696,7 +732,19 @@
       <div id="reply_comment_box_{{=comment.id}}" style="text-align:left; padding:5px 0; display:none;">
         <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
         <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+          <img id="attached_reply_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
+          <div id="attached_reply_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:none;">
+            <a href="#" onclick="$('#reply_comment_image_upload_{{=comment.id}}').click(); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:left;">변경하기</a>
+            <a href="#" onclick="reply_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
+          </div>
           <textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0px; font-size:13px; line-height:20px; text-align:left;"></textarea>
+          <div style="display:none;">
+            <input type="file" name="reply_comment_image" id="reply_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="reply_comment_image_upload({{=comment.id}}); return false;">
+            <input type="hidden" name="reply_comment_image_id" id="reply_comment_image_id_{{=comment.id}}">
+          </div>
+          <a id="reply_comment_image_btn_{{=comment.id}}" href="#" onclick="$('#reply_comment_image_upload_{{=comment.id}}').click(); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#fff; color:#666; border:1px solid #dbdbdb; box-sizing:border-box; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+            <i class="fa fa-image"></i>&nbsp;이미지 첨부하기
+          </a>
           <a id="send_reply_comment_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="send_reply_comment({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=comment.id}}, true); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0px; transition:all .5s;">
             답글 남기기
           </a>
@@ -717,8 +765,15 @@
               </a>
             </div>
             <div style="position:relative; margin:0 10px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-              {{ if (comment.user_id == ask.user_id){ }}
-                <span style="display: inline-block; float: left; padding: 5px 30px 0px; margin-top: -5px; margin-left: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              {{ if (comment.user_id == current_user_id) { }}
+                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+              {{ } else if (comment.user_id == ask.user_id) { }}
+                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              {{ } }}
+              {{ if (comment.image_file_name != null) { }}
+                <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+              {{ }else{ }}
+                <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
               {{ } }}
               <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
               <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
@@ -743,7 +798,23 @@
           <div id="comment_modify_box_{{=comment.id}}" style="text-align:right; display:none;">
             <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
             <div style="position:relative; margin:0 10px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+              {{ if (comment.image_file_name != null) { }}
+                <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+              {{ }else{ }}
+                <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
+              {{ } }}
+              <div id="modify_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:{{=comment.image_file_name != null ? 'block' : 'none'}};">
+                <a href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:left;">변경하기</a>
+                <a href="#" onclick="modify_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
+              </div>
+              <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; min-height:20px; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+              <div style="display:none;">
+                <input type="file" name="modify_comment_image" id="modify_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="modify_comment_image_upload({{=comment.id}}); return false;">
+                <input type="hidden" name="modify_comment_image_id" id="modify_comment_image_id_{{=comment.id}}">
+              </div>
+              <a id="modify_comment_image_btn_{{=comment.id}}" href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="display:{{=comment.image_file_name != null ? 'none' : 'block'}}; width:100%; height:40px; margin-top:10px; background-color:#fff; color:#666; border:1px solid #dbdbdb; box-sizing:border-box; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+                <i class="fa fa-image"></i>&nbsp;이미지 첨부하기
+              </a>
               <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
                 수정하기
               </a>
@@ -766,7 +837,19 @@
       <div id="reply_comment_box_{{=comment.id}}" style="text-align:right; padding:5px 0; display:none;">
         <a id="comment_reply_cancel_btn_{{=comment.id}}" class="comment_reply_cancel_btn" href="#" onclick="comment_reply_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
         <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
+          <img id="attached_reply_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
+          <div id="attached_reply_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:none;">
+            <a href="#" onclick="$('#reply_comment_image_upload_{{=comment.id}}').click(); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:left;">변경하기</a>
+            <a href="#" onclick="reply_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
+          </div>
           <textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0px; font-size:13px; line-height:20px; text-align:right;"></textarea>
+          <div style="display:none;">
+            <input type="file" name="comment_image" id="reply_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="reply_comment_image_upload({{=comment.id}}); return false;">
+            <input type="hidden" name="comment_image_id" id="reply_comment_image_id_{{=comment.id}}">
+          </div>
+          <a id="reply_comment_image_btn_{{=comment.id}}" href="#" onclick="$('#reply_comment_image_upload_{{=comment.id}}').click(); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#fff; color:#666; border:1px solid #dbdbdb; box-sizing:border-box; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+            <i class="fa fa-image"></i>&nbsp;이미지 첨부하기
+          </a>
           <a id="send_reply_comment_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="send_reply_comment({{=ask.id}}, {{=ask.right_ask_deal_id}}, {{=comment.id}}, false); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0px; transition:all .5s;">
             답글 남기기
           </a>
@@ -785,8 +868,15 @@
         <div id="comment_content_{{=comment.id}}" style="text-align:left;">
           <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-            {{ if (comment.user_id == ask.user_id){ }}
-              <span style="display: inline-block; float: right; padding: 5px 30px 0px; margin-top: -5px; margin-right: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+            {{ if (comment.user_id == current_user_id) { }}
+              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+            {{ } else if (comment.user_id == ask.user_id) { }}
+              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+            {{ } }}
+            {{ if (comment.image_file_name != null) { }}
+              <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+            {{ }else{ }}
+              <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
             {{ } }}
             <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
             <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
@@ -817,7 +907,23 @@
         <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
           <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+            {{ if (comment.image_file_name != null) { }}
+              <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+            {{ }else{ }}
+              <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
+            {{ } }}
+            <div id="modify_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:{{=comment.image_file_name != null ? 'block' : 'none'}};">
+              <a href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:left;">변경하기</a>
+              <a href="#" onclick="modify_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
+            </div>
+            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; min-height:20px; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:left;">{{=comment.content}}</textarea>
+            <div style="display:none;">
+              <input type="file" name="modify_comment_image" id="modify_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="modify_comment_image_upload({{=comment.id}}); return false;">
+              <input type="hidden" name="modify_comment_image_id" id="modify_comment_image_id_{{=comment.id}}">
+            </div>
+            <a id="modify_comment_image_btn_{{=comment.id}}" href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="display:{{=comment.image_file_name != null ? 'none' : 'block'}}; width:100%; height:40px; margin-top:10px; background-color:#fff; color:#666; border:1px solid #dbdbdb; box-sizing:border-box; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+              <i class="fa fa-image"></i>&nbsp;이미지 첨부하기
+            </a>
             <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
               수정하기
             </a>
@@ -835,8 +941,15 @@
             </a>
           </div>
           <div style="position:relative; margin:0 0px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-            {{ if (comment.user_id == ask.user_id){ }}
-              <span style="display: inline-block; float: left; padding: 5px 30px 0px; margin-top: -5px; margin-left: -40px; font-size: 12px; color: #ee6e01; background-color: rgba(255, 205, 90, 0.4); transform: rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+            {{ if (comment.user_id == current_user_id) { }}
+              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+            {{ } else if (comment.user_id == ask.user_id) { }}
+              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+            {{ } }}
+            {{ if (comment.image_file_name != null) { }}
+              <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+            {{ }else{ }}
+              <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
             {{ } }}
             <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('\r?\n', 'g'), '<br />')}}</span>
             <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
@@ -862,7 +975,23 @@
         <div id="comment_modify_box_{{=comment.id}}" style="text-align:right; display:none;">
           <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
           <div style="position:relative; margin:0 0px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
-            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+            {{ if (comment.image_file_name != null) { }}
+              <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+            {{ }else{ }}
+              <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
+            {{ } }}
+            <div id="modify_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:{{=comment.image_file_name != null ? 'block' : 'none'}};">
+              <a href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:left;">변경하기</a>
+              <a href="#" onclick="modify_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
+            </div>
+            <textarea id="comment_modify_input_{{=comment.id}}" placeholder="의견을 입력해주세요" rows="1" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; min-height:20px; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:right;">{{=comment.content}}</textarea>
+            <div style="display:none;">
+              <input type="file" name="modify_comment_image" id="modify_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="modify_comment_image_upload({{=comment.id}}); return false;">
+              <input type="hidden" name="modify_comment_image_id" id="modify_comment_image_id_{{=comment.id}}">
+            </div>
+            <a id="modify_comment_image_btn_{{=comment.id}}" href="#" onclick="$('#modify_comment_image_upload_{{=comment.id}}').click(); return false;" style="display:{{=comment.image_file_name != null ? 'none' : 'block'}}; width:100%; height:40px; margin-top:10px; background-color:#fff; color:#666; border:1px solid #dbdbdb; box-sizing:border-box; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
+              <i class="fa fa-image"></i>&nbsp;이미지 첨부하기
+            </a>
             <a id="comment_update_btn_{{=comment.id}}" class="comment_update_btn" href="#" onclick="comment_update({{=comment.id}}); return false;" style="display:block; width:100%; height:40px; margin-top:10px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">
               수정하기
             </a>
@@ -907,14 +1036,14 @@
 		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:left;">
 			<span style="display:block; padding:0 15px;">
 				<i class="fa fa-comment" style="float:left; padding:7px 5px 0 0;"></i>
-				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
+				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(10deg);"></i>'}}</span>
 			</span>
 		</li>
 	{{ }else{ }}
 		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:right;">
 			<span style="display:block; padding:0 15px;">
 				<i class="fa fa-comment" style="float:right; padding:7px 5px 0 0; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
-				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
+				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(-10deg);"></i>'}}{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
 			</span>
 		</li>
 	{{ } }}
@@ -1534,15 +1663,6 @@
     $(".chat_bubble").css("margin-top","65px");
   }
 
-	function comment_input_by_key(ask_id){
-    var comment_message = $("#comment_input_"+ask_id).val();
-    if(comment_message == "" || comment_message == undefined){
-      notify("의견을 입력해주세요");
-    }else{
-      $("#send_comment_btn_"+ask_id).click();
-    }
-  }
-
 	function comment_input_setting(ask_id, ask_user) {
     var keyPressed = [];
 		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
@@ -1554,8 +1674,7 @@
 			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
 				$(this).blur();
 				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
-				var card_open_st = $("#ask_"+ask_id).offset().top - 110;
-				$("html, body").animate({scrollTop:card_open_st},250);
+				$("html, body").animate({scrollTop:0},250);
 			} else {
         $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
         $("#comment_input_box_"+ask_id).css("borderColor","#ee6e01");
@@ -1573,7 +1692,7 @@
       keyPressed[e.keyCode] = true;
       if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
         e.preventDefault();
-        comment_input_by_key(ask_id);
+        $("#send_comment_btn_"+ask_id).click();
         keyPressed = [];
       }
     }).keyup(function(e) {
@@ -1582,22 +1701,74 @@
         $("#send_comment_btn_"+ask_id).css('background-color','#f18b33');
         $(this).parent().find(".tooltip_area").css("transform","scale(0) translateY(-100%)");
       } else {
-        $("#send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
+        if ($("#comment_image_id_"+ask_id).val() == "") $("#send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
         $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
       }
 		});
+
+    $("#comment_image_btn_"+ask_id).on("click",function(){
+      if (current_user_id == 0){
+				visitor_notify("의견 작성은<br>회원만 가능합니다");
+        return false;
+			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
+				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
+				$("html, body").animate({scrollTop:0},250);
+        return false;
+			} else {
+        $("#comment_image_upload_"+ask_id).click();
+        return false;
+			}
+    });
 	}
+
+  function comment_image_upload(ask_id){
+    var fileObj = $("#comment_image_upload_"+ask_id);
+    $.each( $("#comment_image_upload_"+ask_id)[0].files, function( i, file ) {
+      var formData = new FormData();
+      formData.append('File', file);
+      $.ajax({
+        type: "POST",
+        url: "/preview_images/comment_images.json",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+          $("#comment_image_id_"+ask_id).val(data.id);
+          $("#attached_comment_image_"+ask_id).attr("src",data.image_url).show().animateCss("bounceIn");
+        },
+        beforeSend: function(){
+          progressStart();
+        },
+        complete: function(){
+          progressEnd();
+          $("#attached_edit_"+ask_id).show();
+          $("#comment_image_btn_"+ask_id).hide();
+          $("#send_comment_btn_"+ask_id).css('background-color','#f18b33');
+          fileObj.replaceWith(fileObj.clone(true));
+        }
+      }).fail(function (data) {}).done(function () {});
+    });
+	}
+
+  function comment_image_delete(ask_id){
+    $("#comment_image_id_"+ask_id).val("");
+    $("#attached_comment_image_"+ask_id).animateCssHide("bounceOut");
+    $("#attached_edit_"+ask_id).hide();
+    $("#comment_image_btn_"+ask_id).show();
+    if ($("#comment_input_"+ask_id).val() == "") $("#send_comment_btn_"+ask_id).css('background-color','#dbdbdb');
+  }
 
 	function send_comment(ask_id, ask_deal_id){
 			var content = $("#comment_input_"+ask_id).val();
-			if( content == "" || content == null ){
+      var image_id = $("#comment_image_id_"+ask_id).val();
+			if( (content == "" || content == null) && image_id == "" ){
 				notify('의견을 입력해주세요');
 				return;
 			}
 			$.ajax({
 		        url: "/comments.json",
 		        type: 'POST',
-		        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id},
+		        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id, 'image_id': image_id},
 		        dataType: 'json',
             async: false,  // 코멘트 중복 전송을 방지
 		        error: function(){
@@ -1610,6 +1781,12 @@
                 $("#comment_"+data.comment.id).animateCss("flipInX"); //animateCss추가
                 link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'), true);
 		        		// notify("작성 완료");
+
+                $("#comment_image_id_"+ask_id).val("");
+                $("#attached_comment_image_"+ask_id).attr("src","").hide();
+                $("#attached_edit_"+ask_id).hide();
+                $("#comment_image_btn_"+ask_id).show();
+
 		        		$("#comment_input_"+ask_id).val("");
                 $("#no_comment_"+ask_id).hide();
                 $("#send_comment_btn_"+ask_id).css("background-color","#dbdbdb");
@@ -1728,6 +1905,9 @@
   var comment_id_in_progress = null;
   var comment_id_in_progress_type = null;
   var comment_content_origin = null;
+  var comment_image_origin = null;
+  var comment_image_url = null;
+  var modify_content_origin = null;
 	function comment_modify(comment_id){
     if (comment_id_in_progress) {
       if (confirm('기존에 작성중인 내용은 삭제됩니다. 진행하시겠어요?')) {
@@ -1748,8 +1928,12 @@
 		var modify_box = $("#comment_modify_box_"+comment_id);
 		var modify_input = $("#comment_modify_input_"+comment_id);
 		var update_btn = $("#comment_update_btn_"+comment_id);
+    var comment_image = $("#modify_comment_image_"+comment_id);
 
     comment_content_origin = modify_input.val();
+    comment_image_origin = comment_image.attr("src");
+    comment_image_url = comment_image_origin;
+    modify_content_origin = modify_box.html();
 		comment_content.hide();
 		// modify_box.show(); //animateCss추가
     modify_box.show().animateCss("flipInX"); //animateCss추가
@@ -1768,7 +1952,7 @@
       }
     }).keyup(function(e) {
       keyPressed[e.keyCode] = false;
-      if( modify_input.val().length > 0 && modify_input.val() != comment_content_origin ) {
+      if( modify_input.val() != comment_content_origin || comment_image_url != comment_image_origin ) {
 				update_btn.css('background-color','#f18b33');
 			} else {
 				update_btn.css('background-color','#dbdbdb');
@@ -1788,15 +1972,56 @@
 
     // comment_content.show(); //animateCss추가
     comment_content.show().animateCss("fadeIn"); //animateCss추가
-		modify_box.hide();
+    modify_box.hide().html(modify_content_origin);
     modify_input.val(comment_content_origin);
     modify_input.blur();
 		update_btn.css("background-color","#dbdbdb");
     comment_content_origin = null;
+    comment_image_url = null;
+    modify_content_origin = null;
 
 		$("#comment_modify_btn_"+comment_id).show();
 		$("#comment_modify_cancel_btn_"+comment_id).hide();
 	}
+
+  function modify_comment_image_upload(comment_id){
+    var fileObj = $("#modify_comment_image_upload_"+comment_id);
+    $.each( $("#modify_comment_image_upload_"+comment_id)[0].files, function( i, file ) {
+      var formData = new FormData();
+      formData.append('File', file);
+      $.ajax({
+        type: "POST",
+        url: "/preview_images/comment_images.json",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+          $("#modify_comment_image_id_"+comment_id).val(data.id);
+          $("#modify_comment_image_"+comment_id).attr("src",data.image_url).show().animateCss("bounceIn");
+          comment_image_url = data.image_url;
+        },
+        beforeSend: function(){
+          progressStart();
+        },
+        complete: function(){
+          progressEnd();
+          $("#modify_edit_"+comment_id).show();
+          $("#modify_comment_image_btn_"+comment_id).hide();
+          $("#comment_update_btn_"+comment_id).css('background-color','#f18b33');
+          fileObj.replaceWith(fileObj.clone(true));
+        }
+      }).fail(function (data) {}).done(function () {});
+    });
+	}
+
+  function modify_comment_image_delete(comment_id){
+    $("#modify_comment_image_id_"+comment_id).val("image_delete");
+    $("#modify_comment_image_"+comment_id).animateCssHide("bounceOut");
+    comment_image_url = null;
+    $("#modify_edit_"+comment_id).hide();
+    $("#modify_comment_image_btn_"+comment_id).css("display","block");
+    if ($("#comment_modify_input_"+comment_id).val() != "") $("#comment_update_btn_"+comment_id).css('background-color','#f18b33');
+  }
 
 	function comment_update(comment_id){
 		var comment_content = $("#comment_content_"+comment_id);
@@ -1804,19 +2029,21 @@
 		var modify_box = $("#comment_modify_box_"+comment_id);
 		var modify_input = $("#comment_modify_input_"+comment_id);
 		var update_btn = $("#comment_update_btn_"+comment_id);
+    var comment_image = $("#modify_comment_image_"+comment_id);
 
     var content = modify_input.val();
-    if( content == "" || content == null ){
+    var image_id = $("#modify_comment_image_id_"+comment_id).val();
+    if( (content == "" || content == null) && comment_image_url == null ){
       notify('의견을 입력해주세요');
       return;
-    } else if ( content == comment_content_origin ) {
+    } else if ( content == comment_content_origin && comment_image_url == comment_image_origin ) {
       notify('내용이 수정되지 않았습니다');
       return;
     } else {
 			$.ajax({
 				url: "/comments/"+comment_id+".json",
 				type: 'PUT',
-				data: {'content': content},
+				data: {'content': content, 'image_id':image_id},
 				dataType: 'json',
 				error: function(){
 					return false;
@@ -1831,6 +2058,13 @@
           modify_input.val(comment_content.find(".comment_content").html().replace(new RegExp('<br>', 'g'), '\n')).blur();
 					update_btn.css("background-color","#dbdbdb");
 
+          var url = get_image_url(data.comment, 'comments', 'normal');
+          if (data.status == "no_image" && data.comment.image_file_name == null) {
+            $("#comment_image_"+comment_id).attr("src","").hide();
+          } else {
+            $("#comment_image_"+comment_id).attr("src",url).show();
+          }
+
 					$("#comment_modify_btn_"+comment_id).show();
 					$("#comment_modify_cancel_btn_"+comment_id).hide();
 
@@ -1844,6 +2078,8 @@
           comment_id_in_progress = null;
           comment_id_in_progress_type = null;
           comment_content_origin = null;
+          comment_image_origin = null;
+          modify_content_origin = null;
 				}
 			});
 		}
@@ -1897,7 +2133,7 @@
         if( reply_input.val().length > 0 ) {
 					update_btn.css('background-color','#f18b33');
 				} else {
-					update_btn.css('background-color','#dbdbdb');
+					if ($("#reply_comment_image_id_"+comment_id).val() == "") update_btn.css('background-color','#dbdbdb');
 				}
       }).on('input',function(e){
         $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
@@ -1916,20 +2152,63 @@
 		reply_input.blur().val("");
 		update_btn.css("background-color","#dbdbdb");
 
+    $("#reply_comment_image_id_"+comment_id).val("");
+    $("#attached_reply_comment_image_"+comment_id).hide();
+    $("#attached_reply_edit_"+comment_id).hide();
+    $("#reply_comment_image_btn_"+comment_id).show();
+
 		$("#comment_reply_btn_"+comment_id).show();
 		$("#comment_reply_cancel_btn_"+comment_id).hide();
 	}
 
+  function reply_comment_image_upload(comment_id){
+    var fileObj = $("#reply_comment_image_upload_"+comment_id);
+    $.each( $("#reply_comment_image_upload_"+comment_id)[0].files, function( i, file ) {
+      var formData = new FormData();
+      formData.append('File', file);
+      $.ajax({
+        type: "POST",
+        url: "/preview_images/comment_images.json",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+          $("#reply_comment_image_id_"+comment_id).val(data.id);
+          $("#attached_reply_comment_image_"+comment_id).attr("src",data.image_url).show().animateCss("bounceIn");
+        },
+        beforeSend: function(){
+          progressStart();
+        },
+        complete: function(){
+          progressEnd();
+          $("#attached_reply_edit_"+comment_id).show();
+          $("#reply_comment_image_btn_"+comment_id).hide();
+          $("#send_reply_comment_btn_"+comment_id).css('background-color','#f18b33');
+          fileObj.replaceWith(fileObj.clone(true));
+        }
+      }).fail(function (data) {}).done(function () {});
+    });
+	}
+
+  function reply_comment_image_delete(comment_id){
+    $("#reply_comment_image_id_"+comment_id).val("");
+    $("#attached_reply_comment_image_"+comment_id).animateCssHide("bounceOut");
+    $("#attached_reply_edit_"+comment_id).hide();
+    $("#reply_comment_image_btn_"+comment_id).show();
+    if ($("#reply_comment_input_"+comment_id).val() == "") $("#send_reply_comment_btn_"+comment_id).css('background-color','#dbdbdb');
+  }
+
 	function send_reply_comment(ask_id, ask_deal_id, comment_id, is_left){
 		var content = $("#reply_comment_input_"+comment_id).val();
-		if( content == "" || content == null ){
+    var image_id = $("#reply_comment_image_id_"+comment_id).val();
+		if( (content == "" || content == null) && image_id == "" ){
 			notify('의견을 입력해주세요');
 			return false;
 		} else {
       $.ajax({
         url: "/comments.json",
         type: 'POST',
-        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id, 'comment_id':comment_id },
+        data: {'content': content, 'ask_id':ask_id, 'ask_deal_id':ask_deal_id, 'comment_id':comment_id, 'image_id':image_id},
         dataType: 'json',
         async: false,  // 코멘트 중복 전송을 방지
         error: function(){
@@ -1942,7 +2221,13 @@
             $("#comment_"+data.comment.id).animateCss("flipInX"); //animateCss추가
             link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'), true);
             // notify("작성 완료");
+
             comment_reply_cancel(comment_id);
+            $("#reply_comment_image_id_"+comment_id).val("");
+            $("#attached_reply_comment_image_"+comment_id).attr("src","").hide();
+            $("#attached_reply_edit_"+comment_id).hide();
+            $("#reply_comment_image_btn_"+comment_id).show();
+
             $("#reply_comment_input_"+comment_id).val("");
             $("#send_reply_comment_btn_"+comment_id).css("background-color","#dbdbdb");
             $("#reply_comment_input_"+comment_id).blur();
