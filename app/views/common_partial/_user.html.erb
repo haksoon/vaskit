@@ -334,7 +334,17 @@
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
 			$("#user_overlay_seg").scrollTop(0);
 
-			$("#string_id_input").attr("onkeyup","ready_to_submit(); return false;");
+			var keyPressed = [];
+			$("#string_id_input").keydown(function(e) {
+        keyPressed[e.keyCode] = true;
+        if (keyPressed[13]) {
+          e.preventDefault();
+          $("#string_id_change_btn").click();
+          keyPressed = [];
+        }
+      }).keyup(function(e) {
+				ready_to_submit();
+      });
 
 			$("#menu_pc_bg").show();
 			$("#menu_bg").show();
@@ -395,6 +405,7 @@
 		          },
 		          complete: function(){
 	              progressEnd();
+								$("#string_id_input").blur();
 		          }
 				});
 			}
