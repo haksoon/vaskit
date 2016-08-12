@@ -618,6 +618,7 @@
       <% else %>
         <textarea id="comment_input_{{=ask.id}}" placeholder="회원가입하시고 의견을 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
       <% end %>
+      <div style="margin-top: -80px; height: 80px;" onclick="$('#comment_input_{{=ask.id}}').focus();"></div>
       <div style="display:none;">
         <input type="file" name="comment_image" id="comment_image_upload_{{=ask.id}}" accept="image/*" onchange="comment_image_upload({{=ask.id}}); return false;">
         <input type="hidden" name="comment_image_id" id="comment_image_id_{{=ask.id}}">
@@ -652,9 +653,9 @@
           <div id="comment_content_{{=comment.id}}" style="text-align:left;">
     				<div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
               {{ if (comment.user_id == current_user_id) { }}
-                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
               {{ } else if (comment.user_id == ask.user_id) { }}
-                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
               {{ } }}
               {{ if (comment.image_file_name != null) { }}
                 <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
@@ -766,9 +767,9 @@
             </div>
             <div style="position:relative; margin:0 10px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
               {{ if (comment.user_id == current_user_id) { }}
-                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
               {{ } else if (comment.user_id == ask.user_id) { }}
-                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
               {{ } }}
               {{ if (comment.image_file_name != null) { }}
                 <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
@@ -869,9 +870,9 @@
           <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
             {{ if (comment.user_id == current_user_id) { }}
-              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
             {{ } else if (comment.user_id == ask.user_id) { }}
-              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
             {{ } }}
             {{ if (comment.image_file_name != null) { }}
               <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
@@ -942,9 +943,9 @@
           </div>
           <div style="position:relative; margin:0 0px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
             {{ if (comment.user_id == current_user_id) { }}
-              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
+              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
             {{ } else if (comment.user_id == ask.user_id) { }}
-              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
+              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
             {{ } }}
             {{ if (comment.image_file_name != null) { }}
               <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
@@ -1676,6 +1677,7 @@
 				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
 				$("html, body").animate({scrollTop:0},250);
 			} else {
+        if ($(this).val() == "") $(this).val('\r').selectRange(0,0);
         $(this).parent().find(".tooltip_area").css("transform","scale(1) translateY(10%)");
         $("#comment_input_box_"+ask_id).css("borderColor","#ee6e01");
         $("#ask_deal_id_change_"+ask_id+"_left").css("color","#ee6e01");
