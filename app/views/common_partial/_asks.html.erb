@@ -618,7 +618,7 @@
       <% else %>
         <textarea id="comment_input_{{=ask.id}}" placeholder="회원가입하시고 의견을 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
       <% end %>
-      <div style="margin-top: -80px; height: 80px;" onclick="$('#comment_input_{{=ask.id}}').focus();"></div>
+      <div id="comment_input_cover_{{=ask.id}}" style="margin-top: -100px; height: 100px;" onclick="$('#comment_input_{{=ask.id}}').focus(); $(this).hide();"></div>
       <div style="display:none;">
         <input type="file" name="comment_image" id="comment_image_upload_{{=ask.id}}" accept="image/*" onchange="comment_image_upload({{=ask.id}}); return false;">
         <input type="hidden" name="comment_image_id" id="comment_image_id_{{=ask.id}}">
@@ -739,6 +739,7 @@
             <a href="#" onclick="reply_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
           </div>
           <textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0px; font-size:13px; line-height:20px; text-align:left;"></textarea>
+          <div id="reply_comment_input_cover_{{=comment.id}}" style="margin-top: -40px; height: 40px;" onclick="$('#reply_comment_input_{{=comment.id}}').focus(); $(this).hide();"></div>
           <div style="display:none;">
             <input type="file" name="reply_comment_image" id="reply_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="reply_comment_image_upload({{=comment.id}}); return false;">
             <input type="hidden" name="reply_comment_image_id" id="reply_comment_image_id_{{=comment.id}}">
@@ -844,6 +845,7 @@
             <a href="#" onclick="reply_comment_image_delete({{=comment.id}}); return false;" style="position:relative; width:50%; height:100%; display:block; color:#fff; float:right;">삭제하기</a>
           </div>
           <textarea id="reply_comment_input_{{=comment.id}}" placeholder="{{=comment.user.string_id}}님의 의견에 한 마디 남겨주시겠어요?" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; height:auto; overflow:hidden; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0px; font-size:13px; line-height:20px; text-align:right;"></textarea>
+          <div id="reply_comment_input_cover_{{=comment.id}}" style="margin-top: -40px; height: 40px;" onclick="$('#reply_comment_input_{{=comment.id}}').focus(); $(this).hide();"></div>
           <div style="display:none;">
             <input type="file" name="comment_image" id="reply_comment_image_upload_{{=comment.id}}" accept="image/*" onchange="reply_comment_image_upload({{=comment.id}}); return false;">
             <input type="hidden" name="comment_image_id" id="reply_comment_image_id_{{=comment.id}}">
@@ -1690,6 +1692,8 @@
       $("#comment_input_box_"+ask_id).css("borderColor","#dbdbdb");
       $("#ask_deal_id_change_"+ask_id+"_left").css("color","#9d9ea1");
       $("#ask_deal_id_change_"+ask_id+"_right").css("color","#9d9ea1");
+      var height = $(this).height();
+      $("#comment_input_cover_"+ask_id).css({'height':height, 'marginTop':-height}).show();
     }).keydown(function(e) {
       keyPressed[e.keyCode] = true;
       if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
@@ -1761,7 +1765,7 @@
   }
 
 	function send_comment(ask_id, ask_deal_id){
-			var content = $("#comment_input_"+ask_id).val();
+			var content = $("#comment_input_"+ask_id).val().replace(/\s*$/, "");
       var image_id = $("#comment_image_id_"+ask_id).val();
 			if( (content == "" || content == null) && image_id == "" ){
 				notify('의견을 입력해주세요');
@@ -2033,7 +2037,7 @@
 		var update_btn = $("#comment_update_btn_"+comment_id);
     var comment_image = $("#modify_comment_image_"+comment_id);
 
-    var content = modify_input.val();
+    var content = modify_input.val().replace(/\s*$/, "");
     var image_id = $("#modify_comment_image_id_"+comment_id).val();
     if( (content == "" || content == null) && comment_image_url == null ){
       notify('의견을 입력해주세요');
@@ -2117,13 +2121,20 @@
       // reply_box.show().animateCss("flipInX"); //animateCss추가
       // reply_box.slideDown(100); //animateCss추가
       reply_box.slideDown(100).animateCss("flipInX"); //animateCss추가
-			reply_input.focus();
+      // reply_input.focus();
 
 			$("#comment_reply_btn_"+comment_id).hide();
 			$("#comment_reply_cancel_btn_"+comment_id).show();
 
       var keyPressed = [];
-      reply_input.keydown(function(e) {
+      reply_input.on('focus',function(){
+        if ($(this).val() == "") $(this).val('\r').selectRange(0,0);
+      }).on('input',function(e){
+        $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
+      }).on('blur',function(){
+        var height = $(this).height();
+        $("#reply_comment_input_cover_"+comment_id).css({'height':height, 'marginTop':-height}).show();
+      }).keydown(function(e) {
         keyPressed[e.keyCode] = true;
         if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
           keyPressed = [];
@@ -2137,9 +2148,9 @@
 				} else {
 					if ($("#reply_comment_image_id_"+comment_id).val() == "") update_btn.css('background-color','#dbdbdb');
 				}
-      }).on('input',function(e){
-        $(this).css({'height':'auto','overflow-y':'hidden'}).height(this.scrollHeight);
       });
+
+      $("#reply_comment_input_cover_"+comment_id).click();
 		}
 	}
 
@@ -2151,7 +2162,7 @@
 		var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
     reply_box.slideUp(100);
-		reply_input.blur().val("");
+		reply_input.blur().val("").css({"height":"40px"}).unbind();
 		update_btn.css("background-color","#dbdbdb");
 
     $("#reply_comment_image_id_"+comment_id).val("");
@@ -2201,7 +2212,7 @@
   }
 
 	function send_reply_comment(ask_id, ask_deal_id, comment_id, is_left){
-		var content = $("#reply_comment_input_"+comment_id).val();
+		var content = $("#reply_comment_input_"+comment_id).val().replace(/\s*$/, "");
     var image_id = $("#reply_comment_image_id_"+comment_id).val();
 		if( (content == "" || content == null) && image_id == "" ){
 			notify('의견을 입력해주세요');
@@ -2225,14 +2236,14 @@
             // notify("작성 완료");
 
             comment_reply_cancel(comment_id);
-            $("#reply_comment_image_id_"+comment_id).val("");
-            $("#attached_reply_comment_image_"+comment_id).attr("src","").hide();
-            $("#attached_reply_edit_"+comment_id).hide();
-            $("#reply_comment_image_btn_"+comment_id).show();
+            // $("#reply_comment_image_id_"+comment_id).val("");
+            // $("#attached_reply_comment_image_"+comment_id).attr("src","").hide();
+            // $("#attached_reply_edit_"+comment_id).hide();
+            // $("#reply_comment_image_btn_"+comment_id).show();
 
-            $("#reply_comment_input_"+comment_id).val("");
-            $("#send_reply_comment_btn_"+comment_id).css("background-color","#dbdbdb");
-            $("#reply_comment_input_"+comment_id).blur();
+            // $("#reply_comment_input_"+comment_id).val("");
+            // $("#send_reply_comment_btn_"+comment_id).css("background-color","#dbdbdb");
+            // $("#reply_comment_input_"+comment_id).blur();
 
             if (is_left){
               var left_ask_deal_comment_count = $("#left_ask_deal_comment_count_"+data.comment.ask_id);
