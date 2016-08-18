@@ -13,17 +13,22 @@ class Users::SessionsController < Devise::SessionsController
       my_like_ask_count = AskLike.where(:user_id => current_user.id).count
       @alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(20)
       alram_count = 0
-      @owner_users = []
       @send_users = []
+      @ask_owner_users = []
+      @comment_owner_users = []
       @alrams.each do |alram|
         alram.is_read == false ? alram_count = alram_count + 1 : alram_count = alram_count
-        @owner_users << User.where(:id => alram.ask_owner_user_id).select(:string_id) # TODO: 중첩배열이 아닌 객체 배열로 보완 필요
-        @send_users << User.where(:id => alram.send_user_id).select(:string_id) # TODO: 중첩배열이 아닌 객체 배열로 보완 필요
+        send_user = alram.send_user_id != nil ? User.find_by_id(alram.send_user_id).string_id : ""
+        ask_owner_user = alram.ask_owner_user_id != nil ? User.find_by_id(alram.ask_owner_user_id).string_id : ""
+        comment_owner_user = alram.comment_owner_user_id != nil ? User.find_by_id(alram.comment_owner_user_id).string_id : ""
+        @send_users << send_user
+        @ask_owner_users << ask_owner_user
+        @comment_owner_users << comment_owner_user
       end
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count,
       :my_like_ask_count => my_like_ask_count, :alram_count => alram_count,
-      :alrams => @alrams, :owner_users => @owner_users, :send_users => @send_users}
+      :alrams => @alrams, :send_users => @send_users, :ask_owner_users => @ask_owner_users, :comment_owner_users => @comment_owner_users}
   end
 
   #AJS 추가
@@ -78,6 +83,17 @@ class Users::SessionsController < Devise::SessionsController
       message = "not_receive"
     else
       current_user.update(:receive_notice_email => true)
+    end
+    render :json => {:message => message}
+  end
+
+  def toggle_alram_option
+    message = "on"
+    if User.where(:id => current_user.id).pluck(params[:alram_option])[0] == true
+      current_user.update(params[:alram_option] => false)
+      message = "off"
+    else
+      current_user.update(params[:alram_option] => true)
     end
     render :json => {:message => message}
   end

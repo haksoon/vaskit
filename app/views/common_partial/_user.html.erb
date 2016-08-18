@@ -72,8 +72,9 @@
 			{{ } else { }}
 				{{ for(var i=0; i < alrams.length; i++) { }}
 					{{ var alram = alrams[i] }}
-					{{ var owner_user = owner_users[i][0] }}
-					{{ var send_user = send_users[i][0] }}
+					{{ var send_user = send_users[i] }}
+					{{ var comment_owner_user = comment_owner_users[i] }}
+					{{ var ask_owner_user = ask_owner_users[i] }}
 					{{ if (alram.alram_type.match("vote_")) { }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
 							<i class="fa fa-check-circle-o" style="color: #666;"></i>&nbsp;회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표하였습니다. 중간점검 해보세요!
@@ -83,29 +84,19 @@
 						{{ ask_like_count = alram.alram_type.replace("like_ask_","") }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
 							{{ if (ask_like_count == 1) { }}
-								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 질문을 좋아합니다.
+								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 질문을 좋아합니다.
 							{{ } else { }}
-								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= ask_like_count - 1 }}명</span>이 회원님의 질문을 좋아합니다.
+								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= ask_like_count - 1 }}명</span>이 회원님의 질문을 좋아합니다.
 							{{ } }}
-							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
-						</a>
-					{{ } else if (alram.alram_type.match("sub_comment_")) { }}
-						{{ sub_comment_count = alram.alram_type.replace("sub_comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
-						{{ if (sub_comment_count == 1) { }}
-							<i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님도 <span style="color:#998674;">{{= owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
-						{{ } else { }}
-							<i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= sub_comment_count - 1 }}명</span>도 <span style="color:#998674;">{{= owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
-						{{ } }}
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } else if (alram.alram_type.match("like_comment_")) { }}
 						{{ comment_like_count = alram.alram_type.replace("like_comment_","") }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
 							{{ if (comment_like_count == 1) { }}
-								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 의견을 좋아합니다.
+								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 의견을 좋아합니다.
 							{{ } else { }}
-								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= comment_like_count - 1 }}명</span>이 회원님의 의견을 좋아합니다.
+								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= comment_like_count - 1 }}명</span>이 회원님의 의견을 좋아합니다.
 							{{ } }}
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
@@ -113,19 +104,39 @@
 						{{ reply_comment_count = alram.alram_type.replace("reply_comment_","") }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
 							{{ if (reply_comment_count == 1) { }}
-							<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 의견에 댓글을 남겼습니다.
+								<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 의견에 댓글을 남겼습니다.
 							{{ } else { }}
-							<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= reply_comment_count - 1 }}명</span>이 회원님의 의견에 댓글을 남겼습니다.
+								<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= reply_comment_count - 1 }}명</span>이 회원님의 의견에 댓글을 남겼습니다.
 							{{ } }}
+							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
+						</a>
+					{{ } else if (alram.alram_type.match("reply_sub_comment_")) { }}
+					  {{ reply_sub_comment_count = alram.alram_type.replace("reply_sub_comment_","") }}
+					  <a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
+					  {{ if (reply_sub_comment_count == 1) { }}
+					    <i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님도 <span style="color:#998674;">{{=comment_owner_user}}</span>님의 의견에 댓글을 남겼습니다.
+					  {{ } else { }}
+					    <i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= reply_sub_comment_count - 1 }}명</span>도 <span style="color:#998674;">{{=comment_owner_user}}</span>님의 의견에 댓글을 남겼습니다.
+					  {{ } }}
+					    <p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
+					  </a>
+					{{ } else if (alram.alram_type.match("sub_comment_")) { }}
+						{{ sub_comment_count = alram.alram_type.replace("sub_comment_","") }}
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
+						{{ if (sub_comment_count == 1) { }}
+							<i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님도 <span style="color:#998674;">{{=ask_owner_user}}</span>님의 질문에 의견을 남겼습니다.
+						{{ } else { }}
+							<i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= sub_comment_count - 1 }}명</span>도 <span style="color:#998674;">{{=ask_owner_user}}</span>님의 질문에 의견을 남겼습니다.
+						{{ } }}
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
 					{{ } else if (alram.alram_type.match("comment_")) { }}
 						{{ comment_count = alram.alram_type.replace("comment_","") }}
 						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 15px; text-align:left; transition:all .5s;">
 							{{ if (comment_count == 1) { }}
-								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님이 회원님의 질문에 의견을 남겼습니다.
+								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 질문에 의견을 남겼습니다.
 							{{ } else { }}
-								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{= send_user.string_id}}</span>님 외 <span style="color:#998674;">{{= comment_count - 1 }}명</span>이 회원님의 질문에 의견을 남겼습니다.
+								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= comment_count - 1 }}명</span>이 회원님의 질문에 의견을 남겼습니다.
 							{{ } }}
 							<p style="color:#9d9ea1; font-size:12px; margin:0; padding-top:5px; float:right;">{{= get_past_time(alram.updated_at) }}</p>
 						</a>
@@ -170,28 +181,28 @@
 				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;">나의 질문 관련 알림</p>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
-					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
+					<a id="alram_1_btn" href="#" onclick="toggle_alram_option('alram_1'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_1 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-check-circle-o"></i>&nbsp;득표수 알림</span>
-					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
+					<a id="alram_2_btn" href="#" onclick="toggle_alram_option('alram_2'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_2 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-send-o"></i>&nbsp;새로운 의견 알림</span>
-					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
+					<a id="alram_3_btn" href="#" onclick="toggle_alram_option('alram_3'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_3 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;">나의 의견 관련 알림</p>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
-					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
+					<a id="alram_4_btn" href="#" onclick="toggle_alram_option('alram_4'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_4 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-comments-o"></i>&nbsp;답글 알림</span>
-					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
+					<a id="alram_5_btn" href="#" onclick="toggle_alram_option('alram_5'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_5 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
 				</div>
 				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
 					<span style="font-size:12px; color:#666;"><i class="fa fa-comment-o"></i>&nbsp;다른 의견 알림</span>
-					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/on_btn.png" style="display:block; width:40px;"></a>
+					<a id="alram_6_btn" href="#" onclick="toggle_alram_option('alram_6'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_6 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
 				</div>
 			</div>
 		</div>
@@ -210,7 +221,7 @@
 			notify('<%=flash[:custom_notice]%>'.replace('\n','<br>'));
 		<% end %>
 
-		var current_user_string_id
+		var current_user_string_id;
 
 		function user_on(){
 			disableScroll();
@@ -240,11 +251,12 @@
 					my_like_ask_count = data.my_like_ask_count;
 		      alrams = data.alrams;
 					alram_count = data.alram_count;
-		      owner_users = data.owner_users;
-		      send_users = data.send_users;
+					send_users = data.send_users;
+					ask_owner_users = data.ask_owner_users;
+					comment_owner_users = data.comment_owner_users;
 					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, owner_users:owner_users, send_users:send_users}));
+					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, comment_owner_users:comment_owner_users, ask_owner_users:ask_owner_users, send_users:send_users}));
 					alram_check();
 		    },
 		    beforeSend: function(){
@@ -355,7 +367,7 @@
 
 			$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-			$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, owner_users:owner_users, send_users:send_users}));
+			$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, ask_owner_users:ask_owner_users, send_users:send_users}));
 			alram_check();
 			$("#user_path").html("&gt;&nbsp;My Page");
 			$("#manage_on").css("transform","scale(1)").css("-webkit-transform","scale(1)");
@@ -426,6 +438,32 @@
 		        	}else{
 		        		$("#receive_notice_btn img").attr("src","/images/custom/off_btn.png");
 		        		notify("이메일 수신 거부 처리되었습니다");
+		        	}
+		        },
+		        beforeSend: function(){
+							progressStart();
+            },
+            complete: function(){
+              progressEnd();
+            }
+			});
+		}
+
+		function toggle_alram_option(alram_option){
+			$.ajax({
+		        url: '/users/toggle_alram_option.json',
+		        data: {"alram_option": alram_option},
+		        type: 'PUT',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+		        	if (data.message == "on"){
+		        		$("#"+alram_option+"_btn img").attr("src","/images/custom/on_btn.png");
+		        		notify("알람 수신 동의 처리되었습니다");
+		        	}else{
+		        		$("#"+alram_option+"_btn img").attr("src","/images/custom/off_btn.png");
+		        		notify("알람 수신 거부 처리되었습니다");
 		        	}
 		        },
 		        beforeSend: function(){

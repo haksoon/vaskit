@@ -18,20 +18,27 @@ class CommentsController < ApplicationController
       comment = Comment.create(:user_id => current_user.id, :ask_id => ask_id, :ask_deal_id => ask_deal_id, :content => content, :comment_id => comment_id, :image => comment_image)
 
       ask = Ask.find(ask_id)
-      if comment_id == nil
-        if ask.user_id != comment.user_id
-          alram = Alram.where(:user_id => ask.user_id, :ask_id => ask.id).where("alram_type like ?", "comment_%").first
-          if alram
-            alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "comment_" + Comment.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s  )
-          else
-            Alram.create(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id, :alram_type => "comment_" + Comment.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
-          end
-        end
 
+      #본인의 질문에 대한 댓글 알림 (type:comment)
+      if ask.user_id != comment.user_id
+      if User.find_by_id(ask.user_id).alram_3 == true #알림 옵션 체크
+        alram = Alram.where(:user_id => ask.user_id, :ask_id => ask.id).where("alram_type like ?", "comment_%").first
+        if alram
+          alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "comment_" + Comment.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s  )
+        else
+          Alram.create(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id, :alram_type => "comment_" + Comment.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
+        end
+      end
+      end
+
+      if comment_id == nil
+
+        #본인이 댓글 단 질문에 추가 댓글 알림 (type:sub_comment)
         #과거에 달았던 애가 있는지 체크
-        sub_comment_user_ids = Comment.where("ask_id = ? AND id < ?",  ask.id, comment.id ).pluck(:user_id).uniq
+        sub_comment_user_ids = Comment.where("ask_id = ? AND id < ? AND is_deleted = ?",  ask.id, comment.id, false).pluck(:user_id).uniq
         sub_comment_user_ids.each_with_index do |sub_comment_user_id|
           if sub_comment_user_id != ask.user_id && comment.user_id != sub_comment_user_id
+          if User.find_by_id(sub_comment_user_id).alram_6 == true #알림 옵션 체크
             sub_comment = Comment.where(:ask_id => ask.id, :user_id => sub_comment_user_id).first
             user_count = Comment.where("ask_id = ? AND id > ? AND user_id <> ?",  ask.id, sub_comment.id, sub_comment.user_id ).count
             alram = Alram.where(:user_id => sub_comment.user_id, :ask_owner_user_id => ask.user_id, :ask_id => ask.id).where("alram_type like ?", "sub_comment_%").first
@@ -41,12 +48,16 @@ class CommentsController < ApplicationController
               Alram.create(:user_id => sub_comment.user_id, :send_user_id => comment.user_id, :ask_owner_user_id => ask.user_id, :ask_id => ask.id, :alram_type => "sub_comment_" + user_count.to_s )
             end
           end
+          end
         end
 
-      #대댓글의 경우 알람 별도로 추가
+      #대댓글 작성시 알람 생성
       elsif comment_id != nil
         original_comment = Comment.find(comment_id)
+
+        #본인의 댓글에 대한 대댓글 알림 (type:reply_comment)
         if original_comment.user_id != comment.user_id
+        if User.find_by_id(original_comment.user_id).alram_5 == true #알림 옵션 체크
           alram = Alram.where(:user_id => original_comment.user_id, :ask_id => ask.id).where("alram_type like ?", "reply_comment_%").first
           if alram
             alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "reply_comment_" + Comment.where("comment_id = ?", comment.comment_id).count.to_s  )
@@ -54,6 +65,25 @@ class CommentsController < ApplicationController
             Alram.create(:user_id => original_comment.user_id, :send_user_id => current_user.id, :ask_id => ask.id, :alram_type => "reply_comment_" + Comment.where("comment_id = ?", comment.comment_id).count.to_s )
           end
         end
+        end
+
+        #본인이 대댓글 단 댓글에 대한 추가 대댓글 알림 (type:reply_sub_comment)
+        reply_sub_comment_user_ids = Comment.where("comment_id = ? AND id < ? AND is_deleted = ?", original_comment.id, comment.id, false).pluck(:user_id).uniq
+        reply_sub_comment_user_ids.each_with_index do |reply_sub_comment_user_id|
+          if comment.user_id != reply_sub_comment_user_id
+          if User.find_by_id(reply_sub_comment_user_id).alram_6 == true #알림 옵션 체크
+            reply_sub_comment = Comment.where(:comment_id => original_comment.id, :user_id => reply_sub_comment_user_id).first
+            user_count = Comment.where("comment_id = ? AND id > ? AND user_id <> ?",  original_comment.id, reply_sub_comment.id, reply_sub_comment.user_id ).count
+            alram = Alram.where(:user_id => reply_sub_comment.user_id, :ask_id => ask.id, :comment_owner_user_id => original_comment.user_id, :comment_id => original_comment.id).where("alram_type like ?", "reply_sub_comment_%").first
+            if alram
+              alram.update(:is_read => false, :send_user_id => comment.user_id, :alram_type => "reply_sub_comment_" + user_count.to_s )
+            else
+              Alram.create(:user_id => reply_sub_comment.user_id, :send_user_id => comment.user_id, :ask_id => ask.id, :comment_owner_user_id => original_comment.user_id, :comment_id => original_comment.id, :alram_type => "reply_sub_comment_" + user_count.to_s )
+            end
+          end
+          end
+        end
+
       end
 
       message = "success"
@@ -120,13 +150,15 @@ class CommentsController < ApplicationController
       comment_like = CommentLike.create(:user_id => current_user.id, :comment_id => params[:id])
       comment.update(:like_count => comment.like_count + 1)
 
-      if comment.user_id != comment_like.user_id && Alram.where(:user_id => comment.user_id, :send_user_id => current_user.id, :ask_id => comment.ask_id).blank?
-        alram = Alram.where(:user_id => comment.user_id, :ask_id => comment.ask_id).where("alram_type like ?", "like_comment_%").first
+      if comment.user_id != comment_like.user_id #&& Alram.where(:user_id => comment.user_id, :send_user_id => current_user.id, :ask_id => comment.ask_id).blank?
+      if User.find_by_id(comment.user_id).alram_4 == true #알림 옵션 체크
+        alram = Alram.where(:user_id => comment.user_id, :comment_id => comment_like.comment_id,).where("alram_type like ?", "like_comment_%").first
         if alram
           alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "like_comment_" + CommentLike.where("comment_id = ? AND user_id <> ?", comment.id, comment.user_id).count.to_s )
         else
-          Alram.create(:user_id => comment.user_id, :send_user_id => current_user.id, :ask_id => comment.ask_id, :alram_type => "like_comment_" + CommentLike.where("comment_id = ? AND user_id <> ?", comment.id, comment.user_id).count.to_s )
+          Alram.create(:user_id => comment.user_id, :send_user_id => current_user.id, :ask_id => comment.ask_id, :comment_id => comment_like.comment_id, :alram_type => "like_comment_" + CommentLike.where("comment_id = ? AND user_id <> ?", comment.id, comment.user_id).count.to_s )
         end
+      end
       end
     end
     render :json => {:already_like => already_like, :comment_like => comment_like}

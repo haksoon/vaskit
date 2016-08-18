@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
     get 'users/change_password', :to => "users/registrations#edit"
     put 'users/toggle_receive_notice', :to => "users/sessions#toggle_receive_notice"
+    put 'users/toggle_alram_option', :to => "users/sessions#toggle_alram_option"
     delete 'users/:id', :to => "users/registrations#destroy"
   end
   resources :user_categories
