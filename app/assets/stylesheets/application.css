@@ -591,6 +591,17 @@ a.login_btn:hover {
 	background-color:#ffe4a9;
 }
 
+#card_front {
+	position:absolute; top:0; left:0; transform:rotateY(90deg); -webkit-transform:rotateY(90deg); -moz-backface-visibility:hidden; -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s, opacity 0.5s; perspective:0px; -webkit-perspective:0px; opacity:0;
+}
+
+#card_back {
+	position:absolute; top:0; left:0; transform:rotateY(-90deg); -webkit-transform:rotateY(-90deg); -moz-backface-visibility:hidden; -webkit-backface-visibility:hidden; backface-visibility:hidden; transition:transform 0.3s, opacity 0.5s; perspective:0px; -webkit-perspective:0px; opacity:0;
+}
+
+#card_front.on, #card_back.on {
+	opacity:1;
+}
 
 /* 질문하기 화면 */
 
