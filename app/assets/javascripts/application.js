@@ -103,19 +103,19 @@ function back_button(){
 	}
 }
 
-function share_log(channel){
+function share_log(channel, ask_id){
 	$.ajax({
         url: "/share_logs.json",
         type: 'POST',
         async: false,
-        data: {"channel" : channel},
+        data: {"channel" : channel, "ask_id" : ask_id},
         dataType: 'json',
         error: function(){
             return false;
         },
         success: function(data){
         },
-	    beforeSend: function(){
+        beforeSend: function(){
         }
 	});
 }

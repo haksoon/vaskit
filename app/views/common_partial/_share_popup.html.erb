@@ -41,7 +41,6 @@
 
 	function share_facebook(){
 		$("#share_complete").css({"opacity":"1"});
-		share_log("facebook");
 		if (typeof(FB) != 'undefined' && FB != null ) {
 			  FB.init({
 			    appId      : '<%=Facebook::CONFIG["app_id"]%>',
@@ -55,11 +54,12 @@
 			method: 'share',
 			href: share_url,
 		}, function(response){});
+		var ask_id = share_url.replace("http://vaskit.kr/asks/","");
+		share_log("facebook", ask_id);
 	}
 
 	function share_katalk(user_string_id, left_deal_title, right_deal_title){
 		$("#share_complete").css({"opacity":"1"});
-		share_log("katalk");
 		try{
 			Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
 		}catch(err) {
@@ -80,6 +80,8 @@
 	        	url: share_url
 	      	}
 	    });
+			var ask_id = share_url.replace("http://vaskit.kr/asks/","");
+			share_log("katalk", ask_id);
 	}
 
 	function copy_url() {
