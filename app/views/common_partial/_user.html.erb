@@ -327,6 +327,7 @@
 							if (parseInt($("#alram_feed_count").html()) > 0) $("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
 							user_off();
 							ask = data.ask;
+							asks.push(ask);
 
 							if (document.location.pathname == "/") {
 								history.pushState(null, null, "#"+ask.id+"_detail");
