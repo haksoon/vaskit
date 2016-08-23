@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body style="font-size:13px;">
+    <p>
+      신고 접수 항목이 있습니다. 확인해주세요.
+    </p>
+    <ul>
+      <li>
+        신고자: <%= User.find_by_id(@report.user_id).string_id %>
+      </li>
+      <li>
+        신고 대상: <%= @report.target %>, <%= @report.target_id %>
+      </li>
+      <li>
+        신고 종류: <%= @report.report_type %>
+      </li>
+      <li>
+        신고 내용: <%= @report.message %>
+      </li>
+      <li>
+        신고 일시: <%= @report.created_at %>
+      </li>
+    </ul>
+  </body>
+</html>
