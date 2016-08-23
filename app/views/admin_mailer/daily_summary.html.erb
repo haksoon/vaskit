@@ -5,8 +5,68 @@
     <title></title>
   </head>
   <body style="font-size:13px;">
-    <p>
+    <h1>
       daily summary 테스트 입니다
-    </p>
+    </h1>
+
+    <br>
+    <h2>- 최근 7일간 일자별 지표</h2>
+    <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb;">
+      <tr style="background-color:#f4f4f4;">
+        <th style="border-bottom: 1px solid #dbdbdb;">일자</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">신규가입</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">DAU</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">방문</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">투표</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">댓글</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">질문</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">좋아요</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">공감</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">공유</th>
+      </tr>
+      <% @daily_summaries.each do |d| %>
+      <tr style="text-align:right;">
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.date %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.signup_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.DAU %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.visit_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.vote_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.comment_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.ask_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.comment_like_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.ask_like_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= d.share_count %></td>
+      </tr>
+      <% end %>
+    </table>
+
+    <br>
+    <h2>- 누적 방문 횟수 상위 10명 회원 리스트</h2>
+    <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb;">
+      <tr style="background-color:#f4f4f4;">
+        <th style="border-bottom: 1px solid #dbdbdb;">ID</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">방문</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">투표</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">댓글</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">질문</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">좋아요</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">공감</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">공유</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">가입일</th>
+      </tr>
+      <% @user_summaries.each do |u| %>
+      <tr style="text-align:right;">
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.string_id %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.visit_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.vote_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.comment_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.ask_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.comment_like_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.ask_like_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.share_count %></td>
+        <td style="border-bottom: 1px solid #dbdbdb;"><%= u.created_at.month %>월 <%= u.created_at.day %>일</td>
+      </tr>
+      <% end %>
+    </table>
   </body>
 </html>
