@@ -11,4 +11,10 @@ class AdminMailer < ActionMailer::Base
     @report = report
     mail(subject: "[VASKIT] 신고가 접수되었습니다.").deliver
   end
+
+  def daily_summary
+    @summary = "summary"
+    mail(to: 'junsikahn@vaskit.kr', subject: "[VASKIT] daily summary").deliver
+  end
+
 end
