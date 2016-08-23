@@ -91,6 +91,7 @@ Rails.application.routes.draw do
   end
   resources :reports
   resources :rank_asks
+  get "/admin/analysis", :to => "admin#analysis"
   resources :admin do
     collection do
       post 'submit_rank_ask'

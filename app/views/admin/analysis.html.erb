@@ -1,0 +1,257 @@
+<script>
+  var daily_recent_10 = <%= raw @daily_recent_10.to_json %>;
+  var chart_1_list = [],
+      chart_2_list = [],
+      chart_3_list = [],
+      chart_4_list = [];
+  $.each(daily_recent_10, function(index, daily){
+    var a = [];
+    a.push(daily.visit_count);
+    a.push(daily.vote_count);
+    chart_1_list.unshift(a);
+    var b = [];
+    b.push(daily.DAU);
+    chart_2_list.unshift(b);
+    var c = [];
+    c.push(daily.signup_count);
+    chart_3_list.unshift(c);
+    var d = [];
+    d.push(daily.comment_count);
+    d.push(daily.ask_count);
+    d.push(daily.comment_like_count);
+    d.push(daily.ask_like_count);
+    d.push(daily.share_count);
+    chart_4_list.unshift(d);
+  });
+</script>
+<div style="margin:50px auto; width:100%; max-width:600px; font-size:13px; background-color:#fff; padding:50px 100px;">
+  <img src="http://vaskit.kr/images/logo/logo_2.png" style="width:100%; max-width:600px;">
+  <h1 style="color:#998674; text-align:right;">
+    실시간 Report
+  </h1>
+
+  <br><br>
+  <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">누적 주요 지표</h2>
+  <table cellspacing="8" cellpadding="0" style="width:100%; max-width:600px;">
+    <tr style="text-align:center; font-size:30px; font-weight:bold;">
+      <td style="width:25%; height:140px; background-color:#ffcc5a; color:#fff; border-radius:10px;">
+        <small style="font-size:15px;">방문</small><br>
+        <%= @total_visit_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %>
+      </td>
+      <td style="width:25%; height:140px; background-color:#ffcc5a; color:#fff; border-radius:10px;">
+        <small style="font-size:15px;">투표</small><br>
+        <%= @total_vote_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %>
+      </td>
+      <td style="width:25%; height:140px; background-color:#ffcc5a; color:#fff; border-radius:10px;">
+        <small style="font-size:15px;">댓글</small><br>
+        <%= @total_comment_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %>
+      </td>
+      <td style="width:25%; height:140px; background-color:#ffcc5a; color:#fff; border-radius:10px;">
+        <small style="font-size:15px;">질문</small><br>
+        <%= @total_ask_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %>
+      </td>
+    </tr>
+  </table>
+  <p style="margin:10px 15px; color:#666;">
+    이 지표는 실제 사용자들의 누적 주요 지표입니다.<br>
+    단, 방문횟수의 경우에는 2016년 7월 22일부터 집계되었습니다.
+  </p>
+
+
+
+  <br><br>
+  <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">최근 10일간 일자별 지표</h2>
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트1] 일자별 방문, 투표횟수</p>
+  <div id="chart_1"></div>
+  <script>
+  	var options = {
+  		'legend':{
+  			names: ['','','','','','','','','','오늘'],
+  			hrefs: []
+  		},
+  		'dataset':{
+  			title:'일자별 방문, 투표 횟수',
+  			values: chart_1_list,
+  			colorset: ['#DC143C', '#EE6E01'],
+  			fields:['방문', '투표']
+  		},
+  		'chartDiv' : 'chart_1',
+  		'chartType' : 'line',
+  		'chartSize' : {width:600, height:300},
+  		'minValue' : 0,
+  		// 'maxValue' : 300,
+  		'increment' : 50,
+  		'isGuideLineNeeded' : true
+  	};
+  	Nwagon.chart(options);
+  </script>
+
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트2] 일자별 Active Users</p>
+  <div id="chart_2"></div>
+  <script>
+  	var options = {
+  		'legend':{
+  			names: ['','','','','','','','','','오늘'],
+  			hrefs: []
+  		},
+  		'dataset':{
+  			title:'일자별 Active Users',
+  			values: chart_2_list,
+  			colorset: ['#EE6E01'],
+  			fields:['DAU']
+  		},
+  		'chartDiv' : 'chart_2',
+  		'chartType' : 'line',
+  		'chartSize' : {width:600, height:300},
+  		'minValue' : 0,
+  		// 'maxValue' : 30,
+  		'increment' : 10,
+  		'isGuideLineNeeded' : true
+  	};
+  	Nwagon.chart(options);
+  </script>
+
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트3] 일자별 신규 가입자수</p>
+  <div id="chart_3"></div>
+  <script>
+  	var options = {
+  		'legend':{
+  			names: ['','','','','','','','','','오늘'],
+  			hrefs: []
+  		},
+  		'dataset':{
+  			title:'일자별 신규 가입자수',
+  			values: chart_3_list,
+  			colorset: ['RED'],
+  			fields:['신규']
+  		},
+  		'chartDiv' : 'chart_3',
+  		'chartType' : 'line',
+  		'chartSize' : {width:600, height:300},
+  		'minValue' : 0,
+  		// 'maxValue' : 30,
+  		'increment' : 5,
+  		'isGuideLineNeeded' : true
+  	};
+  	Nwagon.chart(options);
+  </script>
+
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트4] 일자별 댓글, 질문, 좋아요, 공감, 공유횟수</p>
+  <div id="chart_4"></div>
+  <script>
+  	var options = {
+  		'legend':{
+  			names: ['','','','','','','','','','오늘'],
+  			hrefs: []
+  		},
+  		'dataset':{
+  			title:'일자별 댓글, 질문, 좋아요, 공감, 공유횟수',
+  			values: chart_4_list,
+  			colorset: ['#DC143C', '#EE6E01', '#FFCC5A', 'blue', 'green'],
+  			fields:['댓글', '질문', '좋아요', '공감', '공유']
+  		},
+  		'chartDiv' : 'chart_4',
+  		'chartType' : 'line',
+  		'chartSize' : {width:600, height:300},
+  		'minValue' : 0,
+  		// 'maxValue' : 30,
+  		'increment' : 5,
+  		'isGuideLineNeeded' : true
+  	};
+  	Nwagon.chart(options);
+  </script>
+
+  <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb; width:100%; max-width:600px;">
+    <tr style="background-color:#f4f4f4;">
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">일자</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">방문</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">투표</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">댓글</th>
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">질문</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">좋아요</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">공감</th>
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">공유</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">신규</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">DAU</th>
+    </tr>
+    <% @daily_recent_10.each do |d| %>
+    <tr style="text-align:right;">
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb; text-align:center;"><%= d.date %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= d.visit_count == 0 ? "-" : d.visit_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= d.vote_count == 0 ? "-" : d.vote_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= d.comment_count == 0 ? "-" : d.comment_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;"><%= d.ask_count == 0 ? "-" : d.ask_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= d.comment_like_count == 0 ? "-" : d.comment_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= d.ask_like_count == 0 ? "-" : d.ask_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;"><%= d.share_count == 0 ? "-" : d.share_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= d.signup_count == 0 ? "-" : d.signup_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= d.DAU == 0 ? "-" : d.DAU.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+    </tr>
+    <% end %>
+  </table>
+
+
+
+  <br><br>
+  <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">최근 10개월간 월별 지표</h2>
+  <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb; width:100%; max-width:600px;">
+    <tr style="background-color:#f4f4f4;">
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">월</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">방문</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">투표</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">댓글</th>
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">질문</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">좋아요</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">공감</th>
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">공유</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">신규</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">MAU</th>
+    </tr>
+    <% @monthly_recent_10.each do |m| %>
+    <tr style="text-align:right;">
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb; text-align:center;"><%= m.month %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= m.visit_count == 0 ? "-" : m.visit_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= m.vote_count == 0 ? "-" : m.vote_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= m.comment_count == 0 ? "-" : m.comment_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;"><%= m.ask_count == 0 ? "-" : m.ask_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= m.comment_like_count == 0 ? "-" : m.comment_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= m.ask_like_count == 0 ? "-" : m.ask_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;"><%= m.share_count == 0 ? "-" : m.share_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= m.signup_count == 0 ? "-" : m.signup_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= m.MAU == 0 ? "-" : m.MAU.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+    </tr>
+    <% end %>
+  </table>
+
+  <br><br>
+  <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">누적 방문 횟수 상위 10명 회원 리스트</h2>
+  <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb; width:100%; max-width:600px;">
+    <tr style="background-color:#f4f4f4;">
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">ID</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">방문</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">투표</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">댓글</th>
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">질문</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">좋아요</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">공감</th>
+      <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">공유</th>
+      <th style="border-bottom: 1px solid #dbdbdb;">가입일</th>
+    </tr>
+    <% @user_top_10.each do |u| %>
+    <tr style="text-align:right;">
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb; text-align:center;"><%= u.string_id %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= u.visit_count == 0 ? "-" : u.visit_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= u.vote_count == 0 ? "-" : u.vote_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= u.comment_count == 0 ? "-" : u.comment_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;"><%= u.ask_count == 0 ? "-" : u.ask_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= u.comment_like_count == 0 ? "-" : u.comment_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb;"><%= u.ask_like_count == 0 ? "-" : u.ask_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;"><%= u.share_count == 0 ? "-" : u.share_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+      <td style="border-bottom: 1px solid #dbdbdb; text-align:center;"><%= u.created_at.month %>월 <%= u.created_at.day %>일</td>
+    </tr>
+    <% end %>
+  </table>
+
+  <br>
+  <h2 style="background-color:#9d9ea1; color:#fff; padding:10px 15px; text-align:center;">END of Report</h2>
+</div>

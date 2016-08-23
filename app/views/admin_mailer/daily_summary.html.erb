@@ -3,34 +3,34 @@
   <head>
     <meta charset="utf-8">
     <title></title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-    <script src="http://vaskit.kr/images/Nwagon/Nwagon.js"></script>
-    <link href="http://vaskit.kr/images/Nwagon/Nwagon.css" rel="stylesheet">
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script> -->
+    <!-- <script src="http://vaskit.kr/images/Nwagon/Nwagon.js"></script> -->
+    <!-- <link href="http://vaskit.kr/images/Nwagon/Nwagon.css" rel="stylesheet"> -->
     <script>
-      var daily_recent_10 = <%= raw @daily_recent_10.to_json %>;
-      var chart_1_list = [],
-          chart_2_list = [],
-          chart_3_list = [],
-          chart_4_list = [];
-      $.each(daily_recent_10, function(index, daily){
-        var a = [];
-        a.push(daily.visit_count);
-        a.push(daily.vote_count);
-        chart_1_list.unshift(a);
-        var b = [];
-        b.push(daily.DAU);
-        chart_2_list.unshift(b);
-        var c = [];
-        c.push(daily.signup_count);
-        chart_3_list.unshift(c);
-        var d = [];
-        d.push(daily.comment_count);
-        d.push(daily.ask_count);
-        d.push(daily.comment_like_count);
-        d.push(daily.ask_like_count);
-        d.push(daily.share_count);
-        chart_4_list.unshift(d);
-      });
+      // var daily_recent_10 = <%= raw @daily_recent_10.to_json %>;
+      // var chart_1_list = [],
+      //     chart_2_list = [],
+      //     chart_3_list = [],
+      //     chart_4_list = [];
+      // $.each(daily_recent_10, function(index, daily){
+      //   var a = [];
+      //   a.push(daily.visit_count);
+      //   a.push(daily.vote_count);
+      //   chart_1_list.unshift(a);
+      //   var b = [];
+      //   b.push(daily.DAU);
+      //   chart_2_list.unshift(b);
+      //   var c = [];
+      //   c.push(daily.signup_count);
+      //   chart_3_list.unshift(c);
+      //   var d = [];
+      //   d.push(daily.comment_count);
+      //   d.push(daily.ask_count);
+      //   d.push(daily.comment_like_count);
+      //   d.push(daily.ask_like_count);
+      //   d.push(daily.share_count);
+      //   chart_4_list.unshift(d);
+      // });
     </script>
   </head>
   <body style="margin:10px; width:100%; max-width:600px; font-size:13px;">
@@ -38,8 +38,9 @@
     <h1 style="color:#998674; text-align:right;">
       <%= @date %> Daily Report
     </h1>
+    <a href="http://vaskit.kr/admin/analysis" style="float:right; padding:5px 10pxs; margin-top:-10px; color:#ee6e01; background-color:#ffe4a9; font-size:16px;">> 실시간 Report 보러가기</a>
 
-    <br>
+    <br><br>
     <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">누적 주요 지표</h2>
     <table cellspacing="8" cellpadding="0" style="width:100%; max-width:600px;">
       <tr style="text-align:center; font-size:30px; font-weight:bold;">
@@ -68,9 +69,9 @@
 
 
 
-    <br>
+    <br><br>
     <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">최근 10일간 일자별 지표</h2>
-    <p style="padding: 10px 15px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트1] 일자별 방문, 투표횟수</p>
+    <!-- <p style="padding: 10px 15px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트1] 일자별 방문, 투표횟수</p>
     <div id="chart_1"></div>
     <script>
     	var options = {
@@ -168,7 +169,7 @@
     		'isGuideLineNeeded' : true
     	};
     	Nwagon.chart(options);
-    </script>
+    </script> -->
 
     <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb; width:100%; max-width:600px;">
       <tr style="background-color:#f4f4f4;">
@@ -201,7 +202,7 @@
 
 
 
-    <br>
+    <br><br>
     <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">최근 10개월간 월별 지표</h2>
     <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb; width:100%; max-width:600px;">
       <tr style="background-color:#f4f4f4;">
@@ -232,7 +233,7 @@
       <% end %>
     </table>
 
-    <br>
+    <br><br>
     <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">누적 방문 횟수 상위 10명 회원 리스트</h2>
     <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb; width:100%; max-width:600px;">
       <tr style="background-color:#f4f4f4;">
@@ -260,5 +261,8 @@
       </tr>
       <% end %>
     </table>
+
+    <br>
+    <h2 style="background-color:#9d9ea1; color:#fff; padding:10px 15px; text-align:center;">END of Report</h2>
   </body>
 </html>
