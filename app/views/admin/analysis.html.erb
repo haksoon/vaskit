@@ -1,34 +1,9 @@
-<script>
-  var daily_recent_10 = <%= raw @daily_recent_10.to_json %>;
-  var chart_1_list = [],
-      chart_2_list = [],
-      chart_3_list = [],
-      chart_4_list = [];
-  $.each(daily_recent_10, function(index, daily){
-    var a = [];
-    a.push(daily.visit_count);
-    a.push(daily.vote_count);
-    chart_1_list.unshift(a);
-    var b = [];
-    b.push(daily.DAU);
-    chart_2_list.unshift(b);
-    var c = [];
-    c.push(daily.signup_count);
-    chart_3_list.unshift(c);
-    var d = [];
-    d.push(daily.comment_count);
-    d.push(daily.ask_count);
-    d.push(daily.comment_like_count);
-    d.push(daily.ask_like_count);
-    d.push(daily.share_count);
-    chart_4_list.unshift(d);
-  });
-</script>
 <div style="margin:50px auto; width:100%; max-width:600px; font-size:13px; background-color:#fff; padding:50px 100px;">
   <img src="http://vaskit.kr/images/logo/logo_2.png" style="width:100%; max-width:600px;">
-  <h1 style="color:#998674; text-align:right;">
+  <h1 style="color:#998674; text-align:right; margin-bottom:5px;">
     실시간 Report
   </h1>
+  <p id="time" style="margin:0; font-size:13px; color:#666; text-align:right;"></p>
 
   <br><br>
   <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">누적 주요 지표</h2>
@@ -61,106 +36,6 @@
 
   <br><br>
   <h2 style="background-color:#4b3d3d; color:#fff; padding:10px 15px;">최근 10일간 일자별 지표</h2>
-  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트1] 일자별 방문, 투표횟수</p>
-  <div id="chart_1"></div>
-  <script>
-  	var options = {
-  		'legend':{
-  			names: ['','','','','','','','','','오늘'],
-  			hrefs: []
-  		},
-  		'dataset':{
-  			title:'일자별 방문, 투표 횟수',
-  			values: chart_1_list,
-  			colorset: ['#DC143C', '#EE6E01'],
-  			fields:['방문', '투표']
-  		},
-  		'chartDiv' : 'chart_1',
-  		'chartType' : 'line',
-  		'chartSize' : {width:600, height:300},
-  		'minValue' : 0,
-  		// 'maxValue' : 300,
-  		'increment' : 50,
-  		'isGuideLineNeeded' : true
-  	};
-  	Nwagon.chart(options);
-  </script>
-
-  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트2] 일자별 Active Users</p>
-  <div id="chart_2"></div>
-  <script>
-  	var options = {
-  		'legend':{
-  			names: ['','','','','','','','','','오늘'],
-  			hrefs: []
-  		},
-  		'dataset':{
-  			title:'일자별 Active Users',
-  			values: chart_2_list,
-  			colorset: ['#EE6E01'],
-  			fields:['DAU']
-  		},
-  		'chartDiv' : 'chart_2',
-  		'chartType' : 'line',
-  		'chartSize' : {width:600, height:300},
-  		'minValue' : 0,
-  		// 'maxValue' : 30,
-  		'increment' : 10,
-  		'isGuideLineNeeded' : true
-  	};
-  	Nwagon.chart(options);
-  </script>
-
-  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트3] 일자별 신규 가입자수</p>
-  <div id="chart_3"></div>
-  <script>
-  	var options = {
-  		'legend':{
-  			names: ['','','','','','','','','','오늘'],
-  			hrefs: []
-  		},
-  		'dataset':{
-  			title:'일자별 신규 가입자수',
-  			values: chart_3_list,
-  			colorset: ['RED'],
-  			fields:['신규']
-  		},
-  		'chartDiv' : 'chart_3',
-  		'chartType' : 'line',
-  		'chartSize' : {width:600, height:300},
-  		'minValue' : 0,
-  		// 'maxValue' : 30,
-  		'increment' : 5,
-  		'isGuideLineNeeded' : true
-  	};
-  	Nwagon.chart(options);
-  </script>
-
-  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트4] 일자별 댓글, 질문, 좋아요, 공감, 공유횟수</p>
-  <div id="chart_4"></div>
-  <script>
-  	var options = {
-  		'legend':{
-  			names: ['','','','','','','','','','오늘'],
-  			hrefs: []
-  		},
-  		'dataset':{
-  			title:'일자별 댓글, 질문, 좋아요, 공감, 공유횟수',
-  			values: chart_4_list,
-  			colorset: ['#DC143C', '#EE6E01', '#FFCC5A', 'blue', 'green'],
-  			fields:['댓글', '질문', '좋아요', '공감', '공유']
-  		},
-  		'chartDiv' : 'chart_4',
-  		'chartType' : 'line',
-  		'chartSize' : {width:600, height:300},
-  		'minValue' : 0,
-  		// 'maxValue' : 30,
-  		'increment' : 5,
-  		'isGuideLineNeeded' : true
-  	};
-  	Nwagon.chart(options);
-  </script>
-
   <table cellspacing="0" cellpadding="10" style="border:1px solid #dbdbdb; width:100%; max-width:600px;">
     <tr style="background-color:#f4f4f4;">
       <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">일자</th>
@@ -189,6 +64,16 @@
     </tr>
     <% end %>
   </table>
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트1] 일자별 방문, 투표횟수</p>
+  <div id="chart_1"></div>
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트2] 일자별 Active Users</p>
+  <div id="chart_2"></div>
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트3] 일자별 신규 가입자수</p>
+  <div id="chart_3"></div>
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트4] 일자별 댓글 횟수</p>
+  <div id="chart_4"></div>
+  <p style="padding: 10px 15px; font-size:14px; font-weight: bold; color: #fff; background: #998674; max-width: 600px; box-sizing: border-box;">[차트5] 일자별 질문, 좋아요, 공감, 공유횟수</p>
+  <div id="chart_5"></div>
 
 
 
@@ -255,3 +140,232 @@
   <br>
   <h2 style="background-color:#9d9ea1; color:#fff; padding:10px 15px; text-align:center;">END of Report</h2>
 </div>
+
+<script>
+  var now = new Date();
+  $("#time").html(now);
+
+  var daily_recent_10 = <%= raw @daily_recent_10.to_json %>;
+  var chart_1_list = [],
+      chart_2_list = [],
+      chart_3_list = [],
+      chart_4_list = [],
+      chart_5_list = [];
+  $.each(daily_recent_10, function(index, daily){
+    var a = [];
+    a.push(daily.visit_count);
+    a.push(daily.vote_count);
+    chart_1_list.unshift(a);
+    var b = [];
+    b.push(daily.DAU);
+    chart_2_list.unshift(b);
+    var c = [];
+    c.push(daily.signup_count);
+    chart_3_list.unshift(c);
+    var d = [];
+    d.push(daily.comment_count);
+    chart_4_list.unshift(d);
+    var e = [];
+    e.push(daily.ask_count);
+    e.push(daily.comment_like_count);
+    e.push(daily.ask_like_count);
+    e.push(daily.share_count);
+    chart_5_list.unshift(e);
+  });
+  var options_1 = {
+    'legend':{
+      names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      hrefs: []
+    },
+    'dataset':{
+      title:'일자별 방문, 투표 횟수',
+      values: chart_1_list,
+      colorset: ['#DC143C', '#EE6E01'],
+      fields:['방문', '투표']
+    },
+    'chartDiv' : 'chart_1',
+    'chartType' : 'line',
+    'chartSize' : {width:600, height:300},
+    'minValue' : 0,
+    // 'maxValue' : 300,
+    'increment' : 50,
+    'isGuideLineNeeded' : true
+  };
+  Nwagon.chart(options_1);
+
+  var options_2 = {
+    'legend':{
+      names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      hrefs: []
+    },
+    'dataset':{
+      title:'일자별 Active Users',
+      values: chart_2_list,
+      colorset: ['#FFCC5A'],
+      fields:['DAU']
+    },
+    'chartDiv' : 'chart_2',
+    'chartType' : 'line',
+    'chartSize' : {width:600, height:300},
+    'minValue' : 0,
+    // 'maxValue' : 30,
+    'increment' : 10,
+    'isGuideLineNeeded' : true
+  };
+  Nwagon.chart(options_2);
+
+  var options_3 = {
+    'legend':{
+      names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      hrefs: []
+    },
+    'dataset':{
+      title:'일자별 신규 가입자수',
+      values: chart_3_list,
+      colorset: ['RED'],
+      fields:['신규']
+    },
+    'chartDiv' : 'chart_3',
+    'chartType' : 'line',
+    'chartSize' : {width:600, height:300},
+    'minValue' : 0,
+    // 'maxValue' : 30,
+    'increment' : 5,
+    'isGuideLineNeeded' : true
+  };
+  Nwagon.chart(options_3);
+
+  var options_4 = {
+    'legend':{
+      names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      hrefs: []
+    },
+    'dataset':{
+      title:'일자별 댓글, 질문, 좋아요, 공감, 공유횟수',
+      values: chart_4_list,
+      colorset: ['GREEN'],
+      fields:['댓글']
+    },
+    'chartDiv' : 'chart_4',
+    'chartType' : 'line',
+    'chartSize' : {width:600, height:300},
+    'minValue' : 0,
+    // 'maxValue' : 30,
+    'increment' : 5,
+    'isGuideLineNeeded' : true
+  };
+  Nwagon.chart(options_4);
+
+  var options_5 = {
+    'legend':{
+      names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      hrefs: []
+    },
+    'dataset':{
+      title:'일자별 질문, 좋아요, 공감, 공유횟수',
+      values: chart_5_list,
+      colorset: ['#EE6E01', '#FFCC5A', '#EE065E', '#DBDBDB'],
+      fields:['질문', '좋아요', '공감', '공유']
+    },
+    'chartDiv' : 'chart_5',
+    'chartType' : 'line',
+    'chartSize' : {width:600, height:300},
+    'minValue' : 0,
+    // 'maxValue' : 30,
+    'increment' : 5,
+    'isGuideLineNeeded' : true
+  };
+  Nwagon.chart(options_5);
+
+  var chart_1 = document.getElementById("chart_1");
+  var graph_1 = chart_1.getElementsByClassName("Nwagon_line");
+  graph_1[0].setAttribute("height","350");
+  graph_1[0].setAttribute("viewBox","-50 -200 460 250");
+  var field_1 = chart_1.getElementsByClassName("fields");
+  var fields_1 = field_1[0].childNodes;
+  fields_1[0].setAttribute("x","0");
+  fields_1[1].setAttribute("x","20");
+  fields_1[2].setAttribute("x","40");
+  fields_1[3].setAttribute("x","60");
+  fields_1[0].setAttribute("y","35");
+  fields_1[1].setAttribute("y","40");
+  fields_1[2].setAttribute("y","35");
+  fields_1[3].setAttribute("y","40");
+  fields_1[0].setAttribute("width","16");
+  fields_1[0].setAttribute("height","10");
+  fields_1[2].setAttribute("width","16");
+  fields_1[2].setAttribute("height","10");
+
+  var chart_2 = document.getElementById("chart_2");
+  var graph_2 = chart_2.getElementsByClassName("Nwagon_line");
+  graph_2[0].setAttribute("height","350");
+  graph_2[0].setAttribute("viewBox","-50 -200 460 250");
+  var field_2 = chart_2.getElementsByClassName("fields");
+  var fields_2 = field_2[0].childNodes;
+  fields_2[0].setAttribute("x","0");
+  fields_2[1].setAttribute("x","20");
+  fields_2[0].setAttribute("y","35");
+  fields_2[1].setAttribute("y","40");
+  fields_2[0].setAttribute("width","16");
+  fields_2[0].setAttribute("height","10");
+
+  var chart_3 = document.getElementById("chart_3");
+  var graph_3 = chart_3.getElementsByClassName("Nwagon_line");
+  graph_3[0].setAttribute("height","350");
+  graph_3[0].setAttribute("viewBox","-50 -200 460 250");
+  var field_3 = chart_3.getElementsByClassName("fields");
+  var fields_3 = field_3[0].childNodes;
+  fields_3[0].setAttribute("x","0");
+  fields_3[1].setAttribute("x","20");
+  fields_3[0].setAttribute("y","35");
+  fields_3[1].setAttribute("y","40");
+  fields_3[0].setAttribute("width","16");
+  fields_3[0].setAttribute("height","10");
+
+  var chart_4 = document.getElementById("chart_4");
+  var graph_4 = chart_4.getElementsByClassName("Nwagon_line");
+  graph_4[0].setAttribute("height","350");
+  graph_4[0].setAttribute("viewBox","-50 -200 460 250");
+  var field_4 = chart_4.getElementsByClassName("fields");
+  var fields_4 = field_4[0].childNodes;
+  fields_4[0].setAttribute("x","0");
+  fields_4[1].setAttribute("x","20");
+  fields_4[0].setAttribute("y","35");
+  fields_4[1].setAttribute("y","40");
+  fields_4[0].setAttribute("width","16");
+  fields_4[0].setAttribute("height","10");
+
+  var chart_5 = document.getElementById("chart_5");
+  var graph_5 = chart_5.getElementsByClassName("Nwagon_line");
+  graph_5[0].setAttribute("height","350");
+  graph_5[0].setAttribute("viewBox","-50 -200 460 250");
+  var field_5 = chart_5.getElementsByClassName("fields");
+  var fields_5 = field_5[0].childNodes;
+  fields_5[0].setAttribute("x","0");
+  fields_5[1].setAttribute("x","20");
+  fields_5[2].setAttribute("x","40");
+  fields_5[3].setAttribute("x","60");
+  fields_5[4].setAttribute("x","90");
+  fields_5[5].setAttribute("x","110");
+  fields_5[6].setAttribute("x","130");
+  fields_5[7].setAttribute("x","150");
+  fields_5[0].setAttribute("y","35");
+  fields_5[1].setAttribute("y","40");
+  fields_5[2].setAttribute("y","35");
+  fields_5[3].setAttribute("y","40");
+  fields_5[4].setAttribute("y","35");
+  fields_5[5].setAttribute("y","40");
+  fields_5[6].setAttribute("y","35");
+  fields_5[7].setAttribute("y","40");
+  fields_5[0].setAttribute("width","16");
+  fields_5[0].setAttribute("height","10");
+  fields_5[2].setAttribute("width","16");
+  fields_5[2].setAttribute("height","10");
+  fields_5[4].setAttribute("width","16");
+  fields_5[4].setAttribute("height","10");
+  fields_5[6].setAttribute("width","16");
+  fields_5[6].setAttribute("height","10");
+
+  $("svg").css("overflow","visible");
+  $(".background text").css("fontSize","10px");
+</script>
