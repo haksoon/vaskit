@@ -122,6 +122,11 @@ class AsksController < ApplicationController
     flash[:ask_create] = "게시글 작성 완료!"
 
     redirect_to root_path
+
+    if current_user.user_role = "user"
+      ask = @ask
+      AdminMailer.ask_submitted(ask).deliver_now
+    end
   end
 
   # PATCH/PUT /asks/1

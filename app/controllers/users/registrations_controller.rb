@@ -28,6 +28,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
     params[:user][:password_confirmation] = params[:user][:password]
     params[:user][:string_id] = User.get_uniq_string_id( params[:user][:email].split("@")[0] )
     super
+
+    user = User.find_by(:email => params[:user][:email])
+    AdminMailer.signup_submitted(user).deliver_now
   end
 
   def edit

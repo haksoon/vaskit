@@ -2,6 +2,16 @@ class AdminMailer < ActionMailer::Base
   default from: 'notice@vaskit.kr',
           to: ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr']
 
+  def signup_submitted(user)
+    @user = user
+    mail(subject: "[VASKIT] 새로운 사용자가 회원가입하였습니다.").deliver
+  end
+
+  def ask_submitted(ask)
+    @ask = ask
+    mail(subject: "[VASKIT] 새로운 질문이 작성되었습니다.").deliver
+  end
+
   def inquiry_submitted(inquiry)
     @inquiry = inquiry
     mail(subject: "[VASKIT] 문의가 접수되었습니다.").deliver
