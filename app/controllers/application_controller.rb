@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   end
 
   def auth_admin
-    render  :template => "/admin/not_auth" unless current_user.user_role == "admin"
+    render  :template => "/admin/not_auth" unless current_user && current_user.user_role == "admin"
   end
 
   def set_visitor
