@@ -123,7 +123,7 @@ class AsksController < ApplicationController
 
     redirect_to root_path
 
-    if current_user.user_role = "user"
+    if User.find(@ask.user_id).user_role == "user"
       ask = @ask
       AdminMailer.ask_submitted(ask).deliver_now
     end
