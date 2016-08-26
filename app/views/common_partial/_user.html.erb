@@ -341,6 +341,10 @@
 						    $("#asks").hide();
 						    $("#ask_detail").show().html(askTemplate({ask: ask}));
 
+								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+						    link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+						    hover_action(ask.id);
+
 						    // ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
 						    $("#mini_new_comment_"+ask.id).slideUp(200);
 						    show_detail_vote_count(ask.id);

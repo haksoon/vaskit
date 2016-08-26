@@ -2,40 +2,34 @@
   <div id="ask_box_{{=ask.id}}" class="ask_box">
     <div id="ask_{{=ask.id}}" class="content_box" style="margin:15px 12px;">
       <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
-        {{ var already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
-          <span class="like_icon" onclick="ask_like({{=ask.id}}); return false;" onmouseover="$(this).children().animateCss('tada');">
-            <i id="ask_{{=ask.id}}_like_icon" class="fa {{= already_like_ask.length == 1 ? 'fa-heart' : 'fa-heart-o'}}"></i>
-          </span>
+        <a class="more_icon" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i></a>
         {{ if (ask.category) { }}
           <span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
         {{ }else{ }}
           <span class="category none" onclick="category_on(); return false;">관심사 미설정</span>
         {{ } }}
-        <div style="position:absolute; bottom:0; right:0;">
-          <a class="share_icon" style="width:80px;" href="#" onclick="show_share_popup({{=ask.id}}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-share" style="font-size:10px; color:#998674;"></i>&nbsp;공유하기</a>
-          {{ if (ask.be_completed == false){ }}
-            <a class="more_icon" style="width:70px;" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i>&nbsp;더보기</a>
-          {{ } }}
-        </div>
+        {{ var already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
+        <span class="like_icon" onclick="ask_like({{=ask.id}}); return false;" onmouseover="$(this).children().animateCss('tada');">
+          공감해요&nbsp;<i id="ask_{{=ask.id}}_like_icon" class="fa {{= already_like_ask.length == 1 ? 'fa-heart' : 'fa-heart-o'}}"></i>
+        </span>
       </div>
-      <div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; padding:15px; border-bottom:1px solid #dbdbdb;">
+      <div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; height:30px; line-height:30px; padding:0 10px; background-color:ghostwhite; border-bottom:1px solid #dbdbdb;">
         {{ if (ask.user) { }}
-          {{ var gender_css = "color:#0389ed; border: solid 1px #0389ed;" }}
-          {{ if (!ask.user.gender) { }}
-            {{ gender_css = "color:#ea065e; border: solid 1px #ea065e;" }}
-          {{ } }}
-          <p style="margin:0px 5px 0px -1px; font-size:12px; padding:3px 4px; float:left; font-weight:bold; opacity:0.8; border-radius:5px; {{= gender_css}} border-right-width:2px; border-bottom-width:2px;">
+          <span style="margin:0px 5px 0px 0px; font-size:10px; float:left; font-weight:bold; opacity:0.8; {{= !ask.user.gender ? 'color:#ea065e;' : 'color:#0389ed;' }}">
             {{ if (ask.user.gender){ }}
               <i class="fa fa-male" style="margin-right:-2px;"></i>
             {{ }else{ }}
               <i class="fa fa-female" style="margin-right:-2px;"></i>
             {{ } }}
             {{= get_user_ages(ask.user.birthday) }}
-          </p>
-          <a href="/?keyword={{= ask.user.string_id }}&type=user"><p style="margin:3px 0 0 0; color:#998675; font-size:17px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</p></a>
-          <span style="float:right; padding-top:5px; color:#9e9fa3; font-size:12px;">
+          </span>
+          <a href="/?keyword={{= ask.user.string_id }}&type=user">
+            <span style="margin:0 5px; color:#998674; font-size:14px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</span>
+          </a>
+          <span style="float:right; color:#9d9ea1; font-size:12px;">
+            <i class="fa fa-heart" style="font-size:12px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_like_count" style="display:inline-block;">{{= ask.like_count }}공감</span>
             <i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count" style="display:inline-block;">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
-            <i class="fa fa-clock-o" style="font-size:13px; margin:0 3px 0 5px;"></i>{{= get_past_time(ask.created_at) }}
+            <i class="fa fa-clock-o" style="font-size:13px; margin:0 3px;"></i>{{= get_past_time(ask.created_at) }}
           </span>
           {{ if (ask.be_completed == true) { }}
             <div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
@@ -612,6 +606,8 @@
       <% if current_user %>
         {{ if (ask.user_id == current_user_id) { }}
           <textarea id="comment_input_{{=ask.id}}" placeholder="<%= current_user.string_id %>님! 많은 고민해결사님들께 한마디 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+        {{ } else if(already_vote.length == 0) { }}
+          <textarea id="comment_input_{{=ask.id}}" placeholder="<%= current_user.string_id %>님! 먼저 투표에 참여해주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
         {{ } else { }}
           <textarea id="comment_input_{{=ask.id}}" placeholder="고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
         {{ } }}
@@ -1039,14 +1035,14 @@
 		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:left;">
 			<span style="display:block; padding:0 15px;">
 				<i class="fa fa-comment" style="float:left; padding:7px 5px 0 0;"></i>
-				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(10deg);"></i>'}}</span>
+				<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(10deg);"></i>'}}</span>
 			</span>
 		</li>
 	{{ }else{ }}
 		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:right;">
 			<span style="display:block; padding:0 15px;">
 				<i class="fa fa-comment" style="float:right; padding:7px 5px 0 0; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
-				<span style="background-color:cornsilk; padding:3px 5px 2px; border-radius:5px;">{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(-10deg);"></i>'}}{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
+				<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(-10deg);"></i>'}}{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
 			</span>
 		</li>
 	{{ } }}
@@ -1330,7 +1326,8 @@
 		        	my_votes.push(data.vote);
               $('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask}));
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
-	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" ).animateCss("tada"); //animateCss추가
+              vote_count_span.prev().animateCssColor("tada","#ee6e01"); //animateCss추가
+	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" ).animateCssColor("tada","#ee6e01"); //animateCss추가
 	        		my_vote_count = my_vote_count + 1;
 
               if (is_card_opened) {
@@ -1487,16 +1484,20 @@
 		            return false;
 		        },
 		        success: function(data){
-	            var ask_like_icon = $("#ask_"+ask_id+"_like_icon")
+	            var ask_like_icon = $("#ask_"+ask_id+"_like_icon");
+              var like_count_span = $("#ask_"+ask_id+"_like_count");
 		        	if (data.already_like){
                 my_like_ask.pop(data.ask_like);
                 // ask_like_icon.removeClass("fa-heart").addClass("fa-heart-o"); //animateCss추가
 	              ask_like_icon.removeClass("fa-heart").addClass("fa-heart-o").animateCss("bounceIn"); //animateCss추가
+                like_count_span.html( parseInt(like_count_span.html()) - 1 + "공감" );
 		        		// notify("좋아요 취소");
 		        	} else {
                 my_like_ask.push(data.ask_like);
                 // ask_like_icon.removeClass("fa-heart-o").addClass("fa-heart"); //animateCss추가
 	              ask_like_icon.removeClass("fa-heart-o").addClass("fa-heart").animateCss("bounceIn"); //animateCss추가
+                like_count_span.prev().animateCssColor("tada","#ee065e"); //animateCss추가
+                like_count_span.html( parseInt(like_count_span.html()) + 1 + "공감" ).animateCssColor("tada","#ee065e"); //animateCss추가
 		        		// notify("좋아요 완료");
 		        	}
 		        },

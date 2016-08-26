@@ -434,6 +434,13 @@ $.fn.extend({
             $(this).removeClass('animated ' + animationName);
         });
     },
+    animateCssColor: function (animationName, color) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        var origin_color = $(this).css("color");
+        $(this).css("color",color).addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).css("color",origin_color).removeClass('animated ' + animationName);
+        });
+    },
     animateCssHide: function (animationName) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         $(this).addClass('animated ' + animationName).one(animationEnd, function() {

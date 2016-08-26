@@ -66,7 +66,6 @@
 <%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/ask_image" %>
 <%= render :partial => "common_partial/more_popup" %>
-<%= render :partial => "common_partial/share_popup" %>
 
 <script>
 	if (document.location.search == "") {
@@ -85,8 +84,6 @@
 			if (is_user_setting_opened) manage_off();
 			if (is_user_opened) user_off();
 			if (is_search_input_opened) search_input_off();
-		} else if (is_share_popup_opened) {
-			hide_share_popup();
 		} else if (is_more_popup_opened) {
 			hide_more_popup();
 		} else if (is_card_opened) {
@@ -110,8 +107,6 @@
 				} else if (is_user_opened) {
 					history.back();
 				} else if (is_search_input_opened) {
-					history.back();
-				} else if (is_share_popup_opened) {
 					history.back();
 				} else if (is_more_popup_opened) {
 					history.back();
