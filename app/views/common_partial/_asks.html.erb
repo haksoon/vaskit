@@ -1034,14 +1034,12 @@
 	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
 		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:left;">
 			<span style="display:block; padding:0 15px;">
-				<i class="fa fa-comment" style="float:left; padding:7px 5px 0 0;"></i>
 				<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(10deg);"></i>'}}</span>
 			</span>
 		</li>
 	{{ }else{ }}
 		<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:right;">
 			<span style="display:block; padding:0 15px;">
-				<i class="fa fa-comment" style="float:right; padding:7px 5px 0 0; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
 				<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(-10deg);"></i>'}}{{=comment.content.length > 20 ? comment.content.substring(0,20)+'&middot;&middot;&middot;' : comment.content}}</span>
 			</span>
 		</li>
