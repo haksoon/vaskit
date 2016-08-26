@@ -67,6 +67,7 @@ class Users::SessionsController < Devise::SessionsController
 
     # 기존 Devise 메소드
     signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    respond_to_on_destroy
   end
 
   # def check_email
