@@ -1,36 +1,36 @@
 <div id="more_popup_bg" href="#" onclick="history.back(); return false;" style="display:block; position:fixed;left:0; top:0; width:100%; height:100%; background-color:black; z-index:12; opacity:0.6; display:none;"></div>
-<div id='more_popup' style='width:240px; z-index:13; position:fixed; left:50%; top:50%; margin-left:-120px; margin-top:-150px; overflow-y:hidden; overflow-x:hidden; display:none;'>
+<div id='more_popup' style='width:240px; z-index:13; position:fixed; left:50%; top:50%; margin-left:-120px; margin-top:-100px; overflow-y:hidden; overflow-x:hidden; display:none;'>
 	<a href="#" onclick="history.back(); return false;" style="position:absolute; right:0; top:0; width:40px; height:40px;"><span style="display:inline-block; color:#fff; font-size:28px; padding-top:5px;">&times;</span></a>
 	<p id="more_title" style="background-color:#4b3d3d; font-size:15px; color:#FFF; height:40px; line-height:40px; margin:0;">menu</p>
 	<div id="more_popup_sub">
 		<div style="background-color:#f4f4f4; border-bottom:1px solid #dbdbdb;">
-			<p style="color:#9d9ea0; font-size:12px; margin:0; padding:15px 0 10px 0;">흥미로운 투표를 지인들에게 공유해보세요</p>
-			<div style="padding-bottom:15px;">
+			<div style="padding-top:16px;">
 				<span onclick="share_facebook(); return false;" style="display:inline-block; width:60px; height:60px; line-height:75px; background-color:#4267b2; color:#fff; border-radius:10px; margin-right:5px; vertical-align:top; cursor:pointer;" onclick="copy_url();"><i class="fa fa-facebook" style="font-size:30px;"></i></span>
 				<span id="share_katalk_btn" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#fae100; color:#fff; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;" onclick="copy_url();">
 					<img src="http://vaskit.kr/images/logo/sns_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;s">
 				</span>
 				<span style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#9d9ea1; color:#fff; border-radius:10px; margin-left:5px; vertical-align:top; cursor:pointer;" onclick="copy_url();"><i class="fa fa-link" style="font-size:24px;"></i></span>
 			</div>
+      <p style="color:#666; font-size:13px; margin:0; padding:13px 0;">흥미로운 질문을 공유해보세요</p>
 		</div>
-		<a id="ask_edit_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:14px;;">수정하기</a>
-		<a id="ask_report_btn" href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:14px;;">신고하기</a>
-		<a id="vote_modify_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:14px;;">투표 실행취소</a>
-		<a id="ask_complete_btn" href="#" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; font-size:14px;;">질문 종료하기</a>
-		<input id="share_url" style="visibility:hidden; border:1px solid #dbdbdb; margin:5px 0 0; padding:5px 8px; color:#383838; font-size:12px; width:188px; outline:none; border-radius:0px;" value="http://vaskit.kr/"/>
+		<a id="ask_edit_btn" href="#" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:14px;;">수정하기</a>
+		<a id="ask_report_btn" href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:14px;;">신고하기</a>
+		<a id="vote_modify_btn" href="#" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:14px;;">투표 실행취소</a>
+		<a id="ask_complete_btn" href="#" style="display:block; background:#f4f4f4; line-height:50px; color:#383838; font-size:14px;;">질문 종료하기</a>
+		<input id="share_url" style="visibility:hidden; border:1px solid #dbdbdb; margin:5px 0 0; padding:5px 8px; color:#666; font-size:12px; width:188px; outline:none; border-radius:0px;" value="http://vaskit.kr/"/>
 	</div>
 	<div id="more_popup_report" style="text-align:left; display:none;">
-		<a id="report_btn_1" href="#"  onclick="set_report_type(1); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px; padding-left:12px;">
+		<a id="report_btn_1" href="#"  onclick="set_report_type(1); return false;" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:13px; padding-left:12px;">
 			<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 구매결정과는 무관한 내용이군요
 		</a>
-		<a id="report_btn_2" href="#" onclick="set_report_type(2); return false;" style="display:block; background:#f4f4f4; line-height:60px; border-bottom:1px solid #dbdbdb; color:#383838; font-size:13px; padding-left:12px;">
+		<a id="report_btn_2" href="#" onclick="set_report_type(2); return false;" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:13px; padding-left:12px;">
 			<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 광고성, 홍보성이 짙은 내용이군요
 		</a>
-		<a id="report_btn_3" href="#"  onclick="set_report_type(3); return false;" style="display:block; background:#f4f4f4; line-height:60px; color:#383838; border-bottom:1px solid #dbdbdb; font-size:13px; padding-left:12px;">
+		<a id="report_btn_3" href="#"  onclick="set_report_type(3); return false;" style="display:block; background:#f4f4f4; line-height:50px; color:#666; border-bottom:1px solid #dbdbdb; font-size:13px; padding-left:12px;">
 			<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 비윤리적인 내용은 보고싶지 않아요
 		</a>
  		<div style="background:#f4f4f4; line-height:20px; padding:12px 12px 8px 12px;">
-			<a id="report_btn_4" href="#" onclick="set_report_type(4); return false;" style="display:block; color:#383838; font-size:13px; margin-bottom:5px;">
+			<a id="report_btn_4" href="#" onclick="set_report_type(4); return false;" style="display:block; color:#666; font-size:13px; margin-bottom:5px;">
 				<i class="fa fa-square" style="font-size: 14px; color: #fff; text-shadow: 1px 1px 0 #dbdbdb;"></i> 직접 입력하겠어요
 			</a>
 			<textarea placeholder="선택 후 입력 가능합니다" class="ask_message_input" name="ask[report]" id="ask_report_message" style="padding-left:10px; border-radius:0px; background-color:#fff; font-size:12px;"></textarea>
@@ -97,7 +97,7 @@
 		$("#more_popup_bg").hide();
 		$("#more_popup").hide();
 		$("#more_title").html("menu");
-		$("#more_popup").css("margin-top", "-150px");
+		$("#more_popup").css("margin-top", "-100px");
 		report_type_reset()
 	}
 
