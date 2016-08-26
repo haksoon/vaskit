@@ -24,6 +24,13 @@
 </div>
 
 <script>
+	if (window.HybridApp) {
+		HybridApp.getGCM("hello world");
+		function setGCM(key) {
+			$.cookie('gcm_key' , key, { expires : 30000, path : '/' });
+		}
+	}
+
 	function webLoginWithFB(){
 		$(".loading").show();
 		window.location = 'https://www.facebook.com/dialog/oauth?client_id=<%=Facebook::CONFIG["app_id"]%>&redirect_uri=<%=CONFIG["host"]%>/users/facebook&scope=email,public_profile,user_birthday';

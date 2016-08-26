@@ -2,7 +2,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   before_filter :configure_permitted_parameters
   skip_before_filter :auth_user
   before_filter :auth_admin, :only => ["destroy"]
-
+  after_action :set_gcm_key, :only => ["create"]
 
   def new
     build_resource({:email => params[:email], :name => params[:name], :facebook_id => params[:facebook_id], :gender => params[:gender], :birthday => params[:birthday] })
@@ -30,6 +30,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
 
     user = User.find_by(:email => params[:user][:email])
+    # UserMailer.welcome_email(user).deliver_now
     AdminMailer.signup_submitted(user).deliver_now
   end
 

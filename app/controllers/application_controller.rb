@@ -91,4 +91,16 @@ class ApplicationController < ActionController::Base
     ret.split(",")[0]
   end
 
+  def set_gcm_key
+    unless cookies["gcm_key"] == nil
+      gcm_key = cookies["gcm_key"]
+      user_gcm_key = UserGcmKey.find_by(:gcm_key => gcm_key)
+      if user_gcm_key
+        user_gcm_key.update(:user_id => current_user.id)
+      else
+        UserGcmKey.create(:user_id => current_user.id, :gcm_key => gcm_key)
+      end
+    end
+  end
+
 end

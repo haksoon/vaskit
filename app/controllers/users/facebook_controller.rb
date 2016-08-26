@@ -1,6 +1,8 @@
 # coding : utf-8
 class Users::FacebookController < Devise::PasswordsController
   skip_before_filter :auth_user
+  after_action :set_gcm_key
+
   def auth
     if params["error"] == "access_denied"
       redirect_to root_path

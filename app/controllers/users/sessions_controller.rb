@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 class Users::SessionsController < Devise::SessionsController
   skip_before_filter :auth_user
+  after_action :set_gcm_key, :only => ["create"]
 
   #AJS추가
   def get_user_data
@@ -52,6 +53,23 @@ class Users::SessionsController < Devise::SessionsController
       flash[:custom_notice] = "입력하신 비밀번호가 틀립니다\\n다시 한 번 확인해 주세요"
       redirect_to "/users/sign_in"
     end
+  end
+
+  def destroy
+    # GCM Key 삭제
+    unless cookies["gcm_key"] == nil
+      gcm_key = cookies["gcm_key"]
+      user_gcm_key = UserGcmKey.find_by(:gcm_key => gcm_key)
+      if user_gcm_key
+        user_gcm_key.delete
+      end
+    end
+
+    # 기존 Devise 메소드
+    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
+    set_flash_message! :notice, :signed_out if signed_out
+    yield if block_given?
+    respond_to_on_destroy
   end
 
   # def check_email
