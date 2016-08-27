@@ -68,18 +68,15 @@
 <%= render :partial => "common_partial/more_popup" %>
 
 <script>
-	$(window).on("load", function(){
-		if (document.location.search == "") {
-			is_search_result_opened = false;
-			history.pushState(null, null, "#welcome");
-			console.log("welcome 초기 해시 설정");
-		} else {
-			is_search_result_opened = true;
-			history.replaceState(null, null, "#search_result");
-			console.log("search_result 초기 해시 설정");
-		}
-	})
+	if (document.location.search == "") {
+		is_search_result_opened = false;
+		history.pushState(null, null, "#welcome");
+	} else {
+		is_search_result_opened = true;
+		history.replaceState(null, null, "#search_result");
+	}
 	$(window).bind("hashchange", function(){
+		// welcome();
 		if (is_ask_image_opened) {
 			ask_image_off();
 		} else if (is_category_opened || is_user_setting_opened || is_user_opened || is_search_input_opened) {
@@ -92,8 +89,6 @@
 		} else if (is_card_opened) {
 			card_detail_off(opened_ask_id);
 			if (is_alram_opened) user_on();
-		} else if (window.location.hash == "") {
-			history.back();
 		} else if (is_search_result_opened) {
 			history.go(-2);
 		} else {
