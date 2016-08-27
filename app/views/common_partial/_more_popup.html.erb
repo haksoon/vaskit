@@ -17,7 +17,6 @@
 		<a id="ask_report_btn" href="#" onclick="show_report_popup(); return false;" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:14px;;">신고하기</a>
 		<a id="vote_modify_btn" href="#" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:14px;;">투표 실행취소</a>
 		<a id="ask_complete_btn" href="#" style="display:block; background:#f4f4f4; line-height:50px; color:#383838; font-size:14px;;">질문 종료하기</a>
-		<input id="share_url" style="visibility:hidden; border:1px solid #dbdbdb; margin:5px 0 0; padding:5px 8px; color:#666; font-size:12px; width:188px; outline:none; border-radius:0px;" value="http://vaskit.kr/"/>
 	</div>
 	<div id="more_popup_report" style="text-align:left; display:none;">
 		<a id="report_btn_1" href="#"  onclick="set_report_type(1); return false;" style="display:block; background:#f4f4f4; line-height:50px; border-bottom:1px solid #dbdbdb; color:#666; font-size:13px; padding-left:12px;">
@@ -39,7 +38,7 @@
 			<i class="fa fa-cab" style="color:#ee6e01;"></i> 신고
 		</a>
 	</div>
-
+	<input id="share_url" style="position:fixed; top:100%; right:100%; border:1px solid #dbdbdb; margin:5px 0 0; padding:5px 8px; color:#666; font-size:12px; width:188px; outline:none; border-radius:0px;" value="http://vaskit.kr/"/>
 </div>
 
 <script>
@@ -169,6 +168,9 @@
 		}
 
 		copyfieldvalue(event, 'share_url');
+
+		var ask_id = $("#share_url").val().replace("http://vaskit.kr/asks/","");
+		share_log("url", ask_id);
 	}
 
 	function show_report_popup(){
