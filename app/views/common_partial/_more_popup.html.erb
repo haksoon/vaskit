@@ -38,7 +38,7 @@
 			<i class="fa fa-cab" style="color:#ee6e01;"></i> 신고
 		</a>
 	</div>
-	<input id="share_url" style="position:fixed; top:100%; right:100%; border:1px solid #dbdbdb; margin:5px 0 0; padding:5px 8px; color:#666; font-size:12px; width:188px; outline:none; border-radius:0px;" value="http://vaskit.kr/"/>
+	<input id="share_url" style="position:fixed; top:100%; left:100%;" value="http://vaskit.kr/"/>
 </div>
 
 <script>
@@ -144,22 +144,12 @@
 	}
 
 	function copy_url() {
-		function copySelectionText(){
-			var copysuccess // var to check whether execCommand successfully executed
-			try{
-					copysuccess = document.execCommand("copy") // run command to copy selected text to clipboard
-			} catch(e){
-					copysuccess = false
-			}
-			return copysuccess
-		}
-
 		function copyfieldvalue(e, id){
-			var field = document.getElementById(id)
-			field.focus()
-			field.setSelectionRange(0, field.value.length)
-			var copysuccess = copySelectionText()
-			if (copysuccess) {
+			if (document.execCommand("copy")) {
+				var field = document.getElementById(id);
+				field.focus();
+				field.setSelectionRange(0, field.value.length);
+				document.execCommand("copy");
 				notify('주소가 복사되었습니다!');
 			} else {
 				var share_url = $("#share_url").val();
