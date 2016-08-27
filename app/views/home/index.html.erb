@@ -37,7 +37,7 @@
 <% else %>
 	<%= render :partial => "common_partial/header", :locals => {:title => ""} %>
 	<%= render :partial => "common_partial/search" %>
-	<p class="chat_bubble" style="margin-top:65px;">
+	<p class="chat_bubble table_div" style="margin-top:65px;">
 		<span style="color:#ee6e01;">#둘중에뭐사지? #고민고민하지마</span> <b style="float:right;">Let's VASKIT!</b>
 	</p>
 <% end %>
@@ -68,15 +68,18 @@
 <%= render :partial => "common_partial/more_popup" %>
 
 <script>
-	if (document.location.search == "") {
-		is_search_result_opened = false;
-		history.pushState(null, null, "#welcome");
-	} else {
-		is_search_result_opened = true;
-		history.replaceState(null, null, "#search_result");
-	}
+	$(window).on("load", function(){
+		if (document.location.search == "") {
+			is_search_result_opened = false;
+			history.pushState(null, null, "#welcome");
+			console.log("welcome 초기 해시 설정");
+		} else {
+			is_search_result_opened = true;
+			history.replaceState(null, null, "#search_result");
+			console.log("search_result 초기 해시 설정");
+		}
+	})
 	$(window).bind("hashchange", function(){
-		// welcome();
 		if (is_ask_image_opened) {
 			ask_image_off();
 		} else if (is_category_opened || is_user_setting_opened || is_user_opened || is_search_input_opened) {
@@ -89,6 +92,8 @@
 		} else if (is_card_opened) {
 			card_detail_off(opened_ask_id);
 			if (is_alram_opened) user_on();
+		} else if (window.location.hash == "") {
+			history.back();
 		} else if (is_search_result_opened) {
 			history.go(-2);
 		} else {
