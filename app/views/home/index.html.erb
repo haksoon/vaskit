@@ -15,17 +15,19 @@
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-search"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;통합 검색 결과입니다.
 		<% end %>
 	</p>
-<% when "my_ask", "vote_ask", "comment_ask", "my_ask_in_progress" %>
+<% when "my_ask_in_progress", "my_like_ask", "my_ask", "vote_ask", "comment_ask" %>
 	<%= render :partial => "common_partial/header", :locals => {:title => ""} %>
 	<p class="chat_bubble">
-		<% if @type == "my_ask" %>
+		<% if @type == "my_ask_in_progress" %>
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674; font-weight:bold;"><%= Ask.where(:user_id => current_user.id, :be_completed => false).count %>개</span>의 질문을 진행중입니다.<br>더보기 버튼을 눌러 투표를 종료할 수 있는 것, 알고 계셨나요?
+		<% elsif @type == "my_like_ask" %>
+			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= AskLike.where(:user_id => current_user.id).count %>개</span>의 질문에 공감하셨군요!<br>와우! 당신의 공감능력은 정말 탁월하답니다!
+		<% elsif @type == "my_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= Ask.where(:user_id => current_user.id).count %>개</span>의 질문을 던지셨군요!<br>와우! 많은 고민을 해결하셨나요?
 		<% elsif @type == "vote_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= Vote.where(:user_id => current_user.id).count %>개</span>의 투표에 참여했군요!<br>와우! 많은 이들의 탈모를 막아주었습니다!
 		<% elsif @type == "comment_ask" %>
 			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 지금까지 <span style="color:#998674; font-weight:bold;"><%= Comment.where(:user_id => current_user.id).count %>개</span>의 의견을 남기셨군요!<br>와우! 우리 모두 수다쟁이를 좋아한답니다!
-		<% elsif @type == "my_ask_in_progress" %>
-			<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님은 현재 <span style="color:#998674; font-weight:bold;"><%= Ask.where(:user_id => current_user.id, :be_completed => false).count %>개</span>의 질문을 진행중입니다.<br>더보기 버튼을 눌러 투표를 종료할 수 있는 것, 알고 계셨나요?
 		<% end %>
 	</p>
 <% when "vote_yet" %>
