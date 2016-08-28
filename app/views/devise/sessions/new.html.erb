@@ -25,7 +25,7 @@
 			<i class="fa fa-sign-in"></i>&nbsp;로그인
 		</a>
 	</div>
-  <a href="/users/password/new" style="display:block; margin:0 25px 15px; color:#666; font-size:13px; text-align:left;"><i class='fa fa-envelope-o'></i>&nbsp;비밀번호를 잊으셨나요?</a>
+  <a href="#" onclick="go_url('/users/password/new'); return false;" style="display:block; margin:0 25px 15px; color:#666; font-size:13px; text-align:left;"><i class='fa fa-envelope-o'></i>&nbsp;비밀번호를 잊으셨나요?</a>
 	<%= f.hidden_field :remember_me, :value => 1 %>
 <% end %>
 

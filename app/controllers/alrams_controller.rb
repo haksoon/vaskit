@@ -13,6 +13,11 @@ class AlramsController < ApplicationController
       alram.update(:is_read => true)
       alram.record_timestamps = true #updated_at 안바뀌게
     end
+    Alram.where(:ask_id => params[:ask_id], :user_id => current_user.id, :is_read => false).each do |alram|
+      alram.record_timestamps = false #updated_at 안바뀌게
+      alram.update(:is_read => true)
+      alram.record_timestamps = true #updated_at 안바뀌게
+    end
     render :json => {:status => "success", :ask => ask}
   end
 

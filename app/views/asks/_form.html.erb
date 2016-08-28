@@ -57,8 +57,8 @@
 					<span class="input_icon center_input" onclick="$('#left_deal_brand').focus(); return false;"><i class="fa fa-tag"></i></span>
 				</div>
 				<div class="table_div">
-					<%= text_area_tag 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field left_input" %>
-					<%= text_area_tag 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input" %>
+					<%= text_field 'left_deal[price]', @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field left_input", :id => "left_deal_price", :pattern => "[0-9]*", :name => "left_deal[price]" %>
+					<%= text_field 'right_deal[price]', @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : nil, :placeholder => "판매가격", :class => "ask_text_field right_input", :id => "right_deal_price", :pattern => "[0-9]*", :name => "right_deal[price]" %>
 					<span class="input_icon center_input" onclick="$('#left_deal_price').focus(); return false;"><i class="fa fa-won"></i></span>
 				</div>
 				<div class="table_div">
@@ -233,15 +233,16 @@
 
 	$('#deal_search_keyword').keypress(function(e) {
 		if (e.keyCode == '13') {
-        	e.preventDefault();
-        	deal_search_by_key();
-      	}
+    	e.preventDefault();
+    	deal_search_by_key();
+  	}
 	});
 
 	function show_card_overlay() {
 		$("#card_overlay").slideDown(500, function(){
 			$("#card_overlay_open").html("닫기&nbsp;<i class='fa fa-angle-double-up' style='font-size:15px;'></i>");
 			$("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
+			is_card_overlay_opened = true;
 		});
 	}
 
@@ -249,6 +250,7 @@
 		$("#card_overlay").slideUp(500, function(){
 			$("#card_overlay_open").html("직접 입력하기&nbsp;<i class='fa fa-angle-double-down' style='font-size:15px;'></i>");
 			$("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
+			is_card_overlay_opened = false;
 		});
 	}
 
@@ -605,41 +607,15 @@
 		$(".edit_ask").submit();
 	}
 
-  //
-  $(window).bind('beforeunload', function(){
-      return "게시글 작성을 중단하시겠습니까?";
-  });
-
-  $(document).on("submit", "form", function(event){
-      $(window).off('beforeunload');
-  });
-	//
-
 	$("#ask_category_id").find("option:eq(0)").attr("disabled",true);
 	$("#ask_category_id").one("focus",function(){ $(this).css("color","#666"); });
-
-	//콤마찍기
-	function comma(str) {
-    str = String(str);
-    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-	}
-	function uncomma(str) {
-	    str = String(str);
-	    return str.replace(/[^\d]+/g, '');
-	}
-	function inputNumberFormat(obj) {
-	    obj.value = comma(uncomma(obj.value));
-	}
-
-	$("#left_deal_price").attr("onkeyup","inputNumberFormat(this)");
-	$("#right_deal_price").attr("onkeyup","inputNumberFormat(this)");
-
 
 	// 입력중 해시태그 강조 추가
 	var ua = window.navigator.userAgent.toLowerCase();
 	var isIE = !!ua.match(/msie|trident\/7|edge/);
 	var isWinPhone = ua.indexOf('windows phone') !== -1;
 	var isIOS = !isWinPhone && !!ua.match(/ipad|iphone|ipod/);
+	var isAndroid = ua.indexOf('android') !== -1;
 
 	var textarea_font = $("#ask_message").css("font");
 	$("#hashtag_highlights").css("font",textarea_font);
@@ -685,6 +661,34 @@
 	}
 
 	$("#ask_message").css("position","absolute");
+
+	// 금액 필드 콤마찍기
+	function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+	}
+	function uncomma(str) {
+    str = String(str);
+    return str.replace(/[^\d]+/g, '');
+	}
+	function inputNumberFormat(obj) {
+	  obj.value = comma(uncomma(obj.value));
+	}
+
+	if (isIOS) {
+		$("#left_deal_price, #right_deal_price").on("focus", function(){
+			$(this).attr("type","number");
+		}).on("keyup keydown keypress blur", function(){
+			$(this).attr("type","text");
+		})
+	} else if (isAndroid) {
+		$("#left_deal_price, #right_deal_price").attr("type","tel");
+	}
+
+	var left_deal_price = <%= @left_ask_deal && @left_ask_deal.price ? @left_ask_deal.price : 'null' %>;
+	var right_deal_price = <%= @right_ask_deal && @right_ask_deal.price ? @right_ask_deal.price : 'null' %>;
+	$("#left_deal_price").val(left_deal_price).attr("onkeyup","inputNumberFormat(this)");
+	$("#right_deal_price").val(right_deal_price).attr("onkeyup","inputNumberFormat(this)");
 
 	// 제출버튼 필수입력필드 입력해야 활성화되도록
 	function ready_to_submit() {

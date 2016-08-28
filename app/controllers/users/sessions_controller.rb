@@ -17,19 +17,26 @@ class Users::SessionsController < Devise::SessionsController
       @send_users = []
       @ask_owner_users = []
       @comment_owner_users = []
+      @left_ask_thumbnails = []
+      @right_ask_thumbnails = []
       @alrams.each do |alram|
         alram.is_read == false ? alram_count = alram_count + 1 : alram_count = alram_count
         send_user = alram.send_user_id != nil ? User.find_by_id(alram.send_user_id).string_id : ""
         ask_owner_user = alram.ask_owner_user_id != nil ? User.find_by_id(alram.ask_owner_user_id).string_id : ""
         comment_owner_user = alram.comment_owner_user_id != nil ? User.find_by_id(alram.comment_owner_user_id).string_id : ""
+        left_ask_thumbnail = alram.ask_id != nil ? AskDeal.find_by_id(Ask.find_by_id(alram.ask_id).left_ask_deal_id) : ""
+        right_ask_thumbnail = alram.ask_id != nil ? AskDeal.find_by_id(Ask.find_by_id(alram.ask_id).right_ask_deal_id) : ""
         @send_users << send_user
         @ask_owner_users << ask_owner_user
         @comment_owner_users << comment_owner_user
+        @left_ask_thumbnails << left_ask_thumbnail
+        @right_ask_thumbnails << right_ask_thumbnail
       end
     end
     render :json => {:current_user_string_id => current_user_string_id, :my_ask_count => my_ask_count, :my_vote_count => my_vote_count, :my_comment_count => my_comment_count, :in_progress_count => in_progress_count,
       :my_like_ask_count => my_like_ask_count, :alram_count => alram_count,
-      :alrams => @alrams, :send_users => @send_users, :ask_owner_users => @ask_owner_users, :comment_owner_users => @comment_owner_users}
+      :alrams => @alrams, :send_users => @send_users, :ask_owner_users => @ask_owner_users, :comment_owner_users => @comment_owner_users,
+      :left_ask_thumbnails => @left_ask_thumbnails, :right_ask_thumbnails => @right_ask_thumbnails}
   end
 
   #AJS 추가

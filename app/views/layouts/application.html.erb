@@ -54,7 +54,6 @@
   		<% end %>
       var is_ask_image_opened = false;
       var is_category_opened = false;
-      var is_user_setting_opened = false;
       var is_user_opened = false;
       var is_search_input_opened = false;
       var is_search_result_opened = false;
@@ -62,6 +61,11 @@
       var is_card_opened = false;
       var is_alram_opened = false;
       var overlay_st = 0;
+      var is_edited = false;
+      var is_card_overlay_opened = false;
+      var left_ask_deal_in_progress = {left_deal_image_url:null, left_deal_title:null, left_deal_brand:null, left_deal_price:null, left_deal_link:null, left_deal_spec1:null, left_deal_spec2:null, left_deal_spec3:null};
+      var right_ask_deal_in_progress = {right_deal_image_url:null, right_deal_title:null, right_deal_brand:null, right_deal_price:null, right_deal_link:null, right_deal_spec1:null, right_deal_spec2:null, right_deal_spec3:null};
+      var ask_in_progress = {category_id:null, message:null, left_ask_deal_in_progress:left_ask_deal_in_progress, right_ask_deal_in_progress:right_ask_deal_in_progress, spec1:null, spec2:null, spec3:null};
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=521318198062554&ev=PageView&noscript=1"/></noscript>
@@ -94,6 +98,11 @@
 
     window.onbeforeunload = function(){
       window.scrollTo(0,0);
+    }
+    progressStart();
+    window.onload = function(){
+      window.scrollTo(0,0);
+      progressEnd();
     }
   </script>
 </body>

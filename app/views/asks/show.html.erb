@@ -1,4 +1,7 @@
 <%= render :partial => "common_partial/header", :locals => {:title => ""} %>
+<p class="chat_bubble table_div">
+  <span style="color:#ee6e01;">#둘중에뭐사지? #고민고민하지마</span> <b style="float:right;">Let's VASKIT!</b>
+</p>
 <div id="asks" class="table_div"></div>
 <%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/ask_image" %>
@@ -19,35 +22,36 @@
   $("#ask_"+ask.id+"_detail_btn").remove();
   $("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").show();
 
-
-  history.pushState(null, null, null);
-  $(window).bind("hashchange", function(){
-		if (is_ask_image_opened) {
-			ask_image_off();
-    } else if (is_user_setting_opened || is_user_opened) {
-      if (is_user_setting_opened) manage_off();
-			if (is_user_opened) user_off();
-		} else if (is_more_popup_opened) {
-			hide_more_popup();
-		}	else {
-			return false;
-		}
-	});
-  $(document).keydown(function(e){
-		if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-			if(e.keyCode === 27){
-				if (is_ask_image_opened) {
-					history.back();
-				} else if (is_user_setting_opened) {
-					history.back();
-				} else if (is_user_opened) {
-					history.back();
-				} else if (is_more_popup_opened) {
-					history.back();
-				}	else {
-					return false;
-				}
-			}
-		}
-	});
+  $(window).on("load", function(){
+    $(window).unbind("hashchange");
+    history.pushState(null, null, "#welcome");
+    $(window).bind("hashchange", function(){
+      if (is_ask_image_opened) {
+        ask_image_off();
+      } else if (is_user_opened) {
+        user_off();
+      } else if (is_more_popup_opened) {
+        hide_more_popup();
+      } else if (window.location.hash == "") {
+				back_button();
+      }	else {
+        return false;
+      }
+    });
+    $(document).keydown(function(e){
+      if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+        if(e.keyCode === 27){
+          if (is_ask_image_opened) {
+            history.back();
+          } else if (is_user_opened) {
+            history.back();
+          } else if (is_more_popup_opened) {
+            history.back();
+          }	else {
+            return false;
+          }
+        }
+      }
+    });
+  })
 </script>

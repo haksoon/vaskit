@@ -47,7 +47,7 @@
 <div id="asks" class="table_div" style="margin:15px 0;"></div>
 <div class="home-float-btn-area">
 	<% if current_user %>
-	<a href="/asks/new" style="display:block;">
+	<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block;">
 	<% else %>
 	<a href="#" style="display:block;" onclick="visitor_notify('질문 작성은<br>회원만 가능합니다'); return false;">
 	<% end %>
@@ -68,54 +68,55 @@
 <%= render :partial => "common_partial/more_popup" %>
 
 <script>
-	if (document.location.search == "") {
-		is_search_result_opened = false;
-		history.pushState(null, null, "#welcome");
-	} else {
-		is_search_result_opened = true;
-		history.replaceState(null, null, "#search_result");
-	}
-	$(window).bind("hashchange", function(){
-		// welcome();
-		if (is_ask_image_opened) {
-			ask_image_off();
-		} else if (is_category_opened || is_user_setting_opened || is_user_opened || is_search_input_opened) {
-			if (is_category_opened) category_off();
-			if (is_user_setting_opened) manage_off();
-			if (is_user_opened) user_off();
-			if (is_search_input_opened) search_input_off();
-		} else if (is_more_popup_opened) {
-			hide_more_popup();
-		} else if (is_card_opened) {
-			card_detail_off(opened_ask_id);
-			if (is_alram_opened) user_on();
-		} else if (is_search_result_opened) {
-			history.go(-2);
+	$(window).on("load", function(){
+		$(window).unbind("hashchange");
+		if (document.location.search == "") {
+			is_search_result_opened = false;
+			history.pushState(null, null, "#welcome");
 		} else {
-			return false;
+			is_search_result_opened = true;
+			history.pushState(null, null, "#search_result");
 		}
-	});
-	$(document).keydown(function(e){
-		if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-			if(e.keyCode === 27){
-				if (is_ask_image_opened) {
-					history.back();
-				} else if (is_category_opened) {
-					history.back();
-				} else if (is_user_setting_opened) {
-					history.back();
-				} else if (is_user_opened) {
-					history.back();
-				} else if (is_search_input_opened) {
-					history.back();
-				} else if (is_more_popup_opened) {
-					history.back();
-				} else if (is_card_opened) {
-					history.back();
-				}	else {
-					return false;
+		$(window).bind("hashchange", function(){
+			if (is_ask_image_opened) {
+				ask_image_off();
+			} else if (is_category_opened || is_user_opened || is_search_input_opened) {
+				if (is_category_opened) category_off();
+				if (is_user_opened) user_off();
+				if (is_search_input_opened) search_input_off();
+			} else if (is_more_popup_opened) {
+				hide_more_popup();
+			} else if (is_card_opened) {
+				card_detail_off(opened_ask_id);
+				if (is_alram_opened) user_on();
+			} else if (is_search_result_opened) {
+				history.back();
+			} else if (window.location.hash == "") {
+				history.back();
+			} else {
+				return false;
+			}
+		});
+		$(document).keydown(function(e){
+			if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+				if(e.keyCode === 27){
+					if (is_ask_image_opened) {
+						history.back();
+					} else if (is_category_opened) {
+						history.back();
+					} else if (is_user_opened) {
+						history.back();
+					} else if (is_search_input_opened) {
+						history.back();
+					} else if (is_more_popup_opened) {
+						history.back();
+					} else if (is_card_opened) {
+						history.back();
+					}	else {
+						return false;
+					}
 				}
 			}
-		}
-	});
+		});
+	})
 </script>

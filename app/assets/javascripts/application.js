@@ -45,6 +45,10 @@ function scrollDistanceFromBottom(argument) {
   return $(document).height() - ($(window).height() + $(window).scrollTop());
 }
 
+function go_url(url) {
+  window.location.assign(url);
+}
+
 function get_image_url(data, model_name, extention){
 	try {
 		var image_url = ""; //static url

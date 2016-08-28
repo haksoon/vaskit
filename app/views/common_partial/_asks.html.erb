@@ -23,7 +23,7 @@
             {{ } }}
             {{= get_user_ages(ask.user.birthday) }}
           </span>
-          <a href="/?keyword={{= ask.user.string_id }}&type=user">
+          <a href="#" onclick="go_url('/?keyword={{= ask.user.string_id }}&type=user'); return false;">
             <span style="margin:0 5px; color:#998674; font-size:14px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</span>
           </a>
           <span style="float:right; color:#9d9ea1; font-size:12px;">
