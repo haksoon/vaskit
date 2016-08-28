@@ -296,8 +296,7 @@
 		    beforeSend: function(){
 		    },
 		    complete: function(){
-					// history.pushState(null, null, "#"+current_user_string_id);
-					document.location.hash == "#welcome" ? history.pushState(null, null, "#"+current_user_string_id) : history.replaceState(null, null, "#"+current_user_string_id);
+					(is_category_opened || is_search_input_opened) ? history.replaceState(null, null, "#"+current_user_string_id) : history.pushState(null, null, "#"+current_user_string_id);
 			    is_user_opened = true;
 					overlay_st = $(window).scrollTop();
 		    }
