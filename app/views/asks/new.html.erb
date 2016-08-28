@@ -1,7 +1,28 @@
 <%= render 'form' %>
 
 <script>
-  $(window).on("load", function(){
-    console.log("질문하기 화면 로드");
-  })
+  $(window).on("load",function(){
+    $(window).unbind("hashchange");
+    history.pushState(null, null, "#welcome");
+    $(window).bind("hashchange", function(){
+      if (is_user_opened) {
+        user_off();
+      } else if (window.location.hash == "") {
+				history.back();
+			} else {
+        return false;
+      }
+    });
+    $(document).keydown(function(e){
+      if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+        if(e.keyCode === 27){
+          if (is_user_opened) {
+            history.back();
+          }	else {
+            return false;
+          }
+        }
+      }
+    });
+  });
 </script>
