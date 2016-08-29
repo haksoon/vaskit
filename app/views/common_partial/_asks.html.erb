@@ -15,16 +15,22 @@
       </div>
       <div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; height:30px; line-height:30px; padding:0 10px; background-color:ghostwhite; border-bottom:1px solid #dbdbdb;">
         {{ if (ask.user) { }}
-          <span style="margin:0px 5px 0px 0px; font-size:10px; float:left; font-weight:bold; opacity:0.8; {{= !ask.user.gender ? 'color:#ea065e;' : 'color:#0389ed;' }}">
-            {{ if (ask.user.gender){ }}
-              <i class="fa fa-male" style="margin-right:-2px;"></i>
-            {{ }else{ }}
-              <i class="fa fa-female" style="margin-right:-2px;"></i>
-            {{ } }}
-            {{= get_user_ages(ask.user.birthday) }}
-          </span>
+          {{ if (ask.user.id == current_user_id) { }}
+            <span style="margin:0px 5px 0px 0px; font-size:10px; float:left; font-weight:bold; opacity:0.8; color:#ee6e01;">
+              <i class="fa fa-user" style="margin-right:2px;"></i>my
+            </span>
+          {{ } else { }}
+            <span style="margin:0px 5px 0px 0px; font-size:10px; float:left; font-weight:bold; opacity:0.8; {{= !ask.user.gender ? 'color:#ea065e;' : 'color:#0389ed;' }}">
+              {{ if (ask.user.gender){ }}
+                <i class="fa fa-male" style="margin-right:-2px;"></i>
+              {{ }else{ }}
+                <i class="fa fa-female" style="margin-right:-2px;"></i>
+              {{ } }}
+              {{= get_user_ages(ask.user.birthday) }}
+            </span>
+          {{ } }}
           <a href="#" onclick="go_url('/?keyword={{= ask.user.string_id }}&type=user'); return false;">
-            <span style="margin:0 5px; color:#998674; font-size:14px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</span>
+            <span style="color:#998674; font-size:14px; float:left; max-width:150px; overflow:hidden; text-overflow:ellipsis;">{{= ask.user.string_id }}</span>
           </a>
           <span style="float:right; color:#9d9ea1; font-size:12px;">
             <i class="fa fa-heart" style="font-size:12px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_like_count" style="display:inline-block;">{{= ask.like_count }}공감</span>
@@ -1642,9 +1648,9 @@
     $("#ask_detail").empty();
 
     $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideUp(500, function(){
-      $("#detail_vote_count_"+ask_id).html("");
-      // $("#ask_deal_"+ask_id+"_table").html("");
-      $("#ask_"+ask_id+"_comment").html("");
+      $("#detail_vote_count_"+ask_id).html("").hide();
+      $("#ask_deal_"+ask_id+"_table").hide();
+      $("#ask_"+ask_id+"_comment").html("").hide();
     });
     if ($("#ask_"+ask_id+"_message_text_shorten").text().indexOf("·") != -1) {
       $("#ask_"+ask_id+"_message_text").hide();
