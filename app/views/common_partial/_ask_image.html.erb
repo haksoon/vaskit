@@ -1,6 +1,6 @@
-<div id="ask_image_bg" onclick="history.back(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; cursor:pointer; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
+<div id="ask_image_bg" onclick="back_button(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; cursor:pointer; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
 <div id="ask_image_overlay" style="position:fixed; top:0; width:inherit; height:100%; display:table; z-index:13; overflow:auto; -webkit-overflow-scrolling:touch; display:none;">
-  <a href="#" onclick="history.back(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; display:block; text-align:right; cursor:default;"></a>
+  <a href="#" onclick="back_button(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; display:block; text-align:right; cursor:default;"></a>
   <div style="display:table; width:100%; height:100%;">
     <div style="display:table-cell; text-align:center; vertical-align:middle;">
       <div style="padding:0px 12px 0; text-align:right;"><span style="display:inline-block; color:#fff; font-size:40px; width:40px; height:40px; text-align:center;">&times;</span></div>
@@ -64,13 +64,12 @@
 </script>
 
 <script>
-  var ask_image_open_st;
   var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
 
   function ask_image_on(ask_id, ask_deal_id, is_left){
     history.pushState(null, null, "#"+ask_id+"_image");
     is_ask_image_opened = true;
-    ask_image_open_st = $(window).scrollTop();
+    overlay_st = $(window).scrollTop();
 
     disableScroll();
     $("#ask_image_overlay").fadeIn(100);
@@ -102,7 +101,7 @@
 
   function ask_image_off(){
     is_ask_image_opened = false;
-    window.scrollTo(0,ask_image_open_st);
+    window.scrollTo(0,overlay_st);
 
     enableScroll();
     $("#ask_image_overlay").fadeOut(300);

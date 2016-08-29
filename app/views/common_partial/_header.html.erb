@@ -3,7 +3,7 @@
 		<td style="width:60px;">
 			<span style="display:block; width:60px; height:50px;">
 				<a id="category_button" href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-navicon" style="color: #fff; font-size: 26px; padding-top: 12px;"></i></a>
-				<a id="back_button" href="#" onclick="back_button(); return false;" style="display:block; position:absolute; top:0; left:0; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>
+				<a id="back_button" href="#" onclick="header_back_button(); return false;" style="display:block; position:absolute; top:0; left:0; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>
 			</span>
 		</td>
 		<td style="width:100%; padding-right:10px;">
@@ -30,8 +30,8 @@
 <% unless title.blank? %>
 	<p style="box-sizing:border-box; height:40px; margin:0; padding:2px 10px 0px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:center; line-height:40px;"><%= title %></p>
 <% end %>
-<div id="menu_pc_bg" onclick="history.back(); return false;"></div>
-<div id="menu_bg" onclick="history.back(); return false;"></div>
+<div id="menu_pc_bg" onclick="back_button(); return false;"></div>
+<div id="menu_bg" onclick="back_button(); return false;"></div>
 <%= render :partial => "common_partial/user" %>
 
 <script>

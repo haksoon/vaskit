@@ -37,14 +37,14 @@
             <i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span id="ask_{{=ask.id}}_vote_count" style="display:inline-block;">{{= ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}}표</span>
             <i class="fa fa-clock-o" style="font-size:13px; margin:0 3px;"></i>{{= get_past_time(ask.created_at) }}
           </span>
-          {{ if (ask.be_completed == true) { }}
-            <div style="color: #fff; background: #4b3d3d; padding: 4px 5px 5px 5px; font-size: 11px; float: right; border-radius: 6px; margin-right: 5px; border-right: 2px solid #998674; border-bottom: 2px solid #998674;">투표종료</div>
-          {{ } }}
         {{ } }}
       </div>
       <div id="ask_deal_{{=ask.id}}" class="table_div" style="margin-bottom:0px;">
         {{= askDealTemplate({my_votes: my_votes, ask: ask}) }}
       </div>
+      {{ if (ask.be_completed == true) { }}
+        <div style="color:#fff; background-color:#4b3d3d; padding:5px; font-size: 12px;">종료된 투표입니다</div>
+      {{ } }}
       <div id="detail_vote_count_{{=ask.id}}" class="table_div" style="display:none; margin-bottom:0px; background-color:#f0f2f4; color:#666; font-size: 12px;"></div>
       <div id="ask_deal_{{=ask.id}}_table" class="table_div" style="display:none; margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
         {{= askDealTableTemplate({ask: ask}) }}
@@ -156,7 +156,7 @@
 			</table>
 		</div>
 	{{ } }}
-  {{ if( ask.user_id != current_user_id && (already_vote.length != 0 || ask.be_completed)){ }}
+  {{ if( ask.user_id != current_user_id && already_vote.length != 0){ }}
     {{ if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
       {{ var ask_deal_id = ask.left_ask_deal_id }}
       {{ var is_left = true }}
@@ -1010,7 +1010,7 @@
 
 <script type="text/template" id="ask-detail-btn-template">
   {{ if (is_card_opened) { }}
-    <a id="ask_{{=ask.id}}_detail_off" class="card_detail" href="#" onclick="history.back(); return false;">
+    <a id="ask_{{=ask.id}}_detail_off" class="card_detail" href="#" onclick="back_button(); return false;">
       <span style="font-size:12px;"><i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>
     </a>
   {{ }else{ }}
@@ -1227,10 +1227,14 @@
 
       	        	if ( more_asks.length == 0 ) {
       	        		is_more_asks = false;
+                    more_load = false;
       	        		$("#endless_loading").hide();
+                    currentPage -= 1;
       	        	} else {
+                    more_load = true;
       	        		if( more_asks.length < <%= Ask::ASK_PER %> ){
       	        			is_more_asks = false;
+                      more_load = false;
       	        			$("#endless_loading").hide();
       	        		}
                     $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px;'></div>");
@@ -1255,7 +1259,6 @@
                   // progressEnd();
                   ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
                   ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
-                  more_load = true;
                   // console.log("로딩완료!");
                 }
       		  });
@@ -1560,7 +1563,7 @@
   //   });
   //
 	// 	$("#category_button:visible").hide();
-	// 	$("#back_button").show().attr("onclick","history.back(); return false;");
+	// 	$("#back_button").show().attr("onclick","back_button(); return false;");
 	// 	$(".chat_bubble").css("margin-top","15px");
   //
   //   ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask_id.toString(), 1);
@@ -1572,8 +1575,8 @@
 		is_more_asks = false;
 		is_card_opened = true;
 		opened_ask_id = ask_id;
-    card_open_st = $("#ask_"+ask_id).offset().top - 60;
-    // card_open_st = $(window).scrollTop();
+    // card_open_st = $("#ask_"+ask_id).offset().top - 60;
+    card_open_st = $(window).scrollTop();
 		$("#endless_loading").hide();
     $("#asks").hide();
     $("#ask_detail").show().html($("#ask_"+ask_id));
@@ -1603,7 +1606,7 @@
     });
 
 		$("#category_button:visible").hide();
-		$("#back_button").show().attr("onclick","history.back(); return false;");
+		$("#back_button").show().attr("onclick","back_button(); return false;");
 		$(".chat_bubble").css("margin-top","15px");
 
     ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask_id.toString(), 1);

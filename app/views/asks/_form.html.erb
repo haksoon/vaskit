@@ -722,4 +722,13 @@
 		}
 	});
 
+	//
+	$(window).bind('beforeunload', function(event){
+		return "게시글 작성을 중단하시겠습니까?";
+	});
+	$(document).on("submit", "form", function(event){
+		$(window).off('beforeunload');
+	});
+	//
+
 </script>

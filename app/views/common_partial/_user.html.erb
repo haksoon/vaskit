@@ -1,7 +1,7 @@
 <% if current_user %>
 	<div id="user_overlay">
 		<div style="position:absolute; top:-50px; right:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
-			<a href="#" onclick="history.back(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+			<a href="#" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
 				<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
 			</a>
 		</div>
@@ -289,13 +289,13 @@
 					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
 					var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
 					$("#user_overlay_seg").html(userOverlaySegTemplate({alrams:alrams, comment_owner_users:comment_owner_users, ask_owner_users:ask_owner_users, send_users:send_users}));
+					$("#alram_feed_count").html(alram_count+"개");
 					alram_check();
 		    },
 		    beforeSend: function(){
 		    },
 		    complete: function(){
 					(is_category_opened || is_search_input_opened || (is_alram_opened && !is_card_opened)) ? history.replaceState(null, null, "#"+current_user_string_id) : history.pushState(null, null, "#"+current_user_string_id);
-					if (!is_card_opened) is_alram_opened = false;
 			    is_user_opened = true;
 					overlay_st = $(window).scrollTop();
 		    }
@@ -308,7 +308,12 @@
 
 		function user_off(){
 			is_user_opened = false;
-	    window.scrollTo(0,overlay_st);
+			if (is_alram_opened && !is_card_opened) {
+				card_detail_off(opened_ask_id);
+				is_alram_opened = false;
+			} else {
+				window.scrollTo(0,overlay_st);
+			}
 
 			enableScroll();
 			$("#user_overlay").fadeOut(300);
@@ -343,79 +348,84 @@
 		}
 
 		function alram_go_url(alram_id, ask_id){
-			$.ajax({
-						url: '/alrams/read.json',
-						type: 'PUT',
-						data: {'id': alram_id, 'ask_id': ask_id},
-						error: function(){
-								return false;
-						},
-						success: function(data){
-							$("#alram_"+alram_id).css("background-color","#fff");
-							if (parseInt($("#alram_feed_count").html()) > 0) $("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
-							user_off();
-							ask = data.ask;
-							asks.push(ask);
+			if (document.location.pathname != "/") {
+				go_url("/asks/" + ask_id);
+			} else {
+				if (is_card_opened) {
+					card_detail_off(opened_ask_id);
+				} else if (!is_alram_opened) {
+					card_open_st = $(window).scrollTop();
+				};
+				$.ajax({
+					url: '/alrams/read.json',
+					type: 'PUT',
+					data: {'id': alram_id, 'ask_id': ask_id},
+					error: function(){
+						return false;
+					},
+					success: function(data){
+						$("#alram_"+alram_id).css("background-color","#fff");
+						if (parseInt($("#alram_feed_count").html()) > 0) $("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
+						user_off();
+						ask = data.ask;
+						asks.push(ask);
 
-							if (document.location.pathname == "/") {
-								history.pushState(null, null, "#"+ask.id+"_detail");
-								is_more_asks = false;
-								is_card_opened = true;
-								is_alram_opened = true;
-								opened_ask_id = ask.id;
-						    // card_open_st = $("#ask_"+ask_id).offset().top - 60;
-						    card_open_st = $(window).scrollTop();
-								$("#endless_loading").hide();
-						    $("#asks").hide();
-						    $("#ask_detail").show().html(askTemplate({ask: ask}));
+						history.pushState(null, null, "#"+ask.id+"_detail");
+						is_more_asks = false;
+						is_card_opened = true;
+						is_alram_opened = true;
+						opened_ask_id = ask.id;
+						// card_open_st = $("#ask_"+ask_id).offset().top - 60;
+						$("#endless_loading").hide();
+						$("#asks").hide();
+						$("#ask_detail").show().html(askTemplate({ask: ask}));
 
-								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-						    link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-						    hover_action(ask.id);
+						hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+						link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+						hover_action(ask.id);
 
-						    // ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
-						    $("#mini_new_comment_"+ask.id).slideUp(200);
-						    show_detail_vote_count(ask.id);
-						    // $("#ask_deal_"+ask_id+"_table").html(askDealTableTemplate({ask: ask}));
-						    $("#ask_deal_"+ask.id+"_table").slideDown(200);
-						    tooltip_box(ask.id);
-						    $("#ask_"+ask.id+"_message_more").click();
-						    $("#ask_"+ask.id+"_comment").html(askCommentTemplate({ask: ask}));
-						    for (i=0; i<ask.comments.length; i++) {
-						      var comment = ask.comments[i];
-						      link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
-						    };
-						    comment_input_setting(ask.id, ask.user);
-						    $("#ask_"+ask.id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
+						// ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+						$("#mini_new_comment_"+ask.id).slideUp(200);
+						show_detail_vote_count(ask.id);
+						// $("#ask_deal_"+ask_id+"_table").html(askDealTableTemplate({ask: ask}));
+						$("#ask_deal_"+ask.id+"_table").slideDown(200);
+						tooltip_box(ask.id);
+						$("#ask_"+ask.id+"_message_more").click();
+						$("#ask_"+ask.id+"_comment").html(askCommentTemplate({ask: ask}));
+						for (i=0; i<ask.comments.length; i++) {
+							var comment = ask.comments[i];
+							link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
+						};
+						comment_input_setting(ask.id, ask.user);
+						$("#ask_"+ask.id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
 
-						    $("#search").hide();
-						    $(".home-float-btn-area").hide();
+						$("#search").hide();
+						$(".home-float-btn-area").hide();
 
-						    // $("#ask_box_"+ask_id).removeClass("ask_box");
-						    // $(".ask_box").hide();
-						    $("html, body").animate({scrollTop:0},0,function(){
-						      $("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").slideDown(500);
-						    });
+						// $("#ask_box_"+ask_id).removeClass("ask_box");
+						// $(".ask_box").hide();
+						$("html, body").animate({scrollTop:0},0,function(){
+							$("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").slideDown(500);
+						});
 
-								$("#category_button:visible").hide();
-								$("#back_button").show().attr("onclick","history.back(); return false;");
-								$(".chat_bubble").css("margin-top","15px");
+						$("#category_button:visible").hide();
+						$("#back_button").show().attr("onclick","back_button(); return false;");
+						$(".chat_bubble").css("margin-top","15px");
 
-						    ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask.id.toString(), 1);
-						    ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
-							}
-						},
-						beforeSend: function(){
-						},
-						complete: function(){
-							if (parseInt($("#alram_feed_count").html()) == 0) {
-								$("#alram_feed_count").css("color","#666");
-								$("#already_all_read").show();
-								$("#all_read").remove();
-							}
+						ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask.id.toString(), 1);
+						ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
+					},
+					beforeSend: function(){
+					},
+					complete: function(){
+						if (parseInt($("#alram_feed_count").html()) == 0) {
+							$("#alram_feed_count").css("color","#666");
+							$("#already_all_read").show();
+							$("#all_read").remove();
 						}
-			});
-			if (document.location.pathname != "/") go_url("/asks/" + ask_id);
+					}
+				});
+			}
 		}
 
 		function manage_on() {
