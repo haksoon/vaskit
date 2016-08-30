@@ -6,7 +6,6 @@ class Alram < ActiveRecord::Base
   def alram_push_send
     if self.is_read == false
       registration_ids = UserGcmKey.where(:user_id => self.user_id).pluck(:gcm_key)
-      registration_ids= ["APA91bG4lu5Ejh2B7_CaRTfCxK4-6fIl9fsmFtErNgkqeMjnVOdVi3IMlaI8qFNAlmg4ElwM5XAEFKWN1aohbdqzrTZHvHrBL25-HROqv28jZYLAcuSeRQX8o07E6ppgotJnc6C2IpSW"] #준식
       unless registration_ids.blank?
         id = self.ask_id.to_s
         msg = "새로운 알림이 있어요. 확인해 보세요!"
