@@ -62,13 +62,13 @@
 		    success: function(data){
 					alram_count = data.alram_count;
 					alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count) : $("#new_alram_icon").css("transform","scale(0)").text(alram_count);
-					if (last_alram_count != null && alram_count > last_alram_count && $("#user_overlay:hidden").length == 1) notify('새로운 알림이 있어요<br>확인해 보세요!');
+					if (last_alram_count != null && alram_count > last_alram_count && !is_user_opened && !$.cookie('gcm_key')) notify('새로운 알림이 있어요<br>확인해 보세요!');
 		    },
 		    beforeSend: function(){
 		    },
 		    complete: function(){
 					last_alram_count = alram_count;
-		    }
+				}
 		  });
 		}
 		alram_check();

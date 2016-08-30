@@ -1,6 +1,5 @@
 class Vote < ActiveRecord::Base
   after_create :incr_ask_deal_vote_count
-
   after_update :reload_ask_deal_vote_count
 
   def incr_ask_deal_vote_count
@@ -28,6 +27,4 @@ class Vote < ActiveRecord::Base
     ask.left_ask_deal.update(:vote_count => Vote.where(:ask_deal_id => ask.left_ask_deal_id).count )
     ask.right_ask_deal.update(:vote_count => Vote.where(:ask_deal_id => ask.right_ask_deal_id).count )
   end
-
-
 end

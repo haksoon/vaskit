@@ -216,7 +216,7 @@ class HomeController < ApplicationController
     end
 
     user_id = current_user.id unless current_user.blank?
-    visitor_id = @visitor.id
+    visitor_id = @visitor.id unless @visitor.blank?
     UserVisit.create(:user_id => user_id, :visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
   end
 
