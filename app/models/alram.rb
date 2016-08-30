@@ -1,7 +1,7 @@
 class Alram < ActiveRecord::Base
   include PushSend
-  after_create :alram_push_send
-  after_update :alram_push_send
+  # after_create :alram_push_send
+  # after_update :alram_push_send
 
   def alram_push_send
     if self.is_read == false
