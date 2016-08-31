@@ -15,7 +15,11 @@
       </div>
       <div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; height:30px; line-height:30px; padding:0 10px; background-color:ghostwhite; border-bottom:1px solid #dbdbdb;">
         {{ if (ask.user) { }}
-          {{ if (ask.user.id == current_user_id) { }}
+          {{ if (ask.user.id == 1) { }}
+            <span style="margin:0px 5px 0px 0px; font-size:10px; float:left; font-weight:bold; opacity:0.8; color:#ee6e01;">
+              <i class="fa fa-star" style="margin-right:2px;"></i>운영자
+            </span>
+          {{ }else if (ask.user.id == current_user_id) { }}
             <span style="margin:0px 5px 0px 0px; font-size:10px; float:left; font-weight:bold; opacity:0.8; color:#ee6e01;">
               <i class="fa fa-user" style="margin-right:2px;"></i>my
             </span>
@@ -654,7 +658,9 @@
         {{ if (comment.is_deleted == false) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:left;">
     				<div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-              {{ if (comment.user_id == current_user_id) { }}
+              {{ if (comment.user.id == 1) { }}
+                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);">VASKIT</span>
+              {{ } else if (comment.user_id == current_user_id) { }}
                 <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
               {{ } else if (comment.user_id == ask.user_id) { }}
                 <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
@@ -678,7 +684,9 @@
                   </div>
                 </div>
                 <div style="display:inline-block; width:40%; float:right; text-align:right;">
-                  <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                  {{ if (comment.user.id != 1) { }}
+                    <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                  {{ } }}
                   <span style="float:right; margin-left:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
                 </div>
               </div>
@@ -769,7 +777,9 @@
               </a>
             </div>
             <div style="position:relative; margin:0 10px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-              {{ if (comment.user_id == current_user_id) { }}
+              {{ if (comment.user.id == 1) { }}
+                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);">VASKIT</span>
+              {{ } else if (comment.user_id == current_user_id) { }}
                 <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
               {{ } else if (comment.user_id == ask.user_id) { }}
                 <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
@@ -793,7 +803,9 @@
                   </div>
                 </div>
                 <div style="display:inline-block; width:40%; float:left; text-align:left;">
-                  <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                  {{ if (comment.user.id != 1) { }}
+                    <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                  {{ } }}
                   <span style="float:left; margin-right:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
                 </div>
               </div>
@@ -873,7 +885,9 @@
         <div id="comment_content_{{=comment.id}}" style="text-align:left;">
           <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-            {{ if (comment.user_id == current_user_id) { }}
+            {{ if (comment.user.id == 1) { }}
+              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);">VASKIT</span>
+            {{ } else if (comment.user_id == current_user_id) { }}
               <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
             {{ } else if (comment.user_id == ask.user_id) { }}
               <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
@@ -897,7 +911,9 @@
                 </div>
               </div>
               <div style="display:inline-block; width:40%; float:right; text-align:right;">
-                <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                {{ if (comment.user.id != 1) { }}
+                  <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                {{ } }}
                 <span style="float:right; margin-left:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
               </div>
             </div>
@@ -946,7 +962,9 @@
             </a>
           </div>
           <div style="position:relative; margin:0 0px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-            {{ if (comment.user_id == current_user_id) { }}
+            {{ if (comment.user.id == 1) { }}
+              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);">VASKIT</span>
+            {{ } else if (comment.user_id == current_user_id) { }}
               <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
             {{ } else if (comment.user_id == ask.user_id) { }}
               <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
@@ -970,7 +988,9 @@
                 </div>
               </div>
               <div style="display:inline-block; width:40%; float:left; text-align:left;">
-                <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                {{ if (comment.user.id != 1) { }}
+                  <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
+                {{ } }}
                 <span style="float:left; margin-right:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
               </div>
             </div>
