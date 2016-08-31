@@ -9,5 +9,5 @@ module PushSend
     response = gcm.send_notification(registration_ids, options)
     logger.debug response
   end
-  
+
 end

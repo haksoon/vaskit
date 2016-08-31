@@ -176,9 +176,9 @@ class HomeController < ApplicationController
     ua = request.headers['User-Agent']
 
     if ua.match(/iPhone/i)
-      device = "iPhone"
+      device = cookies['gcm_key'] ? "App_iOS" : "iPhone"
     elsif ua.match(/Android/i)
-      device = "Android"
+      device = cookies['gcm_key'] ? "App_AOS" : "Android"
     elsif ua.match(/Win|Windows/i)
       device = "Windows"
     elsif ua.match(/Mac|MacIntel/i)

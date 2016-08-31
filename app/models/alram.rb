@@ -1,7 +1,7 @@
 class Alram < ActiveRecord::Base
   include PushSend
-  # after_create :alram_push_send
-  # after_update :alram_push_send
+  after_create :alram_push_send
+  after_update :alram_push_send
 
   def alram_push_send
     if self.is_read == false
@@ -36,7 +36,7 @@ class Alram < ActiveRecord::Base
           else
             msg = send_user + "님 외 " + (reply_comment_count - 1).to_s + "명이 회원님의 의견에 댓글을 남겼습니다."
           end
-        elsif self.alram_type.match("reply_sub_comment_") #테스트
+        elsif self.alram_type.match("reply_sub_comment_")
           reply_sub_comment_count = self.alram_type.gsub("reply_sub_comment_","").to_i
           send_user = User.find_by_id(self.send_user_id).string_id
           comment_owner_user = User.find_by_id(self.comment_owner_user_id).string_id
@@ -70,5 +70,6 @@ class Alram < ActiveRecord::Base
       end
     end
   end
+  handle_asynchronously :alram_push_send
 
 end

@@ -58,3 +58,5 @@ group :development, :test do
 end
 
 gem 'gcm'
+gem 'delayed_job_active_record'
+gem 'daemons'
