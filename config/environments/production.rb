@@ -74,8 +74,6 @@ Rails.application.configure do
     :password => 'vaskit1234',#password
     :enable_starttls_auto => true
   }
-  # config.action_mailer.perform_deliveries = true
-  # config.action_mailer.raise_delivery_errors = true
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -90,11 +88,3 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end
-
-# Rails.application.config.middleware.use ExceptionNotification::Rack,
-#   :email => {
-#     :deliver_with => :deliver,
-#     :email_prefix => "[ERROR] ",
-#     :sender_address => %{"notifier" <notice@vaskit.kr>},
-#     :exception_recipients => %w{junsikahn@vaskit.kr}
-#   }

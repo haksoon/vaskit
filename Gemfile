@@ -60,5 +60,3 @@ end
 gem 'gcm'
 gem 'delayed_job_active_record'
 gem 'daemons'
-
-gem 'exception_notification'
