@@ -4,7 +4,7 @@ class UserMailer < ActionMailer::Base
 
   def welcome_email(user)
     @user = user
-    mail(to: user.email, subject: "[VASKIT] #{user.string_id}님, 환영합니다!")
+    mail(to: user.email, subject: "[VASKIT] #{user.string_id}님, 환영합니다!").deliver
   end
 
   def send_notice(user, notice)
