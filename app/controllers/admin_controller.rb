@@ -3,6 +3,7 @@ class AdminController < ApplicationController
   before_filter :auth_admin
 
   def index
+    dfdfd
     @notices = Notice.all.order("id desc")
     category_id = params[:category_id]
     if category_id
