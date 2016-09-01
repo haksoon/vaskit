@@ -32,13 +32,26 @@ class AsksController < ApplicationController
 
   # GET /posts/new
   def new
-    @ask = Ask.new
+    if current_user
+      @ask = Ask.new
+    else
+      redirect_to "/landing"
+    end
   end
 
   # GET /asks/1/edit
   def edit
-    @left_ask_deal = @ask.left_ask_deal
-    @right_ask_deal = @ask.right_ask_deal
+    if current_user
+      if current_user.id == @ask.user_id
+        @left_ask_deal = @ask.left_ask_deal
+        @right_ask_deal = @ask.right_ask_deal
+      else
+        flash[:ask_create] = "수정 권한이 없습니다"
+        redirect_to "/"
+      end
+    else
+      redirect_to "/landing"
+    end
   end
 
   # POST /asks
@@ -213,7 +226,7 @@ class AsksController < ApplicationController
     end
 
     # flash[:redirect_url] = "/" #AJS추가(삭제)
-    flash[:ask_update] = "게시글 수정 완료!"
+    flash[:ask_create] = "게시글 수정 완료!"
 
     redirect_to "/asks/#{@ask.id}"
   end
