@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   end
 
   def auth_admin
-    safasdf
     render  :template => "/admin/not_auth" unless current_user && current_user.user_role == "admin"
   end
 
