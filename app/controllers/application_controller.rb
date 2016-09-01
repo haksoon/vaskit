@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
   private
   def prepare_exception_notifier
     request.env["exception_notifier.exception_data"] = {
-      :user_string_id => current_user.string_id
+      :user_string_id => current_user ? current_user.string_id : "visitor"
     }
   end
 
