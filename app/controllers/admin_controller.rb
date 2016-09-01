@@ -59,7 +59,7 @@ class AdminController < ApplicationController
   def create_notice
     notice = Notice.create(:title => params[:title], :message => params[:message])
     User.where(:receive_notice_email => true).each do |user|
-      UserMailer.send_notice(user, notice).deliver_now
+      UserMailer.delay.send_notice(user, notice)
     end
     render :json => {:status => "success"}
   end

@@ -15,7 +15,7 @@ class EtcController < ApplicationController
 
   def create_inquiry
     inquiry = Inquiry.create(:user_id => current_user.id, :message => params[:message], :contact => params[:contact])
-    AdminMailer.inquiry_submitted(inquiry).deliver_now
+    AdminMailer.delay.inquiry_submitted(inquiry)
     render :json => {:status => "success" }
   end
 

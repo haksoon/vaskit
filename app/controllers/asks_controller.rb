@@ -125,7 +125,7 @@ class AsksController < ApplicationController
 
     if User.find(@ask.user_id).user_role == "user"
       ask = @ask
-      AdminMailer.ask_submitted(ask).deliver_now
+      AdminMailer.delay.ask_submitted(ask)
     end
   end
 

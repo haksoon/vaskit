@@ -31,7 +31,7 @@ module Vaskit
 
     config.middleware.use ExceptionNotification::Rack,
     :email => {
-      :deliver_with => :deliver, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
+      :deliver_with => :deliver_now, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
       :email_prefix => "[ERROR] ",
       :sender_address => %{"Error notifier" <notice@vaskit.kr>},
       :exception_recipients => %w{junsikahn@vaskit.kr}

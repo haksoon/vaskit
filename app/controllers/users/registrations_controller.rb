@@ -30,8 +30,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
 
     user = User.find_by(:email => params[:user][:email])
-    # UserMailer.welcome_email(user).deliver_now
-    AdminMailer.signup_submitted(user).deliver_now
+    # UserMailer.delay.welcome_email(user)
+    AdminMailer.delay.signup_submitted(user)
   end
 
   def edit
@@ -79,10 +79,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) do |u|
+    devise_parameter_sanitizer.permit(:sign_up) do |u|
       u.permit(:email, :password, :password_confirmation, :remember_me, :sign_up_type, :string_id, :name, :gender, :birthday, :facebook_id, :agree_access_term)
     end
-    devise_parameter_sanitizer.for(:account_update) do |u|
+    devise_parameter_sanitizer.permit(:account_update) do |u|
       u.permit(:email, :current_password, :password, :password_confirmation, :remember_me, :sign_up_type, :string_id, :name, :gender, :birthday, :facebook_id, :agree_access_term)
     end
   end
