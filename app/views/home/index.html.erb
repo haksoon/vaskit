@@ -2,7 +2,7 @@
 <% when "user", "hash_tag", "ask_deal", "brand", "none" %>
 	<%= render :partial => "common_partial/header", :locals => {:title => ""} %>
 	<%= render :partial => "common_partial/search" %>
-	<p class="chat_bubble" style="margin-top:65px;">
+	<p class="chat_bubble">
 		<% if @type == "user" %>
 			<span style="color:#998674; font-weight:bold;"><i class="fa fa-user"></i>&nbsp;<%= flash[:keyword] %></span>&nbsp;유저 검색 결과입니다.
 		<% elsif @type == "hash_tag" %>
@@ -33,14 +33,14 @@
 <% when "vote_yet" %>
 	<%= render :partial => "common_partial/header", :locals => {:title => ""} %>
 	<%= render :partial => "common_partial/search" %>
-	<p class="chat_bubble" style="margin-top:65px;">
+	<p class="chat_bubble">
 		참여하지 않은 카드만 보고싶으셨군요?<br>당신의 꿈은 투표왕?!!
 	</p>
 <% else %>
 	<%= render :partial => "common_partial/header", :locals => {:title => ""} %>
 	<%= render :partial => "common_partial/search" %>
 	<%= render :partial => "common_partial/promotion" %>
-	<p class="chat_bubble table_div" style="margin-top:65px;">
+	<p class="chat_bubble table_div">
 		<span style="color:#ee6e01;">#둘중에뭐사지? #고민고민하지마</span> <b style="float:right;">Let's VASKIT!</b>
 	</p>
 <% end %>

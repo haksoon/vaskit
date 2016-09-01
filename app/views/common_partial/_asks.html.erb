@@ -1248,14 +1248,14 @@
       	        	if ( more_asks.length == 0 ) {
       	        		is_more_asks = false;
                     more_load = false;
-      	        		$("#endless_loading").hide();
+      	        		$("#endless_loading").remove();
                     currentPage -= 1;
       	        	} else {
                     more_load = true;
       	        		if( more_asks.length < <%= Ask::ASK_PER %> ){
       	        			is_more_asks = false;
                       more_load = false;
-      	        			$("#endless_loading").hide();
+      	        			$("#endless_loading").remove();
       	        		}
                     $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px;'></div>");
       	        		for(var i=0; i < more_asks.length; i++) {
@@ -1617,6 +1617,7 @@
     $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
 
     $("#search").hide();
+    $("#search_dummy").hide();
     $(".home-float-btn-area").hide();
 
     // $("#ask_box_"+ask_id).removeClass("ask_box");
@@ -1627,7 +1628,6 @@
 
 		$("#category_button:visible").hide();
 		$("#back_button").show().attr("onclick","back_button(); return false;");
-		$(".chat_bubble").css("margin-top","15px");
 
     ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask_id.toString(), 1);
     ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
@@ -1683,6 +1683,7 @@
     $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
 
     $("#search").show();
+    $("#search_dummy").show();
     $(".home-float-btn-area").show();
 
     // $(".ask_box").show();
@@ -1691,7 +1692,6 @@
 
     $("#back_button").hide().attr("onclick","back_button(); return false;");
     main_header_left_button();
-    $(".chat_bubble").css("margin-top","65px");
   }
 
 	function comment_input_setting(ask_id, ask_user) {

@@ -92,13 +92,17 @@ class ApplicationController < ActionController::Base
   end
 
   def set_gcm_key
-    unless cookies["gcm_key"] == nil
-      gcm_key = cookies["gcm_key"]
-      user_gcm_key = UserGcmKey.find_by(:gcm_key => gcm_key)
-      if user_gcm_key
-        user_gcm_key.update(:user_id => current_user.id)
-      else
-        UserGcmKey.create(:user_id => current_user.id, :gcm_key => gcm_key)
+    if current_user
+      unless cookies["gcm_key"] == nil
+        gcm_key = cookies["gcm_key"]
+        device_id = cookies["device_id"]
+        UserGcmKey.where(:device_id => device_id).destroy_all unless device_id == nil
+        user_gcm_key = UserGcmKey.find_by(:gcm_key => gcm_key)
+        if user_gcm_key
+          user_gcm_key.update(:user_id => current_user.id)
+        else
+          UserGcmKey.create(:user_id => current_user.id, :gcm_key => gcm_key, :device_id => device_id)
+        end
       end
     end
   end

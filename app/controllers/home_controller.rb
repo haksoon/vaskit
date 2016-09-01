@@ -173,7 +173,7 @@ class HomeController < ApplicationController
   def welcome
     referer_host = request.referer ? URI(request.referer).host : "None"
     referer = request.referer ? URI(request.referer) : "None"
-    ua = request.headers['User-Agent']
+    ua = request.headers['User-Agent'] ? request.headers['User-Agent'] : "unknown"
 
     if ua.match(/iPhone/i)
       device = cookies['gcm_key'] ? "App_iOS" : "iPhone"

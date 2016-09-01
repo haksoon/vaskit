@@ -26,8 +26,9 @@
 <script>
 	if (window.HybridApp) {
 		HybridApp.getGCM("hello world");
-		function setGCM(key) {
+		function setGCM(key, device_id) {
 			$.cookie('gcm_key' , key, { expires : 30000, path : '/' });
+			$.cookie('device_id' , device_id, { expires : 30000, path : '/' });
 		}
 	}
 

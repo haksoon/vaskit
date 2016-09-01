@@ -101,11 +101,15 @@ function back_button(){
 function header_back_button(){
   var referrer = document.createElement("a");
   referrer.href = document.referrer;
-  if (parent.history.lenght == 1 || referrer.host != document.location.host) {
+  if (parent.history.length == 1 || referrer.host != document.location.host) {
     document.location.replace("/");
   } else {
     history.back();
   }
+}
+
+function window_back_button(){
+  parent.history.length ==1 ? window.close() : history.back();
 }
 
 function share_log(channel, ask_id){

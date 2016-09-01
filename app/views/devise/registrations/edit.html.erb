@@ -2,7 +2,7 @@
 	<div style="position:fixed; width:inherit; height:40px; padding-top:10px; background-color:#998674; color:#f4f4f4; z-index:1;">
 		<div style="padding:7px 15px;">
 			<h1 style="display:inline-block; margin:0; padding-top:1px; font-size:22px;">비밀번호 변경</h1>
-			<a href="#" onclick="window.close(); return false;"><span style="float:right; font-size:28px; color:#f4f4f4;">&times;</span></a>
+			<a href="#" onclick="window_back_button(); return false;"><span style="float:right; font-size:28px; color:#f4f4f4;">&times;</span></a>
 		</div>
 	</div>
 	<div style="padding-top:50px;">
@@ -54,7 +54,7 @@
 		notify('<%=flash[:custom_notice]%>'.replace('\n','<br>'));
 		<% if flash[:custom_notice] == "비밀번호가 변경되었습니다" %>
 			alert('<%=flash[:custom_notice]%>');
-			window.close();
+			window_back_button();
 		<% end %>
 	<% end %>
 

@@ -21,5 +21,6 @@
   };
   comment_input_setting(ask.id, ask.user);
   $("#ask_"+ask.id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
+  $("#ask_"+ask.id+"_detail_off").attr("onclick","header_back_button(); return false;");
   $("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").show();
 </script>
