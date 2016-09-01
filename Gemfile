@@ -55,8 +55,12 @@ group :development, :test do
   gem 'spring'
 
   gem 'letter_opener'
+
+  gem 'meta_request'
 end
 
 gem 'gcm'
 gem 'delayed_job_active_record'
 gem 'daemons'
+
+gem 'exception_notification'
