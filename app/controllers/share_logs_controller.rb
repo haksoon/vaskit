@@ -1,6 +1,7 @@
 # coding : utf-8
 class ShareLogsController < ApplicationController
   before_filter :auth_admin, :only => ["destroy"]
+  skip_before_action :verify_authenticity_token, :only => ["create"]
 
   # POST /share_logs.josn
   def create
