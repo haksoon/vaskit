@@ -109,7 +109,11 @@ function header_back_button(){
 }
 
 function window_back_button(){
-  parent.history.length ==1 ? window.close() : history.back();
+  try {
+    window.close();
+  } finally {
+    history.back();
+  }
 }
 
 function share_log(channel, ask_id){
@@ -223,6 +227,7 @@ function disableScroll() {
   // window.ontouchmove  = preventDefault; // mobile
   // document.onkeydown  = preventDefaultForScrollKeys;
   $("body").css("overflow","hidden");
+  $("#menu_bg, #menu_pc_bg, #more_popup_bg").bind("touchmove", function(e){e.preventDefault()});
   // $("#menu_bg").bind('touchmove', function(e){e.preventDefault()});
 }
 
@@ -234,6 +239,7 @@ function enableScroll() {
   // window.ontouchmove = null;
   // document.onkeydown = null;
   $("body").css("overflow","auto");
+  $("#menu_bg, #menu_pc_bg, #more_popup_bg").unbind("touchmove");
 	// $("#menu_bg").unbind('touchmove');
 }
 

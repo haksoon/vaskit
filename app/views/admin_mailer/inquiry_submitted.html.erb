@@ -10,13 +10,13 @@
     </p>
     <ul>
       <li>
-        문의자: <%= User.find_by_id(@inquiry.user_id).string_id %>
-      </li>
-      <li>
-        연락처: <%= @inquiry.contact %>
+        문의자: <%= @inquiry.user_id == nil ? "visitor가 남긴 문의사항입니다." : User.find_by_id(@inquiry.user_id).string_id %>
       </li>
       <li>
         접수 내용: <%= @inquiry.message %>
+      </li>
+      <li>
+        연락처: <%= @inquiry.contact %>
       </li>
       <li>
         접수 일시: <%= @inquiry.created_at %>
