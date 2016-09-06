@@ -2,7 +2,7 @@
 class HomeController < ApplicationController
 
   def index
-    welcome
+    welcome if params[:page] == nil && params[:type] == nil
     @user_categories = []
     if current_user
       @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id)
@@ -125,12 +125,6 @@ class HomeController < ApplicationController
     end
   end
 
-  def show_detail
-    ask = Ask.find(params[:id])
-    detail_vote_count = ask.detail_vote_count
-    render :json => {:detail_vote_count => detail_vote_count}
-  end
-
   #GET /home/set_cateogry
   def set_category
     UserCategory.delete_all(:user_id => current_user.id) if current_user
@@ -151,81 +145,56 @@ class HomeController < ApplicationController
     @user_categories = UserCategory.where(:user_id => current_user.id).map(&:category_id) if current_user
   end
 
-  #POST /home/like
-  def like
-    already_like = false
-    ask = Ask.find(params[:id])
-    ask_like = AskLike.where(:user_id => current_user.id, :ask_id => params[:id]).first
-    if ask_like
-      already_like = true
-      ask_like.delete
-      ask.update(:like_count => ask.like_count - 1)
-    else
-      ask_like = AskLike.create(:user_id => current_user.id, :ask_id => params[:id])
-      ask.update(:like_count => ask.like_count + 1)
-
-      if ask.user_id != ask_like.user_id #&& Alram.where(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id).blank?
-      if User.find_by_id(ask.user_id).alram_1 == true #알림 옵션 체크
-        alram = Alram.where(:user_id => ask.user_id, :ask_id => ask.id).where("alram_type like ?", "like_ask_%").first
-        if alram
-          alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "like_ask_" + AskLike.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
-        else
-          Alram.create(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id, :alram_type => "like_ask_" + AskLike.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
-        end
-      end
-      end
-    end
-    render :json => {:already_like => already_like, :ask_like => ask_like}
-  end
-
   def welcome
-    referer_host = request.referer ? URI(request.referer).host : "None"
-    referer = request.referer ? URI(request.referer) : "None"
-    ua = request.headers['User-Agent'] ? request.headers['User-Agent'] : "unknown"
+    referer_host = request.referer ? URI.parse(URI.encode(request.referer.strip)).host.to_s : "None"
+    unless referer_host == request.host
+      referer = request.referer ? URI.parse(URI.encode(request.referer.strip)).to_s : "None"
+      ua = request.headers['User-Agent'] ? request.headers['User-Agent'] : "unknown"
 
-    if ua.match(/iPhone/i)
-      device = cookies['gcm_key'] ? "App_iOS" : "iPhone"
-    elsif ua.match(/Android/i)
-      device = cookies['gcm_key'] ? "App_AOS" : "Android"
-    elsif ua.match(/Win|Windows/i)
-      device = "Windows"
-    elsif ua.match(/Mac|MacIntel/i)
-      device = "Mac"
-    elsif ua.match(/Linux/i)
-      device = "Linux"
-    elsif ua.match(/iPod|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)
-      device = "mobile_etc"
-    else
-      device = "unknown"
+      if ua.match(/iPhone/i)
+        device = cookies['gcm_key'] ? "App_iOS" : "iPhone"
+      elsif ua.match(/Android/i)
+        device = cookies['gcm_key'] ? "App_AOS" : "Android"
+      elsif ua.match(/Win|Windows/i)
+        device = "Windows"
+      elsif ua.match(/Mac|MacIntel/i)
+        device = "Mac"
+      elsif ua.match(/Linux/i)
+        device = "Linux"
+      elsif ua.match(/iPod|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)
+        device = "mobile_etc"
+      else
+        device = "unknown"
+      end
+
+      if ua.match(/NAVER/i)
+        browser = "NaverAPP"
+      elsif ua.match(/Daum/i)
+        browser = "DaumAPP"
+      elsif ua.match(/KAKAOTALK|KAKAOSTORY/i)
+        browser = "KakaoAPP"
+      elsif ua.match(/Facebook|FB/i)
+        browser = "FacebookAPP"
+      elsif ua.match(/MSIE|Trident/i)
+        browser = "IE"
+      elsif ua.match(/Edge/i)
+        browser = "Edge"
+      elsif ua.match(/Opera|OPR|OPiOS/i)
+        browser = "Opera"
+      elsif ua.match(/Chrome|CriOS/i)
+        browser = "Chrome"
+      elsif ua.match(/Firefox|FxiOS/i)
+        browser = "FireFox"
+      elsif ua.match(/Safari/i)
+        browser = "Safari"
+      else
+        browser = "unknown"
+      end
+
+      user_id = current_user.id unless current_user.blank?
+      visitor_id = @visitor.id unless @visitor.blank?
+      UserVisit.create(:user_id => user_id, :visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
     end
-
-    if ua.match(/NAVER/i)
-      browser = "NaverAPP"
-    elsif ua.match(/Daum/i)
-      browser = "DaumAPP"
-    elsif ua.match(/KAKAOTALK|KAKAOSTORY/i)
-      browser = "KakaoAPP"
-    elsif ua.match(/Facebook|FB/i)
-      browser = "FacebookAPP"
-    elsif ua.match(/MSIE|Trident/i)
-      browser = "IE"
-    elsif ua.match(/Edge/i)
-      browser = "Edge"
-    elsif ua.match(/Opera|OPR|OPiOS/i)
-      browser = "Opera"
-    elsif ua.match(/Chrome|CriOS/i)
-      browser = "Chrome"
-    elsif ua.match(/Firefox|FxiOS/i)
-      browser = "FireFox"
-    elsif ua.match(/Safari/i)
-      browser = "Safari"
-    else
-      browser = "unknown"
-    end
-
-    user_id = current_user.id unless current_user.blank?
-    visitor_id = @visitor.id unless @visitor.blank?
-    UserVisit.create(:user_id => user_id, :visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
   end
 
 end

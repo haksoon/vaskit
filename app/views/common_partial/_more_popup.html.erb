@@ -45,7 +45,7 @@
 	var report_type;
 
 	function show_more_popup(target, target_id, ask_user_id, current_user_id, user_string_id, left_deal_title, right_deal_title) {
-    history.pushState(null, null, "#more_"+target_id);
+    history.pushState(null, null, null);
     is_more_popup_opened = true;
 		overlay_st = $(window).scrollTop();
 

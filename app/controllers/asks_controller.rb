@@ -25,6 +25,40 @@ class AsksController < ApplicationController
     end
   end
 
+  # GET /asks/ask_id/show_detail.json
+  def show_detail
+    ask = Ask.find(params[:id])
+    detail_vote_count = ask.detail_vote_count
+    render :json => {:detail_vote_count => detail_vote_count}
+  end
+
+  # POST /asks/ask_id/like
+  def like
+    already_like = false
+    ask = Ask.find(params[:id])
+    ask_like = AskLike.where(:user_id => current_user.id, :ask_id => params[:id]).first
+    if ask_like
+      already_like = true
+      ask_like.delete
+      ask.update(:like_count => ask.like_count - 1)
+    else
+      ask_like = AskLike.create(:user_id => current_user.id, :ask_id => params[:id])
+      ask.update(:like_count => ask.like_count + 1)
+
+      if ask.user_id != ask_like.user_id #&& Alram.where(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id).blank?
+      if User.find_by_id(ask.user_id).alram_1 == true #알림 옵션 체크
+        alram = Alram.where(:user_id => ask.user_id, :ask_id => ask.id).where("alram_type like ?", "like_ask_%").first
+        if alram
+          alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "like_ask_" + AskLike.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
+        else
+          Alram.create(:user_id => ask.user_id, :send_user_id => current_user.id, :ask_id => ask.id, :alram_type => "like_ask_" + AskLike.where("ask_id = ? AND user_id <> ?", ask.id, ask.user_id).count.to_s )
+        end
+      end
+      end
+    end
+    render :json => {:already_like => already_like, :ask_like => ask_like}
+  end
+
   def destroy
     Ask.find_by_id(params[:id]).delete
     redirect_to(:back)

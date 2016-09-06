@@ -353,7 +353,7 @@
 	}
 
 	function select_deal(product_id, is_left){
-		item = $.grep(items, function(obj) { return obj.productId === product_id; })[0];
+		var item = $.grep(items, function(obj) { return obj.productId === product_id; })[0];
 
 		$.ajax({
 	        url: '/deals/create_by_naver.json',

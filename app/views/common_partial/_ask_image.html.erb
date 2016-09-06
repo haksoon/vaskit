@@ -67,7 +67,7 @@
   var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
 
   function ask_image_on(ask_id, ask_deal_id, is_left){
-    history.pushState(null, null, "#"+ask_id+"_image");
+    history.pushState(null, null, null);
     is_ask_image_opened = true;
     overlay_st = $(window).scrollTop();
 
@@ -223,7 +223,7 @@
           askImgB = $("#card_back");
 
       askImg.css("transform","translateY(0px)").css("-webkit-transform","translateY(0px)");
-      if (Math.abs(askImgMouseEndY - askImgMouseStartY) > 100) ask_image_off();
+      if (Math.abs(askImgMouseEndY - askImgMouseStartY) > 100) history.back();
 
       if (askImgMouseStartX > askImgMouseEndX) {
         askImgA.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");

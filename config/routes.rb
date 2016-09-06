@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :asks do
     member do
+      get 'show_detail'
+      post 'like'
       get 'ask_complete'
       get 'create_complete'
     end
@@ -59,12 +61,8 @@ Rails.application.routes.draw do
   end
   resources :home do
     collection do
-      get 'show_detail'
       get 'set_category'
       get 'no_result'
-    end
-    member do
-      post 'like'
     end
   end
 

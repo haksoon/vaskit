@@ -1,7 +1,7 @@
 <div id="category_overlay">
 	<div style="position:absolute; top:-50px; left:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
-		<a href="#" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;">
-			<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
+		<a href="#" class="header_button" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;">
+			<i class="fa fa-remove" style="font-size: 26px; padding-top: 11px;"></i>
 		</a>
 	</div>
 	<div style="position:absolute; top:-10px; left:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
@@ -107,7 +107,7 @@
 	var change_user_categories = <%=raw @user_categories.to_json %>;
 
 	function category_on(){
-		(is_user_opened || is_search_input_opened) ? history.replaceState(null, null, "#category_setting") : history.pushState(null, null, "#category_setting");
+		(is_user_opened || is_search_input_opened) ? history.replaceState(null, null, null) : history.pushState(null, null, null);
     is_category_opened = true;
 		overlay_st = $(window).scrollTop();
 

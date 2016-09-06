@@ -2,8 +2,8 @@
 	<tr>
 		<td style="width:60px;">
 			<span style="display:block; width:60px; height:50px;">
-				<a id="category_button" href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-navicon" style="color: #fff; font-size: 26px; padding-top: 12px;"></i></a>
-				<a id="back_button" href="#" onclick="header_back_button(); return false;" style="display:block; position:absolute; top:0; left:0; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-angle-left" style="color: #fff; font-size: 40px; padding-top: 3px;"></i></a>
+				<a id="category_button" class="header_button" href="#" onclick="category_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-navicon" style="font-size: 26px; padding-top: 12px;"></i></a>
+				<a id="back_button" class="header_button" href="#" onclick="header_back_button(); return false;" style="display:block; position:absolute; top:0; left:0; box-sizing:border-box; width:60px; height:50px; padding-left:10px; font-size: 40px;"><i class="fa fa-angle-left" style="padding-top: 3px;"></i></a>
 			</span>
 		</td>
 		<td style="width:100%; padding-right:10px;">
@@ -14,8 +14,8 @@
 		</td>
 		<td style="width:60px;">
 			<% if current_user %>
-				<a href="#" onclick="user_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
-					<i class="fa fa-user" style="color: #fff; font-size: 30px; padding-top: 12px;"></i>
+				<a class="header_button" href="#" onclick="user_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+					<i class="fa fa-user" style="font-size: 30px; padding-top: 12px;"></i>
 					<span style="position: absolute; bottom: 11px; right: 28px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
 					<span id="new_alram_icon" style="position:absolute; top:9px; right:10px; width:10px; height:10px; line-height:10px; text-align:center; background-color:#ee6e01; border-radius:10px; font-size:10px; font-weight:bold; color:#fff; padding:3px 2px 1px; transition:transform .5s; transform:scale(0); -webkit-transform:scale(0);"></span>
 				</a>

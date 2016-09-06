@@ -56,10 +56,11 @@
       var is_category_opened = false;
       var is_user_opened = false;
       var is_search_input_opened = false;
-      var is_search_result_opened = false;
       var is_more_popup_opened = false;
       var is_card_opened = false;
       var is_alram_opened = false;
+      var opened_ask_id = null;
+      var card_open_st = 0;
       var overlay_st = 0;
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -97,53 +98,45 @@
     progressStart();
     $(document).ready(function(){
       window.scrollTo(0,0);
+      $(window).unbind("popstate");
       progressEnd();
-  		$(window).unbind("hashchange");
-  		if (document.location.search == "") {
-  			is_search_result_opened = false;
-  			history.replaceState(null, null, "#welcome");
-  		} else {
-  			is_search_result_opened = true;
-  			history.replaceState(null, null, "#search_result");
-  		}
-  		$(window).bind("hashchange", function(){
-  			if (is_ask_image_opened) {
-  				ask_image_off();
-  			} else if (is_category_opened || is_user_opened || is_search_input_opened) {
-  				if (is_category_opened) category_off();
-  				if (is_user_opened) user_off();
-  				if (is_search_input_opened) search_input_off();
-  			} else if (is_more_popup_opened) {
-  				hide_more_popup();
-  			// } else if (is_card_opened) {
-  			// 	card_detail_off(opened_ask_id);
-  			// 	if (is_alram_opened) user_on();
+      history.replaceState(null, null, null);
+      $(window).bind("popstate", function(){
+        main_header_left_button();
+        if (is_ask_image_opened) {
+          ask_image_off();
+        } else if (is_category_opened || is_user_opened || is_search_input_opened) {
+          if (is_category_opened) category_off();
+          if (is_user_opened) user_off();
+          if (is_search_input_opened) search_input_off();
+        } else if (is_more_popup_opened) {
+          hide_more_popup();
         } else if (is_alram_opened) {
           card_detail_off(opened_ask_id);
           user_on();
+          is_alram_opened = false;
         } else if (is_card_opened) {
           card_detail_off(opened_ask_id);
         }
-  		});
-  		$(document).keydown(function(e){
-  			if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-  				if(e.keyCode === 27){
+      });
+      $(document).keydown(function(e){
+        if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+          if(e.keyCode === 27){
             if (is_ask_image_opened) {
-      				back_button();
-      			} else if (is_category_opened || is_user_opened || is_search_input_opened) {
-      				if (is_category_opened) back_button();
-      				if (is_user_opened) back_button();
-      				if (is_search_input_opened) back_button();
-      			} else if (is_more_popup_opened) {
-      				back_button();
-      			} else if (is_card_opened) {
-      				back_button();
-      			}
-  				}
-  			}
-  		});
-  	})
-
+              back_button();
+            } else if (is_category_opened || is_user_opened || is_search_input_opened) {
+              if (is_category_opened) back_button();
+              if (is_user_opened) back_button();
+              if (is_search_input_opened) back_button();
+            } else if (is_more_popup_opened) {
+              back_button();
+            } else if (is_card_opened) {
+              back_button();
+            }
+          }
+        }
+      });
+    })
   </script>
 </body>
 </html>

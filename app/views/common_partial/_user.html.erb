@@ -1,8 +1,8 @@
 <% if current_user %>
 	<div id="user_overlay">
 		<div style="position:absolute; top:-50px; right:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
-			<a href="#" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
-				<i class="fa fa-remove" style="color: #fff; font-size: 26px; padding-top: 11px;"></i>
+			<a href="#" class="header_button" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+				<i class="fa fa-remove" style="font-size: 26px; padding-top: 11px;"></i>
 			</a>
 		</div>
 		<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
@@ -294,7 +294,7 @@
 		    beforeSend: function(){
 		    },
 		    complete: function(){
-					(is_category_opened || is_search_input_opened || (is_alram_opened && !is_card_opened)) ? history.replaceState(null, null, "#"+current_user_string_id) : history.pushState(null, null, "#"+current_user_string_id);
+					(is_category_opened || is_search_input_opened) ? history.replaceState(null, null, null) : history.pushState(null, null, null);
 			    is_user_opened = true;
 					overlay_st = $(window).scrollTop();
 		    }
@@ -325,35 +325,37 @@
 
 		function all_read(){
 			$.ajax({
-						url: '/alrams/all_read.json',
-						type: 'PUT',
-						data: {'blank':'blank'},
-						error: function(){
-								return false;
-						},
-						success: function(data){
-							$("#alram_list a").css("background-color","#fff");
-							$("#alram_feed_count").html("0개").css("color","#666");
-							$("#already_all_read").show();
-							$("#all_read").remove();
-						},
-						beforeSend: function(){
-							progressStart();
-						},
-						complete: function(){
-              progressEnd();
-						}
+				url: '/alrams/all_read.json',
+				type: 'PUT',
+				data: {'blank':'blank'},
+				error: function(){
+						return false;
+				},
+				success: function(data){
+					$("#alram_list a").css("background-color","#fff");
+					$("#alram_feed_count").html("0개").css("color","#666");
+					$("#already_all_read").show();
+					$("#all_read").remove();
+				},
+				beforeSend: function(){
+					progressStart();
+				},
+				complete: function(){
+          progressEnd();
+				}
 			});
 		}
 
 		function alram_go_url(alram_id, ask_id){
-			if (document.location.pathname != "/") {
-				go_url("/asks/" + ask_id);
-			} else {
-				if (is_card_opened) {
-					card_detail_off(opened_ask_id);
-				} else if (!is_alram_opened) {
+			var ask_href = new RegExp('\/asks\/[0-9]*$');
+			if (document.location.pathname == "/" || ask_href.test(document.location.pathname)) {
+				if (!is_alram_opened && !is_card_opened) {
 					card_open_st = $(window).scrollTop();
+				} else if ((is_alram_opened || (!is_alram_opened && is_card_opened)) && opened_ask_id == ask_id) {
+					history.back();
+				} else if (is_alram_opened || (!is_alram_opened && is_card_opened)) {
+					card_detail_off(opened_ask_id);
+					history.back();
 				};
 				$.ajax({
 					url: '/alrams/read.json',
@@ -369,24 +371,23 @@
 						ask = data.ask;
 						asks.push(ask);
 
-						history.pushState(null, null, "#"+ask.id+"_detail");
+						history.replaceState(null, null, "/asks/"+ask.id);
 						is_more_asks = false;
 						is_card_opened = true;
 						is_alram_opened = true;
 						opened_ask_id = ask.id;
-						// card_open_st = $("#ask_"+ask_id).offset().top - 60;
+
 						$("#endless_loading").hide();
 						$("#asks").hide();
 						$("#ask_detail").show().html(askTemplate({ask: ask}));
+						$("#ask_"+ask.id).unwrap();
 
 						hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
 						link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
 						hover_action(ask.id);
 
-						// ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
 						$("#mini_new_comment_"+ask.id).slideUp(200);
 						show_detail_vote_count(ask.id);
-						// $("#ask_deal_"+ask_id+"_table").html(askDealTableTemplate({ask: ask}));
 						$("#ask_deal_"+ask.id+"_table").slideDown(200);
 						tooltip_box(ask.id);
 						$("#ask_"+ask.id+"_message_more").click();
@@ -399,17 +400,15 @@
 						$("#ask_"+ask.id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
 
 						$("#search").hide();
+						$("#search_dummy").hide();
 						$(".home-float-btn-area").hide();
 
-						// $("#ask_box_"+ask_id).removeClass("ask_box");
-						// $(".ask_box").hide();
 						$("html, body").animate({scrollTop:0},0,function(){
 							$("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").slideDown(500);
 						});
 
 						$("#category_button:visible").hide();
 						$("#back_button").show().attr("onclick","back_button(); return false;");
-						$(".chat_bubble").css("margin-top","15px");
 
 						ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask.id.toString(), 1);
 						ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
@@ -424,6 +423,8 @@
 						}
 					}
 				});
+			} else {
+				go_url("/asks/" + ask_id);
 			}
 		}
 

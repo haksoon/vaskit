@@ -140,6 +140,16 @@ input:focus, select:focus, textarea:focus {
 	display: none;
 }
 
+.header_button {
+	color: #fff;
+	transition: all .2s;
+}
+.header_button:active {
+	color: #998674;
+	/*transform: scale(0.8);*/
+	/*-webkit-transform: scale(0.8);*/
+}
+
 .search_bar_area {
 	width: inherit;
 	height: 50px;
@@ -404,7 +414,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .card_detail { box-sizing:border-box; line-height:40px; display:block; border-top:1px solid #dbdbdb; color:#9d9ea1; font-size:13px; transition:all .2s; }
-.card_detail:hover { background-color:#f4f4f4; color:#666; }
+.card_detail:hover { background-color:#f4f4f4; color:#666; border-radius:0 0 7px 7px; }
 
 .vote-result-td {
 	width:50%;
@@ -636,7 +646,7 @@ a.login_btn:hover {
 	color: #666;
 	background-color: #fff;
 	font-size: 13px;
-	line-height: 17px;;
+	line-height: 17px;
 }
 
 #hashtag_backdrop {
