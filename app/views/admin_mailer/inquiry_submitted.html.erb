@@ -10,8 +10,7 @@
     </p>
     <ul>
       <li>
-        <% user = @inquiry.user_id ? User.find_by_id(@inquiry.user_id).string_id : "visitor가 남긴 문의사항입니다." %>
-        문의자: <%= user %>
+        문의자: <%= @inquiry.user_id ? User.find_by_id(@inquiry.user_id).string_id : "visitor가 남긴 문의사항입니다." %>
       </li>
       <li>
         접수 내용: <%= @inquiry.message %>
