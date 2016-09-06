@@ -101,7 +101,7 @@ function back_button(){
 function header_back_button(){
   var referrer = document.createElement("a");
   referrer.href = document.referrer;
-  if (parent.history.length == 1 || referrer.host != document.location.host) {
+  if (parent.history.length == 1 || referrer.host != document.location.host || referrer.href == document.location.href) {
     document.location.replace("/");
   } else {
     history.back();
