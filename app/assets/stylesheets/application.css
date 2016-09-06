@@ -727,6 +727,7 @@ a.login_btn:hover {
 }
 
 .ask_text_field {
+	position: relative;
 	display: inline-block;
 	min-width: 50%;
 	max-width: 50%;
