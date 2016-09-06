@@ -9,7 +9,8 @@ class AdminMailer < ActionMailer::Base
 
   def ask_submitted(ask)
     @ask = ask
-    mail(subject: "[VASKIT] 새로운 질문이 작성되었습니다.").deliver
+    bcc = ["junsikahn@gmail.com"]
+    mail(to: "junsikahn@vaskit.kr", bcc: bcc, subject: "[VASKIT] 새로운 질문이 작성되었습니다.").deliver
   end
 
   def inquiry_submitted(inquiry)
