@@ -15,6 +15,7 @@ class AdminMailer < ActionMailer::Base
 
   def inquiry_submitted(inquiry)
     @inquiry = inquiry
+    @user = inquiry.user_id ? User.find(inquiry.user_id).string_id : "visitor"
     mail(subject: "[VASKIT] 문의가 접수되었습니다.").deliver
   end
 
