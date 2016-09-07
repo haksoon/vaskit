@@ -115,7 +115,7 @@ class AsksController < ApplicationController
       end
     end
 
-    left_ask_deal = AskDeal.create(:deal_id => left_deal.id, :user_id => current_user.id, :title => left_deal_params[:title], :brand => left_deal_params[:brand], :link => left_deal.link,
+    left_ask_deal = AskDeal.create(:deal_id => left_deal.id, :user_id => current_user.id, :title => left_deal_params[:title], :brand => left_deal_params[:brand], :link => left_deal_params[:link],
                                     :price => left_deal_params[:price], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3],
                                     :image => left_image, :is_modify => left_deal_is_modify)
 
@@ -142,7 +142,7 @@ class AsksController < ApplicationController
       end
     end
 
-    right_ask_deal = AskDeal.create(:deal_id => right_deal.id, :user_id => current_user.id, :title => right_deal_params[:title], :brand => right_deal_params[:brand], :link => right_deal.link,
+    right_ask_deal = AskDeal.create(:deal_id => right_deal.id, :user_id => current_user.id, :title => right_deal_params[:title], :brand => right_deal_params[:brand], :link => right_deal_params[:link],
                                     :price => right_deal_params[:price], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3],
                                     :image => right_image, :is_modify => right_deal_is_modify)
 

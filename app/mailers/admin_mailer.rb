@@ -54,4 +54,9 @@ class AdminMailer < ActionMailer::Base
     mail(subject: "[VASKIT] #{date} 일일 리포트").deliver
   end
 
+
+  def layout_test
+    mail(to: ['junsikahn@vaskit.kr', 'seokkiyoon@vaskit.kr'], subject: "[VASKIT] 이메일 템플릿 레이아웃 테스트").deliver
+  end
+
 end
