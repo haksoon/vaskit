@@ -172,7 +172,10 @@ class AsksController < ApplicationController
 
     if User.find(@ask.user_id).user_role == "user"
       ask = @ask
-      AdminMailer.delay.ask_submitted(ask)
+      admins = ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr', 'ice1134@naver.com', 'dammi0119@gmail.com', 'duddk0218@naver.com', 'khj120920@naver.com']
+      admins.each do |admin|
+        AdminMailer.delay.ask_submitted(ask, admin)
+      end
     end
   end
 
