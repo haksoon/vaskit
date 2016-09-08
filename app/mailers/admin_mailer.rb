@@ -1,5 +1,5 @@
 class AdminMailer < ActionMailer::Base
-  default from: 'notice@vaskit.kr',
+  default from: %{"VASKIT admin" <notice@vaskit.kr>},
           to: ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr']
 
   def signup_submitted(user)

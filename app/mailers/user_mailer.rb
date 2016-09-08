@@ -4,9 +4,9 @@ class UserMailer < ActionMailer::Base
 
   def welcome_email(user)
     @user = user
-    @ask_count = Ask.all.count
-    @vote_count = Vote.all.count
-    @commnent_count = Comment.all.count
+    @ask_count = Ask.all.count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,')
+    @vote_count = Vote.all.count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,')
+    @comment_count = Comment.all.count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,')
     mail(to: user.email, subject: "[VASKIT] #{user.string_id}님, 환영합니다!").deliver
   end
 

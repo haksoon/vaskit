@@ -7,6 +7,7 @@
     <!--<![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
+    <link href="http://fonts.googleapis.com/css?family=Rationale" rel="stylesheet" type="text/css">
     <!--[if (gte mso 9)|(IE)]>
     <style type="text/css">
         table {border-collapse: collapse !important;}
@@ -70,10 +71,10 @@
                         <br>
                         회원가입을 진심으로 환영합니다:) 뿜빠라밤빠 뿜빠빠~
                       </p>
-                      <img class="dance-girl left" src="http://vaskit.kr/images/user_mailer/welcome_email/pumpgirl.gif" alt="" style="border-width:0;height:100px;min-height:100px;max-height:100px;" >
-                      <img class="dance-girl center" src="http://vaskit.kr/images/user_mailer/welcome_email/pumpgirl.gif" alt="" style="border-width:0;height:120px;min-height:120px;max-height:120px;transform:rotateY(180deg);-webkit-transform:rotateY(180deg);Margin:0px -20px -30px;" >
-                      <img class="dance-girl right" src="http://vaskit.kr/images/user_mailer/welcome_email/pumpgirl.gif" alt="" style="border-width:0;height:100px;min-height:100px;max-height:100px;" >
-                      <p class="dance-girl cancel" style="Margin:0;font-size:14px;Margin-top:30px;Margin-bottom:10px;color:#9d9ea1;text-decoration:line-through;" >환희에 젖어 기쁨의 춤을 추고 있쟈나</p>
+                      <img class="dancing_side" src="http://vaskit.kr/images/user_mailer/welcome_email/pumpgirl.gif" alt="" style="border-width:0;height:100px;min-height:100px;max-height:100px;" >
+                      <img class="dancing_center" src="http://vaskit.kr/images/user_mailer/welcome_email/pumpgirl.gif" alt="" style="border-width:0;height:120px;min-height:120px;max-height:120px;transform:rotateY(180deg);-webkit-transform:rotateY(180deg);Margin:0px -20px -30px;" >
+                      <img class="dancing_side" src="http://vaskit.kr/images/user_mailer/welcome_email/pumpgirl.gif" alt="" style="border-width:0;height:100px;min-height:100px;max-height:100px;" >
+                      <p class="dancing_cancel" style="Margin:0;color:#9d9ea1;Margin-top:30px !important;text-decoration:line-through;font-size:14px;Margin-bottom:10px;" >환희에 젖어 기쁨의 춤을 추고 있쟈나</p>
                     </td>
                   </tr>
                 </table>
@@ -90,13 +91,15 @@
                   <tr>
                     <td class="inner contents main" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;text-align:center;" >
                       <p class="substance" style="font-size:14px;Margin-bottom:10px;color:#333;line-height:2.5;Margin:0;" >
-                        지금까지 <span class="vaskit-logo" style="color:#4b3d3d;font-weight:bold;" >VASKIT</span>에서는 <span class="string-id" style="color:#998674;font-weight:bold;" >670개</span>의 구매고민이 작성되었고
+                        지금까지 <span class="vaskit-logo" style="color:#4b3d3d;font-weight:bold;" >VASKIT</span>에는
                         <br>
-                        <span class="string-id" style="color:#998674;font-weight:bold;" >24,174개</span>의 투표와 <span class="string-id" style="color:#998674;font-weight:bold;" >4,120개</span>의 의견교환이 이루어지며
+                        <span class="vaskit-stat" style="color:#998674;font-weight:normal;font-size:24px;font-style:normal;font-variant:normal;font-family:Rationale;line-height:normal;text-decoration:underline;" ><%= @ask_count %></span><span class="vaskit-stat-text" style="color:#998674;font-weight:bold;font-size:16px;" >개의 구매고민</span>이 올라왔고,
                         <br>
-                        회원님들이 서로서로의 고민해결에 도움을 주고 있습니다.
+                        이 질문들에 <span class="vaskit-stat" style="color:#998674;font-weight:normal;font-size:24px;font-style:normal;font-variant:normal;font-family:Rationale;line-height:normal;text-decoration:underline;" ><%= @vote_count %></span><span class="vaskit-stat-text" style="color:#998674;font-weight:bold;font-size:16px;" >번의 투표</span>와
                         <br>
-                        (위 갯수는 회원님이 회원가입을 한 시점의 숫자이고, 지금 이 순간에도 계속계속 늘어나고 있답니다!!)
+                        <span class="vaskit-stat" style="color:#998674;font-weight:normal;font-size:24px;font-style:normal;font-variant:normal;font-family:Rationale;line-height:normal;text-decoration:underline;" ><%= @comment_count %></span><span class="vaskit-stat-text" style="color:#998674;font-weight:bold;font-size:16px;" >개의 의견</span>을 작성해주시면서
+                        <br>
+                        구매고민에 대한 이야기가 펼쳐지고 있답니다.
                       </p>
                     </td>
                   </tr>
@@ -104,7 +107,20 @@
               </td>
           </tr>
           <tr>
-              <td class="three-column features" style="padding-right:0;padding-left:0;text-align:center;font-size:0;padding-top:10px;padding-bottom:10px;" >
+              <td class="one-column" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
+                  <tr>
+                    <td class="inner contents sub" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;background-color:rgba(102,102,102,0.7);text-align:center;" >
+                      <p class="title" style="Margin:0;font-size:18px;font-weight:bold;color:#fff;Margin-bottom:0px;" >
+                        그래서, 무슨 일들이 벌어지냐구요?
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+          </tr>
+          <tr>
+              <td class="three-column features" style="text-align:center;font-size:0;background-color:#f4f4f4;padding-top:0px;padding-bottom:20px;padding-right:0px;padding-left:0px;" >
                   <!--[if (gte mso 9)|(IE)]>
                   <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                   <tr>
@@ -114,9 +130,17 @@
                       <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                           <tr>
                               <td class="inner contents" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;font-size:14px;text-align:center;" >
-                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature1.png" width="180" alt="" style="border-width:0;max-width:180px;height:auto;width:50%;" />
-                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;Margin-bottom:12px;color:#998674;Margin-top:10px;background-color:#f4f4f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;" >질문하고,</p>
-                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:0;padding-bottom:0;padding-right:10px;padding-left:10px;line-height:1.6;" >혹시 지금 둘 중에 무얼 살까 망설이는 제품이 있으신가요? 그럼 지금 바로 간편입력을 활용해 질문을 작성해 보세요!</p>
+                                <div class="border" style="border-width:1px 3px 3px 1px;border-color:#dbdbdb;border-style:solid;border-radius:10px;background-color:#fff;" >
+                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature1.png" width="180" alt="" style="border-width:0;width:100%;height:auto;max-width:156px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" />
+                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;color:#998674;background-color:#f0f2f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;Margin-bottom:0px;" >질문하고,</p>
+                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:10px;line-height:1.6;" >
+                                    혹시 지금 둘 중에 무얼 살까<br>
+                                    망설이는 제품이 있나요?<br>
+                                    검색어만 입력하면 완성되는<br>
+                                    간편입력으로 손쉽게 지금,<br>
+                                    바로, 질문을 작성해보세요!
+                                  </p>
+                                </div>
                               </td>
                           </tr>
                       </table>
@@ -128,9 +152,17 @@
                       <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                           <tr>
                               <td class="inner contents" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;font-size:14px;text-align:center;" >
-                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature2.png" width="180" alt="" style="border-width:0;max-width:180px;height:auto;width:50%;" />
-                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;Margin-bottom:12px;color:#998674;Margin-top:10px;background-color:#f4f4f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;" >투표하고,</p>
-                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:0;padding-bottom:0;padding-right:10px;padding-left:10px;line-height:1.6;" >누구나 쉽고 간편한 투표 참여가 가능하기 때문에 더 많은 의견을 모아볼 수 있죠, 성별, 연령별 투표 결과 분석은 덤!</p>
+                                <div class="border" style="border-width:1px 3px 3px 1px;border-color:#dbdbdb;border-style:solid;border-radius:10px;background-color:#fff;" >
+                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature2.png" width="180" alt="" style="border-width:0;width:100%;height:auto;max-width:156px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" />
+                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;color:#998674;background-color:#f0f2f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;Margin-bottom:0px;" >투표하고,</p>
+                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:10px;line-height:1.6;" >
+                                    누구나 쓱~ 쉽고 간편하게<br>
+                                    투표 참여가 가능하니까<br>
+                                    더 빨리, 더 많은 사람들의<br>
+                                    의견을 모아볼 수 있죠.<br>
+                                    상세한 투표 결과 분석은 덤!
+                                  </p>
+                                </div>
                               </td>
                           </tr>
                       </table>
@@ -142,9 +174,17 @@
                       <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                           <tr>
                               <td class="inner contents" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;font-size:14px;text-align:center;" >
-                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature3.png" width="180" alt="" style="border-width:0;max-width:180px;height:auto;width:50%;" />
-                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;Margin-bottom:12px;color:#998674;Margin-top:10px;background-color:#f4f4f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;" >이야기하고!</p>
-                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:0;padding-bottom:0;padding-right:10px;padding-left:10px;line-height:1.6;" >내 고민은 어려워도 남의 고민은 쉽다 했나요? 많은 고민해결사님들께서 다양한 의견을 제시해주실거에요!</p>
+                                <div class="border" style="border-width:1px 3px 3px 1px;border-color:#dbdbdb;border-style:solid;border-radius:10px;background-color:#fff;" >
+                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature3.png" width="180" alt="" style="border-width:0;width:100%;height:auto;max-width:156px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" />
+                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;color:#998674;background-color:#f0f2f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;Margin-bottom:0px;" >이야기하고!</p>
+                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:10px;line-height:1.6;" >
+                                    내 고민은 어려워도<br>
+                                    남의 고민은 쉽다 했나요?<br>
+                                    새로운 고민거리에 대해<br>
+                                    다양한 의견을 나누다보면,<br>
+                                    내 시간 어디 가심..?
+                                  </p>
+                                </div>
                               </td>
                           </tr>
                       </table>
@@ -159,9 +199,17 @@
                       <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                           <tr>
                               <td class="inner contents" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;font-size:14px;text-align:center;" >
-                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature4.png" width="180" alt="" style="border-width:0;max-width:180px;height:auto;width:50%;" />
-                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;Margin-bottom:12px;color:#998674;Margin-top:10px;background-color:#f4f4f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;" >공감하고,</p>
-                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:0;padding-bottom:0;padding-right:10px;padding-left:10px;line-height:1.6;" >Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                <div class="border" style="border-width:1px 3px 3px 1px;border-color:#dbdbdb;border-style:solid;border-radius:10px;background-color:#fff;" >
+                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature4.png" width="180" alt="" style="border-width:0;width:100%;height:auto;max-width:156px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" />
+                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;color:#998674;background-color:#f0f2f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;Margin-bottom:0px;" >공감하고,</p>
+                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:10px;line-height:1.6;" >
+                                    "아 이거 나도 고민되네.."<br>
+                                    넘나 이해되는 고민이라면<br>
+                                    공감으로 소통해보세요!<br>
+                                    공감한 질문은 My Page에서<br>
+                                    따로 모아볼 수 있어요!
+                                  </p>
+                                </div>
                               </td>
                           </tr>
                       </table>
@@ -173,9 +221,16 @@
                       <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                           <tr>
                               <td class="inner contents" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;font-size:14px;text-align:center;" >
-                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature5.png" width="180" alt="" style="border-width:0;max-width:180px;height:auto;width:50%;" />
-                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;Margin-bottom:12px;color:#998674;Margin-top:10px;background-color:#f4f4f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;" >담아놓고,</p>
-                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:0;padding-bottom:0;padding-right:10px;padding-left:10px;line-height:1.6;" >Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                <div class="border" style="border-width:1px 3px 3px 1px;border-color:#dbdbdb;border-style:solid;border-radius:10px;background-color:#fff;" >
+                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature5.png" width="180" alt="" style="border-width:0;width:100%;height:auto;max-width:156px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" />
+                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;color:#998674;background-color:#f0f2f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;Margin-bottom:0px;" >담아놓고,</p>
+                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:10px;line-height:1.6;" >
+                                    "어맛! 이건 사야해! &#9829;"<br>
+                                    언제 어디서든 취향저격의<br>
+                                    #잇템_을 발견하셨을 땐,<br>
+                                    나만의 BASKET에 담아두고<br>
+                                    이리저리 비교해보세요!</p>
+                                </div>
                               </td>
                           </tr>
                       </table>
@@ -187,9 +242,17 @@
                       <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                           <tr>
                               <td class="inner contents" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;font-size:14px;text-align:center;" >
-                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature6.png" width="180" alt="" style="border-width:0;max-width:180px;height:auto;width:50%;" />
-                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;Margin-bottom:12px;color:#998674;Margin-top:10px;background-color:#f4f4f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;" >구매하고!</p>
-                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:0;padding-bottom:0;padding-right:10px;padding-left:10px;line-height:1.6;" >Class eleifend aptent taciti sociosqu ad litora torquent conubia</p>
+                                <div class="border" style="border-width:1px 3px 3px 1px;border-color:#dbdbdb;border-style:solid;border-radius:10px;background-color:#fff;" >
+                                  <img src="http://vaskit.kr/images/user_mailer/welcome_email/feature6.png" width="180" alt="" style="border-width:0;width:100%;height:auto;max-width:156px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;" />
+                                  <p class="h2" style="Margin:0;font-size:18px;font-weight:bold;color:#998674;background-color:#f0f2f4;padding-top:10px;padding-bottom:10px;padding-right:0;padding-left:0;Margin-bottom:0px;" >구매하고!</p>
+                                  <p class="description" style="Margin:0;text-align:left;color:#666;padding-top:10px;padding-right:0px;padding-bottom:10px;padding-left:10px;line-height:1.6;" >
+                                    "내가 뭘 살라 그랬더라..?"<br>
+                                    나의 BASKET에 담아두었던<br>
+                                    잇템을 바로 구매!<br>
+                                    더 이상 이곳저곳 들락날락<br>
+                                    헤매일 필요가 없답니다~
+                                  </p>
+                                </div>
                               </td>
                           </tr>
                       </table>
@@ -202,21 +265,24 @@
               </td>
           </tr>
           <tr>
+              <td class="full-width-image" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
+                <img src="http://vaskit.kr/images/user_mailer/welcome_email/you.png" width="600" alt="" style="border-width:0;display:block;width:100%;max-width:600px;height:auto;" />
+              </td>
+          </tr>
+          <tr>
               <td class="one-column" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;" >
                 <table width="100%" style="border-spacing:0;font-family:sans-serif;color:#333333;" >
                   <tr>
                     <td class="inner contents main" style="padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:100%;text-align:center;" >
                       <p class="substance" style="font-size:14px;Margin-bottom:10px;color:#333;line-height:2.5;Margin:0;" >
-                        지금도 <span class="vaskit-logo" style="color:#4b3d3d;font-weight:bold;" >VASKIT</span>에서는 당신과 같은 고민해결사님을 기다리고 있답니다 :)
-                        <br>
-                        회원님의 소중한 투표 하나, 의견 하나가 다른 분들의 고민해결에 큰 힘이 된다구요!
+                        회원님의 소중한 투표 하나, 의견 하나가 다른 분들의 고민해결에 큰 힘이 된답니다!
                         <br>
                         <span class="cancel" style="color:#9d9ea1;text-decoration:line-through;" >선행을 쌓으면 언젠가 복이 온다고 한다</span>
                         <br>
-                        그럼 지금 바로 시작해볼까요?
+                        그럼, 지금 바로 시작해볼까요?
                       </p>
-                      <div style="line-height:24px;Margin:0 auto 30px;position:relative;top:12px;padding:10px;width:160px;height:20px;background-color:#ee6e01;border:0.5px solid #c4600c;border-radius:7px;box-shadow:0px 6px 0px #a9540c;font-size:18px;text-align:center;transition:all 0.1s ease-in-out 0s;" onmouseover="this.style.top = '15px'; this.style.boxShadow = 'rgb(169, 84, 12) 0px 3px 0px';" onmouseout="this.style.top = '12px'; this.style.boxShadow = 'rgb(169, 84, 12) 0px 6px 0px';">
-                        <a href="http://vaskit.kr" target="_blank" style="font-size:20px; font-weight:bold; text-decoration:none; color:#fff;">Let's VASKIT!</a>
+                      <div class="lets-go-button" onmouseover="this.style.top = '15px'; this.style.boxShadow = 'rgb(169, 84, 12) 0px 3px 0px';" onmouseout="this.style.top = '12px'; this.style.boxShadow = 'rgb(169, 84, 12) 0px 6px 0px';" style="line-height:24px;Margin:0 auto 30px;position:relative;top:12px;padding-top:10px;padding-bottom:10px;padding-right:10px;padding-left:10px;width:160px;height:20px;background-color:#ee6e01;border-width:1px;border-style:solid;border-color:#c4600c;border-radius:7px;box-shadow:0px 6px 0px #a9540c;font-size:18px;text-align:center;transition:all 0.1s ease-in-out 0s;" >
+                        <a href="http://vaskit.kr" target="_blank" style="font-size:20px;font-weight:bold;text-decoration:none;color:#fff;" >Let's VASKIT!</a>
                       </div>
                     </td>
                   </tr>
@@ -258,6 +324,13 @@
         <table class="outer" align="center" style="border-spacing:0;font-family:sans-serif;color:#333333;Margin:0 auto;width:100%;max-width:600px;" >
           <tr>
               <td class="blank-space bottom" style="padding-top:0;padding-bottom:0;padding-right:0;padding-left:0;background-color:#f4f4f4;text-align:center;height:100px;" >
+                <p class="sns" style="Margin:0;color:#9d9ea1;font-size:13px;" >
+                  &#9733;&nbsp;다양한 소식을 준비할게요, 날 보러와요!
+                  <br>
+                  <a class="sns" href="https://www.facebook.com/vaskit.kr/" target="_blank" style="text-decoration:underline;color:#666;font-size:14px;padding-top:5px;padding-bottom:5px;padding-right:5px;padding-left:5px;line-height:2;" >facebook</a>
+                  <a class="sns" href="http://blog.naver.com/vaskit" target="_blank" style="text-decoration:underline;color:#666;font-size:14px;padding-top:5px;padding-bottom:5px;padding-right:5px;padding-left:5px;line-height:2;" >blog</a>
+                  <a class="sns" href="http://plus.kakao.com/home/@vaskit" target="_blank" style="text-decoration:underline;color:#666;font-size:14px;padding-top:5px;padding-bottom:5px;padding-right:5px;padding-left:5px;line-height:2;" >yellow ID</a>
+                </p>
               </td>
           </tr>
         </table>
