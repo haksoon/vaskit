@@ -146,6 +146,7 @@
         <th style="border-bottom: 1px solid #dbdbdb;">좋아요</th>
         <th style="border-bottom: 1px solid #dbdbdb;">공감</th>
         <th style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;">공유</th>
+        <th style="border-bottom: 1px solid #dbdbdb;">최근 접속일</th>
         <th style="border-bottom: 1px solid #dbdbdb;">가입일</th>
       </tr>
       <% @user_top_10.each do |u| %>
@@ -158,6 +159,7 @@
         <td style="border-bottom: 1px solid #dbdbdb;"><%= u.comment_like_count == 0 ? "-" : u.comment_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
         <td style="border-bottom: 1px solid #dbdbdb;"><%= u.ask_like_count == 0 ? "-" : u.ask_like_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
         <td style="border-bottom: 1px solid #dbdbdb; border-right:1px solid #dbdbdb;"><%= u.share_count == 0 ? "-" : u.share_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') %></td>
+        <td style="border-bottom: 1px solid #dbdbdb; text-align:center;"><%= u.recent_visit %></td>
         <td style="border-bottom: 1px solid #dbdbdb; text-align:center;"><%= u.created_at.month %>월 <%= u.created_at.day %>일</td>
       </tr>
       <% end %>
