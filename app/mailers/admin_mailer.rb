@@ -53,4 +53,9 @@ class AdminMailer < ActionMailer::Base
     mail(subject: "[VASKIT] #{date} 일일 리포트").deliver
   end
 
+  def client_error(log)
+    @log = log
+    mail(from: %{"Error notifier" <notice@vaskit.kr>}, to: 'junsikahn@vaskit.kr', subject: "[VASKIT] Client Error 발생").deliver
+  end
+
 end

@@ -62,6 +62,27 @@
       var opened_ask_id = null;
       var card_open_st = 0;
       var overlay_st = 0;
+      window.onerror = function(msg, url, line, col, obj){
+        href = window.location.href;
+        obj = obj.stack;
+        $.ajax({
+  		        url: "/error_report.json",
+  		        type: 'POST',
+  		        data: {'msg': msg, 'url': url, 'line': line, 'col': col, 'href': href, 'obj': obj },
+  		        dataType: 'json',
+  		        error: function(){
+  		            return false;
+  		        },
+  		        success: function(data){
+                notify('이크! 에러 발생 T_T<br><br>지금 이 경고창을 캡쳐해서<br>junsikahn@vaskit.kr로<br>보내주시면<br>스벅 라떼 기프티콘 쏩니다!!');
+  		        },
+  		        beforeSend: function(){
+  		        },
+  		        complete: function(){
+  		        }
+  			});
+        return false;
+      }
   	</script>
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=521318198062554&ev=PageView&noscript=1"/></noscript>

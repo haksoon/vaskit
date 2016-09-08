@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body style="font-size:13px;">
+    <p>
+      Client Error 로그가 기록되었습니다.
+    </p>
+    <ul>
+      <li>
+        에러 내용:<br>
+        <%= @log.error %>
+      </li>
+      <br>
+      <li>
+        에러 발생 주소:<br>
+        <%= @log.error_href %>
+      </li>
+      <li>
+        User Agent:<br>
+        <%= @log.user_agent %>
+      </li>
+      <br>
+      <li>
+        에러 발생 ID: <%= @log.user_id ? User.find(@log.user_id).string_id : "visitor" %>
+      </li>
+      <li>
+        에러 발생 시기:<br>
+        <%= @log.created_at %>
+      </li>
+      <br>
+      <li>
+        msg: <%= @log.error_message %>
+      </li>
+      <li>
+        url: <%= @log.error_url %>
+      </li>
+      <li>
+        line: <%= @log.error_line %>
+      </li>
+      <li>
+        col: <%= @log.error_col %>
+      </li>
+    </ul>
+  </body>
+</html>

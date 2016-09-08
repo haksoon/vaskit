@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     end
   end
 
+  post 'error_report', :to => "error_logs#error_report" #AJS추가 에러 리포트
 
   resources :alrams do
     collection do
