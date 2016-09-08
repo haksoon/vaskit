@@ -8,11 +8,12 @@ class AdminMailer < ActionMailer::Base
   end
 
   def ask_submitted(ask)
-    @ask = ask
+    # @ask = ask
     # mail(subject: "[VASKIT] 새로운 질문이 작성되었습니다.").deliver
     # admins = ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr', "ice1134@naver.com", "dammi0119@gmail.com", "duddk0218@naver.com", "khj120920@naver.com"]
     admins = ['junsikahn@vaskit.kr', 'junsikahn@gmail.com']
     admins.each do |admin|
+      @ask = ask
       mail(to: admin, subject: "[VASKIT] 새로운 질문이 작성되었습니다.").deliver
     end
   end
