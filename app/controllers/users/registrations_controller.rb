@@ -30,7 +30,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
 
     user = User.find_by(:email => params[:user][:email])
-    # UserMailer.delay.welcome_email(user)
+    UserMailer.delay.welcome_email(user)
     AdminMailer.delay.signup_submitted(user)
   end
 
