@@ -123,7 +123,7 @@
       progressEnd();
       history.replaceState(null, null, null);
       $(window).bind("popstate", function(){
-        main_header_left_button();
+        if (!!$("#main_header").length) main_header_left_button();
         if (is_ask_image_opened) {
           ask_image_off();
         } else if (is_category_opened || is_user_opened || is_search_input_opened) {

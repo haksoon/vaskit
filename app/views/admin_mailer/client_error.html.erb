@@ -15,20 +15,18 @@
       </li>
       <br>
       <li>
+        에러 발생 ID: <%= @log.user_id ? User.find(@log.user_id).string_id : "visitor" %>
+      </li>
+      <li>
+        에러 발생 시기: <%= @log.created_at %>
+      </li>
+      <li>
         에러 발생 주소:<br>
         <%= @log.error_href %>
       </li>
       <li>
         User Agent:<br>
         <%= @log.user_agent %>
-      </li>
-      <br>
-      <li>
-        에러 발생 ID: <%= @log.user_id ? User.find(@log.user_id).string_id : "visitor" %>
-      </li>
-      <li>
-        에러 발생 시기:<br>
-        <%= @log.created_at %>
       </li>
       <br>
       <li>

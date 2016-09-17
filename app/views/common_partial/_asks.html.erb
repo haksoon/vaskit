@@ -1174,10 +1174,9 @@
               }
             }
 
-            currentPage ++;
       	    $.ajax({
       	        url: window.location.href,
-      	        data: {'page': currentPage},
+      	        data: {'page': currentPage + 1},
       	        dataType: "json",
       	        type: 'GET',
       	        error: function(){
@@ -1199,10 +1198,10 @@
                       more_load = false;
       	        			$("#endless_loading").remove();
       	        		}
-                    $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px;'></div>");
+                    $("#asks").append("<div id='page"+currentPage+"' style='margin:15px 0px;'></div>");
       	        		for(var i=0; i < more_asks.length; i++) {
           						ask = more_asks[i];
-                      $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
+                      $("#page"+currentPage).append(askTemplate({ask: ask}));
       								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
                       link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
       								abbreviate_msg(ask.message, ask.id);
@@ -1216,6 +1215,7 @@
                   more_load = false;
                 },
                 complete: function(){
+                  currentPage ++;
                   ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
                   ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
                 }
