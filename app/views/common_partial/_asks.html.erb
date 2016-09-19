@@ -1291,7 +1291,7 @@
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" ).animateCssColor("tada","#ee6e01"); //animateCss추가
 	        		my_vote_count = my_vote_count + 1;
 
-              if (is_card_opened) {
+              if (is_card_opened || is_show_opened) {
                 show_detail_vote_count(ask_id);
                 $("#ask_"+ask_id+"_comment").html(askCommentTemplate({ask: data.ask}));
                 for (i=0; i<data.ask.comments.length; i++) {
@@ -1327,7 +1327,7 @@
 			success: function(data){
         var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
         var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
-        if (is_card_opened && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count})).animateCss("flipInX"); //animateCss추가
+        if ((is_card_opened || is_show_opened) && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count})).animateCss("flipInX");; //animateCss추가
 			},
 			beforeSend: function(){
 			},
@@ -1446,7 +1446,7 @@
 	}
 
   function mini_comment(ask_id) {
-    if (!is_card_opened) {
+    if (!(is_card_opened || is_show_opened)) {
       $("#mini_new_comment_"+ask_id).slideDown(200).animateCss("flipInX");
       setTimeout(function(){
         $("#mini_comment_input_box_"+ask_id).css("transform","rotateX(0deg)").css("-webkit-transform","rotateX(0deg)");
