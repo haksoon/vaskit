@@ -203,44 +203,14 @@ function get_past_time(time){
     }
 }
 
-// var keys = {37: 1, 38: 1, 39: 1, 40: 1};
-//
-// function preventDefault(e) {
-//   e = e || window.event;
-//   if (e.preventDefault)
-//       e.preventDefault();
-//   e.returnValue = false;
-// }
-//
-// function preventDefaultForScrollKeys(e) {
-//     if (keys[e.keyCode]) {
-//         preventDefault(e);
-//         return false;
-//     }
-// }
-
 function disableScroll() {
-  // if (window.addEventListener) // older FF
-  //     window.addEventListener('DOMMouseScroll', preventDefault, false);
-  // window.onwheel = preventDefault; // modern standard
-  // window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-  // window.ontouchmove  = preventDefault; // mobile
-  // document.onkeydown  = preventDefaultForScrollKeys;
   $("body").css("overflow","hidden");
   $("#menu_bg, #menu_pc_bg, #more_popup_bg").bind("touchmove", function(e){e.preventDefault()});
-  // $("#menu_bg").bind('touchmove', function(e){e.preventDefault()});
 }
 
 function enableScroll() {
-  // if (window.removeEventListener)
-  //     window.removeEventListener('DOMMouseScroll', preventDefault, false);
-  // window.onmousewheel = document.onmousewheel = null;
-  // window.onwheel = null;
-  // window.ontouchmove = null;
-  // document.onkeydown = null;
   $("body").css("overflow","auto");
   $("#menu_bg, #menu_pc_bg, #more_popup_bg").unbind("touchmove");
-	// $("#menu_bg").unbind('touchmove');
 }
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
@@ -385,50 +355,8 @@ function link_tagging(origin_string, target_element, img_preview) {
   }
 }
 
-// AJS추가 : 텍스트 라인 세기
-// void function $getLines($){
-//     function countLines($element){
-//         var lines          = 0;
-//         var greatestOffset = void 0;
-//         $element.find('character').each(function(){
-//             if(!greatestOffset || this.offsetTop > greatestOffset){
-//                 greatestOffset = this.offsetTop;
-//                 ++lines;
-//             }
-//         });
-//         return lines;
-//     }
-//     $.fn.getLines = function $getLines(){
-//         var lines = 0;
-//         var clean = this;
-//         var dirty = this.clone();
-//         (function wrapCharacters(fragment){
-//             var parent = fragment;
-//             $(fragment).contents().each(function(){
-//                 if(this.nodeType === Node.ELEMENT_NODE){
-//                     wrapCharacters(this);
-//                 }
-//                 else if(this.nodeType === Node.TEXT_NODE){
-//                     void function replaceNode(text){
-//                         var characters = document.createDocumentFragment();
-//                         text.nodeValue.replace(/[\s\S]/gm, function wrapCharacter(character){
-//                             characters.appendChild($('<character>' + character + '</>')[0]);
-//                         });
-//                         parent.replaceChild(characters, text);
-//                     }(this);
-//                 }
-//             });
-//         }(dirty[0]));
-//         clean.replaceWith(dirty);
-//         lines = countLines(dirty);
-//         dirty.replaceWith(clean);
-//         return lines;
-//     };
-// }(jQuery);
-
 // AJS추가 : just for fun...
 console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
-// console.log("%c이 문구를 보고 계신 바로 당신만을 애타게 찾고 있었습니다!\n3개월 전만 해도 회계사였는데 여기까지 혼자 공부하면서 왔습니다 ㅠ\n이제는 도움이 필요합니다. 도와주세요...", "font-size:1.5em; color:#666;");
 
 function progressStart() {
   $("#progress_bar").clearQueue().css("display","block").animate({width:"90%"},1000);
