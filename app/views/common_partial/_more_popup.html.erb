@@ -101,19 +101,23 @@
 	}
 
 	function share_facebook(){
-		if (typeof(FB) != 'undefined' && FB != null ) {
+		var share_url = $("#share_url").attr("value");
+		if (window.HybridApp) {
+			HybridApp.shareFacebook(share_url);
+		} else {
+			if (typeof(FB) != 'undefined' && FB != null ) {
 				FB.init({
 					appId      : '<%=Facebook::CONFIG["app_id"]%>',
 					status     : true,
 					xfbml      : true,
 					version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
 				});
+			}
+			FB.ui({
+				method: 'share',
+				href: share_url,
+			}, function(response){});
 		}
-		var share_url = $("#share_url").attr("value");
-		FB.ui({
-			method: 'share',
-			href: share_url,
-		}, function(response){});
 		var ask_id = share_url.replace("http://vaskit.kr/asks/","");
 		share_log("facebook", ask_id);
 	}
