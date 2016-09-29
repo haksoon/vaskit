@@ -136,8 +136,8 @@ class AdminMailer < ActionMailer::Base
       	LEFT JOIN v_ask_shares SL ON `asks`.id = SL.ask_id
       	LEFT JOIN users U ON U.id = `asks`.user_id
       WHERE U.user_role = 'user'
-      	AND date_format(addtime(`asks`.created_at, '09:00:00'), '%Y-%m-%d') BETWEEN ADDDATE(CURDATE(), INTERVAL -9 DAY) AND CURDATE()
-      ORDER BY vote_count DESC
+      	AND date_format(addtime(`asks`.created_at, '09:00:00'), '%Y-%m-%d') BETWEEN ADDDATE(CURDATE(), INTERVAL -10 DAY) AND CURDATE()
+      ORDER BY ask_id DESC
     SQL
 
     @total_visit_count = 0
