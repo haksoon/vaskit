@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+    xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+
+<!-- VASKIT 메인페이지 -->
+   <url>
+      <loc>http://vaskit.kr/</loc>
+      <lastmod>2016-10-05</lastmod>
+      <changefreq>daily</changefreq>
+      <priority>1.0</priority>
+   </url>
+
+<!-- VASKIT 게시물 페이지 -->
+   <url>
+      <loc>http://vaskit.kr/asks/</loc>
+      <changefreq>daily</changefreq>
+      <priority>1.0</priority>
+   </url>
+
+
+<!-- VASKIT 질문페이지 -->
+   <url>
+      <loc>http://vaskit.kr/asks/new</loc>
+      <changefreq>daily</changefreq>
+   </url>
+
+<!-- Contact US -->
+   <url>
+      <loc>http://vaskit.kr/etc/inquiry</loc>
+      <priority>0.3</priority>
+   </url>
+
+<!-- 이용약관 -->
+   <url>
+      <loc>http://vaskit.kr/etc/access_term</loc>
+      <priority>0.3</priority>
+   </url>
+
+<!-- 개인정보 취급정책 -->
+   <url>
+      <loc>http://vaskit.kr/privacy_policy</loc>
+      <priority>0.3</priority>
+   </url>
+
+<!-- FAQ & help -->
+   <url>
+      <loc>http://vaskit.kr/help</loc>
+      <priority>0.3</priority>
+   </url>
+
+<!-- Landing Page -->
+   <url>
+      <loc>http://vaskit.kr/landing</loc>
+      <priority>0.3</priority>
+   </url>
+
+</urlset>
