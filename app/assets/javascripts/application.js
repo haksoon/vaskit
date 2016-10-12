@@ -40,6 +40,7 @@ fbq('track', "PageView");
 // 뒤로가기 관련 코드
 $(document).ready(function(){
   progressStart();
+  search_bar_hide();
   window.scrollTo(0,0);
   $(window).unbind("popstate");
   history.replaceState(null, null, null);
@@ -323,6 +324,44 @@ function get_past_time(time){
     }else{
     	return "방금 전";
     }
+}
+
+
+// 스크롤 관련
+function search_bar_hide(){
+  // 스크롤 다운시 검색창 및 질문버튼 숨기기
+  var didScroll;
+  var lastScrollTop = 0;
+  var delta = 20;
+  var navbarHeight = $(".search_bar_area").outerHeight();
+
+  $(window).scroll(function(event){
+    didScroll = true;
+  });
+
+  setInterval(function() {
+    if (didScroll) {
+      hasScrolled();
+      didScroll = false;
+    }
+  }, 250);
+
+  function hasScrolled() {
+      var st = $(this).scrollTop();
+      if (st > lastScrollTop && st > navbarHeight){
+        $("#search").css({"top":"0px"});
+        $("#app_banner").css({"right":"30%"});
+        $(".home-float-btn-area").css({"bottom":"-85px"});
+      } else if ((st < lastScrollTop && Math.abs(lastScrollTop - st) > delta) || st < 50) {
+          if(st + $(window).height() <= $(document).height() ) {
+            $("#search").css({"top":"50px"});
+            $("#app_banner").css({"right":"50%"});
+            $("#home-float-btn-tooltip").show();
+            $(".home-float-btn-area").css({"bottom":"15px"}).animateCss("bounce");
+          }
+      }
+      lastScrollTop = st;
+  }
 }
 
 function disableScroll() {

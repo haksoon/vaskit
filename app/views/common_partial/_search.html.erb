@@ -30,17 +30,6 @@
 	</div>
 	<div id="search_result" style="position:relative; top:-5px; border-top:5px solid #ffe4a9; border-bottom:0px solid #ffe4a9; width:100%; max-height:340px; background:#fff; text-align:left; overflow-y:auto; -webkit-overflow-scrolling:touch; transition:border .2s;" ontouchmove="if ($(this).height() < 340) return false;"></div>
 </div>
-<div class="home-float-btn-area">
-	<% if current_user %>
-		<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block;">
-	<% else %>
-		<a href="#" style="display:block;" onclick="visitor_notify('질문 작성은<br>회원만 가능합니다'); return false;">
-	<% end %>
-			<div class="home-float-btn"><i class="fa fa-plus"></i></div>
-			<div class="home-float-btn-text">질문<br>하기</div>
-		</a>
-	<div id="home-float-btn-tooltip" class="tooltip_area" style="width:140px; max-width:140px; right:120%; bottom:25%; transform:scale(1); display:none;"><div class="tooltip_arrow right"></div><div class="tooltip_content" style="color:#ffcc5a;">질문을 작성해보세요 :)</div></div>
-</div>
 
 <script type="text/template" id="search-result-template">
 		{{ if(type == "hash_tag"){ }}
@@ -234,44 +223,4 @@
 		});
 
 	});
-
-	function search_bar_hide(){
-		// 스크롤 다운시 검색창 및 질문버튼 숨기기
-	  var didScroll;
-	  var lastScrollTop = 0;
-	  var delta = 20;
-		var navbarHeight = $(".search_bar_area").outerHeight();
-
-		$(window).scroll(function(event){
-			didScroll = true;
-		});
-
-    setInterval(function() {
-      if (didScroll) {
-        hasScrolled();
-        didScroll = false;
-      }
-    }, 250);
-
-	  function hasScrolled() {
-	      var st = $(this).scrollTop();
-	      if (st > lastScrollTop && st > navbarHeight){
-					$("#search").css({"top":"0px"});
-					$("#app_banner").css({"right":"30%"});
-					$(".home-float-btn-area").css({"bottom":"-85px"});
-	      } else if ((st < lastScrollTop && Math.abs(lastScrollTop - st) > delta) || st < 50) {
-	          if(st + $(window).height() <= $(document).height() ) {
-							$("#search").css({"top":"50px"});
-							$("#app_banner").css({"right":"50%"});
-							$("#home-float-btn-tooltip").show();
-							$(".home-float-btn-area").css({"bottom":"15px"}).animateCss("bounce");
-	          }
-	      }
-	      lastScrollTop = st;
-	  }
-	}
-
-	$(document).ready(function(){
-		search_bar_hide();
-	})
 </script>

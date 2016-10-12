@@ -652,13 +652,7 @@
 	  obj.value = comma(uncomma(obj.value));
 	}
 
-	if (isIOS) {
-		$("#left_deal_price, #right_deal_price").on("focus", function(){
-			$(this).attr("type","number");
-		}).on("keyup keydown keypress blur", function(){
-			$(this).attr("type","text");
-		})
-	} else if (isAndroid || isAndroidApp) {
+	if (isAndroid || isAndroidApp) {
 		$("#left_deal_price, #right_deal_price").attr("type","tel");
 	}
 
@@ -846,7 +840,7 @@
 		$("#image_edit_submit, #image_edit_ok").attr("onclick","image_edit_submit("+is_left+", "+preview_image_id+", '"+title+"', '"+brand+"', "+price+", '"+link+"', "+deal_id+"); return false;");
 		create_image_cropper();
 
-		history.pushState(null, null, null);
+		is_search_deal_opened ? history.replaceState(null, null, null) : history.pushState(null, null, null);
 		is_image_edit_opened = true;
     overlay_st = $(window).scrollTop();
 
@@ -1007,7 +1001,7 @@
 							} else {
 								title == "null" ? $("#left_deal_title").val('') : $("#left_deal_title").val(title);
 								brand == "null" ? $("#left_deal_brand").val('') : $("#left_deal_brand").val(brand);
-								link == null ? $("#left_deal_price").val('') : $("#left_deal_price").val(price);
+								price == null ? $("#left_deal_price").val('') : $("#left_deal_price").val(price);
 								link == "null" ? $("#left_deal_link").val('') : $("#left_deal_link").val(link);
 								$("#left_deal_deal_id").val(deal_id);
 							}
@@ -1021,7 +1015,7 @@
 							} else {
 								title == "null" ? $("#right_deal_title").val('') : $("#right_deal_title").val(title);
 								brand == "null" ? $("#right_deal_brand").val('') : $("#right_deal_brand").val(brand);
-								link == null ? $("#right_deal_price").val('') : $("#right_deal_price").val(price);
+								price == null ? $("#right_deal_price").val('') : $("#right_deal_price").val(price);
 								link == "null" ? $("#right_deal_link").val('') : $("#right_deal_link").val(link);
 								$("#right_deal_deal_id").val(deal_id);
 							}

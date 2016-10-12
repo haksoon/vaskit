@@ -88,7 +88,7 @@
       <i class="fa fa-facebook" style="font-size:30px;"></i>
     </span>
     <span id="share_katalk_btn_{{=ask.id}}" onclick="share_katalk({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#fae100; color:#fff; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
-      <img src="/images/logo/sns_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;">
+      <img src="/images/logo/share_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;">
     </span>
     <span id="share_url_btn_{{=ask.id}}" onclick="copy_url({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#9d9ea1; color:#fff; border-radius:10px; margin-left:5px; vertical-align:top; cursor:pointer;">
       <i class="fa fa-link" style="font-size:24px;"></i>
@@ -2282,8 +2282,8 @@
     var left_deal_title = ask.left_ask_deal.title
     var right_deal_title = ask.right_ask_deal.title
     var share_url = $("#share_url_"+ask_id).val();
-    var image_url = "http://vaskit.kr/images/logo/share_image.png";
-    var label = "둘중에뭐사지? 골라주세요!\n\n"+left_deal_title+" vs "+right_deal_title+", 당신의 선택은?\n\n"+share_url;
+    var image_url = "http://vaskit.kr/images/logo/share_800x600.png";
+    var label = "둘중에뭐사지? 골라주세요!\n\n"+left_deal_title+"\nvs\n"+right_deal_title+",\n당신의 선택은?\n\n"+share_url;
     share_log("katalk", ask_id);
     hide_menu(ask_id);
 
@@ -2293,8 +2293,8 @@
         label: label,
         image: {
           src:  image_url,
-          width: '470',
-          height: '353'
+          width: '800',
+          height: '600'
         },
         webButton: {
           text: "Let's VASKIT!",
@@ -2302,6 +2302,7 @@
         }
       });
     } catch(err) {
+      console.log(err);
     }
   }
 

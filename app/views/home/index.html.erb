@@ -56,6 +56,17 @@
 <div id="asks" class="table_div" style="margin:15px 0;"></div>
 <div id="ask_detail" class="table_div" style="margin:15px 0; display:none;"></div>
 
+<div class="home-float-btn-area">
+	<% if current_user %>
+		<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block;">
+	<% else %>
+		<a href="#" style="display:block;" onclick="visitor_notify('질문 작성은<br>회원만 가능합니다'); return false;">
+	<% end %>
+			<div class="home-float-btn"><i class="fa fa-plus"></i></div>
+			<div class="home-float-btn-text">질문<br>하기</div>
+		</a>
+	<div id="home-float-btn-tooltip" class="tooltip_area" style="width:140px; max-width:140px; right:120%; bottom:25%; transform:scale(1); display:none;"><div class="tooltip_arrow right"></div><div class="tooltip_content" style="color:#ffcc5a;">질문을 작성해보세요 :)</div></div>
+</div>
 <div id="endless_loading" style="margin:10px 0 100px;">
 	<img style="width:90px; margin:0 auto;" src="/images/custom/loading.gif" />
 </div>
@@ -69,4 +80,3 @@
 <%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/ask_image" %>
 <%= render :partial => "common_partial/report_popup" %>
-<%= render :partial => "common_partial/app_popup" %>
