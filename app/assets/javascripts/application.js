@@ -91,7 +91,7 @@ $(document).ready(function(){
     }
   });
 
-  if (document.HybridApp) {
+  if (window.HybridApp) {
     HybridApp.getGCM("hello world");
   }
 })
