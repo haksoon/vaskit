@@ -1,26 +1,30 @@
-<div id="ask_image_bg" onclick="back_button(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; cursor:pointer; background-color:#000; z-index:12; opacity:0.75; display:none;"></div>
-<div id="ask_image_overlay" style="position:fixed; top:0; width:inherit; height:100%; display:table; z-index:13; overflow:auto; -webkit-overflow-scrolling:touch; display:none;">
+<div id="ask_image_overlay" style="position:fixed; top:0; width:inherit; height:100%; z-index:13; overflow:auto; -webkit-overflow-scrolling:touch; display:none;" ontouchmove="return false;">
   <a href="#" onclick="back_button(); return false;" style="position:fixed; top:0; left:0; width:100%; height:100%; display:block; text-align:right; cursor:default;"></a>
   <div style="display:table; width:100%; height:100%;">
     <div style="display:table-cell; text-align:center; vertical-align:middle;">
       <div style="padding:0px 12px 0; text-align:right;"><span style="display:inline-block; color:#fff; font-size:40px; width:40px; height:40px; text-align:center;">&times;</span></div>
-      <div id="ask_image_seg" class="table_div" style="padding:0 12px; margin-bottom:0; display:block; height:645px; transition:transform 0.3s;"></div>
-      <div style="padding:0 12px 0px; text-align:center;"><span style="display:inline-block; color:#fff; font-size:12px; line-height:40px; height:40px; text-align:center;">
-        <i class="fa fa-flash"></i> 카드를 뒤집으려면 좌/우로, 닫으려면 위/아래로 스와이프</span>
-      </div>
+      <div id="ask_image_seg" class="table_div" style="padding:0 12px; margin-bottom:0; display:block; max-height:645px; transition:transform 0.3s;"></div>
+      <div style="padding:0 12px 0px; text-align:center;"><span style="display:inline-block; color:#fff; font-size:12px; line-height:40px; height:40px; text-align:center;"><i class="fa fa-flash"></i> 카드를 뒤집으려면 좌/우로, 닫으려면 위/아래로 스와이프</span></div>
     </div>
   </div>
 </div>
 
 <script type="text/template" id="ask-image-seg-template">
-  <div id="ask_image_box" style="position:relative; perspective:2000px; -webkit-perspective:2000px;">
+  <div id="ask_image_box" style="position:relative; perspective:2000px; -webkit-perspective:2000px;" ondblclick="back_button();">
+    <div style="position:relative; width:100%;">
+      <div style="width:100%; height:40px;"></div>
+      <img id="card_dummy_img" src="/images/custom/card_image_preview.png" alt="" style="width:100%; visibility:hidden;" onload='$(this).css("height",$(this).width());'/>
+      <div id="card_dummy" style="width:100%;"></div>
+    </div>
     <div id="card_front">
-      <div class="table_div" style="margin-bottom:0;">
-        <a href="#" onclick="return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD A</a>
+      <div id="card_front_title" class="table_div" style="margin-bottom:0;">
+        <a href="#" onclick="ask_image_flip(false); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD A</a>
         <a href="#" onclick="ask_image_flip(true); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; background-color:#9d9ea1; color:#fff; font-weight:normal;">CARD B</a>
       </div>
-      <img class="card_expanded_image" src='{{= get_image_url(ask.left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
-      <div class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
+      <div id="card_front_img" class="table_div" style="margin-bottom:0; width:100%; height:auto; background-color:#fff; overflow:hidden;">
+        <img id="card_expanded_image_front" src='{{= get_image_url(ask.left_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" onload='$(this).css("height",$(this).width());' onerror="imgError(this);"/>
+      </div>
+      <div id="card_front_table" class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
         {{ if (ask.left_ask_deal.title != "" || ask.right_ask_deal.title != "") { }}
           <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.left_ask_deal.title != "" ? ask.left_ask_deal.title : "-"}}</p>
         {{ } }}
@@ -38,12 +42,14 @@
       </div>
     </div>
     <div id="card_back">
-      <div class="table_div" style="margin-bottom:0;">
+      <div id="card_back_title" class="table_div" style="margin-bottom:0;">
         <a href="#" onclick="ask_image_flip(false); return false;" style="float:left; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:10px 0 0 0; background-color:#9d9ea1; color:#fff; font-weight:normal;">CARD A</a>
-        <a href="#" onclick="return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD B</a>
+        <a href="#" onclick="ask_image_flip(true); return false;" style="float:right; width:50%; display:block; font-size:14px; height:40px; line-height:40px; border-radius:0 10px 0 0; background-color:#f4f4f4; color:#ee6e01; font-weight:bold;">CARD B</a>
       </div>
-      <img class="card_expanded_image" src='{{= get_image_url(ask.right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" />
-      <div class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
+      <div id="card_back_img" class="table_div" style="margin-bottom:0; width:100%; height:auto; background-color:#fff; overflow:hidden;">
+        <img id="card_expanded_image_back" src='{{= get_image_url(ask.right_ask_deal, "ask_deals", "normal") }}' style="width:100%; display:block;" onload='$(this).css("height",$(this).width());' onerror="imgError(this);"/>
+      </div>
+      <div id="card_back_table" class="table_div" style="padding:10px; margin-bottom:0; border-radius:0 0 10px 10px; font-size:13px; color:#666; background-color:#f4f4f4;">
         {{ if (ask.left_ask_deal.title != "" || ask.right_ask_deal.title != "") { }}
           <p style="margin:5px auto; font-weight:bold; height:16px; overflow:hidden; text-overflow:ellipsis;">{{= ask.right_ask_deal.title != "" ? ask.right_ask_deal.title : "-"}}</p>
         {{ } }}
@@ -66,36 +72,62 @@
 <script>
   var askImageSegTemplate = _.template($('#ask-image-seg-template').html());
 
+  function card_front_on() {
+    $("#card_front").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+    $("#card_back").css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
+    $("#card_dummy").css("height",$("#card_front_table").outerHeight());
+  };
+  function card_back_on() {
+    $("#card_front").css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
+    $("#card_back").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+    $("#card_dummy").css("height",$("#card_back_table").outerHeight());
+  };
+
+  $(window).resize(function(){
+    $("#card_dummy_img").css("height",$("#card_dummy_img").width());
+    $("#card_expanded_image_front").css("height",$("#card_expanded_image_front").width());
+		$("#card_expanded_image_back").css("height",$("#card_expanded_image_back").width());
+	}).resize();
+
   function ask_image_on(ask_id, ask_deal_id, is_left){
     history.pushState(null, null, null);
     is_ask_image_opened = true;
     overlay_st = $(window).scrollTop();
 
     disableScroll();
-    $("#ask_image_overlay").fadeIn(100);
-    $("#ask_image_bg").fadeIn(100);
-    $("#ask_image_overlay").scrollTop(0);
-
     var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     $("#ask_image_seg").html(askImageSegTemplate({ask:ask}));
-    $("#ask_image_seg").css("height",$("#card_front").height());
 
     if (is_left) {
-      $("#card_front").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
-      $("#card_back").css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
+      $("#ask_image_overlay").show().animateCss("zoomInLeft");
+      card_front_on();
     } else {
-      $("#card_front").css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
-      $("#card_back").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+      $("#ask_image_overlay").show().animateCss("zoomInRight");
+      card_back_on();
+    }
+    $("#menu_bg_full").show();
+    $("#ask_image_overlay").scrollTop(0);
+
+    if (isIE) {
+      notify('Internet Explorer는<br>이미지 회전이 원활하지 않을 수 있습니다');
+    } else {
+      $("#card_front, #card_back").css({"backfaceVisibility":"hidden"});
     }
   }
 
   function ask_image_flip(is_left){
-    if (is_left) {
-      $("#card_front").css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
-      $("#card_back").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
+    if (isIE) {
+      if ($("#card_front").hasClass("on")) {
+        card_back_on();
+      } else if (($("#card_back").hasClass("on"))) {
+        card_front_on();
+      }
     } else {
-      $("#card_front").css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
-      $("#card_back").css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
+      if (is_left) {
+        card_back_on();
+      } else {
+        card_front_on();
+      }
     }
   }
 
@@ -104,143 +136,136 @@
     window.scrollTo(0,overlay_st);
 
     enableScroll();
-    $("#ask_image_overlay").fadeOut(300);
-    $("#ask_image_bg").fadeOut(300);
+    $("#ask_image_overlay").fadeOut();
+    $("#menu_bg_full").fadeOut();
   }
 
-  if (!navigator.userAgent.match(/MSIE|Trident/i)) {
+  var askImgMouseTarget; // Mouse/Touch event target
+  var askImgMouseStart;
+  var askImgMouseEnd;
 
-    var askImgMouseTarget; // Mouse/Touch event target
-    var askImgMouseStart;
-    var askImgMouseEnd;
+	$(function(){
+		// bind events
+		$("#ask_image_seg").each(function(){
+			$(this).bind("mousedown", askImgMouseDownListener);
+			$(this).bind("touchstart", askImgTouchStartListener);
+			$(this).bind("touchmove", askImgTouchMoveListener);
+			$(this).bind("touchend", askImgTouchEndListener);
+		});
+	});
 
-  	$(function(){
-  		// bind events
-  		$("#ask_image_seg").each(function(){
-  			$(this).bind("mousedown", askImgMouseDownListener);
-  			$(this).bind("touchstart", askImgTouchStartListener);
-  			$(this).bind("touchmove", askImgTouchMoveListener);
-  			$(this).bind("touchend", askImgTouchEndListener);
-  		});
-  	});
+	function askImgMouseDownListener(e){
+		askImgMouseTarget = $(e.currentTarget);
+    cardFlipReady();
+    askImgMouseStartX = askImgMouseEndX = e.pageX;
+    askImgMouseStartY = askImgMouseEndY = e.pageY;
 
-  	function askImgMouseDownListener(e){
-  		askImgMouseTarget = $(e.currentTarget);
-      cardFlipReady();
-      askImgMouseStartX = askImgMouseEndX = e.pageX;
-      askImgMouseStartY = askImgMouseEndY = e.pageY;
+		// unbind and bind mouse events to prevent repeated binding
+		$(document).unbind("mousemove", askImgMouseMoveListener);
+		$(document).unbind("mouseup", askImgMouseUpListener);
+		$(document).bind("mousemove", askImgMouseMoveListener);
+		$(document).bind("mouseup", askImgMouseUpListener);
+		// unbind touch events
+		askImgMouseTarget.unbind("touchstart", askImgTouchStartListener);
+		askImgMouseTarget.unbind("touchmove", askImgTouchMoveListener);
+		askImgMouseTarget.unbind("touchend", askImgTouchEndListener);
+	}
 
-  		// unbind and bind mouse events to prevent repeated binding
-  		$(document).unbind("mousemove", askImgMouseMoveListener);
-  		$(document).unbind("mouseup", askImgMouseUpListener);
-  		$(document).bind("mousemove", askImgMouseMoveListener);
-  		$(document).bind("mouseup", askImgMouseUpListener);
-  		// unbind touch events
-  		askImgMouseTarget.unbind("touchstart", askImgTouchStartListener);
-  		askImgMouseTarget.unbind("touchmove", askImgTouchMoveListener);
-  		askImgMouseTarget.unbind("touchend", askImgTouchEndListener);
-  	}
+	function askImgMouseMoveListener(e){
+		e.preventDefault();
+    askImgMouseEndX = e.pageX;
+    askImgMouseEndY = e.pageY;
+		cardFlip(e.pageX, e.pageY);
+	}
 
-  	function askImgMouseMoveListener(e){
-  		e.preventDefault();
-      askImgMouseEndX = e.pageX;
-      askImgMouseEndY = e.pageY;
-  		cardFlip(e.pageX, e.pageY);
-  	}
+	function askImgMouseUpListener(e){
+		e.preventDefault();
+		updateCard(askImgMouseStartX, askImgMouseEndX, askImgMouseStartY, askImgMouseEndY);
 
-  	function askImgMouseUpListener(e){
-  		e.preventDefault();
-  		updateCard(askImgMouseStartX, askImgMouseEndX, askImgMouseStartY, askImgMouseEndY);
+		// unbind mouse events
+		$(document).unbind("mousemove", askImgMouseMoveListener);
+		$(document).unbind("mouseup", askImgMouseUpListener);
+	}
 
-  		// unbind mouse events
-  		$(document).unbind("mousemove", askImgMouseMoveListener);
-  		$(document).unbind("mouseup", askImgMouseUpListener);
-  	}
+	function askImgTouchStartListener(e){
+		askImgMouseTarget = $(e.currentTarget);
+    cardFlipReady();
+    askImgMouseStartX = askImgMouseEndX = e.originalEvent.touches[0].clientX;
+    askImgMouseStartY = askImgMouseEndY = e.originalEvent.touches[0].clientY;
 
-  	function askImgTouchStartListener(e){
-  		askImgMouseTarget = $(e.currentTarget);
-      cardFlipReady();
-      askImgMouseStartX = askImgMouseEndX = e.originalEvent.touches[0].clientX;
-      askImgMouseStartY = askImgMouseEndY = e.originalEvent.touches[0].clientY;
+		askImgMouseTarget.unbind("mousedown", askImgMouseDownListener);
+	}
 
-  		askImgMouseTarget.unbind("mousedown", askImgMouseDownListener);
-  	}
+	function askImgTouchMoveListener(e){
+    e.preventDefault();
+    askImgMouseEndX = e.originalEvent.touches[0].clientX;
+    askImgMouseEndY = e.originalEvent.touches[0].clientY;
+    cardFlip(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY);
+	}
 
-  	function askImgTouchMoveListener(e){
-      e.preventDefault();
-      askImgMouseEndX = e.originalEvent.touches[0].clientX;
-      askImgMouseEndY = e.originalEvent.touches[0].clientY;
-      cardFlip(e.originalEvent.touches[0].clientX, e.originalEvent.touches[0].clientY);
-  	}
+	function askImgTouchEndListener(e){
+    updateCard(askImgMouseStartX, askImgMouseEndX, askImgMouseStartY, askImgMouseEndY);
+	}
 
-  	function askImgTouchEndListener(e){
-      updateCard(askImgMouseStartX, askImgMouseEndX, askImgMouseStartY, askImgMouseEndY);
-  	}
+  function cardFlipReady(){
+    if ($("#card_front").hasClass("on")) {
+      $("#card_front").css("transform","rotateY(10deg)").css("-webkit-transform","rotateY(10deg)");
+      $("#card_back").css("transform","rotateY(-170deg)").css("-webkit-transform","rotateY(-170deg)");
+    } else if (($("#card_back").hasClass("on"))) {
+      $("#card_front").css("transform","rotateY(170deg)").css("-webkit-transform","rotateY(170deg)");
+      $("#card_back").css("transform","rotateY(-10deg)").css("-webkit-transform","rotateY(-10deg)");
+    }
+  }
 
-    function cardFlipReady(){
-      if ($("#card_front").hasClass("on")) {
-        $("#card_front").css("transform","rotateY(10deg)").css("-webkit-transform","rotateY(10deg)");
-        $("#card_back").css("transform","rotateY(-170deg)").css("-webkit-transform","rotateY(-170deg)");
-      } else if (($("#card_back").hasClass("on"))) {
-        $("#card_front").css("transform","rotateY(170deg)").css("-webkit-transform","rotateY(170deg)");
-        $("#card_back").css("transform","rotateY(-10deg)").css("-webkit-transform","rotateY(-10deg)");
+	function cardFlip(x, y){
+    var askImg = $("#ask_image_seg"),
+        askImgWidth = askImg.outerWidth(),
+        askImgHeight = askImg.outerHeight(),
+        askImgOffsetTop = askImg.offset().top,
+        askImgOffsetLeft = askImg.offset().left,
+        askImgA = $("#card_front"),
+        askImgB = $("#card_back");
+
+    var scale = 0;
+    if (Math.abs(y - askImgMouseStartY) > 40) {
+      scale = (Math.abs(y - askImgMouseStartY) - 40) / (100 - 40);
+      askImg.css("transform","translateY("+(y - askImgMouseStartY)+"px) scale("+(1 - scale/10)+")").css("-webkit-transform","translateY("+(y - askImgMouseStartY)+"px) scale("+(1 - scale/10)+")");
+      return;
+    } else {
+      askImg.css("transform","translateY(0px)").css("-webkit-transform","translateY(0px)");
+      var rotateY = (x - askImgOffsetLeft) * 180 / askImgWidth;
+      askImgA.css("transform","rotateY("+(rotateY+0)+"deg)").css("-webkit-transform","rotateY("+(rotateY+0)+"deg)");
+      askImgB.css("transform","rotateY("+(rotateY-180)+"deg)").css("-webkit-transform","rotateY("+(rotateY-180)+"deg)");
+      if (rotateY < 90) {
+        askImgA.addClass("on");
+        askImgB.removeClass("on");
+      } else {
+        askImgA.removeClass("on");
+        askImgB.addClass("on");
       }
     }
 
-  	function cardFlip(x, y){
-      var askImg = $("#ask_image_seg"),
-          askImgWidth = askImg.outerWidth(),
-          askImgHeight = askImg.outerHeight(),
-          askImgOffsetTop = askImg.offset().top,
-          askImgOffsetLeft = askImg.offset().left,
-          askImgA = $("#card_front"),
-          askImgB = $("#card_back");
+	}
 
-      var scale = 0;
-      if (Math.abs(y - askImgMouseStartY) > 40) {
-        scale = (Math.abs(y - askImgMouseStartY) - 40) / (100 - 40);
-        askImg.css("transform","translateY("+(y - askImgMouseStartY)+"px) scale("+(1 - scale/10)+")").css("-webkit-transform","translateY("+(y - askImgMouseStartY)+"px) scale("+(1 - scale/10)+")");
-        return;
-      } else {
-        askImg.css("transform","translateY(0px)").css("-webkit-transform","translateY(0px)");
-        var rotateY = (x - askImgOffsetLeft) * 180 / askImgWidth;
-        askImgA.css("transform","rotateY("+(rotateY+0)+"deg)").css("-webkit-transform","rotateY("+(rotateY+0)+"deg)");
-        askImgB.css("transform","rotateY("+(rotateY-180)+"deg)").css("-webkit-transform","rotateY("+(rotateY-180)+"deg)");
-        if (rotateY < 90) {
-          askImgA.addClass("on");
-          askImgB.removeClass("on");
-        } else {
-          askImgA.removeClass("on");
-          askImgB.addClass("on");
-        }
+  function updateCard(askImgMouseStartX, askImgMouseEndX, askImgMouseStartY, askImgMouseEndY){
+    var askImg = $("#ask_image_seg"),
+        askImgA = $("#card_front"),
+        askImgB = $("#card_back");
+
+    askImg.css("transform","translateY(0px)").css("-webkit-transform","translateY(0px)");
+    if (Math.abs(askImgMouseEndY - askImgMouseStartY) > 100) history.back();
+
+    if (askImgMouseStartX > askImgMouseEndX) {
+      card_front_on();
+    } else if (askImgMouseStartX < askImgMouseEndX) {
+      card_back_on();
+    } else if (askImgMouseStartX = askImgMouseEndX) {
+      if (askImgA.hasClass("on")) {
+        card_front_on();
+      } else if (askImgB.hasClass("on")) {
+        card_back_on();
       }
+    }
+	}
 
-  	}
-
-    function updateCard(askImgMouseStartX, askImgMouseEndX, askImgMouseStartY, askImgMouseEndY){
-      var askImg = $("#ask_image_seg"),
-          askImgA = $("#card_front"),
-          askImgB = $("#card_back");
-
-      askImg.css("transform","translateY(0px)").css("-webkit-transform","translateY(0px)");
-      if (Math.abs(askImgMouseEndY - askImgMouseStartY) > 100) history.back();
-
-      if (askImgMouseStartX > askImgMouseEndX) {
-        askImgA.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
-        askImgB.css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
-      } else if (askImgMouseStartX < askImgMouseEndX) {
-        askImgA.css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
-        askImgB.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
-      } else if (askImgMouseStartX = askImgMouseEndX) {
-        if (askImgA.hasClass("on")) {
-          askImgA.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
-          askImgB.css("transform","rotateY(-180deg)").css("-webkit-transform","rotateY(-180deg)").removeClass("on");
-        } else if (askImgB.hasClass("on")) {
-          askImgA.css("transform","rotateY(180deg)").css("-webkit-transform","rotateY(180deg)").removeClass("on");
-          askImgB.css("transform","rotateY(0deg)").css("-webkit-transform","rotateY(0deg)").addClass("on");
-        }
-      }
-  	}
-
-  }
 </script>

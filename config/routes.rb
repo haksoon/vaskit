@@ -28,8 +28,11 @@ Rails.application.routes.draw do
   resources :mail_logs
   resources :preview_images do
     collection do
-      post 'create_by_naver'
-      post 'comment_images'
+      post 'crop'
+      patch 'crop'
+    end
+    member do
+      patch 'crop'
     end
   end
   resources :share_logs
@@ -40,11 +43,9 @@ Rails.application.routes.draw do
   }
   devise_scope :user do
     get 'users/facebook', :to => "users/facebook#auth"
-    # get 'users/check_email', :to => "users/sessions#check_email"
     get 'users/check_email', :to => "users/registrations#check_email" #AJS추가
     get 'users/get_user_data', :to => "users/sessions#get_user_data" #AJS추가
     get 'users/alram_check', :to => "users/sessions#alram_check" #AJS추가
-    # get 'users/manage', :to => "users/sessions#manage"
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
     get 'users/change_password', :to => "users/registrations#edit"
     put 'users/toggle_receive_notice', :to => "users/sessions#toggle_receive_notice"
@@ -71,7 +72,6 @@ Rails.application.routes.draw do
   get 'landing', :to => "etc#landing" #AJS추가 랜딩페이지 URL 변경
   resources :etc do
     collection do
-      get 'landing'
       get 'access_term'
       get 'privacy_policy'
       get 'inquiry'

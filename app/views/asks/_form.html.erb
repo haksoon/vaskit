@@ -1,10 +1,10 @@
-<%= render :partial => "common_partial/header", :locals => {:title => @ask.id ? "수정하기" : "질문하기" } %>
+<%= render :partial => "common_partial/header", :locals => @ask.id ? {:title => "수정하기", :sub_title => "질문을 수정할 수 있습니다", :sub_icon => ""} : {:title => "질문하기", :sub_title => "자유롭게 질문을 작성해보세요!", :sub_icon => ""} %>
 
 <div style="background:#f4f4f4; padding:15px 12px 40px; text-align:left;">
 	<%= form_for(@ask) do |f| %>
 		<div class="content_box" style="padding:10px; margin-bottom:15px;">
 			<div class="table_div">
-				<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "어떤 제품/서비스의 구매를 고민중이신가요?" }, :class => "category_select" %>
+				<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "어떤 제품/서비스의 구매를 고민중이신가요?" }, autofocus: true, :class => "category_select" %>
 				<span class="input_icon left_input" onclick="$('#ask_category_id').focus().select(); return false;"><i class="fa fa-filter"></i></span>
 			</div>
 			<div class="table_div" style="margin-bottom:0px; height:120px;">
@@ -14,13 +14,13 @@
 						<div id="hashtag_highlights"></div>
 					</div>
 				</div>
-				<span class="input_icon left_input" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotateY(180deg) skewY(18deg); -webkit-transform:rotateY(180deg) skewY(18deg);"></i></span>
+				<span class="input_icon left_input" onclick="$('#ask_message').focus(); return false;" style="height: 120px; line-height: 120px;"><i class="fa fa-slack" style="transform:rotate(19deg); -webkit-transform:rotate(19deg);"></i></span>
 			</div>
 			<div id="text_counter_info" style="float:left; margin:5px 0 0 5px; height: 15px; text-align: center; font-size: 12px; color:#9d9ea1;"><i class="fa fa-info-circle"></i>&nbsp;기본화면에는 80자까지 보여집니다.</div>
 			<div id="text_counter" style="float:right; margin:5px 5px 0 0; height: 15px; text-align: center; font-size: 12px; color:#9d9ea1;">0 글자</div>
 		</div>
 
-		<div class="content_box" style="padding:10px; margin-bottom:15px;">
+		<div class="content_box" style="padding:10px; margin-bottom:10px;">
 			<div class="table_div">
 				<a class="ask_search_deal" href="#" onclick="show_search_deal_popup(true); return false;" style="float:left;">
 					<i class="fa fa-search" style="color:#ee6e01;"></i>&nbsp;CARD A 검색하기
@@ -115,7 +115,8 @@
 	<% end %>
 </div>
 
-<div style="position:absolute; bottom:0; width:inherit; box-sizing:border-box; padding:0 12px; z-index:1;">
+<div style="position:absolute; bottom:0; color:#9d9ea1; font-size:12px; padding:0px 25px 20px; text-align:left;"><i class="fa fa-asterisk"></i>&nbsp;카테고리, 상황설명, 제품명, 제품이미지는 필수 입력정보입니다.</div>
+<div id="ask_submit_btn_area" style="position:fixed; bottom:-40px; width:inherit; box-sizing:border-box; transition:bottom .3s; z-index:1;">
 	<% if @ask.id %>
 		<a id="ask_submit_btn" href="#" onclick="edit_form(); return false;" class="ask_submit_btn">
 			<i class="fa fa-send"></i>&nbsp;질문 수정하기
@@ -127,108 +128,140 @@
 	<% end %>
 </div>
 
-<div id="search_deal_popup_bg" href="#" onclick="hide_search_deal_popup(); return false;" style="display:block; position:fixed;left:0; top:0; width:100%; height:100%; background-color:black; z-index:12; opacity:0.6; display:none;"></div>
-<div id='search_deal_popup' style='width:inherit; z-index:13; position:fixed; top:30px; display:none;'>
+<div id="search_deal_popup" style="width:inherit; z-index:13; position:fixed; top:50px; display:none;">
 	<div style="padding:10px;">
-		<div>
-			<a href="#" onclick="hide_search_deal_popup(); return false;" style="position:absolute; right:10px; top:10px; width:40px; height:40px; text-align:center;"><span style="display:inline-block; box-sizing:border-box; width:40px; height:40px; color:#fff; font-size:28px; padding-top:5px;">&times;</span></a>
-			<p id="search_deal_title" style="background-color:#4b3d3d; font-size:15px; color:#FFF; height:40px; line-height:40px; margin:0;">
-				CARD A 검색해서 입력하기
-			</p>
-			<div style="background-color:#f4f4f4; padding:12px;">
-				<div class="table_div" style="margin-bottom:0px; border:1px solid #dbdbdb;">
-					<input id="deal_search_keyword" type="text" class="etc_input_box" placeholder="제품명을 입력해주세요" style="background-color:#fff;"/>
-					<a id="deal_search_btn" href="#" style="position:absolute; top:0; right:0; width:50px; height:40px; line-height:40px; background-color:#dbdbdb; display:inline-block; text-align:center; color:#fff; font-size:13px;">입력</a>
+		<div id="search_deal_result" style="display:none;">
+			<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff;">
+				<tr>
+					<td style="width:50%;">
+						<a id="naver_deals_btn" href="#" onclick="show_naver_deals(); return false;" style="font-size:15px; color:#383838; line-height:50px; display:block; background-color:#fff; ">
+							<i class="fa fa-shopping-cart" style="color:#666;"></i> 제품 검색결과
+						</a>
+					</td>
+					<td style="width:50%;">
+						<a id="naver_images_btn" href="#" onclick="show_naver_images(); return false;" style="font-size:15px; color:#383838; line-height:50px; display:block; border-bottom:1px solid #dbdbdb; border-left:1px solid #dbdbdb;  background-color:#f4f4f4;">
+							<i class="fa fa-image" style="color:#666;"></i> 이미지 검색결과
+						</a>
+					</td>
+				</tr>
+			</table>
+			<div id="search_result_div" style="background-color:#fff; border-top:10px solid #fff; overflow-y:auto; -webkit-overflow-scrolling:touch; min-height:150px; max-height:340px;">
+				<div id="naver_deals">
+					<p style='margin:0; line-height:300px; color:#9d9ea1; font-size:15px;'><i class='fa fa-search'></i> 제품 검색결과가 없습니다</p>
 				</div>
-				<div id="search_deal_result" style="display:none;">
-					<table cellspacing="0" cellpadding="0" style="width:100%; background-color:#fff; border-top:1px solid #3b3d3d; border-left:1px solid #dbdbdb; border-right:1px solid #dbdbdb; margin-top:10px;">
-						<tr>
-							<td style="width:50%;">
-								<a id="naver_deals_btn" href="#" onclick="show_naver_deals(); return false;" style="font-size:13px; color:#383838; line-height:38px; display:block; background-color:#fff; ">
-									쇼핑 검색결과
-								</a>
-							</td>
-							<td style="width:50%;">
-								<a id="naver_images_btn" href="#"  onclick="show_naver_images(); return false;" style="font-size:13px; color:#383838; line-height:38px; display:block; border-bottom:1px solid #dbdbdb; border-left:1px solid #dbdbdb;  background-color:#f4f4f4;">
-									이미지 검색결과
-								</a>
-							</td>
-						</tr>
-					</table>
-					<div id="search_result_div" style="background-color:#fff; border:1px solid #dbdbdb; border-top:none; overflow-y:auto; -webkit-overflow-scrolling:touch; min-height:150px; max-height:340px;">
-						<div id="naver_deals"></div>
-						<div id="naver_images" style="display:none;"></div>
-					</div>
+				<div id="naver_images">
+					<p style='margin:0; line-height:300px; color:#9d9ea1; font-size:15px;'><i class='fa fa-search'></i> 이미지 검색결과가 없습니다</p>
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+<div id="deal_search_input" class="table_div" style="position:fixed; top:50%; z-index:15; width:inherit; margin-top:-50px; transition:top .5s; display:none;" ontouchmove="return false;">
+	<div style="position:relative; margin:10px; border-bottom:3px solid #fff;">
+		<input id="deal_search_keyword" type="text" class="etc_input_box" placeholder="제품명 검색" style="padding:0px 40px 0px 10px; background-color:transparent; color:#fff; font-size:20px; line-height:40px;"/>
+		<a id="deal_search_btn" href="#" style="position:absolute; top:3px; right:0; width:40px; height:40px; line-height:40px; display:inline-block; text-align:center; color:#666; font-size:20px; transition:color .3s;"><i class="fa fa-level-down" style="transform:rotate(90deg); -webkit-transform:rotate(90deg)"></i></a>
+		<a id="deal_search_cancle" href="#" onclick="back_button(); return false;" style="position:absolute; top:3px; right:0; width:40px; height:40px; line-height:40px; text-align:center; color:#fff; font-size:35px; display:none;">&times;</a>
+	</div>
+</div>
 
 <script type="text/template" id="naver-deal-template">
 	<table cellspacing="0" cellpadding="0" style="width:100%;">
-		{{ for(var i=0; i < items.length; i++) { }}
-			{{ var item = items[i] }}
-			<tr>
-				<td onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;" style="width:80px; height:80px; padding:4px 12px; border-bottom:1px solid #dbdbdb; cursor:pointer;">
-					<img src="{{= item.image }}" style="width:80px; height:80px; display:block;" />
+		{{ var length = items.length ? items.length : 1 }}
+		{{ for(var i=0; i < length; i++) { }}
+			{{ var item = length == 1 ? items : items[i] }}
+			<tr onclick="select_deal('{{=item.productId}}', {{=is_left}}); return false;">
+				<td style="width:50%; height:auto; padding:10px; border-bottom:1px solid #dbdbdb; cursor:pointer;">
+					<img src="{{=item.image}}" style="width:100%; height:auto; display:block;" />
 				</td>
-				<td onclick="select_deal('{{= item.productId }}', {{= is_left }}); return false;" style="border-bottom:1px solid #dbdbdb; text-align:left; cursor:pointer;">
-					<p style="font-size:12px; font-weight:bold; margin:0; color:#383838;">{{= truncate(item.title) }}</p>
-					<p style="font-size:12px; margin:0; color:#ee6e01;">{{= numberWithCommas(item.lprice) }}원</p>
-					<p style="font-size:11px; margin:0; color:#383838;">{{= item.mallName }}</p>
+				<td style="width:50%; height:auto; padding:10px; padding-right:20px; text-align:left; border-bottom:1px solid #dbdbdb; cursor:pointer;">
+					<p style="font-size:12px; margin:0; color:#9d9ea1; padding-bottom:5px;">{{= item.mallName }}</p>
+					<p style="font-size:15px; margin:0; color:#383838; font-weight:bold;">{{= truncate(item.title) }}</p>
+					<p style="font-size:12px; margin:0; color:#ee6e01; text-align:right; padding-top:5px;">{{= numberWithCommas(item.lprice) }}원</p>
 				</td>
 			</tr>
 		{{ } }}
 	</table>
+	<div style="padding:15px; font-size:13px; color:#666; background-color:#f4f4f4;" onclick='$("#deal_search_keyword").focus();'>
+		<b style="color:#18bf2d;">네이버 쇼핑</b> 검색 결과입니다<br>원하시는 결과가 없으면 검색어를 수정해보세요<br><b style="font-weight:bold; display:inline-block; margin-top:9px;"><i class="fa fa-search" style="color:#9d9ea1;"></i> 다시 검색하기</b>
+	</div>
 </script>
 
 <script type="text/template" id="naver-image-template">
-	<div style="padding:6px 10px;">
-		<table cellspacing="0" cellpadding="0" style="width:100%;">
-			{{ for(var i=0; i < Math.ceil(image_items.length/3); i++) { }}
-				<tr>
-					{{ var item1 = image_items[i * 3] }}
-					<td style="width:33.3%; padding:6px 3px;">
-						<a href="#" onclick="select_image('{{= item1.thumbnail }}', {{= is_left }}); return false;" class="naver_image_wrap">
-							<div class="naver_image_content" style="background:url('{{= item1.thumbnail }}') no-repeat 100% 100%; background-size:100% 100%;"></div>
-						</a>
-					</td>
-					{{ var item2 = image_items[i * 3 + 1] }}
-					<td style="width:33.3%; padding:6px 3px;">
-						{{ if (item2 != null){ }}
-						<a href="#" onclick="select_image('{{= item2.thumbnail }}', {{= is_left }}); return false;" class="naver_image_wrap">
-							<div class="naver_image_content" style="background:url('{{= item2.thumbnail }}') no-repeat 100% 100%; background-size:100% 100%;"></div>
-						</a>
-						{{ } }}
-					</td>
-					{{ var item3 = image_items[i * 3 + 2] }}
-					<td style="width:33.3%; padding:6px 3px;">
-						{{ if (item3 != null){ }}
-						<a href="#" onclick="select_image('{{= item3.thumbnail }}', {{= is_left }}); return false;" class="naver_image_wrap">
-							<div class="naver_image_content" style="background:url('{{= item3.thumbnail }}') no-repeat 100% 100%; background-size:100% 100%;"></div>
-						</a>
-						{{ } }}
-					</td>
-				</tr>
+	<div style="padding:10px;">
+		{{ var length = image_items.length ? image_items.length : 1 }}
+		{{ for(var i=0; i < length; i++) { }}
+			{{ var image_item = length == 1 ? image_items : image_items[i] }}
+			{{ var thumbnail = image_item.thumbnail.replace("?q=", "?t=470x180&q=") }}
+			{{ var link = encodeURI(image_item.link) }}
+			{{ if (image_item.sizewidth >= 300 && image_item.sizeheight >= 300) { }}
+				<img src="{{=link}}" onclick="select_image('{{=link}}', {{=is_left}}); return false;" style="width:100%; height:auto; display:block; outline:1px solid #dbdbdb; cursor:pointer;" onerror="imgError(this, '{{=thumbnail}}');"/>
+				<p style="width:100%; box-sizing:border-box; font-size:12px; margin:0; color:#9d9ea1; padding:5px 5px 15px; text-align:right;">{{=image_item.sizewidth}} &times; {{=image_item.sizeheight}}</p>
 			{{ } }}
-		</table>
+		{{ } }}
+	</div>
+	<div style="padding:15px; font-size:13px; color:#666; background-color:#f4f4f4;" onclick='$("#deal_search_keyword").focus();'>
+		<b style="color:#18bf2d;">네이버 이미지</b> 검색 결과입니다<br>원하시는 결과가 없으면 검색어를 수정해보세요<br><b style="font-weight:bold; display:inline-block; margin-top:9px;"><i class="fa fa-search" style="color:#9d9ea1;"></i> 다시 검색하기</b>
 	</div>
 </script>
 
 
 <script>
-
 	var items;
 	var image_items;
 
+	function show_search_deal_popup(is_left){
+		history.pushState(null, null, null);
+		is_search_deal_opened = true;
+		overlay_st = $(window).scrollTop();
+
+		disableScroll();
+		$("#menu_bg_full").fadeIn(200);
+		$("#search_deal_popup").show();
+
+		$("#deal_search_input").show().animateCss("bounceInUp");
+		$("#deal_search_keyword").on("focus", function(){
+			$(this).val("");
+			$("#deal_search_btn").fadeIn();
+			$("#deal_search_cancle").fadeOut();
+		}).on("keyup",function(){
+			if( $("#deal_search_keyword").val().length > 0 ) {
+				$('#deal_search_btn').css('color','#fff');
+			} else {
+				$('#deal_search_btn').css('color','#666');
+			}
+		});
+		if (!isIOS) $("#deal_search_keyword").focus().select();
+
+		$("#deal_search_btn").attr("onclick", "deal_search("+is_left+"); return false;");
+		show_card_overlay();
+	}
+
+	$(window).resize(function(){
+		var h = $(window).height() - 131;
+		$("#search_result_div").css({"minHeight":h, "maxHeight":h});
+	}).resize();
+
+	function hide_search_deal_popup(){
+		is_search_deal_opened = false;
+    window.scrollTo(0,overlay_st);
+
+		enableScroll();
+		$("#search_deal_popup").fadeOut();
+		$("#menu_bg_full").fadeOut();
+
+		$("#deal_search_input").css({"top":"50%"}).hide();
+		$("#deal_search_keyword").unbind("blur").val("");
+		$("#search_deal_result").hide();
+		$("#naver_deals").html("");
+		$("#naver_images").html("");
+
+		$("#deal_search_btn").attr("onclick","").css("color","#666");
+		$("#deal_search_btn").show();
+		$("#deal_search_cancle").hide();
+	}
+
 	function deal_search_by_key(){
-		var deal_search_keyword = $('#deal_search_keyword').val();
-		if(deal_search_keyword == "" || deal_search_keyword == undefined){
-			notify("검색하실 제품명을 입력해주세요");
-		}else{
-			$("#deal_search_btn").click();
-		}
+		$("#deal_search_btn").click();
 	}
 
 	$('#deal_search_keyword').keypress(function(e) {
@@ -236,60 +269,12 @@
     	e.preventDefault();
     	deal_search_by_key();
   	}
-	});
-
-	function show_card_overlay() {
-		$("#card_overlay").slideDown(500, function(){
-			$("#card_overlay_open").html("닫기&nbsp;<i class='fa fa-angle-double-up' style='font-size:15px;'></i>");
-			$("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
-			is_card_overlay_opened = true;
-		});
-	}
-
-	function hide_card_overlay() {
-		$("#card_overlay").slideUp(500, function(){
-			$("#card_overlay_open").html("직접 입력하기&nbsp;<i class='fa fa-angle-double-down' style='font-size:15px;'></i>");
-			$("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
-			is_card_overlay_opened = false;
-		});
-	}
-
-	function show_search_deal_popup(is_left){
-		disableScroll();
-		$("#search_deal_popup_bg").show();
-		$("#search_deal_popup").show();
-		$("#deal_search_keyword").focus().select();
-		$("#deal_search_keyword").on("keyup",function(){
-			if( $("#deal_search_keyword").val().length > 0 ) {
-				$('#deal_search_btn').css('background-color','#f18b33');
-			} else {
-				$('#deal_search_btn').css('background-color','#dbdbdb');
-			}
-		});
-		$("#deal_search_btn").attr("onclick", "deal_search("+is_left+"); return false;");
-		if (is_left){
-			$("#search_deal_title").html("CARD A 검색해서 입력하기");
-			show_card_overlay();
-		} else {
-			$("#search_deal_title").html("CARD B 검색해서 입력하기");
-			show_card_overlay();
+	}).keydown(function(e) {
+		if (e.keyCode == '27') {
+			e.preventDefault();
+			$(this).val("");
 		}
-	}
-
-	$(window).resize(function(){
-		$("#search_result_div").css("max-height", $(window).height() -260 );
-	}).resize();
-
-	function hide_search_deal_popup(){
-		enableScroll();
-		$("#search_deal_popup").hide();
-		$("#search_deal_popup_bg").hide();
-		$("#search_deal_result").hide();
-		$("#deal_search_keyword").val("");
-		$("#naver_deals").html("");
-		$("#naver_images").html("");
-		$("#deal_search_btn").attr("onclick","").css("background-color","#dbdbdb");
-	}
+	});
 
 	function show_naver_deals(){
 		$("#search_result_div").scrollTop(0);
@@ -316,40 +301,55 @@
 	}
 
 	function deal_search(is_left){
-		var keyword = $("#deal_search_keyword").val();
-		$.ajax({
-	        url: '/deals/get_naver_deals/?keyword='+encodeURIComponent(keyword),
-	        type: 'GET',
-	        error: function(){
-	            return false;
-	        },
-	        success: function(data){
-	        	$("#search_deal_result").show();
-	        	image_items = data.image_result.rss.channel.item;
-			      if (image_items != null ){
-		        	var naverImageTemplate = _.template( $('#naver-image-template').html() );
-				    	$('#naver_images').html(naverImageTemplate({image_items: image_items, is_left: is_left}));
-	        	} else {
-	        		$('#naver_images').html("<p style='line-height:150px; color:#383838; font-size:13px;'>이미지 검색결과가 없습니다.</p>");
-	        	}
-	        	items = data.shop_result.rss.channel.item;
-	        	if (items != null ){
-		        	var naverDealTemplate = _.template( $('#naver-deal-template').html() );
-				    	$('#naver_deals').html( naverDealTemplate({item: items, is_left: is_left}) );
-	        	} else {
-	        		$('#naver_deals').html("<p style='line-height:150px; color:#383838; font-size:13px;'>상품 검색결과가 없습니다.</p>");
-	        	}
-	        	show_naver_deals();
-	        },
-	        beforeSend: function(){
-						progressStart();
-	        	// $(".loading").show();
-          },
-          complete: function(){
-						progressEnd();
-          	// $(".loading").hide();
-          }
-		});
+		var deal_search_keyword = $('#deal_search_keyword').val();
+		if(deal_search_keyword == "" || deal_search_keyword == undefined){
+			notify("검색하실 제품명을 입력해주세요");
+		} else {
+			$("#deal_search_input").css({"top":50});
+			$("#deal_search_keyword").unbind("blur").bind("blur", function(){
+				$(this).val(deal_search_keyword);
+				$("#deal_search_btn").fadeOut();
+				$("#deal_search_cancle").fadeIn();
+			}).blur();
+
+			$.ajax({
+		        url: '/deals/get_naver_deals/?keyword='+encodeURIComponent(deal_search_keyword),
+		        type: 'GET',
+		        error: function(){
+		            return false;
+		        },
+		        success: function(data){
+							items = data.shop_result.rss.channel.item;
+		        	image_items = data.image_result.rss.channel.item;
+
+							$("#search_deal_result").show();
+							if (items != null ){
+								var naverDealTemplate = _.template( $('#naver-deal-template').html() );
+								$('#naver_deals').html(naverDealTemplate({item: items, is_left: is_left}));
+							} else {
+								$('#naver_deals').html("<p style='margin:0; line-height:300px; color:#9d9ea1; font-size:15px;'><i class='fa fa-search'></i> 제품 검색결과가 없습니다</p>");
+							}
+							if (image_items != null ){
+								var naverImageTemplate = _.template( $('#naver-image-template').html() );
+								$('#naver_images').html(naverImageTemplate({image_items: image_items, is_left: is_left}));
+							} else {
+								$('#naver_images').html("<p style='margin:0; line-height:300px; color:#9d9ea1; font-size:15px;'><i class='fa fa-search'></i> 이미지 검색결과가 없습니다</p>");
+							}
+
+							if (items == null && image_items == null) {
+								show_naver_deals();
+							} else {
+								(items == null && image_items != null) ? show_naver_images() : show_naver_deals();
+							}
+		        },
+		        beforeSend: function(){
+							progressStart();
+	          },
+	          complete: function(){
+							progressEnd();
+	          }
+			});
+		}
 	}
 
 	function select_deal(product_id, is_left){
@@ -365,25 +365,9 @@
 	        success: function(data){
 	        	deal = data.deal;
 	        	if (is_left){
-	        		$("#left_deal_image_btn img").attr("src", get_image_url(deal, "deals", "normal") );
-							$("#card_a_img_overlay").fadeOut(200);
-	        		$("#left_deal_title").val(deal.title);
-	        		$("#left_deal_brand").val(deal.brand);
-	        		$("#left_deal_price").val(deal.price);
-	        		$("#left_deal_link").val(deal.link);
-	        		$("#left_deal_deal_id").val(deal.id);
-
-	        		$("#left_deal_image_id").val("");
+							show_image_edit_popup(true, data.id, data.image_url, deal.title, deal.brand, deal.price, deal.link, deal.id);
 	        	}else{
-	        		$("#right_deal_image_btn img").attr("src", get_image_url(deal, "deals", "normal") );
-							$("#card_b_img_overlay").fadeOut(200);
-	        		$("#right_deal_title").val(deal.title);
-	        		$("#right_deal_brand").val(deal.brand);
-	        		$("#right_deal_price").val(deal.price);
-	        		$("#right_deal_link").val(deal.link);
-	        		$("#right_deal_deal_id").val(deal.id);
-
-	        		$("#right_deal_image_id").val("");
+							show_image_edit_popup(false, data.id, data.image_url, deal.title, deal.brand, deal.price, deal.link, deal.id);
 	        	}
 	        	$("#naver_images").html("");
 	        	$("#naver_deals").html("");
@@ -391,21 +375,21 @@
 					},
 					beforeSend: function(){
 						progressStart();
-						// $(".loading").show();
 					},
 					complete: function(){
 						progressEnd();
-						// $(".loading").hide();
+						ready_to_submit();
 						var scroll_top = $("#card_overlay").offset().top;
 						$("html, body").animate({scrollTop:scroll_top-165},500);
-						ready_to_submit();
 					}
 		});
 	}
 
 	function select_image(image_url, is_left){
+		var deal_search_keyword = $('#deal_search_keyword').val();
+
 		$.ajax({
-	        url: '/preview_images/create_by_naver.json',
+	        url: "/preview_images.json",
 	        type: 'POST',
 	        data: {image_url: image_url},
 	        error: function(){
@@ -413,19 +397,9 @@
 	        },
 	        success: function(data){
 	        	if (is_left){
-	        		$("#left_deal_image_btn img").attr("src", data.image_url );
-							$("#card_a_img_overlay").fadeOut(200);
-	        		$("#left_deal_image_id").val(data.id);
-	        		// $("#left_deal_title").val(null);
-	        		// $("#left_deal_brand").val(null);
-	        		// $("#left_deal_price").val(null);
+							show_image_edit_popup(true, data.id, data.image_url, deal_search_keyword);
 	        	} else {
-	        		$("#right_deal_image_btn img").attr("src", data.image_url );
-							$("#card_b_img_overlay").fadeOut(200);
-	        		$("#right_deal_image_id").val(data.id);
-	        		// $("#right_deal_title").val(null);
-	        		// $("#right_deal_brand").val(null);
-	        		// $("#right_deal_price").val(null);
+							show_image_edit_popup(false, data.id, data.image_url, deal_search_keyword);
 	        	}
 	        	$("#naver_images").html("");
 	        	$("#naver_deals").html("");
@@ -433,23 +407,26 @@
 					},
 	        beforeSend: function(){
 						progressStart();
-						// $(".loading").show();
 					},
 					complete: function(){
-						progressEnd();
-						// $(".loading").hide();
+						// progressEnd();
+						ready_to_submit();
 						var scroll_top = $("#card_overlay").offset().top;
 						$("html, body").animate({scrollTop:scroll_top-165},500);
-						ready_to_submit();
 					}
 		});
 	}
 
 	function left_deal_image_upload(){
 		$("#left_deal_image").click();
-	}
+	};
+
+	function right_deal_image_upload(){
+		$("#right_deal_image").click();
+	};
 
 	$("#left_deal_image").change(function(){
+		var fileObj = $(this);
 		$.each( $("#left_deal_image")[0].files, function( i, file ) {
 			var formData = new FormData();
 		    formData.append('File', file);
@@ -461,29 +438,22 @@
 		       contentType: false,
 		       processData: false,
 		       success: function (data) {
-						 $("#left_deal_image_btn img").attr("src",data.image_url);
-						 $("#card_a_img_overlay").fadeOut(200);
-						 $("#left_deal_image_id").val(data.id);
+						 show_image_edit_popup(true, data.id, data.image_url);
 		       },
 					 beforeSend: function(){
 						 progressStart();
-						 //  $(".loading").show();
 					 },
 					 complete: function(){
-						 progressEnd();
-				 		 //  $(".loading").hide();
+						 //  progressEnd();
 						 ready_to_submit();
+						 fileObj.replaceWith(fileObj.clone(true));
 					 }
 		    }).fail(function (data) {}).done(function () {});
 		});
 	});
 
-
-	function right_deal_image_upload(){
-		$("#right_deal_image").click();
-	}
-
 	$("#right_deal_image").change(function(){
+		var fileObj = $(this);
 		$.each( $("#right_deal_image")[0].files, function( i, file ) {
 			var formData = new FormData();
 		    formData.append('File', file);
@@ -495,22 +465,35 @@
 		       contentType: false,
 		       processData: false,
 		       success: function (data) {
-						 $("#right_deal_image_btn img").attr("src",data.image_url);
-						 $("#card_b_img_overlay").fadeOut(200);
-						 $("#right_deal_image_id").val(data.id);
+ 						 show_image_edit_popup(false, data.id, data.image_url);
 		       },
 			  	 beforeSend: function(){
 						 progressStart();
-						 // $(".loading").show();
            },
            complete: function(){
-						 progressEnd();
-						 // $(".loading").hide();
+						//  progressEnd();
 						 ready_to_submit();
+						 fileObj.replaceWith(fileObj.clone(true));
            }
 		    }).fail(function (data) {}).done(function () {});
 		});
 	});
+
+	function show_card_overlay() {
+		$("#card_overlay").slideDown(500, function(){
+			$("#card_overlay_open").html("닫기&nbsp;<i class='fa fa-angle-double-up' style='font-size:15px;'></i>");
+			$("#card_overlay_open").css("background-color","#f4f4f4").attr("onclick","hide_card_overlay(true); return false;");
+			is_card_overlay_opened = true;
+		});
+	}
+
+	function hide_card_overlay() {
+		$("#card_overlay").slideUp(500, function(){
+			$("#card_overlay_open").html("직접 입력하기&nbsp;<i class='fa fa-angle-double-down' style='font-size:15px;'></i>");
+			$("#card_overlay_open").css("background-color","#fff").attr("onclick","show_card_overlay(true); return false;");
+			is_card_overlay_opened = false;
+		});
+	}
 
 	function show_more_add_info() {
 		if ( $("#add_info_1:visible").length == 0 ) {
@@ -611,12 +594,6 @@
 	$("#ask_category_id").one("focus",function(){ $(this).css("color","#666"); });
 
 	// 입력중 해시태그 강조 추가
-	var ua = window.navigator.userAgent.toLowerCase();
-	var isIE = !!ua.match(/msie|trident\/7|edge/);
-	var isWinPhone = ua.indexOf('windows phone') !== -1;
-	var isIOS = !isWinPhone && !!ua.match(/ipad|iphone|ipod/);
-	var isAndroid = ua.indexOf('android') !== -1;
-
 	var textarea_font = $("#ask_message").css("font");
 	$("#hashtag_highlights").css("font",textarea_font);
 
@@ -681,7 +658,7 @@
 		}).on("keyup keydown keypress blur", function(){
 			$(this).attr("type","text");
 		})
-	} else if (isAndroid) {
+	} else if (isAndroid || isAndroidApp) {
 		$("#left_deal_price, #right_deal_price").attr("type","tel");
 	}
 
@@ -697,8 +674,10 @@
 			$("#left_deal_image_btn img").attr("src") != "/images/custom/card_image_preview.png" && $("#right_deal_image_btn img").attr("src") != "/images/custom/card_image_preview.png" &&
 			$("#left_deal_title").val() != "" && $("#right_deal_title").val() != ""
     ) {
+			$("#ask_submit_btn_area").css({"bottom":"0px"});
       $("#ask_submit_btn").css("background-color","#ee6e01");
     } else {
+			$("#ask_submit_btn_area").css({"bottom":"-40px"});
       $("#ask_submit_btn").css("background-color","#9d9ea1");
     }
   }
@@ -731,4 +710,329 @@
 	});
 	//
 
+</script>
+
+<div id="image_edit_popup_bg" onclick="back_button(); $('#image_edit_submit').focus(); return false;" style="position:fixed;left:-100%; top:-100%; width:300%; height:300%; background-color:rgba(0,0,0,0.9); z-index:12; display:none;"></div>
+<div id="image_edit_popup" style="width:inherit; z-index:13; position:fixed; top:0px; overflow-y:auto; -webkit-overflow-scrolling:touch; display:none;" ontouchmove="return false;">
+	<div style="padding:10px;" ontouchmove="return false;">
+		<div class="table_div" style="margin-bottom:0; padding:0 12px 0; height:40px;" ontouchmove="return false;">
+			<a href="#" onclick="back_button(); $('#image_edit_submit').focus(); return false;" style="position:absolute; right:0px; top:0px; width:40px; height:40px; text-align:center;"><span style="display:inline-block; box-sizing:border-box; width:40px; height:40px; color:#fff; font-size:35px;">&times;</span></a>
+			<span id="image_edit_info" style="display:block; color:#9d9ea1; font-size:12px; line-height:40px; height:40px; text-align:center; float:left; margin-right:10px;"><i class='fa fa-arrows'></i>&nbsp;이동&nbsp;&nbsp;&nbsp;<i class='fa fa-arrows-alt'></i>&nbsp;확대</span>
+			<div id="image_edit_tooltip" class="tooltip_area animated pulse" style="width:calc(100% - 50px); max-width:250px; left:0%; bottom:20%;">
+				<div class="tooltip_arrow bottom" style="left:12px; border-top-color:#ffcc5a;"></div>
+				<div class="tooltip_content" style="color:#333; background-color:#ffcc5a;"><i class="fa fa-arrows"></i> 터치하여 이동 <i class="fa fa-arrows-alt"></i> 멀티터치/휠로 확대&middot;축소</div>
+			</div>
+			<span style="display:block; color:#9d9ea1; font-size:12px; line-height:40px; height:40px; text-align:center; float:left;"><i class='fa fa-file-picture-o'></i>&nbsp;<b id="image_edit_w"></b>&nbsp;&times;&nbsp;<b id="image_edit_h"></b></span>
+		</div>
+		<div id="image_edit_area">
+			<img id="image_to_edit" src="/images/custom/card_image_preview.png" alt="" style="width:500px; min-width:100%; max-width:100%;">
+		</div>
+		<div class="table_div" style="margin:10px 0;" ontouchmove="return false;">
+			<a id="image_edit_submit" href="#" onclick="return false;" style="display:block; box-sizing:border-box; width:100%; height:50px; line-height:50px; font-size:12px; background-color:#fff; text-align:center; padding:0 10px; outline:none; border-radius:3px;">
+				<mark id="image_edit_submit_info" style="background-color:transparent; color:#666; display:inline-block; font-size:15px;">이미지 업로드</mark>&nbsp;&nbsp;<i class="fa fa-upload" style="color:#ee6e01; font-size:20px; padding:15px 5px;"></i>
+			</a>
+		</div>
+		<div class="table_div" style="padding:0 10px 0px; text-align:left; height:25px; margin:10px 0;" ontouchmove="return false;">
+			<a href="#" onclick="reset_image_cropper(); return false;">
+				<span id="image_edit_reset" style="color:#fff; font-size:12px; line-height:28px; display:none;"><i class="fa fa-refresh" style="font-size:14px;"></i>&nbsp;초기화하기</span>
+				<span id="image_edit_warning" style="color:#383838; background-color:#ffcc5a; font-size:12px; text-align:center; padding:5px 10px; border-radius:15px; position:absolute; top:0; right:8px; display:none;"><i class="fa fa-exclamation-triangle"></i>&nbsp;이미지 품질이 안 좋아요 <b id="sad_emoji" style="display:inline-block;">:(</b></span>
+				<span id="image_edit_danger" style="color:#fff; background-color:#ee6e01; font-size:12px; text-align:center; padding:5px 10px; border-radius:15px; position:absolute; top:0; right:8px; display:none;"><i class="fa fa-ban"></i>&nbsp;이미지 품질이 너무 안 좋습니다 <b id="angry_emoji" style="display:inline-block;"><i class="fa fa-frown-o"></i></b></span>
+			</a>
+			<span id="image_edit_ok" style="color:#fff; background-color:mediumseagreen; font-size:12px; text-align:center; padding:5px 10px; border-radius:15px; position:absolute; top:0; right:8px;"><i class="fa fa-heart"></i>&nbsp;좋습니다요 <b id="happy_emoji" style="display:inline-block;">:)</b></span>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var image_cropper;
+
+	function create_image_cropper() {
+		var image = document.getElementById('image_to_edit');
+		var container_square_size = $(window).width() > 520 ? 500 : $(window).width() - 20;
+		var crop_options = {
+			viewMode: 1,
+			dragMode: 'move',
+			aspectRatio: 1 / 1,
+			highlight: false,
+			// modal: false,
+			guides: false,
+			background: false,
+			checkOrientation: false,
+			// responsive: false,
+			restore: false,
+			autoCropArea: 1,
+			cropBoxMovable: false,
+			cropBoxResizable: false,
+			minContainerWidth: container_square_size,
+			minContainerHeight: container_square_size,
+			minCropBoxWidth: container_square_size,
+			minCropBoxHeight: container_square_size,
+			toggleDragModeOnDblclick: false,
+			ready: function() {
+				var image_data = this.cropper.getImageData(),
+						img_w = image_data.naturalWidth,
+						img_h = image_data.naturalHeight;
+				var crop_box_data = this.cropper.getCropBoxData(),
+						crop_w = crop_box_data.width,
+						crop_h = crop_box_data.height;
+				var container_data = this.cropper.getContainerData(),
+						cont_w = container_data.width,
+						cont_h = container_data.height;
+				if (img_w > img_h) { // 이미지가 가로로 길 때
+					this.cropper.zoomTo(cont_h / img_h);
+					this.cropper.setCropBoxData({
+						left:0, top:0, width:cont_h, height:cont_h
+					});
+				} else if (img_w < img_h) { // 이미지가 세로로 길 때
+					this.cropper.setCanvasData({
+						left:0, top: -((cont_h - crop_h)/2), width:cont_w, height:cont_w
+					});
+					this.cropper.setCropBoxData({
+						left:0, top:0, width:cont_w, height:cont_w
+					});
+				} else {
+					this.cropper.setCropBoxData({
+						left:0, top:0
+					});
+				}
+				$("#image_edit_submit").focus();
+				$(".cropper-container").css({"width":container_square_size, "height":container_square_size, "max-width":container_square_size, "max-height":container_square_size});
+			},
+			crop: function() {
+				var w = Math.round(this.cropper.getData().width);
+				var h = Math.round(this.cropper.getData().height);
+				$("#image_edit_w").html(w);
+				$("#image_edit_h").html(h);
+				if (w < 100 || h < 100) {
+					$("#image_edit_reset").fadeIn();
+					$("#image_edit_ok").hide();
+					$("#image_edit_warning").hide();
+					$("#image_edit_danger").fadeIn();
+					$("#angry_emoji").animateCss("rubberBand");
+					$(".cropper-face").css({"opacity":"0.6", "background-color":"#ee6e01"});
+					$(".cropper-view-box").css({"outline-color":"#ee6e01"});
+				} else if (w < 300 || h < 300) {
+					$("#image_edit_reset").fadeIn();
+					$("#image_edit_ok").hide();
+					$("#image_edit_warning").fadeIn();
+					$("#image_edit_danger").hide();
+					$("#sad_emoji").animateCss("wobble");
+					$(".cropper-face").css({"opacity":"0.4", "background-color":"#ffe4a9"});
+					$(".cropper-view-box").css({"outline-color":"#ffcc5a"});
+				} else {
+					$("#image_edit_reset").fadeOut();
+					$("#image_edit_ok").fadeIn();
+					$("#image_edit_warning").fadeOut();
+					$("#image_edit_danger").fadeOut();
+					$("#happy_emoji").animateCss("jello");
+					$(".cropper-face").css({"opacity":"0", "background-color":"#fff"});
+					$(".cropper-view-box").css({"outline-color":"#fff"});
+				};
+			},
+			cropend: function() {
+				$("#image_edit_submit_info").next("i").animateCss("jello");
+			}
+		}
+		image_cropper = new Cropper(image, crop_options);
+	};
+
+	function show_image_edit_popup(is_left, preview_image_id, image_url, title, brand, price, link, deal_id) {
+		disableScroll();
+		$("#image_edit_popup_bg").show().animateCss("fadeIn");
+
+		$("#image_to_edit").attr("src",image_url);
+
+		$("#image_edit_submit, #image_edit_ok").attr("onclick","image_edit_submit("+is_left+", "+preview_image_id+", '"+title+"', '"+brand+"', "+price+", '"+link+"', "+deal_id+"); return false;");
+		create_image_cropper();
+
+		history.pushState(null, null, null);
+		is_image_edit_opened = true;
+    overlay_st = $(window).scrollTop();
+
+		$("#image_to_edit").one("load", function(){
+			$("#image_edit_popup").show().animateCss("bounceInDown");
+			progressEnd();
+		});
+
+		$(window).bind("resize", function(){
+			var container_square_size = $(window).width() > 520 ? 500 : $(window).width() - 20;
+			$(".cropper-container").animate({"width":container_square_size, "height":container_square_size, "max-width":container_square_size, "max-height":container_square_size},10,function(){
+				image_cropper.setCropBoxData({
+					left:0, top:0
+				});
+			});
+		}).resize();
+	}
+
+	function hide_image_edit_popup() {
+		enableScroll();
+		$("#image_edit_popup").hide();
+		$("#image_edit_popup_bg").hide();
+		image_cropper.clear().reset().destroy();
+		$("#image_to_edit").attr("src","/images/custom/card_image_preview.png");
+		$("#image_edit_submit, #image_edit_ok").attr("onclick","return false;");
+
+		is_image_edit_opened = false;
+		window.scrollTo(0,overlay_st);
+	}
+
+	var image_edit_area = document.getElementById('image_edit_area');
+	var image_edit_area_hammer = new Hammer(image_edit_area);
+	image_edit_area_hammer.on("doubletap", function(){
+		resize_image_cropper();
+	});
+
+	function resize_image_cropper() {
+		var res = 300;
+		var img_w = image_cropper.getImageData().naturalWidth;
+		var img_h = image_cropper.getImageData().naturalHeight;
+		var cont_w = image_cropper.getContainerData().width;
+		var cont_h = image_cropper.getContainerData().height;
+		var w = image_cropper.getData().width;
+		var h = image_cropper.getData().height;
+
+		if (img_w > img_h && img_h >= res) {
+			if (h != res) {
+				image_cropper.zoomTo(cont_h/res);
+				var canv_w = image_cropper.getCanvasData().width;
+				var canv_h = image_cropper.getCanvasData().height;
+				var crop_w = image_cropper.getCropBoxData().width;
+				var crop_h = image_cropper.getCropBoxData().height;
+				image_cropper.setCanvasData({left:-(canv_w-crop_w)/2,top:-(canv_h-crop_h)/2});
+			} else {
+				image_cropper.zoomTo(cont_h/img_h);
+				var canv_w = image_cropper.getCanvasData().width;
+				var crop_w = image_cropper.getCropBoxData().width;
+				image_cropper.setCanvasData({left:-(canv_w-crop_w)/2,top:0});
+			}
+		} else if (img_w < img_h && img_w >= res) {
+			if (w != res) {
+				image_cropper.zoomTo(cont_w/res);
+				var canv_w = image_cropper.getCanvasData().width;
+				var canv_h = image_cropper.getCanvasData().height;
+				var crop_w = image_cropper.getCropBoxData().width;
+				var crop_h = image_cropper.getCropBoxData().height;
+				image_cropper.setCanvasData({left:-(canv_w-crop_w)/2,top:-(canv_h-crop_h)/2});
+			} else {
+				image_cropper.zoomTo(cont_w/img_w);
+				var canv_h = image_cropper.getCanvasData().height;
+				var crop_h = image_cropper.getCropBoxData().height;
+				image_cropper.setCanvasData({left:0,top:-(canv_h-crop_h)/2});
+			}
+		} else if (img_w == img_h && img_w >= res) {
+			if (w != res) {
+				image_cropper.zoomTo(cont_w/res);
+				var canv_w = image_cropper.getCanvasData().width;
+				var canv_h = image_cropper.getCanvasData().height;
+				var crop_w = image_cropper.getCropBoxData().width;
+				var crop_h = image_cropper.getCropBoxData().height;
+				image_cropper.setCanvasData({left:-(canv_w-crop_w)/2,top:-(canv_h-crop_h)/2});
+			} else {
+				image_cropper.zoomTo(cont_w/img_w);
+				var canv_h = image_cropper.getCanvasData().height;
+				var crop_h = image_cropper.getCropBoxData().height;
+				image_cropper.setCanvasData({left:0,top:-(canv_h-crop_h)/2});
+			}
+		} else {
+			notify("권장 해상도보다 작습니다");
+		}
+		$('#image_edit_submit').focus();
+	}
+
+	function reset_image_cropper() {
+		if (confirm("이미지 편집을 초기화하시겠어요?")) {
+			var image_data = image_cropper.getImageData(),
+					img_w = image_data.naturalWidth,
+					img_h = image_data.naturalHeight;
+			var crop_box_data = image_cropper.getCropBoxData(),
+					crop_w = crop_box_data.width,
+					crop_h = crop_box_data.height;
+			var container_data = image_cropper.getContainerData(),
+					cont_w = container_data.width,
+					cont_h = container_data.height;
+			image_cropper.reset();
+			if (img_w > img_h) { // 이미지가 가로로 길 때
+				image_cropper.zoomTo(cont_h / img_h);
+				image_cropper.setCropBoxData({
+					left:0, top:0, width:cont_h, height:cont_h
+				});
+			} else if (img_w < img_h) { // 이미지가 세로로 길 때
+				image_cropper.setCropBoxData({
+					left:0, top:0
+				});
+				image_cropper.setCanvasData({
+					left:0, top: -((cont_h - crop_h)/2), width:cont_w, height:cont_w
+				});
+			} else {
+				image_cropper.setCropBoxData({
+					left:0, top:0
+				});
+			}
+			$('#image_edit_submit').focus();
+		}
+	}
+
+	function image_edit_submit(is_left, preview_image_id, title, brand, price, link, deal_id) {
+		var crop_data = image_cropper.getData();
+		var x = crop_data.x,
+				y = crop_data.y,
+				w = crop_data.width,
+				h = crop_data.height;
+
+		if ($("#image_edit_warning:visible").length > 0) {
+			if (!confirm("이미지 품질이 낮습니다\n계속하시겠어요?")) return false;
+		} else if ($("#image_edit_danger:visible").length > 0) {
+			alert("이미지 품질이 너무 낮습니다\n이미지를 수정하거나 교체해주세요!");
+			return false;
+		}
+
+		hide_image_edit_popup();
+
+		$.ajax({
+	        url: "/preview_images/crop.json",
+	        type: 'POST',
+	        data: {preview_image_id: preview_image_id, crop_x: x, crop_y: y, crop_w: w, crop_h: h},
+	        error: function(){
+	            return false;
+	        },
+	        success: function(data){
+						if (is_left) {
+							$("#left_deal_image_btn img").attr("src",data.image_url);
+							$("#card_a_img_overlay").fadeOut(200);
+							$("#left_deal_image_id").val(preview_image_id);
+
+							if (deal_id == undefined) {
+								if (title != "undefined" && $("#left_deal_title").val() == '') $("#left_deal_title").val(title);
+							} else {
+								title == "null" ? $("#left_deal_title").val('') : $("#left_deal_title").val(title);
+								brand == "null" ? $("#left_deal_brand").val('') : $("#left_deal_brand").val(brand);
+								link == null ? $("#left_deal_price").val('') : $("#left_deal_price").val(price);
+								link == "null" ? $("#left_deal_link").val('') : $("#left_deal_link").val(link);
+								$("#left_deal_deal_id").val(deal_id);
+							}
+						} else {
+							$("#right_deal_image_btn img").attr("src",data.image_url);
+							$("#card_b_img_overlay").fadeOut(200);
+							$("#right_deal_image_id").val(preview_image_id);
+
+							if (deal_id == undefined) {
+								if (title != "undefined" && $("#right_deal_title").val() == '') $("#right_deal_title").val(title);
+							} else {
+								title == "null" ? $("#right_deal_title").val('') : $("#right_deal_title").val(title);
+								brand == "null" ? $("#right_deal_brand").val('') : $("#right_deal_brand").val(brand);
+								link == null ? $("#right_deal_price").val('') : $("#right_deal_price").val(price);
+								link == "null" ? $("#right_deal_link").val('') : $("#right_deal_link").val(link);
+								$("#right_deal_deal_id").val(deal_id);
+							}
+						};
+					},
+	        beforeSend: function(){
+						progressStart();
+					},
+					complete: function(){
+						progressEnd();
+						ready_to_submit();
+					}
+		});
+	}
 </script>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class Users::SessionsController < Devise::SessionsController
   skip_before_filter :auth_user
-  after_action :set_gcm_key, :only => ["create"]
+  after_action :set_gcm_key, :only => ["create", "destroy"]
 
   #AJS추가
   def get_user_data
@@ -61,31 +61,6 @@ class Users::SessionsController < Devise::SessionsController
       redirect_to "/users/sign_in"
     end
   end
-
-  def destroy
-    # GCM Key 삭제
-    unless cookies["gcm_key"] == nil
-      gcm_key = cookies["gcm_key"]
-      user_gcm_key = UserGcmKey.find_by(:gcm_key => gcm_key)
-      if user_gcm_key
-        user_gcm_key.delete
-      end
-    end
-
-    # 기존 Devise 메소드
-    signed_out = (Devise.sign_out_all_scopes ? sign_out : sign_out(resource_name))
-    respond_to_on_destroy
-  end
-
-  # def check_email
-  #   is_new_email = true
-  #   user = User.find_by_email(params[:email])
-  #   is_new_email = false if user
-  #   render :json => {:is_new_email => is_new_email}
-  # end
-
-  # def manage
-  # end
 
   def change_nickname
     status = "success"

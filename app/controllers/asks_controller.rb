@@ -98,18 +98,18 @@ class AsksController < ApplicationController
 
     left_preview_image = PreviewImage.find_by_id(left_deal_params[:image_id])
     if left_preview_image
-      left_image = left_preview_image.image
+      left_image = left_preview_image.image.styles[:crop]
     end
 
     if left_deal_params[:deal_id].blank?
       left_deal = Deal.create(:title => left_deal_params[:title], :brand => left_deal_params[:brand], :price => left_deal_params[:price], :link => left_deal_params[:link], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3], :image => left_image)
     else
       left_deal = Deal.find(left_deal_params[:deal_id])
-      if left_image.blank?
-        left_image = left_deal.image
-      else
-        left_deal_is_modify = true
-      end
+      # if left_image.blank?
+      #   left_image = left_deal.image
+      # else
+      #   left_deal_is_modify = true
+      # end                                   # 이 다섯 줄은 왜 있는지 모르겠넹...
       unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
         left_deal_is_modify = true
       end
@@ -125,18 +125,18 @@ class AsksController < ApplicationController
 
     right_preview_image = PreviewImage.find_by_id(right_deal_params[:image_id])
     if right_preview_image
-      right_image = right_preview_image.image
+      right_image = right_preview_image.image.styles[:crop]
     end
 
     if right_deal_params[:deal_id].blank?
       right_deal = Deal.create(:title => right_deal_params[:title], :brand => right_deal_params[:brand], :price => right_deal_params[:price], :link => right_deal_params[:link], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3], :image => right_image)
     else
       right_deal = Deal.find(right_deal_params[:deal_id])
-      if right_image.blank?
-        right_image = right_deal.image
-      else
-        right_deal_is_modify = true
-      end
+      # if right_image.blank?
+      #   right_image = right_deal.image
+      # else
+      #   right_deal_is_modify = true
+      # end                                   # 이 다섯 줄은 왜 있는지 모르겠넹...
       unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
         right_deal_is_modify = true
       end
@@ -166,7 +166,8 @@ class AsksController < ApplicationController
       HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag)
     end
 
-    flash[:ask_create] = "게시글 작성 완료!"
+    flash[:ask_create] = "게시글 작성 완료!\\n친구들에게 공유해보세요 :)"
+    flash[:ask_id] = @ask.id
 
     redirect_to root_path
 
@@ -188,7 +189,7 @@ class AsksController < ApplicationController
 
     left_preview_image = PreviewImage.find_by_id(left_deal_params[:image_id])
     if left_preview_image
-      left_image = left_preview_image.image
+      left_image = left_preview_image.image.styles[:crop]
       @ask.left_ask_deal.update(:image => left_image)
     end
 
@@ -197,11 +198,11 @@ class AsksController < ApplicationController
       left_deal_params[:is_modify] = true
     else
       left_deal = Deal.find(left_deal_params[:deal_id])
-      if left_image.blank?
-        left_image = left_deal.image
-      else
-        left_deal_is_modify = true
-      end
+      # if left_image.blank?
+      #   left_image = left_deal.image
+      # else
+      #   left_deal_is_modify = true
+      # end
       unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
         left_deal_is_modify = true
       end
@@ -220,7 +221,7 @@ class AsksController < ApplicationController
 
     right_preview_image = PreviewImage.find_by_id(right_deal_params[:image_id])
     if right_preview_image
-      right_image = right_preview_image.image
+      right_image = right_preview_image.image.styles[:crop]
       @ask.right_ask_deal.update(:image => right_image)
     end
 
@@ -229,11 +230,11 @@ class AsksController < ApplicationController
       right_deal_params[:is_modify] = true
     else
       right_deal = Deal.find(right_deal_params[:deal_id])
-      if right_image.blank?
-        right_image = right_deal.image
-      else
-        right_deal_is_modify = true
-      end
+      # if right_image.blank?
+      #   right_image = right_deal.image
+      # else
+      #   right_deal_is_modify = true
+      # end
       unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
         right_deal_is_modify = true
       end
@@ -263,7 +264,8 @@ class AsksController < ApplicationController
     end
 
     # flash[:redirect_url] = "/" #AJS추가(삭제)
-    flash[:ask_create] = "게시글 수정 완료!"
+    flash[:ask_create] = "게시글 수정 완료!\\n친구들에게 공유해보세요 :)"
+    flash[:ask_id] = @ask.id
 
     redirect_to "/asks/#{@ask.id}"
   end

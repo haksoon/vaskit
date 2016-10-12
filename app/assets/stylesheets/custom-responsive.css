@@ -18,52 +18,95 @@
 .clearfix:after {
   clear: both;
 }
-@media (max-width:520px) {
+
+@media screen and (min-width:521px) {
+	#wrap{
+		width:520px;
+		box-shadow:0px 0px 10px rgba(166,180,188,0.8);
+		-webkit-box-shadow:0px 0px 10px rgba(166,180,188,0.8);
+    border-bottom:3px solid #dbdbdb;
+	}
+  .home-float-btn-area {
+  	right:50%;
+  	margin-right:-345px;
+  }
+  .card_image_expander {
+    color:#fff;
+  	opacity:0.2;
+  }
+  .card_image_expander.img_hover {
+  	opacity:1;
+  	color:#ffcc5a;
+  }
+  #app_banner {
+    margin-right:260px;
+  }
+  #app_banner_btn  {
+    top:0px;
+    right:0px;
+    border-bottom:7px solid #dbdbdb;
+    border-top:3px solid #dbdbdb;
+    border-left:3px solid #dbdbdb;
+  }
+  #app_banner_btn:hover {
+    border-color:#9d9ea1;
+  }
+  #app_banner_btn:active {
+    top:3px;
+    border-bottom-width:4px;
+  }
+  .app_banner_text {
+    right:10px;
+  }
+}
+
+@media screen and (min-width:751px) and (max-width:920px) {
+  #app_banner {
+    margin-right:155px;
+  }
+  #app_banner_btn:hover {
+    right:100px;
+    border-color:#9d9ea1;
+  }
+  #app_banner_btn:active {
+    top:3px;
+    border-bottom-width:4px;
+    border-color:#9d9ea1;
+  }
+  .app_banner_text {
+    right:-80px;
+  }
+}
+
+@media screen and (min-width:521px) and (max-width:750px) {
+  .home-float-btn-area{
+		right:50%;
+		margin-right:-250px;
+	}
+  #app_banner {
+    margin-right:0px;
+  }
+  .app_banner_text {
+    right:-80px;
+  }
+}
+
+@media screen and (max-width:520px) {
 	#wrap{
 		width:100%;
 	}
-  /*.ask_box {
-  	margin:15px 0;
-  }
-  .ask_box .content_box {
-  	border-width: 1px 0 3px 0;
-  }*/
-	.home-float-btn-area{
-		position:fixed;
+  .home-float-btn-area{
 		right:20px;
-		bottom:15px;
+    margin-right:0px;
 	}
   .card_image_expander {
     color: #ffcc5a;
     opacity: 1;
   }
-}
-
-@media (min-width:521px) {
-	#wrap{
-		width:520px;
-		box-shadow:0px 0px 10px rgba(166,180,188,0.8);
-		-webkit-box-shadow:0px 0px 10px rgba(166,180,188,0.8);
-	}
-  /*.ask_box {
-  	margin:15px 12px;
+  #app_banner {
+    margin-right:0px;
   }
-  .ask_box .content_box {
-  	border-width: 1px 3px 3px 1px;
-  }*/
-	.home-float-btn-area{
-		 position:fixed;
-		 right:50%;
-		 margin-right:-345px;
-		 bottom:15px;
-	}
-}
-
-@media (min-width:521px) and (max-width:750px){
-  .home-float-btn-area{
-		 position:fixed;
-		 right:50%;
-		 margin-right:-250px;
-		 bottom:10px;
-	}
+  .app_banner_text {
+    right:-80px;
+  }
 }

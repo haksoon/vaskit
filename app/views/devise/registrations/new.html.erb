@@ -1,4 +1,4 @@
-<%= render :partial => "common_partial/header", :locals => {:title => "회원가입"} %>
+<%= render :partial => "common_partial/header", :locals => {:title => "회원가입", :sub_title => "당신을 애타게 기다리고 있었답니다", :sub_icon => "fa-heart"} %>
 
 <div id="login_screen">
   <p class="chat_bubble" style="margin-bottom:15px;">
@@ -160,8 +160,7 @@
 </style>
 
 <script>
-
-  $("#main_header td").eq(2).css("visibility","hidden");
+  $("#my_button").hide();
 
 	//select박스에 년 붙여줌
 	$.each($("#user_birthday_1i option"), function( index, value ) {

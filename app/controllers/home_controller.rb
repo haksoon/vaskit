@@ -191,6 +191,10 @@ class HomeController < ApplicationController
         browser = "unknown"
       end
 
+      if device == "App_AOS" || device == "App_iOS"
+        set_gcm_key
+      end
+
       user_id = current_user.id unless current_user.blank?
       visitor_id = @visitor.id unless @visitor.blank?
       UserVisit.create(:user_id => user_id, :visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)

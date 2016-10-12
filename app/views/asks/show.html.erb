@@ -1,12 +1,17 @@
-<%= render :partial => "common_partial/header", :locals => {:title => ""} %>
-<p class="chat_bubble table_div">
-  <span style="color:#ee6e01;">#둘중에뭐사지? #고민고민하지마</span> <b style="float:right;">Let's VASKIT!</b>
-</p>
+<%= render :partial => "common_partial/header", :locals => {:title => "", :sub_title => "#{@ask.left_ask_deal.title.truncate(18)} vs #{@ask.right_ask_deal.title.truncate(18)}", :sub_icon => ""} %>
+
+<div class="chat_bubble table_div">
+  <div class="table_div" style="line-height:30px; margin-bottom:0;">
+    <b style="color:#f18b33;">#둘중에뭐사지? #혼자고민하지마</b>
+    <b class="animated swing" style="float:right;">Let's VASKIT!</b>
+  </div>
+</div>
+
 <div id="ask_detail" class="table_div" style="margin:15px 0; display:none;"></div>
 <div id="asks" class="table_div"></div>
 <%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/ask_image" %>
-<%= render :partial => "common_partial/more_popup" %>
+<%= render :partial => "common_partial/report_popup" %>
 
 <script>
   is_show_opened = true;

@@ -1,4 +1,4 @@
-<%= render :partial => "common_partial/header", :locals => {:title => "비밀번호 재설정"} %>
+<%= render :partial => "common_partial/header", :locals => {:title => "비밀번호 재설정", :sub_title => "제가 뭐든지 찾아드립니다!", :sub_icon => "fa-unlock=alt"} %>
 
 <p class="chat_bubble">
   가입하셨던 이메일 주소를 입력해주세요.<br>
@@ -22,7 +22,7 @@
 </div>
 
 <script>
-  $("#main_header td").eq(2).css("visibility","hidden");
+  $("#my_button").hide();
 
   $('#user_email').keypress(function(e) {
 		if (e.keyCode == '13') {

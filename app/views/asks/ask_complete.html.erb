@@ -1,4 +1,4 @@
-<%= render :partial => "common_partial/header", :locals => {:title => "질문 종료하기"} %>
+<%= render :partial => "common_partial/header", :locals => {:title => "질문 종료하기", :sub_title => "당신의 구매이력을 남겨보세요", :sub_icon => "fa-shopping-cart"} %>
 
 <p class="chat_bubble" style="margin:12px;">
 	<span style="color:#998674; font-weight:bold;"><%= current_user.string_id %></span>님, 투표 결과는 만족스러우셨나요?<br />
@@ -61,7 +61,7 @@
 		<i class="fa fa-ban"></i>&nbsp;응답 제출하지 않고 종료하기
 	</a>
 </div>
-<div style="position:absolute; bottom:0; width:inherit; box-sizing:border-box; padding:0 12px; z-index:1;">
+<div id="ask_complete_submit_btn_area" style="position:fixed; bottom:-40px; width:inherit; box-sizing:border-box; transition:bottom .3s; z-index:1;">
 		<a id="ask_complete_submit_btn" href="#" onclick="submit_complete(); return false;" class="ask_submit_btn">
 			<i class="fa fa-chain-broken"></i>&nbsp;질문 종료하기
 		</a>
@@ -460,7 +460,7 @@
 
 	function updateStarPoint(){
 		star_point = $(".star_rating_wrap > ul > li").data("value");
-		if (selected_ask_deal_id != null) ready_to_submit();
+		ready_to_submit();
 	}
 
 	function select_ask_deal(ask_deal_id, is_left){
@@ -472,16 +472,21 @@
 		}else{
 			$("#right_select_div").show();
 		}
-		if (star_point != null) ready_to_submit();
+		ready_to_submit();
 	}
 
 	function ready_to_submit() {
-		$("#ask_complete_submit_btn").css("background-color","#ee6e01");
-		$("html, body").animate({scrollTop:$(window).height()},200);
+		if (star_point != null && star_point > 0 && selected_ask_deal_id != null) {
+			$("#ask_complete_submit_btn_area").css({"bottom":"0px"});
+      $("#ask_complete_submit_btn").css("background-color","#ee6e01");
+		} else {
+			$("#ask_complete_submit_btn_area").css({"bottom":"-40px"});
+      $("#ask_complete_submit_btn").css("background-color","#9d9ea1");
+		}
 	}
 
 	function submit_complete(){
-		if(star_point == null){
+		if(star_point == null || star_point == 0){
 			notify('만족도 별점을 평가해주세요');
 			return;
 		}

@@ -13,16 +13,27 @@
         신고자: <%= User.find_by_id(@report.user_id).string_id %>
       </li>
       <li>
-        신고 대상: <%= @report.target %>, <%= @report.target_id %>
-      </li>
-      <li>
-        신고 종류: <%= @report.report_type %>
-      </li>
-      <li>
-        신고 내용: <%= @report.message %>
+        신고 내용:
+        <%= "구매결정과는 무관한 내용이군요" if @report.report_type == "1" %>
+        <%= "광고성, 홍보성이 짙은 내용이군요" if @report.report_type == "2" %>
+        <%= "비윤리적인 내용은 보고싶지 않아요" if @report.report_type == "3" %>
+        <%= @report.message if @report.report_type == "4" %>
       </li>
       <li>
         신고 일시: <%= @report.created_at %>
+      </li>
+      <br>
+      <li>
+        신고 대상:
+        <% if @report.target == 'ask' %>
+          <% ask = Ask.find(@report.target_id) %>
+          <a href="http://vaskit.kr/asks/<%= @report.target_id %>">ask(<%= @report.target_id %>) 링크</a>
+          <br><%= ask.message %>
+        <% elsif @report.target == 'comment' %>
+          <% comment = Comment.find(@report.target_id) %>
+          <a href="http://vaskit.kr/asks/<%= comment.ask_id %>">comment(<%= @report.target_id %>) 링크</a>
+          <br><%= comment.content %>
+        <% end %>
       </li>
     </ul>
   </body>

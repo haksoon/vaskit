@@ -37,6 +37,121 @@ fbq('init', '521318198062554');
 fbq('track', "PageView");
 // End Facebook Pixel Code
 
+// 뒤로가기 관련 코드
+$(document).ready(function(){
+  progressStart();
+  window.scrollTo(0,0);
+  $(window).unbind("popstate");
+  history.replaceState(null, null, null);
+  $(window).bind("popstate", function(e){
+    if (!!$("#main_header").length) main_header_button();
+    if (is_ask_image_opened) {
+      ask_image_off();
+    } else if (is_category_opened || is_user_opened || is_search_input_opened) {
+      if (is_category_opened) category_off();
+      if (is_user_opened) user_off();
+      if (is_search_input_opened) search_input_off();
+    } else if (is_report_popup_opened) {
+      hide_report_popup();
+    } else if (is_alram_opened) {
+      card_detail_off(opened_ask_id);
+      user_on();
+      is_alram_opened = false;
+    } else if (is_card_opened) {
+      card_detail_off(opened_ask_id);
+    } else if (is_search_deal_opened) {
+      hide_search_deal_popup();
+    } else if (is_image_edit_opened) {
+      confirm("이미지 편집을 취소하실건가요?") ? hide_image_edit_popup() : history.pushState(null, null, null);
+    } else if (is_app_popup_opened) {
+      hide_app_popup();
+    }
+  });
+  $(document).keydown(function(e){
+    if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
+      if(e.keyCode === 27){
+        if (is_ask_image_opened) {
+          back_button();
+        } else if (is_category_opened || is_user_opened || is_search_input_opened) {
+          if (is_category_opened) back_button();
+          if (is_user_opened) back_button();
+          if (is_search_input_opened) back_button();
+        } else if (is_report_popup_opened) {
+          back_button();
+        } else if (is_card_opened) {
+          back_button();
+        } else if (is_search_deal_opened) {
+          back_button();
+        } else if (is_image_edit_opened) {
+          confirm("이미지 편집을 취소하실건가요?") ? hide_image_edit_popup() : history.pushState(null, null, null);
+        } else if (is_app_popup_opened) {
+          hide_app_popup();
+        }
+      }
+    }
+  });
+
+  if (document.HybridApp) {
+    HybridApp.getGCM("hello world");
+  }
+})
+$(window).load(function(){
+  progressEnd();
+});
+
+// Device Check
+// var ua = window.navigator.userAgent.toLowerCase();
+// var isWinPhone = ua.indexOf('windows phone') !== -1;
+// var isIOS = !isWinPhone && !!ua.match(/ipad|iphone|ipod/);
+// var isAndroid = ua.indexOf('android') !== -1;
+// var isIE = !!ua.match(/msie|trident\/7|edge/);
+
+var ua = window.navigator.userAgent.toLowerCase();
+var isAndroidApp       = false,
+    isIOSApp           = false,
+    isWinPhone         = false,
+    isIOS              = false,
+    isAndroid          = false,
+    isWindowPC         = false,
+    isMacPC            = false,
+    isLinuxPC          = false;
+var isMobile           = false,
+    isPC               = false;
+var isIE = !!ua.match(/msie|trident\/7|edge/);
+
+if (window.HybridApp) {
+  isAndroidApp = true;
+  isIOSApp = false;
+  isMobile = true;
+} else if (ua.match(/windows phone/)) {
+  isWinPhone = true;
+  isMobile = true;
+} else if (ua.match(/iphone|ipod|ipad/)) {
+  isIOS = true;
+  isMobile = true;
+} else if (ua.match(/android/) && !isAndroid) {
+  isAndroid = true;
+  isMobile = true;
+} else if (ua.match(/win|windows/) && !isWinPhone) {
+  isWindowPC = true;
+  isPC = true;
+} else if (ua.match(/mac|macIntel/) && !isIOS) {
+  isMacPC = true;
+  isPC = true;
+} else if (ua.match(/linux/)) {
+  isLinuxPC = true;
+  isPC = true;
+} else if (ua.match(/Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)) {
+  isMobile = true;
+}
+
+// App GCM information settings
+function setGCM(key, device_id, app_ver) {
+  $.cookie('gcm_key' , key, { expires : 30000, path : '/' });
+  $.cookie('device_id' , device_id, { expires : 30000, path : '/' });
+  $.cookie('app_ver', app_ver, { expires : 30000, path : '/' });
+};
+
 function nearBottomOfPage() {
   return scrollDistanceFromBottom() < 500;
 }
@@ -63,6 +178,14 @@ function get_image_url(data, model_name, extention){
 	catch(err) {
 	    return "/images/custom/card_image_preview.png";
 	}
+}
+
+function imgError(image, alter_url){
+  image.onerror = "";
+  if (alter_url == null) alter_url = "/images/custom/card_image_preview.png";
+  image.src = alter_url;
+  console.log('이미지 교체...');
+  return true;
 }
 
 function notify(flash_message){
@@ -153,12 +276,11 @@ function get_user_ages(birthday){
 }
 
 function truncate(string){
-   if (string.length > 40)
-      return string.substring(0,40)+'...';
+   if (string.length > 30)
+      return string.substring(0,30)+'&middot;&middot;&middot;';
    else
       return string;
 };
-
 
 _.templateSettings = {
     interpolate: /\{\{\=(.+?)\}\}/g,
@@ -205,12 +327,14 @@ function get_past_time(time){
 
 function disableScroll() {
   $("body").css("overflow","hidden");
-  $("#menu_bg, #menu_pc_bg, #more_popup_bg").bind("touchmove", function(e){e.preventDefault()});
+  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg").bind("touchmove", function(e){
+    return false;
+  });
 }
 
 function enableScroll() {
   $("body").css("overflow","auto");
-  $("#menu_bg, #menu_pc_bg, #more_popup_bg").unbind("touchmove");
+  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg").unbind("touchmove");
 }
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
@@ -412,6 +536,68 @@ $.fn.selectRange = function(start, end) {
     }
   });
 };
+
+
+// doubletap 이벤트 생성
+(function($){
+	"use strict";
+
+	var tapTimer,
+		moved     = false,   // flag to know if the finger had moved while touched the device
+		threshold = 250;     // ms
+
+	$.event.special.doubleTap = {
+	      setup    : setup,
+        teardown : teardown,
+        handler  : handler
+	};
+
+  $.event.special.tap = {
+        setup    : setup,
+        teardown : teardown,
+        handler  : handler
+  };
+
+	function setup(data, namespaces){
+	  var elm = $(this);
+
+		if (elm.data('tap_event') == true) return;
+
+		elm.bind('touchend.tap', handler).bind('touchmove.tap', function(){
+	    moved = true;
+    }).data('tap_event', true);
+	}
+
+	function teardown(namespaces) {
+    $(this).unbind('touchend.tap touchmove.tap');
+  }
+
+	function handler(event){
+		if( moved ){ // reset
+			moved = false;
+			return false;
+		}
+
+		var elem   	  = event.target,
+  			$elem 	  = $(elem),
+  			lastTouch = $elem.data('lastTouch') || 0,
+  			now 	    = event.timeStamp,
+  			delta 	  = now - lastTouch;
+
+		// double-tap condition
+		if ( delta > 20 && delta < threshold ) {
+			clearTimeout(tapTimer);
+			return $elem.data('lastTouch', 0).trigger('doubleTap');
+		} else {
+      $elem.data('lastTouch', now);
+    }
+
+		tapTimer = setTimeout(function(){
+			$elem.trigger('tap');
+		}, threshold);
+	}
+})(jQuery);
+
 
 $( document ).ready(function() {
   $("select").on("change",function(){

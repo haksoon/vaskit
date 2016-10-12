@@ -93,18 +93,22 @@ class ApplicationController < ActionController::Base
   end
 
   def set_gcm_key
+    gcm_key = cookies["gcm_key"]
+    device_id = cookies["device_id"]
+    app_ver = cookies["app_ver"]
     if current_user
       unless cookies["gcm_key"] == nil
-        gcm_key = cookies["gcm_key"]
-        device_id = cookies["device_id"]
-        UserGcmKey.where(:device_id => device_id).destroy_all unless device_id == nil
         user_gcm_key = UserGcmKey.find_by(:gcm_key => gcm_key)
         if user_gcm_key
-          user_gcm_key.update(:user_id => current_user.id)
+          user_gcm_key.update(:user_id => current_user.id, :device_id => device_id, :app_ver => app_ver)
         else
-          UserGcmKey.create(:user_id => current_user.id, :gcm_key => gcm_key, :device_id => device_id)
+          UserGcmKey.create(:user_id => current_user.id, :gcm_key => gcm_key, :device_id => device_id, :app_ver => app_ver)
         end
       end
+    else
+      # 로그아웃한 경우 또는 앱을 삭제했다가 다시 설치한 경우 기존 정보 제거
+      # 단, 앱 삭제시에는 캐치할 수 없고, 앱 삭제 후 재설치한 직후(1회)에는 cookie 설정이 한템포 늦으므로 타이밍 오류 있음
+      UserGcmKey.where(:device_id => device_id).destroy_all unless device_id == nil
     end
   end
 

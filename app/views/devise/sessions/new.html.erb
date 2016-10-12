@@ -1,4 +1,4 @@
-<%= render :partial => "common_partial/header", :locals => {:title => "로그인"} %>
+<%= render :partial => "common_partial/header", :locals => {:title => "로그인", :sub_title => "어디 갔었어요? 어여 이리로 들어와욘", :sub_icon => "fa-smile-o"} %>
 
 <p class="chat_bubble">
   Welcome Back! 다시 돌아오신 것을 환영합니다.<br>
@@ -31,13 +31,13 @@
 
 
 <script>
+  $("#my_button").hide();
+
   <% if flash[:custom_notice] != nil %>
     notify("<%=flash[:custom_notice]%>".replace('\n','<br>'));
     email_check();
     $("#user_password").focus().select();
   <% end %>
-
-  $("#main_header td").eq(2).css("visibility","hidden");
 
 	$('.registrations_input').keypress(function(e) {
 		if (e.keyCode == '13') {

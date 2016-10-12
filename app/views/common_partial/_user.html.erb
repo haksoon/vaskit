@@ -1,19 +1,19 @@
 <% if current_user %>
 	<div id="user_overlay">
-		<div style="position:absolute; top:-50px; right:0; width:60px; height:50px; background-color:#4b3d3d; text-align:center;">
-			<a href="#" class="header_button" onclick="back_button(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
+		<div onclick="back_button(); return false;" style="position:absolute; top:-50px; right:0; width:100%; height:50px; text-align:right;" ontouchmove="return false;">
+			<a href="#" class="header_button" onclick="return false;" style="display:inline-block; box-sizing:border-box; width:60px; height:50px; padding-right:10px; background-color:#4b3d3d; text-align:center;">
 				<i class="fa fa-remove" style="font-size: 26px; padding-top: 11px;"></i>
 			</a>
 		</div>
-		<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;"></div>
-		<div id="user_overlay_title" style="margin:0; height:40px; line-height:40px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left; border:5px solid #998674; border-bottom:none;">
+		<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;" ontouchmove="return false;"></div>
+		<div id="user_overlay_title" style="margin:0; height:45px; line-height:45px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left; border:5px solid #998674; border-bottom:none;" ontouchmove="return false;">
 			<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:6px 6px 3px; color:#998674; background-color:#fff; border-radius:5px;"></a>
-			<span id="user_path" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff;">
+			<span id="user_path" onclick="user_on(); return false;" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff; cursor:pointer;">
 				&gt;&nbsp;My Page
 			</span>
-			<a id="manage_on" href="#" onclick="manage_on(); return false;" style="position:absolute; right:10px; width:40px; height:40px; text-align:center; color:#fff; font-size:20px; transition:transform .2s;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
+			<a id="manage_on" href="#" onclick="manage_on(); return false;" style="position:absolute; right:10px; width:45px; height:45px; text-align:center; color:#fff; font-size:20px; transition:transform .2s;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
 		</div>
-		<div id="user_overlay_wrap" style="box-sizing:border-box; width:100%; height:calc(100% - 45px); background-color:#f4f4f4; border:5px solid #998674; border-top:none; overflow:hidden;">
+		<div id="user_overlay_wrap" style="box-sizing:border-box; width:100%; height:100%; height:calc(100% - 50px); background-color:#f4f4f4; border:5px solid #998674; border-top:none; overflow:hidden;">
 			<div id="user_overlay_seg" style="height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
 		</div>
 	</div>
@@ -21,54 +21,46 @@
 	<script type="text/template" id="user_overlay_seg_template">
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 0;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
-				나의 활동이력
+				<i class="fa fa-caret-down"></i> 나의 활동이력
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">당신의 발자취&nbsp;<i class="fa fa-paw"></i></span>
 			</p>
-			{{ if (in_progress_count > 0) { }}
-				<a href="#" onclick="go_url('/?type=my_ask_in_progress'); return false;" style="display:block; width:100%; background-color:#998675; text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
-					<i class="fa fa-circle-o-notch fa-spin"></i>&nbsp;진행 중인 질문 ({{= in_progress_count }}개)
-				</a>
-			{{ }else{ }}
-				<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
-					<i class="fa fa-plus-circle"></i>&nbsp;새로운 질문을 작성해보시겠어요?
-				</a>
-			{{ } }}
-			<a href="#" onclick="go_url('/?type=my_like_ask'); return false;" style="display:block; width:100%; background-color:#998675; text-align:center; color:#fff; line-height:40px; position:relative; margin:10px 0; border-radius:5px;">
-				<i class="fa fa-heart"></i>&nbsp;공감한 질문 ({{= my_like_ask_count }}개)
+			<a href="#" onclick="{{= in_progress_count }} == 0 ? notify('진행중인 질문이 아직 없네요 T_T') : go_url('/?type=my_ask_in_progress'); return false;" class="table_div" style="display:block; width:100%; box-sizing:border-box; background-color:#998674; text-align:left; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;">
+					<span class="input_icon left_input" style="width:50px; height:50px; line-height:50px; background-color:#fff; border-color:#998674; border-radius:5px; color:#998674;"><i class="fa fa-play"></i></span>
+					<span style="margin-left:60px; font-size:16px; float:left;">진행중인 질문</span>
+					<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= in_progress_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
 			</a>
-			<div style="width:100%; background:#998675; text-align:center; color:#fff; line-height:40px; position:relative; border-radius:5px 5px 0 0;">
-				히스토리
-			</div>
-			<table cellspacing="0" cellpadding="0" style="border:1px solid #dbdbdb; border-top:none; width:100%; text-align:center; background-color:#fff; border-radius:0 0 5px 5px;">
-				<tr>
-					<td style="width:5%;"></td>
-					<td style="width:30%; padding:10px 0;">
-						<a href="#" onclick="go_url('/?type=my_ask'); return false;" style="display:block; color:#666; font-size:22px; line-height:24px; margin:0;">{{= my_ask_count }}</a>
-						<a href="#" onclick="go_url('/?type=my_ask'); return false;" style="display:block; color:#9d9ea1; font-size:12px; line-height:12px; margin:0;">Asks</a>
-					</td>
-					<td style="width:30%;">
-						<a href="#" onclick="go_url('/?type=vote_ask'); return false;" style="display:block; color:#666; font-size:22px; line-height:24px; margin:0;">{{= my_vote_count }}</a>
-						<a href="#" onclick="go_url('/?type=vote_ask'); return false;" style="display:block; color:#9d9ea1; font-size:12px; line-height:12px; margin:0;">Votes</a>
-					</td>
-					<td style="width:30%;">
-						<a href="#" onclick="go_url('/?type=comment_ask'); return false;" style="display:block; color:#666; font-size:22px; line-height:24px; margin:0;">{{= my_comment_count }}</a>
-						<a href="#" onclick="go_url('/?type=comment_ask'); return false;" style="display:block; color:#9d9ea1; font-size:12px; line-height:12px; margin:0;">Comments</a>
-					</td>
-					<td style="width:5%;"></td>
-				</tr>
-			</table>
+			<a href="#" onclick="{{= my_like_ask_count }} == 0 ? notify('공감한 질문이 아직 없네요 T_T') : go_url('/?type=my_like_ask'); return false;" class="table_div" style="display:block; width:100%; box-sizing:border-box; background-color:#998674; text-align:left; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;">
+					<span class="input_icon left_input" style="width:50px; height:50px; line-height:50px; background-color:#fff; border-color:#998674; border-radius:5px; color:#998674;"><i class="fa fa-heart"></i></span>
+					<span style="margin-left:60px; font-size:16px; float:left;">공감하는 질문</span>
+					<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= my_like_ask_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
+			</a>
+			<a href="#" onclick="{{= my_ask_count }} == 0 ? notify('작성하신 질문이 아직 없네요 T_T') : go_url('/?type=my_ask'); return false;" class="table_div" style="display:block; width:100%; box-sizing:border-box; background-color:#998674; text-align:left; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;">
+					<span class="input_icon left_input" style="width:50px; height:50px; line-height:50px; background-color:#fff; border-color:#998674; border-radius:5px; color:#998674;"><i class="fa fa-question-circle"></i></span>
+					<span style="margin-left:60px; font-size:16px; float:left;">작성한 질문</span>
+					<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= my_ask_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
+			</a>
+			<a href="#" onclick="{{= my_vote_count }} == 0 ? notify('참여한 투표가 아직 없네요 T_T') : go_url('/?type=vote_ask'); return false;" class="table_div" style="display:block; width:100%; box-sizing:border-box; background-color:#998674; text-align:left; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;">
+					<span class="input_icon left_input" style="width:50px; height:50px; line-height:50px; background-color:#fff; border-color:#998674; border-radius:5px; color:#998674;"><i class="fa fa-check-circle"></i></span>
+					<span style="margin-left:60px; font-size:16px; float:left;">참여한 투표</span>
+					<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= my_vote_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
+			</a>
+			<a href="#" onclick="{{= my_comment_count }} == 0 ? notify('남기신 의견이 아직 없네요 T_T') : go_url('/?type=comment_ask'); return false;" class="table_div" style="display:block; width:100%; box-sizing:border-box; background-color:#998674; text-align:left; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;">
+					<span class="input_icon left_input" style="width:50px; height:50px; line-height:50px; background-color:#fff; border-color:#998674; border-radius:5px; color:#998674;"><i class="fa fa-comment"></i></span>
+					<span style="margin-left:60px; font-size:16px; float:left;">제시한 의견</span>
+					<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= my_comment_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
+			</a>
 		</div>
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 20px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
-				알림피드 <span id="alram_feed_count" style="font-size:12px; color:{{= alram_count > 0 ? '#ee6e01' : '#666' }}; font-weight:normal;">{{=alram_count}}개</span>
+				<i class="fa fa-caret-down"></i> 알림피드 <span id="alram_feed_count" style="font-size:13px; color:{{= alram_count > 0 ? '#ee6e01' : '#666' }}; font-weight:normal;">{{=alram_count}}개</span>
 				{{ if (alram_count > 0) { }}
-					<a id="all_read" href="#" onclick="all_read(); return false;" style="padding-top:2px; color:#ee6e01; font-size:12px; font-weight:normal; float:right;"><i class="fa fa-bookmark"></i>&nbsp;모두 읽음으로 표시</a>
+					<a id="all_read" href="#" onclick="all_read(); return false;" style="padding-top:2px; color:#ee6e01; font-size:13px; font-weight:normal; float:right;"><i class="fa fa-bookmark"></i>&nbsp;모두 읽음으로 표시</a>
 				{{ } }}
 					<span id="already_all_read" style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right; display:{{= alram_count > 0 ? 'none' : 'block'}}">다른 이들과 소통해보세요!</span>
 			</p>
 			<div id="alram_list" style="border:1px solid #dbdbdb; border-top:none; border-bottom:none; overflow:hidden;">
 			{{ if (alrams == 0) { }}
-				<p style="padding:40px; margin:0; font-size:13px; text-align:center; color:#666; background-color:#fff; border-bottom:1px solid #dbdbdb;">새로운 알림피드가 없습니다</p>
+				<p style="padding:50px; margin:0; font-size:13px; text-align:center; color:#666; background-color:#fff; border-bottom:1px solid #dbdbdb;">새로운 알림피드가 없습니다</p>
 			{{ } else { }}
 				{{ for(var i=0; i < alrams.length; i++) { }}
 					{{ var alram = alrams[i] }}
@@ -78,97 +70,97 @@
 					{{ var left_ask_thumbnail = left_ask_thumbnails[i] }}
 					{{ var right_ask_thumbnail = right_ask_thumbnails[i] }}
 					{{ if (alram.alram_type.match("vote_")) { }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 115px 10px 15px; min-height:42px; text-align:left; transition:all .5s;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 140px 20px 10px; min-height:52px; text-align:left; transition:all .5s;">
 							<i class="fa fa-check-circle-o" style="color: #666;"></i>&nbsp;회원님의 질문에 <span style="color:#998674;">{{= alram.alram_type.replace("vote_", "" )}}명</span>이 투표했습니다. 중간점검 해보세요!
-							<div class="table_div" style="margin:5px; width:100px; height:50px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
+							<div class="table_div" style="margin:10px; width:120px; height:60px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
 								<img src="{{= get_image_url(left_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 								<img src="{{= get_image_url(right_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 							</div>
-							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:115px;">{{= get_past_time(alram.updated_at) }}</span>
+							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:145px;">{{= get_past_time(alram.updated_at) }}</span>
 						</a>
 					{{ } else if (alram.alram_type.match("like_ask_")) { }}
 						{{ ask_like_count = alram.alram_type.replace("like_ask_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 115px 10px 15px; min-height:42px; text-align:left; transition:all .5s;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 140px 20px 10px; min-height:52px; text-align:left; transition:all .5s;">
 							{{ if (ask_like_count == 1) { }}
 								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 질문에 공감합니다.
 							{{ } else { }}
 								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= ask_like_count - 1 }}명</span>이 회원님의 질문에 공감합니다.
 							{{ } }}
-							<div class="table_div" style="margin:5px; width:100px; height:50px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
+							<div class="table_div" style="margin:10px; width:120px; height:60px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
 								<img src="{{= get_image_url(left_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 								<img src="{{= get_image_url(right_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 							</div>
-							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:115px;">{{= get_past_time(alram.updated_at) }}</span>
+							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:145px;">{{= get_past_time(alram.updated_at) }}</span>
 						</a>
 					{{ } else if (alram.alram_type.match("like_comment_")) { }}
 						{{ comment_like_count = alram.alram_type.replace("like_comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 115px 10px 15px; min-height:42px; text-align:left; transition:all .5s;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 140px 20px 10px; min-height:52px; text-align:left; transition:all .5s;">
 							{{ if (comment_like_count == 1) { }}
 								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 의견을 좋아합니다.
 							{{ } else { }}
 								<i class="fa fa-heart-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= comment_like_count - 1 }}명</span>이 회원님의 의견을 좋아합니다.
 							{{ } }}
-							<div class="table_div" style="margin:5px; width:100px; height:50px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
+							<div class="table_div" style="margin:10px; width:120px; height:60px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
 								<img src="{{= get_image_url(left_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 								<img src="{{= get_image_url(right_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 							</div>
-							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:115px;">{{= get_past_time(alram.updated_at) }}</span>
+							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:145px;">{{= get_past_time(alram.updated_at) }}</span>
 						</a>
 					{{ } else if (alram.alram_type.match("reply_comment_")) { }}
 						{{ reply_comment_count = alram.alram_type.replace("reply_comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 115px 10px 15px; min-height:42px; text-align:left; transition:all .5s;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 140px 20px 10px; min-height:52px; text-align:left; transition:all .5s;">
 							{{ if (reply_comment_count == 1) { }}
 								<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 의견에 댓글을 남겼습니다.
 							{{ } else { }}
 								<i class="fa fa-comments-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= reply_comment_count - 1 }}명</span>이 회원님의 의견에 댓글을 남겼습니다.
 							{{ } }}
-							<div class="table_div" style="margin:5px; width:100px; height:50px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
+							<div class="table_div" style="margin:10px; width:120px; height:60px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
 								<img src="{{= get_image_url(left_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 								<img src="{{= get_image_url(right_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 							</div>
-							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:115px;">{{= get_past_time(alram.updated_at) }}</span>
+							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:145px;">{{= get_past_time(alram.updated_at) }}</span>
 						</a>
 					{{ } else if (alram.alram_type.match("reply_sub_comment_")) { }}
 					  {{ reply_sub_comment_count = alram.alram_type.replace("reply_sub_comment_","") }}
-					  <a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 115px 10px 15px; min-height:42px; text-align:left; transition:all .5s;">
+					  <a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 140px 20px 10px; min-height:52px; text-align:left; transition:all .5s;">
 						  {{ if (reply_sub_comment_count == 1) { }}
 						    <i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님도 <span style="color:#998674;">{{=comment_owner_user}}</span>님의 의견에 댓글을 남겼습니다.
 						  {{ } else { }}
 						    <i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= reply_sub_comment_count - 1 }}명</span>도 <span style="color:#998674;">{{=comment_owner_user}}</span>님의 의견에 댓글을 남겼습니다.
 						  {{ } }}
-							<div class="table_div" style="margin:5px; width:100px; height:50px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
+							<div class="table_div" style="margin:10px; width:120px; height:60px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
 								<img src="{{= get_image_url(left_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 								<img src="{{= get_image_url(right_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 							</div>
-							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:115px;">{{= get_past_time(alram.updated_at) }}</span>
+							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:145px;">{{= get_past_time(alram.updated_at) }}</span>
 					  </a>
 					{{ } else if (alram.alram_type.match("sub_comment_")) { }}
 						{{ sub_comment_count = alram.alram_type.replace("sub_comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 115px 10px 15px; min-height:42px; text-align:left; transition:all .5s;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 140px 20px 10px; min-height:52px; text-align:left; transition:all .5s;">
 							{{ if (sub_comment_count == 1) { }}
 								<i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님도 <span style="color:#998674;">{{=ask_owner_user}}</span>님의 질문에 의견을 남겼습니다.
 							{{ } else { }}
 								<i class="fa fa-comment-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= sub_comment_count - 1 }}명</span>도 <span style="color:#998674;">{{=ask_owner_user}}</span>님의 질문에 의견을 남겼습니다.
 							{{ } }}
-							<div class="table_div" style="margin:5px; width:100px; height:50px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
+							<div class="table_div" style="margin:10px; width:120px; height:60px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
 								<img src="{{= get_image_url(left_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 								<img src="{{= get_image_url(right_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 							</div>
-							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:115px;">{{= get_past_time(alram.updated_at) }}</span>
+							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:145px;">{{= get_past_time(alram.updated_at) }}</span>
 						</a>
 					{{ } else if (alram.alram_type.match("comment_")) { }}
 						{{ comment_count = alram.alram_type.replace("comment_","") }}
-						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 115px 10px 15px; min-height:42px; text-align:left; transition:all .5s;">
+						<a id="alram_{{=alram.id}}" href="#" onclick="alram_go_url({{=alram.id}}, {{=alram.ask_id}}); return false;" class="table_div" style="margin-bottom:0; background-color:{{= alram.is_read ? '#fff' : 'rgba(255,228,169,0.6)' }}; color:#666; border-bottom:1px solid #dbdbdb; display:block; padding:10px 140px 20px 10px; min-height:52px; text-align:left; transition:all .5s;">
 							{{ if (comment_count == 1) { }}
 								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님이 회원님의 질문에 의견을 남겼습니다.
 							{{ } else { }}
 								<i class="fa fa-send-o" style="color: #666;"></i>&nbsp;<span style="color:#998674;">{{=send_user}}</span>님 외 <span style="color:#998674;">{{= comment_count - 1 }}명</span>이 회원님의 질문에 의견을 남겼습니다.
 							{{ } }}
-							<div class="table_div" style="margin:5px; width:100px; height:50px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
+							<div class="table_div" style="margin:10px; width:120px; height:60px; position:absolute; top:0; right:0; overflow:hidden; border:1px solid {{=alram.is_read ? '#dbdbdb' : '#998674'}}; border-radius:5px;">
 								<img src="{{= get_image_url(left_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 								<img src="{{= get_image_url(right_ask_thumbnail, 'ask_deals', 'normal') }}" style="width:50%; float:left; box-sizing:border-box;">
 							</div>
-							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:115px;">{{= get_past_time(alram.updated_at) }}</span>
+							<span style="color:#9d9ea1; font-size:12px; position:absolute; bottom:5px; right:145px;">{{= get_past_time(alram.updated_at) }}</span>
 						</a>
 					{{ } }}
 				{{ } }}
@@ -180,69 +172,70 @@
 	<script type="text/template" id="user_overlay_seg_template_manage">
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 0;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
-				계정 설정
+				<i class="fa fa-caret-down"></i> 계정 설정
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">웰컴! <%= current_user.email %></span>
 			</p>
 			<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-user"></i>&nbsp;닉네임 변경</p>
 			<div class="table_div" style="margin-bottom:0px; border:1px solid #dbdbdb;">
-				<input id="string_id_input" type="text" class="etc_input_box" placeholder="닉네임을 입력해주세요" value="<%= current_user.string_id %>" style="background-color:#fff;"/>
-				<a id="string_id_change_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; width:50px; height:40px; line-height:40px; background-color:#dbdbdb; display:inline-block; text-align:center; color:#fff; font-size:13px;">변경</a>
+				<input id="string_id_input" type="text" class="etc_input_box" placeholder="닉네임을 입력해주세요" value="<%= current_user.string_id %>" style="background-color:#fff; height:50px; line-height:50px;"/>
+				<a id="string_id_change_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; width:50px; height:50px; line-height:50px; background-color:#dbdbdb; display:inline-block; text-align:center; color:#fff; font-size:13px;">변경</a>
 			</div>
-			<a href="#" onclick="window.open('/users/change_password', 'VASKIT 비밀번호 변경', 'width=500, height=420'); return false;" style="color:#666; display:inline-block; padding:0 10px; height:40px; line-height:40px; float:right;"><i class="fa fa-lock"></i>&nbsp;비밀번호 변경</a>
+			<a href="#" onclick="window.open('/users/change_password', 'VASKIT 비밀번호 변경', 'width=500, height=420'); return false;" style="color:#666; display:inline-block; padding:0 10px; height:50px; line-height:50px; float:right;"><i class="fa fa-lock"></i>&nbsp;비밀번호 변경</a>
 		</div>
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
-				알림 설정
+				<i class="fa fa-caret-down"></i> 알림 설정
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">...귀찮게 하지 않을게요!</span>
 			</p>
 			<div>
-				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-envelope-o"></i>&nbsp;이메일 알림</p>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-bullhorn"></i>&nbsp;주요 공지사항</span>
-					<a id="receive_notice_btn" href="#" onclick="toggle_receive_notice(); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.receive_notice_email ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
+				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:60px; font-weight:bold;"><i class="fa fa-mobile" style="font-size:20px; margin:0 3px 0 2px;"></i>&nbsp;VASKIT 푸시 알림</p>
+				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;"><i class="fa fa-caret-right"></i> 나의 질문과 관련된 사항을 알려드려요</p>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
+					<a id="alram_1_btn" href="#" onclick="toggle_alram_option('alram_1'); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/<%= current_user.alram_1 ? "on" : "off" %>_btn.png" style="display:block; width:45px;"></a>
 				</div>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트</span>
-					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/off_btn.png" style="display:block; width:40px;"></a>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-check-circle-o"></i>&nbsp;득표수 알림</span>
+					<a id="alram_2_btn" href="#" onclick="toggle_alram_option('alram_2'); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/<%= current_user.alram_2 ? "on" : "off" %>_btn.png" style="display:block; width:45px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-send-o"></i>&nbsp;새로운 의견 알림</span>
+					<a id="alram_3_btn" href="#" onclick="toggle_alram_option('alram_3'); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/<%= current_user.alram_3 ? "on" : "off" %>_btn.png" style="display:block; width:45px;"></a>
+				</div>
+				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;"><i class="fa fa-caret-right"></i> 나의 의견과 관련된 사항을 알려드려요</p>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
+					<a id="alram_4_btn" href="#" onclick="toggle_alram_option('alram_4'); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/<%= current_user.alram_4 ? "on" : "off" %>_btn.png" style="display:block; width:45px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-comments-o"></i>&nbsp;답글 알림</span>
+					<a id="alram_5_btn" href="#" onclick="toggle_alram_option('alram_5'); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/<%= current_user.alram_5 ? "on" : "off" %>_btn.png" style="display:block; width:45px;"></a>
+				</div>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-comment-o"></i>&nbsp;다른 의견 알림</span>
+					<a id="alram_6_btn" href="#" onclick="toggle_alram_option('alram_6'); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/<%= current_user.alram_6 ? "on" : "off" %>_btn.png" style="display:block; width:45px;"></a>
 				</div>
 			</div>
 			<div>
-				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-bell-o"></i>&nbsp;VASKIT 알림</p>
-				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;">나의 질문 관련 알림</p>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
-					<a id="alram_1_btn" href="#" onclick="toggle_alram_option('alram_1'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_1 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
+				<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:60px; font-weight:bold;"><i class="fa fa-envelope-o" style="font-size:15px;"></i>&nbsp;이메일 알림</p>
+				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;"><i class="fa fa-caret-right"></i> 이메일로 소식을 보내드려요</p>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb; border-bottom:none;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-bullhorn"></i>&nbsp;주요 공지사항</span>
+					<a id="receive_notice_btn" href="#" onclick="toggle_receive_notice(); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/<%= current_user.receive_notice_email ? "on" : "off" %>_btn.png" style="display:block; width:45px;"></a>
 				</div>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-check-circle-o"></i>&nbsp;득표수 알림</span>
-					<a id="alram_2_btn" href="#" onclick="toggle_alram_option('alram_2'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_2 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
-				</div>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-send-o"></i>&nbsp;새로운 의견 알림</span>
-					<a id="alram_3_btn" href="#" onclick="toggle_alram_option('alram_3'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_3 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
-				</div>
-				<p style="margin:0; color:#9d9ea1; padding:0 10px; height:30px; line-height:30px;">나의 의견 관련 알림</p>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림</span>
-					<a id="alram_4_btn" href="#" onclick="toggle_alram_option('alram_4'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_4 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
-				</div>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb; border-bottom:none;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-comments-o"></i>&nbsp;답글 알림</span>
-					<a id="alram_5_btn" href="#" onclick="toggle_alram_option('alram_5'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_5 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
-				</div>
-				<div style="position:relative; background-color:#fff; padding:10px; border:1px solid #dbdbdb;">
-					<span style="font-size:12px; color:#666;"><i class="fa fa-comment-o"></i>&nbsp;다른 의견 알림</span>
-					<a id="alram_6_btn" href="#" onclick="toggle_alram_option('alram_6'); return false;" style="position:absolute; top:3px; right:7px;"><img src="/images/custom/<%= current_user.alram_6 ? "on" : "off" %>_btn.png" style="display:block; width:40px;"></a>
+				<div style="position:relative; background-color:#fff; height:50px; line-height:50px; padding:0 15px; border:1px solid #dbdbdb;">
+					<span style="font-size:12px; color:#666;"><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트</span>
+					<a href="#" onclick="notify('준비중이에요 T_T'); return false;" style="position:absolute; top:9px; right:10px;"><img src="/images/custom/off_btn.png" style="display:block; width:45px;"></a>
 				</div>
 			</div>
 		</div>
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
-				접근 금지&nbsp;<i class="fa fa-ban"></i>
+				<i class="fa fa-caret-down"></i> 접근 금지&nbsp;<i class="fa fa-ban"></i>
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">지...금 절 떠나려는건가요?!!</span>
 			</p>
-			<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#666; display:inline-block; padding:0 10px; height:40px; line-height:40px;" data-confirm="정말로 로그아웃 하실건가요?"><i class="fa fa-sign-out"></i>&nbsp;로그아웃</a>
-			<a href="#" onclick="alert('준비중입니다. 회원탈퇴가 꼭 필요하신 경우 VASKIT 고객센터 notice@vaskit.kr로 연락 부탁드립니다.'); return false;" style="color:#9d9ea1; display:inline-block; padding:0 10px; height:40px; line-height:40px; float:right;"><i class="fa fa-plug"></i>&nbsp;회원 탈퇴</a>
+			<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#666; display:inline-block; padding:0 10px; height:50px; line-height:50px;" data-confirm="정말로 로그아웃 하실건가요?"><i class="fa fa-sign-out"></i>&nbsp;로그아웃</a>
+			<a href="#" onclick="alert('준비중입니다.\n회원탈퇴가 꼭 필요하신 경우 VASKIT 고객센터 notice@vaskit.kr로 연락 부탁드립니다.'); return false;" style="color:#9d9ea1; display:inline-block; padding:0 10px; height:50px; line-height:50px; float:right;"><i class="fa fa-plug"></i>&nbsp;회원 탈퇴</a>
 		</div>
 	</script>
 
@@ -255,9 +248,9 @@
 
 		function user_on(){
 			disableScroll();
-			$("#user_overlay").fadeIn(100);
-			$("#menu_pc_bg").show();
-			$("#menu_bg").fadeIn(100);
+			$("#user_overlay").show();
+			$("#menu_bg").show();
+			$("#menu_bg_pc").show();
 
 			$("#category_overlay").hide();
 			$("#search_overlay").hide();
@@ -315,9 +308,10 @@
 			}
 
 			enableScroll();
-			$("#user_overlay").fadeOut(300);
-			$("#menu_pc_bg").hide();
-			$("#menu_bg").fadeOut(300);
+			$("#user_overlay").fadeOut();
+			$("#menu_bg").hide();
+			$("#menu_bg_pc").hide();
+
 			$("#user_path").html();
 			$("#user_overlay_seg").html();
 			alram_check();
@@ -378,6 +372,8 @@
 						opened_ask_id = ask.id;
 
 						$("#endless_loading").hide();
+						$("#end_of_contents").hide();
+						$("#movie_info").hide();
 						$("#asks").hide();
 						$("#ask_detail").show().html(askTemplate({ask: ask}));
 						$("#ask_"+ask.id).unwrap();
@@ -429,7 +425,7 @@
 		}
 
 		function manage_on() {
-			$("#user_path").html("<span style='cursor:pointer'>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
+			$("#user_path").html("<span>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
 			$("#manage_on").css("transform","scale(0)").css("-webkit-transform","scale(0)");
 			var userOverlaySegTemplate = _.template($('#user_overlay_seg_template_manage').html());
 	    $("#user_overlay_seg").html(userOverlaySegTemplate());
@@ -447,7 +443,7 @@
 				ready_to_submit();
       });
 
-			$("#menu_pc_bg").show();
+			$("#menu_bg_pc").show();
 			$("#menu_bg").show();
 		}
 
@@ -460,7 +456,7 @@
 			$("#manage_on").css("transform","scale(1)").css("-webkit-transform","scale(1)");
 			$("#user_overlay_seg").scrollTop(0);
 
-			$("#menu_pc_bg").show();
+			$("#menu_bg_pc").show();
 			$("#menu_bg").show();
 		}
 

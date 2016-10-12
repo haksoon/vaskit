@@ -1,19 +1,20 @@
 <script type="text/template" id="ask-template">
   <div id="ask_box_{{=ask.id}}" class="ask_box">
     <div id="ask_{{=ask.id}}" class="content_box" style="margin:15px 12px;">
-      <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
-        <a class="more_icon" href="#" onclick="show_more_popup('ask', {{=ask.id}}, {{=ask.user_id}}, {{= current_user_id }}, '{{=ask.user.string_id}}', '{{= ask.left_ask_deal.title }}', '{{=ask.right_ask_deal.title}}'); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i></a>
+      <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px;">
+        <a class="more_icon" href="#" onclick="show_menu({{=ask.id}}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i></a>
         {{ if (ask.category) { }}
-          <span class="category" onclick="category_on(); return false;">{{= ask.category.name }}</span>
+          <span class="category" onclick="if (!is_show_opened) category_on(); return false;">{{= ask.category.name }}</span>
         {{ }else{ }}
-          <span class="category none" onclick="category_on(); return false;">관심사 미설정</span>
+          <span class="category none" onclick="if (!is_show_opened) category_on(); return false;">관심사 미설정</span>
         {{ } }}
         {{ var already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
         <span class="like_icon" onclick="ask_like({{=ask.id}}); return false;" onmouseover="$(this).children().animateCss('tada');">
           공감해요&nbsp;<i id="ask_{{=ask.id}}_like_icon" class="fa {{= already_like_ask.length == 1 ? 'fa-heart' : 'fa-heart-o'}}"></i>
         </span>
       </div>
-      <div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; height:30px; line-height:30px; padding:0 10px; background-color:ghostwhite; border-bottom:1px solid #dbdbdb;">
+      <div id="ask_{{=ask.id}}_menu" class="table_div" style="display:none; margin-bottom:0; background-color:oldlace;"></div>
+      <div id="ask_{{=ask.id}}_user" class="table_div" style="margin-bottom:0; height:30px; line-height:30px; padding:0 10px; background-color:ghostwhite; border-top:1px solid #dbdbdb; border-bottom:1px solid #dbdbdb;">
         {{ if (ask.user) { }}
           {{ if (ask.user.id == 1) { }}
             <span style="margin:0px 5px 0px 0px; font-size:10px; float:left; font-weight:bold; opacity:0.8; color:#ee6e01;">
@@ -49,7 +50,9 @@
       {{ if (ask.be_completed == true) { }}
         <div style="color:#fff; background-color:#4b3d3d; padding:5px; font-size: 12px;">종료된 투표입니다</div>
       {{ } }}
-      <div id="detail_vote_count_{{=ask.id}}" class="table_div" style="display:none; margin-bottom:0px; background-color:#f0f2f4; color:#666; font-size: 12px;"></div>
+      <div id="detail_vote_count_{{=ask.id}}" class="table_div" style="display:none; margin-bottom:0px; background-color:#f0f2f4; color:#666; font-size: 12px; border-bottom:1px solid #dbdbdb; height:50px; overflow:hidden;">
+        <i class="fa fa-spinner fa-spin" style="font-size:15px; line-height:50px;"></i>
+      </div>
       <div id="ask_deal_{{=ask.id}}_table" class="table_div" style="display:none; margin-bottom:0px; border-bottom:1px solid #dbdbdb;">
         {{= askDealTableTemplate({ask: ask}) }}
       </div>
@@ -73,6 +76,38 @@
   </div>
 </script>
 
+<script type="text/template" id="ask-menu-template">
+  {{ var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
+  <div style="padding:12px 0 15px 0; border-top:1px solid #dbdbdb;">
+    {{ if (ask.user.id == current_user_id) { }}
+      <p id="share_icon_{{=ask.id}}" style="color:#666; font-size:13px; margin:0; padding:0 0 10px 0;"><i class="fa fa-send-o"></i>&nbsp;친구들에게 질문을 공유해보세요!</p>
+    {{ } else { }}
+      <p id="share_icon_{{=ask.id}}" style="color:#666; font-size:13px; margin:0; padding:0 0 10px 0;"><i class="fa fa-send-o"></i>&nbsp;흥미로운 질문을 공유해보세요!</p>
+    {{ } }}
+    <span id="share_facebook_btn_{{ask.id}}" onclick="share_facebook({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:75px; background-color:#4267b2; color:#fff; border-radius:10px; margin-right:5px; vertical-align:top; cursor:pointer;">
+      <i class="fa fa-facebook" style="font-size:30px;"></i>
+    </span>
+    <span id="share_katalk_btn_{{=ask.id}}" onclick="share_katalk({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#fae100; color:#fff; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
+      <img src="/images/logo/sns_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;">
+    </span>
+    <span id="share_url_btn_{{=ask.id}}" onclick="copy_url({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#9d9ea1; color:#fff; border-radius:10px; margin-left:5px; vertical-align:top; cursor:pointer;">
+      <i class="fa fa-link" style="font-size:24px;"></i>
+    </span>
+    <input id="share_url_{{=ask.id}}" style="position:fixed; top:100%; left:100%;" value="http://vaskit.kr/asks/{{=ask.id}}"/>
+  </div>
+  {{ if (ask.user.id == current_user_id) { }}
+    <a id="ask_edit_btn_{{=ask.id}}" href="#" onclick="go_url('/asks/{{=ask.id}}/edit'); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #dbdbdb;"><i class="fa fa-edit" style="color:#9d9ea1;"></i>&nbsp;수정하기</a>
+    <a id="ask_complete_btn_{{=ask.id}}" href="#" onclick="go_url('/asks/{{=ask.id}}/ask_complete'); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-paperclip" style="color:#9d9ea1;"></i>&nbsp;질문 종료하기</a>
+  {{ } else { }}
+    <a id="ask_report_btn_{{=ask.id}}" href="#" onclick="show_report_popup('ask', {{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #dbdbdb;"><i class="fa fa-cab" style="color:#9d9ea1; font-size:12px;"></i>&nbsp;신고하기</a>
+    {{ if (already_vote.length > 0) { }}
+      <a id="vote_modify_btn_{{=ask.id}}" href="#" onclick="vote_modify({{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-rotate-left" style="color:#9d9ea1;"></i>&nbsp;투표 실행취소</a>
+    {{ } else { }}
+      <a id="vote_modify_btn_{{=ask.id}}" href="#" onclick="notify('투표에 먼저 참여해주세요!'); hide_menu({{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#9d9ea1; font-size:13px; width:50%; float:left;"><i class="fa fa-rotate-left" style="color:#9d9ea1;"></i>&nbsp;투표 실행취소</a>
+    {{ } }}
+  {{ } }}
+</script>
+
 <script type="text/template" id="ask-deal-template">
 	{{ var left_ask_deal = ask.left_ask_deal }}
 	{{ var right_ask_deal = ask.right_ask_deal }}
@@ -80,7 +115,7 @@
 	<div class="table_div" style="margin-bottom:0;">
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:left;">
 			<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;">
-				<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
+				<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image" onerror="imgError(this);"/>
 				<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.2; display:none;"></span>
 				<p class="card_image_expander"><i class="fa fa-expand"></i></p>
 			</a>
@@ -99,7 +134,7 @@
 		</div>
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:right;">
 			<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false); return false;">
-				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image"/>
+				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image" onerror="imgError(this);"/>
 				<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.2; display:none;"></span>
 				<p class="card_image_expander"><i class="fa fa-expand"></i></p>
 			</a>
@@ -546,7 +581,7 @@
       </span>
       <span style="position:absolute; top:0; right:10px; width:40px;">
         <span id="right_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-        <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
+        <i class="fa fa-comment fa-flip-horizontal" style="font-size:16px;"></i>
       </span>
     </div>
   {{ } else if (already_vote.length != 0) { }}
@@ -558,7 +593,7 @@
       </span>
       <span style="position:absolute; top:0; right:10px; width:40px;">
         <span id="right_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-        <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
+        <i class="fa fa-comment fa-flip-horizontal" style="font-size:16px;"></i>
       </span>
     </div>
   {{ } else if (already_vote.length == 0) { }}
@@ -570,7 +605,7 @@
       </span>
       <span style="position:absolute; top:0; right:10px; width:40px;">
         <span id="right_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.right_ask_deal.comment_count}}</span>&nbsp;
-        <i class="fa fa-comment" style="font-size:16px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i>
+        <i class="fa fa-comment fa-flip-horizontal" style="font-size:16px;"></i>
       </span>
     </div>
   {{ } }}
@@ -667,7 +702,7 @@
                 <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
               {{ } }}
               {{ if (comment.image_file_name != null) { }}
-                <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+                <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
               {{ }else{ }}
                 <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
               {{ } }}
@@ -680,7 +715,7 @@
                       <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-right:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
                       <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
                     {{ }else{ }}
-                      <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                      <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="show_report_popup('comment', {{=comment.id}}); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
                     {{ } }}
                   </div>
                 </div>
@@ -705,7 +740,7 @@
           <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
             <div style="position:relative; margin:0 0 0 10px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
               {{ if (comment.image_file_name != null) { }}
-                <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+                <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
               {{ }else{ }}
                 <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
               {{ } }}
@@ -788,7 +823,7 @@
                 <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
               {{ } }}
               {{ if (comment.image_file_name != null) { }}
-                <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+                <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;" onerror="imgError(this);">
               {{ }else{ }}
                 <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
               {{ } }}
@@ -801,7 +836,7 @@
                       <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
                       <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-left:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
                     {{ }else{ }}
-                      <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                      <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="show_report_popup('comment', {{=comment.id}}); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
                     {{ } }}
                   </div>
                 </div>
@@ -818,7 +853,7 @@
             <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
             <div style="position:relative; margin:0 10px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
               {{ if (comment.image_file_name != null) { }}
-                <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+                <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;" onerror="imgError(this);">
               {{ }else{ }}
                 <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
               {{ } }}
@@ -898,7 +933,7 @@
               <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
             {{ } }}
             {{ if (comment.image_file_name != null) { }}
-              <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+              <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
             {{ }else{ }}
               <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
             {{ } }}
@@ -911,7 +946,7 @@
                     <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-right:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
                     <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, true); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
                   {{ }else{ }}
-                    <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                    <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="show_report_popup('comment', {{=comment.id}}); return false;" style="margin-right:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
                   {{ } }}
                 </div>
               </div>
@@ -934,7 +969,7 @@
           <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
             {{ if (comment.image_file_name != null) { }}
-              <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;">
+              <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
             {{ }else{ }}
               <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
             {{ } }}
@@ -976,7 +1011,7 @@
               <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
             {{ } }}
             {{ if (comment.image_file_name != null) { }}
-              <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+              <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;" onerror="imgError(this);">
             {{ }else{ }}
               <img id="comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
             {{ } }}
@@ -989,7 +1024,7 @@
                     <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
                     <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-left:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
                   {{ }else{ }}
-                    <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="comment_report({{=comment.id}}, {{= comment.user_id}}); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
+                    <a id="comment_report_btn_{{=comment.id}}" href="#" onclick="show_report_popup('comment', {{=comment.id}}); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-ban"></i></a>
                   {{ } }}
                 </div>
               </div>
@@ -1007,7 +1042,7 @@
           <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
           <div style="position:relative; margin:0 0px 0 0; padding:9px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
             {{ if (comment.image_file_name != null) { }}
-              <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;">
+              <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;" onerror="imgError(this);">
             {{ }else{ }}
               <img id="modify_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 0 10px auto; display:none;">
             {{ } }}
@@ -1057,7 +1092,7 @@
       <div>
         <span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
         <span style="font-size:12px;"><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
-        <span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment" style="font-size:15px; margin-left:3px; transform:rotateY(180deg); -webkit-transform:rotateY(180deg);"></i></span>
+        <span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment fa-flip-horizontal" style="font-size:15px; margin-left:3px;"></i></span>
       </div>
     </a>
   {{ } }}
@@ -1098,6 +1133,7 @@
       my_like_comment = <%= raw @my_like_comment.to_json %>;
 
 	var askTemplate = _.template($('#ask-template').html()),
+      askMenuTemplate = _.template($('#ask-menu-template').html()),
       askDealTemplate = _.template($('#ask-deal-template').html());
       detailVoteCountTemplate = _.template($('#detail-vote-count-template').html()),
       askDealTableTemplate = _.template($('#ask-deal-table-template').html()),
@@ -1127,20 +1163,18 @@
     // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
 	}
 
-	// var check_scroll
-	// var ready = function() {
-	// 	if (asks.length >= <%= Ask::ASK_PER %>){
-	// 		check_scroll = setInterval("checkScroll()", 1000);
-	// 	}
-	// };
-  //
-	// $(document).ready(ready);
-	// $(document).on('page:load', ready);
-
   if (currentPage == 1) {
     ga('send', 'event', '유저별/첫페이지 로딩 횟수', 'first_page_loading_per_user', current_user_id.toString(), 1);
   }
 	var is_more_asks = true;
+  var more_load = true;
+
+  if (asks.length < <%= Ask::ASK_PER %>) {
+    is_more_asks = false;
+    more_load = false;
+    $("#endless_loading").remove();
+    $("#end_of_contents").show();
+  };
 
   !(function ask_hide(){
 	  var didScroll;
@@ -1159,7 +1193,6 @@
       }
     }, 250);
 
-    var more_load = true;
 	  function hasScrolled() {
 	      var st = $(this).scrollTop();
         var vp = $(this).height();
@@ -1190,6 +1223,7 @@
       	        		is_more_asks = false;
                     more_load = false;
       	        		$("#endless_loading").remove();
+                    $("#end_of_contents").show();
                     currentPage -= 1;
       	        	} else {
                     more_load = true;
@@ -1197,6 +1231,7 @@
       	        			is_more_asks = false;
                       more_load = false;
       	        			$("#endless_loading").remove();
+                      $("#end_of_contents").show();
       	        		}
                     $("#asks").append("<div id='page"+currentPage+"' style='margin:15px 0px;'></div>");
       	        		for(var i=0; i < more_asks.length; i++) {
@@ -1287,8 +1322,8 @@
 		        	my_votes.push(data.vote);
               $('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask}));
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
-              vote_count_span.prev().animateCssColor("tada","#ee6e01"); //animateCss추가
-	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" ).animateCssColor("tada","#ee6e01"); //animateCss추가
+              vote_count_span.prev().animateCssColor("tada","#ee6e01");
+	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" ).animateCssColor("tada","#ee6e01");
 	        		my_vote_count = my_vote_count + 1;
 
               if (is_card_opened || is_show_opened) {
@@ -1298,7 +1333,7 @@
                   var comment = data.ask.comments[i];
                   link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
                 };
-                comment_input_setting(data.ask.id, data.ask.user);
+                comment_input_setting(data.ask.id);
                 $("#visitor_comment_overlay_"+ask_id).remove();
               }
 		        },
@@ -1327,9 +1362,16 @@
 			success: function(data){
         var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
         var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
-        if ((is_card_opened || is_show_opened) && (already_vote.length != 0 || ask.user_id == current_user_id)) $("#detail_vote_count_"+ask_id).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count})).animateCss("flipInX");; //animateCss추가
+        if ((is_card_opened || is_show_opened) && (already_vote.length != 0 || ask.user_id == current_user_id)) {
+          $("#detail_vote_count_"+ask_id).animate({"height":"195px"},750).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
+        } else {
+          var not_yet = '<span class="animated pulse" style="display:block; font-size:13px; font-weight:bold; line-height:50px; background-color:cornsilk;" onclick="notify(\'투표에 먼저 참여해주세요!\'); return false;"><i class="fa fa-bar-chart" style="color:#ee6e01;"></i> 누가 투표했을까요?</span>'
+          $("#detail_vote_count_"+ask_id).html(not_yet);
+        }
 			},
 			beforeSend: function(){
+        var loading = '<i class="fa fa-circle-o-notch fa-spin" style="font-size:15px; line-height:50px;"></i>'
+        $("#detail_vote_count_"+ask_id).html(loading);
 			},
 			complete: function(){
 			}
@@ -1344,6 +1386,8 @@
     card_open_st = $(window).scrollTop();
 
 		$("#endless_loading").hide();
+    $("#end_of_contents").hide();
+    $("#movie_info").hide();
     $("#asks").hide();
     $("#ask_detail").show().html($("#ask_"+ask_id));
 
@@ -1358,7 +1402,7 @@
       var comment = ask.comments[i];
       link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
     };
-    comment_input_setting(ask_id, ask.user);
+    comment_input_setting(ask_id);
     $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
 
     $("#search").hide();
@@ -1380,12 +1424,14 @@
     is_more_asks = true;
     is_card_opened = false;
     $("#endless_loading").show();
+    if (!more_load) $("#end_of_contents").show();
+    $("#movie_info").show();
     $("#asks").show();
     $("#ask_box_"+ask_id).html($("#ask_"+ask_id));
     $("#ask_detail").empty();
 
     $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideUp(500, function(){
-      $("#detail_vote_count_"+ask_id).html("").hide();
+      $("#detail_vote_count_"+ask_id).css("height","50px").html("").hide();
       $("#ask_deal_"+ask_id+"_table").hide();
       $("#ask_"+ask_id+"_comment").html("").hide();
     });
@@ -1403,11 +1449,8 @@
     window.scrollTo(0,card_open_st);
 
     $("#back_button").hide().attr("onclick","back_button(); return false;");
-    main_header_left_button();
+    main_header_button();
   }
-
-
-
 
   function ask_like(ask_id){
 		<% if current_user %>
@@ -1562,15 +1605,16 @@
     }
   }
 
-	function comment_input_setting(ask_id, ask_user) {
+	function comment_input_setting(ask_id) {
     var keyPressed = [];
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
 		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 
 		$("#comment_input_"+ask_id).on("focus",function(){
 			if (current_user_id == 0){
 				$(this).blur();
 				visitor_notify("의견 작성은<br>회원만 가능합니다");
-			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
+			} else if ( this_vote.length == 0 && current_user_id != ask.user.id ){
 				$(this).blur();
 				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
 				$("html, body").animate({scrollTop:0},250);
@@ -1613,7 +1657,7 @@
       if (current_user_id == 0){
 				visitor_notify("의견 작성은<br>회원만 가능합니다");
         return false;
-			} else if ( this_vote.length == 0 && current_user_id != ask_user.id ){
+			} else if ( this_vote.length == 0 && current_user_id != ask.user.id ){
 				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
 				$("html, body").animate({scrollTop:0},250);
         return false;
@@ -1631,7 +1675,7 @@
       formData.append('File', file);
       $.ajax({
         type: "POST",
-        url: "/preview_images/comment_images.json",
+        url: "/preview_images.json",
         data: formData,
         contentType: false,
         processData: false,
@@ -1750,18 +1794,15 @@
 		        	}
 		        },
 		        beforeSend: function(){
+              progressStart();
 		        },
 		        complete: function(){
+              progressEnd();
 		        }
 			});
 		<% else %>
 			visitor_notify("의견 추천은<br>추천할 수 있습니다");
 		<% end %>
-	}
-
-	function comment_report(comment_id, user_id){
-		show_more_popup('comment',comment_id, user_id, '', '');
-		show_report_popup();
 	}
 
 	function comment_del(ask_id, comment_id, is_left){
@@ -2183,5 +2224,121 @@
 			$("#send_comment_btn_"+ask_id).attr("onclick", "send_comment("+ask_id+", "+left_ask_deal_id+"); return false;");
 		}
 	}
+
+  function show_menu(ask_id) {
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    $("#ask_"+ask_id+"_menu").append(askMenuTemplate({ask: ask})).slideDown("normal");
+    $("#ask_"+ask_id+"_category").find(".more_icon").css("transform","rotate(-180deg)").attr("onclick","hide_menu("+ask_id+"); return false;");
+    $("#share_icon_"+ask_id).animateCssColor("zoomIn","#ee6e01");
+    $(window).one("scroll touchmove", function(){
+      hide_menu(ask_id);
+    })
+  }
+
+  <% if flash[:ask_create] && flash[:ask_id] %>
+    show_menu(Number("<%=flash[:ask_id]%>"));
+  <% end %>
+
+  function hide_menu(ask_id) {
+    $("#ask_"+ask_id+"_menu").slideUp("slow", function(){$(this).empty()});
+    $("#ask_"+ask_id+"_category").find(".more_icon").css("transform","rotate(0deg)").attr("onclick","show_menu("+ask_id+"); return false;");
+  }
+
+  function show_menu_tooltip() {
+    var new_tooltip = '<div class="tooltip_area animated pulse"><div class="tooltip_arrow bottom" style="left:20px;"></div><div class="tooltip_content" style="color:#ffcc5a;"><i class="fa fa-heart" style="color:#ee065e;"></i> 여기를 눌러 공유나, 투표취소를 할 수 있어요 :)</div></div>';
+    $(".more_icon:eq(0)").parent().prepend(new_tooltip);
+    setTimeout(function(){
+      $(".more_icon:eq(0)").parent().find(".tooltip_area").fadeOut(300, function(){ $(this).remove() });
+    },3000);
+  }
+  show_menu_tooltip();
+
+  function share_facebook(ask_id) {
+    var share_url = $("#share_url_"+ask_id).val();
+    if (window.HybridApp) {
+      HybridApp.shareFacebook(share_url);
+    } else {
+      if (typeof(FB) != 'undefined' && FB != null ) {
+        FB.init({
+          appId      : '<%=Facebook::CONFIG["app_id"]%>',
+          status     : true,
+          xfbml      : true,
+          version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
+        });
+      }
+      FB.ui({
+        method: 'share',
+        href: share_url,
+      }, function(response){});
+    }
+
+    share_log("facebook", ask_id);
+    hide_menu(ask_id);
+  }
+
+  function share_katalk(ask_id) {
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    var user_string_id = ask.user.string_id
+    var left_deal_title = ask.left_ask_deal.title
+    var right_deal_title = ask.right_ask_deal.title
+    var share_url = $("#share_url_"+ask_id).val();
+    var image_url = "http://vaskit.kr/images/logo/share_image.png";
+    var label = user_string_id+"님을 도와주세요!\n\n'"+left_deal_title+"' vs '"+right_deal_title+"',\n무엇을 사야 후회하지 않을까요?\n\n결정장애 해결에 도움을 주세요!\n\n"+share_url;
+    share_log("katalk", ask_id);
+    hide_menu(ask_id);
+
+    try{
+      Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+      Kakao.Link.sendTalkLink({
+        label: label,
+        image: {
+          src:  image_url,
+          width: '470',
+          height: '353'
+        },
+        webButton: {
+          text: "Let's VASKIT!",
+          url: share_url
+        }
+      });
+    } catch(err) {
+    }
+  }
+
+  function copy_url(ask_id) {
+    var share_url = $("#share_url_"+ask_id).val();
+    function copyfieldvalue(e, id){
+      if (document.execCommand("copy")) {
+        var field = document.getElementById(id);
+        field.focus();
+        field.setSelectionRange(0, field.value.length);
+        document.execCommand("copy");
+        notify('주소가 복사되었습니다!');
+      } else {
+        prompt('아래의 주소를 복사해주세요!', share_url);
+      }
+    }
+
+    copyfieldvalue(event, "share_url_"+ask_id);
+
+    share_log("url", ask_id);
+    hide_menu(ask_id);
+  }
+
+  function vote_modify(ask_id){
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    var change_votes = $.grep(my_votes, function(obj) { return obj.ask_id != ask.id });
+    my_votes = change_votes;
+    var askDealTemplate = _.template($('#ask-deal-template').html())
+    $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask}));
+
+    var vote_count_span = $("#ask_"+ask.id+"_vote_count");
+    vote_count_span.html( parseInt(vote_count_span.html()) - 1 + "표" );
+
+    hover_action(ask_id);
+    hide_menu(ask_id);
+  }
+
+
 
 </script>
