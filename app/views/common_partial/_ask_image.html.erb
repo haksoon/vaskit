@@ -253,7 +253,7 @@
         askImgB = $("#card_back");
 
     askImg.css("transform","translateY(0px)").css("-webkit-transform","translateY(0px)");
-    if (Math.abs(askImgMouseEndY - askImgMouseStartY) > 100) history.back();
+    if (Math.abs(askImgMouseEndY - askImgMouseStartY) > 100) back_button();
 
     if (askImgMouseStartX > askImgMouseEndX) {
       card_front_on();

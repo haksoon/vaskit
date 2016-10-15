@@ -594,10 +594,10 @@
 				if (!is_alram_opened && !is_card_opened) {
 					card_open_st = $(window).scrollTop();
 				} else if ((is_alram_opened || (!is_alram_opened && is_card_opened)) && opened_ask_id == ask_id) {
-					history.back();
+					back_button();
 				} else if (is_alram_opened || (!is_alram_opened && is_card_opened)) {
 					card_detail_off(opened_ask_id);
-					history.back();
+					back_button();
 				};
 				$.ajax({
 					url: '/alrams/read.json',

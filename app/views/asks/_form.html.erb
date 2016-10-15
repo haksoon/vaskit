@@ -353,7 +353,11 @@
 	}
 
 	function select_deal(product_id, is_left){
-		var item = $.grep(items, function(obj) { return obj.productId === product_id; })[0];
+		if (items.length > 1) {
+			var item = $.grep(items, function(obj) { return obj.productId === product_id; })[0];
+		} else {
+			var item = items;
+		}
 
 		$.ajax({
 	        url: '/deals/create_by_naver.json',
