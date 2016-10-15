@@ -48,7 +48,7 @@
 		</div>
 		<div id="movie_info">
 			<p style="margin:0; padding-top:5px; border-top:1px solid #dbdbdb;"><i class="fa fa-caret-right"></i> 회원님께서 작성하신 질문 중에서 핫이슈 아이템을 선정해 제품을 비교해드립니다!</p>
-			<a href="https://youtu.be/DWnI07g9P60" target="_blank" style="display:block; text-align:right; color:#ffcc5a; height:30px; line-height:30px; font-weight:bold;">제품비교 동영상 보기 <i class="fa fa-angle-double-right"></i></a>
+			<a onclick="video_on(); return false;" href="https://www.youtube.com/watch?v=NkgGXGtYdgM&feature=youtu.be&list=PLBo2dHCrZER1TPaPMG-AvvvHeyUoEMiE-" target="_blank" style="display:block; text-align:right; color:#ffcc5a; height:30px; line-height:30px; font-weight:bold;">제품비교 동영상 보기 <i class="fa fa-angle-double-right"></i></a>
 		</div>
 	</div>
 <% end %>
@@ -60,16 +60,14 @@
 	<% if current_user %>
 		<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block;">
 	<% else %>
-		<a href="#" style="display:block;" onclick="visitor_notify('질문 작성은<br>회원만 가능합니다'); return false;">
+		<a href="#" style="display:block;" onclick="visitor_notify('질문 작성은 회원만 가능합니다'); return false;">
 	<% end %>
 			<div class="home-float-btn"><i class="fa fa-plus"></i></div>
 			<div class="home-float-btn-text">질문<br>하기</div>
 		</a>
 	<div id="home-float-btn-tooltip" class="tooltip_area" style="width:140px; max-width:140px; right:120%; bottom:25%; transform:scale(1); display:none;"><div class="tooltip_arrow right"></div><div class="tooltip_content" style="color:#ffcc5a;">질문을 작성해보세요 :)</div></div>
 </div>
-<div id="endless_loading" style="margin:10px 0 100px;">
-	<img style="width:90px; margin:0 auto;" src="/images/custom/loading.gif" />
-</div>
+<div id="endless_loading" style="margin:20px 0 100px; color:#9d9ea1; font-size:15px;"><i class="fa fa-spinner fa-spin"></i></div>
 <div id="end_of_contents" style="display:none; margin:15px 50px 100px; color:#9d9ea1; font-size:13px;">
 	<span class="seperate_line" style="background-color:#dbdbdb;"></span>
 	<img src="/images/logo/logo_1.png" style="width:120px; margin:10px auto;">
@@ -80,3 +78,4 @@
 <%= render :partial => "common_partial/asks" %>
 <%= render :partial => "common_partial/ask_image" %>
 <%= render :partial => "common_partial/report_popup" %>
+<%= render :partial => "common_partial/video_popup" %>

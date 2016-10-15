@@ -1,6 +1,7 @@
 class Vote < ActiveRecord::Base
   after_create :incr_ask_deal_vote_count
   after_update :reload_ask_deal_vote_count
+  after_destroy :reload_ask_deal_vote_count
 
   def incr_ask_deal_vote_count
     ask = Ask.find_by_id(self.ask_id)

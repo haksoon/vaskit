@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     get 'users/facebook', :to => "users/facebook#auth"
     get 'users/check_email', :to => "users/registrations#check_email" #AJS추가
     get 'users/get_user_data', :to => "users/sessions#get_user_data" #AJS추가
+    get 'users/get_my_asks', :to => "users/sessions#get_my_asks" #AJS추가
     get 'users/alram_check', :to => "users/sessions#alram_check" #AJS추가
     put 'users/change_nickname', :to => "users/sessions#change_nickname"
     get 'users/change_password', :to => "users/registrations#edit"
@@ -54,7 +55,11 @@ Rails.application.routes.draw do
   end
   resources :user_categories
   resources :visitors
-  resources :votes
+  resources :votes do
+    collection do
+      post 'vote_cancle', :to => "votes#vote_cancle"
+    end
+  end
   resources :search do
     collection do
       get 'get_keyword'

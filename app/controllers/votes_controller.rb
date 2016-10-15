@@ -35,4 +35,14 @@ class VotesController < ApplicationController
     Vote.find_by_id(params[:id]).delete
     redirect_to(:back)
   end
+
+  def vote_cancle
+    if current_user
+      vote = Vote.find_by(:ask_id => params[:ask_id], :user_id => current_user.id)
+    else
+      vote = Vote.find_by(:ask_id => params[:ask_id], :visitor_id => @visitor.id)
+    end
+    vote.destroy unless vote.nil?
+    render :json => {}
+  end
 end

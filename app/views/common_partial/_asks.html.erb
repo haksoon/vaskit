@@ -4,9 +4,9 @@
       <div id="ask_{{=ask.id}}_category" class="table_div" style="margin-bottom:0px;">
         <a class="more_icon" href="#" onclick="show_menu({{=ask.id}}); return false;"><i class="fa fa-chevron-down" style="font-size:10px; color:#998674;"></i></a>
         {{ if (ask.category) { }}
-          <span class="category" onclick="if (!is_show_opened) category_on(); return false;">{{= ask.category.name }}</span>
+          <span class="category" onclick="if (!is_card_opened && !is_show_opened) category_on(); return false;">{{= ask.category.name }}</span>
         {{ }else{ }}
-          <span class="category none" onclick="if (!is_show_opened) category_on(); return false;">관심사 미설정</span>
+          <span class="category none" onclick="if (!is_card_opened && !is_show_opened) category_on(); return false;">관심사 미설정</span>
         {{ } }}
         {{ var already_like_ask = $.grep(my_like_ask, function(obj) { return obj.ask_id === ask.id }) }}
         <span class="like_icon" onclick="ask_like({{=ask.id}}); return false;" onmouseover="$(this).children().animateCss('tada');">
@@ -78,32 +78,52 @@
 
 <script type="text/template" id="ask-menu-template">
   {{ var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask.id }) }}
-  <div style="padding:12px 0 15px 0; border-top:1px solid #dbdbdb;">
+  <div style="padding:15px 0 8px 0; border-top:1px solid #dbdbdb;">
     {{ if (ask.user.id == current_user_id) { }}
       <p id="share_icon_{{=ask.id}}" style="color:#666; font-size:13px; margin:0; padding:0 0 10px 0;"><i class="fa fa-send-o"></i>&nbsp;친구들에게 질문을 공유해보세요!</p>
     {{ } else { }}
       <p id="share_icon_{{=ask.id}}" style="color:#666; font-size:13px; margin:0; padding:0 0 10px 0;"><i class="fa fa-send-o"></i>&nbsp;흥미로운 질문을 공유해보세요!</p>
     {{ } }}
-    <span id="share_facebook_btn_{{ask.id}}" onclick="share_facebook({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:75px; background-color:#4267b2; color:#fff; border-radius:10px; margin-right:5px; vertical-align:top; cursor:pointer;">
-      <i class="fa fa-facebook" style="font-size:30px;"></i>
-    </span>
-    <span id="share_katalk_btn_{{=ask.id}}" onclick="share_katalk({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#fae100; color:#fff; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
-      <img src="/images/logo/share_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;">
-    </span>
-    <span id="share_url_btn_{{=ask.id}}" onclick="copy_url({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#9d9ea1; color:#fff; border-radius:10px; margin-left:5px; vertical-align:top; cursor:pointer;">
-      <i class="fa fa-link" style="font-size:24px;"></i>
-    </span>
+    <table style="width:100%; height:100%; text-align:center; color:#fff;">
+      <tr style="vertical-align:bottom;">
+        <td style="width:45%;">
+          <span id="share_facebook_btn_{{ask.id}}" onclick="share_facebook({{=ask.id}}); hide_menu({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:75px; background-color:#4267b2; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
+            <i class="fa fa-facebook" style="font-size:30px;"></i>
+          </span>
+        </td>
+        <td style="width:10%;">
+          <span id="share_katalk_btn_{{=ask.id}}" onclick="share_katalk({{=ask.id}}); hide_menu({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#fae100; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
+            <img src="/images/logo/share_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;">
+          </span>
+        </td>
+        <td style="width:45%;">
+          <span id="share_url_btn_{{=ask.id}}" onclick="copy_url({{=ask.id}}); hide_menu({{=ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#9d9ea1; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
+            <i class="fa fa-link" style="font-size:24px;"></i>
+          </span>
+        </td>
+      </tr>
+      <tr style="vertical-align:top;">
+        <td><span onclick="share_facebook({{=ask.id}}); return false;" style="color:#4267b2; font-size:13px; cursor:pointer;">페이스북</span></td>
+        <td><span onclick="share_katalk({{=ask.id}}); return false;" style="color:#fae100; font-size:13px; cursor:pointer;">카카오톡</span></td>
+        <td><span onclick="copy_url({{=ask.id}}); return false;" style="color:#9d9ea1; font-size:13px; cursor:pointer;">주소복사</span></td>
+      </tr>
+    </table>
     <input id="share_url_{{=ask.id}}" style="position:fixed; top:100%; left:100%;" value="http://vaskit.kr/asks/{{=ask.id}}"/>
   </div>
   {{ if (ask.user.id == current_user_id) { }}
-    <a id="ask_edit_btn_{{=ask.id}}" href="#" onclick="go_url('/asks/{{=ask.id}}/edit'); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #dbdbdb;"><i class="fa fa-edit" style="color:#9d9ea1;"></i>&nbsp;수정하기</a>
-    <a id="ask_complete_btn_{{=ask.id}}" href="#" onclick="go_url('/asks/{{=ask.id}}/ask_complete'); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-paperclip" style="color:#9d9ea1;"></i>&nbsp;질문 종료하기</a>
+    {{ if (ask.be_completed == false) { }}
+      <a id="ask_edit_btn_{{=ask.id}}" href="#" onclick="go_url('/asks/{{=ask.id}}/edit'); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #dbdbdb;"><i class="fa fa-edit" style="color:#9d9ea1;"></i>&nbsp;수정하기</a>
+      <a id="ask_complete_btn_{{=ask.id}}" href="#" onclick="go_url('/asks/{{=ask.id}}/ask_complete'); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-paperclip" style="color:#9d9ea1;"></i>&nbsp;질문 종료하기</a>
+    {{ } else { }}
+      <a id="ask_edit_btn_{{=ask.id}}" href="#" onclick="notify('이미 종료하신 투표는 수정하실 수 없습니다'); hide_menu({{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #dbdbdb;"><i class="fa fa-edit" style="color:#9d9ea1;"></i>&nbsp;수정하기</a>
+      <a id="ask_complete_btn_{{=ask.id}}" href="#" onclick="notify('이미 종료하신 투표입니다'); hide_menu({{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-paperclip" style="color:#9d9ea1;"></i>&nbsp;질문 종료하기</a>
+    {{ } }}
   {{ } else { }}
     <a id="ask_report_btn_{{=ask.id}}" href="#" onclick="show_report_popup('ask', {{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #dbdbdb;"><i class="fa fa-cab" style="color:#9d9ea1; font-size:12px;"></i>&nbsp;신고하기</a>
     {{ if (already_vote.length > 0) { }}
       <a id="vote_modify_btn_{{=ask.id}}" href="#" onclick="vote_modify({{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-rotate-left" style="color:#9d9ea1;"></i>&nbsp;투표 실행취소</a>
     {{ } else { }}
-      <a id="vote_modify_btn_{{=ask.id}}" href="#" onclick="notify('투표에 먼저 참여해주세요!'); hide_menu({{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#9d9ea1; font-size:13px; width:50%; float:left;"><i class="fa fa-rotate-left" style="color:#9d9ea1;"></i>&nbsp;투표 실행취소</a>
+      <a id="vote_modify_btn_{{=ask.id}}" href="#" onclick="notify('투표에 먼저 참여해주세요!'); hide_menu({{=ask.id}}); return false;" style="display:block; line-height:40px; border-top:1px solid #dbdbdb; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-rotate-left" style="color:#9d9ea1;"></i>&nbsp;투표 실행취소</a>
     {{ } }}
   {{ } }}
 </script>
@@ -154,23 +174,23 @@
 	</div>
 	{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
 		<div id="main_vote_count_{{=ask.id}}">
-			{{ total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
+			{{ var total_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count }}
 			{{ if (ask.user_id == current_user_id && total_count == 0){ }}
-				{{ left_ratio = 0 }}
-				{{ left_ratio_full = 0 }}
-				{{ right_ratio = 0 }}
-				{{ right_ratio_full = 0 }}
+				{{ var left_ratio = 0 }}
+				{{ var left_ratio_full = 0 }}
+				{{ var right_ratio = 0 }}
+				{{ var right_ratio_full = 0 }}
 			{{ }else{ }}
-				{{ left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80) }}
-				{{ left_ratio_full = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
-				{{ right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80) }}
-				{{ right_ratio_full = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
+				{{ var left_ratio = Math.round(ask.left_ask_deal.vote_count/total_count * 80) }}
+				{{ var left_ratio_full = Math.round(ask.left_ask_deal.vote_count/total_count * 100) }}
+				{{ var right_ratio = Math.round(ask.right_ask_deal.vote_count/total_count * 80) }}
+				{{ var right_ratio_full = Math.round(ask.right_ask_deal.vote_count/total_count * 100) }}
 			{{ } }}
 
-			{{ left_background = "#ffcc5a" }}
-			{{ left_font_weight = "bold" }}
-			{{ right_background = "#ffcc5a" }}
-			{{ right_font_weight = "bold" }}
+			{{ var left_background = "#ffcc5a" }}
+			{{ var left_font_weight = "bold" }}
+			{{ var right_background = "#ffcc5a" }}
+			{{ var right_font_weight = "bold" }}
 			{{ if (left_ratio > right_ratio){ }}
 				{{ right_background = "#fff" }}
 				{{ right_font_weight = "normal" }}
@@ -215,23 +235,23 @@
 </script>
 
 <script type="text/template" id="detail-vote-count-template">
-	{{ gender_total_count = detail_vote_count.left.male_count + detail_vote_count.left.female_count + detail_vote_count.right.male_count + detail_vote_count.right.female_count }}
+	{{ var gender_total_count = detail_vote_count.left.male_count + detail_vote_count.left.female_count + detail_vote_count.right.male_count + detail_vote_count.right.female_count }}
 	{{ if ( gender_total_count == 0 ){ }}
-		{{ male_left_ratio = 0 }}
-		{{ male_right_ratio = 0 }}
-		{{ female_left_ratio = 0 }}
-		{{ female_right_ratio = 0 }}
+		{{ var male_left_ratio = 0 }}
+		{{ var male_right_ratio = 0 }}
+		{{ var female_left_ratio = 0 }}
+		{{ var female_right_ratio = 0 }}
 	{{ }else{ }}
-		{{ male_left_ratio = Math.round(detail_vote_count.left.male_count/gender_total_count * 80) }}
-		{{ male_right_ratio = Math.round(detail_vote_count.right.male_count/gender_total_count * 80) }}
-		{{ female_left_ratio = Math.round(detail_vote_count.left.female_count/gender_total_count * 80) }}
-		{{ female_right_ratio = Math.round(detail_vote_count.right.female_count/gender_total_count * 80) }}
+		{{ var male_left_ratio = Math.round(detail_vote_count.left.male_count/gender_total_count * 80) }}
+		{{ var male_right_ratio = Math.round(detail_vote_count.right.male_count/gender_total_count * 80) }}
+		{{ var female_left_ratio = Math.round(detail_vote_count.left.female_count/gender_total_count * 80) }}
+		{{ var female_right_ratio = Math.round(detail_vote_count.right.female_count/gender_total_count * 80) }}
 	{{ } }}
 
-	{{ gender_male_css = "" }}
-	{{ gender_female_css = "" }}
-	{{ gender_male_background_css = "" }}
-	{{ gender_female_background_css = "" }}
+	{{ var gender_male_css = "" }}
+	{{ var gender_female_css = "" }}
+	{{ var gender_male_background_css = "" }}
+	{{ var gender_female_background_css = "" }}
 	{{ if( (gender_total_count != 0 && (detail_vote_count.left.male_count + detail_vote_count.right.male_count) <= (detail_vote_count.left.female_count + detail_vote_count.right.female_count)) ){ }}
 		{{ gender_female_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ gender_female_background_css = "background-color:rgba(255,228,169,0.7);" }}
@@ -270,63 +290,63 @@
 			</tr>
 		</tbody>
 	</table>
-	{{ age_total_count = detail_vote_count.left.age_20_1_count + detail_vote_count.left.age_20_2_count + detail_vote_count.left.age_20_3_count + detail_vote_count.left.age_30_1_count + detail_vote_count.left.age_30_2_count + detail_vote_count.left.age_30_3_count + detail_vote_count.left.etc_count + detail_vote_count.right.age_20_1_count + detail_vote_count.right.age_20_2_count + detail_vote_count.right.age_20_3_count + detail_vote_count.right.age_30_1_count + detail_vote_count.right.age_30_2_count + detail_vote_count.right .age_30_3_count + detail_vote_count.right.etc_count }}
+	{{ var age_total_count = detail_vote_count.left.age_20_1_count + detail_vote_count.left.age_20_2_count + detail_vote_count.left.age_20_3_count + detail_vote_count.left.age_30_1_count + detail_vote_count.left.age_30_2_count + detail_vote_count.left.age_30_3_count + detail_vote_count.left.etc_count + detail_vote_count.right.age_20_1_count + detail_vote_count.right.age_20_2_count + detail_vote_count.right.age_20_3_count + detail_vote_count.right.age_30_1_count + detail_vote_count.right.age_30_2_count + detail_vote_count.right .age_30_3_count + detail_vote_count.right.etc_count }}
 	{{ if ( age_total_count == 0 ){ }}
-		{{ age_20_1_left_ratio = 0 }}
-		{{ age_20_1_right_ratio = 0 }}
-		{{ age_20_2_left_ratio = 0 }}
-		{{ age_20_2_right_ratio = 0 }}
-		{{ age_20_3_left_ratio = 0 }}
-		{{ age_20_3_right_ratio = 0 }}
-		{{ age_30_1_left_ratio = 0 }}
-		{{ age_30_1_right_ratio = 0 }}
-		{{ age_30_2_left_ratio = 0 }}
-		{{ age_30_2_right_ratio = 0 }}
-		{{ age_30_3_left_ratio = 0 }}
-		{{ age_30_3_right_ratio = 0 }}
-		{{ etc_left_ratio = 0 }}
-		{{ etc_right_ratio = 0 }}
+		{{ var age_20_1_left_ratio = 0 }}
+		{{ var age_20_1_right_ratio = 0 }}
+		{{ var age_20_2_left_ratio = 0 }}
+		{{ var age_20_2_right_ratio = 0 }}
+		{{ var age_20_3_left_ratio = 0 }}
+		{{ var age_20_3_right_ratio = 0 }}
+		{{ var age_30_1_left_ratio = 0 }}
+		{{ var age_30_1_right_ratio = 0 }}
+		{{ var age_30_2_left_ratio = 0 }}
+		{{ var age_30_2_right_ratio = 0 }}
+		{{ var age_30_3_left_ratio = 0 }}
+		{{ var age_30_3_right_ratio = 0 }}
+		{{ var etc_left_ratio = 0 }}
+		{{ var etc_right_ratio = 0 }}
 	{{ }else{ }}
-		{{ age_20_1_left_ratio = Math.round(detail_vote_count.left.age_20_1_count/age_total_count * 80) }}
-		{{ age_20_1_right_ratio = Math.round(detail_vote_count.right.age_20_1_count/age_total_count * 80) }}
-		{{ age_20_2_left_ratio = Math.round(detail_vote_count.left.age_20_2_count/age_total_count * 80) }}
-		{{ age_20_2_right_ratio = Math.round(detail_vote_count.right.age_20_2_count/age_total_count * 80) }}
-		{{ age_20_3_left_ratio = Math.round(detail_vote_count.left.age_20_3_count/age_total_count * 80) }}
-		{{ age_20_3_right_ratio = Math.round(detail_vote_count.right.age_20_3_count/age_total_count * 80) }}
-		{{ age_30_1_left_ratio = Math.round(detail_vote_count.left.age_30_1_count/age_total_count * 80) }}
-		{{ age_30_1_right_ratio = Math.round(detail_vote_count.right.age_30_1_count/age_total_count * 80) }}
-		{{ age_30_2_left_ratio = Math.round(detail_vote_count.left.age_30_2_count/age_total_count * 80) }}
-		{{ age_30_2_right_ratio = Math.round(detail_vote_count.right.age_30_2_count/age_total_count * 80) }}
-		{{ age_30_3_left_ratio = Math.round(detail_vote_count.left.age_30_3_count/age_total_count * 80) }}
-		{{ age_30_3_right_ratio = Math.round(detail_vote_count.right.age_30_3_count/age_total_count * 80) }}
-		{{ etc_left_ratio = Math.round(detail_vote_count.left.etc_count/age_total_count * 80) }}
-		{{ etc_right_ratio = Math.round(detail_vote_count.right.etc_count/age_total_count * 80) }}
+		{{ var age_20_1_left_ratio = Math.round(detail_vote_count.left.age_20_1_count/age_total_count * 80) }}
+		{{ var age_20_1_right_ratio = Math.round(detail_vote_count.right.age_20_1_count/age_total_count * 80) }}
+		{{ var age_20_2_left_ratio = Math.round(detail_vote_count.left.age_20_2_count/age_total_count * 80) }}
+		{{ var age_20_2_right_ratio = Math.round(detail_vote_count.right.age_20_2_count/age_total_count * 80) }}
+		{{ var age_20_3_left_ratio = Math.round(detail_vote_count.left.age_20_3_count/age_total_count * 80) }}
+		{{ var age_20_3_right_ratio = Math.round(detail_vote_count.right.age_20_3_count/age_total_count * 80) }}
+		{{ var age_30_1_left_ratio = Math.round(detail_vote_count.left.age_30_1_count/age_total_count * 80) }}
+		{{ var age_30_1_right_ratio = Math.round(detail_vote_count.right.age_30_1_count/age_total_count * 80) }}
+		{{ var age_30_2_left_ratio = Math.round(detail_vote_count.left.age_30_2_count/age_total_count * 80) }}
+		{{ var age_30_2_right_ratio = Math.round(detail_vote_count.right.age_30_2_count/age_total_count * 80) }}
+		{{ var age_30_3_left_ratio = Math.round(detail_vote_count.left.age_30_3_count/age_total_count * 80) }}
+		{{ var age_30_3_right_ratio = Math.round(detail_vote_count.right.age_30_3_count/age_total_count * 80) }}
+		{{ var etc_left_ratio = Math.round(detail_vote_count.left.etc_count/age_total_count * 80) }}
+		{{ var etc_right_ratio = Math.round(detail_vote_count.right.etc_count/age_total_count * 80) }}
 	{{ } }}
 
-	{{ age_20_1_css = "" }}
-	{{ age_20_2_css = "" }}
-	{{ age_20_3_css = "" }}
-	{{ age_30_1_css = "" }}
-	{{ age_30_2_css = "" }}
-	{{ age_30_3_css = "" }}
-	{{ etc_css = "" }}
-	{{ age_20_1_background_css = "" }}
-	{{ age_20_2_background_css = "" }}
-	{{ age_20_3_background_css = "" }}
-	{{ age_30_1_background_css = "" }}
-	{{ age_30_2_background_css = "" }}
-	{{ age_30_3_background_css = "" }}
-	{{ etc_background_css = "" }}
-	{{ age_20_1_count = detail_vote_count.left.age_20_1_count + detail_vote_count.right.age_20_1_count }}
-	{{ age_20_2_count = detail_vote_count.left.age_20_2_count + detail_vote_count.right.age_20_2_count }}
-	{{ age_20_3_count = detail_vote_count.left.age_20_3_count + detail_vote_count.right.age_20_3_count }}
-	{{ age_30_1_count = detail_vote_count.left.age_30_1_count + detail_vote_count.right.age_30_1_count }}
-	{{ age_30_2_count = detail_vote_count.left.age_30_2_count + detail_vote_count.right.age_30_2_count }}
-	{{ age_30_3_count = detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count }}
-	{{ etc_count = detail_vote_count.left.etc_count + detail_vote_count.right.etc_count }}
-	{{ age_count_arr = [ age_20_1_count, age_20_2_count, age_20_3_count, age_30_1_count, age_30_2_count, age_30_3_count, etc_count] }}
-	{{ max_count = Math.max.apply(window,age_count_arr) }}
-  {{ max_count_index_array = [] }}
+	{{ var age_20_1_css = "" }}
+	{{ var age_20_2_css = "" }}
+	{{ var age_20_3_css = "" }}
+	{{ var age_30_1_css = "" }}
+	{{ var age_30_2_css = "" }}
+	{{ var age_30_3_css = "" }}
+	{{ var etc_css = "" }}
+	{{ var age_20_1_background_css = "" }}
+	{{ var age_20_2_background_css = "" }}
+	{{ var age_20_3_background_css = "" }}
+	{{ var age_30_1_background_css = "" }}
+	{{ var age_30_2_background_css = "" }}
+	{{ var age_30_3_background_css = "" }}
+	{{ var etc_background_css = "" }}
+	{{ var age_20_1_count = detail_vote_count.left.age_20_1_count + detail_vote_count.right.age_20_1_count }}
+	{{ var age_20_2_count = detail_vote_count.left.age_20_2_count + detail_vote_count.right.age_20_2_count }}
+	{{ var age_20_3_count = detail_vote_count.left.age_20_3_count + detail_vote_count.right.age_20_3_count }}
+	{{ var age_30_1_count = detail_vote_count.left.age_30_1_count + detail_vote_count.right.age_30_1_count }}
+	{{ var age_30_2_count = detail_vote_count.left.age_30_2_count + detail_vote_count.right.age_30_2_count }}
+	{{ var age_30_3_count = detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count }}
+	{{ var etc_count = detail_vote_count.left.etc_count + detail_vote_count.right.etc_count }}
+	{{ var age_count_arr = [ age_20_1_count, age_20_2_count, age_20_3_count, age_30_1_count, age_30_2_count, age_30_3_count, etc_count] }}
+	{{ var max_count = Math.max.apply(window,age_count_arr) }}
+  {{ var max_count_index_array = [] }}
   {{ for(i=0; i < age_count_arr.length; i++) { }}
     {{ if (max_count !=0 && age_count_arr[i] == max_count) max_count_index_array.push(i) }}
   {{ } }}
@@ -598,7 +618,7 @@
     </div>
   {{ } else if (already_vote.length == 0) { }}
     <div id="ask_{{=ask.id}}_comment_title" class="table_div comment_title" style="margin:0;">
-      <span style="width:100%;">먼저 투표에 참여해주세요&nbsp;<i class="fa fa-hand-o-up" style="font-size:16px;"></i></span>
+      <span style="width:100%;">투표에 먼저 참여해주세요&nbsp;<i class="fa fa-hand-o-up" style="font-size:16px;"></i></span>
       <span style="position:absolute; top:0; left:10px; width:40px;">
         <i class="fa fa-comment" style="font-size:16px;"></i>
         <span id="left_ask_deal_comment_count_{{=ask.id}}" style="display:inline-block;">{{=ask.left_ask_deal.comment_count}}</span>
@@ -652,7 +672,7 @@
         {{ if (ask.user_id == current_user_id) { }}
           <textarea id="comment_input_{{=ask.id}}" placeholder="<%= current_user.string_id %>님! 많은 고민해결사님들께 한마디 남겨주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
         {{ } else if(already_vote.length == 0) { }}
-          <textarea id="comment_input_{{=ask.id}}" placeholder="<%= current_user.string_id %>님! 먼저 투표에 참여해주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
+          <textarea id="comment_input_{{=ask.id}}" placeholder="<%= current_user.string_id %>님! 투표에 먼저 참여해주세요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
         {{ } else { }}
           <textarea id="comment_input_{{=ask.id}}" placeholder="고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!" style="display:block; padding:0px; width:100%; min-width:100%; max-width:100%; min-height:100px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=ask_deal_text}};"></textarea>
         {{ } }}
@@ -674,11 +694,9 @@
       <div class="tooltip_area" style="width:60%;">
         <div class="tooltip_arrow bottom"></div>
         <div class="tooltip_content" style="text-align:left; line-height:1.5;">
-          - 이미지 첨부 기능이 추가되었습니다 <span style="color: #ffcc5a;font-weight: bold;">new!</span><br>
-          - URL 입력시 자동으로 링크가 생성됩니다<br>
-          - 이미지 URL을 입력하시면 이미지가 보여집니다<br>
-          - 엔터키가 줄바꿈으로 변경되었습니다<br>
-          - 컨트롤+엔터 입력시 보내기가 가능합니다
+          <i class="fa fa-image" style="width:15px; text-align:center;"></i> 이미지를 첨부해보아요<br>
+          <i class="fa fa-link" style="width:15px; text-align:center;"></i> URL 링크를 공유해보아요<br>
+          <i class="fa fa-level-down fa-rotate-90" style="height:15px; margin:0 6px 0 3px;"></i> 컨트롤+엔터로 전송해보아요
         </div>
       </div>
     </div>
@@ -1213,10 +1231,10 @@
       	        dataType: "json",
       	        type: 'GET',
       	        error: function(){
-      	            return false;
+      	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       	        },
       	        success: function(data){
-      	        	var more_asks = data.asks;
+      	          var more_asks = data.asks;
       	        	$.merge(asks, more_asks);
 
       	        	if ( more_asks.length == 0 ) {
@@ -1245,14 +1263,14 @@
                       // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
           					}
       	        	}
+                  currentPage ++;
+                  ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
+                  ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
       	        },
       	        beforeSend: function(){
                   more_load = false;
                 },
                 complete: function(){
-                  currentPage ++;
-                  ga('send', 'event', '유저별/엔들리스 로딩 횟수', 'endless_loading_per_user', current_user_id.toString(), 1);
-                  ga('send', 'event', '엔들리스 로딩 페이지', 'endless_loading_page', currentPage.toString(), 1);
                 }
       		  });
           } else if (more_load) {
@@ -1308,7 +1326,7 @@
 
 	function vote_ask_deal(ask_id, ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
-	 		visitor_notify("더 많은 투표는<br>회원만 가능합니다");
+	 		visitor_notify("더 많은 투표는 회원만 가능합니다");
 	 	}else{
 	 		$.ajax({
 		        url: "/votes.json",
@@ -1316,7 +1334,7 @@
 		        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
 		        dataType: 'json',
 		        error: function(){
-		            return false;
+		          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 		        },
 		        success: function(data){
 		        	my_votes.push(data.vote);
@@ -1336,28 +1354,33 @@
                 comment_input_setting(data.ask.id);
                 $("#visitor_comment_overlay_"+ask_id).remove();
               }
+
+              var total_count = data.ask.left_ask_deal.vote_count + data.ask.right_ask_deal.vote_count;
+              var left_ratio = Math.round(data.ask.left_ask_deal.vote_count/total_count * 80);
+              var right_ratio = Math.round(data.ask.right_ask_deal.vote_count/total_count * 80);
+              graph_animation(ask_id, left_ratio, right_ratio);
+              hover_action(ask_id);
+              mini_comment(ask_id);
 		        },
 		        beforeSend: function(){
               progressStart();
 		        },
 		        complete: function(){
               progressEnd();
-              graph_animation(ask_id);
-              hover_action(ask_id);
-              mini_comment(ask_id);
 		        }
 			});
 	 	}
 	}
 
 	function show_detail_vote_count(ask_id) {
+    $("#detail_vote_count_"+ask_id).css({"height":"50px"});
 		$.ajax({
 			url: "/asks/"+ask_id+"/show_detail.json",
 			type: "GET",
 			data: {'id': ask_id},
 			dataType: 'json',
 			error: function(){
-					return false;
+				notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 			},
 			success: function(data){
         var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
@@ -1365,12 +1388,12 @@
         if ((is_card_opened || is_show_opened) && (already_vote.length != 0 || ask.user_id == current_user_id)) {
           $("#detail_vote_count_"+ask_id).animate({"height":"195px"},750).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
         } else {
-          var not_yet = '<span class="animated pulse" style="display:block; font-size:13px; font-weight:bold; line-height:50px; background-color:cornsilk;" onclick="notify(\'투표에 먼저 참여해주세요!\'); return false;"><i class="fa fa-bar-chart" style="color:#ee6e01;"></i> 누가 투표했을까요?</span>'
+          var not_yet = '<span class="animated pulse" style="display:block; font-size:13px; font-weight:bold; line-height:50px; background-color:cornsilk;" onclick="notify(\'투표에 먼저 참여해주세요!\'); $(\'html, body\').animate({scrollTop:0},250); return false;"><i class="fa fa-bar-chart" style="color:#ee6e01;"></i> 누가 투표했을까요?</span>'
           $("#detail_vote_count_"+ask_id).html(not_yet);
         }
 			},
 			beforeSend: function(){
-        var loading = '<i class="fa fa-circle-o-notch fa-spin" style="font-size:15px; line-height:50px;"></i>'
+        var loading = '<i class="fa fa-circle-o-notch fa-spin" style="font-size:15px; line-height:50px;"></i>';
         $("#detail_vote_count_"+ask_id).html(loading);
 			},
 			complete: function(){
@@ -1410,7 +1433,8 @@
     $(".home-float-btn-area").hide();
 
     $("html, body").animate({scrollTop:0},0,function(){
-      $("#detail_vote_count_"+ask_id+", #ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideDown(500);
+      $("#detail_vote_count_"+ask_id).show();
+      $("#ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideDown(500);
     });
 
 		$("#category_button:visible").hide();
@@ -1460,7 +1484,7 @@
 		        data: {'blank': 'blank'},
 		        dataType: 'json',
 		        error: function(){
-	            return false;
+	            notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 		        },
 		        success: function(data){
 	            var ask_like_icon = $("#ask_"+ask_id+"_like_icon");
@@ -1484,7 +1508,7 @@
 		        }
 			});
 		<% else %>
-			visitor_notify("관심 질문 등록은<br>회원만 가능합니다");
+			visitor_notify("관심 질문 등록은 회원만 가능합니다");
 		<% end %>
 	}
 
@@ -1502,7 +1526,7 @@
       $("#mini_comment_input_"+ask_id).on("click",function(){
         if (current_user_id == 0){
           $(this).blur();
-          visitor_notify("의견 작성은<br>회원만 가능합니다");
+          visitor_notify("의견 작성은 회원만 가능합니다");
         } else {
           $(this).focus();
         }
@@ -1556,7 +1580,7 @@
           dataType: 'json',
           async: false,  // 코멘트 중복 전송을 방지
           error: function(){
-            return false;
+            notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
           },
           success: function(data){
             var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
@@ -1573,7 +1597,7 @@
               $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
               $("#ask_"+ask_id+"_comment_preview").animateCss("flipInY");
             }else{
-              visitor_notify("의견 작성은<br>회원만 가능합니다");
+              visitor_notify("의견 작성은 회원만 가능합니다");
             }
           },
           beforeSend: function(){
@@ -1613,10 +1637,10 @@
 		$("#comment_input_"+ask_id).on("focus",function(){
 			if (current_user_id == 0){
 				$(this).blur();
-				visitor_notify("의견 작성은<br>회원만 가능합니다");
+				visitor_notify("의견 작성은 회원만 가능합니다");
 			} else if ( this_vote.length == 0 && current_user_id != ask.user.id ){
 				$(this).blur();
-				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
+				notify("투표에 먼저 참여해주세요!");
 				$("html, body").animate({scrollTop:0},250);
 			} else {
         if ($(this).val() == "") $(this).val('\r').selectRange(0,0);
@@ -1655,10 +1679,10 @@
 
     $("#comment_image_btn_"+ask_id).on("click",function(){
       if (current_user_id == 0){
-				visitor_notify("의견 작성은<br>회원만 가능합니다");
+				visitor_notify("의견 작성은 회원만 가능합니다");
         return false;
 			} else if ( this_vote.length == 0 && current_user_id != ask.user.id ){
-				notify("투표 참여 후에<br>의견을 남길 수 있습니다");
+				notify("투표에 먼저 참여해주세요!");
 				$("html, body").animate({scrollTop:0},250);
         return false;
 			} else {
@@ -1679,18 +1703,21 @@
         data: formData,
         contentType: false,
         processData: false,
+        error: function(){
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+        },
         success: function (data) {
           $("#comment_image_id_"+ask_id).val(data.id);
           $("#attached_comment_image_"+ask_id).attr("src",data.image_url).show().animateCss("bounceIn");
+          $("#attached_edit_"+ask_id).show();
+          $("#comment_image_btn_"+ask_id).hide();
+          $("#send_comment_btn_"+ask_id).css('background-color','#f18b33');
         },
         beforeSend: function(){
           progressStart();
         },
         complete: function(){
           progressEnd();
-          $("#attached_edit_"+ask_id).show();
-          $("#comment_image_btn_"+ask_id).hide();
-          $("#send_comment_btn_"+ask_id).css('background-color','#f18b33');
           fileObj.replaceWith(fileObj.clone(true));
         }
       }).fail(function (data) {}).done(function () {});
@@ -1722,7 +1749,7 @@
           dataType: 'json',
           async: false,  // 코멘트 중복 전송을 방지
           error: function(){
-            return false;
+            notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
           },
           success: function(data){
             if (data.message = "success"){
@@ -1753,8 +1780,9 @@
                 right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) + 1 ).animateCss("tada");
                 ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count + 1;
               }
+              $("#comment_input_"+ask_id).height(0);
             }else{
-              visitor_notify("의견 작성은<br>회원만 가능합니다");
+              visitor_notify("의견 작성은 회원만 가능합니다");
             }
           },
           beforeSend: function(){
@@ -1762,7 +1790,6 @@
           },
           complete: function(){
             progressEnd();
-            $("#comment_input_"+ask_id).height(0);
           }
         });
       }
@@ -1776,7 +1803,7 @@
 		        data: {'blank': 'blank'},
 		        dataType: 'json',
 		        error: function(){
-		            return false;
+		          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 		        },
 		        success: function(data){
 	            var comment_like_icon = $("#comment_"+comment_id+"_like_icon")
@@ -1801,7 +1828,7 @@
 		        }
 			});
 		<% else %>
-			visitor_notify("의견 추천은<br>추천할 수 있습니다");
+			visitor_notify("의견 추천은 회원만 가능합니다");
 		<% end %>
 	}
 
@@ -1813,7 +1840,7 @@
         data: {'blank': 'blank'},
         dataType: 'json',
         error: function(){
-            return false;
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
         success: function(data){
           ask.comments.pop(data.comment);
@@ -1934,23 +1961,26 @@
       formData.append('File', file);
       $.ajax({
         type: "POST",
-        url: "/preview_images/comment_images.json",
+        url: "/preview_images.json",
         data: formData,
         contentType: false,
         processData: false,
+        error: function(){
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+        },
         success: function (data) {
           $("#modify_comment_image_id_"+comment_id).val(data.id);
           $("#modify_comment_image_"+comment_id).attr("src",data.image_url).show().animateCss("bounceIn");
           comment_image_url = data.image_url;
+          $("#modify_edit_"+comment_id).show();
+          $("#modify_comment_image_btn_"+comment_id).hide();
+          $("#comment_update_btn_"+comment_id).css('background-color','#f18b33');
         },
         beforeSend: function(){
           progressStart();
         },
         complete: function(){
           progressEnd();
-          $("#modify_edit_"+comment_id).show();
-          $("#modify_comment_image_btn_"+comment_id).hide();
-          $("#comment_update_btn_"+comment_id).css('background-color','#f18b33');
           fileObj.replaceWith(fileObj.clone(true));
         }
       }).fail(function (data) {}).done(function () {});
@@ -1992,7 +2022,7 @@
 				data: {'content': content, 'image_id':image_id},
 				dataType: 'json',
 				error: function(){
-					return false;
+					notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 				},
 				success: function(data){
 					comment_content.find(".comment_content").html(content.replace(new RegExp('<', 'g'), '&lt;').replace(new RegExp('\r?\n', 'g'), '<br>'));
@@ -2014,17 +2044,18 @@
 
 					$("#comment_modify_btn_"+comment_id).show();
 					$("#comment_modify_cancel_btn_"+comment_id).hide();
+
+          comment_id_in_progress = null;
+          comment_id_in_progress_type = null;
+          comment_content_origin = null;
+          comment_image_origin = null;
+          modify_content_origin = null;
 				},
 				beforeSend: function(){
           progressStart();
 				},
 				complete: function(){
           progressEnd();
-          comment_id_in_progress = null;
-          comment_id_in_progress_type = null;
-          comment_content_origin = null;
-          comment_image_origin = null;
-          modify_content_origin = null;
 				}
 			});
 		}
@@ -2045,11 +2076,11 @@
 		var this_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
 		var ask_user_id = $.grep(asks, function(obj) {return obj.id == ask_id})[0].user_id;
 		if (current_user_id == 0){
-			visitor_notify("의견 작성은<br>회원만 가능합니다");
+			visitor_notify("의견 작성은 회원만 가능합니다");
 		} else if ( this_vote.length == 0 && current_user_id != ask_user_id ) {
 			var card_open_st = $("#ask_"+ask_id).offset().top - 110;
 			$("html, body").animate({scrollTop:card_open_st},250);
-			notify("투표 참여 후에<br>의견을 남길 수 있습니다");
+			notify("투표에 먼저 참여해주세요!");
 		} else {
       comment_id_in_progress = comment_id;
       comment_id_in_progress_type = "reply";
@@ -2118,22 +2149,25 @@
       formData.append('File', file);
       $.ajax({
         type: "POST",
-        url: "/preview_images/comment_images.json",
+        url: "/preview_images.json",
         data: formData,
         contentType: false,
         processData: false,
+        error: function(){
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+        },
         success: function (data) {
           $("#reply_comment_image_id_"+comment_id).val(data.id);
           $("#attached_reply_comment_image_"+comment_id).attr("src",data.image_url).show().animateCss("bounceIn");
+          $("#attached_reply_edit_"+comment_id).show();
+          $("#reply_comment_image_btn_"+comment_id).hide();
+          $("#send_reply_comment_btn_"+comment_id).css('background-color','#f18b33');
         },
         beforeSend: function(){
           progressStart();
         },
         complete: function(){
           progressEnd();
-          $("#attached_reply_edit_"+comment_id).show();
-          $("#reply_comment_image_btn_"+comment_id).hide();
-          $("#send_reply_comment_btn_"+comment_id).css('background-color','#f18b33');
           fileObj.replaceWith(fileObj.clone(true));
         }
       }).fail(function (data) {}).done(function () {});
@@ -2165,7 +2199,7 @@
         dataType: 'json',
         async: false,  // 코멘트 중복 전송을 방지
         error: function(){
-          return false;
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
         success: function(data){
           if (data.message = "success"){
@@ -2187,16 +2221,16 @@
               ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count + 1;
             }
           }else{
-            visitor_notify("의견 작성은<br>회원만 가능합니다");
+            visitor_notify("의견 작성은 회원만 가능합니다");
           }
+          comment_id_in_progress = null;
+          comment_id_in_progress_type = null;
         },
         beforeSend: function(){
           progressStart();
         },
         complete: function(){
           progressEnd();
-          comment_id_in_progress = null;
-          comment_id_in_progress_type = null;
         }
       });
     }
@@ -2205,7 +2239,7 @@
 	function ask_deal_id_change(ask_id, left_ask_deal_id, right_ask_deal_id){
     var margin = $("#new_comment").width() - $("#comment_input_box_"+ask_id).outerWidth() - 10;
 		if (ask_deal_text == "center") {
-      notify("투표 참여 후에<br>의견을 남길 수 있습니다");
+      notify("투표에 먼저 참여해주세요!");
       var card_open_st = $("#ask_"+ask_id).offset().top - 110;
       $("html, body").animate({scrollTop:card_open_st},250);
     } else if (ask_deal_text == "left") {
@@ -2253,93 +2287,38 @@
   }
   show_menu_tooltip();
 
-  function share_facebook(ask_id) {
-    var share_url = $("#share_url_"+ask_id).val();
-    if (window.HybridApp) {
-      HybridApp.shareFacebook(share_url);
-    } else {
-      if (typeof(FB) != 'undefined' && FB != null ) {
-        FB.init({
-          appId      : '<%=Facebook::CONFIG["app_id"]%>',
-          status     : true,
-          xfbml      : true,
-          version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
-        });
-      }
-      FB.ui({
-        method: 'share',
-        href: share_url,
-      }, function(response){});
-    }
-
-    share_log("facebook", ask_id);
-    hide_menu(ask_id);
-  }
-
-  function share_katalk(ask_id) {
-    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
-    var user_string_id = ask.user.string_id
-    var left_deal_title = ask.left_ask_deal.title
-    var right_deal_title = ask.right_ask_deal.title
-    var share_url = $("#share_url_"+ask_id).val();
-    var image_url = "http://vaskit.kr/images/logo/share_800x600.png";
-    var label = "둘중에뭐사지? 골라주세요!\n\n"+left_deal_title+"\nvs\n"+right_deal_title+",\n당신의 선택은?\n\n"+share_url;
-    share_log("katalk", ask_id);
-    hide_menu(ask_id);
-
-    try{
-      Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
-      Kakao.Link.sendTalkLink({
-        label: label,
-        image: {
-          src:  image_url,
-          width: '800',
-          height: '600'
-        },
-        webButton: {
-          text: "Let's VASKIT!",
-          url: share_url
-        }
-      });
-    } catch(err) {
-      console.log(err);
-    }
-  }
-
-  function copy_url(ask_id) {
-    var share_url = $("#share_url_"+ask_id).val();
-    function copyfieldvalue(e, id){
-      if (document.execCommand("copy")) {
-        var field = document.getElementById(id);
-        field.focus();
-        field.setSelectionRange(0, field.value.length);
-        document.execCommand("copy");
-        notify('주소가 복사되었습니다!');
-      } else {
-        prompt('아래의 주소를 복사해주세요!', share_url);
-      }
-    }
-
-    copyfieldvalue(event, "share_url_"+ask_id);
-
-    share_log("url", ask_id);
-    hide_menu(ask_id);
-  }
-
   function vote_modify(ask_id){
-    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
-    var change_votes = $.grep(my_votes, function(obj) { return obj.ask_id != ask.id });
-    my_votes = change_votes;
-    var askDealTemplate = _.template($('#ask-deal-template').html())
-    $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask}));
+    $.ajax({
+          url: "/votes/vote_cancle.json",
+          type: 'POST',
+          data: {'ask_id': ask_id},
+          dataType: 'json',
+          error: function(){
+            notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+          },
+          success: function(data){
+            var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+            var change_votes = $.grep(my_votes, function(obj) { return obj.ask_id != ask.id });
+            my_votes = change_votes;
+            $("#ask_deal_"+ask_id).html(askDealTemplate({my_votes: my_votes, ask: ask}));
 
-    var vote_count_span = $("#ask_"+ask.id+"_vote_count");
-    vote_count_span.html( parseInt(vote_count_span.html()) - 1 + "표" );
+            var vote_count_span = $("#ask_"+ask.id+"_vote_count");
+            vote_count_span.html( parseInt(vote_count_span.html()) - 1 + "표" );
 
-    hover_action(ask_id);
-    hide_menu(ask_id);
+            my_vote_count = my_vote_count - 1;
+
+            show_detail_vote_count(ask_id);
+            comment_input_setting(ask_id);
+            hover_action(ask_id);
+            hide_menu(ask_id);
+          },
+          beforeSend: function(){
+            progressStart();
+          },
+          complete: function(){
+            progressEnd();
+          }
+    });
   }
-
-
 
 </script>

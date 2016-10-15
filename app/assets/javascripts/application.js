@@ -66,6 +66,8 @@ $(document).ready(function(){
       confirm("이미지 편집을 취소하실건가요?") ? hide_image_edit_popup() : history.pushState(null, null, null);
     } else if (is_app_popup_opened) {
       hide_app_popup();
+    } else if (is_video_opened) {
+      video_off();
     }
   });
   $(document).keydown(function(e){
@@ -98,6 +100,13 @@ $(document).ready(function(){
 })
 $(window).load(function(){
   progressEnd();
+});
+$(window).scroll(function(){
+  if($(this).scrollTop() < 0) {
+    $("#wrap_dummy_back").show();
+  } else {
+    $("#wrap_dummy_back").hide();
+  }
 });
 
 // Device Check
@@ -189,27 +198,29 @@ function imgError(image, alter_url){
   return true;
 }
 
-function notify(flash_message){
-	// jQuery: reference div, load in message, and fade in
-    var flash_div = $("#flash");
-    flash_div.html(flash_message);
-    flash_div.attr('class', 'flash_ajax');
-    flash_div.fadeIn("fast");
-
-    // use Javascript timeout function to delay calling
-    // our jQuery fadeOut, and hide
-    setTimeout(function(){
-    	flash_div.fadeOut("fast", function(){
-        	flash_div.html("");
-        	flash_div.attr('class', 'flash_html');
-        	flash_div.hide();
-      	})
-    }, 2000);
+function notify(msg){
+  var flash_div = $("#flash");
+  var flash_msg = $("#flash_msg");
+  flash_div.stop().animate({"top":"-50px"},50,function(){
+    flash_msg.html("").html(msg);
+    flash_div.show().animate({"top":"0px"},250,function(){
+      flash_div.delay(3000).animate({"top":"-50px"},500,function(){
+        flash_div.hide();
+        flash_msg.html("");
+      });
+    });
+  });
+  flash_div.unbind("touchmove click").bind("touchmove click", function(){
+    $(this).stop().animate({"top":"-50px"},250,function(){
+      $(this).css({"height":"50px"});
+    });
+    return false;
+  });
 }
 
 function visitor_notify(message) {
   notify(message);
-  setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;회원가입 화면으로 이동합니다&middot;&middot;&middot;')",1500);
+  setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;&nbsp;회원가입 화면으로 이동합니다&middot;&middot;&middot;')",1500);
   setTimeout('window.location.assign("/landing")',2500);
 }
 
@@ -218,17 +229,26 @@ function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
+var back_button_clicked = false;
 function back_button(){
-  history.back();
+  if (!back_button_clicked) {
+    history.back();
+    back_button_clicked = true;
+    setTimeout(function(){
+      back_button_clicked = false;
+    },1000);
+  } else {
+    return false;
+  }
 }
 
 function header_back_button(){
   var referrer = document.createElement("a");
   referrer.href = document.referrer;
-  if (parent.history.length == 1 || referrer.host != document.location.host || referrer.href == document.location.href) {
-    document.location.replace("/");
+  if (parent.history.length == 1 || referrer.host != document.location.host || is_show_opened) {//|| referrer.href == document.location.href) {
+    go_url("/");
   } else {
-    history.back();
+    back_button();
   }
 }
 
@@ -236,7 +256,7 @@ function window_back_button(){
   try {
     window.close();
   } finally {
-    history.back();
+    back_button();
   }
 }
 
@@ -248,7 +268,7 @@ function share_log(channel, ask_id){
         data: {"channel" : channel, "ask_id" : ask_id},
         dataType: 'json',
         error: function(){
-            return false;
+          return false;
         },
         success: function(data){
         },
@@ -366,14 +386,14 @@ function search_bar_hide(){
 
 function disableScroll() {
   $("body").css("overflow","hidden");
-  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg").bind("touchmove", function(e){
+  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").bind("touchmove", function(e){
     return false;
   });
 }
 
 function enableScroll() {
   $("body").css("overflow","auto");
-  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg").unbind("touchmove");
+  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").unbind("touchmove");
 }
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
@@ -423,7 +443,9 @@ function hover_action(ask_id){
 };
 
 // AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
-function graph_animation(ask_id) {
+function graph_animation(ask_id, left_ratio, right_ratio) {
+  var left_ratio_full = left_ratio / 80 * 100;
+  var right_ratio_full = right_ratio / 80 * 100;
   var timing = 30,
       l_bar = $("#left_bar_"+ask_id),
       l_num = $("#left_num_"+ask_id),
@@ -518,11 +540,83 @@ function link_tagging(origin_string, target_element, img_preview) {
   }
 }
 
+function share_facebook(ask_id) {
+  var share_url = $("#share_url_"+ask_id).val();
+  if (window.HybridApp) {
+    HybridApp.shareFacebook(share_url);
+  } else {
+    if (typeof(FB) != 'undefined' && FB != null ) {
+      FB.init({
+        appId      : '<%=Facebook::CONFIG["app_id"]%>',
+        status     : true,
+        xfbml      : true,
+        version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
+      });
+    }
+    FB.ui({
+      method: 'share',
+      href: share_url,
+    }, function(response){});
+  }
+
+  share_log("facebook", ask_id);
+}
+
+function share_katalk(ask_id) {
+  var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+  var left_deal_title = ask.left_ask_deal.title;
+  var right_deal_title = ask.right_ask_deal.title;
+  var share_url = $("#share_url_"+ask_id).val();
+  var image_url = "http://vaskit.kr/images/logo/share_800x600.png";
+  var label = "둘중에뭐사지? 골라주세요!\n\n"+left_deal_title+"\nvs\n"+right_deal_title+",\n당신의 선택은?\n\n"+share_url;
+  share_log("katalk", ask_id);
+
+  try{
+    Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+    Kakao.Link.sendTalkLink({
+      label: label,
+      image: {
+        src:  image_url,
+        width: '800',
+        height: '600'
+      },
+      webButton: {
+        text: "Let's VASKIT!",
+        url: share_url
+      }
+    });
+  } catch(err) {
+  }
+}
+
+function copy_url(ask_id) {
+  var share_url = $("#share_url_"+ask_id).val();
+  function copyfieldvalue(e, id){
+    if (document.execCommand("copy")) {
+      var field = document.getElementById(id);
+      field.focus();
+      field.setSelectionRange(0, field.value.length);
+      document.execCommand("copy");
+      notify('주소가 복사되었습니다!');
+    } else {
+      prompt('아래의 주소를 복사해주세요!', share_url);
+    }
+  }
+
+  copyfieldvalue(event, "share_url_"+ask_id);
+
+  share_log("url", ask_id);
+}
+
 // AJS추가 : just for fun...
 console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
 
 function progressStart() {
-  $("#progress_bar").clearQueue().css("display","block").animate({width:"90%"},1000);
+  $("#progress_bar").clearQueue().css("display","block").animate({width:"90%"},1000,function(){
+    $("#progress_bar").animate({width:"94%"},2000,function(){
+      $("#progress_bar").animate({width:"98%"},8000);
+    });
+  });
 }
 function progressEnd() {
   $("#progress_bar").stop().animate({width:"100%"},100,function(){
@@ -636,6 +730,17 @@ $.fn.selectRange = function(start, end) {
 		}, threshold);
 	}
 })(jQuery);
+
+// extension: scrollEnd detection
+$.fn.scrollEnd = function(callback, timeout) {
+  $(this).scroll(function(){
+    var $this = $(this);
+    if ($this.data('scrollTimeout')) {
+      clearTimeout($this.data('scrollTimeout'));
+    }
+    $this.data('scrollTimeout', setTimeout(callback,timeout));
+  });
+};
 
 
 $( document ).ready(function() {

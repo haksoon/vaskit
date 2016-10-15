@@ -80,6 +80,7 @@
   			var uniq_key = new Date() + Math.random();
   			$.cookie('uniq_key' , "<%= @uniq_key %>", { expires : 30000, path : '/' });
   		<% end %>
+      var asks = new Array();
       var is_ask_image_opened = false,
           is_category_opened = false,
           is_user_opened = false,
@@ -94,6 +95,7 @@
       var is_app_popup_opened = false;
       var is_search_deal_opened = false,
           is_image_edit_opened = false;
+      var is_video_opened = false;
 
       window.onbeforeunload = function(){
         window.scrollTo(0,0);
@@ -101,7 +103,7 @@
 
       window.onerror = function(msg, url, line, col, obj){
         href = window.location.href;
-        obj = obj.stack;
+        obj = obj == null ? 'obj is null' : obj.stack;
         $.ajax({
   		        url: "/error_report.json",
   		        type: 'POST',
@@ -111,7 +113,7 @@
   		            return false;
   		        },
   		        success: function(data){
-                notify('이크! 에러 발생 T_T<br><br>지금 이 경고창을 캡쳐해서<br>junsikahn@vaskit.kr로<br>보내주시면<br>스벅 라떼 기프티콘 쏩니다!!');
+                notify('이크! 에러 발생T_T 지금 이 화면을 캡쳐해서<br>help@vaskit.kr로 보내주시면 스벅 라떼 쏩니다!!');
   		        },
   		        beforeSend: function(){
   		        },
@@ -125,14 +127,9 @@
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=521318198062554&ev=PageView&noscript=1"/></noscript>
 </head>
 <body data-no-turbolink="true">
-	<div id="flash" class="flash_html" style="display:none;"></div>
-	<div class="loading" style="display:none;">
-  	<div><i class="fa fa-spinner fa-spin"></i>&nbsp;Loading...</div>
-	</div>
 	<div id="wrap">
-    <div style="position:fixed; top:0px; width:inherit; z-index:30;">
-      <span id="progress_bar" style="display:none; width:0%; height:5px; background-color:#ee6e01;">&nbsp;</span>
-    </div>
+    <div id="flash" style="display:none;"><div id="flash_msg"></div></div>
+    <div style="position:fixed; top:0px; width:inherit; z-index:900000;"><span id="progress_bar" style="display:none; width:0%; height:5px; background-color:#ee6e01;">&nbsp;</span></div>
 		<%= yield %>
     <%= render :partial => "common_partial/app_popup" %>
 	</div>
@@ -150,11 +147,6 @@
         },!1)
       }
     })(document,window.navigator,"standalone")
-    // $(window).on("scroll",function(e){
-    //   if ( $(this).scrollTop() < -100 ) {
-    //     notify("Let's VASKIT!");
-    //   }
-    // });
   </script>
 </body>
 </html>

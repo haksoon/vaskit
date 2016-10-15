@@ -13,7 +13,7 @@ class Alram < ActiveRecord::Base
       alrams.each do |alram|
         alram.is_read == false ? count = count + 1 : count = count
       end
-      msg = "새로운 알림이 있어요. 확인해 보세요!"
+      msg = "새로운 알림이 도착했습니다!"
       id = self.ask_id.to_s
       link = CONFIG["host"] + "/asks/" + self.ask_id.to_s
 

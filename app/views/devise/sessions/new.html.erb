@@ -113,7 +113,7 @@
 
 	function sign_in_submit(){
     if ($("#email_checker i").hasClass("fa-check") != true) {
-      notify('가입되지 않은 이메일 주소입니다<br>이메일을 확인해 주세요');
+      notify('가입되지 않은 이메일 주소입니다');
       $("#user_email").focus().select();
     } else if ($("#user_password").val() == ""){
       notify('비밀번호를 입력해 주세요');

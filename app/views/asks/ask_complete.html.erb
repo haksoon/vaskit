@@ -15,7 +15,7 @@
 	</ul>
 </div>
 <span style="display:block; color:#9d9ea1; font-size:12px; padding-top:5px;">이미지를 눌러 구매 결정제품을 선택해 주세요!</span>
-<div class="content_box" style="margin:5px 12px 12px;">
+<div class="content_box" style="margin:5px 12px 12px; overflow:hidden;">
 	<div id="ask_deal_table" class="card_detail_table" style="padding: 10px 10px 0px;">
     <div class="table_div">
       <div class="ask_text_field left_input output_field" style="font-weight:bold;">
@@ -132,7 +132,7 @@
 		{{ gender_male_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ gender_male_background_css = "background-color:rgba(255,228,169,0.7);" }}
 	{{ } }}
-	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px; border-bottom:1px solid #dbdbdb; background-color:#f4f4f4; font-size:12px;">
+	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px; border-bottom:1px solid #dbdbdb; font-size:12px; background-color:#fff;">
 		<tbody>
 			<tr style="{{=gender_male_background_css}}">
 				<td class="vote-result-td">
@@ -250,7 +250,7 @@
 		{{ etc_css = "color:#ffcc5a; font-weight:bold;" }}
 		{{ etc_background_css = "background-color:rgba(255,228,169,0.7);" }}
 	{{ } }}
-	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px; background-color:#f4f4f4; font-size:12px;">
+	<table cellspacing="0" cellpadding="1" class="graph" style="padding:10px; background-color:#f4f4f4; font-size:12px; background-color:#fff;">
 		<tbody>
 			<tr style="{{=age_20_1_background_css}}">
 				<td class="vote-result-td">
@@ -491,7 +491,7 @@
 			return;
 		}
 		if(selected_ask_deal_id == null){
-			notify("최종 선택하신 제품을 선택해주세요");
+			notify("최종 선택하신 제품을 골라주세요");
 			return;
 		}
 		window.location = "/asks/<%=@ask.id%>/create_complete?star_point="+star_point+"&ask_deal_id="+selected_ask_deal_id;

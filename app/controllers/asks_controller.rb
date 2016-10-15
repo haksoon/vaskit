@@ -81,7 +81,7 @@ class AsksController < ApplicationController
         @right_ask_deal = @ask.right_ask_deal
       else
         flash[:ask_create] = "수정 권한이 없습니다"
-        redirect_to "/"
+        redirect_to root_path
       end
     else
       redirect_to "/landing"
@@ -166,7 +166,7 @@ class AsksController < ApplicationController
       HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag)
     end
 
-    flash[:ask_create] = "게시글 작성 완료!\\n친구들에게 공유해보세요 :)"
+    flash[:ask_create] = "게시글 작성 완료! 친구들에게 공유해보세요 :)"
     flash[:ask_id] = @ask.id
 
     redirect_to root_path
@@ -264,7 +264,7 @@ class AsksController < ApplicationController
     end
 
     # flash[:redirect_url] = "/" #AJS추가(삭제)
-    flash[:ask_create] = "게시글 수정 완료!\\n친구들에게 공유해보세요 :)"
+    flash[:ask_create] = "게시글 수정 완료! 친구들에게 공유해보세요 :)"
     flash[:ask_id] = @ask.id
 
     redirect_to "/asks/#{@ask.id}"
@@ -272,7 +272,19 @@ class AsksController < ApplicationController
 
   #GET /asks/:id/ask_complete
   def ask_complete
-    @detail_vote_count = @ask.detail_vote_count #AJS추가
+    if current_user
+      if current_user.id != @ask.user_id
+        flash[:ask_create] = "권한이 없습니다"
+        redirect_to root_path
+      elsif @ask.be_completed == true
+        flash[:ask_create] = "이미 종료된 투표입니다"
+        redirect_to root_path
+      else
+        @detail_vote_count = @ask.detail_vote_count
+      end
+    else
+      redirect_to "/landing"
+    end
   end
 
   #GET /asks/:id/create_complete

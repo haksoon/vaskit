@@ -99,10 +99,10 @@
     $("#ask_image_seg").html(askImageSegTemplate({ask:ask}));
 
     if (is_left) {
-      $("#ask_image_overlay").show().animateCss("zoomInLeft");
+      $("#ask_image_overlay").show().animateCss("bounceInDown");
       card_front_on();
     } else {
-      $("#ask_image_overlay").show().animateCss("zoomInRight");
+      $("#ask_image_overlay").show().animateCss("bounceInDown");
       card_back_on();
     }
     $("#menu_bg_full").show();

@@ -20,8 +20,8 @@
 					<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;"><i class="fa fa-plus-circle"></i>&nbsp;당신의 고민을 이야기해주세요!</a>
 					<a href="#" onclick="go_url('/?type=vote_yet'); return false;" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:50px; position:relative; margin:10px 0 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box;"><i class="fa fa-sort-amount-asc"></i>&nbsp;참여하지 않은 투표만 보여주세요</a>
 				<% else %>
-					<a href="#" onclick="visitor_notify('회원가입 후<br>질문 작성이 가능합니다'); return false;" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;"><i class="fa fa-plus-circle"></i>&nbsp;당신의 고민을 이야기해주세요!</a>
-					<a href="#" onclick="visitor_notify('회원가입 후<br>이용이 가능합니다'); return false;" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:50px; position:relative; margin:10px 0 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box;"><i class="fa fa-sort-amount-asc"></i>&nbsp;참여하지 않은 투표만 보여주세요</a>
+					<a href="#" onclick="visitor_notify('회원가입 후 질문 작성이 가능합니다'); return false;" style="display:block; width:100%; background-color:rgba(238,110,1,0.8); text-align:center; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;"><i class="fa fa-plus-circle"></i>&nbsp;당신의 고민을 이야기해주세요!</a>
+					<a href="#" onclick="visitor_notify('회원가입 후 이용이 가능합니다'); return false;" style="display:block; width:100%; background-color:#fff; text-align:center; color:#666; line-height:50px; position:relative; margin:10px 0 0; border-radius:5px; border:1px solid #dbdbdb; box-sizing:border-box;"><i class="fa fa-sort-amount-asc"></i>&nbsp;참여하지 않은 투표만 보여주세요</a>
 				<% end %>
 			</div>
 			<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
@@ -147,7 +147,7 @@
 				$("#category_submit_btn").css({"backgroundColor":"#dbdbdb"});
 			}
 		<% else %>
-		 	visitor_notify("관심사 설정은<br>회원만 가능합니다");
+		 	visitor_notify("관심사 설정은 회원만 가능합니다");
 		<% end %>
 	}
 
@@ -192,7 +192,7 @@
 				$("#category_submit_btn").css({"backgroundColor":"#dbdbdb"});
 			}
 		<% else %>
-      visitor_notify("관심사 설정은<br>회원만 가능합니다");
+      visitor_notify("관심사 설정은 회원만 가능합니다");
 		<% end %>
 	}
 
@@ -204,7 +204,7 @@
 				notify("변경된 내용이 없습니다");
 			}
 		<% else %>
-      visitor_notify("관심사 설정은<br>회원만 가능합니다");
+      visitor_notify("관심사 설정은 회원만 가능합니다");
 		<% end %>
 	}
 

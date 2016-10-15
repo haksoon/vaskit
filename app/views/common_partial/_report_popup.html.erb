@@ -81,6 +81,7 @@
 			return;
 		}else if(report_type == 4 && report_message == ""){
 			notify("신고하실 내용을 입력해주세요");
+			$("#ask_report_message").focus();
 			return;
 		}
 		$.ajax({
@@ -88,22 +89,22 @@
 	        type: 'POST',
 	        data: {'target': target, 'target_id':target_id, 'report_type':report_type, 'message':$("#ask_report_message").val() },
 	        dataType: 'json',
-	        error: function(){
-	            return false;
+					error: function(){
+	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 	        },
 	        success: function(data){
 	        	if (data.already_report){
 	        		notify("이미 신고하신 항목입니다");
 	        	} else {
-	        		notify("신고가 정상적으로 접수되었습니다<br>감사합니다!");
+	        		notify("신고가 정상적으로 접수되었습니다. 감사합니다!");
 	        	}
+						hide_report_popup();
 	        },
 	        beforeSend: function(){
 						progressStart();
 	        },
 	        complete: function(){
 						progressEnd();
-            hide_report_popup();
 	        }
 		});
 	}
