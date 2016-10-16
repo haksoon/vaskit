@@ -14,21 +14,18 @@
 <%= render :partial => "common_partial/report_popup" %>
 
 <script>
-  !(function show_ask(){
-    var ask = asks[0];
-    is_show_opened = true;
-    show_detail_vote_count(ask.id);
-    $("#ask_deal_"+ask.id+"_table").html(askDealTableTemplate({ask: ask}));
-    tooltip_box(ask.id);
-    $("#ask_"+ask.id+"_message_more").click();
-    $("#ask_"+ask.id+"_comment").html(askCommentTemplate({ask: ask}));
-    for (i=0; i<ask.comments.length; i++) {
-      var comment = ask.comments[i];
-      link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
-    };
-    comment_input_setting(ask.id, ask.user);
-    $("#ask_"+ask.id+"_detail_btn").html(askDetailBtnTemplate({ask: ask, is_card_opened: true}));
-    $("#ask_"+ask.id+"_detail_off").attr("onclick","header_back_button(); return false;");
-    $("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").show();
-  })();
+  is_show_opened = true;
+  show_detail_vote_count(ask.id);
+  $("#ask_deal_"+ask.id+"_table").html(askDealTableTemplate({ask: ask}));
+  tooltip_box(ask.id);
+  $("#ask_"+ask.id+"_message_more").click();
+  $("#ask_"+ask.id+"_comment").html(askCommentTemplate({ask: ask}));
+  for (i=0; i<ask.comments.length; i++) {
+    var comment = ask.comments[i];
+    link_tagging(comment.content, $('#comment_content_'+comment.id+' .comment_content'), true);
+  };
+  comment_input_setting(ask.id, ask.user);
+  $("#ask_"+ask.id+"_detail_btn").html(askDetailBtnTemplate({ask: ask, is_card_opened: true}));
+  $("#ask_"+ask.id+"_detail_off").attr("onclick","header_back_button(); return false;");
+  $("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").show();
 </script>
