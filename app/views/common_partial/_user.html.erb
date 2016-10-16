@@ -615,7 +615,7 @@
 						$("#alram_"+alram_id).css("background-color","#fff");
 						if (parseInt($("#alram_feed_count").html()) > 0) $("#alram_feed_count").html( parseInt($("#alram_feed_count").html()) - 1 + "개");
 						user_off();
-						ask = data.ask;
+						var ask = data.ask;
 
 						if (!asks.some(function(item, index, array){
 							if (item.id == ask.id) { asks.splice(index, 1, ask); }

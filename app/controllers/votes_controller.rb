@@ -4,11 +4,7 @@ class VotesController < ApplicationController
 
   def create
     ask_deal_id = params[:ask_deal_id]
-    if ActiveRecord::Type::Boolean.new.type_cast_from_database(params[:is_left])
-      ask = Ask.find_by_left_ask_deal_id(ask_deal_id)
-    else
-      ask = Ask.find_by_right_ask_deal_id(ask_deal_id)
-    end
+    ask = Ask.find_by_id(params[:ask_id])
 
     if current_user
       vote = Vote.where(:ask_id => ask.id, :user_id => current_user.id).first

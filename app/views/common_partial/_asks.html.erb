@@ -1171,16 +1171,18 @@
 
   var currentPage = 1;
   $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px;'></div>");
-	for(var i=0; i < asks.length; i++) {
-		ask = asks[i]
-    $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
-		hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-    link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-		abbreviate_msg(ask.message, ask.id);
-    hover_action(ask.id);
-    // var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false });
-    // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
-	}
+  !(function ask_load(){
+    for(var i=0; i < asks.length; i++) {
+      var ask = asks[i]
+      $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
+      hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+      link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+      abbreviate_msg(ask.message, ask.id);
+      hover_action(ask.id);
+      // var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false });
+      // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
+    }
+  })();
 
   if (currentPage == 1) {
     ga('send', 'event', '유저별/첫페이지 로딩 횟수', 'first_page_loading_per_user', current_user_id.toString(), 1);
@@ -1254,7 +1256,7 @@
       	        		}
                     $("#asks").append("<div id='page"+currentPage+"' style='margin:15px 0px;'></div>");
       	        		for(var i=0; i < more_asks.length; i++) {
-          						ask = more_asks[i];
+          						var ask = more_asks[i];
                       $("#page"+currentPage).append(askTemplate({ask: ask}));
       								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
                       link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
@@ -1332,7 +1334,7 @@
 	 		$.ajax({
 		        url: "/votes.json",
 		        type: 'POST',
-		        data: {'ask_deal_id': ask_deal_id, 'is_left':is_left },
+		        data: {'ask_id': ask_id, 'ask_deal_id': ask_deal_id, 'is_left':is_left },
 		        dataType: 'json',
 		        error: function(){
 		          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
@@ -1415,7 +1417,7 @@
     $("#asks").hide();
     $("#ask_detail").show().html($("#ask_"+ask_id));
 
-    ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     $("#mini_new_comment_"+ask_id).slideUp(200);
     show_detail_vote_count(ask_id);
     tooltip_box(ask_id);
@@ -1445,6 +1447,7 @@
 	}
 
   function card_detail_off(ask_id) {
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     is_more_asks = true;
     is_card_opened = false;
     $("#endless_loading").show();
@@ -1753,6 +1756,7 @@
           },
           success: function(data){
             if (data.message = "success"){
+              var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
               ask.comments.push(data.comment);
               $("#ask_"+ask_id+"_comment_list").append(askCommentListTemplate({ask:data.ask, comment:data.comment}));
               $("#comment_"+data.comment.id).animateCss("flipInX");
@@ -1843,6 +1847,7 @@
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
         success: function(data){
+          var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
           ask.comments.pop(data.comment);
           if (data.status == "success") {
             $("#comment_"+comment_id).animateCssRemove("flipOutX");
@@ -2203,6 +2208,7 @@
         },
         success: function(data){
           if (data.message = "success"){
+            var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
             ask.comments.push(data.comment);
             $("#comment_"+comment_id+"_reply_list").append(replyCommentListTemplate({ask:data.ask, comment:data.comment}));
             $("#comment_"+data.comment.id).animateCss("flipInX");
