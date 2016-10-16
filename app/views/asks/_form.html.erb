@@ -4,12 +4,12 @@
 	<%= form_for(@ask) do |f| %>
 		<div class="content_box" style="padding:10px; margin-bottom:15px;">
 			<div class="table_div">
-				<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "어떤 제품/서비스의 구매를 고민중이신가요?" }, autofocus: true, :class => "category_select" %>
+				<%= f.select :category_id, options_for_select(Category.all.collect {|c| [ c.name, c.id ] }, ["관심사", f.object.category_id]), { include_blank: "어떤 제품/서비스의 구매를 고민중이신가요?" }, :class => "category_select" %>
 				<span class="input_icon left_input" onclick="$('#ask_category_id').focus().select(); return false;"><i class="fa fa-filter"></i></span>
 			</div>
 			<div class="table_div" style="margin-bottom:0px; height:120px;">
 				<div id="hashtag_container">
-					<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input" %>
+					<%= f.text_area :message, :placeholder => "구매를 고민하고 있는 상황을 알려주세요! #고민고민하지마 #VASKIT", :class => "ask_message_input", :style => "position:absolute;" %>
 					<div id="hashtag_backdrop">
 						<div id="hashtag_highlights"></div>
 					</div>
@@ -642,12 +642,8 @@
 	  });
 	}
 
-	if (!isIE) {		// IE는 일단 해당 기능 제거할 것
-		bindEvents();
-		handleInput();
-	}
-
-	$("#ask_message").css("position","absolute");
+	bindEvents();
+	handleInput();
 
 	// 금액 필드 콤마찍기
 	function comma(str) {

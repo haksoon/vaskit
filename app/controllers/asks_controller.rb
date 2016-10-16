@@ -39,7 +39,7 @@ class AsksController < ApplicationController
     ask_like = AskLike.where(:user_id => current_user.id, :ask_id => params[:id]).first
     if ask_like
       already_like = true
-      ask_like.delete
+      ask_like.destroy
       ask.update(:like_count => ask.like_count - 1)
     else
       ask_like = AskLike.create(:user_id => current_user.id, :ask_id => params[:id])
@@ -256,7 +256,7 @@ class AsksController < ApplicationController
       end
     end
 
-    HashTag.delete_all(:ask_id => @ask.id) #AJS추가 - 해쉬태그 기존 값을 모두 삭제 후 업데이트된 내용으로 재 설정
+    HashTag.destroy_all(:ask_id => @ask.id) #AJS추가 - 해쉬태그 기존 값을 모두 삭제 후 업데이트된 내용으로 재 설정
     hash_tags = @ask.message.scan(/#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr("#","").tr(",","")

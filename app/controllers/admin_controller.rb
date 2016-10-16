@@ -52,7 +52,7 @@ class AdminController < ApplicationController
   end
 
   def delete_rank_ask
-    RankAsk.find(params[:rank_ask_id]).delete
+    RankAsk.find(params[:rank_ask_id]).destroy
     render :json => {:status => "success"}
   end
 

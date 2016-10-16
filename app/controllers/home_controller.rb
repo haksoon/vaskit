@@ -127,7 +127,7 @@ class HomeController < ApplicationController
 
   #GET /home/set_cateogry
   def set_category
-    UserCategory.delete_all(:user_id => current_user.id) if current_user
+    UserCategory.destroy_all(:user_id => current_user.id) if current_user
     if params[:category_ids] == "all"
       @asks = Ask.all.order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal])
     else

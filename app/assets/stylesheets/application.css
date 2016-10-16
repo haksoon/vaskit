@@ -56,6 +56,7 @@ input, select, textarea {
 	-webkit-appearance: none;
 		 -moz-appearance: none;
 					appearance: none;
+	font-family: "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
 }
 input:focus, select:focus, textarea:focus {
 	outline: none;
@@ -71,6 +72,8 @@ input:focus, select:focus, textarea:focus {
 	background-color: #f4f4f4;
 	position:relative;
 	box-sizing:border-box;
+
+	-ms-overflow-style: none;
 
 	/*height: 100%;
 	overflow-y: auto;

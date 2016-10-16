@@ -744,11 +744,13 @@ $.fn.scrollEnd = function(callback, timeout) {
 
 
 $( document ).ready(function() {
-  $("select").on("change",function(){
-    if( $(this).val() != "" ) {
-      $(this).css("color","#666");
-    } else {
+  $("select").on("focus",function(){
+    $(this).css("color","#666");
+  }).on("blur",function(){
+    if( $(this).val() == "" || $(this).val() == null ) {
       $(this).css("color","#ccc");
+    } else {
+      $(this).css("color","#666");
     }
   });
 	//ie 에서 placeholder

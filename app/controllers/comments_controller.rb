@@ -97,7 +97,7 @@ class CommentsController < ApplicationController
 
   #어드민에서 삭제
   def destroy
-    Comment.find_by_id(params[:id]).destroy
+    Comment.find_by_id(params[:id]).delete
     redirect_to(:back)
   end
 
@@ -144,7 +144,7 @@ class CommentsController < ApplicationController
     comment_like = CommentLike.where(:user_id => current_user.id, :comment_id => params[:id]).first
     if comment_like
       already_like = true
-      comment_like.delete
+      comment_like.destroy
       comment.update(:like_count => comment.like_count - 1)
     else
       comment_like = CommentLike.create(:user_id => current_user.id, :comment_id => params[:id])

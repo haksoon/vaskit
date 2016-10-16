@@ -57,8 +57,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def destroy
-    user = User.find_by_id(params[:id])
-    user.delete
+    user = User.find_by_id(params[:id]).delete
     redirect_to(:back)
   end
 
