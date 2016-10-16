@@ -144,7 +144,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay">
-						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin:25%;">
+            <i class="animated rubberBand fa fa-check-circle" style="position:absolute; width:80px; height:80px; top:50%; left:50%; margin-top:-38px; margin-left:-40px; font-size:80px; color:#fff; font-weight:bold;"></i>
 					</a>
 				{{ } }}
 			{{ } }}
@@ -163,7 +163,7 @@
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false); return false;" class="card_image_overlay"></a>
 				{{ }else if(ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
 					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false ); return false;" class="card_image_overlay">
-						<img src="/images/custom/vote_result_check.png" style="width:50%; height:50%; margin:25%;">
+						<i class="animated rubberBand fa fa-check-circle" style="position:absolute; width:80px; height:80px; top:50%; left:50%; margin-top:-38px; margin-left:-40px; font-size:80px; color:#fff; font-weight:bold;"></i>
 					</a>
 				{{ } }}
 			{{ } }}
@@ -752,7 +752,7 @@
                 <span id="comment_{{=comment.id}}_like_count">{{=comment.like_count}}</span>
               </a>
               <a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="display:block; padding:0 5px 10px 0; color:#666;">
-                <i class="fa fa-reply" style="margin:1px 3px 0px 2px; transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:text-top;"></i>답글
+                <i class="fa fa-reply fa-rotate-180" style="margin:1px 3px 0px 2px; font-size:10px; vertical-align:text-top;"></i>답글
               </a>
             </div>
   				</div>
@@ -797,7 +797,7 @@
   			{{ } }}
   		</div>
       <div id="reply_comment_box_{{=comment.id}}" style="text-align:left; padding:5px 0; display:none;">
-        <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+        <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
         <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
           <img id="attached_reply_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
           <div id="attached_reply_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:none;">
@@ -942,7 +942,7 @@
   	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
       <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
         <div id="comment_content_{{=comment.id}}" style="text-align:left;">
-          <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+          <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
             {{ if (comment.user.id == 1) { }}
               <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);">VASKIT</span>
@@ -985,7 +985,7 @@
           </div>
         </div>
         <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
-          <span><i class="fa fa-reply" style="transform:rotateZ(180deg); -webkit-transform:rotateZ(180deg); font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+          <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
             {{ if (comment.image_file_name != null) { }}
               <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
@@ -1171,16 +1171,18 @@
 
   var currentPage = 1;
   $("#asks").append("<div id='page"+(currentPage-1)+"' style='margin:15px 0px;'></div>");
-	for(var i=0; i < asks.length; i++) {
-		ask = asks[i]
-    $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
-		hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-    link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
-		abbreviate_msg(ask.message, ask.id);
-    hover_action(ask.id);
-    // var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false });
-    // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
-	}
+  !(function ask_load(){
+    for(var i=0; i < asks.length; i++) {
+      var ask = asks[i]
+      $("#page"+(currentPage-1)).append(askTemplate({ask: ask}));
+      hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+      link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
+      abbreviate_msg(ask.message, ask.id);
+      hover_action(ask.id);
+      // var comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false });
+      // if (comments.length > 0) $('#ask_'+ask.id+'_comment_preview').vTicker('init', {pause:2500, mousePause:false});
+    }
+  })();
 
   if (currentPage == 1) {
     ga('send', 'event', '유저별/첫페이지 로딩 횟수', 'first_page_loading_per_user', current_user_id.toString(), 1);
@@ -1254,7 +1256,7 @@
       	        		}
                     $("#asks").append("<div id='page"+currentPage+"' style='margin:15px 0px;'></div>");
       	        		for(var i=0; i < more_asks.length; i++) {
-          						ask = more_asks[i];
+          						var ask = more_asks[i];
                       $("#page"+currentPage).append(askTemplate({ask: ask}));
       								hash_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
                       link_tagging(ask.message, $("#ask_"+ask.id+"_message_text"));
@@ -1328,7 +1330,7 @@
 	function vote_ask_deal(ask_id, ask_deal_id, is_left){
 	 	if (current_user_id == 0 && my_vote_count > 4){
 	 		visitor_notify("더 많은 투표는 회원만 가능합니다");
-	 	}else{
+	 	} else {
 	 		$.ajax({
 		        url: "/votes.json",
 		        type: 'POST',
@@ -1375,31 +1377,31 @@
 
 	function show_detail_vote_count(ask_id) {
     $("#detail_vote_count_"+ask_id).css({"height":"50px"});
-		$.ajax({
-			url: "/asks/"+ask_id+"/show_detail.json",
-			type: "GET",
-			data: {'id': ask_id},
-			dataType: 'json',
-			error: function(){
-				notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
-			},
-			success: function(data){
-        var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
-        var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
-        if ((is_card_opened || is_show_opened) && (already_vote.length != 0 || ask.user_id == current_user_id)) {
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    var already_vote = $.grep(my_votes, function(obj) { return obj.ask_id === ask_id });
+    if ((is_card_opened || is_show_opened) && (already_vote.length != 0 || ask.user_id == current_user_id)) {
+      $.ajax({
+        url: "/asks/"+ask_id+"/show_detail.json",
+        type: "GET",
+        data: {'id': ask_id},
+        dataType: 'json',
+        error: function(){
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+        },
+        success: function(data){
           $("#detail_vote_count_"+ask_id).animate({"height":"195px"},750).html(detailVoteCountTemplate({detail_vote_count: data.detail_vote_count}));
-        } else {
-          var not_yet = '<span class="animated pulse" style="display:block; font-size:13px; font-weight:bold; line-height:50px; background-color:cornsilk;" onclick="notify(\'투표에 먼저 참여해주세요!\'); $(\'html, body\').animate({scrollTop:0},250); return false;"><i class="fa fa-bar-chart" style="color:#ee6e01;"></i> 누가 투표했을까요?</span>'
-          $("#detail_vote_count_"+ask_id).html(not_yet);
+        },
+        beforeSend: function(){
+          var loading = '<i class="fa fa-circle-o-notch fa-spin" style="font-size:15px; line-height:50px;"></i>';
+          $("#detail_vote_count_"+ask_id).html(loading);
+        },
+        complete: function(){
         }
-			},
-			beforeSend: function(){
-        var loading = '<i class="fa fa-circle-o-notch fa-spin" style="font-size:15px; line-height:50px;"></i>';
-        $("#detail_vote_count_"+ask_id).html(loading);
-			},
-			complete: function(){
-			}
-		});
+      });
+    } else {
+      var not_yet = '<span class="animated pulse" style="display:block; font-size:13px; font-weight:bold; line-height:50px; background-color:cornsilk;" onclick="notify(\'투표에 먼저 참여해주세요!\'); $(\'html, body\').animate({scrollTop:0},250); return false;"><i class="fa fa-bar-chart" style="color:#ee6e01;"></i> 누가 투표했을까요?</span>'
+      $("#detail_vote_count_"+ask_id).html(not_yet);
+    }
 	}
 
   function card_detail_on(ask_id) {
@@ -1415,7 +1417,7 @@
     $("#asks").hide();
     $("#ask_detail").show().html($("#ask_"+ask_id));
 
-    ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     $("#mini_new_comment_"+ask_id).slideUp(200);
     show_detail_vote_count(ask_id);
     tooltip_box(ask_id);
@@ -1445,6 +1447,7 @@
 	}
 
   function card_detail_off(ask_id) {
+    var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
     is_more_asks = true;
     is_card_opened = false;
     $("#endless_loading").show();

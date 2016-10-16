@@ -39,19 +39,16 @@
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:left;">
 			<a href="#" onclick="select_ask_deal(<%=@ask.left_ask_deal.id%>, true); return false;">
 				<img src='<%= @ask.left_ask_deal.image.url(:normal) %>' class="card_image"/>
-				<a href="#" onclick="return false;" id="left_select_div" class="card_image_overlay" style="border:5px solid #ee6e01; box-sizing:border-box; display:none;">
-					<img src="/images/custom/vote_result_check.png" style="width:50%; margin:25%;">
-				</a>
 			</a>
 		</div>
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:right;">
 			<a href="#" onclick="select_ask_deal(<%=@ask.right_ask_deal.id%>, false); return false;">
 				<img src='<%= @ask.right_ask_deal.image.url(:normal) %>' class="card_image"/>
-				<a href="#" onclick="return false;" id="right_select_div" class="card_image_overlay" style="border:5px solid #ee6e01; box-sizing:border-box; display:none;">
-					<img src="/images/custom/vote_result_check.png" style="width:50%; margin:25%;">
-				</a>
 			</a>
 		</div>
+		<a href="#" onclick="return false;" id="select_div" class="card_image_overlay" style="width:50%; border:10px solid #ffe4a9; box-sizing:border-box; display:none; transition:left .75s ease-out;">
+			<i class="fa fa-check-circle" style="position:absolute; width:80px; height:80px; top:50%; left:50%; margin-top:-38px; margin-left:-40px; font-size:80px; color:#ffcc5a; font-weight:bold;"></i>
+		</a>
 	</div>
 	<div id="final_vote_count">
 	</div>
@@ -464,14 +461,21 @@
 	}
 
 	function select_ask_deal(ask_deal_id, is_left){
-		selected_ask_deal_id = ask_deal_id;
-		$("#left_select_div").hide();
-		$("#right_select_div").hide();
-		if (is_left){
-			$("#left_select_div").show();
-		}else{
-			$("#right_select_div").show();
+		if (selected_ask_deal_id == null) {
+			if (is_left){
+				$("#select_div").show().css("left","0%").animateCss("slideInRight");
+			} else {
+				$("#select_div").show().css("left","50%").animateCss("slideInLeft");
+			}
+		} else {
+			if (is_left){
+				$("#select_div").css("left","0%");
+			} else {
+				$("#select_div").css("left","50%");
+			}
 		}
+		$("#select_div i").animateCss("rubberBand");
+		selected_ask_deal_id = ask_deal_id;
 		ready_to_submit();
 	}
 

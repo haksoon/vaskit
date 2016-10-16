@@ -6,9 +6,9 @@ class Ask < ActiveRecord::Base
   has_many :comments
   has_one :rank_ask
   has_one :ask_complete
-  
+
   ASK_PER = 5
-  
+
   def detail_vote_count
     age_20 = Date.new(Time.now.year - 18, 1, 1)
     age_20_1_end = Date.new(Time.now.year - 22, 1, 1)
@@ -17,7 +17,7 @@ class Ask < ActiveRecord::Base
     age_30_1_end = Date.new(Time.now.year - 32, 1, 1)
     age_30_2_end = Date.new(Time.now.year - 35, 1, 1)
     age_30_3_end = Date.new(Time.now.year - 38, 1, 1)
-    
+
     detail_vote_count = {
       :left => {
         :male_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.gender = true").where("votes.ask_deal_id = ?", self.left_ask_deal_id).count,
@@ -42,7 +42,7 @@ class Ask < ActiveRecord::Base
         :etc_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday IS NOT NULL AND (users.birthday > ? OR users.birthday < ?)", age_20, age_30_3_end).where("votes.ask_deal_id = ?", self.right_ask_deal_id).count
       }
     }
-    
+
   end
-  
+
 end

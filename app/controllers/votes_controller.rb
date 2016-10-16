@@ -26,9 +26,8 @@ class VotesController < ApplicationController
       end
     end
     ask.reload
-    detail_vote_count = ask.detail_vote_count
     ask = ask.as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}}])
-    render :json => {:ask => ask, :vote => vote, :detail_vote_count => detail_vote_count}
+    render :json => { :ask => ask, :vote => vote }
   end
 
   def destroy
