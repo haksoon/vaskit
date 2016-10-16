@@ -24,11 +24,28 @@
 				<i class="fa fa-caret-down"></i> 나만의 현황판
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">How is it going on..?&nbsp;<i class="fa fa-dashboard"></i></span>
 			</p>
+			{{ if (in_progress_count > 0) { }}
+			<a href="#" onclick="{{= in_progress_count }} == 0 ? notify('진행중인 질문이 아직 없네요 T_T') : go_url('/?type=my_ask_in_progress'); return false;" class="table_div" style="display:block; width:100%; box-sizing:border-box; background-color:#4b3d3d; text-align:left; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;">
+					<span class="input_icon left_input" style="width:50px; height:50px; line-height:50px; background-color:#fff; border-color:#4b3d3d; border-radius:5px; color:#4b3d3d;"><i class="fa fa-play"></i></span>
+					<span style="margin-left:60px; font-size:16px; float:left;">진행중인 질문</span>
+					<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= in_progress_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
+			</a>
 			<div id="my_asks_seg">
-				<a href="#" onclick="notify('잠시만요! 불러오는 중입니다...'); return false;" style="display:block; padding:50px 10px; margin:0; font-size:13px; text-align:center; color:#666; background-color:#fff; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 3px 3px;">
-					<i class="fa fa-circle-o-notch fa-spin" style="font-size:16px;"></i> 불러오는 중...
+				<a href="#" onclick="notify('잠시만요! 불러오는 중입니다...'); return false;" style="display:block; margin:10px 0 0; height:280px; line-height:280px; font-size:13px; text-align:center; color:#666; background-color:#fff; border:1px solid #dbdbdb; border-radius:5px;">
+					<i class="fa fa-circle-o-notch fa-spin" style="font-size:16px;"></i>
 				</a>
+				<div style="height:30px; line-height:30px; color:#9d9ea1; font-size:12px; text-align:center;">불러오는 중...</div>
+				<div class="table_div">
+					<a id="prev_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('첫번째 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:left; background-color:#dbdbdb; color:#fff; border-radius:5px 0 0 5px; transition:background-color .5s;"><i class="fa fa-angle-double-left"></i> 이전</a>
+					<a id="next_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('마지막 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:right; background-color:#dbdbdb; color:#fff; border-radius:0 5px 5px 0; transition:background-color .5s; margin-left:-1px; border-left:1px solid #f4f4f4;">다음 <i class="fa fa-angle-double-right"></i></a>
+				</div>
 			</div>
+			{{ } else { }}
+				<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block; padding:50px 10px; margin:0; font-size:13px; text-align:center; color:#666; background-color:#fff; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 3px 3px;">
+					아직 진행중인 질문이 없으시군요?
+					<span style="display: block; color: #f18b33; font-size: 18px; padding-top: 5px;">질문 작성하기 <i class="fa fa-angle-double-right"></i></span>
+				</a>
+			{{ } }}
 		</div>
 
 		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 0;">
@@ -177,13 +194,6 @@
 	</script>
 
 	<script type="text/template" id="my_asks_template">
-	{{ if (in_progress_count > 0) { }}
-		<a href="#" onclick="{{= in_progress_count }} == 0 ? notify('진행중인 질문이 아직 없네요 T_T') : go_url('/?type=my_ask_in_progress'); return false;" class="table_div" style="display:block; width:100%; box-sizing:border-box; background-color:#4b3d3d; text-align:left; color:#fff; line-height:50px; position:relative; margin:10px 0; border-radius:5px;">
-				<span class="input_icon left_input" style="width:50px; height:50px; line-height:50px; background-color:#fff; border-color:#4b3d3d; border-radius:5px; color:#4b3d3d;"><i class="fa fa-play"></i></span>
-				<span style="margin-left:60px; font-size:16px; float:left;">진행중인 질문</span>
-				<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= in_progress_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
-		</a>
-
 		<ul id="my_asks_card_box" class="bxslider" style="display:none; position:relative; width:100%; height:300px; left:0px; overflow-y:hidden; margin:0; padding:0; list-style:none;">
 		{{ for (var i=0; i < my_asks.length; i++) { }}
 			{{ var my_ask = my_asks[i] }}
@@ -338,12 +348,6 @@
 			<a id="prev_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('첫번째 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:left; background-color:#dbdbdb; color:#fff; border-radius:5px 0 0 5px; transition:background-color .5s;"></a>
 			<a id="next_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('마지막 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:right; background-color:#dbdbdb; color:#fff; border-radius:0 5px 5px 0; transition:background-color .5s; margin-left:-1px; border-left:1px solid #f4f4f4;"></a>
 		</div>
-	{{ } else { }}
-		<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block; padding:50px 10px; margin:0; font-size:13px; text-align:center; color:#666; background-color:#fff; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 3px 3px;">
-			아직 진행중인 질문이 없으시군요?
-			<span style="display: block; color: #f18b33; font-size: 18px; padding-top: 5px;">질문 작성하기 <i class="fa fa-angle-double-right"></i></span>
-		</a>
-	{{ } }}
 	</script>
 
 	<script type="text/template" id="user_overlay_seg_manage_template">
@@ -456,6 +460,7 @@
 					current_user_string_id = data.current_user_string_id;
 					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
 
+					var in_progress_count = data.in_progress_count;
 		      var my_ask_count = data.my_ask_count;
 					var my_like_ask_count = data.my_like_ask_count;
 		      var my_vote_count = data.my_vote_count;
@@ -472,6 +477,7 @@
 					var right_ask_thumbnails = data.right_ask_thumbnails;
 
 					$("#user_overlay_seg").html(userOverlaySegTemplate({
+						in_progress_count:in_progress_count,
 						my_ask_count:my_ask_count,
 						my_like_ask_count:my_like_ask_count,
 						my_vote_count:my_vote_count,
@@ -483,7 +489,7 @@
 						left_ask_thumbnails:left_ask_thumbnails,
 						right_ask_thumbnails:right_ask_thumbnails
 					}));
-					get_my_asks();
+					if (in_progress_count > 0) get_my_asks(in_progress_count);
 		    },
 		    beforeSend: function(){
 					var loading = '<i class="fa fa-circle-o-notch fa-spin" style="color:#998674; line-height:200px;"></i>'
@@ -495,7 +501,7 @@
 		  });
 		}
 
-		function get_my_asks() {
+		function get_my_asks(in_progress_count) {
 			$.ajax({
 		    url: "/users/get_my_asks.json",
 		    type: "GET",
@@ -507,7 +513,6 @@
 		    success: function(data){
 					var my_asks = data.my_asks_in_progress;
 					var my_asks_details = data.my_asks_in_progress_detail;
-					var in_progress_count = data.in_progress_count;
 
 					for (var i=0; i<my_asks.length; i++) {
 						var my_ask = my_asks[i];
@@ -520,9 +525,9 @@
 					}
 
 					$("#my_asks_seg").html(myAsksSegTemplate({
-						my_asks:my_asks,
-						my_asks_details:my_asks_details,
 						in_progress_count:in_progress_count,
+						my_asks:my_asks,
+						my_asks_details:my_asks_details
 					}));
 
 					if (in_progress_count > 1) $("#next_card_btn").css('background-color','#cbcbcb');

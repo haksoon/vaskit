@@ -18,6 +18,21 @@ class HomeController < ApplicationController
     @type = params[:type]
 
     case params[:type]
+      when "my_ask_in_progress"
+        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
+        @asks = Ask.where(:user_id => current_user.id, :be_completed => false).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
+      when "my_ask"
+        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
+        @asks = Ask.where(:user_id => current_user.id).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
+      when "my_like_ask"
+        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
+        @asks = Ask.where(:id => @my_like_ask.map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
+      when "vote_ask"
+        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
+        @asks = Ask.where(:id => @my_votes.map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
+      when "comment_ask"
+        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
+        @asks = Ask.where(:id => Comment.where(:user_id => current_user.id).map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
       when "user"
         flash[:keyword] = params[:keyword] #AJS추가
         users = User.where("string_id like ?", "#{params[:keyword]}%") #AJS추가
@@ -35,21 +50,6 @@ class HomeController < ApplicationController
         flash[:keyword] = params[:keyword] #AJS추가
         ask_deals = AskDeal.where("brand like ?", "%#{params[:keyword]}%" )
         @asks = Ask.where("left_ask_deal_id in (?) OR right_ask_deal_id in (?)", ask_deals.map(&:id), ask_deals.map(&:id)).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) unless ask_deals.blank?
-      when "my_ask"
-        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
-        @asks = Ask.where(:user_id => current_user.id).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
-      when "vote_ask"
-        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
-        @asks = Ask.where(:id => @my_votes.map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
-      when "comment_ask"
-        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
-        @asks = Ask.where(:id => Comment.where(:user_id => current_user.id).map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
-      when "my_ask_in_progress"
-        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
-        @asks = Ask.where(:user_id => current_user.id, :be_completed => false).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
-      when "my_like_ask"
-        @asks = "visitor" unless current_user #비회원이 해당 URL로 접속했을 때 랜딩페이지로 리다이렉트시킴
-        @asks = Ask.where(:id => @my_like_ask.map(&:ask_id).uniq ).page(params[:page]).per(Ask::ASK_PER).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, :ask_complete, {:comments => {:include => :user}} ]) if current_user
       when "none" #통합 검색
         keyword = params[:keyword]
         flash[:keyword] = params[:keyword] #AJS추가
