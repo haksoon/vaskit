@@ -7,19 +7,9 @@ class VotesController < ApplicationController
     ask = Ask.find_by_id(params[:ask_id])
 
     if current_user
-      vote = Vote.where(:ask_id => ask.id, :user_id => current_user.id).first
-      if vote
-        vote.update(:ask_deal_id => ask_deal_id)
-      else
-        vote = Vote.create(:ask_id => ask.id, :ask_deal_id => ask_deal_id, :user_id => current_user.id)
-      end
+      vote = Vote.create(:ask_id => ask.id, :ask_deal_id => ask_deal_id, :user_id => current_user.id)
     elsif @visitor
-      vote = Vote.where(:ask_id => ask.id, :visitor_id => @visitor.id).first
-      if vote
-        vote.update(:ask_deal_id => ask_deal_id)
-      else
-        vote = Vote.create(:ask_id => ask.id, :ask_deal_id => ask_deal_id, :visitor_id => @visitor.id)
-      end
+      vote = Vote.create(:ask_id => ask.id, :ask_deal_id => ask_deal_id, :visitor_id => @visitor.id)
     end
     ask.reload
     ask = ask.as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}}])

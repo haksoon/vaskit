@@ -135,16 +135,16 @@
 	<div class="table_div" style="margin-bottom:0;">
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:left;">
 			<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;">
-				<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image" onerror="imgError(this);"/>
-				<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.2; display:none;"></span>
+				<img src='{{= get_image_url(left_ask_deal, "ask_deals", "normal") }}' class="card_image_{{=ask.id}} card_image left_card_image" onerror="imgError(this);"/>
+				<span class="card_image_hover_{{=ask.id}} card_image_hover left_card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.5; display:none;"></span>
 				<p class="card_image_expander"><i class="fa fa-expand"></i></p>
 			</a>
 			{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
 				{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
-					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay"></a>
+					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay_{{=ask.id}} card_image_overlay_lose card_image_overlay"></a>
 				{{ }else if(ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay">
-            <i class="animated rubberBand fa fa-check-circle" style="position:absolute; width:80px; height:80px; top:50%; left:50%; margin-top:-38px; margin-left:-40px; font-size:80px; color:#fff; font-weight:bold;"></i>
+					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.left_ask_deal_id}}, true); return false;" class="card_image_overlay_{{=ask.id}} card_image_overlay_win card_image_overlay">
+            <i class="fa fa-check-circle" style="position:absolute; width:80px; height:80px; top:50%; left:50%; margin-top:-38px; margin-left:-40px; font-size:80px; color:#fff; font-weight:bold;"></i>
 					</a>
 				{{ } }}
 			{{ } }}
@@ -154,16 +154,16 @@
 		</div>
 		<div class="table_div" style="margin-bottom:0; width:50%; overflow:hidden; float:right;">
 			<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false); return false;">
-				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image" onerror="imgError(this);"/>
-				<span class="card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.2; display:none;"></span>
+				<img src='{{= get_image_url(right_ask_deal, "ask_deals", "normal") }}' class="card_image_{{=ask.id}} card_image right_card_image" onerror="imgError(this);"/>
+				<span class="card_image_hover_{{=ask.id}} card_image_hover right_card_image_hover" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#ffe4a9; opacity:0.5; display:none;"></span>
 				<p class="card_image_expander"><i class="fa fa-expand"></i></p>
 			</a>
 			{{ if( ask.user_id == current_user_id || already_vote.length != 0 || ask.be_completed){ }}
 				{{ if ((ask.user_id == current_user_id || ask.be_completed) || ask.left_ask_deal_id == already_vote[0].ask_deal_id){ }}
-					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false); return false;" class="card_image_overlay"></a>
+					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false); return false;" class="card_image_overlay_{{=ask.id}} card_image_overlay_lose card_image_overlay"></a>
 				{{ }else if(ask.right_ask_deal_id == already_vote[0].ask_deal_id){ }}
-					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false ); return false;" class="card_image_overlay">
-						<i class="animated rubberBand fa fa-check-circle" style="position:absolute; width:80px; height:80px; top:50%; left:50%; margin-top:-38px; margin-left:-40px; font-size:80px; color:#fff; font-weight:bold;"></i>
+					<a href="#" onclick="ask_image_on({{=ask.id}}, {{=ask.right_ask_deal_id}}, false ); return false;" class="card_image_overlay_{{=ask.id}} card_image_overlay_win card_image_overlay">
+						<i class="fa fa-check-circle" style="position:absolute; width:80px; height:80px; top:50%; left:50%; margin-top:-38px; margin-left:-40px; font-size:80px; color:#fff; font-weight:bold;"></i>
 					</a>
 				{{ } }}
 			{{ } }}
@@ -226,7 +226,7 @@
     <div id="mini_new_comment_{{=ask.id}}" class="table_div" style="background-color:#f18b33; text-align:left; margin-bottom:0; display:none;">
       <div id="mini_comment_input_box_{{=ask.id}}" style="border:1px solid #ee6e01; background-color:#fff; transition:all .5s; transform:rotateX(180deg); -webkit-transform:rotateX(180deg); -webkit-backface-visibility:hidden; backface-visibility:hidden;">
         <textarea id="mini_comment_input_{{=ask.id}}" class="comment_box" placeholder="<% if current_user %>고민해결사 <%= current_user.string_id %>님! 한마디 부탁해요!<% else %>회원가입하시고 의견을 남겨주세요!<% end %>" style="display:block; padding:10px 70px 10px 40px; width:100%; min-width:100%; max-width:100%; height:40px; box-sizing:border-box; border:none; color:#383838; background-color:#fff; border-radius:0; font-size:13px; line-height:20px; text-align:{{=is_left ? 'left' : 'right'}};"></textarea>
-        <a id="mini_ask_deal_id_change_{{=ask.id}}" onclick="mini_ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}, {{=is_left}}); return false;" href="#" style="position:absolute; top:0px; left:0px; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; font-size:14px;"><i class="fa fa-align-{{=is_left ? 'left' : 'right'}}"></i></a>
+        <a id="mini_ask_deal_id_change_{{=ask.id}}" onclick="mini_ask_deal_id_change({{=ask.id}}, {{=ask.left_ask_deal_id}}, {{=ask.right_ask_deal_id}}, {{=is_left}}); return false;" href="#" style="position:absolute; top:0px; left:0px; width:40px; height:40px; line-height:40px; text-align:center; color:#ee6e01; background-color:#fff; font-size:14px;"><i class="fa fa-align-left {{=is_left ? '' : 'fa-flip-horizontal'}}" style="transition:transform .5s;"></i></a>
         <a id="mini_send_comment_btn_{{=ask.id}}" class="comment_update_btn" href="#" onclick="mini_send_comment({{=ask.id}}, {{=ask_deal_id}}, {{=is_left}}); return false;" style="position:absolute; top:0; right:0; display:block; width:60px; height:40px; background-color:#dbdbdb; color:#fff; text-align:center; line-height:40px; font-size:12px; border-radius:0; transition:all .5s;">보내기</a>
       </div>
       <div id="mini_comment_notify_{{=ask.id}}" class="comment_title already_vote" style="position:absolute; top:0; left:0; width:100%; height:100%; background-color:#f3994d; transition:all .5s; transform:rotateX(0deg); -webkit-transform:rotateX(0deg); -webkit-backface-visibility:hidden; backface-visibility:hidden;">당신의 의견을 남겨주세요&nbsp;<i class="fa fa-keyboard-o" style="font-size:16px;"></i></div>
@@ -712,14 +712,18 @@
       <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
         {{ if (comment.is_deleted == false) { }}
           <div id="comment_content_{{=comment.id}}" style="text-align:left;">
-    				<div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-              {{ if (comment.user.id == 1) { }}
-                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);">VASKIT</span>
-              {{ } else if (comment.user_id == current_user_id) { }}
-                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
-              {{ } else if (comment.user_id == ask.user_id) { }}
-                <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
-              {{ } }}
+            {{ if (comment.user_id == 1) { }}
+            <div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px 15px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              <span style="position:absolute; top:0; left:0; display:block; width:5px; height:100%; background-color:rgba(75, 61, 61, 0.8);"></span>
+            {{ } else if (comment.user_id == current_user_id) { }}
+            <div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px 15px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              <span style="position:absolute; top:0; left:0; display:block; width:5px; height:100%; background-color:rgba(153, 134, 116, 0.7);"></span>
+            {{ } else if (comment.user_id == ask.user_id) { }}
+            <div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px 15px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              <span style="position:absolute; top:0; left:0; display:block; width:5px; height:100%; background-color:rgba(238, 110, 1, 0.7);"></span>
+            {{ } else { }}
+            <div style="position:relative; margin:0 0 0 10px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            {{ } }}
               {{ if (comment.image_file_name != null) { }}
                 <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
               {{ }else{ }}
@@ -728,7 +732,11 @@
   						<span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('<', 'g'), '&lt;').replace(new RegExp('\r?\n', 'g'), '<br>')}}</span>
               <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
                 <div style="display:inline-block; width:60%; float:left; text-align:left;">
-                  <span style="float:left; margin-right:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                  {{ if (comment.user_id == 1) { }}
+                    <span style="float:left; margin-right:5px; color:#4b3d3d; font-weight:bold;">{{=comment.user.string_id}}</span>
+                  {{ } else { }}
+                    <span style="float:left; margin-right:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                  {{ } }}
                   <div style="float:left;">
                     {{ if ( comment.user_id == current_user_id ){ }}
                       <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-right:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
@@ -739,7 +747,13 @@
                   </div>
                 </div>
                 <div style="display:inline-block; width:40%; float:right; text-align:right;">
-                  {{ if (comment.user.id != 1) { }}
+                  {{ if (comment.user_id == 1) { }}
+                    <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; color:#4b3d3d;"><i class="fa fa-star"></i></span>
+                  {{ } else if (comment.user_id == current_user_id) { }}
+                    <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; color:#998674;">ME</span>
+                  {{ } else if (comment.user_id == ask.user_id) { }}
+                    <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; color:#f18b33;">ASKER</span>
+                  {{ } else { }}
                     <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
                   {{ } }}
                   <span style="float:right; margin-left:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
@@ -797,7 +811,7 @@
   			{{ } }}
   		</div>
       <div id="reply_comment_box_{{=comment.id}}" style="text-align:left; padding:5px 0; display:none;">
-        <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+        <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:10px 5px 0px 15px; color:#666;"></i></span>
         <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
           <img id="attached_reply_comment_image_{{=comment.id}}" src="" style="max-width:100%; margin:0 auto 10px 0; display:none;">
           <div id="attached_reply_edit_{{=comment.id}}" style="position:relative; margin-top:-50px; margin-bottom:10px; width:100%; height:40px; line-height:40px; text-align:center; font-size:12px; background-color:rgba(0,0,0,0.6); color:#fff; display:none;">
@@ -830,17 +844,21 @@
                 <i id="comment_{{=comment.id}}_like_icon" class="fa {{= already_like.length == 1 ? 'fa-heart' : 'fa-heart-o'}}" style="color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}}; margin-right:1px;"></i>
               </a>
               <a id="comment_reply_btn_{{=comment.id}}" class="comment_reply_btn" href="#" onclick="comment_reply({{=ask.id}}, {{=comment.id}}); return false;" style="display:block; padding:0 0 10px 5px; color:#666;">
-                답글<i class="fa fa-reply" style="margin:1px 2px 0px 3px; transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:text-top;"></i>
+                답글<i class="fa fa-reply fa-flip-vertical" style="margin:1px 2px 0px 3px; font-size:10px; vertical-align:text-top;"></i>
               </a>
             </div>
+            {{ if (comment.user_id == 1) { }}
+            <div style="position:relative; margin:0 10px 0 0; padding:10px 15px 5px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              <span style="position:absolute; top:0; right:0; display:block; width:5px; height:100%; background-color:rgba(75, 61, 61, 0.8);"></span>
+            {{ } else if (comment.user_id == current_user_id) { }}
+            <div style="position:relative; margin:0 10px 0 0; padding:10px 15px 5px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              <span style="position:absolute; top:0; right:0; display:block; width:5px; height:100%; background-color:rgba(153, 134, 116, 0.7);"></span>
+            {{ } else if (comment.user_id == ask.user_id) { }}
+            <div style="position:relative; margin:0 10px 0 0; padding:10px 15px 5px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+              <span style="position:absolute; top:0; right:0; display:block; width:5px; height:100%; background-color:rgba(238, 110, 1, 0.7);"></span>
+            {{ } else { }}
             <div style="position:relative; margin:0 10px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-              {{ if (comment.user.id == 1) { }}
-                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);">VASKIT</span>
-              {{ } else if (comment.user_id == current_user_id) { }}
-                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
-              {{ } else if (comment.user_id == ask.user_id) { }}
-                <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
-              {{ } }}
+            {{ } }}
               {{ if (comment.image_file_name != null) { }}
                 <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;" onerror="imgError(this);">
               {{ }else{ }}
@@ -849,7 +867,11 @@
               <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('<', 'g'), '&lt;').replace(new RegExp('\r?\n', 'g'), '<br>')}}</span>
               <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
                 <div style="display:inline-block; width:60%; float:right; text-align:right;">
-                  <span style="float:right; margin-left:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                  {{ if (comment.user_id == 1) { }}
+                    <span style="float:right; margin-left:5px; color:#4b3d3d; font-weight:bold;">{{=comment.user.string_id}}</span>
+                  {{ } else { }}
+                    <span style="float:right; margin-left:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                  {{ } }}
                   <div style="float:right;">
                     {{ if ( comment.user_id == current_user_id ){ }}
                       <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
@@ -860,7 +882,13 @@
                   </div>
                 </div>
                 <div style="display:inline-block; width:40%; float:left; text-align:left;">
-                  {{ if (comment.user.id != 1) { }}
+                  {{ if (comment.user_id == 1) { }}
+                    <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; color:#4b3d3d;"><i class="fa fa-star"></i></span>
+                  {{ } else if (comment.user_id == current_user_id) { }}
+                    <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; color:#998674;">ME</span>
+                  {{ } else if (comment.user_id == ask.user_id) { }}
+                    <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; color:#f18b33;">ASKER</span>
+                  {{ } else { }}
                     <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
                   {{ } }}
                   <span style="float:left; margin-right:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
@@ -930,7 +958,7 @@
             답글 남기기
           </a>
         </div>
-        <span><i class="fa fa-reply" style="transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:15px 15px 0px 5px; color:#666;"></i></span>
+        <span><i class="fa fa-reply fa-flip-vertical" style="font-size:10px; vertical-align:top; margin:10px 15px 0px 5px; color:#666;"></i></span>
       </div>
   	{{ } }}
   {{ } }}
@@ -942,15 +970,19 @@
   	{{ if (ask.left_ask_deal_id == comment.ask_deal_id){ }}
       <div id="comment_{{= comment.id }}" class="table_div" style="width:100%; text-align:left; margin:0; padding:5px 0;">
         <div id="comment_content_{{=comment.id}}" style="text-align:left;">
-          <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+          <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:10px 5px 0px 15px; color:#666;"></i></span>
+          {{ if (comment.user_id == 1) { }}
+          <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px 15px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            <span style="position:absolute; top:0; left:0; display:block; width:5px; height:100%; background-color:rgba(75, 61, 61, 0.8);"></span>
+          {{ } else if (comment.user_id == current_user_id) { }}
+          <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px 15px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            <span style="position:absolute; top:0; left:0; display:block; width:5px; height:100%; background-color:rgba(153, 134, 116, 0.7);"></span>
+          {{ } else if (comment.user_id == ask.user_id) { }}
+          <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px 15px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            <span style="position:absolute; top:0; left:0; display:block; width:5px; height:100%; background-color:rgba(238, 110, 1, 0.7);"></span>
+          {{ } else { }}
           <div style="position:relative; margin:0 0 0 0px; padding:10px 10px 5px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-            {{ if (comment.user.id == 1) { }}
-              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);">VASKIT</span>
-            {{ } else if (comment.user_id == current_user_id) { }}
-              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
-            {{ } else if (comment.user_id == ask.user_id) { }}
-              <span style="position:absolute; top:5px; right:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(45deg); -webkit-transform:rotateZ(45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
-            {{ } }}
+          {{ } }}
             {{ if (comment.image_file_name != null) { }}
               <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
             {{ }else{ }}
@@ -959,7 +991,11 @@
             <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('<', 'g'), '&lt;').replace(new RegExp('\r?\n', 'g'), '<br>')}}</span>
             <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
               <div style="display:inline-block; width:60%; float:left; text-align:left;">
-                <span style="float:left; margin-right:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                {{ if (comment.user_id == 1) { }}
+                  <span style="float:left; margin-right:5px; color:#4b3d3d; font-weight:bold;">{{=comment.user.string_id}}</span>
+                {{ } else { }}
+                  <span style="float:left; margin-right:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                {{ } }}
                 <div style="float:left;">
                   {{ if ( comment.user_id == current_user_id ){ }}
                     <a id="comment_modify_btn_{{=comment.id}}" class="comment_modify_btn" href="#" onclick="comment_modify({{=comment.id}}); return false;" style="margin-right:5px; color:#dbdbdb;"><i class="fa fa-pencil"></i></a>
@@ -970,7 +1006,13 @@
                 </div>
               </div>
               <div style="display:inline-block; width:40%; float:right; text-align:right;">
-                {{ if (comment.user.id != 1) { }}
+                {{ if (comment.user_id == 1) { }}
+                  <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; color:#4b3d3d;"><i class="fa fa-star"></i></span>
+                {{ } else if (comment.user_id == current_user_id) { }}
+                  <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; color:#998674;">ME</span>
+                {{ } else if (comment.user_id == ask.user_id) { }}
+                  <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; color:#f18b33;">ASKER</span>
+                {{ } else { }}
                   <span style="float:right; margin-left:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
                 {{ } }}
                 <span style="float:right; margin-left:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
@@ -985,7 +1027,7 @@
           </div>
         </div>
         <div id="comment_modify_box_{{=comment.id}}" style="text-align:left; display:none;">
-          <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:15px 5px 0px 15px; color:#666;"></i></span>
+          <span><i class="fa fa-reply fa-rotate-180" style="font-size:10px; vertical-align:top; margin:10px 5px 0px 15px; color:#666;"></i></span>
           <div style="position:relative; margin:0 0 0 0px; padding:9px 10px; width:60%; display:inline-block; text-align:left; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #ee6e01; border-bottom:2px solid #ee6e01; vertical-align:bottom;">
             {{ if (comment.image_file_name != null) { }}
               <img id="modify_comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 auto 10px 0;" onerror="imgError(this);">
@@ -1021,14 +1063,18 @@
               <i id="comment_{{=comment.id}}_like_icon" class="fa {{= already_like.length == 1 ? 'fa-heart' : 'fa-heart-o'}}" style="color:{{= already_like.length == 1 ? '#ee6e01' : '#9d9ea1'}}; margin-right:1px;"></i>
             </a>
           </div>
+          {{ if (comment.user_id == 1) { }}
+          <div style="position:relative; margin:0 0px 0 0; padding:10px 15px 5px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            <span style="position:absolute; top:0; right:0; display:block; width:5px; height:100%; background-color:rgba(75, 61, 61, 0.9);"></span>
+          {{ } else if (comment.user_id == current_user_id) { }}
+          <div style="position:relative; margin:0 0px 0 0; padding:10px 15px 5px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            <span style="position:absolute; top:0; right:0; display:block; width:5px; height:100%; background-color:rgba(153, 134, 116, 0.7);"></span>
+          {{ } else if (comment.user_id == ask.user_id) { }}
+          <div style="position:relative; margin:0 0px 0 0; padding:10px 15px 5px 10px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
+            <span style="position:absolute; top:0; right:0; display:block; width:5px; height:100%; background-color:rgba(238, 110, 1, 0.7);"></span>
+          {{ } else { }}
           <div style="position:relative; margin:0 0px 0 0; padding:10px 10px 5px; width:60%; display:inline-block; text-align:right; background-color:#fff; font-size:13px; line-height:20px; color:#383838; word-break:break-all; border:1px solid #dbdbdb; border-bottom:2px solid #dbdbdb; vertical-align:bottom; overflow:hidden;">
-            {{ if (comment.user.id == 1) { }}
-              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(75, 61, 61, 0.9); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);">VASKIT</span>
-            {{ } else if (comment.user_id == current_user_id) { }}
-              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#fff; background-color:rgba(238, 110, 1, 0.7); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-user" style="font-size: 11px;"></i>&nbsp;Me&nbsp;</span>
-            {{ } else if (comment.user_id == ask.user_id) { }}
-              <span style="position:absolute; top:5px; left:-30px; padding:5px 30px 0px; font-size:12px; color:#ee6e01; background-color:rgba(255, 205, 90, 0.4); transform:rotateZ(-45deg); -webkit-transform:rotateZ(-45deg);"><i class="fa fa-lightbulb-o" style="font-size: 13px;"></i>&nbsp;Asker</span>
-            {{ } }}
+          {{ } }}
             {{ if (comment.image_file_name != null) { }}
               <img id="comment_image_{{=comment.id}}" src="{{= get_image_url(comment, 'comments', 'normal') }}" style="max-width:100%; margin:0 0 10px auto;" onerror="imgError(this);">
             {{ }else{ }}
@@ -1037,7 +1083,11 @@
             <span class="comment_content" style="display:block;">{{=comment.content.replace(new RegExp('<', 'g'), '&lt;').replace(new RegExp('\r?\n', 'g'), '<br>')}}</span>
             <div class="table_div" style="margin:5px 0 0; padding:5px 5px 0; border-top:1px solid #dbdbdb; font-size:12px;">
               <div style="display:inline-block; width:60%; float:right; text-align:right;">
-                <span style="float:right; margin-left:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                {{ if (comment.user_id == 1) { }}
+                  <span style="float:right; margin-left:5px; color:#4b3d3d; font-weight:bold;">{{=comment.user.string_id}}</span>
+                {{ } else { }}
+                  <span style="float:right; margin-left:5px; color:#998674;">{{=comment.user.string_id}}</span>
+                {{ } }}
                 <div style="float:right;">
                   {{ if ( comment.user_id == current_user_id ){ }}
                     <a id="comment_delete_btn_{{=comment.id}}" href="#" onclick="comment_del({{=ask.id}}, {{=comment.id}}, false); return false;" style="margin-left:0px; color:#dbdbdb;"><i class="fa fa-trash"></i></a>
@@ -1048,14 +1098,20 @@
                 </div>
               </div>
               <div style="display:inline-block; width:40%; float:left; text-align:left;">
-                {{ if (comment.user.id != 1) { }}
+                {{ if (comment.user_id == 1) { }}
+                  <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; color:#4b3d3d;"><i class="fa fa-star"></i></span>
+                {{ } else if (comment.user_id == current_user_id) { }}
+                  <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; color:#998674;">ME</span>
+                {{ } else if (comment.user_id == ask.user_id) { }}
+                  <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; color:#f18b33;">ASKER</span>
+                {{ } else { }}
                   <span style="float:left; margin-right:5px; font-size:11px; font-weight:bold; opacity:0.8; color:{{= comment.user.gender ? '#0389ed' : '#ea065e'}};">{{=get_user_ages(comment.user.birthday)}}</span>
                 {{ } }}
                 <span style="float:left; margin-right:0px; font-size:11px; color:#9d9ea1;">{{= get_past_time(comment.created_at)}}</span>
               </div>
             </div>
           </div>
-          <span><i class="fa fa-reply" style="transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:15px 15px 0px 5px; color:#666;"></i></span>
+          <span><i class="fa fa-reply fa-flip-vertical" style="font-size:10px; vertical-align:top; margin:10px 15px 0px 5px; color:#666;"></i></span>
         </div>
         <div id="comment_modify_box_{{=comment.id}}" style="text-align:right; display:none;">
           <a id="comment_modify_cancel_btn_{{=comment.id}}" class="comment_modify_cancel_btn" href="#" onclick="comment_modify_cancel({{=comment.id}}); return false;" style="padding:10px; margin-bottom:10px; color:#ee6e01; font-size:12px; display:inline-block;">취소</a>
@@ -1082,7 +1138,7 @@
               수정하기
             </a>
           </div>
-          <span><i class="fa fa-reply" style="transform:rotateX(180deg); -webkit-transform:rotateX(180deg); font-size:10px; vertical-align:top; margin:15px 15px 0px 5px; color:#666;"></i></span>
+          <span><i class="fa fa-reply fa-flip-vertical" style="font-size:10px; vertical-align:top; margin:10px 15px 0px 5px; color:#666;"></i></span>
         </div>
   		</div>
   	{{ } }}
@@ -1092,7 +1148,7 @@
 <script type="text/template" id="ask-detail-btn-template">
   {{ if (is_card_opened) { }}
     <a id="ask_{{=ask.id}}_detail_off" class="card_detail" href="#" onclick="back_button(); return false;">
-      <span style="font-size:12px;"><i class="fa fa-angle-double-up" style="font-size:15px;">&nbsp;</i>상세 닫기</span>
+      <span style="font-size:12px;"><i class="fa fa-angle-double-up">&nbsp;</i>상세 닫기</span>
     </a>
   {{ }else{ }}
     <a id="ask_{{=ask.id}}_detail_on" class="card_detail" href="#" onclick="card_detail_on({{=ask.id}}); return false;">
@@ -1110,7 +1166,7 @@
       {{ } }}
       <div>
         <span style="float:left; margin-left:15px;"><i class="fa fa-comment" style="font-size:15px; margin-right:3px;"></i>{{=ask.left_ask_deal.comment_count}}</span>
-        <span style="font-size:12px;"><i class="fa fa-angle-double-down" style="font-size:15px;">&nbsp;</i>상세 열기</span>
+        <span style="font-size:12px;"><i class="fa fa-angle-double-down">&nbsp;</i>상세 열기</span>
         <span style="float:right; margin-right:15px;">{{=ask.right_ask_deal.comment_count}}<i class="fa fa-comment fa-flip-horizontal" style="font-size:15px; margin-left:3px;"></i></span>
       </div>
     </a>
@@ -1341,7 +1397,7 @@
 		        },
 		        success: function(data){
 		        	my_votes.push(data.vote);
-              $('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask}));
+
 	        		var vote_count_span = $("#ask_"+data.ask.id+"_vote_count");
               vote_count_span.prev().animateCssColor("tada","#ee6e01");
 	        		vote_count_span.html( parseInt(vote_count_span.html()) + 1 + "표" ).animateCssColor("tada","#ee6e01");
@@ -1361,15 +1417,28 @@
               var total_count = data.ask.left_ask_deal.vote_count + data.ask.right_ask_deal.vote_count;
               var left_ratio = Math.round(data.ask.left_ask_deal.vote_count/total_count * 80);
               var right_ratio = Math.round(data.ask.right_ask_deal.vote_count/total_count * 80);
-              graph_animation(ask_id, left_ratio, right_ratio);
-              hover_action(ask_id);
-              mini_comment(ask_id);
+
+              setTimeout(function(){
+                $('#ask_deal_'+data.ask.id).html(askDealTemplate({my_votes: my_votes, ask:data.ask}));
+                $(".card_image_overlay_"+ask_id).animateCss("fadeIn");
+                $(".card_image_overlay_"+ask_id).find("i").animateCss("rubberBand");
+                graph_animation(ask_id, left_ratio, right_ratio);
+                hover_action(ask_id);
+                mini_comment(ask_id);
+              }, 750);
 		        },
 		        beforeSend: function(){
-              progressStart();
+              if (is_left) {
+                $(".card_image_hover_"+ask_id+".left_card_image_hover").show().animateCss("slideInUp");
+                $(".vote_btn_"+ask_id+".left_btn").css("background-color","#ffcc5a").html("탁월한 선택 <i class='fa fa-heart animated tada'></i>");
+                $(".vote_btn_"+ask_id+".right_btn").css("background-color","#9d9ea1").html("...졌다 T_T");
+              } else {
+                $(".card_image_hover_"+ask_id+".right_card_image_hover").show().animateCss("slideInUp");
+                $(".vote_btn_"+ask_id+".right_btn").css("background-color","#ffcc5a").html("탁월한 선택 <i class='fa fa-heart animated tada'></i>");
+                $(".vote_btn_"+ask_id+".left_btn").css("background-color","#9d9ea1").html("...졌다 T_T");
+              }
 		        },
 		        complete: function(){
-              progressEnd();
 		        }
 			});
 	 	}
@@ -1439,8 +1508,7 @@
       $("#ask_deal_"+ask_id+"_table, #ask_"+ask_id+"_comment").slideDown(500);
     });
 
-		$("#category_button:visible").hide();
-		$("#back_button").show().attr("onclick","back_button(); return false;");
+    main_header_button();
 
     ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask_id.toString(), 1);
     ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
@@ -1475,7 +1543,6 @@
 
     window.scrollTo(0,card_open_st);
 
-    $("#back_button").hide().attr("onclick","back_button(); return false;");
     main_header_button();
   }
 
@@ -1504,10 +1571,8 @@
 		        	}
 		        },
 		        beforeSend: function(){
-              progressStart();
 		        },
 		        complete: function(){
-              progressEnd();
 		        }
 			});
 		<% else %>
@@ -1553,14 +1618,12 @@
 
   function mini_ask_deal_id_change(ask_id, left_ask_deal_id, right_ask_deal_id, is_left){
 		if (is_left){
-      $("#mini_comment_input_box_"+ask_id).animateCss("flipInY");
-      $("#mini_ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-left").addClass("fa-align-right");
+      $("#mini_ask_deal_id_change_"+ask_id).find("i").addClass("fa-flip-horizontal");
       $("#mini_comment_input_"+ask_id).css("textAlign","right").focus();
       $("#mini_ask_deal_id_change_"+ask_id).attr("onclick", "mini_ask_deal_id_change("+ask_id+", "+left_ask_deal_id+", "+right_ask_deal_id+", false); return false;");
       $("#mini_send_comment_btn_"+ask_id).attr("onclick", "mini_send_comment("+ask_id+", "+right_ask_deal_id+", false); return false;");
 		} else {
-      $("#mini_comment_input_box_"+ask_id).animateCss("flipInY");
-      $("#mini_ask_deal_id_change_"+ask_id).find("i").removeClass("fa-align-right").addClass("fa-align-left");
+      $("#mini_ask_deal_id_change_"+ask_id).find("i").removeClass("fa-flip-horizontal");
       $("#mini_comment_input_"+ask_id).css("textAlign","left").focus();
       $("#mini_ask_deal_id_change_"+ask_id).attr("onclick", "mini_ask_deal_id_change("+ask_id+", "+left_ask_deal_id+", "+right_ask_deal_id+", true); return false;");
 			$("#mini_send_comment_btn_"+ask_id).attr("onclick", "mini_send_comment("+ask_id+", "+left_ask_deal_id+", true); return false;");
@@ -1598,16 +1661,14 @@
               $("#mini_comment_notify_"+ask_id).text("복 받으실 거에요!").css("transform","rotateX(0deg)").css("-webkit-transform","rotateX(0deg)");
               $("#mini_new_comment_"+ask_id).delay(1000).slideUp(500);
               $("#ask_"+ask_id+"_detail_btn").html(askDetailBtnTemplate({ask: ask}));
-              $("#ask_"+ask_id+"_comment_preview").animateCss("flipInY");
+              $("#ask_"+ask_id+"_comment_preview ul").animateCss("bounceInDown");
             }else{
               visitor_notify("의견 작성은 회원만 가능합니다");
             }
           },
           beforeSend: function(){
-            progressStart();
           },
           complete: function(){
-            progressEnd();
           }
         });
       }
@@ -1759,7 +1820,7 @@
               var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
               ask.comments.push(data.comment);
               $("#ask_"+ask_id+"_comment_list").append(askCommentListTemplate({ask:data.ask, comment:data.comment}));
-              $("#comment_"+data.comment.id).animateCss("flipInX");
+              $("#comment_"+data.comment.id).animateCss("bounceInUp");
               link_tagging(data.comment.content, $('#comment_content_'+data.comment.id+' .comment_content'), true);
 
               $("#comment_image_id_"+ask_id).val("");
@@ -1790,10 +1851,8 @@
             }
           },
           beforeSend: function(){
-            progressStart();
           },
           complete: function(){
-            progressEnd();
           }
         });
       }
@@ -1825,10 +1884,8 @@
 		        	}
 		        },
 		        beforeSend: function(){
-              progressStart();
 		        },
 		        complete: function(){
-              progressEnd();
 		        }
 			});
 		<% else %>
@@ -1850,7 +1907,7 @@
           var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
           ask.comments.pop(data.comment);
           if (data.status == "success") {
-            $("#comment_"+comment_id).animateCssRemove("flipOutX");
+            $("#comment_"+comment_id).animateCssRemove("bounceOutDown");
             $("#comment_"+comment_id+"_reply_list").remove();
             $("#reply_comment_box_"+comment_id).remove();
           } else if (data.status == "reply_exist") {
@@ -1866,13 +1923,11 @@
             right_ask_deal_comment_count.html( parseInt(right_ask_deal_comment_count.html()) - 1 );
             ask.right_ask_deal.comment_count = ask.right_ask_deal.comment_count - 1;
           }
-          if ( ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count == 0 ) $("#no_comment_"+ask_id).show().animateCss("flipInX");
+          if ( ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count == 0 ) $("#no_comment_"+ask_id).show().animateCss("bounceInUp");
         },
         beforeSend: function(){
-          progressStart();
         },
         complete: function(){
-          progressEnd();
         }
       });
     }
@@ -2057,10 +2112,8 @@
           modify_content_origin = null;
 				},
 				beforeSend: function(){
-          progressStart();
 				},
 				complete: function(){
-          progressEnd();
 				}
 			});
 		}
@@ -2093,7 +2146,7 @@
 			var reply_input = $("#reply_comment_input_"+comment_id);
 			var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
-      reply_box.slideDown(100).animateCss("flipInX");
+      reply_box.slideDown(200).animateCss("flipInX");
 
 			$("#comment_reply_btn_"+comment_id).hide();
 			$("#comment_reply_cancel_btn_"+comment_id).show();
@@ -2134,7 +2187,7 @@
 		var reply_input = $("#reply_comment_input_"+comment_id);
 		var update_btn = $("#send_reply_comment_btn_"+comment_id);
 
-    reply_box.slideUp(100);
+    reply_box.slideUp(200);
 		reply_input.blur().val("").css({"height":"40px"}).unbind();
 		update_btn.css("background-color","#dbdbdb");
 
@@ -2233,10 +2286,8 @@
           comment_id_in_progress_type = null;
         },
         beforeSend: function(){
-          progressStart();
         },
         complete: function(){
-          progressEnd();
         }
       });
     }
@@ -2316,13 +2367,11 @@
             show_detail_vote_count(ask_id);
             comment_input_setting(ask_id);
             hover_action(ask_id);
-            hide_menu(ask_id);
           },
           beforeSend: function(){
-            progressStart();
+            hide_menu(ask_id);
           },
           complete: function(){
-            progressEnd();
           }
     });
   }

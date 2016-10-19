@@ -2,23 +2,22 @@
 <table id="main_header" cellspacing="0" cellpadding="0" ontouchmove="return false;">
 	<tr>
 		<td style="width:60px;">
-			<span style="display:block; width:60px; height:50px;">
-				<a id="category_button" class="header_button" href="#" onclick="category_on(); return false;" style="display:none; box-sizing:border-box; width:60px; height:50px; padding-left:10px;"><i class="fa fa-navicon" style="font-size: 26px; padding-top: 12px;"></i></a>
-				<a id="back_button" class="header_button" href="#" onclick="header_back_button(); return false;" style="display:none; position:absolute; top:0; left:0; box-sizing:border-box; width:60px; height:50px; padding-left:10px; font-size: 40px;"><i class="fa fa-angle-left" style="padding-top: 3px;"></i></a>
-			</span>
+			<a id="category_button" class="header_button" href="#" onclick="category_on(); return false;" style="display:block; width:50px; height:50px; padding-left:10px;">
+				<i id="category_icon" class="fa fa-navicon" style="font-size: 26px; line-height:50px; transition:transform .25s;"></i>
+			</a>
 		</td>
 		<td style="padding-right:10px;">
 			<a href="#" onclick="go_main(); return false;" style="display:inline-block; margin-top:4px; padding:5px;">
-				<img src="/images/logo/header_logo.png" style="width:auto; height:30px;"/>
+				<img id="vaskit_logo" src="/images/logo/header_logo.png" style="width:auto; height:30px;"/>
 				<span style="position:absolute; top:27px; left:50%; margin-left:70px; color:#ffcc5a; font-size:11px; font-weight:bold;">BETA</span>
 			</a>
 		</td>
 		<td style="width:60px;">
-			<div id="my_button" style="display:none;">
+			<div id="my_button">
 				<% if current_user %>
-					<a class="header_button" href="#" onclick="user_on(); return false;" style="display:block; box-sizing:border-box; width:60px; height:50px; padding-right:10px;">
-						<i class="fa fa-user" style="font-size:30px; padding-top:12px;"></i>
-						<span style="position: absolute; top: 27px; right: 28px; color: #4b3d3d; font-size: 10px; font-weight: bold;">my</span>
+					<a class="header_button" href="#" onclick="user_on(); return false;" style="display:block; width:50px; height:50px; padding-right:10px;">
+						<i id="my_icon" class="fa fa-user" style="font-size:30px; line-height:52px; transition:transform .25s;"></i>
+						<span id="my_text" style="position:absolute; top:0; right:10px; width:50px; height:50px; color:#4b3d3d; font-size:10px; font-weight:bold; line-height:65px;">my</span>
 						<span id="new_alram_icon" style="position:absolute; top:9px; right:10px; width:10px; height:10px; line-height:10px; text-align:center; background-color:#ee6e01; border-radius:10px; font-size:10px; font-weight:bold; color:#fff; padding:3px 2px 1px; transition:transform .5s; transform:scale(0); -webkit-transform:scale(0);"></span>
 					</a>
 				<% else %>
@@ -55,11 +54,21 @@
 <script>
 	function main_header_button() {
 		if ( window.location.pathname == "/" && window.location.search == "" ) {
-			$("#category_button").show();
-			$("#back_button").hide();
+			// $("#category_button").show();
+			// $("#back_button").hide();
+			$("#category_icon").removeClass("fa-rotate-180");
+			$("#category_button").attr("onclick", "category_on(); return false;");
+			setTimeout(function(){
+				$("#category_icon").addClass("fa-navicon").removeClass("fa-angle-right").css({"fontSize":"26px"});
+			},100);
 		} else {
-			$("#category_button").hide();
-			$("#back_button").show();
+			$("#category_icon").addClass("fa-rotate-180");
+			$("#category_button").attr("onclick", "header_back_button(); return false;");
+			setTimeout(function(){
+				$("#category_icon").removeClass("fa-navicon").addClass("fa-angle-right").css({"fontSize":"40px"});
+			},100);
+			// $("#category_button").hide();
+			// $("#back_button").show();
 		};
 		$("#my_button").show();
 	}
@@ -80,8 +89,8 @@
 		    },
 		    success: function(data){
 					alram_count = data.alram_count;
-					alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count) : $("#new_alram_icon").css("transform","scale(0)").text(alram_count);
-					if (last_alram_count != null && alram_count > last_alram_count && !is_user_opened && !$.cookie('gcm_key')) notify('새로운 알림이 도착했습니다!');
+					alram_count > 0 ? $("#new_alram_icon").css("transform","scale(1)").text(alram_count).animateCss("swing") : $("#new_alram_icon").css("transform","scale(0)").text(alram_count);
+					if (last_alram_count != null && alram_count > last_alram_count && !is_user_opened && !$.cookie('gcm_key')) { notify('새로운 알림이 도착했습니다!', "user_on();"); }
 		    },
 		    beforeSend: function(){
 		    },
@@ -97,7 +106,9 @@
 	function go_main() {
 		if (window.location.pathname == "/" && $(window).scrollTop() != 0) {
 			$('html, body').scrollTop(1200).animate({scrollTop:'0'},300);
-			window.location.search == "" ? notify('새로고침 하시려면 로고를 한 번 더 누르세요!') : notify('메인으로 가시려면 로고를 한 번 더 누르세요!');
+			window.location.search == "" ? notify('새로고침 하시려면 로고를 한 번 더 누르세요!', "go_url('/');") : notify('메인으로 가시려면 로고를 한 번 더 누르세요!', "go_url('/');");
+		} else if (is_card_opened) {
+			back_button();
 		} else {
 			go_url('/');
 		}

@@ -145,21 +145,8 @@ class CommentsController < ApplicationController
     if comment_like
       already_like = true
       comment_like.destroy
-      comment.update(:like_count => comment.like_count - 1)
     else
       comment_like = CommentLike.create(:user_id => current_user.id, :comment_id => params[:id])
-      comment.update(:like_count => comment.like_count + 1)
-
-      if comment.user_id != comment_like.user_id #&& Alram.where(:user_id => comment.user_id, :send_user_id => current_user.id, :ask_id => comment.ask_id).blank?
-      if User.find_by_id(comment.user_id).alram_4 == true #알림 옵션 체크
-        alram = Alram.where(:user_id => comment.user_id, :comment_id => comment_like.comment_id,).where("alram_type like ?", "like_comment_%").first
-        if alram
-          alram.update(:is_read => false, :send_user_id => current_user.id, :alram_type => "like_comment_" + CommentLike.where("comment_id = ? AND user_id <> ?", comment.id, comment.user_id).count.to_s )
-        else
-          Alram.create(:user_id => comment.user_id, :send_user_id => current_user.id, :ask_id => comment.ask_id, :comment_id => comment_like.comment_id, :alram_type => "like_comment_" + CommentLike.where("comment_id = ? AND user_id <> ?", comment.id, comment.user_id).count.to_s )
-        end
-      end
-      end
     end
     render :json => {:already_like => already_like, :comment_like => comment_like}
   end

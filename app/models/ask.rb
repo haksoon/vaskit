@@ -28,7 +28,7 @@ class Ask < ActiveRecord::Base
         :age_30_1_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday < ? AND users.birthday > ?", age_30, age_30_1_end).where("votes.ask_deal_id = ?", self.left_ask_deal_id).count,
         :age_30_2_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday < ? AND users.birthday > ?", age_30_1_end, age_30_2_end).where("votes.ask_deal_id = ?", self.left_ask_deal_id).count,
         :age_30_3_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday < ? AND users.birthday > ?", age_30_2_end, age_30_3_end).where("votes.ask_deal_id = ?", self.left_ask_deal_id).count,
-        :etc_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday IS NOT NULL AND (users.birthday > ? OR users.birthday < ?)", age_20, age_30_3_end).where("votes.ask_deal_id = ?", self.left_ask_deal_id).count
+        :etc_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday IS NULL OR (users.birthday > ? OR users.birthday < ?)", age_20, age_30_3_end).where("votes.ask_deal_id = ?", self.left_ask_deal_id).count
       },
       :right => {
         :male_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.gender = true").where("votes.ask_deal_id = ?", self.right_ask_deal_id).count,
@@ -39,7 +39,7 @@ class Ask < ActiveRecord::Base
         :age_30_1_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday < ? AND users.birthday > ?", age_30, age_30_1_end).where("votes.ask_deal_id = ?", self.right_ask_deal_id).count,
         :age_30_2_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday < ? AND users.birthday > ?", age_30_1_end, age_30_2_end).where("votes.ask_deal_id = ?", self.right_ask_deal_id).count,
         :age_30_3_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday < ? AND users.birthday > ?", age_30_2_end, age_30_3_end).where("votes.ask_deal_id = ?", self.right_ask_deal_id).count,
-        :etc_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday IS NOT NULL AND (users.birthday > ? OR users.birthday < ?)", age_20, age_30_3_end).where("votes.ask_deal_id = ?", self.right_ask_deal_id).count
+        :etc_count => Vote.joins("JOIN users ON votes.user_id = users.id").where("users.birthday IS NULL OR (users.birthday > ? OR users.birthday < ?)", age_20, age_30_3_end).where("votes.ask_deal_id = ?", self.right_ask_deal_id).count
       }
     }
 

@@ -160,6 +160,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .header_button {
+	display: block;
 	color: #fff;
 	transition: all .2s;
 }
@@ -368,11 +369,11 @@ input:focus, select:focus, textarea:focus {
 	width:100%;
 	height:100%;
 	display:block;
-	transition:all .2s;
+	transition:all .5s;
 }
 .card_image.img_hover {
-	transform:scale(1.02);
-	-webkit-transform:scale(1.02);
+	transform:scale(1.05);
+	-webkit-transform:scale(1.05);
 }
 .card_image_expander {
 	margin:0;
@@ -407,7 +408,7 @@ input:focus, select:focus, textarea:focus {
 	color:#fff;
 	background-color:#f3994d;
 	font-size:13px;
-	transition:all .2s;
+	transition:all .5s;
 }
 .vote_btn:hover, .vote_btn:focus, .vote_btn:active {
 	background-color:#f18b34;

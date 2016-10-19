@@ -177,7 +177,11 @@ function go_url(url) {
 function get_image_url(data, model_name, extention){
 	try {
 		var image_url = ""; //static url
-		image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+    if (document.location.host.match("vaskit.kr") == null) {
+      image_url = "http://vaskit.kr/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+    } else {
+      image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+    }
 		var image_file_name = data.image_file_name;
 		if(image_file_name.indexOf(".") == -1){
 			image_file_name = image_file_name + ".";
@@ -198,14 +202,14 @@ function imgError(image, alter_url){
   return true;
 }
 
-function notify(msg){
+function notify(msg, onclick){
   var flash_div = $("#flash");
   var flash_msg = $("#flash_msg");
   flash_div.stop().animate({"top":"-50px"},50,function(){
     flash_msg.html("").html(msg);
-    flash_div.show().animate({"top":"0px"},250,function(){
+    flash_div.show().attr("onclick",onclick).animate({"top":"0px"},250,function(){
       flash_div.delay(3000).animate({"top":"-50px"},500,function(){
-        flash_div.hide();
+        flash_div.hide().attr("onclick","return false;");
         flash_msg.html("");
       });
     });
@@ -247,6 +251,8 @@ function header_back_button(){
   referrer.href = document.referrer;
   if (parent.history.length == 1 || referrer.host != document.location.host || is_show_opened) {//|| referrer.href == document.location.href) {
     go_url("/");
+  } else if (isIOS && document.location.pathname == "/asks/new") {
+    if (confirm('정말로 빠져나가시겠어요?\n내용이 저장되지 않을거에요 T_T')) back_button();
   } else {
     back_button();
   }
@@ -403,7 +409,7 @@ function hover_action(ask_id){
     $("#ask_"+ask_id).find(".card_image_expander").addClass("img_hover");
     return false;
   } else {
-    $("#ask_"+ask_id).find(".card_image").hover(
+    $(".card_image_"+ask_id).hover(
       function(){
         $(this).addClass("img_hover");
         $(this).parent().children(".card_image_expander").addClass("img_hover");
@@ -429,13 +435,13 @@ function hover_action(ask_id){
       function(){
         $(this).prev().children(".card_image").addClass("img_hover");
         $(this).prev().children(".card_image_expander").addClass("img_hover");
-        $(this).prev().children(".card_image_hover").fadeIn(100);
+        // $(this).prev().children(".card_image_hover").fadeIn(100);
         // $(this).parent().parent().parent().parent().find(".card_detail_table").slideDown(200);
       },
       function(){
         $(this).prev().children(".card_image").removeClass("img_hover");
         $(this).prev().children(".card_image_expander").removeClass("img_hover");
-        $(this).prev().children(".card_image_hover").fadeOut(100);
+        // $(this).prev().children(".card_image_hover").fadeOut(100);
         // $(this).parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
       }
     );

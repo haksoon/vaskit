@@ -51,12 +51,17 @@
 .bx-wrapper .bx-loading {
 	min-height: 50px;
 	background: url(/images/bxslider/bx_loader.gif) center center no-repeat #fff;
+	background-size: 15px;
 	height: 100%;
 	width: 100%;
 	position: absolute;
 	top: 0;
 	left: 0;
 	z-index: 2000;
+
+	box-sizing: border-box;
+	border: 1px solid #998674;
+	border-radius: 5px;
 }
 
 /* PAGER */

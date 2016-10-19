@@ -1,17 +1,13 @@
 <% if current_user %>
 	<div id="user_overlay">
-		<div onclick="back_button(); return false;" style="position:absolute; top:-50px; right:0; width:100%; height:50px; text-align:right;" ontouchmove="return false;">
-			<a href="#" class="header_button" onclick="return false;" style="display:inline-block; box-sizing:border-box; width:60px; height:50px; padding-right:10px; background-color:#4b3d3d; text-align:center;">
-				<i class="fa fa-remove" style="font-size: 26px; padding-top: 11px;"></i>
-			</a>
-		</div>
+		<div onclick="back_button(); return false;" style="position:absolute; top:-50px; right:0; width:100%; height:50px; text-align:right; cursor:pointer;" ontouchmove="return false;"></div>
 		<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;" ontouchmove="return false;"></div>
 		<div id="user_overlay_title" style="margin:0; height:45px; line-height:45px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left; border:5px solid #998674; border-bottom:none;" ontouchmove="return false;">
-			<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:6px 6px 3px; color:#998674; background-color:#fff; border-radius:5px;"></a>
+			<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:6px 6px 3px; color:#998674; background-color:#fff; border-radius:5px;"><i class="fa fa-user"></i>&nbsp;<%= current_user.string_id %></a>
 			<span id="user_path" onclick="user_on(); return false;" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff; cursor:pointer;">
 				&gt;&nbsp;My Page
 			</span>
-			<a id="manage_on" href="#" onclick="manage_on(); return false;" style="position:absolute; right:10px; width:45px; height:45px; text-align:center; color:#fff; font-size:20px; transition:transform .2s;"><i class="fa fa-gear" style="padding-top:10px;"></i></a>
+			<a id="manage_on" href="#" onclick="manage_on(); return false;" style="position:absolute; right:10px; width:45px; height:45px; text-align:center; color:#fff; font-size:20px;"><i class="fa fa-gear" style="line-height:40px;  transition:transform .25s;"></i></a>
 		</div>
 		<div id="user_overlay_wrap" style="box-sizing:border-box; width:100%; height:100%; height:calc(100% - 50px); background-color:#f4f4f4; border:5px solid #998674; border-top:none; overflow:hidden;">
 			<div id="user_overlay_seg" style="height:100%; overflow-y:auto; -webkit-overflow-scrolling:touch;"></div>
@@ -19,7 +15,7 @@
 	</div>
 
 	<script type="text/template" id="user_overlay_seg_template">
-		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 0;">
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
 				<i class="fa fa-caret-down"></i> 나만의 현황판
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">How is it going on..?&nbsp;<i class="fa fa-dashboard"></i></span>
@@ -30,15 +26,142 @@
 					<span style="margin-left:60px; font-size:16px; float:left;">진행중인 질문</span>
 					<span style="float:right; height:50px; margin-right:15px;"><b style="font-size:20px; margin-right:2px;">{{= in_progress_count }}</b>개 <i class="fa fa-angle-double-right"></i></span>
 			</a>
-			<div id="my_asks_seg">
-				<a href="#" onclick="notify('잠시만요! 불러오는 중입니다...'); return false;" style="display:block; margin:10px 0 0; height:280px; line-height:280px; font-size:13px; text-align:center; color:#666; background-color:#fff; border:1px solid #dbdbdb; border-radius:5px;">
-					<i class="fa fa-circle-o-notch fa-spin" style="font-size:16px;"></i>
-				</a>
-				<div style="height:30px; line-height:30px; color:#9d9ea1; font-size:12px; text-align:center;">불러오는 중...</div>
-				<div class="table_div">
-					<a id="prev_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('첫번째 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:left; background-color:#dbdbdb; color:#fff; border-radius:5px 0 0 5px; transition:background-color .5s;"><i class="fa fa-angle-double-left"></i> 이전</a>
-					<a id="next_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('마지막 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:right; background-color:#dbdbdb; color:#fff; border-radius:0 5px 5px 0; transition:background-color .5s; margin-left:-1px; border-left:1px solid #f4f4f4;">다음 <i class="fa fa-angle-double-right"></i></a>
-				</div>
+			<ul id="my_asks_card_box" class="bxslider" style="position:relative; width:100%; height:282px; left:0px; overflow-y:hidden; margin:0; padding:0; list-style:none;">
+			{{ for (var i=0; i < my_asks.length; i++) { }}
+				{{ var my_ask = my_asks[i] }}
+				{{ var pos = $("#wrap").innerWidth() - 30 }}
+				<li id="my_ask_card_{{=i}}" style="margin:0 10px 10px 0; width:100%; background-color:#fff; border:1px solid #998674; box-sizing: border-box; border-radius:5px; overflow:hidden;">
+					{{ var total_count = my_ask.left_ask_deal.vote_count + my_ask.right_ask_deal.vote_count }}
+					{{ if (total_count == 0){ }}
+						{{ var left_ratio_full = 0 }}
+						{{ var right_ratio_full = 0 }}
+					{{ }else{ }}
+						{{ var left_ratio_full = Math.round(my_ask.left_ask_deal.vote_count/total_count * 100) }}
+						{{ var right_ratio_full = Math.round(my_ask.right_ask_deal.vote_count/total_count * 100) }}
+					{{ } }}
+
+					{{ var background = "#ffe4a9" }}
+					{{ var left_background = "rgba(255, 228, 169, 0.7)" }}
+					{{ var right_background = "rgba(255, 228, 169, 0.7)" }}
+					{{ var left_font_css = "max-width:75%; font-size:12px; font-weight:normal; color:#666; text-decoration:none;" }}
+					{{ var right_font_css = "max-width:75%; font-size:12px; font-weight:normal; color:#666; text-decoration:none;" }}
+					{{ if (total_count < 10) { }}
+					{{ } else if (left_ratio_full - right_ratio_full > 30) { }}
+						{{ left_background = "rgba(255, 204, 90, 0.7)" }}
+						{{ left_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
+					{{ } else if (right_ratio_full - left_ratio_full > 30) { }}
+						{{ right_background = "rgba(255, 204, 90, 0.7)" }}
+						{{ right_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
+					{{ } else { }}
+						{{ if (left_ratio_full > right_ratio_full) { }}
+							{{ left_background = "rgba(255, 204, 90, 0.7)" }}
+						{{ } else { }}
+							{{ right_background = "rgba(255, 204, 90, 0.7)" }}
+						{{ } }}
+						{{ left_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
+						{{ right_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
+					{{ } }}
+					<div onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="padding:10px; height:45px; color:#333; font-size:15px; margin-bottom:0; border-radius:5px 5px 0 0; cursor:pointer; overflow:hidden; background-color:#ffe4a9; background:linear-gradient(90deg, {{=left_background}} 0%, {{=left_background}} {{=left_ratio_full-5}}%, {{=right_background}} {{=100-right_ratio_full+5}}%, {{=right_background}} 100%);">
+						<span style="position:absolute; top:10px; left:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; {{=left_font_css}}">{{= my_ask.left_ask_deal.title }}</span>
+						<span style="position:absolute; bottom:10px; right:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; {{=right_font_css}}">{{= my_ask.right_ask_deal.title }}</span>
+						{{ if (total_count >= 10 && (left_ratio_full > right_ratio_full || right_ratio_full - left_ratio_full <= 30)) { }}
+							<span style="position:absolute; top:32px; left:10px; font-size:10px; color:#ee6e01; font-weight:bold;"><i class="fa fa-caret-up"></i> {{=left_ratio_full}}% win!</span>
+						{{ } else { }}
+							<span style="position:absolute; top:25px; left:10px; font-size:10px; color:#9d9ea1;"><i class="fa fa-caret-up"></i> {{=left_ratio_full}}%</span>
+						{{ } }}
+						{{ if (total_count >= 10 && (right_ratio_full > left_ratio_full || left_ratio_full - right_ratio_full <= 30)) { }}
+							<span style="position:absolute; bottom:32px; right:10px; font-size:10px; color:#ee6e01; font-weight:bold;">{{=right_ratio_full}}% win! <i class="fa fa-caret-down"></i> </span>
+						{{ } else { }}
+							<span style="position:absolute; bottom:25px; right:10px; font-size:10px; color:#9d9ea1;">{{=right_ratio_full}}% <i class="fa fa-caret-down"></i> </span>
+						{{ } }}
+					</div>
+					<div onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="margin:0; height:25px; line-height:25px; padding:0 10px;background:ghostwhite; border:1px solid #dbdbdb; border-width:1px 0; cursor:pointer; overflow:hidden;">
+						{{ if (total_count < 10) { }}
+							<span style="color:#f18b33;">이제 시작합니다! <b style="font-size:10px; color:#ffcc5a;">new</b></span>
+						{{ } else if (left_ratio_full - right_ratio_full > 30) { }}
+							<span style="color:#9d9ea1;"><i class="fa fa-hand-o-left"></i> 제품의 완승!</span>
+						{{ } else if (right_ratio_full - left_ratio_full > 30) { }}
+							<span style="color:#9d9ea1;"><i class="fa fa-hand-o-right"></i> 제품의 완승!</span>
+						{{ } else { }}
+							<span style="color:#f18b33;"><i class="fa fa-soccer-ball-o"></i> 치열한 접전중!</span>
+						{{ } }}
+						<span style="float:right; color:#9d9ea1; font-size:12px;">
+							<i class="fa fa-heart" style="font-size:12px; margin:0 3px;"></i><span style="display:inline-block;">{{= my_ask.like_count }}공감</span>
+							<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span style="display:inline-block;">{{= my_ask.left_ask_deal.vote_count + my_ask.right_ask_deal.vote_count }}표</span>
+							<i class="fa fa-comment fa-flip-horizontal" style="font-size:13px; margin:0 3px;"></i>{{= my_ask.left_ask_deal.comment_count + my_ask.right_ask_deal.comment_count }}개
+						</span>
+					</div>
+					<div onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="margin:0; padding:10px; cursor:pointer; overflow:hidden;">
+						{{ var comments = $.grep(my_ask.comments, function(obj) { return obj.is_deleted == false && obj.comment_id == null && obj.user_id != my_ask.user_id} ) }}
+						{{ var l = comments.length }}
+						{{ if (l > 0) { }}
+						<ul style="width:100%; height:90px; margin:0; padding:0; list-style:none;">
+							{{ for(var j=0; j < Math.min(3, l); j++) { }}
+								{{ var comment = comments[l-j-1] }}
+								{{ if (my_ask.left_ask_deal_id == comment.ask_deal_id) { }}
+									<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:left;">
+										<span style="display:block;">
+											<i class="fa fa-comment" style="margin-right: 3px;"></i>
+											<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.replace(new RegExp('<', 'g'), '&lt;').substring(0,20)+'&middot;&middot;&middot;' : comment.content.replace(new RegExp('<', 'g'), '&lt;')}}{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(10deg);"></i>'}}</span>
+										</span>
+									</li>
+								{{ } else { }}
+									<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:right;">
+										<span style="display:block;">
+											<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(-10deg);"></i>'}}{{=comment.content.length > 20 ? comment.content.replace(new RegExp('<', 'g'), '&lt;').substring(0,20)+'&middot;&middot;&middot;' : comment.content.replace(new RegExp('<', 'g'), '&lt;')}}</span>
+											<i class="fa fa-comment fa-flip-horizontal" style="margin-left: 3px;"></i>
+										</span>
+									</li>
+								{{ } }}
+							{{ } }}
+						</ul>
+						{{ } else { }}
+							<p style="padding:0 10px; margin:0; height:90px; line-height:90px; font-size:13px; text-align:center; color:#9d9ea1;">
+								아직까지는 작성된 댓글이 없네요 T_T
+							</p>
+						{{ } }}
+					</div>
+					<div id="my_ask_card_detail_{{=i}}" onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="height:15px; text-align:left; padding:0 15px; margin:0 0 12px; color:#9d9ea1; font-size:12px; cursor:pointer; overflow:hidden;">
+						<span style="color:#9d9ea1;"><i class="fa fa-spinner fa-spin"></i>&nbsp;&nbsp;분석중...</span>
+						<span style="float:right; color:#9d9ea1;">더 보기 <i class="fa fa-angle-double-down"></i></span>
+					</div>
+					<div class="table_div" style="margin-bottom:0; border-top:1px solid #f4f4f4; text-align:center; overflow:hidden;">
+						<a href="#" onclick="$('#my_asks_share_{{=my_ask.id}}').css('bottom','0'); return false;" style="display:block; line-height:50px; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #f4f4f4;"><i class="fa fa-share" style="color:#9d9ea1;"></i>&nbsp;공유하기</a>
+						<a href="#" onclick="go_url('/asks/{{=my_ask.id}}/ask_complete'); return false;" style="display:block; line-height:50px; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-paperclip" style="color:#9d9ea1;"></i>&nbsp;질문 종료하기</a>
+					</div>
+					<div id="my_asks_share_{{=my_ask.id}}" onclick="$(this).css('bottom','-100%');" style="position:absolute; width:100%; height:100%; bottom:-100%; text-align:center; background:rgba(0,0,0,0.7); transition:bottom 0.3s;">
+						<table style="width:100%; height:100%; text-align:center; color:#fff;">
+							<tr style="vertical-align:bottom;">
+								<td style="width:45%;">
+									<span onclick="share_facebook({{=my_ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:75px; background-color:#4267b2; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
+										<i class="fa fa-facebook" style="font-size:30px;"></i>
+									</span>
+								</td>
+								<td style="width:10%;">
+									<span onclick="share_katalk({{=my_ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#fae100; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
+										<img src="/images/logo/share_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;">
+									</span>
+								</td>
+								<td style="width:45%;">
+									<span onclick="copy_url({{=my_ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#9d9ea1; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
+										<i class="fa fa-link" style="font-size:24px;"></i>
+									</span>
+								</td>
+							</tr>
+							<tr style="vertical-align:top;">
+								<td style="padding-top:5px;"><span onclick="share_facebook({{=my_ask.id}}); return false;" style="cursor:pointer; font-weight:bold;">페이스북</span></td>
+								<td style="padding-top:5px;"><span onclick="share_katalk({{=my_ask.id}}); return false;" style="cursor:pointer; font-weight:bold;">카카오톡</span></td>
+								<td style="padding-top:5px;"><span onclick="copy_url({{=my_ask.id}}); return false;" style="cursor:pointer; font-weight:bold;">주소복사</span></td>
+							</tr>
+						</table>
+						<input id="share_url_{{=my_ask.id}}" style="position:fixed; top:100%; left:100%;" value="http://vaskit.kr/asks/{{=my_ask.id}}"/>
+					</div>
+				</li>
+			{{ } }}
+			</ul>
+			<div class="table_div" style="margin-bottom:0;">
+				<a id="prev_card_btn" href="#" onclick="if ($(this).css('background-color') == 'rgb(219, 219, 219)') notify('첫번째 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:left; background-color:#dbdbdb; color:#fff; border-radius:5px 0 0 5px; transition:background-color .5s;"></a>
+				<a id="next_card_btn" href="#" onclick="if ($(this).css('background-color') == 'rgb(219, 219, 219)') notify('마지막 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:right; background-color:#dbdbdb; color:#fff; border-radius:0 5px 5px 0; transition:background-color .5s; margin-left:-1px; border-left:1px solid #f4f4f4;"></a>
 			</div>
 			{{ } else { }}
 				<a href="#" onclick="go_url('/asks/new'); return false;" style="display:block; padding:50px 10px; margin:0; font-size:13px; text-align:center; color:#666; background-color:#fff; border:1px solid #dbdbdb; border-top:none; border-radius:0 0 3px 3px;">
@@ -48,7 +171,7 @@
 			{{ } }}
 		</div>
 
-		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px 10px 0;">
+		<div class="table_div" style="margin-bottom:0; font-size:13px; text-align:left; padding:10px;">
 			<p style="font-size:15px; font-weight:bold; color:#4b3d3d; margin:0; padding:10px 10px 5px; border-bottom:1px solid #998674;">
 				<i class="fa fa-caret-down"></i> 나의 활동이력
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">당신의 발자취&nbsp;<i class="fa fa-paw"></i></span>
@@ -193,160 +316,33 @@
 		</div>
 	</script>
 
-	<script type="text/template" id="my_asks_template">
-		<ul id="my_asks_card_box" class="bxslider" style="display:none; position:relative; width:100%; height:300px; left:0px; overflow-y:hidden; margin:0; padding:0; list-style:none;">
-		{{ for (var i=0; i < my_asks.length; i++) { }}
-			{{ var my_ask = my_asks[i] }}
-			{{ var pos = $("#wrap").innerWidth() - 30 }}
-			<li id="my_ask_card_{{=i}}" style="margin:0 10px 10px 0; width:100%; background-color:#fff; border:1px solid #998674; box-sizing: border-box; border-radius:5px; overflow:hidden;">
-				{{ var total_count = my_ask.left_ask_deal.vote_count + my_ask.right_ask_deal.vote_count }}
-				{{ if (total_count == 0){ }}
-					{{ var left_ratio_full = 0 }}
-					{{ var right_ratio_full = 0 }}
-				{{ }else{ }}
-					{{ var left_ratio_full = Math.round(my_ask.left_ask_deal.vote_count/total_count * 100) }}
-					{{ var right_ratio_full = Math.round(my_ask.right_ask_deal.vote_count/total_count * 100) }}
-				{{ } }}
+	<script type="text/template" id="my_asks_detail_template">
+		{{ // var male = detail.left.male_count + detail.right.male_count }}
+		{{ // var female = detail.left.female_count + detail.right.female_count  }}
+		{{ // var age_20 = detail.left.age_20_1_count + detail.right.age_20_1_count + detail.left.age_20_2_count + detail.right.age_20_2_count + detail.left.age_20_3_count + detail.right.age_20_3_count }}
+		{{ // var age_30 = detail.left.age_30_1_count + detail.right.age_30_1_count + detail.left.age_30_2_count + detail.right.age_30_2_count + detail.left.age_30_3_count + detail.right.age_30_3_count }}
+		{{ // var total_count = male + female }}
 
-				{{ var background = "#ffe4a9" }}
-				{{ var left_background = "rgba(255, 228, 169, 0.7)" }}
-				{{ var right_background = "rgba(255, 228, 169, 0.7)" }}
-				{{ var left_font_css = "max-width:75%; font-size:12px; font-weight:normal; color:#666; text-decoration:none;" }}
-				{{ var right_font_css = "max-width:75%; font-size:12px; font-weight:normal; color:#666; text-decoration:none;" }}
-				{{ if (total_count < 10) { }}
-				{{ } else if (left_ratio_full - right_ratio_full > 30) { }}
-					{{ left_background = "rgba(255, 204, 90, 0.7)" }}
-					{{ left_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
-				{{ } else if (right_ratio_full - left_ratio_full > 30) { }}
-					{{ right_background = "rgba(255, 204, 90, 0.7)" }}
-					{{ right_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
-				{{ } else { }}
-					{{ if (left_ratio_full > right_ratio_full) { }}
-						{{ left_background = "rgba(255, 204, 90, 0.7)" }}
-					{{ } else { }}
-						{{ right_background = "rgba(255, 204, 90, 0.7)" }}
-					{{ } }}
-					{{ left_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
-					{{ right_font_css = "max-width:85%; font-size:20px; font-weight:bold; color:#333; text-decoration:underline;" }}
-				{{ } }}
-				<div onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="padding:10px; height:45px; color:#333; font-size:15px; margin-bottom:0; border-radius:5px 5px 0 0; cursor:pointer; overflow:hidden; background-color:#ffe4a9; background:linear-gradient(90deg, {{=left_background}} 0%, {{=left_background}} {{=left_ratio_full-5}}%, {{=right_background}} {{=100-right_ratio_full+5}}%, {{=right_background}} 100%);">
-					<span style="position:absolute; top:10px; left:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; {{=left_font_css}}">{{= my_ask.left_ask_deal.title }}</span>
-					<span style="position:absolute; bottom:10px; right:10px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; {{=right_font_css}}">{{= my_ask.right_ask_deal.title }}</span>
-					{{ if (total_count >= 10 && (left_ratio_full > right_ratio_full || right_ratio_full - left_ratio_full < 30)) { }}
-						<span style="position:absolute; top:32px; left:10px; font-size:10px; color:#ee6e01; font-weight:bold;"><i class="fa fa-caret-up"></i> {{=left_ratio_full}}% win!</span>
-					{{ } else { }}
-						<span style="position:absolute; top:25px; left:10px; font-size:10px; color:#9d9ea1;"><i class="fa fa-caret-up"></i> {{=left_ratio_full}}%</span>
-					{{ } }}
-					{{ if (total_count >= 10 && (right_ratio_full > left_ratio_full || left_ratio_full - right_ratio_full < 30)) { }}
-						<span style="position:absolute; bottom:32px; right:10px; font-size:10px; color:#ee6e01; font-weight:bold;">{{=right_ratio_full}}% win! <i class="fa fa-caret-down"></i> </span>
-					{{ } else { }}
-						<span style="position:absolute; bottom:25px; right:10px; font-size:10px; color:#9d9ea1;">{{=right_ratio_full}}% <i class="fa fa-caret-down"></i> </span>
-					{{ } }}
-				</div>
-				<div onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="margin:0; height:25px; line-height:25px; padding:0 10px;background:ghostwhite; border:1px solid #dbdbdb; border-width:1px 0; cursor:pointer; overflow:hidden;">
-					{{ if (total_count < 10) { }}
-						<span style="color:#f18b33;">이제 시작합니다! <b style="font-size:10px; color:#ffcc5a;">new</b></span>
-					{{ } else if (left_ratio_full - right_ratio_full > 30) { }}
-						<span style="color:#9d9ea1;"><i class="fa fa-hand-o-left"></i> 제품의 완승!</span>
-					{{ } else if (right_ratio_full - left_ratio_full > 30) { }}
-						<span style="color:#9d9ea1;"><i class="fa fa-hand-o-right"></i> 제품의 완승!</span>
-					{{ } else { }}
-						<span style="color:#f18b33;"><i class="fa fa-soccer-ball-o"></i> 치열한 접전중!</span>
-					{{ } }}
-					<span style="float:right; color:#9d9ea1; font-size:12px;">
-						<i class="fa fa-heart" style="font-size:12px; margin:0 3px;"></i><span style="display:inline-block;">{{= my_ask.like_count }}공감</span>
-						<i class="fa fa-check-circle-o" style="font-size:13px; margin:0 3px;"></i><span style="display:inline-block;">{{= my_ask.left_ask_deal.vote_count + my_ask.right_ask_deal.vote_count }}표</span>
-						<i class="fa fa-clock-o" style="font-size:13px; margin:0 3px;"></i>{{= get_past_time(my_ask.created_at) }}
-					</span>
-				</div>
-				<div onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="margin:0; padding:10px; cursor:pointer; overflow:hidden;">
-					{{ var comments = $.grep(my_ask.comments, function(obj) { return obj.is_deleted == false && obj.comment_id == null && obj.user_id != my_ask.user_id} ) }}
-					{{ var l = comments.length }}
-					{{ if (l > 0) { }}
-					<ul style="width:100%; height:90px; margin:0; padding:0; list-style:none;">
-						{{ for(var j=0; j < Math.min(3, l); j++) { }}
-							{{ var comment = comments[l-j-1] }}
-							{{ if (my_ask.left_ask_deal_id == comment.ask_deal_id) { }}
-								<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:left;">
-									<span style="display:block;">
-										<i class="fa fa-comment" style="margin-right: 3px;"></i>
-										<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.content.length > 20 ? comment.content.replace(new RegExp('<', 'g'), '&lt;').substring(0,20)+'&middot;&middot;&middot;' : comment.content.replace(new RegExp('<', 'g'), '&lt;')}}{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(10deg);"></i>'}}</span>
-									</span>
-								</li>
-							{{ } else { }}
-								<li style="font-size:13px; color:#666; line-height:30px; height:30px; overflow:hidden; text-align:right;">
-									<span style="display:block;">
-										<span style="background-color:ghostwhite; padding:3px 5px 2px; border-radius:5px;">{{=comment.image_file_name == null ? '' : '<i class="fa fa-image" style="margin:0 5px; transform:rotateZ(-10deg);"></i>'}}{{=comment.content.length > 20 ? comment.content.replace(new RegExp('<', 'g'), '&lt;').substring(0,20)+'&middot;&middot;&middot;' : comment.content.replace(new RegExp('<', 'g'), '&lt;')}}</span>
-										<i class="fa fa-comment fa-flip-horizontal" style="margin-left: 3px;"></i>
-									</span>
-								</li>
-							{{ } }}
-						{{ } }}
-					</ul>
-					{{ } else { }}
-						<p style="padding:0 10px; margin:0; height:90px; line-height:90px; font-size:13px; text-align:center; color:#9d9ea1;">
-							아직까지는 작성된 댓글이 없네요 T_T
-						</p>
-					{{ } }}
-				</div>
-				{{ var detail = my_asks_details[i] }}
-				{{ var male = detail.left.male_count + detail.right.male_count }}
-				{{ var female = detail.left.female_count + detail.right.female_count  }}
-				{{ var age_20 = detail.left.age_20_1_count + detail.right.age_20_1_count + detail.left.age_20_2_count + detail.right.age_20_2_count + detail.left.age_20_3_count + detail.right.age_20_3_count }}
-				{{ var age_30 = detail.left.age_30_1_count + detail.right.age_30_1_count + detail.left.age_30_2_count + detail.right.age_30_2_count + detail.left.age_30_3_count + detail.right.age_30_3_count }}
+		{{ // var color = male > female ? "#0389ed" : "#ea065e" }}
+		{{ // var gender = male > female ? "남자" : "여자" }}
+		{{ // var age = age_20 < age_30 ? "30" : "20" }}
 
-				{{ var color = male > female ? "#0389ed" : "#ea065e" }}
-				{{ var sex = male > female ? "남자" : "여자" }}
-				{{ var age = age_20 < age_30 ? "30" : "20" }}
-				<div onclick="alram_go_url({{=my_ask.id}}); return false;" class="table_div" style="height:15px; text-align:left; padding:0 15px; margin:0 0 12px; color:{{=color}}; font-size:12px; cursor:pointer; overflow:hidden;">
-					{{ if (total_count > 10) { }}
-						{{ var random = ["들의 관심이 많아요","들이 좋아합니다","들이 열광하고 있어요","들의 주된 관심사군요","들이 공감하는군요"] }}
-						{{ var rnum = Math.floor(Math.random() * random.length); }}
-						<i class="fa fa-heart"></i>
-						<span style="font-weight:bold;">{{=age}}대</span>
-						<span style="font-weight:bold;">{{=sex}}</span>{{=random[rnum]}}
-					{{ } else { }}
-						<span style="color:#9d9ea1;"><i class="fa fa-globe"></i> 아직 투표가 충분하지 않아요</span>
-					{{ } }}
-					<span style="float:right; color:#9d9ea1;">더 보기 <i class="fa fa-angle-double-right"></i></span>
-				</div>
-				<div class="table_div" style="margin-bottom:0; border-top:1px solid #f4f4f4; text-align:center; overflow:hidden;">
-					<a href="#" onclick="$('#my_asks_share_{{=my_ask.id}}').css('bottom','0'); return false;" style="display:block; line-height:50px; color:#666; font-size:13px; width:50%; float:left; margin-right:-1px; border-right:1px solid #f4f4f4;"><i class="fa fa-share" style="color:#9d9ea1;"></i>&nbsp;공유하기</a>
-					<a href="#" onclick="go_url('/asks/{{=my_ask.id}}/ask_complete'); return false;" style="display:block; line-height:50px; color:#666; font-size:13px; width:50%; float:left;"><i class="fa fa-paperclip" style="color:#9d9ea1;"></i>&nbsp;질문 종료하기</a>
-				</div>
-				<div id="my_asks_share_{{=my_ask.id}}" onclick="$(this).css('bottom','-100%');" style="position:absolute; width:100%; height:100%; bottom:-100%; text-align:center; background:rgba(0,0,0,0.7); transition:bottom 0.3s;">
-					<table style="width:100%; height:100%; text-align:center; color:#fff;">
-						<tr style="vertical-align:bottom;">
-							<td style="width:45%;">
-								<span onclick="share_facebook({{=my_ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:75px; background-color:#4267b2; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
-									<i class="fa fa-facebook" style="font-size:30px;"></i>
-								</span>
-							</td>
-							<td style="width:10%;">
-								<span onclick="share_katalk({{=my_ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#fae100; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
-									<img src="/images/logo/share_kakaotalk.png" alt="" style="width:38px; margin:13px auto 0px;">
-								</span>
-							</td>
-							<td style="width:45%;">
-								<span onclick="copy_url({{=my_ask.id}}); return false;" style="display:inline-block; width:60px; height:60px; line-height:70px; background-color:#9d9ea1; border-radius:10px; margin:0px; vertical-align:top; cursor:pointer;">
-									<i class="fa fa-link" style="font-size:24px;"></i>
-								</span>
-							</td>
-						</tr>
-						<tr style="vertical-align:top;">
-							<td style="padding-top:5px;"><span onclick="share_facebook({{=my_ask.id}}); return false;" style="cursor:pointer; font-weight:bold;">페이스북</span></td>
-							<td style="padding-top:5px;"><span onclick="share_katalk({{=my_ask.id}}); return false;" style="cursor:pointer; font-weight:bold;">카카오톡</span></td>
-							<td style="padding-top:5px;"><span onclick="copy_url({{=my_ask.id}}); return false;" style="cursor:pointer; font-weight:bold;">주소복사</span></td>
-						</tr>
-					</table>
-					<input id="share_url_{{=my_ask.id}}" style="position:fixed; top:100%; left:100%;" value="http://vaskit.kr/asks/{{=my_ask.id}}"/>
-				</div>
-			</li>
-		{{ } }}
-		</ul>
-		<div class="table_div">
-			<a id="prev_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('첫번째 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:left; background-color:#dbdbdb; color:#fff; border-radius:5px 0 0 5px; transition:background-color .5s;"></a>
-			<a id="next_card_btn" href="#" onclick="if ($(this).css('background-color') == '#dbdbdb') notify('마지막 페이지입니다'); return false;" style="display:block; width:50%; height:40px; line-height:40px; text-align:center; float:right; background-color:#dbdbdb; color:#fff; border-radius:0 5px 5px 0; transition:background-color .5s; margin-left:-1px; border-left:1px solid #f4f4f4;"></a>
+		{{ var gender = detail.vote_gender_average == 1 ? "남성" : "여성" }}
+		{{ var age = detail.vote_age_average > 30 ? "30" : "20" }}
+		{{ var color = detail.vote_gender_average == 1 ? "#0389ed" : "#ea065e" }}
+		<div class="table_div" style="color:{{=color}};">
+			{{ if (detail.total_vote_count > 10) { }}
+				{{ var random1 = ["들이 관심을 보이기 시작했어요","들이 흥미를 보이고 있네요","들이 재미있어해요","들이 클릭하기 시작했네요"] }}
+				{{ var random2 = ["들의 관심이 많아요!","들이 좋아하는 분야입니다!","들이 열광하고 있어요!","들의 주된 관심사군요!","들이 공감하는군요!"] }}
+				{{ var rnum1 = Math.floor(Math.random() * random1.length); }}
+				{{ var rnum2 = Math.floor(Math.random() * random2.length); }}
+				<i class="fa fa-heart"></i>
+				<span style="font-weight:bold;">{{=age}}대</span>
+				<span style="font-weight:bold;">{{=gender}}</span>{{= detail.vote_total_count < 25 ? random1[rnum1] : random2[rnum2] }}
+			{{ } else { }}
+				<span style="color:#9d9ea1;"><i class="fa fa-globe"></i> 아직 투표가 충분하지 않아요</span>
+			{{ } }}
+			<span style="float:right; color:#9d9ea1;">더 보기 <i class="fa fa-angle-double-down"></i></span>
 		</div>
 	</script>
 
@@ -427,7 +423,7 @@
 
 		var current_user_string_id;
 		var userOverlaySegTemplate = _.template($('#user_overlay_seg_template').html());
-		var myAsksSegTemplate = _.template($('#my_asks_template').html());
+		var myAsksDetailTemplate = _.template($('#my_asks_detail_template').html());
 		var userOverlaySegManageTemplate = _.template($('#user_overlay_seg_manage_template').html());
 
 		function user_on(){
@@ -440,13 +436,23 @@
 			$("#menu_bg").show();
 			$("#menu_bg_pc").show();
 
+			$("#my_button").find("i").addClass("fa-rotate-180");
+			$("#my_text").fadeOut(100);
+			setTimeout(function(){
+				$("#my_button").find("i").removeClass("fa-user").addClass("fa-remove").css("font-size","26px");
+			},100);
+
 			$("#category_overlay").hide();
 			$("#search_overlay").hide();
 			$('#search_input').val("");
 			$("#keyword_reset_btn").hide();
 
 			$("#user_path").html("&gt;&nbsp;My Page");
-			$("#manage_on").css("transform","scale(1)").css("-webkit-transform","scale(1)");
+			// $("#manage_on").css("transform","scale(1)").css("-webkit-transform","scale(1)");
+			// $("#manage_on").find("i").animateCss("rollIn");
+			$("#manage_on").find("i").removeClass("fa-flip-horizontal");
+			$("#manage_on").attr("onclick","manage_on(); return false;");
+			setTimeout(function(){ $("#manage_on").find("i").addClass("fa-gear").removeClass("fa-angle-right"); },100);
 
 			$.ajax({
 		    url: "/users/get_user_data.json",
@@ -459,6 +465,17 @@
 		    success: function(data){
 					current_user_string_id = data.current_user_string_id;
 					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
+
+					var my_asks = data.my_asks_in_progress;
+					for (var i=0; i<my_asks.length; i++) {
+						var my_ask = my_asks[i];
+						if (!asks.some(function(item, index, array){
+							if (item.id == my_ask.id) { asks.splice(index, 1, my_ask); }
+							return item.id == my_ask.id;
+						})) {
+							asks.push(my_ask);
+						}
+					}
 
 					var in_progress_count = data.in_progress_count;
 		      var my_ask_count = data.my_ask_count;
@@ -477,6 +494,7 @@
 					var right_ask_thumbnails = data.right_ask_thumbnails;
 
 					$("#user_overlay_seg").html(userOverlaySegTemplate({
+						my_asks:my_asks,
 						in_progress_count:in_progress_count,
 						my_ask_count:my_ask_count,
 						my_like_ask_count:my_like_ask_count,
@@ -489,7 +507,21 @@
 						left_ask_thumbnails:left_ask_thumbnails,
 						right_ask_thumbnails:right_ask_thumbnails
 					}));
+
+					my_ask_card_slider = $("#my_asks_card_box").bxSlider({
+						infiniteLoop: false,
+						prevText: '<i class="fa fa-angle-double-left"></i> 이전',
+						nextText: '다음 <i class="fa fa-angle-double-right"></i>',
+						prevSelector: $("#prev_card_btn"),
+						nextSelector: $("#next_card_btn"),
+						onSlideBefore: function() {
+							my_ask_card_slider.getCurrentSlide() == 0 ? $("#prev_card_btn").css('background-color','#dbdbdb') : $("#prev_card_btn").css('background-color','#cbcbcb');
+							my_ask_card_slider.getCurrentSlide() == my_ask_card_slider.getSlideCount() - 1 ? $("#next_card_btn").css('background-color','#dbdbdb') : $("#next_card_btn").css('background-color','#cbcbcb');
+						}
+					});
+
 					if (in_progress_count > 0) get_my_asks(in_progress_count);
+					if (in_progress_count > 1) $("#next_card_btn").css('background-color','#cbcbcb');
 		    },
 		    beforeSend: function(){
 					var loading = '<i class="fa fa-circle-o-notch fa-spin" style="color:#998674; line-height:200px;"></i>'
@@ -511,38 +543,15 @@
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
 		    success: function(data){
-					var my_asks = data.my_asks_in_progress;
 					var my_asks_details = data.my_asks_in_progress_detail;
-
-					for (var i=0; i<my_asks.length; i++) {
-						var my_ask = my_asks[i];
-						if (!asks.some(function(item, index, array){
-							if (item.id == my_ask.id) { asks.splice(index, 1, my_ask); }
-							return item.id == my_ask.id;
-						})) {
-							asks.push(my_ask);
+					setTimeout(function(){
+						for (var i=0; i<in_progress_count; i++) {
+							var detail = my_asks_details[i];
+							$("#my_ask_card_detail_"+i).html(myAsksDetailTemplate({
+								detail:detail
+							}));
 						}
-					}
-
-					$("#my_asks_seg").html(myAsksSegTemplate({
-						in_progress_count:in_progress_count,
-						my_asks:my_asks,
-						my_asks_details:my_asks_details
-					}));
-
-					if (in_progress_count > 1) $("#next_card_btn").css('background-color','#cbcbcb');
-					$("#my_asks_card_box").show().animateCss("fadeIn");
-					my_ask_card_slider = $("#my_asks_card_box").bxSlider({
-						infiniteLoop: false,
-						prevText: '<i class="fa fa-angle-double-left"></i> 이전',
-						nextText: '다음 <i class="fa fa-angle-double-right"></i>',
-						prevSelector: $("#prev_card_btn"),
-						nextSelector: $("#next_card_btn"),
-						onSlideBefore: function() {
-							my_ask_card_slider.getCurrentSlide() == 0 ? $("#prev_card_btn").css('background-color','#dbdbdb') : $("#prev_card_btn").css('background-color','#cbcbcb');
-							my_ask_card_slider.getCurrentSlide() == my_ask_card_slider.getSlideCount() - 1 ? $("#next_card_btn").css('background-color','#dbdbdb') : $("#next_card_btn").css('background-color','#cbcbcb');
-						}
-					});
+					}, 2000);
 		    },
 		    beforeSend: function(){
 		    },
@@ -565,6 +574,12 @@
 			$("#menu_bg").hide();
 			$("#menu_bg_pc").hide();
 
+			$("#my_button").find("i").removeClass("fa-rotate-180");
+			setTimeout(function(){
+				$("#my_button").find("i").addClass("fa-user").removeClass("fa-remove").css("font-size","30px");
+				$("#my_text").show();
+			},200);
+
 			$("#user_path").html("");
 			$("#user_overlay_seg").html("");
 			alram_check();
@@ -583,6 +598,7 @@
 					$("#alram_feed_count").html("0개").css("color","#666");
 					$("#already_all_read").show();
 					$("#all_read").remove();
+					$("#new_alram_icon").css("transform","scale(0)").text(alram_count);
 				},
 				beforeSend: function(){
 					progressStart();
@@ -662,8 +678,7 @@
 							$("#detail_vote_count_"+ask.id+", #ask_deal_"+ask.id+"_table, #ask_"+ask.id+"_comment").slideDown(500);
 						});
 
-						$("#category_button:visible").hide();
-						$("#back_button").show().attr("onclick","back_button(); return false;");
+						main_header_button();
 
 						ga('send', 'event', '질문별/상세화면 오픈 횟수', 'detail_view_opened', ask.id.toString(), 1);
 						ga('send', 'event', '유저별/상세화면 오픈 횟수', 'detail_view_per_user', current_user_id.toString(), 1);
@@ -685,7 +700,10 @@
 
 		function manage_on() {
 			$("#user_path").html("<span>&gt;&nbsp;My Page</span>&nbsp;&gt;&nbsp;Settings");
-			$("#manage_on").css("transform","scale(0)").css("-webkit-transform","scale(0)");
+			// $("#manage_on").css("transform","scale(0)").css("-webkit-transform","scale(0)");
+			$("#manage_on").find("i").addClass("fa-flip-horizontal");
+			$("#manage_on").attr("onclick","user_on(); return false;");
+			setTimeout(function(){ $("#manage_on").find("i").removeClass("fa-gear").addClass("fa-angle-right"); },100);
 	    $("#user_overlay_seg").html(userOverlaySegManageTemplate());
 			$("#user_overlay_seg").scrollTop(0);
 

@@ -8,6 +8,8 @@ class Users::SessionsController < Devise::SessionsController
     if current_user
       current_user_string_id = User.find_by_id(current_user.id).string_id
 
+      my_asks_in_progress = Ask.where(:user_id => current_user.id, :be_completed => false).order("id desc").as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
+
       in_progress_count = Ask.where(:user_id => current_user.id, :be_completed => false).count
       my_ask_count = Ask.where(:user_id => current_user.id).count
       my_like_ask_count = AskLike.where(:user_id => current_user.id).count
@@ -35,6 +37,7 @@ class Users::SessionsController < Devise::SessionsController
         right_ask_thumbnails << right_ask_thumbnail
       end
       render :json => {
+        :my_asks_in_progress => my_asks_in_progress,
         :current_user_string_id => current_user_string_id,
         :in_progress_count => in_progress_count,
         :my_ask_count => my_ask_count,
@@ -52,11 +55,10 @@ class Users::SessionsController < Devise::SessionsController
       my_asks_in_progress = Ask.where(:user_id => current_user.id, :be_completed => false).order("id desc")
       my_asks_in_progress_detail = []
       my_asks_in_progress.each do |my|
-        my_asks_in_progress_detail << my.detail_vote_count
+        # my_asks_in_progress_detail << my.detail_vote_count
+        my_asks_in_progress_detail << Views::DetailVoteCount.average_vote_count(my.id)
       end
-      my_asks_in_progress = my_asks_in_progress.as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
       render :json => {
-        :my_asks_in_progress => my_asks_in_progress,
         :my_asks_in_progress_detail => my_asks_in_progress_detail }
     end
   end

@@ -8,26 +8,17 @@ class Comment < ActiveRecord::Base
   validates_attachment_size :image, :less_than => 20.megabytes
   validates_attachment_content_type :image, :content_type => ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
 
-  after_create :ask_deal_comment_count
-  after_update :ask_deal_comment_count
-  before_destroy :ask_deal_comment_count
+  after_create :reload_ask_deal_comment_count
+  after_update :reload_ask_deal_comment_count
+  after_destroy :reload_ask_deal_comment_count
 
-  def ask_deal_comment_count
+  def reload_ask_deal_comment_count
     ask = Ask.find_by_id(self.ask_id)
-    if ask.left_ask_deal_id == self.ask_deal_id
-      ask.left_ask_deal.update(:comment_count => Comment.where(:ask_deal_id => self.ask_deal_id, :is_deleted => 0).count )
-    elsif ask.right_ask_deal_id == self.ask_deal_id
-      ask.right_ask_deal.update(:comment_count => Comment.where(:ask_deal_id => self.ask_deal_id, :is_deleted => 0).count )
+    if ask.left_ask_deal.id == self.ask_deal_id
+      ask.left_ask_deal.update(:comment_count => Comment.where(:ask_deal_id => ask.left_ask_deal_id, :is_deleted => false).count)
+    elsif ask.right_ask_deal.id == self.ask_deal_id
+      ask.right_ask_deal.update(:comment_count => Comment.where(:ask_deal_id => ask.right_ask_deal_id, :is_deleted => false).count)
     end
   end
-
-  # def decr_ask_deal_comment_count
-  #   ask = Ask.find_by_id(self.ask_id)
-  #   if ask.left_ask_deal_id == self.ask_deal_id
-  #     ask.left_ask_deal.update(:comment_count => Comment.where(:ask_deal_id => self.ask_deal_id, :is_deleted => 0).count )
-  #   elsif ask.right_ask_deal_id == self.ask_deal_id
-  #     ask.right_ask_deal.update(:comment_count => Comment.where(:ask_deal_id => self.ask_deal_id, :is_deleted => 0).count )
-  #   end
-  # end
 
 end
