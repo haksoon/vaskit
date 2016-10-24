@@ -2,7 +2,7 @@
 	<div onclick="back_button(); return false;" style="position:absolute; top:-50px; left:0; width:100%; height:50px; text-align:left; cursor:pointer;" ontouchmove="return false;"></div>
 	<div style="position:absolute; top:-10px; left:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;" ontouchmove="return false;"></div>
 	<div id="category_overlay_title" style="margin:0; padding:0 20px; height:45px; line-height:45px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left; border:5px solid #998674; border-bottom:none;" ontouchmove="return false;">
-		MENU
+		<i class="fa fa-navicon"></i> MENU
 		<span style="font-size:12px; font-weight:normal; color:#fff; float:right;">보고싶은 것만 보자구요~</span>
 	</div>
 	<div id="category_overlay_wrap" style="box-sizing:border-box; width:100%; height:100%; height:calc(100% - 50px); background-color:#f4f4f4; border:5px solid #998674; border-top:none; overflow:hidden;">
@@ -56,7 +56,7 @@
 					<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">궁금하신 점이 있으신가요?</span>
 				</p>
 				<ul style="margin:0; padding:0; list-style:none; font-size:13px;">
-					<a href="http://blog.naver.com/vaskit" target="_blank" style="color:#666;">
+					<a href="https://www.facebook.com/vaskit.kr/" target="_blank" style="color:#666;">
 						<li style="height:50px; line-height:50px; border:1px solid #dbdbdb; border-top:none; background-color:#fff; padding:0px 10px;">
 							<i class="fa fa-child" style="display:inline-block; width:15px; text-align:center; "></i>&nbsp;About Us
 						</li>
@@ -103,7 +103,6 @@
 		disableScroll();
 		$("#category_overlay").show();
 		$("#menu_bg").show();
-		$("#menu_bg_pc").show();
 
 		$("#category_icon").addClass("fa-rotate-180");
 		setTimeout(function(){ $("#category_icon").removeClass("fa-navicon").addClass("fa-remove"); },100);
@@ -122,7 +121,6 @@
 		enableScroll();
 		$("#category_overlay").fadeOut();
 		$("#menu_bg").hide();
-		$("#menu_bg_pc").hide();
 
 		$("#category_icon").removeClass("fa-rotate-180");
 		setTimeout(function(){ $("#category_icon").addClass("fa-navicon").removeClass("fa-remove"); },100);

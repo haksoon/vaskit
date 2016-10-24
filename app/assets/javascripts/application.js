@@ -392,14 +392,14 @@ function search_bar_hide(){
 
 function disableScroll() {
   $("body").css("overflow","hidden");
-  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").bind("touchmove", function(e){
+  $("#menu_bg_full, #menu_bg, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").bind("touchmove", function(e){
     return false;
   });
 }
 
 function enableScroll() {
   $("body").css("overflow","auto");
-  $("#menu_bg_full, #menu_bg, #menu_bg_pc, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").unbind("touchmove");
+  $("#menu_bg_full, #menu_bg, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").unbind("touchmove");
 }
 
 // AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여

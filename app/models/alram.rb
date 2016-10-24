@@ -1,18 +1,28 @@
 class Alram < ActiveRecord::Base
+  belongs_to :ask
+  belongs_to :comment
+  belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
+  belongs_to :send_user, :class_name => 'User', :foreign_key => 'send_user_id'
+  belongs_to :ask_owner_user, :class_name => 'User', :foreign_key => 'ask_owner_user_id'
+  belongs_to :comment_owner_user, :class_name => 'User', :foreign_key => 'comment_owner_user_id'
+
   include PushSend
   after_create :alram_push_send
   after_update :alram_push_send
 
   def alram_push_send
-    registration_ids = UserGcmKey.where(:user_id => self.user_id).pluck(:gcm_key)
+    if Rails.env == "development"
+      if User.find(self.user_id).user_role == "admin"
+        registration_ids = UserGcmKey.where(:user_id => self.user_id).pluck(:gcm_key)
+      end
+    else
+      registration_ids = UserGcmKey.where(:user_id => self.user_id).pluck(:gcm_key)
+    end
     unless registration_ids.blank?
       # default setting
       type = "true"
       alrams = Alram.where(:user_id => self.user_id).order("updated_at desc").limit(20)
-      count = 0
-      alrams.each do |alram|
-        alram.is_read == false ? count = count + 1 : count = count
-      end
+      count = alrams.where(:is_read => false).count
       msg = "새로운 알림이 도착했습니다!"
       id = self.ask_id.to_s
       link = CONFIG["host"] + "/asks/" + self.ask_id.to_s
@@ -78,7 +88,7 @@ class Alram < ActiveRecord::Base
         type = "false"
         push_send(registration_ids, type, count, msg, id, link) if UserGcmKey.find_by(:user_id => self.user_id).app_ver != nil # 앱버전 구분을 위한 임시 코드 (2/3 : 삭제)
       end
-      # push_send(registration_ids, type, count, msg, id, link) # 앱버전 구분을 위한 임시 코드 (1/3 : 주석 해제)
+      # push_send(registration_ids, type, count, msg, id, link) # 앱버전 구분을 위한 임시 코드 (3/3 : 주석 해제)
     end
   end
   handle_asynchronously :alram_push_send
