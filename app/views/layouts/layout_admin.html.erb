@@ -1,20 +1,82 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>VASKIT - admin page</title>
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-  <%= csrf_meta_tags %>
-  <script src="/images/Nwagon/Nwagon.js"></script>
-  <link href="/images/Nwagon/Nwagon.css" rel="stylesheet">
-</head>
-<body>
-	<div id="flash" class="flash_html" style="display:none;" ></div>
-	<div class="loading" style="display:none;">
-    	<div>Loading...</div>
-  	</div>
-	<%= yield %>
-</body>
+  <head>
+    <title>VASKIT - admin page</title>
 
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/favicon/apple-icon-144x144.png">
 
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/images/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/images/favicon/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+
+  	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <style>
+      a:link, a:visited, a:hover, a:active { text-decoration:none; }
+      div::after { content:""; display:block; clear:both; }
+      input:focus, select:focus, textarea:focus { outline:none; background-color:#fff; }
+      .menu_btn {
+        padding:5px;
+        font-size:14px;
+        color:#666;
+      }
+      .table_btn {
+        display:inline-block;
+        background-color:#ffcc5a;
+        color:#666;
+        padding:10px;
+        margin:5px 0;
+        font-size:14px;
+      }
+      .loading {
+      	position:fixed;
+      	top:50%;
+      	left:50%;
+      	margin-top:-30px;
+      	margin-left:-110px;
+      	width:200px;
+      	padding:15px 10px;
+      	background-color:rgba(238,110,1,0.9);
+      	color:#fff;
+      	font-size:14px;
+      	font-weight:bold;
+      	line-height:20px;
+      	text-align:center;
+      	border-radius:5px;
+      	z-index:990000;
+      }
+    </style>
+
+    <script src="/images/Nwagon/Nwagon.js"></script>
+    <link href="/images/Nwagon/Nwagon.css" rel="stylesheet">
+  </head>
+  <body style="margin:0; padding:0; color:#666; max-width:100%;">
+  	<div class="loading" style="display:none;"><div>Loading...</div></div>
+    <div style="padding:10px; background-color:#ffe4a9; border-bottom:5px solid #ffcc5a;">
+      <a href="/admin"><h1 style="color:#666; margin:10px 5px;">VASKIT admin page</h1></a>
+      <a href="/admin/table" class="menu_btn"><i class="fa fa-caret-right"></i> DB조회</a>
+      <a href="/admin/analysis" class="menu_btn"><i class="fa fa-caret-right"></i> 통계분석</a>
+      <a href="/admin/notice" class="menu_btn"><i class="fa fa-caret-right"></i> 공지사항</a>
+      <a href="/admin/rank_asks" class="menu_btn"><i class="fa fa-caret-right"></i> 게시물고정</a>
+      <a data-method="delete" rel="nofollow" href="/users/sign_out" class="menu_btn" style="color:#ee6e01; font-size:12px; float:right;"><i class="fa fa-sign-out"></i> 로그아웃</a>
+    </div>
+  	<%= yield %>
+  </body>
 </html>

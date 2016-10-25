@@ -19,7 +19,7 @@
 
 <script>
   function show_app_popup() {
-		if (isAndroid && !$.cookie('app_promo')) {
+		if (isAndroid && !isAndroidApp && !$.cookie('app_promo')) {
 			history.pushState(null, null, null);
 			is_app_popup_opened = true;
 

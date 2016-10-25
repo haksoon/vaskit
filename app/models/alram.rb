@@ -22,7 +22,7 @@ class Alram < ActiveRecord::Base
       # default setting
       type = "true"
       alrams = Alram.where(:user_id => self.user_id).order("updated_at desc").limit(20)
-      count = alrams.where(:is_read => false).count
+      count = alrams.pluck(:is_read).count(false)
       msg = "새로운 알림이 도착했습니다!"
       id = self.ask_id.to_s
       link = CONFIG["host"] + "/asks/" + self.ask_id.to_s

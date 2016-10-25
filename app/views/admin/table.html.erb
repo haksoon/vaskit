@@ -1,52 +1,54 @@
-<div style="margin:0 auto; text-align:center;">
-	<a href="/admin" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px; margin-top:20px;">main</a>
-	<% @tables.each do |table| %>
-		<a href="/admin/table/<%=table%>" style="display:inline-block; background-color:#e6b621; color:white; text-decoration:none; padding:8px; margin-top:20px;"><%=table%></a>
-	<% end %>
-	<a data-method="delete" rel="nofollow" href="/users/sign_out" style="color:#ee6e01; font-size:12px; text-align:left; margin-left:6px;">로그아웃</a>
+<div style="padding:10px;">
+	<select id="table_setting" style="width:100%; height:40px; line-height:40px; background-color:#fff; padding:0 5px; margin-top:10px;">
+		<option value="" disabled="true" selected="selected">조회할 DB를 선택하세요</option>
+    <% @tables.each do |table| %>
+      <option value="<%=table%>"><%=table%></option>
+    <% end %>
+  </select>
 </div>
 
-<div style="padding:0 10px;">
+<div style="padding:10px;">
 	<% if @records.blank?%>
-	<p style="margin:0 auto; padding:200px 0; width:100%;text-align:center;">
-		데이터가 없습니다.
-	</p>
+		<p style="margin:0 auto; padding:150px 0; width:100%; text-align:center; font-size:13px;">데이터가 없습니다</p>
 	<% else %>
-	
-	<table border="1" cellspacing="0" cellpadding="2" style="width: 100%; margin-top:20px; font-size:12px; text-align:center;">
-	  <thead>
-	    <tr>
-	      <% @record_names.each do |name| %>
-	      	<th><%=name%></th>
-	      <% end %>
-	      <th></th>
-	    </tr>
-	  </thead>
-	
-	  <tbody>
-	    <% @records.each do |record| %>
-			<tr>
-				<% @record_names.each do |name| %>
-					<% if record[name].class == ActiveSupport::TimeWithZone %>
-					<td><%=record[name].to_s(:dot_colon_datetime) %></td>
-					<% else %>
-					<td><%=record[name]%></td>
-					<% end %>
-			    	
+		<h2 style="margin:0 0 10px; padding:0 5px;"><i class="fa fa-check"></i> <%= @tableModel.name %></h2>
+		<div style="overflow:auto; -webkit-overflow-scrolling:touch;">
+			<table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center;">
+			  <thead>
+			    <tr style="height:40px; background-color:#998674; color:#fff;">
+			      <% @record_names.each do |name| %>
+			      	<th><%=name%></th>
+			      <% end %>
+						<th>삭제</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <% @records.each do |record| %>
+						<tr>
+							<% @record_names.each do |name| %>
+								<% if record[name].class == ActiveSupport::TimeWithZone %>
+									<td><%=record[name].to_s(:dot_colon_datetime) %></td>
+								<% else %>
+									<td><%=record[name]%></td>
+								<% end %>
+					    <% end %>
+					    <td>
+					    <% if record.class == User %>
+					    	<%= link_to '삭제', "/users/"+record.id.to_s, method: :delete, data: { confirm: '정말 삭제하시겠습니까?' } %>
+					    <% else %>
+					    	<%= link_to '삭제', record, method: :delete, data: { confirm: '정말 삭제하시겠습니까?' } %>
+					    <% end %>
+					    </td>
+		       	</tr>
 			    <% end %>
-			    
-			    <td>
-			    <% if record.class == User %>
-			    	<%= link_to '삭제', "/users/"+record.id.to_s, method: :delete, data: { confirm: '정말 삭제하시겠습니까?' } %>
-			    <% else %>
-			    	<%= link_to '삭제', record, method: :delete, data: { confirm: '정말 삭제하시겠습니까?' } %>
-			    <% end %>
-			    </td>
-			    
-	       	</tr>
-	    <% end %>
-	  </tbody>
-	</table>
-	<% end %>	
+			  </tbody>
+			</table>
+		</div>
+	<% end %>
 </div>
 
+<script>
+	$("#table_setting").on("change",function(){
+		document.location.assign("/admin/table/" + $(this).val());
+	})
+</script>

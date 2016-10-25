@@ -1220,8 +1220,8 @@
 
 	<% unless @ranking_asks.blank? %>
 		var ranking_asks = <%= raw @ranking_asks.to_json %>;
-		for(var i=0; i < ranking_asks.length; i++) {
-			asks.unshift(ranking_asks[i])
+		for(var i=ranking_asks.length; i > 0; i--) {
+			asks.unshift(ranking_asks[i-1]);
 		}
 	<% end %>
 

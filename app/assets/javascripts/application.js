@@ -129,7 +129,7 @@ var isMobile           = false,
     isPC               = false;
 var isIE = !!ua.match(/msie|trident\/7|edge/);
 
-if (window.HybridApp) {
+if (window.HybridApp || !!$.cookie('device_id')) {
   isAndroidApp = true;
   isIOSApp = false;
   isMobile = true;

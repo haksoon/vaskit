@@ -17,7 +17,7 @@ class Users::SessionsController < Devise::SessionsController
       my_comment_count = Comment.where(:user_id => current_user.id).count
 
       alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(20)
-      alram_count = alrams.where(:is_read => false).count
+      alram_count = alrams.pluck(:is_read).count(false)
       alrams = alrams.as_json(:include => [:user, :send_user, :ask_owner_user, :comment_owner_user, {:ask => {:include => [:left_ask_deal, :right_ask_deal]}}])
 
       render :json => {
@@ -50,7 +50,7 @@ class Users::SessionsController < Devise::SessionsController
   def alram_check
     if current_user
       alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(20)
-      alram_count = alrams.where(:is_read => false).count
+      alram_count = alrams.pluck(:is_read).count(false)
     end
     render :json => {:alram_count => alram_count}
   end

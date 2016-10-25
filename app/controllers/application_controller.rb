@@ -117,7 +117,7 @@ class ApplicationController < ActionController::Base
         registration_ids << user_gcm_key.gcm_key
         if current_user
           alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(20)
-          count = alrams.where(:is_read => false).count
+          count = alrams.pluck(:is_read).count(false)
         else
           count = 0
         end

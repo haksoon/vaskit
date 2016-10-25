@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       delete 'comment_del'
     end
   end
+  resources :ask_likes
   resources :comment_likes
   resources :deals do
     collection do
@@ -94,16 +95,21 @@ Rails.application.routes.draw do
     end
   end
   resources :reports
+
   resources :rank_asks
+  get "/admin/table", :to => "admin#table"
+  get "/admin/table/:table_name", :to => "admin#table"
   get "/admin/analysis", :to => "admin#analysis"
+  get "/admin/notice", :to => "admin#notice"
+  get "/admin/rank_asks", :to => "admin#rank_asks"
   resources :admin do
     collection do
+      post 'load_more_asks'
+      post 'create_notice'
       post 'submit_rank_ask'
       delete 'delete_rank_ask'
-      post 'create_notice'
     end
   end
-  get "/admin/table/:table_name", :to => "admin#table"
 
   # get "/:string_id", :to => "etc#user"
 
