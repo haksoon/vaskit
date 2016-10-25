@@ -44,11 +44,65 @@
 			  </tbody>
 			</table>
 		</div>
+		<div style="margin-top:10px; text-align:center;">
+			<a href="#" onclick="navigate_page(false); return false;" class="navigate_btn" style="float: left;"><i class="fa fa-angle-double-left"></i> 이전</a>
+			<select id="table_page" style="width:45%; height:40px; line-height:40px; background-color:#fff; padding:0 10px; direction:rtl; border-radius:0;">
+				<% 1.step @record_count do |r| %>
+					<option value="<%=r%>"><%=r%></option>
+				<% end %>
+			</select>
+			<a href="#" onclick="navigate_page(true); return false;" class="navigate_btn" style="float: right;">다음 <i class="fa fa-angle-double-right"></i></a>
+		</div>
 	<% end %>
 </div>
-
+<style>
+	.navigate_btn {
+		display: block;
+		width: 25%;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		background-color: #dbdbdb;
+		color: #fff;
+		font-size: 13px;
+	}
+</style>
 <script>
 	$("#table_setting").on("change",function(){
-		document.location.assign("/admin/table/" + $(this).val());
-	})
+		$(".loading").show();
+		document.location.assign("/admin/table/" + $(this).val() + "/?page=1");
+	});
+
+	if (document.location.search != "") {
+    var currentPage = Number(document.location.search.replace("?page=",""));
+    $("#table_page option[value="+currentPage+"]").attr("selected","selected");
+  }
+
+	$("#table_page").on("change",function(){
+		$(".loading").show();
+		document.location.search = "?page=" + $(this).val();
+	});
+
+	function navigate_page(is_next) {
+		var table_name = document.location.pathname.replace("/admin/table/","");
+		var currentPage = Number(document.location.search.replace("?page=",""));
+		var nextPage;
+
+		$(".loading").show();
+
+		if (currentPage == 1 && !is_next) {
+			alert('첫 페이지입니다');
+			$(".loading").hide();
+			return false;
+		} else if (currentPage == $("#table_page option").length && is_next) {
+			alert('마지막 페이지입니다');
+			$(".loading").hide();
+			return false;
+		} else if (is_next) {
+			nextPage = currentPage += 1;
+		} else {
+			nextPage = currentPage -= 1;
+		}
+		document.location.assign("/admin/table/" + table_name + "?page=" + nextPage);
+	}
 </script>

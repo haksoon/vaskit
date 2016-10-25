@@ -10,6 +10,7 @@ class AdminController < ApplicationController
   def table
     @tables = ActiveRecord::Base.connection.tables
     @tables = @tables - ["schema_migrations",
+                         "delayed_jobs",
                          "v_alba_ask_likes", "v_alba_asks", "v_alba_comment_likes", "v_alba_comments", "v_alba_shares", "v_alba_visits", "v_alba_votes",
                          "v_alba_daily_ask_likes", "v_alba_daily_asks", "v_alba_daily_comment_likes", "v_alba_daily_comments", "v_alba_daily_shares", "v_alba_daily_visits", "v_alba_daily_votes",
                          "v_user_ask_likes", "v_user_asks", "v_user_comment_likes", "v_user_comments", "v_user_shares", "v_user_visits", "v_user_votes",
@@ -22,7 +23,8 @@ class AdminController < ApplicationController
     if params[:table_name]
       @tableModel = params[:table_name].classify.constantize
       @record_names = @tableModel.columns.map(&:name)
-      @records = @tableModel.all.order("id desc")
+      @records = @tableModel.page(params[:page]).per(10).order("id desc")
+      @record_count = @tableModel.all.count / 10 + 1
     end
     render :layout => "layout_admin"
   end

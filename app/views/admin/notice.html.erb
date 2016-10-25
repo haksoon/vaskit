@@ -59,6 +59,8 @@
 </style>
 
 <script>
+  alert('레이아웃이 준비되기 전까지\n해당 페이지를 통한\n이메일 공지사항 전송을\n최대한 자제해주세요');
+
 	function create_notice() {
 		var notice_title = $("#notice_title").val();
 		var notice_message = $("#notice_message").val();
@@ -79,10 +81,10 @@
           location.reload();
         },
         beforeSend: function(){
-          // $(".loading").show();
+          $(".loading").show();
         },
         complete: function(){
-          // $(".loading").hide();
+          $(".loading").hide();
         }
       });
     }

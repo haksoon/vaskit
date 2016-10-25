@@ -111,6 +111,10 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :error_logs
+  resources :user_gcm_keys
+  resources :user_visits
+
   # get "/:string_id", :to => "etc#user"
 
   # The priority is based upon order of creation: first created -> highest priority.

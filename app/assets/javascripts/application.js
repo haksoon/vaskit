@@ -171,6 +171,7 @@ function scrollDistanceFromBottom(argument) {
 }
 
 function go_url(url) {
+  progressStart();
   window.location.assign(url);
 }
 
