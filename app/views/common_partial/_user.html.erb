@@ -3,7 +3,7 @@
 		<div onclick="back_button(); return false;" style="position:absolute; top:-50px; right:0; width:100%; height:50px; text-align:right; cursor:pointer;" ontouchmove="return false;"></div>
 		<div style="position:absolute; top:-10px; right:28px; border-bottom:10px solid #998674; border-right:7px solid transparent; border-left:7px solid transparent;" ontouchmove="return false;"></div>
 		<div id="user_overlay_title" style="margin:0; height:45px; line-height:45px; font-size:16px; font-weight:bold; color:#fff; background-color:#998674; text-align:left; border:5px solid #998674; border-bottom:none;" ontouchmove="return false;">
-			<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:6px 6px 3px; color:#998674; background-color:#fff; border-radius:5px;"><i class="fa fa-user"></i>&nbsp;<%= current_user.string_id %></a>
+			<a id="user_id" href="#" onclick="user_on(); return false;" style="margin-left:12px; padding:6px 6px 3px; color:#998674; background-color:#fff; border-radius:5px;"><i class="fa fa-address-card-o"></i>&nbsp;<%= current_user.string_id %></a>
 			<span id="user_path" onclick="user_on(); return false;" style="margin-left:5px; font-size:13px; font-weight:normal; color:#fff; cursor:pointer;">
 				&gt;&nbsp;My Page
 			</span>
@@ -337,7 +337,7 @@
 				<i class="fa fa-caret-down"></i> 계정 설정
 				<span style="color:#666; font-size:12px; font-weight:normal; font-style:italic; padding-top:3px; float:right;">웰컴! <%= current_user.email %></span>
 			</p>
-			<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-user"></i>&nbsp;닉네임 변경</p>
+			<p style="margin:0; color:#666; padding:0 10px; height:40px; line-height:40px;"><i class="fa fa-id-badge"></i>&nbsp;닉네임 변경</p>
 			<div class="table_div" style="margin-bottom:0px; border:1px solid #dbdbdb;">
 				<input id="string_id_input" type="text" class="etc_input_box" placeholder="닉네임을 입력해주세요" value="<%= current_user.string_id %>" style="background-color:#fff; height:50px; line-height:50px;"/>
 				<a id="string_id_change_btn" href="#" onclick="change_string_id(); return false;" style="position:absolute; top:0; right:0; width:50px; height:50px; line-height:50px; background-color:#dbdbdb; display:inline-block; text-align:center; color:#fff; font-size:13px;">변경</a>
@@ -420,10 +420,9 @@
 			$("#user_overlay").show();
 			$("#menu_bg").show();
 
-			$("#my_button").find("i").addClass("fa-rotate-180");
-			$("#my_text").fadeOut(100);
+			$("#my_icon").addClass("fa-rotate-180");
 			setTimeout(function(){
-				$("#my_button").find("i").removeClass("fa-user").addClass("fa-remove").css("font-size","26px");
+				$("#my_icon").removeClass("fa-user-circle-o").addClass("fa-remove");
 			},100);
 
 			$("#category_overlay").hide();
@@ -447,7 +446,7 @@
         },
 		    success: function(data){
 					current_user_string_id = data.current_user_string_id;
-					$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
+					$("#user_id").html('<i class="fa fa-address-card-o"></i>&nbsp;'+current_user_string_id);
 
 					var my_asks = data.my_asks_in_progress;
 					for (var i=0; i<my_asks.length; i++) {
@@ -547,10 +546,9 @@
 			$("#user_overlay").fadeOut();
 			$("#menu_bg").hide();
 
-			$("#my_button").find("i").removeClass("fa-rotate-180");
+			$("#my_icon").removeClass("fa-rotate-180");
 			setTimeout(function(){
-				$("#my_button").find("i").addClass("fa-user").removeClass("fa-remove").css("font-size","30px");
-				$("#my_text").show();
+				$("#my_icon").addClass("fa-user-circle-o").removeClass("fa-remove");
 			},200);
 
 			$("#user_path").html("");
@@ -719,7 +717,7 @@
 			        success: function(data){
 			        	if (data.status == "success"){
 									current_user_string_id = data.new_string_id;
-									$("#user_id").html('<i class="fa fa-user"></i>&nbsp;'+current_user_string_id);
+									$("#user_id").html('<i class="fa fa-address-card-o"></i>&nbsp;'+current_user_string_id);
 									$("#string_id_change_btn").css("background-color","#9d9ea1");
 			        		notify("타-다! 닉네임이 변경되었습니다!");
 			        	} else {

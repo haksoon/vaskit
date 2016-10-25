@@ -34,7 +34,7 @@
 <script type="text/template" id="search-result-template">
 		{{ if(type == "hash_tag"){ }}
 			<a href="#" onclick="go_url('/?keyword={{=keyword}}&type={{=type}}'); return false;" style="display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:8px 8px 8px 12px; color:#666;">
-				<i class="fa fa-slack" style="transform:rotate(19deg); -webkit-transform:rotate(19deg);"></i>&nbsp;{{= keyword }}
+				<i class="fa fa-hashtag"></i>&nbsp;{{= keyword }}
 			</a>
 		{{ }else if(type == "ask_deal"){ }}
 			<a href="#" onclick="go_url('/?keyword={{=keyword}}&type={{=type}}'); return false;" style="display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:8px 8px 8px 12px; color:#666;">
