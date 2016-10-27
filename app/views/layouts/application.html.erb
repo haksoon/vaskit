@@ -16,7 +16,81 @@
 
     -->
 <head>
-  	<title><%= Rails.env == "production" ? "VASKIT" : "VASKIT:test" %></title>
+    <% if Rails.env == "development" %>
+      <title>VASKIT TEST</title>
+    <% else %>
+      <% if (controller.controller_name == "home" && controller.action_name == "index" && controller.request.query_string == "") %>
+        <title>VASKIT | 세상의 모든 결정장애자들을 위하여!</title>
+        <meta name="title" content="VASKIT | 세상의 모든 결정장애자들을 위하여!" />
+        <meta name="description" content="#둘중에뭐사지? #혼자고민하지마! VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
+        <meta name="keywords" content="쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" />
+      <% elsif (controller.controller_name == "home" && controller.action_name == "index" && controller.request.query_string != "") %>
+        <% case @type %>
+        <% when "user", "hash_tag", "ask_deal", "brand", "none" %>
+          <% if @type == "user" %>
+            <title>VASKIT | <%= controller.request.params[:keyword] %> - 사용자 검색결과</title>
+            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 사용자 검색결과" />
+            <meta name="description" content="<%= controller.request.params[:keyword] %> 사용자 검색결과입니다" />
+      		<% elsif @type == "hash_tag" %>
+            <title>VASKIT | #<%= controller.request.params[:keyword] %> - 해쉬태그 검색결과</title>
+            <meta name="title" content="VASKIT | #<%= controller.request.params[:keyword] %> - 해쉬태그 검색결과" />
+            <meta name="description" content="#<%= controller.request.params[:keyword] %> 해쉬태그 검색결과입니다" />
+      		<% elsif @type == "ask_deal" %>
+            <title>VASKIT | <%= controller.request.params[:keyword] %> - 제품 검색결과</title>
+            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 제품 검색결과" />
+            <meta name="description" content="<%= controller.request.params[:keyword] %> 제품 검색결과입니다" />
+      		<% elsif @type == "brand" %>
+            <title>VASKIT | <%= controller.request.params[:keyword] %> - 브랜드 검색결과</title>
+            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 브랜드 검색결과" />
+            <meta name="description" content="<%= controller.request.params[:keyword] %> 브랜드 검색결과입니다" />
+      		<% elsif @type == "none" %>
+            <title>VASKIT | <%= controller.request.params[:keyword] %> - 통합 검색결과</title>
+            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 통합 검색결과" />
+            <meta name="description" content="<%= controller.request.params[:keyword] %> 통합 검색결과입니다" />
+      		<% end %>
+          <meta name="keywords" content="<%= controller.request.params[:keyword] %>, 쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" />
+        <% when "vote_yet" %>
+          <title>VASKIT | 참여하지 않은 투표 모아보기</title>
+          <meta name="title" content="VASKIT | 참여하지 않은 투표 모아보기" />
+          <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
+        <% when "my_ask_in_progress", "my_like_ask", "my_ask", "vote_ask", "comment_ask" %>
+          <% if @type == "my_ask_in_progress" %>
+            <title>VASKIT | 나의 히스토리 - 진행중인 질문</title>
+            <meta name="title" content="VASKIT | 나의 히스토리 - 진행중인 질문" />
+          <% elsif @type == "my_like_ask" %>
+            <title>VASKIT | 나의 히스토리 - 공감한 질문</title>
+            <meta name="title" content="VASKIT | 나의 히스토리 - 공감한 질문" />
+          <% elsif @type == "my_ask" %>
+            <title>VASKIT | 나의 히스토리 - 작성한 질문</title>
+            <meta name="title" content="VASKIT | 나의 히스토리 - 작성한 질문" />
+          <% elsif @type == "vote_ask" %>
+            <title>VASKIT | 나의 히스토리 - 참여한 투표</title>
+            <meta name="title" content="VASKIT | 나의 히스토리 - 참여한 투표" />
+          <% elsif @type == "comment_ask" %>
+            <title>VASKIT | 나의 히스토리 - 제시한 의견</title>
+            <meta name="title" content="VASKIT | 나의 히스토리 - 제시한 의견" />
+          <% end %>
+          <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
+        <% end %>
+      <% elsif (controller.controller_name == "asks" && controller.action_name == "show") %>
+        <title>VASKIT | <%= @ask.left_ask_deal.title.truncate(16) %> vs <%= @ask.right_ask_deal.title.truncate(16) %></title>
+        <meta name="title" content="VASKIT | <%= @ask.left_ask_deal.title.truncate(16) %> vs <%= @ask.right_ask_deal.title.truncate(16) %>" />
+        <meta name="description" content="<%= @ask.left_ask_deal.title %> vs <%= @ask.right_ask_deal.title %>, 당신의 선택은? <%= @ask.message.truncate(200) %>" />
+        <meta name="keywords" content="<%= @ask.left_ask_deal.title %>, <%= @ask.right_ask_deal.title %>, <%= @ask.left_ask_deal.brand %>, <%= @ask.right_ask_deal.brand %>, <%= HashTag.where(:ask_id => @ask.id).pluck(:keyword).join(", ") %>" />
+      <% elsif (controller.controller_name == "asks" && controller.action_name == "new") %>
+        <title>VASKIT | 새로운 질문 작성하기</title>
+        <meta name="title" content="VASKIT | 새로운 질문 작성하기" />
+        <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
+      <% elsif (controller.controller_name == "asks" && controller.action_name == "edit") %>
+        <title>VASKIT | 나의 질문 수정하기</title>
+        <meta name="title" content="VASKIT | 나의 질문 수정하기" />
+        <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
+      <% else %>
+        <title>VASKIT</title>
+        <meta name="title" content="VASKIT" />
+        <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
+      <% end %>
+    <% end %>
 
     <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
@@ -25,7 +99,6 @@
     <link rel="apple-touch-icon" sizes="114x114" href="/images/favicon/apple-icon-114x114.png">
     <link rel="apple-touch-icon" sizes="120x120" href="/images/favicon/apple-icon-120x120.png">
     <link rel="apple-touch-icon" sizes="144x144" href="/images/favicon/apple-icon-144x144.png">
-
     <link rel="apple-touch-icon" sizes="152x152" href="/images/favicon/apple-icon-152x152.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-icon-180x180.png">
     <link rel="icon" type="image/png" sizes="192x192"  href="/images/favicon/android-icon-192x192.png">
@@ -37,21 +110,9 @@
     <meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
+    <meta name="apple-mobile-web-app-title" content="VASKIT">
     <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
     <!-- <meta name="apple-mobile-web-app-status-bar-style" content="default"> -->
-
-    <% if (controller.controller_name == "home" && controller.action_name == "index" && controller.request.query_string == "") %>
-      <meta name="title" content="VASKIT: 세상의 모든 결정장애자들을 위하여!" />
-      <meta name="description" content="#둘중에뭐사지? #혼자고민하지마! VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-      <meta name="keywords" content="쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" />
-  	<% elsif (controller.controller_name == "asks" && controller.action_name == "show") %>
-      <meta name="title" content="<%= @ask.left_ask_deal.title.truncate(16) %> vs <%= @ask.right_ask_deal.title.truncate(16) %> - VASKIT" />
-      <meta name="description" content="<%= @ask.left_ask_deal.title %> vs <%= @ask.right_ask_deal.title %>, 당신의 선택은? <%= @ask.message.truncate(200) %>" />
-      <meta name="keywords" content="<%= @ask.left_ask_deal.title %>, <%= @ask.right_ask_deal.title %>, <%= @ask.left_ask_deal.brand %>, <%= @ask.right_ask_deal.brand %>, <%= HashTag.where(:ask_id => @ask.id).pluck(:keyword).join(", ") %>" />
-    <% else %>
-      <meta name="title" content="VASKIT" />
-      <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-    <% end %>
 
   	<% if (controller.controller_name == "asks" && controller.action_name == "show") %>
   		<meta property="og:title" content="둘중에뭐사지? 골라주세요!" />
