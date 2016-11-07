@@ -23,3 +23,4 @@ Gemfile.lock
 /tmp
 /public/paperclip/*
 /public/assets/*
+.byebug_history

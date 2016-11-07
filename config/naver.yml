@@ -1,0 +1,7 @@
+# config/naver.yml
+development:
+  client_id: pBWurRcpROaIQE2EaNus
+  client_secret: cTSg17TxCh
+production:
+  client_id: pBWurRcpROaIQE2EaNus
+  client_secret: cTSg17TxCh
