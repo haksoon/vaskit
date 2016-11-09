@@ -1,13 +1,6 @@
 # coding : utf-8
 class PreviewImagesController < ApplicationController
 
-  before_filter :auth_admin, :only => ["destroy"]
-
-  def destroy
-    PreviewImage.find_by_id(params[:id]).delete
-    redirect_to(:back)
-  end
-
   # POST /preview_images.json
   def create
     if params[:File]

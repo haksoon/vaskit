@@ -2,7 +2,6 @@
 require 'open-uri'
 
 class DealsController < ApplicationController
-  before_filter :auth_admin, :only => ["destroy"]
 
   #GET /deals/get_naver_deals.json
   def get_naver_deals
@@ -83,8 +82,4 @@ class DealsController < ApplicationController
     render :json => {:deal => deal, :image_url => image_url, :id => preview_image.id}
   end
 
-  def destroy
-    Deal.find_by_id(params[:id]).delete
-    redirect_to(:back)
-  end
 end

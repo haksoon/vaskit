@@ -1,7 +1,6 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_filter :configure_permitted_parameters
   skip_before_filter :auth_user
-  before_filter :auth_admin, :only => ["destroy"]
   after_action :set_gcm_key, :only => ["create"]
 
   def new
@@ -54,11 +53,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
       flash[:custom_notice] = "기존 비밀번호를 정확히 입력해주세요"
     end
     super
-  end
-
-  def destroy
-    user = User.find_by_id(params[:id]).delete
-    redirect_to(:back)
   end
 
 

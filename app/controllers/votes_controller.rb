@@ -1,6 +1,5 @@
 # coding : utf-8
 class VotesController < ApplicationController
-  before_filter :auth_admin, :only => ["destroy"]
 
   def create
     ask_deal_id = params[:ask_deal_id]
@@ -16,11 +15,6 @@ class VotesController < ApplicationController
     render :json => { :ask => ask, :vote => vote }
   end
 
-  def destroy
-    Vote.find_by_id(params[:id]).delete
-    redirect_to(:back)
-  end
-
   def vote_cancle
     if current_user
       vote = Vote.find_by(:ask_id => params[:ask_id], :user_id => current_user.id)
@@ -30,4 +24,5 @@ class VotesController < ApplicationController
     vote.destroy unless vote.nil?
     render :json => {}
   end
+
 end

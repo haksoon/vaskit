@@ -1,7 +1,5 @@
 # coding : utf-8
 class ErrorLogsController < ApplicationController
-  before_filter :auth_admin, :only => ["destroy"]
-
   def error_report
     obj = params[:obj]
     href = params[:href]
@@ -18,10 +16,4 @@ class ErrorLogsController < ApplicationController
     AdminMailer.delay.client_error(log) if Rails.env == "production"
     render :json => {:status => "success"}
   end
-
-  def destroy
-    ErrorLog.find_by_id(params[:id]).delete
-    redirect_to(:back)
-  end
-
 end

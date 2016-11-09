@@ -13,5 +13,4 @@ class ReportsController < ApplicationController
     render :json => {:already_report => already_report}
   end
 
-
 end

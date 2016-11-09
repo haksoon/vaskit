@@ -2,8 +2,6 @@
 class AsksController < ApplicationController
   before_action :set_ask, only: [:show, :edit, :update, :destroy, :vote, :ask_complete, :create_complete]
 
-  before_filter :auth_admin, :only => ["destroy"]
-
   def show
     if current_user
       Alram.where(:ask_id => @ask.id, :user_id => current_user.id).each do |alram|
@@ -44,11 +42,6 @@ class AsksController < ApplicationController
       ask_like = AskLike.create(:user_id => current_user.id, :ask_id => params[:id])
     end
     render :json => {:already_like => already_like, :ask_like => ask_like}
-  end
-
-  def destroy
-    Ask.find_by_id(params[:id]).delete
-    redirect_to(:back)
   end
 
   # GET /posts/new

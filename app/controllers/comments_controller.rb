@@ -1,6 +1,5 @@
 # coding : utf-8
 class CommentsController < ApplicationController
-  before_filter :auth_admin, :only => ["destroy"]
 
   def create
     ask_id = params[:ask_id]
@@ -95,11 +94,6 @@ class CommentsController < ApplicationController
     render :json => {:message => message, :comment => comment, :ask => ask}
   end
 
-  #어드민에서 삭제
-  def destroy
-    Comment.find_by_id(params[:id]).delete
-    redirect_to(:back)
-  end
 
   def comment_del
     comment = Comment.find_by_id(params[:id])
