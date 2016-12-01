@@ -97,17 +97,27 @@ Rails.application.routes.draw do
   resources :reports
 
   resources :rank_asks
-  get "/admin/table", :to => "admin#table"
-  get "/admin/table/:table_name", :to => "admin#table"
-  get "/admin/analysis", :to => "admin#analysis"
-  get "/admin/notice", :to => "admin#notice"
-  get "/admin/rank_asks", :to => "admin#rank_asks"
+
+  post 'get_videos', :to => "videos#get_videos"
+
+  # Admin Page
   resources :admin do
     collection do
-      post 'load_more_asks'
+      get 'table'
+      get 'table/:table_name', :to => "admin#table"
+
+      get 'analysis'
+
+      get 'notice'
       post 'create_notice'
+
+      get 'rank_asks'
+      post 'load_more_asks'
       post 'submit_rank_ask'
       delete 'delete_rank_ask'
+
+      get 'video'
+      post 'create_video'
     end
   end
 

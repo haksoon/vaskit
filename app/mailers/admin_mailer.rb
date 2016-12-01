@@ -161,7 +161,7 @@ class AdminMailer < ActionMailer::Base
     date = date.year.to_s + "년 "+ date.month.to_s + "월 " + date.day.to_s + "일"
     @date = date
 
-    mail(subject: "[VASKIT] #{date} 일일 리포트").deliver
+    mail(subject: "[VASKIT] #{date} 일일 리포트")
   end
 
   def client_error(log)

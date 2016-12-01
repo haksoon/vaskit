@@ -54,67 +54,46 @@
     $("#video_overlay_loading").show();
     $("#video_overlay").show();
 
-    var video_contents = [
-      {
-        "ask_id": 984,
-        "title": "스타일난다 vs 삐아, 쿠션 비교!",
-        "url": "//www.youtube.com/embed/cjJDHQ2UUb0?feature=youtu.be&amp;autoplay=0"
-      },
-      {
-        "ask_id": 678,
-        "title": "센카 vs 뉴트로지나, 클렌징폼 비교!",
-        "url": "//www.youtube.com/embed/nS8ztC6mlxY?feature=youtu.be&amp;autoplay=0"
-      },
-      {
-        "ask_id": 615,
-        "title": "미팩토리 vs 엘리자베스, 코팩 비교!",
-        "url": "//www.youtube.com/embed/3hrX1dz-qT0?feature=youtu.be&amp;autoplay=0"
-      },
-      {
-        "ask_id": 866,
-        "title": "삐아 vs 클리오, 아이브로우 틴트 비교!",
-        "url": "//www.youtube.com/embed/NkgGXGtYdgM?feature=youtu.be&amp;autoplay=0"
-      },
-      {
-        "ask_id": 834,
-        "title": "에이프릴스킨 vs 로하셀, 쿠션 파운데이션 비교!",
-        "url": "//www.youtube.com/embed/DWnI07g9P60?feature=youtu.be&amp;autoplay=0"
-      },
-      {
-        "ask_id": 770,
-        "title": "블랙몬스터 vs 세븐피엠, 다운펌 비교!",
-        "url": "//www.youtube.com/embed/_uv3ywLvYsw?feature=youtu.be&amp;autoplay=0"
-      }
-    ]
+    $.ajax({
+            url: '/get_videos.json',
+            type: 'POST',
+            dataType: 'json',
+            error: function() {
+              return false;
+            },
+            success: function(data) {
+              var video_contents = data.videos;
 
-    $("#video_seg").html(videoBoxTemplate({
-      video_contents:video_contents
-    }));
+              $("#video_seg").html(videoBoxTemplate({
+                video_contents:video_contents
+              }));
 
-    $("#video_box").fitVids();
-    video_slider = $("#video_box").bxSlider({
-      infiniteLoop: false,
-      slideMargin: 20,
-      video: true,
-      pagerType: 'short',
-      pagerSelector: $("#video_box_pager"),
-      prevText: '<i class="fa fa-step-backward"></i> 이전',
-      nextText: '다음 영상 보기 <i class="fa fa-step-forward"></i>',
-      prevSelector: $("#prev_video_btn"),
-      nextSelector: $("#next_video_btn"),
-      onSliderLoad: function() {
-        $("#prev_video_btn a").css("color","#666");
-        $("#video_overlay_loading").hide();
-        $("#video_overlay").css("top","0");
-      },
-      onSlideBefore: function() {
-        video_slider.getCurrentSlide() == 0 ? $("#prev_video_btn a").css("color","#666") : $("#prev_video_btn a").css("color","#fff");
-        video_slider.getCurrentSlide() == video_slider.getSlideCount() - 1 ? $("#next_video_btn a").css("color","#666") : $("#next_video_btn a").css("color","#fff");
-        video_contents_slider.goToSlide(video_slider.getCurrentSlide());
-      }
-    });
+              $("#video_box").fitVids();
+              video_slider = $("#video_box").bxSlider({
+                infiniteLoop: false,
+                slideMargin: 20,
+                video: true,
+                pagerType: 'short',
+                pagerSelector: $("#video_box_pager"),
+                prevText: '<i class="fa fa-step-backward"></i> 이전',
+                nextText: '다음 영상 보기 <i class="fa fa-step-forward"></i>',
+                prevSelector: $("#prev_video_btn"),
+                nextSelector: $("#next_video_btn"),
+                onSliderLoad: function() {
+                  $("#prev_video_btn a").css("color","#666");
+                  $("#video_overlay_loading").hide();
+                  $("#video_overlay").css("top","0");
+                },
+                onSlideBefore: function() {
+                  video_slider.getCurrentSlide() == 0 ? $("#prev_video_btn a").css("color","#666") : $("#prev_video_btn a").css("color","#fff");
+                  video_slider.getCurrentSlide() == video_slider.getSlideCount() - 1 ? $("#next_video_btn a").css("color","#666") : $("#next_video_btn a").css("color","#fff");
+                  video_contents_slider.goToSlide(video_slider.getCurrentSlide());
+                }
+              });
 
-    load_video_contents(video_contents);
+              load_video_contents(video_contents);
+            }
+    })
   }
 
   function load_video_contents(video_contents) {
