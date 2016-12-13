@@ -578,27 +578,6 @@ function share_katalk(ask_id) {
   var label = "둘중에뭐사지? 골라주세요!\n\n"+left_deal_title+"\nvs\n"+right_deal_title+",\n당신의 선택은?\n\n"+share_url;
   share_log("katalk", ask_id);
 
-  // try {
-  //   Kakao.cleanup();
-  //   Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
-  // } catch(err) {
-  //   alert(err);
-  // } finally {
-  //   Kakao.Link.sendTalkLink({
-  //     label: label,
-  //     image: {
-  //       src:  image_url,
-  //       width: '800',
-  //       height: '600'
-  //     },
-  //     webButton: {
-  //       text: "Let's VASKIT!",
-  //       url: share_url
-  //     },
-  //     installTalk: false
-  //   });
-  // }
-
   Kakao.cleanup();
   Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
   Kakao.Link.cleanup();
@@ -615,14 +594,6 @@ function share_katalk(ask_id) {
     },
     installTalk: false
   });
-
-  // Kakao.cleanup();
-  // Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
-  // Kakao.Link.cleanup();
-  // Kakao.Link.sendTalkLink({
-  //   label: "test",
-  //   installTalk: false
-  // });
 }
 
 function copy_url(ask_id) {
