@@ -552,9 +552,9 @@ function share_facebook(ask_id) {
   if (window.HybridApp) {
     HybridApp.shareFacebook(share_url);
   } else {
-    if (typeof(FB) != 'undefined' && FB != null ) {
+    if (typeof(FB) != 'undefined' && FB != null) {
       FB.init({
-        appId      : '<%=Facebook::CONFIG["app_id"]%>',
+        appId      : '532503193593128',
         status     : true,
         xfbml      : true,
         version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
@@ -578,22 +578,51 @@ function share_katalk(ask_id) {
   var label = "둘중에뭐사지? 골라주세요!\n\n"+left_deal_title+"\nvs\n"+right_deal_title+",\n당신의 선택은?\n\n"+share_url;
   share_log("katalk", ask_id);
 
-  try{
-    Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
-    Kakao.Link.sendTalkLink({
-      label: label,
-      image: {
-        src:  image_url,
-        width: '800',
-        height: '600'
-      },
-      webButton: {
-        text: "Let's VASKIT!",
-        url: share_url
-      }
-    });
-  } catch(err) {
-  }
+  // try {
+  //   Kakao.cleanup();
+  //   Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+  // } catch(err) {
+  //   alert(err);
+  // } finally {
+  //   Kakao.Link.sendTalkLink({
+  //     label: label,
+  //     image: {
+  //       src:  image_url,
+  //       width: '800',
+  //       height: '600'
+  //     },
+  //     webButton: {
+  //       text: "Let's VASKIT!",
+  //       url: share_url
+  //     },
+  //     installTalk: false
+  //   });
+  // }
+
+  Kakao.cleanup();
+  Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+  Kakao.Link.cleanup();
+  Kakao.Link.sendTalkLink({
+    label: label,
+    image: {
+      src:  image_url,
+      width: '800',
+      height: '600'
+    },
+    webButton: {
+      text: "Let's VASKIT!",
+      url: share_url
+    },
+    installTalk: false
+  });
+
+  // Kakao.cleanup();
+  // Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+  // Kakao.Link.cleanup();
+  // Kakao.Link.sendTalkLink({
+  //   label: "test",
+  //   installTalk: false
+  // });
 }
 
 function copy_url(ask_id) {
