@@ -122,45 +122,80 @@ var isAndroidApp       = false,
     isWinPhone         = false,
     isIOS              = false,
     isAndroid          = false,
-    isWindowPC         = false,
+    isWinPC            = false,
     isMacPC            = false,
     isLinuxPC          = false;
 var isMobile           = false,
     isPC               = false;
-var isIE = !!ua.match(/msie|trident\/7|edge/);
+var isIE               = false;
 
-if (window.HybridApp || !!$.cookie('device_id')) {
-  isAndroidApp = true;
-  isIOSApp = false;
-  isMobile = true;
-} else if (ua.match(/windows phone/)) {
-  isWinPhone = true;
-  isMobile = true;
-} else if (ua.match(/iphone|ipod|ipad/)) {
-  isIOS = true;
-  isMobile = true;
-} else if (ua.match(/android/) && !isAndroid) {
-  isAndroid = true;
-  isMobile = true;
-} else if (ua.match(/win|windows/) && !isWinPhone) {
-  isWindowPC = true;
-  isPC = true;
-} else if (ua.match(/mac|macIntel/) && !isIOS) {
-  isMacPC = true;
-  isPC = true;
-} else if (ua.match(/linux/)) {
-  isLinuxPC = true;
-  isPC = true;
-} else if (ua.match(/Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)) {
-  isMobile = true;
-}
+// iOS App Check & iOS App Push Setting
+function getIOSApp() {
+  isIOSApp           = true;
+  isMobile           = true;
+  // alert('isIOSApp');
+};
 
-// App GCM information settings
+function setIOSToken(gcm_key, device_id, app_ver) {
+  $.cookie('gcm_key' , gcm_key, { expires : 30000, path : '/' });
+  $.cookie('device_id' , device_id, { expires : 30000, path : '/' });
+  $.cookie('app_ver', app_ver, { expires : 30000, path : '/' });
+};
+
+// AOS App Check & Push Setting
+function getAOSApp() {
+  isAndroidApp       = true;
+  isMobile           = true;
+};
+
 function setGCM(key, device_id, app_ver) {
   $.cookie('gcm_key' , key, { expires : 30000, path : '/' });
   $.cookie('device_id' , device_id, { expires : 30000, path : '/' });
   $.cookie('app_ver', app_ver, { expires : 30000, path : '/' });
 };
+
+$(window).ready(function(){
+  // if (isIOSApp) {
+  //   isIOSApp             = true;
+  //   isMobile             = true;
+  //   alert('isIOSApp');
+  // }
+  if (window.HybridApp || !!$.cookie('device_id')) {
+    isAndroidApp         = true;
+    isMobile             = true;
+    // alert('isAndroidApp');
+  }
+
+  if (ua.match(/windows phone/)) {
+    isWinPhone           = true;
+    isMobile             = true;
+    // alert('isWinPhone');
+  } else if (ua.match(/iphone|ipod|ipad/)) {
+    isIOS                = true;
+    isMobile             = true;
+    // alert('isIOS');
+  } else if (ua.match(/android/)) {
+    isAndroid            = true;
+    isMobile             = true;
+    // alert('isAndroid');
+  } else if (ua.match(/win|windows/) && !isWinPhone) {
+    isWinPC              = true;
+    isPC                 = true;
+    // alert('isWinPC');
+  } else if (ua.match(/mac|macIntel/) && !isIOS) {
+    isMacPC              = true;
+    isPC                 = true;
+    // alert('isMacPC');
+  } else if (ua.match(/linux/)) {
+    isLinuxPC            = true;
+    isPC                 = true;
+    // alert('isLinuxPC');
+  } else if (ua.match(/Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)) {
+    isMobile             = true;
+  }
+  if (!!ua.match(/msie|trident\/7|edge/)) isIE = true;
+});
+
 
 function nearBottomOfPage() {
   return scrollDistanceFromBottom() < 500;
@@ -551,6 +586,8 @@ function share_facebook(ask_id) {
   var share_url = $("#share_url_"+ask_id).val();
   if (window.HybridApp) {
     HybridApp.shareFacebook(share_url);
+  } else if (isIOSApp) {
+    window.location = "vaskit://shareFacebook/////" + share_url;
   } else {
     if (typeof(FB) != 'undefined' && FB != null) {
       FB.init({
