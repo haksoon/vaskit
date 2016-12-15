@@ -133,7 +133,7 @@ var isIE               = false;
 function getIOSApp() {
   isIOSApp           = true;
   isMobile           = true;
-  // alert('isIOSApp');
+  alert('isIOSApp');
 };
 
 function setIOSToken(gcm_key, device_id, app_ver) {
