@@ -635,15 +635,17 @@
 		});
 	}
 
-	if (isIOS) {
-		$("#hashtag_highlights").css({
-	    'padding-left': '+=3px',
-	    'padding-right': '+=3px'
-	  });
-	}
+	$(window).ready(function(){
+		if (isIOS) {
+			$("#hashtag_highlights").css({
+				'padding-left': '+=3px',
+				'padding-right': '+=3px'
+			});
+		}
 
-	bindEvents();
-	handleInput();
+		bindEvents();
+		handleInput();
+	})
 
 	// 금액 필드 콤마찍기
 	function comma(str) {
