@@ -142,6 +142,10 @@ function setIOSToken(gcm_key, device_id, app_ver) {
   $.cookie('app_ver', app_ver, { expires : 30000, path : '/' });
 };
 
+function setUserApp() {
+  // 앱스토어 1.0.3 버전 검수용
+};
+
 // AOS App Check & Push Setting
 function getAOSApp() {
   isAndroidApp       = true;
