@@ -1,0 +1,386 @@
+<script type="text/template" id="askDetailTemplate">
+  {{ var my_vote = [] }}
+  {{ var is_voted = false }}
+  {{ var vote_id = '' }}
+  {{ var vote_direction = '' }}
+  {{ if (current_user && current_user.id == ask.user_id) { }}
+    {{ is_voted = true }}
+    {{ vote_id = '' }}
+    {{ vote_direction = 'left' }}
+  {{ } else if (current_user) { }}
+    {{ my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) }) }}
+    {{ if (my_vote.length > 0) { }}
+      {{ vote_id = my_vote[0].id }}
+      {{ is_voted = true }}
+      {{ vote_direction = ask.left_ask_deal_id == my_vote[0].ask_deal_id ? 'left' : 'right' }}
+    {{ } }}
+  {{ } else { }}
+    {{ var my_votes = [] }}
+    {{ var votes = $.cookie('visitor_votes') }}
+    {{ var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".") }}
+    {{ for (var i=0; i < votes_array.length; i++) { }}
+      {{ var vote = votes_array[i] }}
+      {{ vote = JSON.parse(vote) }}
+      {{ my_votes.push(vote) }}
+    {{ } }}
+    {{ my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) }) }}
+    {{ if (my_vote.length > 0) { }}
+      {{ vote_id = my_vote[0].id }}
+      {{ is_voted = true }}
+      {{ vote_direction = my_vote[0].is_left ? 'left' : 'right' }}
+    {{ } }}
+  {{ } }}
+  {{ if (ask.be_completed == true) is_voted = true }}
+  {{ var left_count = ask.left_ask_deal.vote_count }}
+  {{ var right_count = ask.right_ask_deal.vote_count }}
+  {{ var total_count = left_count + right_count }}
+  <div class="container top ask ask_detail ask_{{= ask.id }}" ontouchmove="return false;">
+    <span class="header_title" onclick="$(this).scroll_to();">상세보기</span>
+    <span class="header_btn left close_btn" onclick="back_button();">&times;</span>
+    <span class="header_btn right" onclick="go_url('share', 'ask, {{= ask.id }}');"><i class="vaskit_icon share_icon"></i></span>
+    {{ if (current_user && current_user.id == ask.user_id) { }}
+      <span class="header_btn right ask_edit_btn" onclick="go_url('ask_form', {{= ask.id }});"><i class="fa fa-edit"></i></span>
+    {{ } else { }}
+      <span class="header_btn right ask_like_btn" onclick="like_ask($(this));" ask-id="{{= ask.id }}"><i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i></span>
+    {{ } }}
+  </div>
+  <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
+    <div class="ask ask_detail ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" ask-id="{{= ask.id }}" ask-user-id="{{= ask.user_id }}">
+      <div class="clearfix">
+        <div class="ask_image_box clearfix">
+          <i class="fa fa-angle-left ask_image_background"></i>
+          <span class="ask_image_background cancel">&times;</span>
+          <i class="fa fa-angle-right ask_image_background"></i>
+          <img class="ask_image left" src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" onclick="go_url('ask_image', $(this));">
+          <img class="ask_image right" src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" onclick="go_url('ask_image', $(this));">
+          {{ if (current_user && current_user.id == ask.user_id) { }}
+            {{ var left_ratio = (left_count / ( left_count + right_count ) * 100).toFixed() }}
+            {{ var right_ratio = (right_count / ( left_count + right_count ) * 100).toFixed() }}
+            {{ if (total_count == 0) { }}
+              <span class="my_ask_vote_count blank"><small>이제 곧 투표가 시작됩니다 😬</small></span>
+            {{ } else { }}
+              <span class="my_ask_vote_count left">{{= left_ratio }}<small>%</small></span>
+              <span class="my_ask_vote_count right">{{= right_ratio }}<small>%</small></span>
+            {{ } }}
+          {{ } }}
+          <div class="ask_completed {{= ask.be_completed ? 'on' : '' }}">종료된 투표입니다</div>
+        </div>
+        {{ if (ask.be_completed == false && (current_user == null || current_user.id != ask.user_id)) { }}
+          <div class="vs_btn {{= is_voted ? '' : 'animated rubberBand' }} {{= vote_direction }}" onanimationstart="vs_init($(this));" onmouseover="vs_init($(this));" onanimationend="$(this).removeClass('animated rubberBand');" vote-id="{{= vote_id }}" vote-direction="{{= vote_direction }}">vs</div>
+        {{ } }}
+      </div>
+      <div class="clearfix">
+        {{ if ((ask.left_ask_deal.title != "" && ask.left_ask_deal.title != null) || (ask.right_ask_deal.title != "" && ask.right_ask_deal.title != null)) { }}
+        <div class="ask_table_row title">
+          <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.left_ask_deal.title) }}</span>
+          <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.right_ask_deal.title) }}</span>
+          <i class="ask_table_icon vaskit_icon title"></i>
+        </div>
+        {{ } }}
+        {{ if ((ask.left_ask_deal.brand != "" && ask.left_ask_deal.brand != null) || (ask.right_ask_deal.brand != "" && ask.right_ask_deal.brand != null)) { }}
+        <div class="ask_table_row brand">
+          <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.left_ask_deal.brand) }}</span>
+          <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.right_ask_deal.brand) }}</span>
+          <i class="ask_table_icon vaskit_icon brand"></i>
+        </div>
+        {{ } }}
+        {{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null) { }}
+        <div class="ask_table_row price">
+          <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(numberWithCommas(ask.left_ask_deal.price)) }}원</span>
+          <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(numberWithCommas(ask.right_ask_deal.price)) }}원</span>
+          <i class="ask_table_icon vaskit_icon price"></i>
+        </div>
+        {{ } }}
+        {{ if ((ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) || (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null)) { }}
+        <div class="ask_table_row link">
+          {{ var aLink = document.createElement("a") }}
+          {{ if (ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) { }}
+            {{ aLink.href = ask.left_ask_deal.link }}
+            <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));"><a href="{{= aLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(aLink.host) }}</a></span>
+          {{ } else { }}
+            <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(aLink.host) }}</span>
+          {{ } }}
+          {{ var bLink = document.createElement("a") }}
+          {{ if (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null) { }}
+            {{ bLink.href = ask.right_ask_deal.link }}
+            <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));"><a href="{{= bLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(bLink.host) }}</a></span>
+          {{ } else { }}
+            <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(bLink.host) }}</span>
+          {{ } }}
+          <i class="ask_table_icon vaskit_icon link"></i>
+        </div>
+        {{ } }}
+        {{ if (ask.spec1 != null && ask.spec1 != "") { }}
+        <div class="ask_table_row spec">
+          <span class="ask_table_cell center text_box_short">{{= fieldWithBlank(ask.spec1) }}</span>
+          <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.left_ask_deal.spec1) }}</span>
+          <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.right_ask_deal.spec1) }}</span>
+          <i class="ask_table_icon vaskit_icon spec"></i>
+        </div>
+        {{ } }}
+        {{ if (ask.spec2 != null && ask.spec2 != "") { }}
+        <div class="ask_table_row spec">
+          <span class="ask_table_cell center text_box_short">{{= fieldWithBlank(ask.spec2) }}</span>
+          <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.left_ask_deal.spec2) }}</span>
+          <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.right_ask_deal.spec2) }}</span>
+          <i class="ask_table_icon vaskit_icon spec"></i>
+        </div>
+        {{ } }}
+        {{ if (ask.spec3 != null && ask.spec3 != "") { }}
+        <div class="ask_table_row spec">
+          <span class="ask_table_cell center text_box_short">{{= fieldWithBlank(ask.spec3) }}</span>
+          <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.left_ask_deal.spec3) }}</span>
+          <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(ask.right_ask_deal.spec3) }}</span>
+          <i class="ask_table_icon vaskit_icon spec"></i>
+        </div>
+        {{ } }}
+      </div>
+      <div class="vs_result">
+        {{= askResultTemplate({type: "전체", left_count: left_count, right_count: right_count, total_count: total_count }) }}
+      </div>
+      <div class="vs_result_detail">
+      </div>
+      <div class="vs_result_detail_btn" onclick="toggle_vote_detail($(this));">
+        <span>상세보기 <i class="fa fa-angle-down"></i></span>
+        <span>불러오는중... <i class="fa fa-spinner fa-spin"></i></span>
+        <span>상세닫기 <i class="fa fa-angle-up"></i></span>
+      </div>
+      <div class="ask_user">
+        {{ var gender = ask.user.gender ? 'male' : 'female' }}
+        <img class="user_profile" src="{{= get_avatar(ask.user) }}">
+        <span class="user_id">{{=ask.user.string_id}}</span>
+        <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
+        <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
+      </div>
+      <div class="ask_message">
+        {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
+      </div>
+      <div class="ask_message_menu">
+        {{ if (current_user && current_user.id == ask.user.id && ask.be_completed == false) { }}
+          <span onclick="go_url('ask_form', {{= ask.id }});">질문 수정</span>
+          &middot;
+          <span onclick="submit_ask_complete({{= ask.id }});">질문 종료</span>
+        {{ } else { }}
+          <span onclick="report_ask({{= ask.id }});">신고하기</span>
+        {{ } }}
+        <span class="ask_created_at">{{= get_past_time(ask.created_at) }}</span>
+      </div>
+    </div>
+    {{= commentListTemplate({ask: ask, like_comments: like_comments}) }}
+  </div>
+  <div class="container bottom comment_input_box ask ask_{{= ask.id }}" ontouchmove="return false;">
+      <div class="comment_input_init" onclick="new_comment();">
+        <div class="comment_input_bubble">
+          <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;"></textarea>
+        </div>
+      </div>
+      <div class="comment_input_btn comment_input_menu {{= vote_direction == 'right' ? 'right' : 'left' }}" onclick="toggle_comment($(this));" left="{{= vote_direction == 'right' ? '' : 'true' }}">
+        <div class="toggle_btn_background">
+          <span class="toggle_btn_on"></span>
+          <span class="toggle_btn_text left">A</span>
+          <span class="toggle_btn_text right">B</span>
+        </div>
+      </div>
+      <div class="comment_input_btn comment_input_submit">
+        <div class="submit_btn">
+          <span class="submit_btn_text">전송</span>
+        </div>
+      </div>
+  </div>
+  {{= askImgViewTemplate({ask: ask, like_comments: like_comments}) }}
+</script>
+
+<script type="text/template" id="commentListTemplate">
+  <div class="comment ask_{{= ask.id }}">
+    <div class="comment_title">
+      <div class="comment_title_left">
+        <img class="comment_title_img left" src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+        A제품
+      </div>
+      <div class="comment_title_right">
+        B제품
+        <img class="comment_title_img right" src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+      </div>
+    </div>
+    <ul class="comment_list">
+      <li class="comment_list_background"></li>
+      {{ if (ask.comments.length == 0) { }}
+        <li class="comment_blank" onclick="comment_input_activate('new');">첫 댓글을 달아주세요!</li>
+      {{ } else { }}
+        <li class="comment_blank" style="display: none;">첫 댓글을 달아주세요!</li>
+        {{ var original_comments = $.grep(ask.comments, function(obj) { return (obj.ask_id == ask.id && obj.comment_id == null) }) }}
+        {{ for (var i=0; i < original_comments.length; i++) { }}
+          {{ var original_comment = original_comments[i] }}
+          {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === original_comment.id}).length == 0 ? false : true }}
+          {{= commentTemplate({ask: ask, comment: original_comment, already_like: already_like}) }}
+          {{ var reply_comments = $.grep(ask.comments, function(obj) { return (obj.ask_id == ask.id && obj.comment_id == original_comment.id) }) }}
+          {{ for (var j=0; j < reply_comments.length; j++) { }}
+            {{ var reply_comment = reply_comments[j] }}
+            {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === reply_comment.id}).length == 0 ? false : true }}
+            {{= commentTemplate({ask: ask, comment: reply_comment, already_like: already_like}) }}
+          {{ } }}
+        {{ } }}
+      {{ } }}
+    </ul>
+  </div>
+</script>
+
+<script>
+  var askDetailTemplate = _.template($("#askDetailTemplate").html());
+  var commentListTemplate = _.template($("#commentListTemplate").html());
+
+  function show_ask(ask_id) {
+    var url = '/asks/'+ask_id;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'GET',
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        var html = askDetailTemplate({ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
+        create_wrapper(html, true);
+      },
+      beforeSend: function(){
+        loadingStart();
+      },
+      complete: function(){
+        loadingEnd();
+      }
+    });
+    return url;
+  };
+
+  function hide_ask() {
+    remove_wrapper();
+  };
+
+  function like_ask(target) {
+    var ask_id = target.attr("ask-id");
+    var all_ask_divs = $("#main_view").find(".ask.ask_"+ask_id);
+    var all_ask_like_icons = all_ask_divs.find(".ask_like_icon").not(target);
+    var all_ask_like_texts = all_ask_divs.find(".ask_like_text");
+    var all_ask_like_counts = all_ask_divs.find(".ask_like_count");
+    var ask_like_count = parseInt(all_ask_like_counts.last().html());
+
+    visitor_check(function(){
+      $.ajax({
+              url: "/asks/"+ask_id+"/like.json",
+              type: 'POST',
+              dataType: 'json',
+              error: function() {
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data) {
+                if (data.already_like) {
+                  target.removeClass("is_liked").animateCss("jello");
+                  all_ask_like_icons.removeClass("is_liked");
+                  all_ask_like_texts.removeClass("is_liked");
+                  ask_like_count == 1 ? all_ask_like_counts.html(0) : all_ask_like_counts.html(ask_like_count-1);
+                } else {
+                  target.addClass("is_liked").animateCss("tada");
+                  all_ask_like_icons.addClass("is_liked");
+                  all_ask_like_texts.addClass("is_liked");
+                  all_ask_like_counts.html(ask_like_count+1);
+                };
+              }
+      });
+    });
+  };
+
+  function toggle_vote_detail(target) {
+    var ask_container = target.parentsUntil(this, ".container.main");
+    var vs_result_detail = ask_container.find(".vs_result_detail");
+    var vs_result_detail_btn = ask_container.find(".vs_result_detail_btn");
+
+    var ask_box = ask_container.find(".ask");
+    var ask_id = ask_box.attr("ask-id");
+    var is_vote = ask_box.hasClass("is_voted");
+    var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+
+    if (!is_vote) {
+      notify("먼저 투표에 참여해주세요!");
+      ask_container.animate({scrollTop: 0},250);
+      vs_result_detail_btn.removeClass("is_opened");
+    } else {
+      visitor_check(function(){
+        if (vs_result_detail_btn.hasClass("is_opened")) {
+          vs_result_detail.removeClass("is_opened");
+          vs_result_detail_btn.removeClass("is_opened");
+        } else {
+          $.ajax({
+                  url: "/asks/"+ask_id+"/show_detail.json",
+                  dataType: "json",
+                  type: "GET",
+                  error: function(){
+                    notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+                  },
+                  success: function(data) {
+                    var detail_vote_count = data.detail_vote_count;
+                    var html = "";
+                    var gender_total_count = detail_vote_count.left.male_count + detail_vote_count.right.male_count
+                                           + detail_vote_count.left.female_count + detail_vote_count.right.female_count;
+                    var age_total_count = detail_vote_count.left.age_20_1_count + detail_vote_count.right.age_20_1_count
+                                        + detail_vote_count.left.age_20_2_count + detail_vote_count.right.age_20_2_count
+                                        + detail_vote_count.left.age_20_3_count + detail_vote_count.right.age_20_3_count
+                                        + detail_vote_count.left.age_30_1_count + detail_vote_count.right.age_30_1_count
+                                        + detail_vote_count.left.age_30_2_count + detail_vote_count.right.age_30_2_count
+                                        + detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count
+                                        + detail_vote_count.left.etc_count + detail_vote_count.right.etc_count;
+
+                    html += "<div style='border-top: 1px solid #dbdbdb;'>" + askResultTemplate({type: "남성", left_count: detail_vote_count.left.male_count, right_count: detail_vote_count.right.male_count, total_count: gender_total_count }) + "</div>";
+                    html += "<div>" + askResultTemplate({type: "여성", left_count: detail_vote_count.left.female_count, right_count: detail_vote_count.right.female_count, total_count: gender_total_count }) + "</div>";
+                    html += "<div style='border-top: 1px solid #dbdbdb;'>" + askResultTemplate({type: "20초", left_count: detail_vote_count.left.age_20_1_count, right_count: detail_vote_count.right.age_20_1_count, total_count: age_total_count }) + "</div>";
+                    html += "<div>" + askResultTemplate({type: "20중", left_count: detail_vote_count.left.age_20_2_count, right_count: detail_vote_count.right.age_20_2_count, total_count: age_total_count }) + "</div>";
+                    html += "<div>" + askResultTemplate({type: "20후", left_count: detail_vote_count.left.age_20_3_count, right_count: detail_vote_count.right.age_20_3_count, total_count: age_total_count }) + "</div>";
+                    html += "<div>" + askResultTemplate({type: "30초", left_count: detail_vote_count.left.age_30_1_count, right_count: detail_vote_count.right.age_30_1_count, total_count: age_total_count }) + "</div>";
+                    html += "<div>" + askResultTemplate({type: "30중", left_count: detail_vote_count.left.age_30_2_count, right_count: detail_vote_count.right.age_30_2_count, total_count: age_total_count }) + "</div>";
+                    html += "<div>" + askResultTemplate({type: "30후", left_count: detail_vote_count.left.age_30_3_count, right_count: detail_vote_count.right.age_30_3_count, total_count: age_total_count }) + "</div>";
+                    html += "<div>" + askResultTemplate({type: "기타", left_count: detail_vote_count.left.etc_count, right_count: detail_vote_count.right.etc_count, total_count: age_total_count }) + "</div>";
+                    html += "<div style='height: 27px; line-height: 28px; border-top: 1px solid #dbdbdb;'><i class='fa fa-id-badge'></i> 비회원 투표 결과는 제외한 수치입니다</div>"
+
+                    vs_result_detail.html(html).addClass("is_loading").one(transitionEnd, function() {
+                        vs_result_detail.addClass("is_opened").removeClass("is_loading");
+                    });
+                    vs_result_detail_btn.removeClass("is_loading").addClass("is_opened");
+                  },
+                  beforeSend: function(){
+                    loadingStart();
+                    vs_result_detail_btn.addClass("is_loading");
+                  },
+                  complete: function(){
+                    loadingEnd();
+                  }
+          });
+        };
+      });
+    };
+  };
+
+  function submit_ask_complete(ask_id) {
+    if (confirm('질문을 종료하시겠어요?')) {
+      $.ajax({
+            url: "/asks/" + ask_id,
+            dataType: "json",
+            type: "DELETE",
+            error: function(){
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              notify('질문이 종료되었습니다');
+              var all_ask_divs = $("#main_view").find(".ask.ask_"+ask_id);
+              var all_ask_completed = all_ask_divs.find(".ask_completed");
+              all_ask_completed.addClass("on");
+              back_button();
+            },
+            beforeSend: function(){
+              loadingStart();
+            },
+            complete: function(){
+              loadingEnd();
+            }
+      })
+    }
+  }
+</script>

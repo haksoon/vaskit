@@ -1,0 +1,12 @@
+<script>
+	$(window).ready(function(){
+		<% if current_user %>
+			go_seg(4);
+			go_url('settings');
+		<% else %>
+			go_url('landing');
+		<% end %>
+	}).load(function(){
+		go_url('edit_push_alarm');
+	});
+</script>

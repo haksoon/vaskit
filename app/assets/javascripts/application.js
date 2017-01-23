@@ -37,191 +37,696 @@ fbq('init', '521318198062554');
 fbq('track', "PageView");
 // End Facebook Pixel Code
 
-// 뒤로가기 관련 코드
-$(document).ready(function(){
-  progressStart();
-  search_bar_hide();
-  window.scrollTo(0,0);
-  $(window).unbind("popstate");
-  history.replaceState(null, null, null);
-  $(window).bind("popstate", function(e){
-    if (!!$("#main_header").length) main_header_button();
-    if (is_ask_image_opened) {
-      ask_image_off();
-    } else if (is_category_opened || is_user_opened || is_search_input_opened) {
-      if (is_category_opened) category_off();
-      if (is_user_opened) user_off();
-      if (is_search_input_opened) search_input_off();
-    } else if (is_report_popup_opened) {
-      hide_report_popup();
-    } else if (is_alram_opened) {
-      card_detail_off(opened_ask_id);
-      user_on();
-      is_alram_opened = false;
-    } else if (is_card_opened) {
-      card_detail_off(opened_ask_id);
-    } else if (is_search_deal_opened) {
-      hide_search_deal_popup();
-    } else if (is_image_edit_opened) {
-      confirm("이미지 편집을 취소하실건가요?") ? hide_image_edit_popup() : history.pushState(null, null, null);
-    } else if (is_app_popup_opened) {
-      hide_app_popup();
-    } else if (is_video_opened) {
-      video_off();
-    }
-  });
-  $(document).keydown(function(e){
-    if(e.target.nodeName != "INPUT" && e.target.nodeName != "TEXTAREA"){
-      if(e.keyCode === 27){
-        if (is_ask_image_opened) {
-          back_button();
-        } else if (is_category_opened || is_user_opened || is_search_input_opened) {
-          if (is_category_opened) back_button();
-          if (is_user_opened) back_button();
-          if (is_search_input_opened) back_button();
-        } else if (is_report_popup_opened) {
-          back_button();
-        } else if (is_card_opened) {
-          back_button();
-        } else if (is_search_deal_opened) {
-          back_button();
-        } else if (is_image_edit_opened) {
-          confirm("이미지 편집을 취소하실건가요?") ? hide_image_edit_popup() : history.pushState(null, null, null);
-        } else if (is_app_popup_opened) {
-          hide_app_popup();
-        }
-      }
-    }
-  });
 
+// init Template
+_.templateSettings = {
+    interpolate: /\{\{\=(.+?)\}\}/g,
+    evaluate: /\{\{(.+?)\}\}/g
+};
+
+// init VASKIT Frame
+if (window.location.pathname.indexOf("admin") == -1) {
+  $(window).ready(function(){
+    if ($.cookie('visitor_uniq_key') == null) {
+      var uniq_key = (new Date().getTime() / 1000).toString() + (Math.random() * 1000000).toFixed(0).toString();
+      $.cookie('visitor_uniq_key' , uniq_key, { expires : 30000, path : '/' });
+    }
+    if ($.cookie('visitor_votes') != null) $.cookie('visitor_votes', null);
+    loadingStart();
+    alarm_check();
+    history.replaceState({pageHistory:currentHistory}, null, null);
+    $(window).unbind("popstate").bind("popstate", go_popstate);
+
+    // seg1 초기화
+    $("#collections").html(collectionsTemplate());
+    // set_recent_asks();
+    set_collections();
+    // seg2 초기화
+    $("#search").html(searchTemplate());
+    // seg4 초기화
+    $("#my_page").html(myPageTemplate());
+    user_profile_on();
+    user_alarms_on();
+    // 기본화면 초기화
+    go_seg(1);
+  }).load(function(){
+    $(".loading_div").removeAttr("ontouchmove");
+    setUserDevice();
+    open_app_banner();
+    loadingEnd();
+  });
+};
+// End init VASKIT Frame
+
+ // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용
+ $(window).load(function(){
   if (window.HybridApp) {
-    HybridApp.getGCM("hello world");
-  }
-})
-$(window).load(function(){
-  progressEnd();
-});
-$(window).scroll(function(){
-  if($(this).scrollTop() < 0) {
-    $("#wrap_dummy_back").show();
-  } else {
-    $("#wrap_dummy_back").hide();
+    try {
+      HybridApp.getGCM("hello world");
+    } catch(err) {
+      return false;
+    }
   }
 });
-
-// Device Check
-// var ua = window.navigator.userAgent.toLowerCase();
-// var isWinPhone = ua.indexOf('windows phone') !== -1;
-// var isIOS = !isWinPhone && !!ua.match(/ipad|iphone|ipod/);
-// var isAndroid = ua.indexOf('android') !== -1;
-// var isIE = !!ua.match(/msie|trident\/7|edge/);
-
-var ua = window.navigator.userAgent.toLowerCase();
-var isAndroidApp       = false,
-    isIOSApp           = false,
-    isWinPhone         = false,
-    isIOS              = false,
-    isAndroid          = false,
-    isWinPC            = false,
-    isMacPC            = false,
-    isLinuxPC          = false;
-var isMobile           = false,
-    isPC               = false;
-var isIE               = false;
-
-// iOS App Check & iOS App Push Setting
-function getIOSApp() {
-  isIOSApp           = true;
-  isMobile           = true;
-  // alert('isIOSApp');
-};
-
-function setIOSToken(gcm_key, device_id, app_ver) {
-  $.cookie('gcm_key' , gcm_key, { expires : 30000, path : '/' });
-  $.cookie('device_id' , device_id, { expires : 30000, path : '/' });
-  $.cookie('app_ver', app_ver, { expires : 30000, path : '/' });
-};
-
-function setUserApp() {
-  // 앱스토어 1.0.3 버전 검수용
-};
-
-// AOS App Check & Push Setting
-function getAOSApp() {
-  isAndroidApp       = true;
-  isMobile           = true;
-};
 
 function setGCM(key, device_id, app_ver) {
-  $.cookie('gcm_key' , key, { expires : 30000, path : '/' });
-  $.cookie('device_id' , device_id, { expires : 30000, path : '/' });
-  $.cookie('app_ver', app_ver, { expires : 30000, path : '/' });
+  $.cookie('gcm_key', null);
+  $.cookie('device_id', null);
+  $.cookie('app_ver', null);
+  var html = "<div class='no_result'>\
+                <div class='align_middle' style='color: #fff;'>\
+                  <img src='/images/logo/logo_landing.png' style='width: 180px; margin-bottom: -60px;'>\
+                  <br>완전히 달라진 VASKIT!\
+                  <br>앱을 업데이트해주세요 🙈<br>\
+                  <a href='market://details?id=com.vaskit.msh.vaskit'>\
+                    <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' style='width: 220px;'>\
+                  </a>\
+                </div>\
+              </div>";
+  $("body").html(html);
 };
 
-$(window).ready(function(){
-  // if (isIOSApp) {
-  //   isIOSApp             = true;
-  //   isMobile             = true;
-  //   alert('isIOSApp');
-  // }
-  if (window.HybridApp || !!$.cookie('device_id')) {
-    isAndroidApp         = true;
-    isMobile             = true;
-    // alert('isAndroidApp');
-  }
+function getIOSApp() {}; // 앱스토어 1.0.3 버전 검수용
+// 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용
 
-  if (ua.match(/windows phone/)) {
-    isWinPhone           = true;
-    isMobile             = true;
-    // alert('isWinPhone');
-  } else if (ua.match(/iphone|ipod|ipad/)) {
-    isIOS                = true;
-    isMobile             = true;
-    // alert('isIOS');
+// Device Check
+var userApp = false;               // 앱이면 true, 앱이 아니면 false, AOS/iOS는 window.HybridApp으로 판별
+    userDevice = {
+        isAndroid     : false,    // 금액입력필드 키보드 타입 조정
+        isIOS         : false,    // 해시태그 입력필드 마진 조정
+        isWinPC       : false,
+        isMacPC       : false,
+        isLinuxPC     : false,
+        isMobile      : false,
+        isPC          : false     // 앱 프로모션 배너
+    },
+    userBrowser = {
+        isNaver       : false,
+        isDaum        : false,
+        isKakao       : false,
+        isFacebook    : false,
+        isIE          : false,
+        isEdge        : false,
+        isOpera       : false,
+        isChrome      : false,
+        isFirefox     : false,
+        isSafari      : false
+    };
+
+function setUserDevice() {
+  var ua = window.navigator.userAgent.toLowerCase();
+  if (ua.match(/iphone|ipod|ipad/)) {
+    userDevice.isIOS             = true;
+    userDevice.isMobile          = true;
   } else if (ua.match(/android/)) {
-    isAndroid            = true;
-    isMobile             = true;
-    // alert('isAndroid');
-  } else if (ua.match(/win|windows/) && !isWinPhone) {
-    isWinPC              = true;
-    isPC                 = true;
-    // alert('isWinPC');
-  } else if (ua.match(/mac|macIntel/) && !isIOS) {
-    isMacPC              = true;
-    isPC                 = true;
-    // alert('isMacPC');
+    userDevice.isAndroid         = true;
+    userDevice.isMobile          = true;
+  } else if (ua.match(/win|windows/)) {
+    userDevice.isWinPC           = true;
+    userDevice.isPC              = true;
+  } else if (ua.match(/mac|macIntel/)) {
+    userDevice.isMacPC           = true;
+    userDevice.isPC              = true;
   } else if (ua.match(/linux/)) {
-    isLinuxPC            = true;
-    isPC                 = true;
-    // alert('isLinuxPC');
-  } else if (ua.match(/Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)) {
-    isMobile             = true;
+    userDevice.isLinuxPC         = true;
+    userDevice.isPC              = true;
   }
-  if (!!ua.match(/msie|trident\/7|edge/)) isIE = true;
-});
 
+  if (ua.match(/NAVER/i)) {
+    userBrowser.isNaver          = true;
+  } else if (ua.match(/Daum/)) {
+    userBrowser.isDaum           = true;
+  } else if (ua.match(/KAKAOTALK|KAKAOSTORY/i)) {
+    userBrowser.isKakao          = true;
+  } else if (ua.match(/Facebook|FB/i)) {
+    userBrowser.isFacebook       = true;
+  } else if (ua.match(/MSIE|Trident/i)) {
+    userBrowser.isIE             = true;
+  } else if (ua.match(/Edge/i)) {
+    userBrowser.isEdge           = true;
+  } else if (ua.match(/Opera|OPR|OPiOS/i)) {
+    userBrowser.isOpera          = true;
+  } else if (ua.match(/Chrome|CriOS/i)) {
+    userBrowser.isChrome         = true;
+  } else if (ua.match(/Firefox|FxiOS/i)) {
+    userBrowser.isFirefox        = true;
+  } else if (ua.match(/Safari/i)) {
+    userBrowser.isSafari         = true;
+  }
+};
 
-function nearBottomOfPage() {
-  return scrollDistanceFromBottom() < 500;
+// App Check & Push Setting
+function setUserApp() {
+  // App에서 호출
+  userApp                        = true;
+  userDevice.isMobile            = true;
+  getUserToken();
+};
+
+function getUserToken() {
+  if (window.HybridApp) {
+    HybridApp.getUserToken("hello world");        // AOS
+  } else {
+    window.location = "vaskit://getUserToken";    // iOS
+  }
+};
+
+function setUserToken(gcm_key, device_id, app_ver) {
+  // App에서 호출
+  $.ajax({
+          url: '/user_gcm_keys.json',
+          dataType: 'json',
+          type: 'POST',
+          data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver},
+          error: function() {
+            return false;
+          },
+          success: function(data) {
+          },
+          beforeSend: function() {
+            loadingStart();
+          },
+          complete: function() {
+            loadingEnd();
+          }
+  });
+};
+
+function setAppStatusBar(type) {
+  // type => { normal, dark, orange }
+  // textColor => { 0: white, 1: black }
+  if (type == "dark") {
+    var r = 51, g = 51, b = 51, a = 1, textColor = 0;
+  } else if (type == "orange") {
+    var r = 255, g = 120, b = 0, a = 1, textColor = 0;
+  } else {
+    var r = 249, g = 249, b = 249, a = 1, textColor = 1;
+  }
+  if (window.HybridApp) {
+    // HybridApp.setAppStatusBar(r + ", " + g + ", " + b + ", " + a * 255 + ", " + textColor);        // AOS
+  } else {
+    window.location = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
+  }
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// Navigating
+var currentSeg = 0;
+var currentHistory = 0;
+var segOrder = [];
+var segHistory = {1: 0, 2: 0, 4: 0};
+var segPrevFunc = {1: [], 2: [], 4: []};
+var segNextFunc = {1: [], 2: [], 4: []};
+var segURL = {1: [], 2: [], 4: []};
+
+function go_popstate(e) {
+  var state = e.originalEvent.state;
+  if (state.pageHistory < currentHistory) {
+    console.log(currentHistory+" -> "+state.pageHistory+'...뒤로 갑니다');
+    // 뒤로 가는 경우
+
+    var func = segPrevFunc[currentSeg][segHistory[currentSeg]];
+    if (segHistory[currentSeg] == 0) {
+      if (segOrder.pop() && segOrder.length > 0) {
+        console.log('segOrder 순서 제거, 이전 탭으로 이동');
+        currentSeg = segOrder[segOrder.length -1];
+        var url = segURL[currentSeg][segHistory[currentSeg]];
+      } else {
+        console.log('뒤로가기의 마지막입니다...');
+      }
+    } else {
+      segHistory[currentSeg] -= 1;
+      var url = segURL[currentSeg][segHistory[currentSeg]];
+    }
+
+    if (func) {
+      typeof func.arguments == "string" ? window[func.callback].apply(null, func.arguments.split(", ")) : window[func.callback](func.arguments); // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+      history.replaceState(history.state, null, url);
+      currentHistory = history.state.pageHistory;
+      console.log(func.callback+"("+func.arguments+") 실행");
+    } else {
+      history.forward();
+      currentHistory = history.state.pageHistory;
+      console.log("더이상 실행할 뒤로가기 없음");
+    }
+
+  } else if (state.pageHistory > currentHistory) {
+    console.log(currentHistory+" -> "+state.pageHistory+'...앞으로 갑니다');
+    // 앞으로 가는 경우
+
+    var func = segNextFunc[currentSeg][segHistory[currentSeg]];
+    if (segHistory[currentSeg] == segURL[currentSeg].length - 1) {
+      if (segNextFunc[currentSeg].length == segHistory[currentSeg] + 1) {
+        console.log('segOrder 순서 추가, 다음 탭으로 이동');
+        segOrder.push(segNextFunc[currentSeg][segHistory[currentSeg]].arguments);
+        currentSeg = segOrder[segOrder.length -1];
+        var url = segURL[currentSeg][segHistory[currentSeg]];
+      } else {
+        console.log('앞으로가기의 마지막입니다...');
+      }
+    } else {
+      segHistory[currentSeg] += 1;
+      var url = segURL[currentSeg][segHistory[currentSeg]];
+    }
+
+    if (func) {
+      typeof func.arguments == "string" ? window[func.callback].apply(null, func.arguments.split(", ")) : window[func.callback](func.arguments); // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+      history.replaceState(history.state, null, url);
+      currentHistory = history.state.pageHistory;
+      console.log(func.callback+"("+func.arguments+") 실행");
+    } else {
+      history.back();
+      currentHistory = history.state.pageHistory;
+      console.log("더이상 실행할 앞으로가기 없음");
+    }
+
+  }
 }
 
-function scrollDistanceFromBottom(argument) {
-  return $(document).height() - ($(window).height() + $(window).scrollTop());
-}
+function go_seg(seg_id) {
+  var url = show_seg(seg_id);
+  if (currentSeg == seg_id) {
+    if (segHistory[currentSeg] > 0) {
+      go_back(segHistory[currentSeg]);
+      console.log("동일 탭으로 이동 & 기록 삭제");
+    } else {
+      console.log("동일 탭으로 이동 But 기록 없음");
+    }
+  } else {
+    var lastSeg = currentSeg;
+    currentSeg = seg_id;
+    if (segOrder.indexOf(currentSeg) == -1) {
+      // 처음으로 진입하는 탭의 경우
+      console.log('처음으로 진입하는 탭의 경우');
 
-function go_url(url) {
-  progressStart();
-  window.location.assign(url);
-}
+      segOrder.push(currentSeg);
 
-function get_image_url(data, model_name, extention){
+      if (lastSeg == 0) {
+        segPrevFunc[currentSeg].splice(0,1,{
+          callback : "go_exit",
+          arguments : null
+        });
+      } else {
+        segNextFunc[lastSeg].splice(segHistory[lastSeg],1,{
+          callback : "show_seg",
+          arguments : currentSeg
+        });
+        segPrevFunc[currentSeg].splice(0,1,{
+          callback : "show_seg",
+          arguments : lastSeg
+        });
+        segNextFunc[currentSeg].splice(segHistory[lastSeg],1);
+      };
+      segURL[currentSeg].splice(segHistory[currentSeg],1,url);
+
+      history.pushState({pageHistory:currentHistory+1}, null, url);
+      currentHistory = history.state.pageHistory;
+
+      console.log(currentHistory+"로 진행, 신규 탭 추가, 현재 탭 히스토리 : "+segOrder);
+    } else {
+      // 이미 기존에 진행한 탭 히스토리가 있을 경우
+      console.log('이미 기존에 진행한 탭 히스토리가 있을 경우');
+
+      segOrder.splice(segOrder.indexOf(currentSeg),1);
+      segOrder.push(currentSeg);
+
+      segNextFunc[lastSeg].splice(segHistory[lastSeg],1,{
+        callback : "show_seg",
+        arguments : currentSeg
+      });
+      segPrevFunc[currentSeg].splice(0,1,{
+        callback : "show_seg",
+        arguments : lastSeg
+      });
+      segNextFunc[currentSeg].splice(segHistory[lastSeg],1);
+      segPrevFunc[segOrder[0]].splice(0,1,{
+        callback : "go_exit",
+        arguments : null
+      });
+      url = segURL[currentSeg][segHistory[currentSeg]];
+
+      history.pushState({pageHistory:currentHistory+1}, null, url);
+      currentHistory = history.state.pageHistory;
+
+      console.log(currentHistory+"로 진행, 기존 탭 진행, 현재 탭 히스토리 : "+segOrder);
+    }
+  }
+};
+
+function show_history(seg_id) {
+  console.log(currentHistory);
+  console.log("뒤로가기 함수");
+  console.log(segPrevFunc[seg_id]);
+  console.log("앞으로가기 함수");
+  console.log(segNextFunc[seg_id]);
+  console.log(segURL[seg_id]);
+  console.log(segHistory[seg_id]);
+};
+
+function go_url(func_name, func_args) {
+  if (window.event) window.event.cancelBubble = true;
+  var url = typeof func_args == "string" ? window["show_"+func_name].apply(null, func_args.split(", ")) : window["show_"+func_name](func_args); // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+
+  segPrevFunc[currentSeg] = segPrevFunc[currentSeg].slice(0, segHistory[currentSeg]+1);
+  segPrevFunc[currentSeg].push({
+    callback : "hide_"+func_name,
+    arguments : func_args
+  });
+  segNextFunc[currentSeg] = segNextFunc[currentSeg].slice(0, segHistory[currentSeg]);
+  segNextFunc[currentSeg].push({
+    callback : "show_"+func_name,
+    arguments : func_args
+  });
+  segURL[currentSeg] = segURL[currentSeg].slice(0, segHistory[currentSeg]+1);
+  segURL[currentSeg].push(url);
+  segHistory[currentSeg] += 1;
+
+  history.pushState({pageHistory:currentHistory+1}, null, url);
+  currentHistory = history.state.pageHistory;
+
+  console.log("url, 히스토리 변경... show_"+func_name+" 실행하여 "+currentHistory+"로 진행");
+};
+
+var back_button_clicked = false;
+function back_button() {
+  if (!back_button_clicked) {
+    history.back();
+    back_button_clicked = true;
+    setTimeout(function(){
+      back_button_clicked = false;
+    },500);
+  } else {
+    return false;
+  }
+};
+
+function go_back(length) {
+  $(window).unbind("popstate");
+
+  segPrevFunc[currentSeg].splice(segPrevFunc[currentSeg].length-length, length);
+  segNextFunc[currentSeg].splice(segNextFunc[currentSeg].length-length, length);
+  segURL[currentSeg].splice(segURL[currentSeg].length-length, length);
+  segHistory[currentSeg] -= length;
+  currentHistory -= length;
+  var url = segURL[currentSeg][segHistory[currentSeg]];
+
+  history.go(-length);
+
+  setTimeout(function(){
+    history.replaceState(history.state, null, url);
+    $(window).bind("popstate", go_popstate);
+  },100);
+
+  console.log("히스토리 삭제 ("+ length +"개)");
+};
+
+function go_exit() {
+  console.log('bye...');
+  if (userApp) {
+    go_back(currentHistory+1);
+  } else {
+    $("body").children().animateCssRemove("fadeOut");
+    setTimeout(function(){
+      go_back(currentHistory+1);
+    },500);
+  }
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function visitor_check(callback) {
+  if (current_user) {
+    if (typeof callback === "function") callback();
+  } else {
+    go_url('landing');
+    notify("로그인 해주세요!");
+  }
+};
+
+// 탭 이동
+function show_seg(seg_id) {
+  if (seg_id === 1) {
+    var url = '/collections';
+    $(".seg.seg1").css("transform","translateX(0%)");
+    $(".seg.seg2").css("transform","translateX(100%)");
+    $(".seg.seg4").css("transform","translateX(200%)");
+  } else if (seg_id === 2) {
+    var url = '/search';
+    $(".seg.seg1").css("transform","translateX(-100%)");
+    $(".seg.seg2").css("transform","translateX(0%)");
+    $(".seg.seg4").css("transform","translateX(100%)");
+  } else if (seg_id === 4) {
+    var url = '/users';
+    $(".seg.seg1").css("transform","translateX(-200%)");
+    $(".seg.seg2").css("transform","translateX(-100%)");
+    $(".seg.seg4").css("transform","translateX(0%)");
+  }
+
+  if ($(".seg.on").hasClass("seg"+seg_id)) {
+    // 동일 탭으로 이동할 경우
+    if ($(".seg"+seg_id+" .wrapper.main").hasClass("prev")) {
+      // 보조 컨테이너가 열려있는 경우 메인으로 돌아감
+      $(".seg"+seg_id+" .wrapper.main").removeClass("prev");
+      $(".seg"+seg_id+" .wrapper.sub").removeClass("prev").addClass("next").transitionRemove();
+      if (seg_id === 1) {
+        set_recent_asks();
+      } else if (seg_id === 4) {
+        user_profile_on();
+        user_alarms_on();
+      }
+    } else {
+      // 메인 컨테이너가 열려있는 경우 상단으로 돌아감
+      $(".seg"+seg_id+" .wrapper.main .container.main").animate({scrollTop:0}, 250);
+      $(".seg"+seg_id+" .wrapper.main .inner").not(".prev").not(".next").animate({scrollTop:0}, 250);
+    }
+  } else {
+    // 다른 탭으로 이동할 경우
+
+    // 현재 열려있는 모든 컨테이너를 비활성화함
+    $(".seg.on").removeClass("on");
+    $(".tab_icon.on").removeClass("on");
+
+    // 사용자가 이동하기 원하는 탭을 활성화함
+    $(".seg"+seg_id).removeClass("prev next").addClass("on");
+    $(".tab_icon.seg"+seg_id).addClass("on");
+
+    if (seg_id === 1) {
+      set_recent_asks();
+    } else if (seg_id === 4) {
+      user_profile_on();
+    }
+
+    return url;
+  };
+};
+
+// Full View
+function open_full_view(html) {
+  var new_viewer = '<div class="viewer full off new"></div>';
+  $("#main_view").append(new_viewer);
+  new_viewer = $("#main_view").find(".viewer.new");
+  new_viewer.html(html).removeClass("new");
+  setTimeout(function(){
+    new_viewer.removeClass("off");
+  },250);
+};
+
+function close_full_view() {
+  $("#main_view").children().last().addClass("off").transitionRemove();
+};
+
+function create_wrapper(html, is_full) {
+  var target_seg = $("#seg_"+currentSeg);
+  var prev_wrappers = target_seg.find(".wrapper");
+  var new_wrapper = is_full ? '<div class="wrapper sub full next new"></div>' : '<div class="wrapper sub next new"></div>';
+
+  target_seg.append(new_wrapper);
+  new_wrapper = target_seg.find(".wrapper.new");
+  new_wrapper.html(html).removeClass("new");
+  setTimeout(function(){
+    is_full ? $("#footer").addClass("hide") : $("#footer").removeClass("hide");
+    prev_wrappers.addClass("prev");
+    new_wrapper.removeClass("next");
+  },250);
+};
+
+function remove_wrapper() {
+  var target_seg = $("#seg_"+currentSeg);
+  var prev_wrappers = target_seg.find(".wrapper");
+  var now_wrapper = prev_wrappers.eq(prev_wrappers.length-1);
+  var last_wrapper = prev_wrappers.eq(prev_wrappers.length-2);
+
+  if (last_wrapper.hasClass("full")) {
+    $("#footer").addClass("hide");
+  } else {
+    $("#footer").removeClass("hide");
+  }
+  last_wrapper.removeClass("prev");
+  now_wrapper.addClass("next").transitionRemove();
+};
+
+$.fn.scroll_to = function(destination) {
+  var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+  var main_container = current_wrapper.find(".container.main");
+  var st_now = main_container.scrollTop();
+  var top = 0;
+  var bottom = main_container.prop("scrollHeight");
+
+  if (destination == null) {
+    destination = st_now > 0 ? top : bottom;
+  } else if (destination == true) {
+    destination = bottom;
+  }
+
+  main_container.animate({scrollTop: destination}, 250);
+};
+
+function nearBottomOfContainer(element) {
+  // return element.scrollHeight - element.scrollTop - element.offsetHeight < 500;
+  return element.prop("scrollHeight") - (element.scrollTop() + element.height()) < 50;
+};
+
+function removeIOSRubberEffect(element) {
+  if (userDevice.isIOS) {
+    window.event.cancelBubble = true;
+    var vp_height = element.height(),
+        vp_scroll = element.prop("scrollHeight"),
+        vp_top = element.scrollTop(),
+        vp_bottom = vp_top + vp_height;
+    if (vp_height == vp_scroll) {
+      element.on("touchmove",function(){
+        return false;
+      });
+    } else {
+      element.off("touchmove");
+      if (vp_top === 0) {
+        element.scrollTop(1);
+      } else if (vp_bottom === vp_scroll) {
+        element.scrollTop(vp_top-1);
+      };
+    }
+  }
+};
+
+// Template Load
+function load_template(title, callback) {
+  if ($("#"+title+"_template").length == 0) {
+    $.ajax({
+      url: '/templates/'+title,
+      dataType: 'HTML',
+      method: 'GET',
+      async: false,
+      success: function(data) {
+        $("body").append(data);
+        if (typeof callback === "function") callback();
+      },
+      beforeSend: function(){
+        loadingStart();
+      },
+      complete: function(){
+        loadingEnd();
+      }
+    });
+  } else {
+    if (typeof callback === "function") callback();
+  }
+};
+
+// 노티스, 로딩바
+function notify(msg, onclick){
+  var notice_div = $(".notice_div");
+  var notice_msg = $(".notice_msg");
+  notice_div.stop().animate({"top":"-50px"},50,function(){
+    notice_msg.html("").html(msg);
+    notice_div.show().attr("onclick",onclick).animate({"top":"0px"},250,function(){
+      notice_div.delay(3000).animate({"top":"-50px"},500,function(){
+        notice_div.hide().attr("onclick","return false;");
+        notice_msg.html("");
+      });
+    });
+  });
+  notice_div.unbind("touchmove click").bind("touchmove click", function(){
+    $(this).stop().animate({"top":"-50px"},250,function(){
+      $(this).css({"height":"50px"});
+    });
+    return false;
+  });
+};
+
+function loadingStart() {
+  var loading_bar = $(".loading_bar");
+  $(".loading_div").show();
+  loading_bar.clearQueue().show().animate({width:"90%"},1000,function(){
+    loading_bar.animate({width:"94%"},2000,function(){
+      loading_bar.animate({width:"98%"},8000);
+    });
+  });
+};
+
+function loadingEnd() {
+  var loading_bar = $(".loading_bar");
+  loading_bar.stop().animate({width:"100%"},100,function(){
+    loading_bar.delay(300).animate({height:"0px"},100,function(){
+      loading_bar.css({width:"0%", height:"5px", display:"none"});
+      $(".loading_div").hide();
+    });
+  });
+};
+
+// Alarm Check
+var current_user = null;
+var alarm_check_counter;
+function alarm_check(last_alarm_count) {
+  var alarm_count = last_alarm_count == null ? 0 : last_alarm_count;
+
+  $.ajax({
+    url: "/users/alarm_check.json",
+    dataType: 'json',
+    type: "GET",
+    error: function() {
+      return false;
+    },
+    success: function(data) {
+      current_user = data.current_user;
+      alarm_count = data.alarm_count;
+      if (current_user == null) {
+        $("#my_tab").hide();
+        $("#login_tab").show();
+      } else {
+        $("#my_tab").show();
+        $("#login_tab").hide();
+      }
+      alarm_count > 0 ? $(".tab_badge").addClass("on").animateCss("wobble") : $(".tab_badge").removeClass("on");
+      if (last_alarm_count != null && alarm_count > last_alarm_count) {
+        user_alarms_on();
+        if (!window.HybridApp) { notify("새로운 알림이 도착했습니다!", "go_seg(4); $('#footer').removeClass('hide'); open_user_alarms();"); }
+      }
+    },
+    beforeSend: function() {
+      clearInterval(alarm_check_counter);
+    },
+    complete: function() {
+      alarm_check_counter = setInterval(function() { alarm_check(alarm_count) }, 60000);
+    }
+  });
+};
+
+
+// Image Load
+function get_image_url(data, model_name, extention) {
 	try {
 		var image_url = ""; //static url
-    if (document.location.host.match("vaskit.kr") == null) {
-      image_url = "http://vaskit.kr/assets/"+model_name+"/"+data.id+"/"+extention+"/";
-    } else {
-      image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
-    }
+    image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
 		var image_file_name = data.image_file_name;
 		if(image_file_name.indexOf(".") == -1){
 			image_file_name = image_file_name + ".";
@@ -234,7 +739,7 @@ function get_image_url(data, model_name, extention){
 	}
 }
 
-function imgError(image, alter_url){
+function imgError(image, alter_url) {
   image.onerror = "";
   if (alter_url == null) alter_url = "/images/custom/card_image_preview.png";
   image.src = alter_url;
@@ -242,93 +747,149 @@ function imgError(image, alter_url){
   return true;
 }
 
-function notify(msg, onclick){
-  var flash_div = $("#flash");
-  var flash_msg = $("#flash_msg");
-  flash_div.stop().animate({"top":"-50px"},50,function(){
-    flash_msg.html("").html(msg);
-    flash_div.show().attr("onclick",onclick).animate({"top":"0px"},250,function(){
-      flash_div.delay(3000).animate({"top":"-50px"},500,function(){
-        flash_div.hide().attr("onclick","return false;");
-        flash_msg.html("");
+function get_avatar(data) {
+	try {
+		var avatar_url = "";
+    avatar_url = "/assets/users/"+data.id+"/original/";
+		var avatar_file_name = data.avatar_file_name;
+		if(avatar_file_name.indexOf(".") == -1){
+			avatar_file_name = avatar_file_name + ".";
+		}
+	  	avatar_url += avatar_file_name;
+	  	return avatar_url;
+	}
+	catch(err) {
+	    return "/images/custom/user_profile_preview.png";
+	}
+};
+
+
+// 해쉬태그, 링크 하이라이트
+function taggingKeywords(origin_string, img_hidden) {
+  var html_tmp = document.createElement("div");
+  var html_txt = document.createTextNode(origin_string);
+  html_tmp.id = "taggingTmp"
+  html_tmp.appendChild(html_txt);
+  document.body.appendChild(html_tmp);
+  html_tmp = $("#taggingTmp");
+
+  var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
+  var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
+  if (hash_tags != null) {
+    hash_tags.sort(function(a,b){ return b.length - a.length; });
+    $.each(hash_tags, function( index, hash_tag ) {
+      hash_tag = hash_tag.replace(",","");
+      html_tmp.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
+      $.each(html_tmp.find(".hash_tag."+index), function( index2, element ){
+        hash_tag = hash_tag.replace('#', '').replace("?","");
+        $(element).attr({
+          href: "/search?type=hash_tag&keyword="+encodeURIComponent(hash_tag),
+          onclick: "go_url('search_result', {type: 'hash_tag', keyword: '" + hash_tag + "'}); return false;"
+        });
       });
     });
-  });
-  flash_div.unbind("touchmove click").bind("touchmove click", function(){
-    $(this).stop().animate({"top":"-50px"},250,function(){
-      $(this).css({"height":"50px"});
+  }
+  if (links != null) {
+    links.sort(function(a,b){ return b.length - a.length; });
+    var link_tags = [];
+    var img_tags = [];
+    var img_reg = /\.(jpg|jpeg|gif|bmp|png)/;
+    $.each(links, function(index, link){
+      if (img_reg.test(link)) {
+        img_tags[img_tags.length] = link;
+      } else {
+        link_tags[link_tags.length] = link;
+      }
     });
-    return false;
-  });
+    if (!img_hidden) {
+      $.each(img_tags, function(index, img){
+        html_tmp.highlight(img, {element:'img', className: 'link_img '+index});
+        $.each(html_tmp.find(".link_img."+index), function(index2, element){
+          $(element).attr({
+            src: img,
+            onerror: "imgError(this);"
+          });
+        });
+      });
+    }
+    $.each(links, function(index, link){
+      html_tmp.highlight(link, {element:'a', className: 'link '+index});
+      $.each(html_tmp.find(".link."+index), function(index2, element){
+        $(element).attr({
+          href: link,
+          target: "_blank",
+          onclick: "window.event.cancelBubble = true;"
+        });
+      });
+    });
+  }
+
+  var html_output = html_tmp.html();
+  html_tmp.remove();
+
+  return html_output.replace(/^\s*/g, '')                             // 앞 공백 제거
+                    .replace(/\s*$/g, '')                             // 뒷 공백 제거
+                    .replace(new RegExp('\r?\n', 'g'), '<br>');       // 줄바꿈 처리
+};
+
+// Form 필수 입력값 체크
+function form_check(form) {
+  var fields = $.map(form.find("[required]"), function(value, index) { return [value] });
+  var check_boxs = $.map(form.find("[required][type=checkbox]"), function(value, index) { return [value] });
+  if ( fields.every(function (item, index) { return item.value.length > 0 }) && check_boxs.every(function (item, index) { return item.checked == true }) ) {
+    form.find(".submit_btn").addClass("ready");
+  } else {
+    form.find(".submit_btn").removeClass("ready");
+  }
+};
+
+// 각종 표기법
+function truncate(string, range) {
+  if (range == null) range = 30;
+  if (string.length > range)
+    return string.substring(0,range)+'&middot;&middot;&middot;';
+  else
+    return string;
+};
+
+
+// 금액 필드 콤마찍기
+function fieldWithBlank(text) {
+  return (text == null || text.length == 0) ? "-" : text;
 }
 
-function visitor_notify(message) {
-  notify(message);
-  setTimeout("notify('<i class=\"fa fa-spinner fa-spin\"></i>&nbsp;&nbsp;회원가입 화면으로 이동합니다&middot;&middot;&middot;')",1500);
-  setTimeout('window.location.assign("/landing")',2500);
+function fieldWithLink(link) {
+  var tmpLink = document.createElement("a");
+  tmpLink.href = link;
+  tmpLink.text = tmpLink.host;
+  tmpLink.target = "_blank";
+  $(tmpLink).attr("onclick", "window.event.cancelBubble = true;");
+  return tmpLink;
 }
-
 
 function numberWithCommas(x) {
-  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (x != null) x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return x;
 }
 
-var back_button_clicked = false;
-function back_button(){
-  if (!back_button_clicked) {
-    history.back();
-    back_button_clicked = true;
-    setTimeout(function(){
-      back_button_clicked = false;
-    },1000);
-  } else {
-    return false;
+function inputNumberWithCommas(obj) {
+  obj.value = comma(uncomma(obj.value));
+  function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+  }
+  function uncomma(str) {
+    str = String(str);
+    return str.replace(/[^\d]+/g, '');
   }
 }
 
-function header_back_button(){
-  var referrer = document.createElement("a");
-  referrer.href = document.referrer;
-  if (parent.history.length == 1 || referrer.host != document.location.host || is_show_opened) {//|| referrer.href == document.location.href) {
-    go_url("/");
-  } else if (isIOS && document.location.pathname == "/asks/new") {
-    if (confirm('정말로 빠져나가시겠어요?\n내용이 저장되지 않을거에요 T_T')) back_button();
-  } else {
-    back_button();
-  }
-}
-
-function window_back_button(){
-  try {
-    window.close();
-  } finally {
-    back_button();
-  }
-}
-
-function share_log(channel, ask_id){
-	$.ajax({
-        url: "/share_logs.json",
-        type: 'POST',
-        async: false,
-        data: {"channel" : channel, "ask_id" : ask_id},
-        dataType: 'json',
-        error: function(){
-          return false;
-        },
-        success: function(data){
-        },
-        beforeSend: function(){
-        }
-	});
-}
-
-function get_user_ages(birthday){
+function get_user_ages(birthday) {
   try {
     var ret = "";
     if (birthday == null || birthday == ""){
       ret = "기타";
-    }else{
+    } else {
       var current_user_year = parseInt(birthday.split("-")[0]);
       var current_year = (new Date).getFullYear();
       var user_age = current_year - current_user_year + 1;
@@ -337,342 +898,50 @@ function get_user_ages(birthday){
       ret = user_age + "대";
     }
     return ret;
-  }catch(err) {
-      return "기타";
+  } catch(err) {
+    return "기타";
   }
 }
 
-function truncate(string){
-   if (string.length > 30)
-      return string.substring(0,30)+'&middot;&middot;&middot;';
-   else
-      return string;
-};
+function get_past_time(time) {
+    var start = new Date(time),
+        end = new Date(),
+        diff = new Date(end - start),
+        month = Math.floor(diff / 1000 / 60 / 60 / 24 / 30),
+        week = Math.floor(diff / 1000 / 60 / 60 / 24 / 7),
+        day = Math.floor(diff / 1000 / 60 / 60 / 24),
+        hour = Math.floor(diff / 1000 / 60 / 60),
+        min = Math.floor(diff / 1000 / 60);
 
-_.templateSettings = {
-    interpolate: /\{\{\=(.+?)\}\}/g,
-    evaluate: /\{\{(.+?)\}\}/g
-};
-
-function get_past_time(time){
-	var start = new Date(time),
-    end   = new Date(),
-    diff  = new Date(end - start),
-    month  = Math.floor(diff/1000/60/60/24/30),
-   	week = Math.floor(diff/1000/60/60/24/7),
-    day  = Math.floor(diff/1000/60/60/24),
-    hour = Math.floor(diff/1000/60/60),
-    min = Math.floor(diff/1000/60);
-    ret = 0;
-
-    if (month != 0){
-    	return month + "개월 전";
-    }else if(week != 0){
-    	return week + "주 전";
-    }else if(day != 0){
-    	return day + "일 전";
-    }else if(hour != 0){
-    	return hour + "시간 전";
-    }else if(min != 0){
-      if(min<60 && min>=50) {
-        return "50분 전";
-      }else if(min<50 && min>=40){
-        return "40분 전";
-      }else if(min<40 && min>=30){
-        return "30분 전";
-      }else if(min<30 && min>=20){
-        return "20분 전";
-      }else if(min<20 && min>=10){
-        return "10분 전";
-      }else{
-      	return "방금 전";
-      }
-    }else{
-    	return "방금 전";
-    }
-}
-
-
-// 스크롤 관련
-function search_bar_hide(){
-  // 스크롤 다운시 검색창 및 질문버튼 숨기기
-  var didScroll;
-  var lastScrollTop = 0;
-  var delta = 20;
-  var navbarHeight = $(".search_bar_area").outerHeight();
-
-  $(window).scroll(function(event){
-    didScroll = true;
-  });
-
-  setInterval(function() {
-    if (didScroll) {
-      hasScrolled();
-      didScroll = false;
-    }
-  }, 250);
-
-  function hasScrolled() {
-      var st = $(this).scrollTop();
-      if (st > lastScrollTop && st > navbarHeight){
-        $("#search").css({"top":"0px"});
-        $("#app_banner").css({"right":"30%"});
-        $(".home-float-btn-area").css({"bottom":"-85px"});
-      } else if ((st < lastScrollTop && Math.abs(lastScrollTop - st) > delta) || st < 50) {
-          if(st + $(window).height() <= $(document).height() ) {
-            $("#search").css({"top":"50px"});
-            $("#app_banner").css({"right":"50%"});
-            $("#home-float-btn-tooltip").show();
-            $(".home-float-btn-area").css({"bottom":"15px"}).animateCss("bounce");
-          }
-      }
-      lastScrollTop = st;
-  }
-}
-
-function disableScroll() {
-  $("body").css("overflow","hidden");
-  $("#menu_bg_full, #menu_bg, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").bind("touchmove", function(e){
-    return false;
-  });
-}
-
-function enableScroll() {
-  $("body").css("overflow","auto");
-  $("#menu_bg_full, #menu_bg, #image_edit_popup_bg, #app_popup_bg, #video_overlay_bg").unbind("touchmove");
-}
-
-// AJS추가 : 각 카드 이미지에 마우스 올릴 경우 확대되도록 애니메이션 효과 부여
-// 모바일의 경우 호버 액션은 실행되지 않도록 제어
-function hover_action(ask_id){
-  if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    $("#ask_"+ask_id).find(".card_image_expander").addClass("img_hover");
-    return false;
-  } else {
-    $(".card_image_"+ask_id).hover(
-      function(){
-        $(this).addClass("img_hover");
-        $(this).parent().children(".card_image_expander").addClass("img_hover");
-      },
-      function(){
-        $(this).removeClass("img_hover");
-        $(this).parent().children(".card_image_expander").removeClass("img_hover");
-      }
-    );
-    $("#ask_"+ask_id).find(".card_image_overlay").hover(
-      function(){
-        $(this).addClass("img_hover");
-        $(this).prev().children(".card_image").addClass("img_hover");
-        $(this).prev().children(".card_image_expander").addClass("img_hover");
-      },
-      function(){
-        $(this).removeClass("img_hover");
-        $(this).prev().children(".card_image").removeClass("img_hover");
-        $(this).prev().children(".card_image_expander").removeClass("img_hover");
-      }
-    );
-    $("#ask_"+ask_id).find(".vote_btn").hover(
-      function(){
-        $(this).prev().children(".card_image").addClass("img_hover");
-        $(this).prev().children(".card_image_expander").addClass("img_hover");
-        // $(this).prev().children(".card_image_hover").fadeIn(100);
-        // $(this).parent().parent().parent().parent().find(".card_detail_table").slideDown(200);
-      },
-      function(){
-        $(this).prev().children(".card_image").removeClass("img_hover");
-        $(this).prev().children(".card_image_expander").removeClass("img_hover");
-        // $(this).prev().children(".card_image_hover").fadeOut(100);
-        // $(this).parent().parent().parent().find(".card_detail_table").clearQueue().delay(500).slideUp(200);
-      }
-    );
-  }
-};
-
-// AJS추가 : 투표 참여시 그래프 애니메이션 효과 부여
-function graph_animation(ask_id, left_ratio, right_ratio) {
-  var left_ratio_full = left_ratio / 80 * 100;
-  var right_ratio_full = right_ratio / 80 * 100;
-  var timing = 30,
-      l_bar = $("#left_bar_"+ask_id),
-      l_num = $("#left_num_"+ask_id),
-      l_tim = timing * left_ratio,
-      r_bar = $("#right_bar_"+ask_id),
-      r_num = $("#right_num_"+ask_id),
-      r_tim = timing * right_ratio;
-  // var percent_number_step = $.animateNumber.numberStepFactories.append('%');
-
-  // l_bar.css("width","3px").velocity({"width":left_ratio+"%"}, l_tim);
-  // l_num.animateNumber({ number: left_ratio_full, numberStep: percent_number_step }, l_tim);
-  l_bar.css("width","3px").animate({"width":left_ratio+"%"}, l_tim);
-  $({ val : 0 }).animate({ val : left_ratio_full }, {
-    duration: l_tim,
-    step: function() { l_num.text(Math.round(this.val)+"%") },
-    complete: function() { l_num.text(Math.round(this.val)+"%") }
-  });
-
-  // r_bar.css("width","3px").velocity({"width":right_ratio+"%"}, r_tim);
-  // r_num.animateNumber({ number: right_ratio_full, numberStep: percent_number_step }, r_tim);
-  r_bar.css("width","3px").animate({"width":right_ratio+"%"}, r_tim);
-  $({ val : 0 }).animate({ val : right_ratio_full }, {
-    duration: r_tim,
-    step: function() { r_num.text(Math.round(this.val)+"%") },
-    complete: function() { r_num.text(Math.round(this.val)+"%") }
-  });
-}
-
-// AJS추가 : 제품명 툴팁박스 추가
-function tooltip_box(ask_id) {
-  if ( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-    $("#ask_"+ask_id).find("p.output_field").on("click",function(){
-      var tooltip_width = $(this).width();
-      $(this).next().css("width",tooltip_width).clearQueue().toggleClass("tooltip_open");
-    })
-  } else {
-    $("#ask_"+ask_id).find("p.output_field").hover(
-      function(){
-        var tooltip_width = $(this).width();
-        $(this).next().css("width",tooltip_width).clearQueue().addClass("tooltip_open");
-      }, function(){
-        $(this).next().clearQueue().delay(500).removeClass("tooltip_open");
-      }
-    );
-  }
-}
-
-// AJS추가 : 해쉬태그 하이라이트 별도 함수로 지정
-function hash_tagging(origin_string, target_element) {
-  var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
-  if (hash_tags != null) hash_tags.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-  $.each(hash_tags, function( index, hash_tag ) {
-    hash_tag = hash_tag.replace(",","");
-    target_element.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-    hash_tag = hash_tag.replace('#', '').replace("?","");
-    $.each( target_element.find(".hash_tag."+index), function( index2, element ){
-      // if ( $(element).parent().prop('nodeName') == "SPAN"){
-        $(element).attr({href:"/?keyword="+hash_tag+"&type=hash_tag"})
-      // }
-    });
-  });
-}
-
-function link_tagging(origin_string, target_element, img_preview) {
-  var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
-  if (links != null) {
-    links.sort(function(a,b){ return b.length - a.length; }); // 긴 순서대로 정렬
-    var link_tags = [];
-    var img_tags = [];
-    var img_reg = /\.(jpg|jpeg|gif|bmp|png)/;
-    $.each(links, function(index, link) {
-      if (img_reg.test(link)) {
-        img_tags[img_tags.length] = link;
-      } else {
-        link_tags[link_tags.length] = link;
-      }
-    });
-    if (img_preview) {
-      $.each(img_tags, function( index, img ) {
-        target_element.highlight(img, {element:'img', className: 'img '+index});
-        $.each( target_element.find(".img."+index), function( index2, element ){
-          $(element).attr({src:img, style:"width:100%;"});
-        });
-      });
-    }
-    $.each(links, function( index, link ) {
-      target_element.highlight(link, {element:'a', className: 'link '+index});
-      $.each( target_element.find(".link."+index), function( index2, element ){
-        $(element).attr({href:link, target:"_blank"});
-      });
-    });
-  }
-}
-
-function share_facebook(ask_id) {
-  var share_url = $("#share_url_"+ask_id).val();
-  if (window.HybridApp) {
-    HybridApp.shareFacebook(share_url);
-  } else if (isIOSApp) {
-    window.location = "vaskit://shareFacebook/////" + share_url;
-  } else {
-    if (typeof(FB) != 'undefined' && FB != null) {
-      FB.init({
-        appId      : '532503193593128',
-        status     : true,
-        xfbml      : true,
-        version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
-      });
-    }
-    FB.ui({
-      method: 'share',
-      href: share_url,
-    }, function(response){});
-  }
-
-  share_log("facebook", ask_id);
-}
-
-function share_katalk(ask_id) {
-  var ask = $.grep(asks, function(obj) { return obj.id === ask_id })[0];
-  var left_deal_title = ask.left_ask_deal.title;
-  var right_deal_title = ask.right_ask_deal.title;
-  var share_url = $("#share_url_"+ask_id).val();
-  var image_url = "http://vaskit.kr/images/logo/share_800x600.png";
-  var label = "둘중에뭐사지? 골라주세요!\n\n"+left_deal_title+"\nvs\n"+right_deal_title+",\n당신의 선택은?\n\n"+share_url;
-  share_log("katalk", ask_id);
-
-  Kakao.cleanup();
-  Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
-  Kakao.Link.cleanup();
-  Kakao.Link.sendTalkLink({
-    label: label,
-    image: {
-      src:  image_url,
-      width: '800',
-      height: '600'
-    },
-    webButton: {
-      text: "Let's VASKIT!",
-      url: share_url
-    },
-    installTalk: false
-  });
-}
-
-function copy_url(ask_id) {
-  var share_url = $("#share_url_"+ask_id).val();
-  function copyfieldvalue(e, id){
-    if (document.execCommand("copy")) {
-      var field = document.getElementById(id);
-      field.focus();
-      field.setSelectionRange(0, field.value.length);
-      document.execCommand("copy");
-      notify('주소가 복사되었습니다!');
+    if (month != 0) {
+        return month + "개월 전";
+    } else if (week != 0) {
+        return week + "주 전";
+    } else if (day != 0) {
+        return day + "일 전";
+    } else if (hour != 0) {
+        return hour + "시간 전";
+    } else if (min != 0) {
+        if (min < 60 && min >= 50) {
+            return "50분 전";
+        } else if (min < 50 && min >= 40) {
+            return "40분 전";
+        } else if (min < 40 && min >= 30) {
+            return "30분 전";
+        } else if (min < 30 && min >= 20) {
+            return "20분 전";
+        } else if (min < 20 && min >= 10) {
+            return "10분 전";
+        } else {
+            return "방금 전";
+        }
     } else {
-      prompt('아래의 주소를 복사해주세요!', share_url);
+        return "방금 전";
     }
-  }
-
-  copyfieldvalue(event, "share_url_"+ask_id);
-
-  share_log("url", ask_id);
 }
 
 // AJS추가 : just for fun...
-console.log("%c개발자형을 구합니다!","color:#ee6e01; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
-
-function progressStart() {
-  $("#progress_bar").clearQueue().css("display","block").animate({width:"90%"},1000,function(){
-    $("#progress_bar").animate({width:"94%"},2000,function(){
-      $("#progress_bar").animate({width:"98%"},8000);
-    });
-  });
-}
-function progressEnd() {
-  $("#progress_bar").stop().animate({width:"100%"},100,function(){
-    $("#progress_bar").delay(300).animate({height:"0px"},100,function(){
-      $("#progress_bar").css({width:"0%", height:"5px", display:"none"});
-    });
-  });
-}
+// console.log("%c개발자형을 구합니다!","color:#FF7800; font-size:4em; font-weight:bold; background-color: #ffe4a9; padding: 0 10px;");
 
 // animateCSS
 $.fn.extend({
@@ -700,9 +969,30 @@ $.fn.extend({
         $(this).addClass('animated ' + animationName).one(animationEnd, function() {
             $(this).remove();
         });
+    },
+    removeClassRemove: function (className) {
+        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+        $(this).removeClass(className).one(transitionEnd, function() {
+            $(this).remove();
+        });
+    },
+    transitionEmpty: function (callback) {
+        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+        $(this).one(transitionEnd, function() {
+            $(this).empty().off(transitionEnd);
+            if (typeof callback === "function") callback();
+        });
+    },
+    transitionRemove: function (callback) {
+        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+        $(this).one(transitionEnd, function() {
+            $(this).remove();
+            if (typeof callback === "function") callback();
+        });
     }
 });
 
+// textarea 내부 선택하기
 $.fn.selectRange = function(start, end) {
   return this.each(function() {
     if(this.setSelectionRange) {
@@ -715,6 +1005,18 @@ $.fn.selectRange = function(start, end) {
       range.moveStart('character', start);
       range.select();
     }
+  });
+};
+
+
+// extension: scrollEnd detection
+$.fn.scrollEnd = function(callback, timeout) {
+  $(this).scroll(function(){
+    var $this = $(this);
+    if ($this.data('scrollTimeout')) {
+      clearTimeout($this.data('scrollTimeout'));
+    }
+    $this.data('scrollTimeout', setTimeout(callback,timeout));
   });
 };
 
@@ -779,55 +1081,44 @@ $.fn.selectRange = function(start, end) {
 	}
 })(jQuery);
 
-// extension: scrollEnd detection
-$.fn.scrollEnd = function(callback, timeout) {
-  $(this).scroll(function(){
-    var $this = $(this);
-    if ($this.data('scrollTimeout')) {
-      clearTimeout($this.data('scrollTimeout'));
-    }
-    $this.data('scrollTimeout', setTimeout(callback,timeout));
-  });
-};
 
-
-$( document ).ready(function() {
-  $("select").on("focus",function(){
-    $(this).css("color","#666");
-  }).on("blur",function(){
-    if( $(this).val() == "" || $(this).val() == null ) {
-      $(this).css("color","#ccc");
-    } else {
-      $(this).css("color","#666");
-    }
-  });
-	//ie 에서 placeholder
-	(function($) {
-	  $.fn.placeholder = function() {
-	    if(typeof document.createElement("input").placeholder == 'undefined') {
-	      $('[placeholder]').focus(function() {
-	        var input = $(this);
-	        if (input.val() == input.attr('placeholder')) {
-	          input.val('');
-	          input.removeClass('placeholder');
-	        }
-	      }).blur(function() {
-	        var input = $(this);
-	        if (input.val() == '' || input.val() == input.attr('placeholder')) {
-	          input.addClass('placeholder');
-	          input.val(input.attr('placeholder'));
-	        }
-	      }).blur().parents('form').submit(function() {
-	        $(this).find('[placeholder]').each(function() {
-	          var input = $(this);
-	          if (input.val() == input.attr('placeholder')) {
-	            input.val('');
-	          }
-	      })
-	    });
-	  }
-	}
-	})( jQuery );
-	$.fn.placeholder();
-	/////////////////////////////////
-});
+// $(document).ready(function() {
+//   $("select").on("focus", function(){
+//     $(this).css("color","#666");
+//   }).on("blur", function() {
+//     if( $(this).val() == "" || $(this).val() == null ) {
+//       $(this).css("color","#ccc");
+//     } else {
+//       $(this).css("color","#666");
+//     }
+//   });
+// 	//ie 에서 placeholder
+// 	(function($) {
+// 	  $.fn.placeholder = function() {
+// 	    if(typeof document.createElement("input").placeholder == 'undefined') {
+// 	      $('[placeholder]').focus(function() {
+// 	        var input = $(this);
+// 	        if (input.val() == input.attr('placeholder')) {
+// 	          input.val('');
+// 	          input.removeClass('placeholder');
+// 	        }
+// 	      }).blur(function() {
+// 	        var input = $(this);
+// 	        if (input.val() == '' || input.val() == input.attr('placeholder')) {
+// 	          input.addClass('placeholder');
+// 	          input.val(input.attr('placeholder'));
+// 	        }
+// 	      }).blur().parents('form').submit(function() {
+// 	        $(this).find('[placeholder]').each(function() {
+// 	          var input = $(this);
+// 	          if (input.val() == input.attr('placeholder')) {
+// 	            input.val('');
+// 	          }
+// 	      })
+// 	    });
+// 	  }
+// 	}
+// 	})( jQuery );
+// 	$.fn.placeholder();
+// 	/////////////////////////////////
+// });

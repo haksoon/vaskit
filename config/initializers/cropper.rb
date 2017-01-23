@@ -2,8 +2,15 @@ module Paperclip
   class Cropper < Thumbnail
     def transformation_command
       if crop_command
-        #  crop_command + super.join(' ').sub(/ -crop \S+/, '').split(' ') # super returns     an array like this: ["-resize", "100x", "-crop", "100x100+0+0", "+repage"]
-        super.join(' ').sub(/ -crop \S+/, '').split(' ') + crop_command # EXIF orientaion issue로 인해 먼저 resize 후 crop 하도록 command 순서 변경함
+        scale, crop = @current_geometry.transformation_to(@target_geometry, crop?)
+        trans = []
+        trans << "-coalesce" if animated?
+        trans << "-auto-orient" if auto_orient
+        trans << "-resize" << %["1024x1024>"]  # 크롭하기 전에 프리뷰 이미지 사이즈로 재조정함
+        trans << crop_command
+        trans << "+repage -resize" << %["#{scale}"] unless scale.nil? || scale.empty?
+        trans << '-layers "optimize"' if animated?
+        trans
       else
         super
       end

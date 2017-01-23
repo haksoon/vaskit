@@ -1,0 +1,307 @@
+<script type="text/template" id="searchTemplate">
+  <div class="container top search_input_box" ontouchmove="return false;">
+    <form action="" class="search_input_init" onclick="search_input_init($(this));">
+      <input class="input text_field left right search_input" type="text" placeholder="검색어를 입력하세요" disabled>
+      <span class="input btn_field left search_icon"><i class="fa fa-search"></i></span>
+      <span class="input btn_field right search_input_submit"><i class="fa fa-search"></i></span>
+      <span class="input btn_field text_btn right search_input_reset"><i class="fa fa-times-circle"></i></span>
+    </form>
+  </div>
+  <div class="container main search_preview" ontouchstart="removeIOSRubberEffect($(this));" index="-1">
+    {{= recentSearchTemplate() }}
+  </div>
+</script>
+
+<script type="text/template" id="recentSearchTemplate">
+  <div class="recent_search">
+    <div class="recent_search_title">
+      <i class="fa fa-caret-right"></i>
+      인기 검색어
+    </div>
+    <ul class="recent_search_list">
+      {{= searchPreviewTemplate({keyword: "쿠션", type: "ask_deal", id: null}) }}
+      {{= searchPreviewTemplate({keyword: "겨울", type: "hash_tag", id: null}) }}
+      {{= searchPreviewTemplate({keyword: "촉촉", type: "hash_tag", id: null}) }}
+      {{= searchPreviewTemplate({keyword: "여행", type: "hash_tag", id: null}) }}
+      {{= searchPreviewTemplate({keyword: "남친선물", type: "hash_tag", id: null}) }}
+    </ul>
+  </div>
+  <div class="recent_search">
+    {{ var recent_search_list = $.cookie('recent_search_list') }}
+    {{ if (recent_search_list != null) { }}
+      <div class="recent_search_title">
+        <i class="fa fa-caret-right"></i> 최근 검색어
+        <span class="recent_search_reset" onclick="reset_recent_search();">&times; 삭제</span>
+      </div>
+      <ul class="recent_search_list">
+        {{ recent_search_list = recent_search_list.split(".") }}
+        {{ for (var i=0; i < recent_search_list.length; i++) { }}
+          {{ var search = JSON.parse(recent_search_list[i]) }}
+          {{ var keyword = search.keyword }}
+          {{ var type = search.type }}
+          {{= searchPreviewTemplate({keyword: keyword, type: type, id: null}) }}
+        {{ } }}
+      </ul>
+    {{ } }}
+  </div>
+</script>
+
+<script type="text/template" id="searchPreviewTemplate">
+  {{ if (type == "collection") { }}
+    <a href="{{= '/collections/' + id }}" class="search_preview_list" onclick="go_url('collection', {{= id }}); return false;">
+      <i class="search_preview_icon vaskit_icon {{= type }}"></i>
+      {{= unescape(keyword) }}
+    </a>
+  {{ } else { }}
+    <a href="{{= '/search?type=' + escape(type) + '&keyword=' + escape(keyword) }}" class="search_preview_list" onclick="go_url('search_result', {type: '{{=type}}', keyword: '{{=escape(keyword)}}'}); return false;">
+      <i class="search_preview_icon vaskit_icon {{= type }}"></i>{{= unescape(keyword) }}
+    </a>
+  {{ } }}
+</script>
+
+<script>
+  var searchTemplate = _.template($("#searchTemplate").html());
+  var recentSearchTemplate = _.template($("#recentSearchTemplate").html());
+  var searchPreviewTemplate = _.template($("#searchPreviewTemplate").html());
+
+  function search_input_init(target) {
+    var search_wrapper = target.parentsUntil(this, ".wrapper");
+    var search_preview_container = search_wrapper.find(".search_preview");
+    var search_input = target.find(".search_input");
+    var search_input_submit = target.find(".search_input_submit");
+    var search_input_reset = target.find(".search_input_reset");
+
+    search_input_submit.off("click").on("click", function(){ search_by_key() });
+    search_input_reset.off("click").on("click", function(){ search_keyword_reset() });
+    search_input.off("keydown keyup blur")
+                .on("keydown", function(e) {
+              		if (e.keyCode == '13') {
+              			e.preventDefault();
+                    $(this).blur();
+                    search_by_key();
+              		} else if (e.keyCode == '27') {
+              			e.preventDefault();
+              			search_keyword_reset();
+              		} else if (e.keyCode == '40') {
+              			e.preventDefault();
+              			navigate_by_key(true);
+              		} else if (e.keyCode == '38') {
+              			e.preventDefault();
+              			navigate_by_key(false);
+              		}
+              	}).on("keyup", function(e) {
+                  var keyword = $(this).val();
+                  if (keyword.length == 0) {
+                    search_input_reset.hide();
+                    search_input_submit.removeClass("ready");
+                    var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>검색어를 입력해주세요</span>";
+                    search_preview_container.html(empty_span);
+                  } else {
+                    search_input_reset.show();
+                    search_input_submit.addClass("ready");
+                    $.ajax({
+                      url: "/search/get_keyword",
+                      dataType: "json",
+                      type: "GET",
+                      data: {keyword: keyword},
+                      error: function(){
+                        return false;
+                      },
+                      success: function(data) {
+                        search_preview_container.attr("index", -1);
+                        search_preview_container.html("");
+
+                        if (data.is_empty_result) {
+                          if (keyword != ""){
+                            var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다</span>";
+                            search_preview_container.html(empty_span);
+                          };
+                        } else {
+                          $.each(data.collections, function(index, collection) {
+                            search_preview_container.append(searchPreviewTemplate({keyword:collection.name, type: 'collection', id: collection.id}));
+                          })
+                          $.each(data.hash_tags, function(index, hash_tag) {
+                            search_preview_container.append(searchPreviewTemplate({keyword:hash_tag.keyword, type: 'hash_tag', id: null}));
+                          });
+
+                          if (data.ask_deal) {
+                            search_preview_container.append(searchPreviewTemplate({keyword:keyword, type: 'ask_deal', id: null}));
+                          };
+
+                          if (data.brand) {
+                            search_preview_container.append(searchPreviewTemplate({keyword:keyword, type: 'brand', id: null}));
+                          };
+
+                          $.each(data.users, function(index, user) {
+                            search_preview_container.append(searchPreviewTemplate({keyword:user.string_id, type: 'user', id: null}));
+                          });
+
+                          search_preview_container.highlight(keyword);
+
+                          navigate_by_mouse();
+                        }
+                      },
+                      beforeSend: function() {
+                        var keys = [13, 27, 40, 39, 38, 37]
+                        if ($.inArray(e.keyCode, keys) != -1) return false;
+                      }
+                    });
+                  }
+                }).on("focus", function(){
+                  target.addClass("on");
+              	}).on("blur", function(){
+                  target.removeClass("on");
+                  if ($(this).val().length == 0) search_preview_container.html(recentSearchTemplate());
+                  $(this).attr("disabled",true);
+                }).attr("disabled",false).focus();
+
+    function search_by_key() {
+      var keyword = search_input.val();
+      var search_focus = search_preview_container.find(".search_preview_list.search_focus");
+      if (keyword == "" || keyword == undefined) {
+        notify("검색어를 입력해주세요");
+        target.click();
+      } else if ( search_focus.length == 1 ) {
+        search_focus.click();
+      } else {
+        var search_options = { type: "none", keyword: keyword };
+        go_url('search_result', search_options);
+      };
+    };
+
+    function search_keyword_reset() {
+      search_preview_container.html("").attr("index", -1);
+      search_input_reset.hide();
+  		search_input.val("");
+      target.click();
+  	};
+
+    function navigate_by_key(is_down) {
+      var search_results = search_preview_container.find(".search_preview_list");
+  		var search_result_length = search_results.length;
+      var search_result_height = search_results.outerHeight();
+  		var vp_height = search_preview_container.innerHeight();
+
+  		if (is_down) {
+        var search_focus_index = Number(search_preview_container.attr("index"));
+  			if (search_focus_index == search_result_length - 1) {
+  				search_preview_container.attr("index", 0);
+  				search_preview_container.scrollTop(0);
+  			} else {
+  				search_preview_container.attr("index", search_focus_index + 1);
+  			}
+        search_focus_index = Number(search_preview_container.attr("index"));
+  			search_results.removeClass("search_focus");
+  			search_results.eq(search_focus_index).addClass("search_focus");
+        var search_focus = search_preview_container.find(".search_preview_list.search_focus");
+  			var focus_bottom = search_result_height * (search_focus_index + 1);
+  			var vp_top = search_preview_container.scrollTop();
+  			if (focus_bottom > vp_top + vp_height) {
+  				search_preview_container.scrollTop(focus_bottom-vp_height);
+  			}
+  		} else {
+        var search_focus_index = Number(search_preview_container.attr("index"));
+  			if (search_focus_index == 0) {
+  				search_preview_container.attr("index", search_result_length - 1);
+  				search_preview_container.scrollTop(search_result_height * search_result_length);
+  			} else {
+          search_preview_container.attr("index", search_focus_index - 1);
+  			}
+        search_focus_index = Number(search_preview_container.attr("index"));
+  			search_results.removeClass("search_focus");
+  			search_results.eq(search_focus_index).addClass("search_focus");
+        var search_focus = search_preview_container.find(".search_preview_list.search_focus");
+  			var focus_top = search_result_height * search_focus_index;
+  			var vp_top = search_preview_container.scrollTop();
+  			if (focus_top < vp_top) {
+  				search_preview_container.scrollTop(focus_top);
+  			}
+  		}
+
+  		var focus_text = search_focus.text().replace(/(^\s*)|(\s*$)/g, "");
+  		search_input.val(focus_text);
+  	};
+
+    function navigate_by_mouse() {
+      var search_results = search_preview_container.find(".search_preview_list");
+      search_results.off("mouseover")
+                    .on("mouseover", function(e) {
+                      search_results.removeClass("search_focus");
+                      $(this).addClass("search_focus");
+                      search_preview_container.attr("index", $(this).index());
+                      var focus_text = $(this).text().replace(/(^\s*)|(\s*$)/g, "");
+                      search_input.val(focus_text);
+                    });
+    };
+  };
+</script>
+
+<script type="text/template" id="searchResultTemplate">
+  <div class="container top" ontouchmove="return false;">
+    <span class="header_title" onclick="$(this).scroll_to();">
+      <i class="search_preview_icon vaskit_icon {{= type }}"></i>{{= unescape(keyword) }} 검색결과</span>
+    <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+  </div>
+  {{= asksListTemplate({asks: asks, url: url}) }}
+</script>
+
+<script>
+  var searchResultTemplate = _.template($("#searchResultTemplate").html());
+
+  function show_search_result(search_options) {
+    var type = unescape(search_options.type);
+    var keyword = unescape(search_options.keyword);
+    var url = "/search";
+    $.ajax({
+            url: url,
+            dataType: "json",
+            type: "GET",
+            data: {type:type, keyword:keyword},
+            error: function(){
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data){
+              var html = searchResultTemplate({type:type, keyword:keyword, asks:data.asks, url:url});
+              create_wrapper(html);
+              save_recent_search(type, keyword);
+              $(".search_preview").html(recentSearchTemplate());
+            },
+            beforeSend: function(){
+              loadingStart();
+            },
+            complete: function(){
+              loadingEnd();
+            }
+    });
+
+    url = url + "?type="+encodeURIComponent(type)+"&keyword="+encodeURIComponent(keyword);
+    return url;
+  };
+
+  function save_recent_search(type, keyword) {
+    var recent_search_list = $.cookie('recent_search_list');
+    var search_array = recent_search_list == null ? new Array() : recent_search_list.split(".");
+
+    for (var i=0; i<search_array.length; i++) {
+      var search = search_array[i];
+      search = JSON.parse(search);
+      if (search.type == type && search.keyword == keyword) search_array.splice(i,1);
+    };
+    var this_search = JSON.stringify({
+      type: type,
+      keyword: keyword
+    });
+    search_array.push(this_search);
+    recent_search_list = search_array.join(".");
+    $.cookie('recent_search_list', recent_search_list, { expires : 30000, path : '/' });
+  };
+
+  function reset_recent_search() {
+    $.cookie('recent_search_list', null);
+    $(".search_preview").html(recentSearchTemplate());
+  };
+
+  function hide_search_result() {
+    remove_wrapper();
+  };
+</script>

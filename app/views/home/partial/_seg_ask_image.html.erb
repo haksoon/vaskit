@@ -1,0 +1,301 @@
+<script type="text/template" id="askImgViewTemplate">
+  <div class="img_layer">
+    <div class="inner left" onclick="back_button();">
+      <img class="ask_deal_image" src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" ontouchmove="return false;">
+      <div class="ask_deal_info" ontouchstart="removeIOSRubberEffect($(this));">
+        <div class="blank"><i class="fa left">&times;</i><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-up"></i></div>
+        <div class="ask ask_detail">
+          {{ if (ask.left_ask_deal.title != "" && ask.left_ask_deal.title != null) { }}
+            <div class="ask_table_row title">
+              <span class="ask_table_cell">{{= ask.left_ask_deal.title }}</span>
+            </div>
+          {{ } }}
+          {{ if (ask.left_ask_deal.brand != "" && ask.left_ask_deal.brand != null) { }}
+            <div class="ask_table_row brand">
+              <span class="ask_table_cell text_box_short">{{= ask.left_ask_deal.brand }}</span>
+            </div>
+          {{ } }}
+          {{ if (ask.left_ask_deal.price != null) { }}
+            <div class="ask_table_row price">
+              <span class="ask_table_cell text_box_short">{{= numberWithCommas(ask.left_ask_deal.price) }}원</span>
+            </div>
+          {{ } }}
+          {{ if (ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) { }}
+            <div class="ask_table_row link">
+              {{ var aLink = document.createElement("a") }}
+              {{ if (ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) { }}
+                {{ aLink.href = ask.left_ask_deal.link }}
+                <span class="ask_table_cell text_box_short"><a href="{{= aLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(aLink.host) }}</a></span>
+              {{ } else { }}
+                <span class="ask_table_cell text_box_short">{{= fieldWithBlank(aLink.host) }}</span>
+              {{ } }}
+            </div>
+          {{ } }}
+        </div>
+        <div class="comment">
+          <ul class="comment_list left">
+            <li class="comment_list_background left"></li>
+            {{ var left_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.left_ask_deal.id}) }}
+            {{ if (left_comments.length == 0) { }}
+              <li class="comment_blank">첫 댓글을 달아주세요!</li>
+            {{ } else { }}
+              <li class="comment_blank" style="display: none;">첫 댓글을 달아주세요!</li>
+              {{ for (var i=0; i < left_comments.length; i++) { }}
+                {{ var comment = left_comments[i] }}
+                {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === comment.id}).length == 0 ? false : true }}
+                {{= commentTemplate({ask: ask, comment: comment, already_like: already_like}) }}
+              {{ } }}
+            {{ } }}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="inner right next" onclick="back_button();">
+      <img class="ask_deal_image" src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" ontouchmove="return false;">
+      <div class="ask_deal_info" ontouchstart="removeIOSRubberEffect($(this));">
+        <div class="blank"><i class="fa right">&times;</i><i class="fa fa-angle-double-left"></i><i class="fa fa-angle-double-up"></i></div>
+        <div class="ask ask_detail">
+          {{ if (ask.right_ask_deal.title != "" && ask.right_ask_deal.title != null) { }}
+            <div class="ask_table_row title">
+              <span class="ask_table_cell">{{= ask.right_ask_deal.title }}</span>
+            </div>
+          {{ } }}
+          {{ if (ask.right_ask_deal.brand != "" && ask.right_ask_deal.brand != null) { }}
+            <div class="ask_table_row brand">
+              <span class="ask_table_cell text_box_short">{{= ask.right_ask_deal.brand }}</span>
+            </div>
+          {{ } }}
+          {{ if (ask.right_ask_deal.price != null) { }}
+            <div class="ask_table_row price">
+              <span class="ask_table_cell text_box_short">{{= numberWithCommas(ask.right_ask_deal.price) }}원</span>
+            </div>
+          {{ } }}
+          {{ if (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null) { }}
+            <div class="ask_table_row link">
+              {{ var bLink = document.createElement("a") }}
+              {{ if (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null) { }}
+                {{ bLink.href = ask.right_ask_deal.link }}
+                <span class="ask_table_cell text_box_short"><a href="{{= bLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(bLink.host) }}</a></span>
+              {{ } else { }}
+                <span class="ask_table_cell text_box_short">{{= fieldWithBlank(bLink.host) }}</span>
+              {{ } }}
+            </div>
+          {{ } }}
+        </div>
+        <div class="comment">
+          <ul class="comment_list right">
+            <li class="comment_list_background right"></li>
+            {{ var right_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.right_ask_deal.id}) }}
+            {{ if (right_comments.length == 0) { }}
+              <li class="comment_blank">첫 댓글을 달아주세요!</li>
+            {{ } else { }}
+              <li class="comment_blank" style="display: none;">첫 댓글을 달아주세요!</li>
+              {{ for (var i=0; i < right_comments.length; i++) { }}
+                {{ var comment = right_comments[i] }}
+                {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === comment.id}).length == 0 ? false : true }}
+                {{= commentTemplate({ask: ask, comment: comment, already_like: already_like}) }}
+              {{ } }}
+            {{ } }}
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="close_btn left" onclick="back_button();">
+      <span>&times;</span>
+      <span class="text_box_short">{{= ask.left_ask_deal.title }}</span>
+      <img src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" ontouchmove="return false;">
+    </div>
+    <div class="close_btn right" onclick="back_button();">
+      <img src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" ontouchmove="return false;">
+      <span class="text_box_short">{{= ask.right_ask_deal.title }}</span>
+      <span>&times;</span>
+    </div>
+  </div>
+</script>
+
+<script>
+  var askImgViewTemplate = _.template($("#askImgViewTemplate").html());
+
+  function show_ask_image(target) {
+    var ask_wrapper = target.parentsUntil(this, ".wrapper");
+    var img_layer = ask_wrapper.find(".img_layer");
+    var inner_left = img_layer.find(".inner.left");
+    var inner_right = img_layer.find(".inner.right");
+
+    var ask_deal_info = img_layer.find(".ask_deal_info");
+    ask_deal_info.clearQueue().scrollTop(0);
+
+    var is_left = target.hasClass("left") ? true : false;
+    if (is_left) {
+      img_layer.clearQueue().css({transform: "translateY(0%)", top: "0%", left: "0%"});
+    } else {
+      img_layer.clearQueue().css({transform: "translateY(0%)", top: "0%", left: "-100%"});
+    }
+
+     target.toggle_ask_image();
+  };
+
+  function hide_ask_image(target) {
+    var ask_wrapper = target.parentsUntil(this, ".wrapper");
+    var img_layer = ask_wrapper.find(".img_layer");
+    var html = img_layer.html();
+
+    img_layer.clearQueue().css({transform: "translateY(100%)"}).transitionEmpty(function(){
+      img_layer.html(html);
+    });
+  };
+
+  $.fn.toggle_ask_image = function() {
+    var ask_wrapper = $(this).parentsUntil(this, ".wrapper");
+    var img_layer = ask_wrapper.find(".img_layer");
+    var inner_left = img_layer.find(".inner.left");
+    var inner_right = img_layer.find(".inner.right");
+    var ask_deal_images = img_layer.find(".blank");
+    var ask_deal_info = img_layer.find(".ask_deal_info");
+    var close_btn = img_layer.find(".close_btn");
+
+    var comment_boxs = img_layer.find(".comment_box");
+    comment_boxs.each(function(){ $(this).attr("onclick", null); });
+
+    var mouseTarget, mouseStartX, mouseStartY, mouseEndX, mouseEndY; // Mouse/Touch event target
+    var screenTop, screenLeft, screenWidth, screenHeight;
+    var deltaX = 50, deltaY = 150;
+
+    ask_deal_images.bind("mousedown", mouseDownListener);
+    ask_deal_images.bind("touchstart", touchStartListener);
+    ask_deal_images.bind("touchmove", touchMoveListener);
+    ask_deal_images.bind("touchend", touchEndListener);
+    ask_deal_info.bind("scroll", scrollListener);
+
+    function scrollListener(e) {
+      var st = $(e.currentTarget).scrollTop();
+      if (st > 50) {
+        close_btn.addClass("visible");
+        ask_deal_images.addClass("visible");
+      } else {
+        close_btn.removeClass("visible");
+        ask_deal_images.removeClass("visible");
+      }
+    };
+
+    function start(e) {
+      screenTop = img_layer.offset().top;
+      screenLeft = img_layer.offset().left;
+      screenWidth = img_layer.width();
+      screenHeight = img_layer.height();
+      ask_deal_info.stop().animate({scrollTop: 0}, 250);
+    };
+
+    function moving(e) {
+      if (mouseEndY > mouseStartY) {
+        if (Math.abs(mouseEndY - mouseStartY) > Math.abs(mouseEndX - mouseStartX)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          var top = (mouseEndY - mouseStartY + screenTop) / screenHeight * 100;
+          img_layer.clearQueue().css({top: top+"%", left: (screenLeft / screenWidth) * 100 + "%"});
+        }
+      }
+      if (Math.abs(mouseEndX - mouseStartX) > 0) {
+        if (Math.abs(mouseEndY - mouseStartY) < Math.abs(mouseEndX - mouseStartX)) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          var left = (mouseEndX - mouseStartX + screenLeft) / screenWidth * 100;
+          if (left < 0 && left > -100) img_layer.clearQueue().css({top: 0, left: left+"%"});
+        }
+      }
+    };
+
+    function end(e) {
+      if (mouseEndY - mouseStartY > deltaY) {
+        e.preventDefault();
+        back_button();
+      } else {
+        img_layer.clearQueue().animate({top: "0%"}, 100);
+        if (Math.abs(mouseEndX - mouseStartX) > deltaX) {
+          if (mouseStartX - mouseEndX > deltaX) {
+            img_layer.stop().animate({top: "0%", left: "-100%"}, 250);
+          } else if (mouseEndX - mouseStartX > deltaX) {
+            img_layer.stop().animate({top: "0%", left: "0%"}, 250);
+          }
+        } else {
+          img_layer.stop().animate({top: "0%", left: (screenLeft / screenWidth) * 100 + "%"},250);
+        }
+      }
+    };
+
+    function mouseDownListener(e){
+      e.preventDefault();
+      mouseTarget = $(e.currentTarget);
+      mouseStartX = mouseEndX = e.pageX;
+      mouseStartY = mouseEndX = e.pageY;
+
+      // unbind and bind mouse events to prevent repeated binding
+      $(document).unbind("mousemove", mouseMoveListener);
+      $(document).unbind("mouseup", mouseUpListener);
+      $(document).bind("mousemove", mouseMoveListener);
+      $(document).bind("mouseup", mouseUpListener);
+      // unbind touch events
+      mouseTarget.unbind("touchstart", touchStartListener);
+      mouseTarget.unbind("touchmove", touchMoveListener);
+      mouseTarget.unbind("touchend", touchEndListener);
+
+      // Custom Code
+      start(e);
+    };
+
+    function mouseMoveListener(e){
+      e.preventDefault();
+      mouseEndX = e.pageX;
+      mouseEndY = e.pageY;
+
+      // Custom Code
+      moving(e);
+    };
+
+    function mouseUpListener(e){
+      e.preventDefault();
+      window.event.cancelBubble = true;
+
+      // unbind mouse events
+      $(document).unbind("mousemove", mouseMoveListener);
+      $(document).unbind("mouseup", mouseUpListener);
+      // bind touch events
+      mouseTarget.bind("touchstart", touchStartListener);
+      mouseTarget.bind("touchmove", touchMoveListener);
+      mouseTarget.bind("touchend", touchEndListener);
+
+      // Custom Code
+      end(e);
+    };
+
+    function touchStartListener(e){
+      // e.preventDefault();
+      mouseTarget = $(e.currentTarget);
+      mouseStartX = mouseEndX = e.originalEvent.touches[0].clientX;
+      mouseStartY = mouseEndY = e.originalEvent.touches[0].clientY;
+
+      // unbind mouse events to prevent repeated binding
+      mouseTarget.unbind("mousedown", mouseDownListener);
+
+      // Custom Code
+      start(e);
+    };
+
+    function touchMoveListener(e){
+      // e.preventDefault();
+      mouseEndX = e.originalEvent.touches[0].clientX;
+      mouseEndY = e.originalEvent.touches[0].clientY;
+
+      // Custom Code
+      moving(e);
+    };
+
+    function touchEndListener(e){
+      // e.preventDefault();
+
+      // Custom Code
+      end(e);
+    };
+
+  };
+</script>

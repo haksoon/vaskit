@@ -1,0 +1,10 @@
+<script>
+  $(window).ready(function(){
+    <% if current_user %>
+      go_seg(4);
+      go_url('user_history', '<%= @type %>');
+    <% else %>
+      go_url('landing');
+    <% end %>
+  });
+</script>

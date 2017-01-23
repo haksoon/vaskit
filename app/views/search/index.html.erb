@@ -1,0 +1,11 @@
+<script>
+  $(window).ready(function(){
+    go_seg(2);
+    <% if @type %>
+      var type = "<%= @type %>";
+      var keyword = "<%= raw @keyword %>";
+      var search_options = { type: type, keyword: keyword };
+      go_url('search_result', search_options);
+    <% end %>
+  });
+</script>

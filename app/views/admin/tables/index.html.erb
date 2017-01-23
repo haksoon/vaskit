@@ -1,0 +1,100 @@
+<div style="padding:10px;">
+	<select id="table_setting" style="width:100%; height:40px; line-height:40px; background-color:#fff; padding:0 5px; margin-top:10px;">
+		<option value="" disabled="true" selected="selected">조회할 DB를 선택하세요</option>
+    <% @tables.each do |table| %>
+      <option value="<%=table%>"><%=table%></option>
+    <% end %>
+  </select>
+</div>
+
+<div style="padding:10px;">
+	<% if @records.blank?%>
+		<p style="margin:0 auto; padding:150px 0; width:100%; text-align:center; font-size:13px;">데이터가 없습니다</p>
+	<% else %>
+		<h2 style="margin:0 0 10px; padding:0 5px;"><i class="fa fa-check"></i> <%= @tableModel.name %></h2>
+		<div style="overflow:auto; -webkit-overflow-scrolling:touch;">
+			<table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center;">
+			  <thead>
+			    <tr style="height:40px; background-color:#998674; color:#fff;">
+			      <% @record_names.each do |name| %>
+			      	<th><%=name%></th>
+			      <% end %>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    <% @records.each do |record| %>
+						<tr>
+							<% @record_names.each do |name| %>
+								<% if record[name].class == ActiveSupport::TimeWithZone %>
+									<td><%=record[name].to_s(:dot_colon_datetime) %></td>
+								<% else %>
+									<td><%=record[name]%></td>
+								<% end %>
+					    <% end %>
+		       	</tr>
+			    <% end %>
+			  </tbody>
+			</table>
+		</div>
+		<div style="margin-top:10px; text-align:center;">
+			<a href="#" onclick="navigate_page(false); return false;" class="navigate_btn" style="float: left;"><i class="fa fa-angle-double-left"></i> 이전</a>
+			<select id="table_page" style="width:45%; height:40px; line-height:40px; background-color:#fff; padding:0 10px; direction:rtl; border-radius:0;">
+				<% 1.step @record_count do |r| %>
+					<option value="<%=r%>"><%=r%></option>
+				<% end %>
+			</select>
+			<a href="#" onclick="navigate_page(true); return false;" class="navigate_btn" style="float: right;">다음 <i class="fa fa-angle-double-right"></i></a>
+		</div>
+	<% end %>
+</div>
+<style>
+	.navigate_btn {
+		display: block;
+		width: 25%;
+		height: 40px;
+		line-height: 40px;
+		text-align: center;
+		background-color: #dbdbdb;
+		color: #fff;
+		font-size: 13px;
+	}
+</style>
+<script>
+	$("#table_setting").on("change",function(){
+		$(".loading").show();
+		document.location.assign("/admin/tables/" + $(this).val() + "/?page=1");
+	});
+
+	if (document.location.search != "") {
+    var currentPage = Number(document.location.search.replace("?page=",""));
+    $("#table_page option[value="+currentPage+"]").attr("selected","selected");
+  }
+
+	$("#table_page").on("change",function(){
+		$(".loading").show();
+		document.location.search = "?page=" + $(this).val();
+	});
+
+	function navigate_page(is_next) {
+		var table_name = document.location.pathname.replace("/admin/tables/","");
+		var currentPage = Number(document.location.search.replace("?page=",""));
+		var nextPage;
+
+		$(".loading").show();
+
+		if (currentPage == 1 && !is_next) {
+			alert('첫 페이지입니다');
+			$(".loading").hide();
+			return false;
+		} else if (currentPage == $("#table_page option").length && is_next) {
+			alert('마지막 페이지입니다');
+			$(".loading").hide();
+			return false;
+		} else if (is_next) {
+			nextPage = currentPage += 1;
+		} else {
+			nextPage = currentPage -= 1;
+		}
+		document.location.assign("/admin/tables/" + table_name + "?page=" + nextPage);
+	}
+</script>

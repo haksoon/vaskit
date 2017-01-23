@@ -1,0 +1,374 @@
+<script type="text/template" id="myPageTemplate">
+  <div class="container top" ontouchmove="return false;">
+    <span id="user_tab_profile" class="user_tab on" onclick="open_user_profile();">내 정보</span>
+    <span id="user_tab_alarm" class="user_tab" onclick="open_user_alarms();">내 소식</span>
+    <span id="user_tab_active" class="user_tab_active"></span>
+  </div>
+  <div class="container main">
+    <div id="user_profile" class="inner" ontouchstart="removeIOSRubberEffect($(this));"></div>
+    <div id="user_alarm" class="inner next"></div>
+  </div>
+</script>
+
+<script>
+  var myPageTemplate = _.template($("#myPageTemplate").html());
+
+  function open_user_profile() {
+    if ($("#user_tab_profile").hasClass("on")) {
+      $("#user_profile").animate({scrollTop:0},250);
+      user_profile_on();
+    } else {
+      $("#user_profile").removeClass("prev");
+      $("#user_alarm").addClass("next");
+      $("#user_tab_profile").addClass("on");
+      $("#user_tab_alarm").removeClass("on");
+      $("#user_tab_active").removeClass("right");
+    };
+  };
+
+  function open_user_alarms() {
+    if ($("#user_tab_alarm").hasClass("on")) {
+      $("#user_alarm").animate({scrollTop:0},250);
+      user_alarms_on();
+    } else {
+      $("#user_profile").addClass("prev");
+      $("#user_alarm").removeClass("next");
+      $("#user_tab_profile").removeClass("on");
+      $("#user_tab_alarm").addClass("on");
+      $("#user_tab_active").addClass("right");
+    };
+  };
+</script>
+
+<script type="text/template" id="userProfileTemplate">
+  <div class="profile_div">
+    <img id="user_profile_pic" class="profile_pic" src="{{= get_avatar(user) }}">
+    <a class="profile_edit_btn" href="/users/settings/edit_profile" onclick="go_url('edit_profile'); return false;"><i class="fa fa-camera"></i></a>
+  </div>
+  <div class="profile_title">
+    <i class="vaskit_icon user_icon"></i>
+    <span class="user_id">{{=user.string_id}}</span>'s profile
+    <a class="setting_btn" href="/users/settings" onclick="go_url('settings'); return false;"><i class="vaskit_icon setting_icon"></i> 설정</a>
+  </div>
+  <div class="my_hisotry_div clearfix">
+    <a class="my_hisotry_btn my_asks_in_progress" href="/users/history?type=my_asks_in_progress" onclick="go_url('user_history', 'my_asks_in_progress'); return false;">
+      <span class="my_history_type"><i class="fa fa-caret-right"></i> 진행중인 질문목록 전체 보기</span>
+      <span class="my_history_count">{{=my_asks_in_progress_count}} 개</span>
+    </a>
+    <div id="my_asks_in_progress">
+      <div class="no_result"><p class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></p></div>
+    </div>
+  </div>
+  <div class="my_hisotry_div clearfix">
+    <a class="my_hisotry_btn my_asks" href="/users/history?type=my_asks" onclick="go_url('user_history', 'my_asks'); return false;">
+      <span class="my_history_type"><i class="fa fa-caret-right"></i> 작성한 질문</span>
+      <span class="my_history_count">{{=my_asks_count}} 개</span>
+    </a>
+    <a class="my_hisotry_btn my_likes" href="/users/history?type=my_likes" onclick="go_url('user_history', 'my_likes'); return false;">
+      <span class="my_history_type"><i class="fa fa-caret-right"></i> 공감한 질문</span>
+      <span class="my_history_count">{{=my_likes_count}} 개</span>
+    </a>
+    <a class="my_hisotry_btn my_votes" href="/users/history?type=my_votes" onclick="go_url('user_history', 'my_votes'); return false;">
+      <span class="my_history_type"><i class="fa fa-caret-right"></i> 참여한 투표</span>
+      <span class="my_history_count">{{=my_votes_count}} 개</span>
+    </a>
+    <a class="my_hisotry_btn my_comments" href="/users/history?type=my_comments" onclick="go_url('user_history', 'my_comments'); return false;">
+      <span class="my_history_type"><i class="fa fa-caret-right"></i> 제시한 의견</span>
+      <span class="my_history_count">{{=my_comments_count}} 개</span>
+    </a>
+  </div>
+</script>
+
+<script>
+  var userProfileTemplate = _.template($("#userProfileTemplate").html());
+
+  function user_profile_on() {
+    $.ajax({
+        url: "/users/get_user_profile.json",
+        dataType: 'json',
+        type: "GET",
+        error: function(){
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+        },
+        success: function(data){
+          current_user = data.current_user;
+          if (current_user == null) {
+            $("#user_profile").html("");
+          } else {
+            $("#user_profile").html(userProfileTemplate({
+              user: current_user,
+              my_asks_in_progress_count: data.my_asks_in_progress_count,
+              my_asks_count: data.my_asks_count,
+              my_likes_count: data.my_likes_count,
+              my_votes_count: data.my_votes_count,
+              my_comments_count: data.my_comments_count
+            }));
+            get_my_asks_in_progress();
+          }
+        }
+    });
+  };
+
+  function get_my_asks_in_progress() {
+    $.ajax({
+        url: "/users/get_my_asks.json",
+        dataType: 'json',
+        type: "GET",
+        error: function(){
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+        },
+        success: function(data){
+          var my_ask = data.my_ask[0];
+          if (my_ask != null) {
+            // for (var i=0; i < data.my_asks.length; i++) {
+            //   var my_ask = data.my_asks[i];
+              my_ask.ask_likes = [];
+              my_ask.votes = [];
+              my_ask.user = current_user;
+              $("#my_asks_in_progress").html(askThumbnailTemplate({ask: my_ask}));
+            // };
+          } else {
+            var empty_html = "<div class='no_result'><p class='align_middle'><i class='fa fa-search'></i> 현재 진행중인 질문 목록이 없습니다 <a id='new_ask_btn' class='new_ask_btn' href='/asks/new'>질문 작성하러 가기 <i class='fa fa-forward'></i></a></p></div>";
+            $("#my_asks_in_progress").html(empty_html);
+            $("#new_ask_btn").on("click", function(){ go_url('ask_form'); return false; });
+          }
+        },
+        beforeSend: function(){
+          var loading_html = "<div class='no_result'><p class='align_middle'>불러오는 중 <i class='fa fa-spinner fa-spin'></i></p></div>";
+          $("#my_asks_in_progress").html(loading_html);
+        }
+    });
+  };
+</script>
+
+<script type="text/template" id="userHistoryTemplate">
+  <div class="container top" ontouchmove="return false;">
+    <span class="header_title" onclick="$(this).scroll_to();">
+      {{ if (type == "my_asks_in_progress") { }}
+        진행중인 질문
+  		{{ } else if (type == "my_asks") { }}
+        작성한 질문
+  	  {{ } else if (type == "my_likes") { }}
+        공감한 질문
+  		{{ } else if (type == "my_votes") { }}
+        참여한 투표
+      {{ } else if (type == "my_comments") { }}
+        제시한 의견
+  		{{ } }}
+    </span>
+    <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+  </div>
+  {{= asksListTemplate({asks: asks, url: url}) }}
+</script>
+
+<script>
+  var userHistoryTemplate = _.template($("#userHistoryTemplate").html());
+
+  function show_user_history(type) {
+    var url = '/users/history';
+    $.ajax({
+            url: url,
+            dataType: "json",
+            type: "GET",
+            data: {type: type},
+            error: function(){
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data){
+              var html = userHistoryTemplate({type:type, asks:data.asks, url:url});
+              create_wrapper(html);
+            },
+            beforeSend: function(){
+              loadingStart();
+            },
+            complete: function(){
+              loadingEnd();
+            }
+    });
+    url = url + '?type='+encodeURIComponent(type);
+    return url;
+  };
+
+  function hide_user_history() {
+    remove_wrapper();
+  };
+</script>
+
+<script type="text/template" id="userAlarmTemplate">
+  {{ if (alarms.length == 0) { }}
+    <div class="no_result" ontouchstart="removeIOSRubberEffect($(this));"><span class="align_middle">새로운 알림피드가 없습니다</span></div>
+  {{ } else { }}
+    <div id="alarm_list" class="alarm_list" ontouchstart="removeIOSRubberEffect($(this));">
+    {{ for (var i=0; i < alarms.length; i++) { }}
+      {{ var alarm = alarms[i] }}
+      {{ if (alarm.alarm_type.match("vote_")) { }}
+				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
+          <img class="alarm_user_profile" src="{{= get_avatar(alarm.send_user_id) }}" alt="">
+					<i class="fa fa-check-circle-o"></i>&nbsp;회원님의 질문에 <span class="alarm_highlight">{{= alarm.alarm_type.replace("vote_", "" )}}명</span>이 투표했습니다. 중간점검 해보세요!
+					<div class="alarm_imgs">
+						<img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+						<img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+					</div>
+					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
+				</a>
+			{{ } else if (alarm.alarm_type.match("like_ask_")) { }}
+				{{ var ask_like_count = alarm.alarm_type.replace("like_ask_","") }}
+				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
+          <img class="alarm_user_profile" src="{{= get_avatar(alarm.send_user_id) }}" alt="">
+					{{ if (ask_like_count == 1) { }}
+						<i class="fa fa-heart-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님이 회원님의 질문에 공감합니다.
+					{{ } else { }}
+						<i class="fa fa-heart-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님 외 <span class="alarm_highlight">{{= ask_like_count - 1 }}명</span>이 회원님의 질문에 공감합니다.
+					{{ } }}
+					<div class="alarm_imgs">
+						<img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+						<img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+					</div>
+					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
+				</a>
+			{{ } else if (alarm.alarm_type.match("like_comment_")) { }}
+				{{ var comment_like_count = alarm.alarm_type.replace("like_comment_","") }}
+				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
+          <img class="alarm_user_profile" src="{{= get_avatar(alarm.send_user_id) }}" alt="">
+					{{ if (comment_like_count == 1) { }}
+						<i class="fa fa-heart-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님이 회원님의 의견을 좋아합니다.
+					{{ } else { }}
+						<i class="fa fa-heart-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님 외 <span class="alarm_highlight">{{= comment_like_count - 1 }}명</span>이 회원님의 의견을 좋아합니다.
+					{{ } }}
+					<div class="alarm_imgs">
+						<img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+						<img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+					</div>
+					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
+				</a>
+			{{ } else if (alarm.alarm_type.match("reply_comment_")) { }}
+				{{ var reply_comment_count = alarm.alarm_type.replace("reply_comment_","") }}
+				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
+          <img class="alarm_user_profile" src="{{= get_avatar(alarm.send_user_id) }}" alt="">
+					{{ if (reply_comment_count == 1) { }}
+						<i class="fa fa-comments-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님이 회원님의 의견에 댓글을 남겼습니다.
+					{{ } else { }}
+						<i class="fa fa-comments-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님 외 <span class="alarm_highlight">{{= reply_comment_count - 1 }}명</span>이 회원님의 의견에 댓글을 남겼습니다.
+					{{ } }}
+					<div class="alarm_imgs">
+						<img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+						<img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+					</div>
+					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
+				</a>
+			{{ } else if (alarm.alarm_type.match("reply_sub_comment_")) { }}
+			  {{ var reply_sub_comment_count = alarm.alarm_type.replace("reply_sub_comment_","") }}
+			  <a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
+          <img class="alarm_user_profile" src="{{= get_avatar(alarm.send_user_id) }}" alt="">
+				  {{ if (reply_sub_comment_count == 1) { }}
+				    <i class="fa fa-comment-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님도 <span class="alarm_highlight">{{=alarm.comment_owner_user.string_id}}</span>님의 의견에 댓글을 남겼습니다.
+				  {{ } else { }}
+				    <i class="fa fa-comment-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님 외 <span class="alarm_highlight">{{= reply_sub_comment_count - 1 }}명</span>도 <span class="alarm_highlight">{{=alarm.comment_owner_user.string_id}}</span>님의 의견에 댓글을 남겼습니다.
+				  {{ } }}
+					<div class="alarm_imgs">
+						<img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+						<img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+					</div>
+					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
+			  </a>
+			{{ } else if (alarm.alarm_type.match("sub_comment_")) { }}
+				{{ var sub_comment_count = alarm.alarm_type.replace("sub_comment_","") }}
+				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
+          <img class="alarm_user_profile" src="{{= get_avatar(alarm.send_user_id) }}" alt="">
+					{{ if (sub_comment_count == 1) { }}
+						<i class="fa fa-comment-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님도 <span class="alarm_highlight">{{=alarm.ask_owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
+					{{ } else { }}
+						<i class="fa fa-comment-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님 외 <span class="alarm_highlight">{{= sub_comment_count - 1 }}명</span>도 <span class="alarm_highlight">{{=alarm.ask_owner_user.string_id}}</span>님의 질문에 의견을 남겼습니다.
+					{{ } }}
+					<div class="alarm_imgs">
+						<img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+						<img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+					</div>
+					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
+				</a>
+			{{ } else if (alarm.alarm_type.match("comment_")) { }}
+				{{ var comment_count = alarm.alarm_type.replace("comment_","") }}
+				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
+          <img class="alarm_user_profile" src="{{= get_avatar(alarm.send_user_id) }}" alt="">
+					{{ if (comment_count == 1) { }}
+						<i class="fa fa-send-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님이 회원님의 질문에 의견을 남겼습니다.
+					{{ } else { }}
+						<i class="fa fa-send-o"></i>&nbsp;<span class="alarm_highlight">{{=alarm.send_user.string_id}}</span>님 외 <span class="alarm_highlight">{{= comment_count - 1 }}명</span>이 회원님의 질문에 의견을 남겼습니다.
+					{{ } }}
+					<div class="alarm_imgs">
+						<img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+						<img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
+					</div>
+					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
+				</a>
+			{{ } }}
+    {{ } }}
+    </div>
+    <div class="alarm_feed_title" ontouchmove="return false;">
+      <i class="fa fa-caret-right"></i> 알림피드 <span id="alarm_feed_count" class="alarm_feed_count">{{= alarm_count == 0 ? "-" : alarm_count }}</span>
+      <div id="alarm_read_all" class="alarm_read_all {{= alarm_count == 0 ? '' : 'on' }}">
+        <span>다른 이들과 소통해보세요!</span><br>
+        <span class="alarm_read_all_btn" onclick="alarm_read_all();"><i class="fa fa-check"></i> 모두 읽음으로 표시</span>
+      </div>
+    </div>
+  {{ } }}
+</script>
+
+<script>
+  var userAlarmTemplate = _.template($("#userAlarmTemplate").html());
+
+  function user_alarms_on() {
+    $.ajax({
+		    url: "/users/get_user_alarms.json",
+        dataType: "json",
+        type: "GET",
+        error: function(){
+          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+        },
+		    success: function(data){
+          if (data.alarms == null) {
+            $("#user_alarm").html("");
+          } else {
+            $("#user_alarm").html(userAlarmTemplate({alarms: data.alarms, alarm_count: data.alarm_count}));
+          }
+        }
+    });
+  };
+
+  function alarm_read(target) {
+    var ask_id = Number(target.attr("ask-id"));
+    var alarm_count = parseInt($("#alarm_feed_count").html());
+    var all_alarm_items = $("#alarm_list").find(".alarm_ask_"+ask_id);
+    var alarm_count_decrease = all_alarm_items.length;
+    if (target.hasClass("new")) {
+      if (alarm_count > alarm_count_decrease) {
+        $("#alarm_feed_count").html(alarm_count - alarm_count_decrease);
+      } else {
+        $("#my_badge").removeClass("on");
+        $("#alarm_read_all").removeClass("on");
+        $("#alarm_feed_count").html("-");
+      }
+      all_alarm_items.removeClass("new");
+    }
+    go_url('ask', ask_id);
+  };
+
+  function alarm_read_all() {
+    $.ajax({
+            url: "/alarms.json",
+            dataType: "json",
+            type: "GET",
+            error: function(){
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+    		    success: function(data){
+              if (data.status == "success") {
+                $("#alarm_list").find(".alarm_item").removeClass("new");
+                $("#my_badge").removeClass("on");
+                $("#alarm_read_all").removeClass("on");
+                $("#alarm_feed_count").html("-");
+              }
+            }
+    });
+  };
+</script>

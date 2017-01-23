@@ -1,11 +1,13 @@
 class PreviewImage < ActiveRecord::Base
 
-  has_attached_file :image, :styles => { :crop => "1024>x" }, :processors => [:cropper],
-                    :url  => "/assets/preview_images/:id/:style/:basename.:extension",
-                    :path => ":rails_root/public/assets/preview_images/:id/:style/:basename.:extension",
-                    :default_url => "/images/custom/card_image_preview.png"
-  validates_attachment_size :image, :less_than => 20.megabytes
-  validates_attachment_content_type :image, :content_type => ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
+  has_attached_file :image,
+                    styles: { square: "500x500#", crop: "1024x1024>" },
+                    processors: [:cropper],
+                    url: "/assets/preview_images/:id/:style/:basename.:extension",
+                    path: ":rails_root/public/assets/preview_images/:id/:style/:basename.:extension",
+                    default_url: "/images/custom/card_image_preview.png"
+  validates_attachment_size :image, less_than: 20.megabytes
+  validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
   attr_accessor :crop_x, :crop_y, :crop_w, :crop_h
 
   before_create :rename_file
@@ -22,7 +24,7 @@ class PreviewImage < ActiveRecord::Base
   end
 
   def reprocess_image
-    image.reprocess!
+    image.reprocess! :square
   end
 
 end

@@ -1,0 +1,234 @@
+<div style="padding:10px;">
+  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 상단 고정 게시물 설정</h2>
+
+  <select id="rank_ask_category" style="width:100%; height:40px; line-height:40px; background-color:#fff; padding:0 10px;">
+    <option value="">전체</option>
+    <optgroup label="개별 카테고리">
+      <% @categories.each do |category| %>
+        <option value="<%=category.id%>"><%=category.name%></option>
+      <% end %>
+    </optgroup>
+  </select>
+
+  <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center; margin-top:10px;">
+    <thead>
+      <tr style="height:40px; background-color:#998674; color:#fff;">
+        <th>순위</th>
+        <th>내용</th>
+        <th>사진1</th>
+        <th>사진2</th>
+        <th>삭제</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @rank_asks.blank? %>
+        <tr>
+          <td colspan="5" style="height:120px;">설정된 내용이 없습니다</td>
+        </tr>
+      <% else %>
+        <% @rank_asks.each do |rank_ask| %>
+          <% ask = rank_ask.ask %>
+          <% if ask %>
+            <tr>
+              <td><%= rank_ask.ranking %></td>
+              <td><%= ask.message %></td>
+              <td><img src="<%= ask.left_ask_deal.image.url(:normal) %>" style="width:60px;" onerror="imgError(this);"/></td>
+              <td><img src="<%= ask.right_ask_deal.image.url(:normal) %>" style="width:60px;" onerror="imgError(this);"/></td>
+              <td><a href="#" onclick="delete_rank_ask(<%=rank_ask.id%>); return false;">삭제</a></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div style="position:relative;">
+    <span class="rank_input_icon">1</span>
+    <input id="rank_ask_input_1" class="rank_input" type="number" name="point" placeholder="1순위로 설정할 ask id를 입력하세요" />
+    <span class="rank_input_icon right_icon" onclick="submit_rank_ask(1, '<%= @category.id if @category%>'); return false;">SAVE <i class="fa fa-save"></i></span>
+  </div>
+  <div style="position:relative;">
+    <span class="rank_input_icon">2</span>
+    <input id="rank_ask_input_2" class="rank_input" type="number" name="point" placeholder="2순위로 설정할 ask id를 입력하세요" />
+    <span class="rank_input_icon right_icon" onclick="submit_rank_ask(2, '<%= @category.id if @category%>'); return false;">SAVE <i class="fa fa-save"></i></span>
+  </div>
+  <div style="position:relative;">
+    <span class="rank_input_icon">3</span>
+    <input id="rank_ask_input_3" class="rank_input" type="number" name="point" placeholder="3순위로 설정할 ask id를 입력하세요" />
+    <span class="rank_input_icon right_icon" onclick="submit_rank_ask(3, '<%= @category.id if @category%>'); return false;">SAVE <i class="fa fa-save"></i></span>
+  </div>
+
+  <p style="margin:30px 0 10px; padding:0 5px;"><i class="fa fa-info-circle"></i> 최근 게시물</p>
+  <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center; margin-top:10px;">
+    <thead>
+      <tr style="height:40px; background-color:#998674; color:#fff;">
+        <th>id</th>
+        <th>내용</th>
+        <th>사진1</th>
+        <th>사진2</th>
+      </tr>
+    </thead>
+    <tbody id="recent_asks">
+      <% if @asks.blank? %>
+        <tr>
+          <td colspan="5" style="height:120px;">내용이 없습니다</td>
+        </tr>
+      <% else %>
+        <% @asks.each do |ask| %>
+            <tr>
+              <td><%= ask.id %></td>
+              <td><%= ask.message %></td>
+              <td><img src="<%= ask.left_ask_deal.image.url(:normal) %>" style="width:60px;" onerror="imgError(this);"/></td>
+              <td><img src="<%= ask.right_ask_deal.image.url(:normal) %>" style="width:60px;" onerror="imgError(this);"/></td>
+            </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+  <a href="#" onclick="load_more_asks(); return false;" style="display:block; width:100%; height:50px; line-height:50px; text-align:center; color:#fff; background-color:#ffe4a9; margin-top:10px; font-size:13px;">더 불러오기</a>
+</div>
+
+<script type="text/template" id="more-asks-template">
+  {{ for (var i=0; i < asks.length; i++) { }}
+  {{ var ask = asks[i] }}
+    <tr>
+      <td>{{= ask.id }}</td>
+      <td>{{= ask.message }}</td>
+      <td><img src="{{= ask.left_ask_deal.image }}.url(:normal)" style="width:60px;" onerror="imgError(this);"/></td>
+      <td><img src="{{= ask.right_ask_deal.image }}.url(:normal)" style="width:60px;" onerror="imgError(this);"/></td>
+    </tr>
+  {{ } }}
+</script>
+
+<style>
+  .rank_input_icon {
+    position: absolute;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+  	box-sizing: border-box;
+    text-align: center;
+    line-height: 40px;
+    color: #666;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #f4f4f4;
+    border: 1px solid #dbdbdb;
+  }
+  .rank_input_icon.right_icon {
+    right:0px;
+    background-color: #f18b33;
+    color:#fff;
+    width: 60px;
+    font-size: 13px;
+    border-left:none;
+    cursor:pointer;
+  }
+  .rank_input {
+    display:block;
+    width:100%;
+    height:40px;
+    margin:10px 0;
+    line-height:40px;
+    padding:0 70px 0 50px;
+    -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+    border:1px solid #dbdbdb;
+    color:#666;
+    font-size:13px;
+    -webkit-appearance:none;
+    border-radius:0;
+  }
+</style>
+
+<script>
+  if (document.location.search == "") {
+    $("#rank_ask_category option").eq(0).attr("selected","selected");
+  } else {
+    var category_id = document.location.search.replace("?category_id=","");
+    $("#rank_ask_category option[value="+category_id+"]").attr("selected","selected");
+  }
+
+  $("#rank_ask_category").on("change",function(){
+    $(".loading").show();
+    if ($(this).val() == "") {
+      document.location.assign("/admin/rank_asks");
+    } else {
+      document.location.assign("/admin/rank_asks?category_id=" + $(this).val());
+    }
+  })
+
+  var currentPage = 1;
+  var moreAsksTemplate = _.template($("#more-asks-template").html());
+  function load_more_asks() {
+    var category_id = $("#rank_ask_category").val();
+    currentPage += 1;
+    $.ajax({
+	        url: "/admin/rank_asks.json",
+	        type: 'GET',
+	        data: {'page': currentPage, 'category_id': category_id },
+	        dataType: 'json',
+	        error: function(){
+	          return false;
+	        },
+	        success: function(data){
+            $("#recent_asks").append(moreAsksTemplate({asks:data.asks}));
+	        },
+	        beforeSend: function(){
+            $(".loading").show();
+	        },
+	        complete: function(){
+            $(".loading").hide();
+	        }
+		});
+  }
+
+	function submit_rank_ask(ranking, category_id){
+    var ask_id = $("#rank_ask_input_"+ranking).val();
+		$.ajax({
+	        url: "/admin/rank_asks.json",
+	        type: 'POST',
+	        data: {'ask_id': ask_id, 'ranking': ranking, 'category_id': category_id },
+	        dataType: 'json',
+	        error: function(){
+	          return false;
+	        },
+	        success: function(data){
+            if (data.status == "success") {
+              location.reload();
+            } else {
+              alert("없는 Ask id입니다\n다시 입력하세요");
+              $("#rank_ask_input_"+ranking).val("").focus();
+            }
+	        },
+	        beforeSend: function(){
+            $(".loading").show();
+	        },
+	        complete: function(){
+            $(".loading").hide();
+	        }
+		});
+	}
+
+	function delete_rank_ask(rank_ask_id){
+    if (confirm("정말로 삭제하시겠어요?")) {
+      $.ajax({
+            url: "/admin/rank_asks/"+rank_ask_id+".json",
+            type: 'DELETE',
+            dataType: 'json',
+            error: function(){
+              return false;
+            },
+            success: function(data){
+              location.reload();
+            },
+            beforeSend: function(){
+              $(".loading").show();
+            },
+            complete: function(){
+              $(".loading").hide();
+            }
+          });
+    }
+	}
+</script>

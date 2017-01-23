@@ -1,0 +1,618 @@
+<script type="text/template" id="landingTemplate">
+  <div id="landing_page" class="wrapper main">
+    <div class="container main landing" ontouchstart="removeIOSRubberEffect($(this));">
+      <div class="landing_background">
+        <div class="landing_description">
+          <div class="landing_description_seg">
+            <span>Let's VASKIT!</span>
+            <span>바로 지금 가입하세요!</span>
+            <span>꼼꼼한 소비자들의 깐깐한 선택</span>
+            <span>#둘중에뭐사지? #혼자고민고민하지마</span>
+          </div>
+        </div>
+      </div>
+      <div class="login_btn_area">
+        <a class="login_btn facebook" href="https://www.facebook.com/dialog/oauth?client_id=<%=Facebook::CONFIG['app_id']%>&redirect_uri=<%=CONFIG['host']%>/users/facebook&scope=email,public_profile,user_birthday" onclick="login_with_FB(); return false;">페이스북으로 계속하기</a>
+        <a class="login_btn sign_in" href="/users/sign_in" onclick="go_url('sign_in'); return false;">로그인</a>
+        <a class="login_btn sign_up" href="/users/sign_up" onclick="go_url('sign_up'); return false;">회원가입</a>
+      </div>
+      <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; line-height: 40px; padding-right: 15px; box-sizing: border-box; font-size: 13px; text-align: right;">
+        <a href="/etc/access_term" onclick="go_url('access_term'); return false;" style="color: #fff; border-bottom: 1px solid #fff;">이용약관</a> 및
+        <a href="/etc/privacy_policy" onclick="go_url('privacy_policy'); return false;" style="color: #fff; border-bottom: 1px solid #fff;">개인정보취급정책</a>
+      </div>
+    </div>
+  </div>
+  <div id="login_page" class="wrapper sub next"></div>
+  <div id="login_page_sub" class="wrapper sub next"></div>
+</script>
+
+<script type="text/template" id="facebookLoginTemplate">
+  <%= form_for(:user, url: registration_path(:user), remote: true, html: {id: "facebook_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+    <div class="container top" ontouchmove="return false;">
+      <span class="header_title">회원가입</span>
+      <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+      <span class="header_btn right submit_btn" onclick="sign_up_FB();">완료</span>
+    </div>
+    <div class="container main" ontouchstart="removeIOSRubberEffect($(this));">
+      {{ if (data.email == null) { }}
+        <div style="position:relative; height:50px; margin-bottom:10px;">
+          <%= f.email_field :email, placeholder: "welcome@vaskit.kr", class: "input text_field right landing", required: true, onkeyup: "email_check($(this), true);", onblur: "email_check($(this), true);" %>
+          <span class="input btn_field right checker"><i class="fa fa-keyboard-o"></i></span>
+        </div>
+      {{ } else { }}
+        <%= f.hidden_field :email, value: "{{=data.email}}" %>
+      {{ } }}
+      {{ if (data.birthday == null) { }}
+        <div style="position:relative; height:50px; margin-bottom:10px;">
+          <%= f.date_select :birthday, {
+              start_year: Time.now.year,
+              end_year: 1900,
+              prompt: { year: '연도', month: '월', day: '일' }
+            }, { class: "input date_field landing", required: true } %>
+        </div>
+      {{ } else { }}
+        <%= f.hidden_field :birthday, value: "{{=data.birthday}}" %>
+      {{ } }}
+      <div style="display:none;">
+        <%= f.hidden_field :facebook_id, value: "{{=data.facebook_id}}" %>
+        <%= f.hidden_field :name, value: "{{=data.name}}" %>
+        <%= f.hidden_field :gender, value: "{{=data.gender}}" %>
+        <%= f.hidden_field :avatar, value: "{{=data.avatar}}" %>
+        <%= f.check_box :agree_access_term, { checked: true, required: true } %>
+      </div>
+    </div>
+  <% end %>
+</script>
+
+<script type="text/template" id="signUpTemplate">
+  <%= form_for(:user, url: registration_path(:user), remote: true, html: {id: "sign_up_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+    <div class="container top" ontouchmove="return false;">
+      <span class="header_title">회원가입</span>
+      <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+      <span class="header_btn right submit_btn" onclick="sign_up();">완료</span>
+    </div>
+    <div class="container main" ontouchstart="removeIOSRubberEffect($(this));">
+      <div style="position:relative; height:50px; margin-bottom:10px;">
+        <%= f.email_field :email, placeholder: "welcome@vaskit.kr", class: "input text_field right landing", required: true, onkeyup: "email_check($(this), true);", onblur: "email_check($(this), true);" %>
+        <span class="input btn_field right checker"><i class="fa fa-keyboard-o"></i></span>
+      </div>
+      <div style="position:relative; height:50px; margin-bottom:10px;">
+        <%= f.password_field :password, placeholder: "8자리 이상", class: "input text_field right landing", required: true, onkeyup: "password_check($(this));", onblur: "password_check($(this));" %>
+        <span class="input btn_field right checker"><i class="fa fa-unlock-alt"></i></span>
+      </div>
+      <div style="position:relative; height:50px; margin-bottom:10px;">
+        <%= f.password_field :password_confirmation, placeholder: "비밀번호 확인", class: "input text_field right landing", required: true, onkeyup: "password_confirm_check($(this));", onblur: "password_confirm_check($(this));" %>
+        <span class="input btn_field right checker"><i class="fa fa-keyboard-o"></i></span>
+      </div>
+      <div style="position:relative; height:50px; margin-bottom:10px;">
+        <%= f.date_select :birthday, {
+            start_year: Time.now.year,
+            end_year: 1900,
+            prompt: { year: '연도', month: '월', day: '일' }
+          }, { class: "input date_field landing", required: true } %>
+      </div>
+      <div style="position:relative; height:50px; margin-bottom:10px;">
+        <span onclick="select_gender(1);" class="input btn_field left gender_btn male"><i class="fa fa-male"></i></span>
+        <span onclick="select_gender(0);" class="input btn_field right gender_btn female"><i class="fa fa-female"></i></span>
+        <span id="gender_bar"></span>
+      </div>
+      <div style="position:relative; height:40px; line-height:40px; margin-bottom:10px; font-size:13px; padding:0 10px;">
+        <span id="agree_access_term_btn" onclick="access_term_agree(); return false;" style="display:inline-block; width:30px; height:40px; line-height:40px; text-align:center; color:#ccc; cursor: pointer;"><i class="fa fa-square"></i></span>
+        <a href="/etc/access_term" onclick="go_url('access_term'); return false;" style="color: #999; border-bottom: 1px solid #999;">이용약관</a> 및
+        <a href="/etc/privacy_policy" onclick="go_url('privacy_policy'); return false;" style="color: #999; border-bottom: 1px solid #999;">개인정보취급정책</a>에 동의합니다
+      </div>
+      <div style="position:relative; width:100%; padding:10px; box-sizing:border-box; line-height:16px; font-size:12px; background-color:#eee; color:#666;">
+        <i class="fa fa-info-circle" style="font-size:14px; line-height:20px; font-weight:bold;">&nbsp;걱정마세요!</i>
+        <br>입력하신 생년월일 및 성별 정보는 투표의 통계분석을 위한 자료로서만 활용되며, 기타 여하한 이유로 악용되지 않습니다.
+        <br>VASKIT은 고객님의 개인정보를 중요하게 여기고, 언제나 그 관리에 최선을 다하고 있습니다.
+      </div>
+      <div style="display:none;">
+        <%= f.check_box :agree_access_term, { checked: false, required: true } %>
+        <%= f.hidden_field :gender, required: true %>
+      </div>
+    </div>
+  <% end %>
+</script>
+
+<script type="text/template" id="signInTemplate">
+  <%= form_for(:user, url: session_path(:user), remote: true, html: {id: "sign_in_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+    <div class="container top" ontouchmove="return false;">
+      <span class="header_title">이메일 로그인</span>
+      <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+      <span class="header_btn right submit_btn" onclick="sign_in();">완료</span>
+    </div>
+    <div class="container main" ontouchstart="removeIOSRubberEffect($(this));">
+      <div style="position:relative; height:50px; margin-bottom:10px;">
+        <%= f.email_field :email, placeholder: "welcome@vaskit.kr", class: "input text_field right landing", required: true, onkeyup: "email_check($(this), false);", onblur: "email_check($(this), false);" %>
+        <span class="input btn_field right checker"><i class="fa fa-keyboard-o"></i></span>
+      </div>
+      <div style="position:relative; height:50px;">
+        <%= f.password_field :password, placeholder: "8자리 이상", class: "input text_field right landing", required: true, onkeyup: "password_check($(this));", onblur: "password_check($(this));" %>
+        <span class="input btn_field right checker"><i class="fa fa-unlock-alt"></i></span>
+      </div>
+      <%= f.hidden_field :remember_me, value: 1, required: true %>
+      <a id="reset_password_btn" href="/users/forgot_password" onclick="go_url('forgot_password'); return false;" style="display:block; height:40px; line-height:40px; margin:0 10px; color:#999; font-size:13px; text-align:right; transition:color 1s, margin 1s;"><i class='fa fa-envelope-o'></i>&nbsp;비밀번호를 잊으셨나요?</a>
+    </div>
+  <% end %>
+</script>
+
+<script type="text/template" id="forgotPasswordTemplate">
+  <%= form_for(:user, url: user_password_path, remote: true, html: {id: "forgot_password_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+    <div class="container top landing" ontouchmove="return false;">
+      <span class="header_title">비밀번호를 잊으셨나요?</span>
+      <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+      <span class="header_btn right submit_btn" onclick="forgot_password();">완료</span>
+    </div>
+    <div class="container main landing" ontouchstart="removeIOSRubberEffect($(this));">
+      <div style="position:relative; height:50px; margin-bottom:10px;">
+        <%= f.email_field :email, placeholder: "가입하신 이메일 주소를 입력해주세요", class: "input text_field right landing", required: true, onkeyup: "email_check($(this), false);", onblur: "email_check($(this), false);" %>
+        <span class="input btn_field right checker"><i class="fa fa-keyboard-o"></i></span>
+      </div>
+    </div>
+  <% end %>
+</script>
+
+<script>
+  var landingTemplate = _.template($('#landingTemplate').html()),
+      facebookLoginTemplate = _.template($('#facebookLoginTemplate').html()),
+      signUpTemplate = _.template($('#signUpTemplate').html()),
+      signInTemplate = _.template($('#signInTemplate').html()),
+      forgotPasswordTemplate = _.template($('#forgotPasswordTemplate').html());
+
+  function show_landing() {
+    if ($("#landing_page").length == 0) {
+      open_full_view(landingTemplate());
+      if (userApp) setAppStatusBar("orange");
+    }
+    var url = '/landing';
+    return url;
+  };
+
+  function hide_landing() {
+    history.go(1);
+  };
+
+  function login_success(length) {
+    go_back(length);
+    close_full_view();
+    if (userApp) getUserToken();
+    if (userApp) setAppStatusBar();
+    try {
+      if ($.cookie('visitor_votes') != null) {
+        var votes_array = $.cookie('visitor_votes').split(".");
+        for (var i=0; i < votes_array.length; i++) {
+          var vote = votes_array[i];
+          vote = JSON.parse(vote);
+          $.ajax({
+            url: "/votes.json",
+            dataType: "json",
+            type: "POST",
+            data: {ask_id: vote.ask_id, is_left: vote.is_left},
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              $.cookie('visitor_votes', null);
+            },
+            beforeSend: function() {
+            },
+            complete: function() {
+            }
+          });
+        }
+      };
+    } catch(err) {
+      $.cookie('visitor_votes', null);
+    };
+  };
+
+  function landing_back() {
+    $("#landing_page").removeClass("prev");
+    $("#login_page").addClass("next").removeClass("prev");
+    $("#login_page_sub").addClass("next");
+    if (userApp) setAppStatusBar("orange");
+  };
+
+  function login_back() {
+    $("#login_page").removeClass("prev");
+    $("#login_page_sub").addClass("next");
+    if (userApp) setAppStatusBar();
+  };
+
+  function login_with_FB() {
+    // 기본 인자들을 WEB에서 APP으로 전달
+    var scope = "public_profile,email,user_birthday";
+    var scope_for_ios = "public_profile,email,user_birthday" + ",email,email,email";
+    var fields = "name,gender,picture.width(200).height(200).type(square),email,birthday";
+    // 기본 인자들을 WEB에서 APP으로 전달
+    if (userApp) {
+      if (window.HybridApp) {
+        HybridApp.facebookLogin(scope, fields);
+      } else {
+        window.location = "vaskit://facebookLogin/////"+scope_for_ios+"/////"+fields;
+      }
+    } else {
+      if (typeof(FB) != 'undefined' && FB != null) {
+        FB.init({
+          appId      : '<%=Facebook::CONFIG["app_id"]%>',
+          status     : true,
+          xfbml      : true,
+          version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
+        });
+      }
+      FB.login(function(response) {
+        if (response.authResponse) {
+          FB.api('/me?fields='+fields, function(response) {
+            login_with_FB_continue(response);
+          });
+        }
+      }, {scope: scope});
+    }
+	};
+
+  function login_with_FB_continue(response) {
+    $.ajax({
+            url: "/users/facebook.json",
+            dataType: "json",
+            type: "POST",
+            data: {data: response},
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              if (data.status === "not_enough") {
+                login_with_FB_edit(data);
+                if (userApp) setAppStatusBar();
+              } else if (data.status === "success") {
+                notify(data.string_id + "님, 어서오세요!");
+                alarm_check();
+                login_success(1);
+                user_profile_on();
+                user_alarms_on();
+              }
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+    });
+  };
+
+  function login_with_FB_edit(data) {
+    $("#landing_page").addClass("prev");
+    $("#login_page").html(facebookLoginTemplate({data: data})).removeClass("next");
+    $("#login_page_sub").html("");
+    $("#facebook_form input").keypress(function(e) {
+		  if (e.keyCode == '13') {
+      	e.preventDefault();
+        $(this).blur();
+      	sign_up_FB();
+    	};
+  	});
+	  $.each($("#facebook_form #user_birthday_1i option"), function( index, value ) { if (index > 0) value.text = value.text+"년"; });
+	  $.each($("#facebook_form #user_birthday_3i option"), function( index, value ) { if (index > 0) value.text = value.text+"일"; });
+  };
+
+  function show_sign_up() {
+    $("#landing_page").addClass("prev");
+    $("#login_page").html(signUpTemplate()).removeClass("next");
+    if (userApp) setAppStatusBar();
+    $("#login_page_sub").html("");
+    $("#sign_up_form input").keypress(function(e) {
+		  if (e.keyCode == '13') {
+      	e.preventDefault();
+        $(this).blur();
+      	sign_up();
+    	};
+  	});
+	  $.each($("#sign_up_form #user_birthday_1i option"), function( index, value ) { if (index > 0) value.text = value.text+"년"; });
+	  $.each($("#sign_up_form #user_birthday_3i option"), function( index, value ) { if (index > 0) value.text = value.text+"일"; });
+    var url = '/users/sign_up';
+    return url;
+  };
+
+  function hide_sign_up() {
+    landing_back();
+  };
+
+  function show_sign_in() {
+    $("#landing_page").addClass("prev");
+    $("#login_page").html(signInTemplate()).removeClass("next");
+    if (userApp) setAppStatusBar();
+    $("#login_page_sub").html("");
+    $("#sign_in_form input").keypress(function(e) {
+		  if (e.keyCode == '13') {
+      	e.preventDefault();
+        $(this).blur();
+      	sign_in();
+    	};
+  	});
+    var url = '/users/sign_in';
+    return url;
+  };
+
+  function hide_sign_in() {
+    landing_back();
+  };
+
+  function show_forgot_password() {
+    $("#login_page").addClass("prev");
+    $("#login_page_sub").html(forgotPasswordTemplate()).removeClass("next");
+    $("#forgot_password_form #user_email").val($("#sign_in_form #user_email").val());
+    form_check($("#forgot_password_form"));
+    $("#forgot_password_form input").keypress(function(e) {
+		  if (e.keyCode == '13') {
+      	e.preventDefault();
+        $(this).blur();
+      	forgot_password();
+    	};
+  	});
+    var url = '/users/forgot_password';
+    return url;
+  };
+
+  function hide_forgot_password() {
+    login_back();
+  };
+
+  function email_check(target, is_new) {
+    var email = target.val();
+    var checker = target.next(".checker");
+    var reg = /^[0-9a-zA-Z-_.]+@[a-z0-9]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
+    if ( email == "" || email.indexOf("@") == -1 ) {
+      checker.html("<i class='fa fa-keyboard-o'></i>");
+    } else if ( !reg.test(email) ) {
+      checker.html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
+    } else {
+      $.ajax({
+        url: "/users/check_email.json",
+        type: "POST",
+        data: {email: email },
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data) {
+          if (is_new) {
+            data.is_new_email ? checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>") : checker.html("<i class='fa fa-remove' style='color: red;'></i>");
+          } else {
+            data.is_new_email ? checker.html("<i class='fa fa-remove' style='color: red;'></i>") : checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>");
+          }
+        },
+        beforeSend: function() {
+          checker.html("<i class='fa fa-spinner fa-spin' style='color: lightgray;'></i>");
+        },
+        complete: function() {
+        }
+      })
+    }
+  };
+
+  function password_check(target) {
+    var password = target.val();
+    var checker = target.next(".checker");
+    if ( password.length >= 8 ) {
+      checker.html("<i class='fa fa-lock' style='color: lightgreen;'></i>");
+    } else {
+      checker.html("<i class='fa fa-unlock-alt'></i>");
+    };
+  };
+
+  function password_confirm_check(target) {
+    var password = target.parent().prev().children("[type=password]").val();
+    var confirm = target.val();
+    var checker = target.next(".checker");
+    if ( confirm.length == 0 ) {
+      checker.html("<i class='fa fa-keyboard-o'></i>");
+    } else {
+      if ( password.length != 0 ) {
+        if ( password === confirm ) {
+          checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>");
+        } else {
+          checker.html("<i class='fa fa-remove' style='color: red;'></i>");
+        }
+      }
+    }
+  };
+
+  function select_gender(gender) {
+    var male = $(".gender_btn.male");
+    var female = $(".gender_btn.female");
+    var gender_box = $("#user_gender");
+    var gender_bar = $("#gender_bar");
+		if (gender == 1) {
+			gender_box.val(true);
+      male.addClass("on");
+      female.removeClass("on");
+      gender_bar.addClass("on").addClass("male").removeClass("female");
+		} else {
+			gender_box.val(false);
+      male.removeClass("on");
+      female.addClass("on");
+      gender_bar.addClass("on").addClass("female").removeClass("male");
+		};
+    form_check($("#facebook_form"));
+    form_check($("#sign_up_form"));
+	};
+
+  function access_term_agree() {
+    var check_box = $("#user_agree_access_term"),
+        check_icon = $("#agree_access_term_btn i");
+    if ( check_box.prop("checked") == false ) {
+      check_box.prop("checked", true);
+      check_icon.removeClass("fa-square").addClass("fa-check-square");
+    } else {
+      check_box.prop("checked", false);
+      check_icon.removeClass("fa-check-square").addClass("fa-square");
+    };
+    form_check($("#sign_up_form"));
+  };
+
+
+  function sign_up_FB() {
+    var user = $("#facebook_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    $.ajax({
+            url: '/users/sign_up.json',
+            type: 'POST',
+            data: {data: user},
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              if (data.status === "blank_email") {
+                notify("이메일을 입력해주세요");
+                $("#sign_up_form #user_email").focus();
+              } else if (data.status === "not_email") {
+                notify("잘못된 이메일 형식이네요");
+                $("#sign_up_form #user_email").focus();
+              } else if (data.status === "birthday_not_selected") {
+                notify("생년월일을 입력해주세요");
+              } else if (data.status === "gender_not_selected") {
+                notify("성별을 선택해주세요");
+              } else if (data.status === "success") {
+                notify(data.string_id + "님, 환영합니다 :)");
+                alarm_check();
+                login_success(2);
+                user_profile_on();
+                user_alarms_on();
+              }
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+    });
+  };
+
+  function sign_up() {
+    var user = $("#sign_up_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    $.ajax({
+            url: '/users/sign_up.json',
+            type: 'POST',
+            data: {data: user},
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              if (data.status === "blank_email") {
+                notify("이메일을 입력해주세요");
+                $("#sign_up_form #user_email").focus();
+              } else if (data.status === "blank_password") {
+                notify("비밀번호를 입력해주세요");
+                $("#sign_up_form #user_password").focus();
+              } else if (data.status === "not_email") {
+                notify("잘못된 이메일 형식이네요");
+                $("#sign_up_form #user_email").focus();
+              } else if (data.status === "already_exist_email") {
+                notify("이미 가입된 이메일이네요");
+                $("#sign_up_form #user_email").focus();
+              } else if (data.status === "not_enough_password") {
+                notify("비밀번호는 8자 이상 입력해주세요");
+                $("#sign_up_form #user_password").val("").focus();
+              } else if (data.status === "password_confirm_error") {
+                notify("비밀번호를 다시 확인해주세요");
+                $("#sign_up_form #user_password_confirmation").val("").focus();
+              } else if (data.status === "birthday_not_selected") {
+                notify("생년월일을 입력해주세요");
+              } else if (data.status === "gender_not_selected") {
+                notify("성별을 선택해주세요");
+              } else if (data.status === "agree_access_term") {
+                notify("이용약관에 동의해주세요");
+              } else if (data.status === "success") {
+                notify(data.string_id + "님, 환영합니다 :)");
+                alarm_check();
+                login_success(2);
+                user_profile_on();
+                user_alarms_on();
+              }
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+    });
+  };
+
+  function sign_in() {
+    var user = $("#sign_in_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    $.ajax({
+            url: '/users/sign_in.json',
+            type: 'POST',
+            data: {data: user},
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              if (data.status === "blank_email") {
+                notify("이메일을 입력해주세요");
+                $("#sign_in_form input[type=email]").focus();
+              } else if (data.status === "blank_password") {
+                notify("비밀번호를 입력해주세요");
+                $("#sign_in_form input[type=password]").focus();
+              } else if (data.status === "not_email") {
+                notify("잘못된 이메일 형식이네요");
+                $("#sign_in_form input[type=email]").focus();
+              } else if (data.status === "not_exist") {
+                notify("가입되지 않은 이메일이군요");
+                $("#sign_in_form input[type=email]").focus();
+              } else if (data.status === "not_enough_password") {
+                notify("비밀번호는 8자 이상입니다");
+                $("#sign_in_form input[type=password]").val("").focus();
+                $("#reset_password_btn").css({"color":"#fff", "marginRight":"15px"});
+              } else if (data.status === "invalid_password") {
+                notify("비밀번호를 잘못 입력했어요");
+                $("#sign_in_form input[type=password]").val("").focus();
+                $("#reset_password_btn").css({"color":"#fff", "marginRight":"15px"});
+              } else if (data.status === "success") {
+                notify(data.string_id + "님, 어서오세요!");
+                alarm_check();
+                login_success(2);
+                user_profile_on();
+                user_alarms_on();
+              }
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+    });
+  };
+
+  function forgot_password() {
+    var user = $("#forgot_password_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    $.ajax({
+            url: '/users/password.json',
+            type: 'POST',
+            data: {data: user},
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              var email = user["user[email]"];
+              if (data.status == "fail") {
+                notify("가입되지 않은 이메일이군요");
+                $("#forgot_password_form input[type=email]").focus();
+              } else if (data.status == "success") {
+                notify("메일 전송 완료! 메일함을 확인해주세요 :)");
+                $("#forgot_password_form").find(".top").find(".header_btn").attr("onclick","back_button(); return false;");
+                $("#sign_in_form input[type=email]").val(email);
+                $("#sign_in_form input[type=password]").val("");
+              }
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+    });
+  };
+</script>

@@ -1,212 +1,95 @@
 <!DOCTYPE html>
 <html>
-    <!-- LET'S VASKIT!
+  <head>
+    <%= render :partial => "home/main/meta" %>
 
-    ██      ███████ ████████  ██  ███████
-    ██      ██         ██      █  ██
-    ██      █████      ██         ███████
-    ██      ██         ██              ██
-    ███████ ███████    ██         ███████
-
-    ██    ██  █████  ███████ ██   ██ ██ ████████ ██
-    ██    ██ ██   ██ ██      ██  ██  ██    ██    ██
-    ██    ██ ███████ ███████ █████   ██    ██    ██
-     ██  ██  ██   ██      ██ ██  ██  ██    ██
-      ████   ██   ██ ███████ ██   ██ ██    ██    ██
-
-    -->
-<head>
-    <% if Rails.env == "development" %>
-      <title>VASKIT TEST</title>
-    <% else %>
-      <% if (controller.controller_name == "home" && controller.action_name == "index" && controller.request.query_string == "") %>
-        <title>VASKIT | 세상의 모든 결정장애자들을 위하여!</title>
-        <meta name="title" content="VASKIT | 세상의 모든 결정장애자들을 위하여!" />
-        <meta name="description" content="#둘중에뭐사지? #혼자고민하지마! VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-        <meta name="keywords" content="쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" />
-      <% elsif (controller.controller_name == "home" && controller.action_name == "index" && controller.request.query_string != "") %>
-        <% case @type %>
-        <% when "user", "hash_tag", "ask_deal", "brand", "none" %>
-          <% if @type == "user" %>
-            <title>VASKIT | <%= controller.request.params[:keyword] %> - 사용자 검색결과</title>
-            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 사용자 검색결과" />
-            <meta name="description" content="<%= controller.request.params[:keyword] %> 사용자 검색결과입니다" />
-      		<% elsif @type == "hash_tag" %>
-            <title>VASKIT | #<%= controller.request.params[:keyword] %> - 해쉬태그 검색결과</title>
-            <meta name="title" content="VASKIT | #<%= controller.request.params[:keyword] %> - 해쉬태그 검색결과" />
-            <meta name="description" content="#<%= controller.request.params[:keyword] %> 해쉬태그 검색결과입니다" />
-      		<% elsif @type == "ask_deal" %>
-            <title>VASKIT | <%= controller.request.params[:keyword] %> - 제품 검색결과</title>
-            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 제품 검색결과" />
-            <meta name="description" content="<%= controller.request.params[:keyword] %> 제품 검색결과입니다" />
-      		<% elsif @type == "brand" %>
-            <title>VASKIT | <%= controller.request.params[:keyword] %> - 브랜드 검색결과</title>
-            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 브랜드 검색결과" />
-            <meta name="description" content="<%= controller.request.params[:keyword] %> 브랜드 검색결과입니다" />
-      		<% elsif @type == "none" %>
-            <title>VASKIT | <%= controller.request.params[:keyword] %> - 통합 검색결과</title>
-            <meta name="title" content="VASKIT | <%= controller.request.params[:keyword] %> - 통합 검색결과" />
-            <meta name="description" content="<%= controller.request.params[:keyword] %> 통합 검색결과입니다" />
-      		<% end %>
-          <meta name="keywords" content="<%= controller.request.params[:keyword] %>, 쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" />
-        <% when "vote_yet" %>
-          <title>VASKIT | 참여하지 않은 투표 모아보기</title>
-          <meta name="title" content="VASKIT | 참여하지 않은 투표 모아보기" />
-          <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-        <% when "my_ask_in_progress", "my_like_ask", "my_ask", "vote_ask", "comment_ask" %>
-          <% if @type == "my_ask_in_progress" %>
-            <title>VASKIT | 나의 히스토리 - 진행중인 질문</title>
-            <meta name="title" content="VASKIT | 나의 히스토리 - 진행중인 질문" />
-          <% elsif @type == "my_like_ask" %>
-            <title>VASKIT | 나의 히스토리 - 공감한 질문</title>
-            <meta name="title" content="VASKIT | 나의 히스토리 - 공감한 질문" />
-          <% elsif @type == "my_ask" %>
-            <title>VASKIT | 나의 히스토리 - 작성한 질문</title>
-            <meta name="title" content="VASKIT | 나의 히스토리 - 작성한 질문" />
-          <% elsif @type == "vote_ask" %>
-            <title>VASKIT | 나의 히스토리 - 참여한 투표</title>
-            <meta name="title" content="VASKIT | 나의 히스토리 - 참여한 투표" />
-          <% elsif @type == "comment_ask" %>
-            <title>VASKIT | 나의 히스토리 - 제시한 의견</title>
-            <meta name="title" content="VASKIT | 나의 히스토리 - 제시한 의견" />
-          <% end %>
-          <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-        <% end %>
-      <% elsif (controller.controller_name == "asks" && controller.action_name == "show") %>
-        <title>VASKIT | <%= @ask.left_ask_deal.title.truncate(16) %> vs <%= @ask.right_ask_deal.title.truncate(16) %></title>
-        <meta name="title" content="VASKIT | <%= @ask.left_ask_deal.title.truncate(16) %> vs <%= @ask.right_ask_deal.title.truncate(16) %>" />
-        <meta name="description" content="<%= @ask.left_ask_deal.title %> vs <%= @ask.right_ask_deal.title %>, 당신의 선택은? <%= @ask.message.truncate(200) %>" />
-        <meta name="keywords" content="<%= @ask.left_ask_deal.title %>, <%= @ask.right_ask_deal.title %>, <%= @ask.left_ask_deal.brand %>, <%= @ask.right_ask_deal.brand %>, <%= HashTag.where(:ask_id => @ask.id).pluck(:keyword).join(", ") %>" />
-      <% elsif (controller.controller_name == "asks" && controller.action_name == "new") %>
-        <title>VASKIT | 새로운 질문 작성하기</title>
-        <meta name="title" content="VASKIT | 새로운 질문 작성하기" />
-        <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-      <% elsif (controller.controller_name == "asks" && controller.action_name == "edit") %>
-        <title>VASKIT | 나의 질문 수정하기</title>
-        <meta name="title" content="VASKIT | 나의 질문 수정하기" />
-        <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-      <% else %>
-        <title>VASKIT</title>
-        <meta name="title" content="VASKIT" />
-        <meta name="description" content="VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-      <% end %>
-    <% end %>
-
-    <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="/images/favicon/apple-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="/images/favicon/apple-icon-76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="/images/favicon/apple-icon-114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="/images/favicon/apple-icon-120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="/images/favicon/apple-icon-144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="/images/favicon/apple-icon-152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-icon-180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192"  href="/images/favicon/android-icon-192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon/favicon-96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/images/favicon/manifest.json">
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/logo/favicon/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/logo/favicon/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/logo/favicon/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/logo/favicon/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/logo/favicon/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/logo/favicon/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/logo/favicon/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/logo/favicon/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/favicon/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/images/logo/favicon/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/logo/favicon/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/images/logo/favicon/manifest.json">
     <meta name="msapplication-TileColor" content="#ffffff">
-    <meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png">
+    <meta name="msapplication-TileImage" content="/images/logo/favicon/ms-icon-144x144.png">
     <meta name="theme-color" content="#ffffff">
 
+    <!-- <meta name="apple-itunes-app" content="app-id=1188969345, affiliate-data=myAffiliateData, app-argument=myURL"> -->
     <meta name="apple-mobile-web-app-title" content="VASKIT">
     <!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
     <!-- <meta name="apple-mobile-web-app-status-bar-style" content="default"> -->
 
-  	<% if (controller.controller_name == "asks" && controller.action_name == "show") %>
-  		<meta property="og:title" content="둘중에뭐사지? 골라주세요!" />
-      <meta property="og:description" content="<%=@ask.left_ask_deal.title%> vs <%=@ask.right_ask_deal.title%>, 당신의 선택은?" />
-  		<meta property="og:url" content="http://vaskit.kr/asks/<%= @ask.id %>" />
-      <meta property="og:image" content="http://vaskit.kr/images/logo/share_1200x630.png" />
-    <% else %>
-      <meta property="og:title" content="VASKIT | 세상의 모든 결정장애자들을 위하여!" />
-      <meta property="og:description" content="#둘중에뭐사지? #혼자고민하지마! VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" />
-      <meta property="og:url" content="http://vaskit.kr/" />
-      <meta property="og:image" content="http://vaskit.kr/images/logo/share_1200x630.png" />
-    <% end %>
-    <meta property="og:site_name" content="VASKIT" />
-    <meta property="og:type" content="website" />
-    <meta property="og:locale" content="ko_KR" />
-    <meta property="fb:app_id" content="1738386856398348" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 
-    <meta name="naver-site-verification" content="2d90db92ba9197478a54e3eebc7654049863ec15"/>
-
-  	<%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   	<%= csrf_meta_tags %>
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-  	<script>
-  		<% unless @uniq_key.blank? %>
-  			var uniq_key = new Date() + Math.random();
-  			$.cookie('uniq_key' , "<%= @uniq_key %>", { expires : 30000, path : '/' });
-  		<% end %>
-      var asks = new Array();
-      var is_ask_image_opened = false,
-          is_category_opened = false,
-          is_user_opened = false,
-          is_search_input_opened = false,
-          is_report_popup_opened = false,
-          is_card_opened = false,
-          is_show_opened = false,
-          is_alram_opened = false,
-          opened_ask_id = null,
-          card_open_st = 0,
-          overlay_st = 0;
-      var is_app_popup_opened = false;
-      var is_search_deal_opened = false,
-          is_image_edit_opened = false;
-      var is_video_opened = false;
 
-      window.onbeforeunload = function(){
-        window.scrollTo(0,0);
-      }
-
-      window.onerror = function(msg, url, line, col, obj){
-        href = window.location.href;
-        obj = obj == null ? 'obj is null' : obj.stack;
-        $.ajax({
-  		        url: "/error_report.json",
-  		        type: 'POST',
-  		        data: {'msg': msg, 'url': url, 'line': line, 'col': col, 'href': href, 'obj': obj },
-  		        dataType: 'json',
-  		        error: function(){
-  		            return false;
-  		        },
-  		        success: function(data){
-                notify('이크! 에러 발생T_T 지금 이 화면을 캡쳐해서<br>help@vaskit.kr로 보내주시면 스벅 라떼 쏩니다!!');
-  		        },
-  		        beforeSend: function(){
-  		        },
-  		        complete: function(){
-  		        }
-  			});
-        return false;
-      }
-  	</script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=521318198062554&ev=PageView&noscript=1"/></noscript>
-</head>
-<body data-no-turbolink="true">
-	<div id="wrap">
-    <div id="flash" style="display:none;"><div id="flash_msg"></div></div>
-    <div style="position:fixed; top:0px; width:inherit; z-index:900000;"><span id="progress_bar" style="display:none; width:0%; height:5px; background-color:#ee6e01;">&nbsp;</span></div>
-		<%= yield %>
-    <%= render :partial => "common_partial/app_popup" %>
-	</div>
-  <!-- Webapp Transition hotfix -->
-  <script>
-    (function(a,b,c){
-      if(c in b && b[c]){
-        var d,
-            e=a.location,
-            f=/^(a|html)$/i;
-        a.addEventListener("click",function(a){
-          d=a.target;
-          while (!f.test(d.nodeName)) d=d.parentNode;
-          "href" in d && (d.href.indexOf("http")||~d.href.indexOf(e.host)) && d.href.indexOf("#") == -1 && (a.preventDefault(), e.href = d.href)
-        },!1)
-      }
-    })(document,window.navigator,"standalone")
-  </script>
-</body>
+    <script>
+        window.onerror = function(msg, url, line, col, obj) {
+          href = window.location.href;
+          obj = obj == null ? 'obj is null' : obj.stack;
+          $.ajax({
+                url: "/log_errors.json",
+                type: "POST",
+                data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj },
+                beforeSend: function(){ alert("앗! 오류가 발생하여 앱을 재시작합니다"); },
+                complete: function(){ window.location = href; }
+          });
+          return false;
+        }
+    </script>
+  </head>
+  <body data-no-turbolink="true" class="clearfix">
+    <div class="background" ontouchmove="return false;"></div>
+    <div id="app_banner" class="layout viewer appBanner"></div>
+    <div id="main_view" class="layout viewer">
+      <div id="seg_1" class="seg seg1" style="transform: translateX(0%);">
+        <div id="collections" class="wrapper main"></div>
+      </div>
+      <div id="seg_2" class="seg seg2" style="transform: translateX(100%);">
+        <div id="search" class="wrapper main"></div>
+      </div>
+      <div id="seg_4" class="seg seg4" style="transform: translateX(200%);">
+        <div id="my_page" class="wrapper main"></div>
+      </div>
+      <div id="footer" class="layout footer" ontouchmove="return false;">
+        <a href="/collections" class="tab" style="left:0%;" onclick="go_seg(1); return false;"><i class="tab_icon vaskit_icon seg1"></i></a>
+        <a href="/search" class="tab" style="left:25%;" onclick="go_seg(2); return false;"><i class="tab_icon vaskit_icon seg2"></i></a>
+        <a href="/asks/new" class="tab" style="left:50%;" onclick="visitor_check(function(){go_url('ask_form')}); return false;"><i class="tab_icon vaskit_icon seg3"></i></a>
+        <a id="my_tab" href="/users" class="tab" style="left:75%; display:none;" onclick="go_seg(4); return false;">
+          <i class="tab_icon vaskit_icon seg4"></i><i id="my_badge" class="tab_badge animated swing"></i>
+        </a>
+        <a id="login_tab" href="/landing" class="tab login" style="left:75%; display:none;" onclick="go_url('landing'); return false;">
+          <i class="tab_icon vaskit_icon seg4 login"></i>
+        </a>
+      </div>
+    </div>
+    <div class="layout notice_div" style="display:none;"><div class="notice_msg"></div></div>
+    <div class="layout loading_div" onclick="return false;" ontouchmove="return false;"><div class="loading_bar">&nbsp;</div></div>
+    <div>
+      <%= render :partial => "home/main/seg1" %>
+      <%= render :partial => "home/main/seg2" %>
+      <%= render :partial => "home/main/seg4" %>
+      <%= render :partial => "home/partial/seg_asks" %>
+      <%= render :partial => "home/partial/seg_ask_image" %>
+      <%= render :partial => "home/partial/seg_comments" %>
+      <%= render :partial => "home/partial/seg_menu" %>
+      <%= render :partial => "home/partial/seg_user_settings" %>
+      <%= render :partial => "home/partial/seg_app_banner" %>
+      <%= render :partial => "home/full/seg_image_cropping" %>
+      <%= render :partial => "home/full/seg_share" %>
+      <%= render :partial => "home/full/seg_ask_detail" %>
+      <%= render :partial => "home/full/seg_ask_form" %>
+      <%= render :partial => "home/full/seg_login" %>
+      <%= yield %>
+    </div>
+  </body>
 </html>

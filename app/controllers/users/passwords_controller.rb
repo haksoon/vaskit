@@ -1,71 +1,49 @@
 class Users::PasswordsController < Devise::PasswordsController
-  # prepend_before_action :require_no_authentication
-  # Render the #edit only if coming from a reset password email link
-  append_before_action :assert_reset_token_passed, only: :edit
+  respond_to :json
 
-  # GET /resource/password/new
+  # GET /users/forgot_password
   def new
-    self.resource = resource_class.new
   end
 
-  # POST /resource/password
+  # POST /users/password.json
   def create
+    resource_params = params[:data][:user]
     self.resource = resource_class.send_reset_password_instructions(resource_params)
     yield resource if block_given?
 
     if successfully_sent?(resource)
-      flash[:custom_notice] = "비밀번호 초기화 메일 전송 완료!"
-      respond_with({}, location: after_sending_reset_password_instructions_path_for(resource_name))
+      render :json => {:status => "success"}
     else
-      respond_with(resource)
+      render :json => {:status => "fail"}
     end
   end
 
-  # GET /resource/password/edit?reset_password_token=abcdef
+  # GET /users/password/edit?reset_password_token=xxx
+  # URL => /users/reset_password?reset_password_token=xxx
   def edit
-    self.resource = resource_class.new
-    resource.reset_password_token = params[:reset_password_token]
   end
 
-  # PUT /resource/password
+  # PUT /users/password.json
   def update
-    self.resource = resource_class.reset_password_by_token(resource_params)
-    if resource.sign_up_type == "facebook"
-      resource.update(:sign_up_type => "both")
-    end
-    yield resource if block_given?
+    data = params[:data][:user]
 
-    if resource.errors.empty?
-      if Devise.sign_in_after_reset_password
-        sign_in(resource_name, resource)
-      else
-        flash[:custom_notice] = "새로운 비밀번호로 로그인해주세요"
-      end
-      respond_with resource, location: after_resetting_password_path_for(resource)
+    if data[:password].length < 8
+      render :json => {:status => "not_enough_password"}
+    elsif data[:password] != data[:password_confirmation]
+      render :json => {:status => "password_confirm_error"}
     else
-      respond_with resource
+      self.resource = resource_class.reset_password_by_token(data)
+      if resource.sign_up_type == "facebook"
+        resource.update(:sign_up_type => "both")
+      end
+      yield resource if block_given?
+      if resource.errors.empty?
+        sign_in(resource_name, resource)
+        render :json => {:status => "success", :string_id => resource.string_id}
+      else
+        render :json => {:status => "fail"}
+      end
     end
   end
 
-  protected
-    def after_resetting_password_path_for(resource)
-      Devise.sign_in_after_reset_password ? after_sign_in_path_for(resource) : new_session_path(resource_name)
-    end
-
-    # The path used after sending reset password instructions
-    def after_sending_reset_password_instructions_path_for(resource_name)
-      new_session_path(resource_name) if is_navigational_format?
-    end
-
-    # Check if a reset_password_token is provided in the request
-    def assert_reset_token_passed
-      if params[:reset_password_token].blank?
-        flash[:custom_notice] = "비밀번호 재설정 기한이 만료되었으니\\n다시 시도해주세요"
-        redirect_to new_session_path(resource_name)
-      end
-    end
-
-    def translation_scope
-      'devise.passwords'
-    end
 end

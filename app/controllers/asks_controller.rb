@@ -1,292 +1,285 @@
 # coding : utf-8
 class AsksController < ApplicationController
-  before_action :set_ask, only: [:show, :edit, :update, :destroy, :vote, :ask_complete, :create_complete]
+  before_action :set_ask, only: [:show, :show_detail, :edit, :update, :destroy]
 
+  # GET /asks
+  # GET /asks.json
+  def index
+    respond_to do |format|
+      format.html
+      format.json {
+        if current_user
+          my_votes = Vote.where(user_id: current_user.id).map(&:ask_id)
+          if my_votes.length == 0 # 첫 회원가입의 경우 my_votes가 null이어서 아무것도 노출이 안됨
+            asks = Ask.where(be_completed: false)
+                      .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+          else
+            asks = Ask.where(be_completed: false).where("id NOT IN (?) AND user_id NOT IN (?)", my_votes, current_user.id)
+                      .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+          end
+        else
+            asks = Ask.where(be_completed: false)
+                      .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+        end
+        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
+        render json: { asks: asks }
+      }
+    end
+  end
+
+  # GET /asks/:id
+  # GET /asks/:id.json
   def show
     if current_user
-      Alram.where(:ask_id => @ask.id, :user_id => current_user.id).each do |alram|
-        alram.record_timestamps = false #updated_at 안바뀌게
-        alram.update(:is_read => true)
-        alram.record_timestamps = true #updated_at 안바뀌게
+      all_alarms = Alarm.where(ask_id: params[:id], user_id: current_user.id, is_read: false)
+      unless all_alarms.blank?
+        last_alarm = all_alarms.last
+        all_alarms.update_all(is_read: true)
+        # updated_at 바뀌지 않고 마지막 알람에 대해서만 푸쉬 보내는 callback이 트리거되도록 조정
+        last_alarm.record_timestamps = false
+        last_alarm.update(is_read: true)
+        last_alarm.record_timestamps = true
       end
     end
-    @asks = Ask.where(:id => @ask.id).as_json(:include => [:category, :user, :left_ask_deal, :right_ask_deal, {:comments => {:include => :user}} ])
-    # @detail_vote_count = @ask.detail_vote_count #AJS추가(삭제)
-    if current_user
-      @my_votes = Vote.where(:user_id => current_user.id)
-      @my_like_ask = AskLike.where(:user_id => current_user.id) #AJS추가
-      @my_like_comment = CommentLike.where(:user_id => current_user.id) #AJS추가
-    elsif @visitor
-      @my_votes = Vote.where(:visitor_id => @visitor.id)
-      @my_like_ask = [] #AJS추가
-      @my_like_comment = [] #AJS추가
+
+    respond_to do |format|
+      format.html
+      format.json {
+        ask = Ask.find(params[:id])
+
+        already_like = false
+        if current_user
+          ask_like = AskLike.where(user_id: current_user.id, ask_id: params[:id]).first
+          already_like = ask_like ? true : false
+        end
+
+        like_comments = []
+        if current_user
+          ask_comments = ask.comments.pluck(:id)
+          like_comments = CommentLike.where(user_id: current_user.id, comment_id: ask_comments)
+        end
+
+        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :hash_tags, {comments: {include: :user}} ])
+        render json: {ask: ask, already_like: already_like, like_comments: like_comments}
+      }
     end
   end
 
-  # GET /asks/ask_id/show_detail.json
+  # GET /asks/:id/show_detail.json
   def show_detail
-    ask = Ask.find(params[:id])
-    detail_vote_count = ask.detail_vote_count
-    render :json => {:detail_vote_count => detail_vote_count}
+    detail_vote_count = @ask.detail_vote_count
+    render json: {detail_vote_count: detail_vote_count}
   end
 
-  # POST /asks/ask_id/like
+  # POST /asks/:id/like.json
   def like
     already_like = false
     ask = Ask.find(params[:id])
-    ask_like = AskLike.where(:user_id => current_user.id, :ask_id => params[:id]).first
+    ask_like = AskLike.where(user_id: current_user.id, ask_id: params[:id]).first
     if ask_like
       already_like = true
       ask_like.destroy
     else
-      ask_like = AskLike.create(:user_id => current_user.id, :ask_id => params[:id])
+      ask_like = AskLike.create(user_id: current_user.id, ask_id: params[:id])
     end
-    render :json => {:already_like => already_like, :ask_like => ask_like}
+    render json: {already_like: already_like, ask_like: ask_like}
   end
 
-  # GET /posts/new
+
+
+  # GET /asks/new
+  # GET /asks/new.json
   def new
-    if current_user
-      @ask = Ask.new
-    else
-      redirect_to "/landing"
+    @ask = Ask.new
+    respond_to do |format|
+      format.html
+      format.json {
+        if current_user
+          ask = @ask.as_json
+          ask["left_ask_deal"] = ask["right_ask_deal"] = AskDeal.new.as_json
+          status = "success"
+        else
+          status = "not_authorized"
+        end
+        render json: {status: status, ask: ask}
+      }
     end
   end
 
-  # GET /asks/1/edit
-  def edit
-    if current_user
-      if current_user.id == @ask.user_id
-        @left_ask_deal = @ask.left_ask_deal
-        @right_ask_deal = @ask.right_ask_deal
-      else
-        flash[:ask_create] = "수정 권한이 없습니다"
-        redirect_to root_path
-      end
-    else
-      redirect_to "/landing"
-    end
-  end
-
-  # POST /asks
   # POST /asks.json
   def create
     left_deal_params = params[:left_deal]
-    left_image = nil
-    left_deal_is_modify = false
-
-
-    left_preview_image = PreviewImage.find_by_id(left_deal_params[:image_id])
-    if left_preview_image
-      left_image = left_preview_image.image.styles[:crop]
-    end
-
-    if left_deal_params[:deal_id].blank?
-      left_deal = Deal.create(:title => left_deal_params[:title], :brand => left_deal_params[:brand], :price => left_deal_params[:price], :link => left_deal_params[:link], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3], :image => left_image)
-    else
-      left_deal = Deal.find(left_deal_params[:deal_id])
-      # if left_image.blank?
-      #   left_image = left_deal.image
-      # else
-      #   left_deal_is_modify = true
-      # end                                   # 이 다섯 줄은 왜 있는지 모르겠넹...
-      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
-        left_deal_is_modify = true
-      end
-    end
-
-    left_ask_deal = AskDeal.create(:deal_id => left_deal.id, :user_id => current_user.id, :title => left_deal_params[:title], :brand => left_deal_params[:brand], :link => left_deal_params[:link],
-                                    :price => left_deal_params[:price], :spec1 => left_deal_params[:spec1], :spec2 => left_deal_params[:spec2], :spec3 => left_deal_params[:spec3],
-                                    :image => left_image, :is_modify => left_deal_is_modify)
-
     right_deal_params = params[:right_deal]
-    right_image = nil
-    right_deal_is_modify = false
 
-    right_preview_image = PreviewImage.find_by_id(right_deal_params[:image_id])
-    if right_preview_image
-      right_image = right_preview_image.image.styles[:crop]
-    end
+    left_deal_params[:price] = left_deal_params[:price].sub(/^[0]*/, "").gsub(",", "").to_i if left_deal_params != nil && left_deal_params[:price] != nil
+    right_deal_params[:price] = right_deal_params[:price].sub(/^[0]*/, "").gsub(",", "").to_i if right_deal_params != nil && right_deal_params[:price] != nil
 
-    if right_deal_params[:deal_id].blank?
-      right_deal = Deal.create(:title => right_deal_params[:title], :brand => right_deal_params[:brand], :price => right_deal_params[:price], :link => right_deal_params[:link], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3], :image => right_image)
+    if left_deal_params == nil || left_deal_params[:image_id].blank?
+      status = "no_left_image"
+      render json: {status: status}
+    elsif left_deal_params == nil || left_deal_params[:title].blank?
+      status = "no_left_title"
+      render json: {status: status}
+    elsif right_deal_params == nil || right_deal_params[:image_id].blank?
+      status = "no_right_image"
+      render json: {status: status}
+    elsif right_deal_params == nil || right_deal_params[:title].blank?
+      status = "no_right_title"
+      render json: {status: status}
+    elsif params[:ask] == nil || params[:ask][:message].blank?
+      status = "no_ask_message"
+      render json: {status: status}
     else
-      right_deal = Deal.find(right_deal_params[:deal_id])
-      # if right_image.blank?
-      #   right_image = right_deal.image
-      # else
-      #   right_deal_is_modify = true
-      # end                                   # 이 다섯 줄은 왜 있는지 모르겠넹...
-      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
-        right_deal_is_modify = true
+      # left_ask_deal
+      left_image = PreviewImage.find(left_deal_params[:image_id]).image.styles[:square]
+      if left_deal_params[:deal_id].blank?
+        left_deal = Deal.create(title: left_deal_params[:title],
+                                brand: left_deal_params[:brand],
+                                price: left_deal_params[:price],
+                                link: left_deal_params[:link],
+                                image: left_image,
+                                spec1: left_deal_params[:spec1],
+                                spec2: left_deal_params[:spec2],
+                                spec3: left_deal_params[:spec3])
+        left_deal_is_modify = false
+      else
+        left_deal = Deal.find(left_deal_params[:deal_id])
+        left_deal_is_modify = true unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
       end
+
+      left_ask_deal = AskDeal.create(deal_id: left_deal.id,
+                                     user_id: current_user.id,
+                                     title: left_deal_params[:title],
+                                     brand: left_deal_params[:brand],
+                                     price: left_deal_params[:price],
+                                     link: left_deal_params[:link],
+                                     image: left_image,
+                                     spec1: left_deal_params[:spec1],
+                                     spec2: left_deal_params[:spec2],
+                                     spec3: left_deal_params[:spec3],
+                                     is_modify: left_deal_is_modify)
+
+      # right_ask_deal
+      right_image = PreviewImage.find(right_deal_params[:image_id]).image.styles[:square]
+      if right_deal_params[:deal_id].blank?
+        right_deal = Deal.create(title: right_deal_params[:title],
+                                 brand: right_deal_params[:brand],
+                                 price: right_deal_params[:price],
+                                 link: right_deal_params[:link],
+                                 image: right_image,
+                                 spec1: right_deal_params[:spec1],
+                                 spec2: right_deal_params[:spec2],
+                                 spec3: right_deal_params[:spec3])
+        right_deal_is_modify = false
+      else
+        right_deal = Deal.find(right_deal_params[:deal_id])
+        right_deal_is_modify = true unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
+      end
+
+      right_ask_deal = AskDeal.create(deal_id: right_deal.id,
+                                      user_id: current_user.id,
+                                      title: right_deal_params[:title],
+                                      brand: right_deal_params[:brand],
+                                      price: right_deal_params[:price],
+                                      link: right_deal_params[:link],
+                                      image: right_image,
+                                      spec1: right_deal_params[:spec1],
+                                      spec2: right_deal_params[:spec2],
+                                      spec3: right_deal_params[:spec3],
+                                      is_modify: right_deal_is_modify)
+
+      # ask
+      params[:ask][:user_id] = current_user.id
+      params[:ask][:left_ask_deal_id] = left_ask_deal.id
+      params[:ask][:right_ask_deal_id] = right_ask_deal.id
+      params[:ask][:message].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
+      ask = Ask.create(ask_params)
+      status = "success"
+      render json: {status: status, ask: ask}
     end
 
-    right_ask_deal = AskDeal.create(:deal_id => right_deal.id, :user_id => current_user.id, :title => right_deal_params[:title], :brand => right_deal_params[:brand], :link => right_deal_params[:link],
-                                    :price => right_deal_params[:price], :spec1 => right_deal_params[:spec1], :spec2 => right_deal_params[:spec2], :spec3 => right_deal_params[:spec3],
-                                    :image => right_image, :is_modify => right_deal_is_modify)
+  end
 
-    params[:ask][:user_id] = current_user.id
-    params[:ask][:left_ask_deal_id] = left_ask_deal.id
-    params[:ask][:right_ask_deal_id] = right_ask_deal.id
-
-    params["ask"]["message"].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
-    @ask = Ask.create(ask_params)
-
-    # 카테고리가 없는 경우 카테고리 추가
-    unless UserCategory.where(:user_id => current_user.id).blank? #AJS추가 유저가 카테고리를 수동으로 설정한 경우에 한해, 신규 카테고리 내용 글 쓰면 카테고리를 추가해서 보여줌
-      if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
-        UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
-      end
-    end
-
-    hash_tags = @ask.message.scan(/#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*/)
-    hash_tags.each do |hash_tag|
-      hash_tag = hash_tag.tr("#","").tr(",","")
-      HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag)
-    end
-
-    flash[:ask_create] = "게시글 작성 완료! 친구들에게 공유해보세요 :)"
-    flash[:ask_id] = @ask.id
-
-    redirect_to root_path
-
-    if User.find(@ask.user_id).user_role == "user"
-      ask = @ask
-      admins = ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr', 'ice1134@naver.com', 'dammi0119@gmail.com', 'duddk0218@naver.com', 'khj120920@naver.com']
-      admins.each do |admin|
-        AdminMailer.delay.ask_submitted(ask, admin)
-      end
+  # GET /asks/:id/edit
+  # GET /asks/:id/edit.json
+  def edit
+    respond_to do |format|
+      format.html
+      format.json {
+        if current_user && current_user.id == @ask.user_id
+          ask = @ask.as_json(include: [:left_ask_deal, :right_ask_deal])
+          status = "success"
+        else
+          status = "not_authorized"
+        end
+        render json: {status: status, ask: ask}
+      }
     end
   end
 
-  # PATCH/PUT /asks/1
-  # PATCH/PUT /asks/1.json
+  # PUT /asks/:id.json
   def update
     left_deal_params = params[:left_deal]
-    left_image = nil
-    left_deal_is_modify = false
-
-    left_preview_image = PreviewImage.find_by_id(left_deal_params[:image_id])
-    if left_preview_image
-      left_image = left_preview_image.image.styles[:crop]
-      @ask.left_ask_deal.update(:image => left_image)
-    end
-
-    if left_deal_params[:deal_id].blank?
-      left_deal_params.except!("deal_id")
-      left_deal_params[:is_modify] = true
-    else
-      left_deal = Deal.find(left_deal_params[:deal_id])
-      # if left_image.blank?
-      #   left_image = left_deal.image
-      # else
-      #   left_deal_is_modify = true
-      # end
-      unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
-        left_deal_is_modify = true
-      end
-      @ask.left_ask_deal.update(:image => left_image)
-      left_deal_params[:image] = left_image
-    end
-    left_deal_params.except!("image_id")
-    left_deal_params.except!("image")
-    unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(left_deal_params)
-    @ask.left_ask_deal.update(unlocked_params)
-
-
     right_deal_params = params[:right_deal]
-    right_image = nil
-    right_deal_is_modify = false
 
-    right_preview_image = PreviewImage.find_by_id(right_deal_params[:image_id])
-    if right_preview_image
-      right_image = right_preview_image.image.styles[:crop]
-      @ask.right_ask_deal.update(:image => right_image)
-    end
-
-    if right_deal_params[:deal_id].blank?
-      right_deal_params.except!("deal_id")
-      right_deal_params[:is_modify] = true
+    if left_deal_params[:image_id].blank? && @ask.left_ask_deal.image == nil
+      status = "no_left_image"
+      render json: {status: status}
+    elsif left_deal_params[:title].blank?
+      status = "no_left_title"
+      render json: {status: status}
+    elsif right_deal_params[:image_id].blank? && @ask.right_ask_deal.image == nil
+      status = "no_right_image"
+      render json: {status: status}
+    elsif right_deal_params[:title].blank?
+      status = "no_right_title"
+      render json: {status: status}
+    elsif params[:ask][:message].blank?
+      status = "no_ask_message"
+      render json: {status: status}
     else
+      # left_ask_deal
+      unless left_deal_params[:image_id].blank?
+        left_image = PreviewImage.find(left_deal_params[:image_id]).image.styles[:square]
+        left_deal_params[:image] = left_image
+      end
+      left_deal_params.except!(:image_id)
+
+      left_deal = Deal.find(left_deal_params[:deal_id])
+      left_deal_params[:is_modify] = true unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
+
+      unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(left_deal_params)
+      @ask.left_ask_deal.update(unlocked_params)
+
+      # right_ask_deal
+      unless right_deal_params[:image_id].blank?
+        right_image = PreviewImage.find(right_deal_params[:image_id]).image.styles[:square]
+        right_deal_params[:image] = right_image
+      end
+      right_deal_params.except!(:image_id)
+
       right_deal = Deal.find(right_deal_params[:deal_id])
-      # if right_image.blank?
-      #   right_image = right_deal.image
-      # else
-      #   right_deal_is_modify = true
-      # end
-      unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
-        right_deal_is_modify = true
-      end
-      @ask.right_ask_deal.update(:image => right_image)
-      right_deal_params[:image] = right_image
-    end
-    right_deal_params.except!("image_id")
-    right_deal_params.except!("image")
-    unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(right_deal_params)
-    @ask.right_ask_deal.update(unlocked_params)
+      right_deal_params[:is_modify] = true unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
 
-    params["ask"]["message"].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
-    @ask.update(ask_params)
+      unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(right_deal_params)
+      @ask.right_ask_deal.update(unlocked_params)
 
-    # 카테고리가 없는 경우 카테고리 추가
-    unless UserCategory.where(:user_id => current_user.id).blank? #AJS추가 유저가 카테고리를 수동으로 설정한 경우에 한해, 신규 카테고리 내용 글 쓰면 카테고리를 추가해서 보여줌
-      if @ask.category_id && !UserCategory.where(:user_id => current_user.id).map(&:category_id).include?(@ask.category_id)
-        UserCategory.create(:user_id => current_user.id, :category_id => @ask.category_id)
-      end
-    end
-
-    HashTag.destroy_all(:ask_id => @ask.id) #AJS추가 - 해쉬태그 기존 값을 모두 삭제 후 업데이트된 내용으로 재 설정
-    hash_tags = @ask.message.scan(/#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*/)
-    hash_tags.each do |hash_tag|
-      hash_tag = hash_tag.tr("#","").tr(",","")
-      HashTag.create(:ask_id => @ask.id, :user_id => current_user.id, :keyword => hash_tag) # if HashTag.where(:ask_id => @ask.id, :keyword => hash_tag).blank?
-    end
-
-    # flash[:redirect_url] = "/" #AJS추가(삭제)
-    flash[:ask_create] = "게시글 수정 완료! 친구들에게 공유해보세요 :)"
-    flash[:ask_id] = @ask.id
-
-    redirect_to "/asks/#{@ask.id}"
-  end
-
-  #GET /asks/:id/ask_complete
-  def ask_complete
-    if current_user
-      if current_user.id != @ask.user_id
-        flash[:ask_create] = "권한이 없습니다"
-        redirect_to root_path
-      elsif @ask.be_completed == true
-        flash[:ask_create] = "이미 종료된 투표입니다"
-        redirect_to root_path
-      else
-        @detail_vote_count = @ask.detail_vote_count
-      end
-    else
-      redirect_to "/landing"
+      # ask
+      params[:ask][:message].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
+      @ask.update(ask_params)
+      status = "success"
+      render json: {status: status, ask: @ask}
     end
   end
 
-  #GET /asks/:id/create_complete
-  def create_complete
-    if AskComplete.where(:user_id => current_user.id, :ask_id => @ask.id).blank? #이미 종료한 경우
-      @ask.update(:be_completed => true)
-      AskComplete.create(:user_id => current_user.id, :ask_id => @ask.id, :ask_deal_id => params[:ask_deal_id], :star_point => params[:star_point])
-    end
 
-    redirect_to root_path
-  end
-
-
-  # DELETE /asks/1
-  # DELETE /asks/1.json
+  # DELETE /asks/:id.json
   def destroy
-    @ask.destroy
-    respond_to do |format|
-      format.html { redirect_to asks_path }
-      format.json { head :no_ask }
-    end
+    @ask.update(be_completed: true)
+    AskComplete.create(user_id: current_user.id, ask_id: @ask.id)
+    render json: {}
   end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -296,6 +289,6 @@ class AsksController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def ask_params
-      params.require(:ask).permit(:user_id, :left_ask_deal_id, :right_ask_deal_id, :category_id, :message, :be_completed, :admin_choice, :spec1, :spec2, :spec3)
+      params.require(:ask).permit(:user_id, :left_ask_deal_id, :right_ask_deal_id, :message, :be_completed, :admin_choice, :spec1, :spec2, :spec3)
     end
 end

@@ -1,0 +1,134 @@
+<div style="padding:10px;">
+  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 생성</h2>
+	<div style="position:relative;">
+    <span class="collection_input_icon">title</span>
+    <input id="collection_input" class="collection_input" type="text" placeholder="생성할 컬렉션의 제목을 입력하세요" />
+  </div>
+  <div style="position:relative;">
+    <span class="collection_input_icon">desc</span>
+    <input id="collection_description" class="collection_input" type="text" placeholder="생성할 컬렉션의 설명을 입력하세요" />
+  </div>
+  <a id="collection_submit_btn" href="#" onclick="create_collection(); return false;" style="display:block; width:100%; height:40px; line-height:40px; text-align:center; background-color:#f18b33; color:#fff; font-size:13px;">생성 <i class="fa fa-database"></i></a>
+  <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center; margin-top:10px;">
+    <thead>
+      <tr style="height:40px; background-color:#998674; color:#fff;">
+        <th>id</th>
+        <th>제목</th>
+        <th>설명</th>
+        <th>컨텐츠</th>
+        <th>태그</th>
+        <th>메인</th>
+        <th>수정</th>
+      </tr>
+    </thead>
+    <tbody id="recent_asks">
+      <% if @collections.blank? %>
+        <tr>
+          <td colspan="4" style="height:120px;">내용이 없습니다</td>
+        </tr>
+      <% else %>
+        <% @collections.each do |collection| %>
+            <tr>
+              <td><%= collection.id %></td>
+              <td style="text-align:left;"><%= raw collection.name %></td>
+              <td style="text-align:left;"><%= collection.description %></td>
+              <td><%= collection.collection_to_asks.length %>개</td>
+              <td><%= collection.collection_to_collection_keywords.length %>개</td>
+              <td><i class="fa <%= collection.show == true ? 'fa-check' : 'fa-remove' %>" style="color:<%= collection.show == true ? '#ee6e01' : '#666' %>;"></i></td>
+              <td><%= link_to 'Edit', admin_collection_path(collection.id) %></td>
+            </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .collection_input_icon {
+    position: absolute;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+  	box-sizing: border-box;
+    text-align: center;
+    line-height: 40px;
+    color: #666;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #f4f4f4;
+    border: 1px solid #dbdbdb;
+  }
+  .collection_input_icon.right_btn {
+    right:0px;
+    background-color: #f18b33;
+    color:#fff;
+    width: 60px;
+    font-size: 13px;
+    border-left:none;
+    cursor:pointer;
+  }
+  .collection_input {
+    display:block;
+    width:100%;
+    height:40px;
+    margin:10px 0;
+    line-height:40px;
+    padding:0 10px 0 50px;
+    -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+    border:1px solid #dbdbdb;
+    color:#666;
+    font-size:13px;
+    -webkit-appearance:none;
+    border-radius:0;
+  }
+</style>
+
+<script>
+  $("#collection_input, #collection_description").keydown(function(e){
+		if (e.keyCode == '13') {
+			e.preventDefault();
+			$("#collection_submit_btn").click();
+		}
+	});
+
+  $("#collection_ask_input").keydown(function(e){
+		if (e.keyCode == '13') {
+			e.preventDefault();
+			$("#collection_ask_submit_btn").click();
+		}
+	});
+
+  function create_collection() {
+    var name = $("#collection_input").val();
+    var desc = $("#collection_description").val();
+    if (name == "") {
+      alert('제목을 입력하세요');
+      $("#collection_input").focus();
+      return false;
+    } else if (desc == "") {
+      alert('설명을 입력하세요');
+      $("#collection_description").focus();
+      return false;
+    } else {
+      $.ajax({
+        url: "/admin/collections.json",
+        type: 'POST',
+        data: {'name': name, 'desc': desc},
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          location.reload();
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  };
+</script>

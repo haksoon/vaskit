@@ -1,0 +1,9 @@
+<script>
+	$(window).ready(function(){
+		<% if current_user %>
+			go_seg(4);
+		<% else %>
+			go_url('landing');
+		<% end %>
+	});
+</script>

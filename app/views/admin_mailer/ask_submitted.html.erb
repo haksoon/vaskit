@@ -16,9 +16,6 @@
         성별: <%= User.find(@ask.user_id).gender == true ? "남성" : "여성" %>
       </li>
       <li>
-        카테고리: <%= Category.find(@ask.category_id).name %>
-      </li>
-      <li>
         작성 내용: <%= @ask.message %>
       </li>
       <li>

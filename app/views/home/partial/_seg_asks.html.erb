@@ -1,0 +1,515 @@
+<script type="text/template" id="asksListTemplate">
+  <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'asks');" url="{{=url}}">
+    {{ var l = asks.length }}
+    {{ if (l == 0) { }}
+      <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
+    {{ } else { }}
+      {{ for (var i=0; i < l; i++) { }}
+        {{ var ask = asks[i] }}
+        {{= askThumbnailTemplate({ask:ask}) }}
+      {{ } }}
+      {{ if (l == <%= Ask::ASK_PER %>) { }}
+        <div class="loading_icon" page="2" loading="true"><i class="fa fa-spinner fa-spin"></i></div>
+      {{ } else { }}
+        <div class="loading_icon" page="2">- End of Contents -</i></div>
+      {{ } }}
+    {{ } }}
+  </div>
+</script>
+
+<script>
+  function endless_loading(target, type) {
+    var loading_icon = target.find(".loading_icon");
+    var loading = Boolean(loading_icon.attr("loading"));
+    if (loading && nearBottomOfContainer(target)) {
+      var url = target.attr("url");
+      var page = Number(loading_icon.attr("page"));
+      $.ajax({
+              url: url,
+              dataType: "json",
+              type: "GET",
+              data: {page: page},
+              error: function(){
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data) {
+                var is_more_load;
+                if (type == "asks") {
+                  var asks = data.asks;
+                  for (var i=0; i < asks.length; i++) {
+                    var ask = asks[i];
+                    loading_icon.before(askThumbnailTemplate({ask:ask}));
+                  };
+                  is_more_load = asks.length == <%= Ask::ASK_PER %> ? true : false;
+                } else if (type == "collections") {
+                  var collections = data.collections;
+                  for (var i=0; i < collections.length; i++) {
+                    var collection = collections[i]
+                    loading_icon.before(collectionTemplate({collection: collection}));
+                  };
+                  is_more_load = collections.length == <%= Collection::COLLECTION_PER %> ? true : false;
+                };
+                if (is_more_load) {
+                  loading_icon.attr("page", Number(page)+1);
+                  loading_icon.attr("loading", true);
+                } else {
+                  loading_icon.html("- End of Contents -").animateCss("flipInY");
+                }
+              },
+              beforeSend: function(){
+                loadingStart();
+                loading_icon.removeAttr("loading");
+              },
+              complete: function(){
+                loadingEnd();
+              }
+      });
+    };
+  };
+</script>
+
+<script type="text/template" id="askThumbnailTemplate">
+  {{ var my_vote = [] }}
+  {{ var is_voted = false }}
+  {{ var vote_id = '' }}
+  {{ var vote_direction = '' }}
+  {{ if (current_user && current_user.id == ask.user_id) { }}
+    {{ is_voted = true }}
+    {{ vote_id = '' }}
+    {{ vote_direction = '' }}
+  {{ } else if (current_user) { }}
+    {{ my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) }) }}
+    {{ if (my_vote.length > 0) { }}
+      {{ vote_id = my_vote[0].id }}
+      {{ is_voted = true }}
+      {{ vote_direction = ask.left_ask_deal_id == my_vote[0].ask_deal_id ? 'left' : 'right' }}
+    {{ } }}
+  {{ } else { }}
+    {{ var my_votes = [] }}
+    {{ var votes = $.cookie('visitor_votes') }}
+    {{ var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".") }}
+    {{ for (var i=0; i < votes_array.length; i++) { }}
+      {{ var vote = votes_array[i] }}
+      {{ vote = JSON.parse(vote) }}
+      {{ my_votes.push(vote) }}
+    {{ } }}
+    {{ my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) }) }}
+    {{ if (my_vote.length > 0) { }}
+      {{ vote_id = my_vote[0].id }}
+      {{ is_voted = true }}
+      {{ vote_direction = my_vote[0].is_left ? 'left' : 'right' }}
+    {{ } }}
+  {{ } }}
+  {{ if (ask.be_completed == true) is_voted = true }}
+  {{ var left_count = ask.left_ask_deal.vote_count }}
+  {{ var right_count = ask.right_ask_deal.vote_count }}
+  {{ var total_count = left_count + right_count }}
+  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+    <div class="clearfix">
+      {{ var already_like = false }}
+      {{ if (current_user) { }}
+        {{ var already_like = $.grep(ask.ask_likes, function(obj) { return (obj.user_id == current_user.id) }).length > 0 ? true : false }}
+      {{ } }}
+      <div class="ask_user">
+        <img class="user_profile" src="{{= get_avatar(ask.user) }}">
+        <span class="user_id">{{= ask.user.string_id }}</span>
+        <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
+        <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
+      </div>
+      <div class="ask_message text_box_short">
+        {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
+      </div>
+      <div class="ask_message_more"><i class="fa fa-angle-double-right"></i></div>
+    </div>
+    <div class="clearfix">
+      <div class="vs_result">
+        {{= askResultTemplate({type: "전체", left_count: left_count, right_count: right_count, total_count: total_count }) }}
+      </div>
+      <div class="vs_help">
+        <div class="vs_before_text">
+          <i class="fa fa-hand-pointer-o"></i> 상세한 내용을 보시려면 터치하세요!
+        </div>
+        <div class="vs_help_text">
+          <i class="fa fa-hand-pointer-o"></i> vs버튼을 좌우로 움직여 투표에 참여하세요!
+        </div>
+        <div class="vs_help_menu">
+          {{ if (current_user == null || current_user.id != ask.user_id) { }}
+            <div class="vs_help_menu_left ask_like_text {{= already_like ? 'is_liked' : '' }}" onclick="like_ask($(this)); window.event.cancelBubble = true;" ask-id="{{= ask.id }}">공감해요 <i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i></div>
+            <div class="vs_help_menu_center" onclick="go_url('ask', {{= ask.id }});">댓글달기 <i class="vaskit_icon comment_icon"></i></div>
+            <div class="vs_help_menu_right" onclick="go_url('share', 'ask, {{= ask.id }}');">공유하기 <i class="vaskit_icon share_icon"></i></div>
+          {{ } else { }}
+            <div class="vs_help_menu_left" onclick="go_url('ask', {{= ask.id }});">내용보기 <i class="fa fa-check"></i></div>
+            <div class="vs_help_menu_center" onclick="go_url('ask_form', {{= ask.id }}); window.event.cancelBubble = true;">수정하기 <i class="fa fa-edit"></i></div>
+            <div class="vs_help_menu_right" onclick="go_url('share', 'ask, {{= ask.id }}');">공유하기 <i class="vaskit_icon share_icon"></i></div>
+          {{ } }}
+        </div>
+      </div>
+      <div class="ask_image_box">
+        <i class="fa fa-angle-left ask_image_background"></i>
+        <span class="ask_image_background cancel">&times;</span>
+        <i class="fa fa-angle-right ask_image_background"></i>
+        <img class="ask_image left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
+        <img class="ask_image right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
+        {{ if (current_user && current_user.id == ask.user_id) { }}
+          {{ var left_ratio = (left_count / ( left_count + right_count ) * 100).toFixed() }}
+          {{ var right_ratio = (right_count / ( left_count + right_count ) * 100).toFixed() }}
+          {{ if (total_count == 0) { }}
+            <span class="my_ask_vote_count blank"><small>이제 곧 투표가 시작됩니다 😬</small></span>
+          {{ } else { }}
+            <span class="my_ask_vote_count left">{{= left_ratio }}<small>%</small></span>
+            <span class="my_ask_vote_count right">{{= right_ratio }}<small>%</small></span>
+          {{ } }}
+        {{ } }}
+        <span class="ask_title_label text_box_short left">{{=ask.left_ask_deal.title}}</span>
+        <span class="ask_title_label text_box_short right">{{=ask.right_ask_deal.title}}</span>
+        <div class="ask_completed {{= ask.be_completed ? 'on' : '' }}">종료된 투표입니다</div>
+      </div>
+      {{ if (ask.be_completed == false && (current_user == null || current_user.id != ask.user_id)) { }}
+        <div class="vs_btn {{= is_voted ? '' : 'animated rubberBand' }} {{= vote_direction }}" onanimationstart="vs_init($(this));" onmouseover="vs_init($(this));" onanimationend="$(this).removeClass('animated rubberBand');" vote-id="{{= vote_id }}" vote-direction="{{= vote_direction }}">vs</div>
+      {{ } }}
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="askResultTemplate">
+  <span class="left_vote_count">{{= left_count }}</span>
+  <div class="vote_graph left">
+    {{ for(var i=0; i < 10; i++) { }}
+      <span class="circle left {{= i < (left_count / total_count) * 10 ? 'on' : '' }}" style="animation-delay: {{= i * 0.1 }}s;"></span>
+    {{ } }}
+  </div>
+  <span class="vote_type">{{= type }}</span>
+  <div class="vote_graph right">
+    {{ for(var i=0; i < 10; i++) { }}
+      <span class="circle right {{= i < (right_count / total_count) * 10 ? 'on' : '' }}" style="animation-delay: {{= i * 0.1 }}s;"></span>
+    {{ } }}
+  </div>
+  <span class="right_vote_count">{{= right_count }}</span>
+</script>
+
+<script>
+  var asksListTemplate = _.template($("#asksListTemplate").html());
+  var askThumbnailTemplate = _.template($("#askThumbnailTemplate").html());
+  var askResultTemplate = _.template($("#askResultTemplate").html());
+
+  function vs_init(target) {
+    var mouseTarget, mouseStartX, mouseStartY, mouseEndX, mouseEndY; // Mouse/Touch event target
+    var ask_box = target.parentsUntil(this, ".ask"),
+        ask_image_box = ask_box.find(".ask_image_box"),
+        left_img = ask_box.find(".ask_image.left"),
+        right_img = ask_box.find(".ask_image.right"),
+        vs_result = ask_box.find(".vs_result"),
+        vs_result_detail = ask_box.find(".vs_result_detail"),
+        vs_result_detail_btn = ask_box.find(".vs_result_detail_btn");
+    var ask_id = Number(ask_box.attr("ask-id")),
+        ask_image_box_top,
+        ask_image_box_left,
+        ask_image_box_width,
+        vs_delta = 10;
+
+
+    target.removeAttr("onanimationstart onmouseover").each(function(){
+      $(this).off("click", clickListener).on("click", clickListener);
+      $(this).off("mousedown", mouseDownListener).on("mousedown", mouseDownListener);
+      $(this).off("touchstart", touchStartListener).on("touchstart", touchStartListener);
+      $(this).off("touchmove", touchMoveListener).on("touchmove", touchMoveListener);
+      $(this).off("touchend", touchEndListener).on("touchend", touchEndListener);
+    });
+
+
+    function clickListener(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    };
+
+    function mouseDownListener(e){
+      e.preventDefault();
+      // e.stopPropagation();
+      mouseTarget = $(e.currentTarget);
+      mouseStartX = mouseEndX = e.pageX;
+      mouseStartY = mouseEndY = e.pageY;
+
+      console.log('mousedown');
+
+      // unbind and bind mouse events to prevent repeated binding
+      $(document).unbind("mousemove", mouseMoveListener);
+      $(document).unbind("mouseup", mouseUpListener);
+      $(document).bind("mousemove", mouseMoveListener);
+      $(document).bind("mouseup", mouseUpListener);
+      // unbind touch events
+      mouseTarget.unbind("touchstart", touchStartListener);
+      mouseTarget.unbind("touchmove", touchMoveListener);
+      mouseTarget.unbind("touchend", touchEndListener);
+
+      // Custom Code
+      start(e);
+    };
+
+    function mouseMoveListener(e){
+      e.preventDefault();
+      mouseEndX = e.pageX;
+      mouseEndY = e.pageY;
+
+      // Custom Code
+      moving(e);
+    };
+
+    function mouseUpListener(e){
+      e.preventDefault();
+
+      // unbind mouse events
+      $(document).unbind("mousemove", mouseMoveListener);
+      $(document).unbind("mouseup", mouseUpListener);
+      // bind touch events
+      mouseTarget.bind("touchstart", touchStartListener);
+      mouseTarget.bind("touchmove", touchMoveListener);
+      mouseTarget.bind("touchend", touchEndListener);
+
+      // Custom Code
+      end(e);
+    };
+
+    function touchStartListener(e){
+      e.preventDefault();
+      mouseTarget = $(e.currentTarget);
+      mouseStartX = mouseEndX = e.originalEvent.touches[0].clientX;
+      mouseStartY = mouseEndY = e.originalEvent.touches[0].clientY;
+
+      console.log('touchstart');
+
+      // unbind mouse events to prevent repeated binding
+      mouseTarget.unbind("mousedown", mouseDownListener);
+
+      // Custom Code
+      start(e);
+    };
+
+    function touchMoveListener(e){
+      e.preventDefault();
+      e.stopPropagation();
+
+      mouseEndX = e.originalEvent.touches[0].clientX;
+      mouseEndY = e.originalEvent.touches[0].clientY;
+
+      // Custom Code
+      moving(e);
+    };
+
+    function touchEndListener(e){
+      e.preventDefault();
+
+      // Custom Code
+      end(e);
+    };
+
+
+    function start(e) {
+      var vote_direction = target.attr("vote-direction");
+
+      if (vote_direction == "left") {
+        left_img.css({left: "10vw"});
+        right_img.css({right: "-10vw"});
+      } else if (vote_direction == "right") {
+        left_img.css({left: "-10vw"});
+        right_img.css({right: "10vw"});
+      }
+
+      ask_image_box_top = ask_image_box.offset().top;
+      ask_image_box_left = ask_image_box.offset().left;
+      ask_image_box_width = ask_box.width();
+      ask_box.removeClass("is_voted").addClass("is_voting");
+      vs_result_detail.removeClass("is_opened");
+      vs_result_detail_btn.removeClass("is_opened");
+      target.removeClass("left right").css({
+        top: mouseStartY - ask_image_box_top,
+        left: mouseStartX - ask_image_box_left
+      });
+    };
+
+    function moving(e) {
+      target.clearQueue().css({
+        top: mouseEndY - ask_image_box_top,
+        left: mouseEndX - ask_image_box_left
+      });
+      if (mouseEndX - ask_image_box_left < (ask_image_box_width / 2) - vs_delta) {
+        left_img.clearQueue().css({left: "10vw"});
+        right_img.clearQueue().css({right: "-10vw"});
+      } else if (mouseEndX - ask_image_box_left > (ask_image_box_width / 2) + vs_delta) {
+        left_img.clearQueue().css({left: "-10vw"});
+        right_img.clearQueue().css({right: "10vw"});
+      } else {
+        left_img.clearQueue().css({left: "-3vw"});
+        right_img.clearQueue().css({right: "-3vw"});
+      };
+    };
+
+    function end(e) {
+      ask_box.removeClass("is_voting");
+      left_img.clearQueue().css({left: 0});
+      right_img.clearQueue().css({right: 0});
+
+      var vote_id = Number(target.attr("vote-id"));
+      var vote_direction = target.attr("vote-direction");
+
+      if (mouseEndX - ask_image_box_left < (ask_image_box_width / 2) - vs_delta) {
+        if (vote_direction != "left") vote(target, ask_id, true);
+        ask_box.addClass("is_voted");
+        target.addClass("left").clearQueue().stop().animate({
+          top: '50%',
+          left: '25%'
+        }, 250, 'easeOutBack');
+      } else if (mouseEndX - ask_image_box_left > (ask_image_box_width / 2) + vs_delta) {
+        if (vote_direction != "right") vote(target, ask_id, false);
+        ask_box.addClass("is_voted");
+        target.addClass("right").clearQueue().stop().animate({
+          top: '50%',
+          left: '75%'
+        }, 250, 'easeOutBack');
+      } else {
+        if (vote_id) vote_cancel(target, ask_id, vote_id);
+        ask_box.removeClass("is_voted");
+        target.removeClass("left right").clearQueue().stop().animate({
+          top: '50%',
+          left: '50%'
+        }, 250, 'easeInOutBack');
+      };
+    };
+
+  };
+
+  function vote(target, ask_id, is_left) {
+    var vote_id;
+    var all_ask_box = $(".ask.ask_"+ask_id);
+    var all_vs_btns = all_ask_box.find(".vs_btn").not(target);
+    var all_vs_results = all_ask_box.find(".vs_result");
+    var all_comment_toggles = all_ask_box.find(".comment_input_menu");
+    if (current_user) {
+      $.ajax({
+              url: "/votes.json",
+              dataType: "json",
+              type: "POST",
+              data: {ask_id: ask_id, is_left: is_left},
+              error: function() {
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data) {
+                all_ask_box.addClass("is_voted");
+                var left_vote_count = data.ask.left_ask_deal.vote_count;
+                var right_vote_count = data.ask.right_ask_deal.vote_count;
+                if (is_left) {
+                  all_vs_results.html(askResultTemplate({type: "전체", left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
+                                 .find(".vote_graph.left").find(".on").animateCss("flash");
+                  all_vs_btns.attr("vote-id", data.vote.id)
+                              .attr("vote-direction", "left")
+                              .removeClass("right").addClass("left").clearQueue().stop().css({
+                                top: '50%',
+                                left: '25%'
+                              });
+                  all_comment_toggles.attr("left", true).removeClass("right").addClass("left");
+                } else {
+                  all_vs_results.html(askResultTemplate({type: "전체", left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
+                                 .find(".vote_graph.right").find(".on").animateCss("flash");
+                  all_vs_btns.attr("vote-id", data.vote.id)
+                              .attr("vote-direction", "right")
+                              .removeClass("left").addClass("right").clearQueue().stop().css({
+                                top: '50%',
+                                left: '75%'
+                              });
+                  all_comment_toggles.removeAttr("left").removeClass("left").addClass("right");
+                }
+              },
+              beforeSend: function() {
+              },
+              complete: function() {
+              }
+      });
+    } else {
+      var votes = $.cookie('visitor_votes');
+      var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".");
+
+      vote_id = votes_array.length == 0 ? 0 : JSON.parse(votes_array[votes_array.length-1]).id + 1;
+      for (var i=0; i<votes_array.length; i++) {
+        var vote = votes_array[i];
+        vote = JSON.parse(vote);
+        if (vote.ask_id == ask_id) votes_array.splice(i,1);
+      };
+      var this_vote = JSON.stringify({
+        id: vote_id,
+        ask_id: ask_id,
+        is_left: is_left
+      });
+      votes_array.push(this_vote);
+      votes = votes_array.join(".");
+      $.cookie('visitor_votes', votes, { expires : 30000, path : '/' });
+
+      all_ask_box.addClass("is_voted");
+      if (is_left) {
+        all_vs_btns.attr("vote-id", vote_id)
+                    .attr("vote-direction", "left")
+                    .removeClass("right").addClass("left").clearQueue().stop().css({
+                      top: '50%',
+                      left: '25%'
+                    });
+      } else {
+        all_vs_btns.attr("vote-id", vote_id)
+                    .attr("vote-direction", "right")
+                    .removeClass("left").addClass("right").clearQueue().stop().css({
+                      top: '50%',
+                      left: '75%'
+                    });
+      }
+
+      if (votes_array.length > 4) visitor_check();
+    }
+  };
+
+
+  function vote_cancel(target, ask_id, vote_id) {
+    var all_ask_box = $(".ask.ask_"+ask_id);
+    var all_vs_btns = all_ask_box.find(".vs_btn").not(target);
+    if (current_user) {
+      $.ajax({
+              url: "/votes/"+vote_id+".json",
+              dataType: "json",
+              type: "DELETE",
+              error: function() {
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data) {
+                all_ask_box.removeClass("is_voted");
+                all_vs_btns.removeAttr("vote-id")
+                            .removeAttr("vote-direction")
+                            .removeClass("left right").clearQueue().stop().css({
+                              top: '50%',
+                              left: '50%'
+                            });
+              },
+              beforeSend: function() {
+                loadingStart();
+              },
+              complete: function() {
+                loadingEnd();
+              }
+      });
+    } else {
+      var votes = $.cookie('visitor_votes');
+      var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".");
+      for (var i=0; i<votes_array.length; i++) {
+        var vote = votes_array[i];
+        vote = JSON.parse(vote);
+        if (vote.id == vote_id) votes_array.splice(i,1);
+      };
+
+      votes = votes_array.join(".");
+      $.cookie('visitor_votes', votes, { expires : 30000, path : '/' });
+
+      all_ask_box.removeClass("is_voted");
+      all_vs_btns.removeAttr("vote-id")
+                  .removeAttr("vote-direction")
+                  .removeClass("left right").clearQueue().stop().css({
+                    top: '50%',
+                    left: '50%'
+                  });
+    }
+  };
+</script>

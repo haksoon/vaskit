@@ -1,0 +1,42 @@
+<script type="text/template" id="menuTemplate">
+  <div class="viewer menu ready" ontouchmove="return false;">
+    <div class="menu_background" onclick="back_button();"></div>
+    <div class="menu_box ready">
+      <ul class="menu_lists">
+        {{ if (options.description != null) { }}
+          <li class="menu_description">{{=options.description}}</li>
+        {{ } }}
+        {{ for (var i = 0; i < options.menus.length; i++) { }}
+          {{ var menu = options.menus[i] }}
+          <li class="menu_list" onclick="{{= menu.func }}">{{=menu.name}}</li>
+        {{ } }}
+      </ul>
+      <ul class="menu_lists">
+        <li class="menu_list" onclick="back_button();">취소</li>
+      </ul>
+    </div>
+  </div>
+</script>
+
+<script>
+  var menuTemplate = _.template($("#menuTemplate").html());
+
+  function show_menu(options) {
+    $("#main_view").append(menuTemplate({options: options}));
+    var menu = $(".viewer.menu").last();
+    var menu_box = menu.find(".menu_box");
+    setTimeout(function(){
+      menu.removeClass("ready");
+      menu_box.removeClass("ready");
+    },50);
+  };
+
+  function hide_menu() {
+    var menu = $(".viewer.menu").last();
+    var menu_box = menu.find(".menu_box");
+    menu.addClass("ready");
+    menu_box.addClass("ready").transitionRemove(function(){
+      menu.remove();
+    });
+  };
+</script>

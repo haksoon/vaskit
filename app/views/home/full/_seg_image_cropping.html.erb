@@ -1,0 +1,148 @@
+<script type="text/template" id="imageCropTemplate">
+  <%= form_for(:preview_images, remote: true, html: {id: "image_crop_form", style: "height: 100%;"}) do |f| %>
+    <div class="container top dark" ontouchmove="return false;">
+      <span id="image_crop_info" class="header_title">터치하여 이미지를 조절하세요<br>이미지 해상도가 낮습니다</span>
+      <span class="header_btn left back_btn" onclick="back_button();">&times;</span>
+      <span id="image_save_btn" class="header_btn right submit_btn ready">저장</span>
+    </div>
+    <div class="container main dark">
+      <img id="image_to_crop" src="{{= preview_image_url }}" alt="">
+    </div>
+  <% end %>
+</script>
+
+<script>
+  var imageCropTemplate = _.template($("#imageCropTemplate").html());
+
+  function show_image_edit(target, cropping_type) {
+    window.event.cancelBubble = true;
+    var img_to_be_changed = target.parent().find("img");
+    var preview_img_id = Number(target.attr("img-id"));
+    var is_circle = Boolean(target.attr("is-circle"));
+    var cropping_type = target.attr("cropping-type");
+    var cropper;
+    if ($("#image_crop_form").length == 0) {
+      $.ajax({
+              url: "/preview_images/" + preview_img_id + ".json",
+              dataType: "json",
+              type: "GET",
+              error: function(){
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function (data){
+                open_full_view(imageCropTemplate({preview_image_url: data.preview_image_url}));
+                init_image_cropper();
+              },
+              beforeSend: function(){
+                loadingStart();
+              },
+              complete: function(){
+                loadingEnd();
+              }
+      });
+    };
+
+    function init_image_cropper() {
+      var preview_image = document.getElementById("image_to_crop");
+      if (cropper != null) cropper.destroy();
+      var crop_option = {
+        viewMode: 1,
+        dragMode: 'move',
+        aspectRatio: 1 / 1,
+        responsive: true,
+        restore: false,
+        checkOrientation: true,
+        modal: true,
+        guides: false,
+        center: false,
+        highlight: false,
+        background: false,
+        autoCrop: true,
+        autoCropArea: 1,
+        movable: true,
+        rotatable: true,
+        zoomable: true,
+        zoomOnTouch: true,
+        zoomOnWheel: true,
+        wheelZoomRatio: 0.1,
+        cropBoxMovable: false,
+        cropBoxResizable: false,
+        toggleDragModeOnDblclick: false,
+        ready: function(e) {
+          if (is_circle) $(".cropper-view-box").addClass("circle");
+        },
+        cropstart: function(e) {
+          // 한손 터치 시작시 1회 발생
+        },
+        cropmove: function(e) {
+          // 한손 터치 이동시 연속적으로 발생
+        },
+        cropend: function(e) {
+          // 한손 터치 종료시 1회 발생
+        },
+        zoom: function(e) {
+          // zoom 조절시 연속적으로 발생
+        },
+        crop: function(e) {
+          // 모든 행위에서 연속적으로 발생 (끝판왕임, 시작시 autoCrop 포함)
+          set_image_crop_data(e);
+        }
+      };
+      cropper = new Cropper(preview_image, crop_option);
+
+      var image_save_btn = $("#image_save_btn");
+      image_save_btn.off("click").on("click", function(){
+        submit_image_cropper($(this));
+      });
+
+      function set_image_crop_data(e) {
+        image_save_btn.attr("crop-x", cropper.getData(true).x);
+        image_save_btn.attr("crop-y", cropper.getData(true).y);
+        image_save_btn.attr("crop-w", cropper.getData(true).width);
+        image_save_btn.attr("crop-h", cropper.getData(true).height);
+      };
+    };
+
+    function submit_image_cropper(submit_btn) {
+      var crop_x = submit_btn.attr("crop-x");
+      var crop_y = submit_btn.attr("crop-y");
+      var crop_w = submit_btn.attr("crop-w");
+      var crop_h = submit_btn.attr("crop-h");
+      $.ajax({
+              url: "/preview_images/" + preview_img_id,
+              dataType: "json",
+              type: "PUT",
+              data: {crop_x: crop_x, crop_y: crop_y, crop_w: crop_w, crop_h: crop_h, cropping_type: cropping_type},
+              error: function(){
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function (data){
+                img_to_be_changed.attr("src", data.image_url).animateCss("pulse");
+                go_back(1);
+                close_full_view();
+                if (cropping_type == "user_profile") {
+                  $("#user_profile_pic").attr("src", data.image_url);
+                };
+              },
+              beforeSend: function(){
+                loadingStart();
+              },
+              complete: function(){
+                loadingEnd();
+              }
+      });
+    };
+
+  };
+
+
+
+  function hide_image_edit() {
+    if (confirm('편집중인 내용이 저장되지 않습니다. 종료하시겠어요?')) {
+      close_full_view();
+    } else {
+      history.go(1);
+    }
+  };
+
+</script>

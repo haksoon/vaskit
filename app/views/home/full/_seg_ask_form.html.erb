@@ -1,0 +1,844 @@
+<script type="text/template" id="askFormTemplate">
+  <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check($(this));", onchange: "ask_progress_check($(this));"}) do |f| %>
+    <div class="container top dark" ontouchmove="return false;">
+      <span class="header_title">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
+      <span class="header_btn left" onclick="back_button();">취소</span>
+      <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음</span>
+    </div>
+    <div class="container main">
+      <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.left_ask_deal, is_left: true}) }}</div>
+      <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.right_ask_deal, is_left: false}) }}</div>
+      <div class="inner step_3 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardResultTemplate({ask: ask}) }}</div>
+      <div class="card_search_input_init" onclick="card_search_input_init($(this));" is-left="true" ontouchmove="return false;">
+        <input class="input text_field left right card_search_input" type="text" placeholder="제품명을 검색해서 입력해보세요!" disabled>
+        <span class="input btn_field left card_search_icon"><i class="fa fa-search"></i></span>
+        <span class="input btn_field right card_search_input_submit"><i class="fa fa-search"></i></span>
+        <span class="input btn_field text_btn right card_search_input_reset"><i class="fa fa-times-circle"></i></a>
+      </div>
+      <div class="ask_form_progress" ontouchmove="return false;"><div class="ask_form_progress bar"></div></div>
+    </div>
+    <div class="inner card_search_result bottom"></div>
+  <% end %>
+</script>
+
+<script>
+  var askFormTemplate = _.template($('#askFormTemplate').html());
+
+  function show_ask_form(ask_id) {
+    var url = '/asks/';
+    if ($("#ask_form").length == 0) {
+      url += ask_id == null ? 'new' : ask_id+'/edit';
+      $.ajax({
+        url: url,
+        dataType: "json",
+        type: "GET",
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          if (data.status == "success") {
+            open_full_view(askFormTemplate({ask: data.ask}));
+            if (userApp) setAppStatusBar("dark");
+          } else if (data.status == "not_authorized") {
+            notify('권한이 없습니다');
+            go_back(1);
+          };
+        },
+        beforeSend: function(){
+          if (ask_id != null) loadingStart();
+        },
+        complete: function(){
+          if (ask_id != null) loadingEnd();
+        }
+      });
+    }
+
+    return url;
+  }
+
+  function hide_ask_form() {
+    if (confirm('작성중인 내용이 삭제됩니다. 종료하시겠어요?')) {
+      close_full_view();
+      if (userApp) setAppStatusBar();
+    } else {
+      history.go(1);
+    }
+  };
+
+  function card_search_input_init(target) {
+    var ask_form = $("#ask_form");
+    var all_inners = ask_form.find(".inner");
+    var card_search_input_submit = target.find(".card_search_input_submit");
+    var card_search_input_reset = target.find(".card_search_input_reset");
+    var card_search_input = target.find(".card_search_input");
+    var is_left = Boolean(target.attr("is-left"));
+
+    all_inners.find(".input.text_field").attr('disabled', true);
+    card_search_input_submit.off("click").on("click", function(){ search_by_key() });
+    card_search_input_reset.off("click").on("click", function(){ search_keyword_reset() });
+    card_search_input.off("keydown keyup")
+                      .on("keydown", function(e) {
+                   	    if (e.keyCode == '13') {
+                      	 	e.preventDefault();
+                          $(this).blur();
+                          search_by_key();
+                   	    } else if (e.keyCode == '27') {
+                    			e.preventDefault();
+                    			search_keyword_reset();
+                        }
+                   	  }).on("keyup", function(e) {
+                        var keyword = $(this).val();
+                        if (keyword.length == 0) {
+                          card_search_input_reset.hide();
+                          card_search_input_submit.removeClass("ready");
+                        } else {
+                          card_search_input_reset.show();
+                          card_search_input_submit.addClass("ready");
+                        }
+                      }).on("focus", function(e){
+                        target.addClass("on");
+                   	  }).on("blur", function(e) {
+                        target.removeClass("on");
+                        $(this).attr('disabled',true);
+                      }).attr('disabled',false).focus();
+
+    function search_by_key() {
+      var keyword = card_search_input.val();
+      if (keyword == "" || keyword == undefined) {
+        notify("검색어를 입력해주세요");
+        target.click();
+      } else {
+        go_url('card_search_result', { is_left: is_left, keyword: keyword });
+      };
+    };
+
+    function search_keyword_reset() {
+      card_search_input_reset.hide();
+      card_search_input.val("");
+      target.click();
+    };
+  };
+
+  function ask_progress_check(target) {
+    var ask_form = $("#ask_form");
+    var inners = ask_form.find(".inner");
+    var ask_form_progress_bar = ask_form.find(".ask_form_progress.bar");
+    var ask_form_submit_btn = ask_form.find(".submit_btn");
+
+    var progress = [];
+    var required_fields = $.map($(inners).find("[required]"), function(value, index) { return [value] });
+    $.each(required_fields, function(index, field){
+      var value = field.value.replace(/^\s*/g, '').replace(/\s*$/g, '');
+      if (value != "") progress.push(index);
+    });
+
+    var percent = progress.length / required_fields.length * 100;
+    ask_form_progress_bar.css({width: percent+"%"});
+    percent < 100 ? ask_form_submit_btn.removeClass("ready") : ask_form_submit_btn.addClass("ready");
+    percent < 100 ? ask_form_progress_bar.removeClass("ready") : ask_form_progress_bar.addClass("ready");
+  };
+
+
+  function show_next_ask_form(target) {
+    var ask_form = $("#ask_form");
+    var ask_id = Number(target.attr("ask-id"));
+    var back_btn = ask_form.find(".header_btn.left");
+    var current_step = Number(target.attr("step"));
+    var step_1_inner = ask_form.find(".inner.step_1");
+    var step_2_inner = ask_form.find(".inner.step_2");
+    var step_3_inner = ask_form.find(".inner.step_3");
+    var card_search_input_init = ask_form.find(".card_search_input_init");
+    var hashtag_backdrop = ask_form.find(".hashtag_backdrop");
+
+    if (current_step == 1) {
+      // 2번 스텝으로 진행
+      step_1_inner.addClass("prev");
+      step_2_inner.removeClass("next").scrollTop(0);
+      target.html("다음").attr("step", 2);
+      back_btn.html("이전");
+      card_search_input_init.removeAttr("is-left");
+    } else if (current_step == 2) {
+      // 3번 스텝으로 진행
+      step_2_inner.addClass("prev");
+      step_3_inner.removeClass("next").scrollTop(0);
+      target.html("완료").attr("step", 3);
+      back_btn.html("이전");
+      card_search_input_init.addClass("hide");
+      if (userDevice.isIOS) hashtag_backdrop.addClass("iOS");
+    } else if (current_step == 3) {
+      ask_form.find(".form_data").removeAttr('disabled');
+      var data = ask_form.serializeArray();
+      data = $.grep(data, function(obj){ return obj.value != ""});
+      data = data.reduce(function(obj, item) {
+  	    obj[item.name] = item.value;
+  	    return obj;
+	    }, {});
+      ask_form_submit(data, ask_id);
+    }
+
+
+    function ask_form_submit(data, ask_id) {
+      $.ajax({
+  	        url: ask_id == 0 ? "/asks.json" : "/asks/" + ask_id + ".json",
+            dataType: "json",
+  	        type: ask_id == 0 ? "POST" : "PUT",
+  	        data: data,
+  	        error: function(){
+  	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+  	        },
+  	        success: function(data){
+              if (data.status == "no_left_image") {
+                go_back(1);
+                notify('A제품 이미지를 추가해주세요');
+                step_1_inner.find(".ask_image_seg").addClass("required");
+                var required_field = step_3_inner.find(".ask_image.left");
+                required_field.addClass("required");
+                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+              } else if(data.status == "no_left_title") {
+                go_back(1);
+                notify('A제품 제품명을 입력해주세요');
+                step_1_inner.find(".form_data").parent(".title").addClass("required");
+                var required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.left");
+                required_field.addClass("required");
+                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+              } else if(data.status == "no_right_image") {
+                go_back(1);
+                notify('B제품 이미지를 추가해주세요');
+                step_2_inner.find(".ask_image_seg").addClass("required");
+                var required_field = step_3_inner.find(".ask_image.right");
+                required_field.addClass("required");
+                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+              } else if(data.status == "no_right_title") {
+                go_back(1);
+                notify('B제품 제품명을 입력해주세요');
+                step_2_inner.find(".form_data").parent(".title").addClass("required");
+                var required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.right");
+                required_field.addClass("required");
+                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+              } else if(data.status == "no_ask_message") {
+                go_back(1);
+                notify('메세지를 입력해주세요');
+                step_3_inner.animate({scrollTop: step_3_inner.prop("scrollHeight")}, 250);
+                var required_field = step_3_inner.find(".ask_message_input");
+                required_field.parentsUntil(this, ".hashtag_container").animateCss("bounce");
+                required_field.parentsUntil(this, ".input_container").click();
+              } else if(data.status == "success") {
+                go_back(4);
+                setTimeout(function(){
+                  close_full_view();
+                  if (userApp) setAppStatusBar();
+                  ask_id == 0 ? notify('게시글 작성 완료! 친구들에게 공유해보세요 :)') : notify('게시글 수정 완료! 친구들에게 공유해보세요 :)');
+                  go_url('ask', data.ask.id);
+                }, 500);
+              }
+  					},
+  					beforeSend: function(){
+  						loadingStart();
+  					},
+  					complete: function(){
+              loadingEnd();
+  					}
+  		});
+    };
+  };
+
+  function hide_next_ask_form(target) {
+    var ask_form = $("#ask_form");
+    var back_btn = ask_form.find(".header_btn.left");
+    var current_step = Number(target.attr("step"));
+    var step_1_inner = ask_form.find(".inner.step_1");
+    var step_2_inner = ask_form.find(".inner.step_2");
+    var step_3_inner = ask_form.find(".inner.step_3");
+    var card_search_input_init = ask_form.find(".card_search_input_init");
+
+    if (current_step == 3) {
+      step_3_inner.addClass("next");
+      step_2_inner.removeClass("prev").scrollTop(0);
+      target.html("다음").attr("step", 2);
+      back_btn.html("이전");
+      card_search_input_init.removeAttr("is-left").removeClass("hide");
+    } else if (current_step == 2) {
+      step_2_inner.addClass("next");
+      step_1_inner.removeClass("prev").scrollTop(0);
+      target.html("다음").attr("step", 1);
+      back_btn.html("취소");
+      card_search_input_init.attr("is-left", true).removeClass("hide");
+    }
+
+    back_button();
+  };
+</script>
+
+
+
+
+
+<script type="text/template" id="askFormCardTemplate">
+  {{ var deal_direction = is_left ? "left_deal" : "right_deal" }}
+  <div class="input_container">
+    <div class="ask_image_seg" onclick="ask_form_card_image_upload_click($(this));">
+      <img src="{{= get_image_url(ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
+      <span class="ask_image_crop_btn {{= is_left? 'left' : 'right' }} {{= ask_deal.deal_id ? 'on' : '' }}" onclick="go_url('image_edit', $(this));" img-id=""><i class="fa fa-crop"></i></span>
+    </div>
+    <div class="input_div title" onclick="ask_form_card_input_init($(this));">
+      <input class="input text_field {{= is_left? 'left' : 'right' }} form_data" type="text"
+                name="{{= deal_direction }}[title]"
+                value="{{= ask_deal.title }}"
+                placeholder="{{= is_left ? 'A제품 제품명 *' : '* B제품 제품명' }}" required disabled>
+      <span class="input btn_field {{= is_left ? 'left' : 'right' }}"><i class="ask_table_icon vaskit_icon title"></i></span>
+    </div>
+    <div class="input_div brand" onclick="ask_form_card_input_init($(this));">
+      <input class="input text_field {{= is_left? 'left' : 'right' }} form_data" type="text"
+                name="{{= deal_direction }}[brand]"
+                value="{{= ask_deal.brand }}"
+                placeholder="{{= is_left ? 'A제품 브랜드명' : 'B제품 브랜드명' }}" disabled>
+      <span class="input btn_field {{= is_left ? 'left' : 'right' }}"><i class="ask_table_icon vaskit_icon brand"></i></span>
+    </div>
+    <div class="input_div price" onclick="ask_form_card_input_init($(this));">
+      <input class="input text_field {{= is_left? 'left' : 'right' }} form_data" type="text" pattern="[0-9]*"
+                name="{{= deal_direction }}[price]"
+                value="{{= numberWithCommas(ask_deal.price) }}"
+                placeholder="{{= is_left ? 'A제품 판매가격' : 'B제품 판매가격' }}" disabled>
+      <span class="input btn_field {{= is_left ? 'left' : 'right' }}"><i class="ask_table_icon vaskit_icon price"></i></span>
+    </div>
+    <div class="input_div link" onclick="ask_form_card_input_init($(this));">
+      <input class="input text_field {{= is_left? 'left' : 'right' }} form_data" type="url"
+                name="{{= deal_direction }}[link]"
+                value="{{= ask_deal.link }}"
+                placeholder="{{= is_left ? 'A제품 판매링크' : 'B제품 판매링크' }}" disabled>
+      <span class="input btn_field {{= is_left ? 'left' : 'right' }}"><i class="ask_table_icon vaskit_icon link"></i></span>
+    </div>
+  </div>
+  <div style="display: none;">
+    <input class="form_data image_file" type="file" name="{{= deal_direction }}[image]" value="{{= ask_deal.image }}" accept="image/*" onclick="ask_form_card_image_upload($(this));">
+    <input class="form_data preview_img_id" type="hidden" name="{{= deal_direction }}[image_id]" value="" {{= ask_deal.deal_id ? '' : 'required' }}>
+    <input class="form_data deal_id" type="hidden" name="{{= deal_direction }}[deal_id]" value="{{= ask_deal.deal_id }}">
+  </div>
+</script>
+
+<script>
+  var askFormCardTemplate = _.template($('#askFormCardTemplate').html());
+
+  function ask_form_card_input_init(target) {
+    var ask_form = $("#ask_form");
+    var all_inners = ask_form.find(".inner");
+    var current_step = Number(ask_form.find(".submit_btn").attr("step"));
+    var current_inner = ask_form.find(".inner.step_"+current_step);
+    var step_3_inner = ask_form.find(".inner.step_3");
+    var ask_form_card_inputs = target.parent(".input_container").find(".input.text_field");
+
+    all_inners.find(".input.text_field").attr('disabled', true);
+    current_inner.find(".input.text_field").removeAttr('disabled');
+    ask_form_card_inputs.off("keyup focus blur")
+                        .on("keyup", function(){
+                          if ($(this).attr("pattern")) inputNumberWithCommas(this);
+                        }).on("focus", function(e){
+                          if (userDevice.isAndroid && $(this).attr("pattern")) $(this).attr("type", "tel");
+                          $(this).parent(".input_div").addClass("on");
+                          // 결과값 업데이트
+                          var input_information = $(this).attr("name").replace("]","").split("[");
+                          var input_direction = input_information[0].replace("_deal","");
+                          var input_type = input_information[1];
+                          var input_value = $(this).val();
+                          step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html("입력해주세요");
+                        }).on("blur", function(e) {
+                          $(this).parent(".input_div").removeClass("on");
+                          if ($(this).val().length > 0) $(this).parent(".input_div").removeClass("required");
+                          // 결과값 업데이트
+                          var input_information = $(this).attr("name").replace("]","").split("[");
+                          var input_direction = input_information[0].replace("_deal","");
+                          var input_type = input_information[1];
+                          var input_value = $(this).val();
+                          if (input_value.length != 0) {
+                            if (input_type == "price") {
+                              input_value = numberWithCommas(input_value)+"원"
+                            } else if (input_type == "link") {
+                              input_value = fieldWithLink(input_value);
+                            }
+                            step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html(input_value);
+                          }
+                          // $(this).attr('disabled',true);
+                        }).attr('disabled',false);
+    target.find(".input.text_field").focus();
+  };
+
+  function ask_form_card_image_upload_click(target) {
+    var current_inner = target.parentsUntil(this, ".inner");
+    var image_file = current_inner.find(".image_file");
+    target.addClass("is_uploading");
+    image_file.click();
+    setTimeout(function(){
+      target.removeClass("is_uploading");
+    }, 1000);
+  };
+
+  function ask_form_card_image_upload(target) {
+    var ask_form = $("#ask_form");
+    var card_search_input_init = ask_form.find(".card_search_input_init");
+    var is_left = Boolean(card_search_input_init.attr("is-left"));
+    var step_1_inner = ask_form.find(".inner.step_1");
+    var step_2_inner = ask_form.find(".inner.step_2");
+    var step_3_inner = ask_form.find(".inner.step_3");
+
+    target.off("change")
+          .on("change", function() {
+              var fileObj = $(this);
+              $.each($(this)[0].files, function(i, file) {
+                var formData = new FormData();
+                formData.append('File', file);
+                $.ajax({
+                  url: "/preview_images.json",
+                  dataType: "json",
+                  type: "POST",
+                  data: formData,
+                  contentType: false,
+                  processData: false,
+                  error: function(){
+                    notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+                  },
+                  success: function (data){
+                    if (is_left) {
+                      step_1_inner.find(".preview_img_id").val(data.preview_img_id);
+                      step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+                      step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+                      // 결과값 업데이트
+                      step_1_inner.find(".ask_image_seg").removeClass("required");
+                      step_3_inner.find(".ask_image.left").attr("src", data.image_url);
+        	        	} else {
+                      step_2_inner.find(".preview_img_id").val(data.preview_img_id);
+                      step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+                      step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+                      // 결과값 업데이트
+                      step_2_inner.find(".ask_image_seg").removeClass("required");
+                      step_3_inner.find(".ask_image.right").attr("src", data.image_url);
+        	        	}
+                    ask_progress_check(ask_form);
+                  },
+                  beforeSend: function(){
+                    loadingStart();
+                  },
+                  complete: function(){
+                    loadingEnd();
+                    fileObj.replaceWith(fileObj.clone(true));
+                  }
+                }).fail(function (data) {}).done(function () {});
+              });
+          });
+  };
+</script>
+
+
+
+
+
+<script type="text/template" id="cardSearchResultTemplate">
+  <div class="card_search_result_title">
+    <div class="naver_product {{= items == null ? '' : 'on' }}" onclick="toggle_search_result($(this));"><i class="fa fa-shopping-cart"></i> 제품 검색결과</div>
+    <div class="naver_image  {{= items == null ? 'on' : '' }}" onclick="toggle_search_result($(this));"><i class="fa fa-image"></i> 이미지 검색결과</div>
+  </div>
+  <div class="card_search_result_list" ontouchstart="removeIOSRubberEffect($(this));">
+    <div class="naver_product {{= items == null ? '' : 'on' }}">
+      {{ if (items != null) { }}
+        {{ var items_length = items.length ? items.length : 1 }}
+        <table cellspacing="0" cellpadding="0">
+          {{ for(var i=0; i < items_length; i++) { }}
+            {{ var item = items_length == 1 ? items : items[i] }}
+            <tr onclick="select_naver_product('{{= item.productId }}');">
+              <td class="naver_product_image_seg">
+                <img src="{{=item.image}}">
+              </td>
+              <td class="naver_product_info_seg">
+                <p class="mall">{{= item.mallName }}</p>
+                <p class="title">{{= truncate(item.title) }}</p>
+                <p class="price">{{= numberWithCommas(item.lprice) }}원</p>
+              </td>
+            </tr>
+          {{ } }}
+        </table>
+        <div class="naver_info">
+          <b style="color:#18bf2d;">네이버 쇼핑</b> 검색 결과입니다
+          <br>원하시는 결과가 없으면 검색어를 수정해보세요
+        </div>
+      {{ } else { }}
+        <div class="no_result"><p class="align_middle"><i class='fa fa-search'></i> 제품 검색결과가 없습니다</p></div>
+      {{ } }}
+    </div>
+    <div class="naver_image {{= items == null ? 'on' : '' }}">
+      {{ if (image_items != null) { }}
+        {{ var image_items_length = image_items.length ? image_items.length : 1 }}
+        <div class="naver_image_seg">
+          {{ for(var i=0; i < image_items_length; i++) { }}
+            {{ var image_item = image_items_length == 1 ? image_items : image_items[i] }}
+            {{ var thumbnail = image_item.thumbnail.replace("?q=", "?t=470x180&q=") }}
+            {{ var link = encodeURI(image_item.link) }}
+            {{ if (image_item.sizewidth >= 300 && image_item.sizeheight >= 300) { }}
+              <img src="{{=link}}" onclick="select_naver_image('{{= link }}');" onerror="imgError(this, '{{=thumbnail}}');"/>
+              <p>{{=image_item.sizewidth}} &times; {{=image_item.sizeheight}}</p>
+            {{ } }}
+          {{ } }}
+        </div>
+        <div class="naver_info">
+          <b style="color:#18bf2d;">네이버 이미지</b> 검색 결과입니다
+          <br>원하시는 결과가 없으면 검색어를 수정해보세요
+        </div>
+      {{ } else { }}
+        <div class="no_result"><p class="align_middle"><i class='fa fa-search'></i> 이미지 검색결과가 없습니다</p></div>
+      {{ } }}
+    </div>
+  </div>
+</script>
+
+<script>
+  var cardSearchResultTemplate = _.template($('#cardSearchResultTemplate').html());
+
+  var naver_deal_items;
+  var naver_deal_images;
+
+  function show_card_search_result(options) {
+    var is_left = options.is_left;
+    var keyword = options.keyword;
+    var ask_form = $("#ask_form");
+    var ask_form_header_title = ask_form.find(".header_title");
+    var ask_form_back_btn = ask_form.find(".header_btn.left");
+    var ask_form_submit_btn = ask_form.find(".submit_btn");
+    var card_search_result_div = ask_form.find(".card_search_result");
+    $.ajax({
+            url: '/deals/get_naver_deals/?keyword='+encodeURIComponent(keyword),
+            dataType: "json",
+            type: "GET",
+            error: function(){
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data){
+              naver_deal_items = data.shop_result.rss.channel.item;
+              naver_deal_images = data.image_result.rss.channel.item;
+
+              if (naver_deal_items == null && naver_deal_images == null) {
+                notify("검색 결과가 없습니다");
+              } else {
+                ask_form_header_title.html(keyword + " 검색결과");
+                ask_form_back_btn.html("닫기");
+                ask_form_submit_btn.hide();
+                card_search_result_div.html(cardSearchResultTemplate({items: naver_deal_items, image_items: naver_deal_images})).removeClass("bottom");
+              };
+            },
+            beforeSend: function(){
+              loadingStart();
+            },
+            complete: function(){
+              loadingEnd();
+            }
+    });
+  };
+
+  function hide_card_search_result() {
+    var ask_form = $("#ask_form");
+    var ask_form_header_title = ask_form.find(".header_title");
+    var ask_form_back_btn = ask_form.find(".header_btn.left");
+    var ask_form_submit_btn = ask_form.find(".submit_btn");
+    var current_step = Number(ask_form_submit_btn.attr("step"));
+    var card_search_result_div = ask_form.find(".card_search_result");
+    var card_search_input = ask_form.find(".card_search_input");
+    current_step == 1 ? ask_form_back_btn.html("취소") : ask_form_back_btn.html("이전");
+    ask_form_header_title.html("질문 작성하기");
+    ask_form_submit_btn.show();
+    card_search_input.val("");
+    card_search_result_div.addClass("bottom").transitionEmpty();
+  };
+
+  function toggle_search_result(target) {
+    var target_name = target.hasClass("naver_product") ? "naver_product" : "naver_image";
+    var card_search_result = target.parentsUntil(this, ".card_search_result");
+    var naver_product = card_search_result.find(".naver_product");
+    var naver_image = card_search_result.find(".naver_image");
+    var card_search_result_list = card_search_result.find(".card_search_result_list");
+
+    if (!target.hasClass("on")) {
+      naver_product.toggleClass("on");
+      naver_image.toggleClass("on");
+      card_search_result_list.scrollTop(0);
+    };
+  };
+
+  function select_naver_product(product_id) {
+    var ask_form = $("#ask_form");
+    var card_search_input_init = ask_form.find(".card_search_input_init");
+    var is_left = Boolean(card_search_input_init.attr("is-left"));
+    var step_1_inner = ask_form.find(".inner.step_1");
+    var step_2_inner = ask_form.find(".inner.step_2");
+    var step_3_inner = ask_form.find(".inner.step_3");
+    var item = naver_deal_items.length > 1 ? $.grep(naver_deal_items, function(obj) { return obj.productId === product_id; })[0] : naver_deal_items;
+
+		$.ajax({
+	        url: "/deals/create_by_naver.json",
+	        type: "POST",
+	        data: {item: item},
+	        error: function(){
+	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+	        },
+	        success: function(data){
+	        	if (is_left) {
+              step_1_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left}));
+              step_1_inner.find(".preview_img_id").val(data.preview_img_id);
+              step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+              // 결과값 업데이트
+              step_3_inner.find(".ask_image.left").attr("src", data.image_url);
+              step_3_inner.find(".ask_table_row.title").find(".ask_table_cell.left").html(data.deal.title);
+              step_3_inner.find(".ask_table_row.brand").find(".ask_table_cell.left").html(data.deal.brand);
+              step_3_inner.find(".ask_table_row.price").find(".ask_table_cell.left").html(numberWithCommas(data.deal.price)+"원");
+              step_3_inner.find(".ask_table_row.link").find(".ask_table_cell.left").html(fieldWithLink(data.deal.link));
+	        	} else {
+              step_2_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left}));
+              step_2_inner.find(".preview_img_id").val(data.preview_img_id);
+              step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+              // 결과값 업데이트
+              step_3_inner.find(".ask_image.right").attr("src", data.image_url);
+              step_3_inner.find(".ask_table_row.title").find(".ask_table_cell.right").html(data.deal.title);
+              step_3_inner.find(".ask_table_row.brand").find(".ask_table_cell.right").html(data.deal.brand);
+              step_3_inner.find(".ask_table_row.price").find(".ask_table_cell.right").html(numberWithCommas(data.deal.price)+"원");
+              step_3_inner.find(".ask_table_row.link").find(".ask_table_cell.right").html(fieldWithLink(data.deal.link));
+	        	}
+            ask_progress_check(ask_form);
+					},
+					beforeSend: function(){
+						loadingStart();
+					},
+					complete: function(){
+            loadingEnd();
+            back_button();
+					}
+		});
+  };
+
+  function select_naver_image(image_url) {
+    var ask_form = $("#ask_form");
+    var card_search_input_init = ask_form.find(".card_search_input_init");
+    var is_left = Boolean(card_search_input_init.attr("is-left"));
+    var step_1_inner = ask_form.find(".inner.step_1");
+    var step_2_inner = ask_form.find(".inner.step_2");
+    var step_3_inner = ask_form.find(".inner.step_3");
+
+    $.ajax({
+	        url: "/preview_images.json",
+          dataType: "json",
+	        type: "POST",
+	        data: {image_url: image_url},
+	        error: function(){
+	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+	        },
+	        success: function(data){
+            if (is_left) {
+              step_1_inner.find(".preview_img_id").val(data.preview_img_id);
+              step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+              // 결과값 업데이트
+              step_1_inner.find(".ask_image_seg").removeClass("required");
+              step_3_inner.find(".ask_image.left").attr("src", data.image_url);
+	        	} else {
+              step_2_inner.find(".preview_img_id").val(data.preview_img_id);
+              step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+              // 결과값 업데이트
+              step_2_inner.find(".ask_image_seg").removeClass("required");
+              step_3_inner.find(".ask_image.right").attr("src", data.image_url);
+	        	}
+            ask_progress_check(ask_form);
+					},
+	        beforeSend: function(){
+						loadingStart();
+					},
+					complete: function(){
+						loadingEnd();
+            back_button();
+					}
+		});
+
+  };
+</script>
+
+
+
+
+<script type="text/template" id="askFormCardResultTemplate">
+  <div class="ask ask_detail">
+    <div class="clearfix">
+      <div class="ask_image_box clearfix is_voting">
+        <img class="ask_image left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+        <img class="ask_image right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+      </div>
+    </div>
+    <div class="clearfix">
+      <div class="ask_table_row title">
+        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.title != "" && ask.left_ask_deal.title != null) ? ask.left_ask_deal.title : '입력해주세요' }}</span>
+        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.title != "" && ask.right_ask_deal.title != null) ? ask.right_ask_deal.title : '입력해주세요' }}</span>
+        <i class="ask_table_icon vaskit_icon title"></i>
+      </div>
+      <div class="ask_table_row brand">
+        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.brand != "" && ask.left_ask_deal.brand != null) ? ask.left_ask_deal.brand : '입력해주세요' }}</span>
+        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.brand != "" && ask.right_ask_deal.brand != null) ? ask.right_ask_deal.brand : '입력해주세요' }}</span>
+        <i class="ask_table_icon vaskit_icon brand"></i>
+      </div>
+      <div class="ask_table_row price">
+        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.price != "" && ask.left_ask_deal.price != null) ? numberWithCommas(ask.left_ask_deal.price)+"원" : '입력해주세요' }}</span>
+        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.price != "" && ask.right_ask_deal.price != null) ? numberWithCommas(ask.right_ask_deal.price)+"원" : '입력해주세요' }}</span>
+        <i class="ask_table_icon vaskit_icon price"></i>
+      </div>
+      <div class="ask_table_row link">
+        {{ var aLink = document.createElement("a") }}
+        {{ if (ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) { }}
+          {{ aLink.href = ask.left_ask_deal.link }}
+          <span class="ask_table_cell left text_box_short"><a href="{{= aLink.href }}" target="_blank">{{= fieldWithBlank(aLink.host) }}</a></span>
+        {{ } else { }}
+          <span class="ask_table_cell left text_box_short">{{= "입력해주세요" }}</span>
+        {{ } }}
+        {{ var bLink = document.createElement("a") }}
+        {{ if (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null) { }}
+          {{ bLink.href = ask.right_ask_deal.link }}
+          <span class="ask_table_cell left text_box_short"><a href="{{= bLink.href }}" target="_blank">{{= fieldWithBlank(bLink.host) }}</a></span>
+        {{ } else { }}
+          <span class="ask_table_cell right text_box_short">{{= "입력해주세요" }}</span>
+        {{ } }}
+        <i class="ask_table_icon vaskit_icon link"></i>
+      </div>
+    </div>
+  </div>
+  <div class="input_container spec">
+    <div class="clearfix">
+      <div class="input_div spec spec_1 {{= ask.spec1 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field left right center form_data" type="text"
+                  name="ask[spec1]"
+                  value="{{= ask.spec1 }}"
+                  placeholder="추가입력1" disabled>
+      </div>
+      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field center form_data" type="text"
+                  name="left_deal[spec1]"
+                  value="{{= ask.left_ask_deal.spec1 }}"
+                  placeholder="추가입력" disabled>
+      </div>
+      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field center form_data" type="text"
+                  name="right_deal[spec1]"
+                  value="{{= ask.right_ask_deal.spec1 }}"
+                  placeholder="추가입력" disabled>
+      </div>
+      <i class="ask_table_icon vaskit_icon spec"></i>
+    </div>
+    <div class="clearfix">
+      <div class="input_div spec spec_2 {{= ask.spec2 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field left right center form_data" type="text"
+                  name="ask[spec2]"
+                  value="{{= ask.spec2 }}"
+                  placeholder="추가입력2" disabled>
+      </div>
+      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field center form_data" type="text"
+                  name="left_deal[spec2]"
+                  value="{{= ask.left_ask_deal.spec2 }}"
+                  placeholder="추가입력" disabled>
+      </div>
+      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field center form_data" type="text"
+                  name="right_deal[spec2]"
+                  value="{{= ask.right_ask_deal.spec2 }}"
+                  placeholder="추가입력" disabled>
+      </div>
+      <i class="ask_table_icon vaskit_icon spec"></i>
+    </div>
+    <div class="clearfix">
+      <div class="input_div spec spec_3 {{= ask.spec3 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field left right center form_data" type="text"
+                  name="ask[spec3]"
+                  value="{{= ask.spec3 }}"
+                  placeholder="추가입력3" disabled>
+      </div>
+      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field center form_data" type="text"
+                  name="left_deal[spec3]"
+                  value="{{= ask.left_ask_deal.spec3 }}"
+                  placeholder="추가입력" disabled>
+      </div>
+      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+        <input class="input text_field center form_data" type="text"
+                  name="right_deal[spec3]"
+                  value="{{= ask.right_ask_deal.spec3 }}"
+                  placeholder="추가입력" disabled>
+      </div>
+      <i class="ask_table_icon vaskit_icon spec"></i>
+    </div>
+    {{ if (ask.spec3 == null) { }}
+      <div class="add_more_spec_btn" onclick="add_more_spec($(this));"><i class="fa fa-angle-down"></i> 추가 정보 입력하기</div>
+    {{ } }}
+  </div>
+  <div class="input_container" onclick="ask_form_message_input_init($(this));">
+		<div class="hashtag_container">
+      <img class="user_profile" src="{{= get_avatar(current_user) }}" alt="">
+      <span class="user_id">{{= current_user.string_id }}</span>
+      <div class="ask_message_arrow"></div>
+      <textarea class="input text_field ask_message_input form_data" type="text"
+                  name="ask[message]"
+                  placeholder="구매를 고민하고 있는 상황을 알려주세요! &#13;&#10;#고민고민하지마 #VASKIT" required disabled>{{= ask.message }}</textarea>
+			<div class="hashtag_backdrop">
+        <div class="hashtag_highlights">{{= applyHashtag(ask.message) }}</div>
+      </div>
+		</div>
+	</div>
+</script>
+
+<script>
+  var askFormCardResultTemplate = _.template($('#askFormCardResultTemplate').html());
+
+  function add_more_spec(target) {
+    var input_container = target.parentsUntil(this, ".input_container");
+    var input_length_index = (input_container.find(".input_div.spec:visible").length) / 3 + 1;
+    input_container.find(".input_div.spec.spec_" + input_length_index).addClass("is_opened");
+    if (input_length_index == 3) target.hide();
+  };
+
+  function ask_form_message_input_init(target) {
+    var ask_form_message_input = target.find(".ask_message_input");
+    var hashtag_container = target.find(".hashtag_container");
+    var hashtag_highlights = target.find(".hashtag_highlights");
+    var hashtag_backdrop = target.find(".hashtag_backdrop");
+
+    var ask_form = $("#ask_form");
+    var all_inners = ask_form.find(".inner");
+    var current_step = Number(ask_form.find(".submit_btn").attr("step"));
+    var current_inner = ask_form.find(".inner.step_"+current_step);
+    all_inners.find(".input.text_field").attr('disabled', true);
+    current_inner.find(".input.text_field").removeAttr('disabled');
+
+    ask_form_message_input.off("input scroll blur")
+                          .on("input", function(e){
+                            hashtagInput($(this));
+                          }).on("scroll", function(e){
+                            hashtagScroll($(this));
+                          }).on("focus", function(e){
+                            hashtag_container.addClass("on");
+                          }).on("blur", function(e) {
+                            hashtag_container.removeClass("on");
+                            // $(this).attr('disabled',true);
+                          }).attr('disabled',false).focus();
+
+    function hashtagInput(target) {
+      var text = target.val();
+      var highlightedText = applyHashtag(text);
+      hashtag_highlights.html(highlightedText);
+    };
+
+    function hashtagScroll(target) {
+      var scrollTop = target.scrollTop();
+      var scrollLeft = target.scrollLeft();
+      hashtag_backdrop.scrollTop(scrollTop);
+      hashtag_backdrop.scrollLeft(scrollLeft);
+    };
+  };
+
+  function applyHashtag(text) {
+    if (text != null) text = text.replace(/\n$/g, '\n\n').replace(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g, '<mark>$&</mark>');
+    return text;
+  };
+
+</script>

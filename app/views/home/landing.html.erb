@@ -1,0 +1,7 @@
+<script>
+  $(window).ready(function(){
+    <% unless current_user %>
+      go_url('landing');
+    <% end %>
+  });
+</script>

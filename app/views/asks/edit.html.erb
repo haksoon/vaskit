@@ -1,1 +1,5 @@
-<%= render 'form' %>
+<script>
+  $(window).load(function() {
+    visitor_check(function(){ go_url('ask_form', <%= @ask.id %>) });
+  });
+</script>

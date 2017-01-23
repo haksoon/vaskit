@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body style="font-size:13px;">
+    <p>
+      사용자가 질문을 수정하였습니다.
+    </p>
+    <ul>
+      <li>
+        질문 작성자 ID: <%= User.find(@ask.user_id).string_id %>
+      </li>
+      <li>
+        성별: <%= User.find(@ask.user_id).gender == true ? "남성" : "여성" %>
+      </li>
+      <li>
+        수정 내용: <%= @ask.message %>
+      </li>
+      <li>
+        수정 일시: <%= @ask.created_at %>
+      </li>
+      <li>
+        링크: <a href="http://vaskit.kr/asks/<%= @ask.id %>" target="_blank">Click Here</a>
+      </li>
+    </ul>
+  </body>
+</html>

@@ -2,11 +2,6 @@ class AdminMailer < ActionMailer::Base
   default from: %{"VASKIT admin" <notice@vaskit.kr>},
           to: ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr']
 
-  def update_contact(contact)
-    @contact = contact
-    mail(to: 'junsikahn@vaskit.kr', subject: "[UPDATE] 앱 업데이트 연락처 도착")
-  end
-
   def signup_submitted(user)
     @user = user
     mail(subject: "[VASKIT] 새로운 사용자가 회원가입하였습니다.")
@@ -15,6 +10,11 @@ class AdminMailer < ActionMailer::Base
   def ask_submitted(ask, to)
     @ask = ask
     mail(to: to, subject: "[VASKIT] 새로운 질문이 작성되었습니다.")
+  end
+
+  def ask_edit_submitted(ask, to)
+    @ask = ask
+    mail(to: to, subject: "[VASKIT] 사용자가 질문을 수정하였습니다.")
   end
 
   def inquiry_submitted(inquiry)

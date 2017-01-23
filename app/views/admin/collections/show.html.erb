@@ -1,0 +1,440 @@
+<div style="padding:10px;">
+  <h2 style="margin:10px 0; padding:0 5px;">
+    <i class="fa fa-archive" style="font-size:14px; color:#ee6e01;"></i>&nbsp;
+    <%= raw @collection.name %>
+  </h2>
+  <p style="margin:10px 0; padding:0 5px; font-size:14px; color:#999;">
+    <i class="fa fa-align-left" style="font-size:14px; color:#ee6e01;"></i>&nbsp;
+    <%= @collection.description %>
+  </p>
+  <img id="collection_image" src="<%= @collection.image.url(:original) %>" style="display: block; width: 900px; margin: 10px auto;">
+  <input id="collection_image_upload" type="file" style="width: 100%; height: 40px;" onchange="upload_collection_image();">
+  <p style="margin:10px 0; font-size:13px; color:#999;">
+    컬렉션 대표이미지 권장 해상도는 900 * 600 픽셀 입니다<br>
+    <a href="http://tinypng.com" target="_blank">tinypng.com</a>
+  </p>
+</div>
+
+<script>
+  var collection_id = <%= @collection.id %>
+
+  function upload_collection_image() {
+    var fileObj = $(this);
+		$.each( $("#collection_image_upload")[0].files, function( i, file ) {
+			var formData = new FormData();
+	    formData.append('File', file);
+	    $.ajax({
+	       type: "POST",
+	       url: "/admin/collections/"+collection_id+"/image_upload.json",
+	       data: formData,
+	       contentType: false,
+	       processData: false,
+				 error: function(){
+           return false;
+         },
+	       success: function (data) {
+           $("#collection_image").attr("src", data.image_url);
+	       },
+				 beforeSend: function(){
+					 $(".loading").show();
+				 },
+				 complete: function(){
+           $(".loading").hide();
+					 fileObj.replaceWith(fileObj.clone(true));
+				 }
+	    }).fail(function (data) {}).done(function () {});
+		});
+  }
+</script>
+
+<div style="padding:10px;">
+  <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 발행하기</h4>
+  <p style="margin:10px 0; font-size:13px; color:#999;">
+    발행하기 버튼을 누르면 메인 피드의 가장 상단에 반영됩니다.
+  </p>
+  <a href="#" id="collection_main_show_btn" onclick="toggle_main_show(); return false;" class="collection_main_show_btn <%= @collection.show == true ? 'cancel' : '' %>"><%= @collection.show == true ? '발행취소' : '발행하기' %></a>
+</div>
+
+<script>
+  function toggle_main_show() {
+    if (confirm("메인 피드 화면이 변경됩니다\n진행하시겠습니까?")) {
+      $.ajax({
+        url: '/admin/collections/'+collection_id+'.json',
+        type: 'PUT',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          var btn = $("#collection_main_show_btn");
+          if (data.status == "off") {
+            btn.removeClass("cancel").text("발행하기");
+            alert("발행 취소 완료");
+          } else if (data.status == "on") {
+            btn.addClass("cancel").text("발행취소");
+            alert("발행 완료, 메인피드 화면을 확인하세요");
+          }
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  };
+</script>
+
+<div style="padding:10px;">
+  <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 키워드 생성</h4>
+  <p id="collection_keywords" style="margin:10px 0; padding:0 5px; font-size:14px; color:#999;">
+    <i class="fa fa-tag" style="font-size:14px; color:#ee6e01;"></i>&nbsp;
+    <% @collection.collection_to_collection_keywords.each do |collection_to_collection_keyword| %>
+      <%= collection_to_collection_keyword.collection_keyword.keyword %>,&nbsp;
+    <% end %>
+  </p>
+  <div style="position:relative;">
+    <span class="collection_input_icon" onclick="$('#collection_keyword_input').focus();"><i class="fa fa-hashtag"></i></span>
+    <input id="collection_keyword_input" class="collection_input" type="text" placeholder="컬렉션의 키워드를 입력하세요"/>
+    <span id="collection_keyword_submit_btn" class="collection_input_icon right_btn" onclick="create_collection_keywords(); return false;">추가 <i class="fa fa-database"></i></span>
+  </div>
+  <div id="collection_keyword_result"></div>
+  <div id="related_collections_result"></div>
+</div>
+
+<script type="text/template" id="collection-keyword-result-template">
+  <span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:6px 0; text-align:center; color:#666; font-size:13px;'>{{= keyword }} ({{= refer_count }}회)</span>
+</script>
+
+<script type="text/template" id="related-collection-result-template">
+  <span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:6px 0; text-align:center; color:#666; font-size:13px;'>{{= name }}</span>
+</script>
+
+<script>
+  var collectionKeywordResultTemplate = _.template($("#collection-keyword-result-template").html());
+  var relatedCollectionResultTemplate = _.template($("#related-collection-result-template").html());
+
+  $("#collection_keyword_input").off("keydown keyup");
+  $("#collection_keyword_input").keydown(function(e){
+    if (e.keyCode == '13') {
+      e.preventDefault();
+      $(this).blur();
+      $("#collection_keyword_submit_btn").click();
+    }
+  }).keyup(function(e) {
+    var keyword = $("#collection_keyword_input").val();
+    var result_div = $("#collection_keyword_result");
+    if (keyword.length == 0) {
+      var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>검색어를 입력해주세요</span>";
+      result_div.html(empty_span);
+    } else {
+      $.ajax({
+        url: "/admin/collection_keywords.json",
+        type: 'GET',
+        data: {keyword: keyword},
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data) {
+          result_div.html("");
+
+          var collection_keywords = data.collection_keywords;
+
+          if (collection_keywords.length == 0) {
+            if (keyword != ""){
+              var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 키워드가 없습니다<br>키워드를 새로 생성하려면 엔터 누르세요</span>";
+              result_div.html(empty_span);
+            };
+          } else {
+            for (var i = 0; i < collection_keywords.length; i++) {
+              var collection_keyword = collection_keywords[i];
+              result_div.append(collectionKeywordResultTemplate({keyword: collection_keyword.keyword, refer_count: collection_keyword.refer_count}));
+            }
+          }
+        },
+        beforeSend: function() {
+          var keys = [13, 27, 40, 39, 38, 37]
+          if ($.inArray(e.keyCode, keys) != -1) return false;
+        }
+      });
+    }
+  });
+
+  function create_collection_keywords() {
+    var keyword = $("#collection_keyword_input").val();
+    if (collection_id == "" || collection_id == null) {
+      alert('컬렉션을 선택하세요');
+      $("#collection_keyword_input").focus().select();
+      return false;
+    } else if (keyword == "") {
+        alert('keyword를 입력하세요');
+        $("#collection_keyword_input").focus();
+        return false;
+    } else {
+      $.ajax({
+        url: "/admin/collection_to_collection_keywords.json",
+        type: 'POST',
+        data: {collection_id: collection_id, keyword: keyword},
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          if (data.status == "success") {
+            $("#collection_keywords").append(" "+keyword + ",");
+            for (var i = 0; i < data.related_collections.length; i++) {
+              var related_collection = data.related_collections[i];
+              $("#related_collections_result").append(relatedCollectionResultTemplate({name: related_collection.name}));
+            }
+          } else if (data.status == "already_exists") {
+            alert('이미 존재하는 키워드입니다');
+          }
+          $("#related_collections_result").html("");
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  }
+</script>
+
+<div style="padding:10px;">
+  <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 컨텐츠 생성</h4>
+  <p style="margin:10px 0; font-size:13px; color:#999;">
+    컬렉션을 선택한 뒤 컨텐츠 ask id를 수기로 입력합니다.
+    <br>먼저 추가한 컨텐츠일수록 상위에 노출됩니다.
+    <br>(숫자를 쉼표로 구분해서 복수 입력이 가능합니다)
+    <br>컬렉션 준비가 완료되면 가장 하단에 있는 발행하기 버튼을 통해 메인피드에 발행이 가능합니다.
+  </p>
+  <div style="position:relative;">
+    <span class="collection_input_icon" onclick="$('#collection_to_ask_input').focus();">id</span>
+    <input id="collection_to_ask_input" class="collection_input" type="text" placeholder="컨텐츠의 ask id를 입력하세요"/>
+    <span id="collection_to_ask_submit_btn" class="collection_input_icon right_btn" onclick="create_collection_to_asks(); return false;">추가 <i class="fa fa-database"></i></span>
+  </div>
+  <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center; margin-top:10px;">
+    <thead>
+      <tr style="height:40px; background-color:#998674; color:#fff;">
+        <th id="collection_to_asks_count">컬렉션 컨텐츠 미리보기 (<%= @collection.collection_to_asks.count %>개)</th>
+      </tr>
+    </thead>
+    <tbody id="collection_to_asks"></tbody>
+  </table>
+</div>
+
+<script type="text/template" id="collection_to_asks_template">
+  {{ var l = collection_to_asks.length }}
+  {{ if (l == 0) { }}
+    <tr id="blank_collection_to_asks" style="height:50px;">
+      <td>
+        컨텐츠를 추가해주세요
+      </td>
+    </tr>
+  {{ } else { }}
+    {{ for (var i=0; i < l; i++) { }}
+      {{ var collection_to_ask = collection_to_asks[i] }}
+      <tr id="collection_to_ask_{{=collection_to_ask.id}}" class="collection_to_ask" style="background-color:#fff;">
+        <td>
+          <div style="position: relative; margin:0 auto; padding:10px 10px 35px; max-width:500px; text-align:left;">
+            <a href="/asks/{{=collection_to_ask.ask.id}}" target="_blank" style="color:#ee6e01; font-weight:bold; float:left;">{{= collection_to_ask.ask.id }}</a>
+            <br>
+            <div class="clearfix">
+              <span> {{= collection_to_ask.ask.user.string_id }} ({{= collection_to_ask.ask.user.gender == true ? '남성' : '여성' }} {{= get_user_ages(collection_to_ask.ask.user.birthday) }})</span>
+              <span style="float:right;">댓글 {{= collection_to_ask.ask.left_ask_deal.comment_count + collection_to_ask.ask.right_ask_deal.comment_count }}개</span>
+              <span style="float:right;">투표 {{= collection_to_ask.ask.left_ask_deal.vote_count + collection_to_ask.ask.right_ask_deal.vote_count }}표&nbsp;/&nbsp;</span>
+              <br>
+              <span>{{= collection_to_ask.ask.message }}</span>
+            </div>
+            <div class="clearfix">
+              <img src="{{= get_image_url(collection_to_ask.ask.left_ask_deal, 'ask_deals', 'normal') }}" alt="" style="display:inline-block; width:50%; max-width:250px; float:left;" onerror="imgError(this);">
+              <img src="{{= get_image_url(collection_to_ask.ask.right_ask_deal, 'ask_deals', 'normal') }}" alt="" style="display:inline-block; width:50%; max-width:250px; float:left;" onerror="imgError(this);">
+            </div>
+            <div style="position: absolute; bottom: 10px; left: 15px;">
+              <a href="#" onclick="sort_collection_to_ask({{=collection_to_ask.id}}, true); return false;" style="margin-right:10px;"><i class="fa fa-caret-up"></i> 위로</a>
+              <a href="#" onclick="sort_collection_to_ask({{=collection_to_ask.id}}, false); return false;">아래로<i class="fa fa-caret-down"></i></a>
+            </div>
+            <div style="position: absolute; bottom: 10px; right: 15px;">
+              <a href="#" onclick="destroy_collection_to_ask({{=collection_to_ask.id}}); return false;"><i class="fa fa-trash"></i> 삭제</a>
+            </div>
+          </div>
+        </td>
+      </tr>
+    {{ } }}
+  {{ } }}
+</script>
+
+<script>
+  var collectionToAsksTemplate = _.template($('#collection_to_asks_template').html());
+
+  !(function load_collection_to_asks() {
+    $.ajax({
+      url: "/admin/collection_to_asks.json",
+      type: 'GET',
+      data: {collection_id: collection_id},
+      dataType: 'json',
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        var collection_to_asks = data.collection_to_asks;
+        $("#collection_to_asks").html(collectionToAsksTemplate({collection_to_asks: collection_to_asks}));
+      },
+      beforeSend: function(){
+        $(".loading").show();
+      },
+      complete: function(){
+        $(".loading").hide();
+      }
+    });
+  })();
+
+  function create_collection_to_asks() {
+    var ask_ids = $("#collection_to_ask_input").val();
+    if (ask_ids == "") {
+        alert('ask_id를 입력하세요');
+        $("#collection_to_ask_input").focus();
+        return false;
+    } else {
+      $.ajax({
+        url: "/admin/collection_to_asks.json",
+        type: 'POST',
+        data: {collection_id: collection_id, ask_ids: ask_ids},
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          var collection_to_asks = data.collection_to_asks;
+          alert("총 "+data.success_ids.length+"개 컨텐츠 등록 완료\n"+data.success_ids);
+          $("#blank_collection_to_asks").remove();
+          $("#collection_to_asks").append(collectionToAsksTemplate({collection_to_asks: collection_to_asks}));
+          $("#collection_to_asks_count").html("컬렉션 컨텐츠 미리보기 (" + $("#collection_to_asks").find(".collection_to_ask").length + "개)");
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  };
+
+  function sort_collection_to_ask(collection_to_ask_id, is_up) {
+    $.ajax({
+      url: '/admin/collection_to_asks/'+collection_to_ask_id+'.json',
+      type: 'PUT',
+      data: {is_up: is_up},
+      dataType: 'json',
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        if (data.status == "not_exists") {
+          var message = is_up ? "첫번째 컨텐츠입니다" : "마지막 컨텐츠입니다"
+          alert(message);
+        } else if (data.status == "success") {
+          var collection_to_ask = $("#collection_to_ask_"+collection_to_ask_id);
+          var target_collection_to_ask = $("#collection_to_ask_"+data.target_collection_to_ask_id);
+          if (is_up) {
+            collection_to_ask.after(target_collection_to_ask);
+            collection_to_ask.animateCssColor("slideInUp", "#ee6e01");
+            target_collection_to_ask.animateCss("slideInDown");
+          } else {
+            collection_to_ask.before(target_collection_to_ask);
+            collection_to_ask.animateCssColor("slideInDown", "#ee6e01");
+            target_collection_to_ask.animateCss("slideInUp");
+          }
+        }
+      },
+      beforeSend: function(){
+        $(".loading").show();
+      },
+      complete: function(){
+        $(".loading").hide();
+      }
+    });
+  };
+
+  function destroy_collection_to_ask(collection_to_ask_id) {
+    if (confirm("정말로 삭제하시겠어요?")) {
+      $.ajax({
+        url: '/admin/collection_to_asks/'+collection_to_ask_id+'.json',
+        type: 'DELETE',
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          $("#collection_to_ask_"+collection_to_ask_id).remove();
+          $("#collection_to_asks_count").html("컬렉션 컨텐츠 미리보기 (" + $("#collection_to_asks").find(".collection_to_ask").length + "개)");
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  };
+</script>
+
+<style>
+  .collection_main_show_btn {
+    display: block;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background-color: #f18b33;
+    color: #fff;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .collection_main_show_btn.cancel {
+    background-color: #ccc;
+  }
+  .collection_input_icon {
+    position: absolute;
+    top: 0px;
+    width: 40px;
+    height: 40px;
+  	box-sizing: border-box;
+    text-align: center;
+    line-height: 40px;
+    color: #666;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #f4f4f4;
+    border: 1px solid #dbdbdb;
+  }
+  .collection_input_icon.right_btn {
+    right:0px;
+    background-color: #f18b33;
+    color:#fff;
+    width: 60px;
+    font-size: 13px;
+    border-left:none;
+    cursor:pointer;
+  }
+  .collection_input {
+    display:block;
+    width:100%;
+    height:40px;
+    margin:10px 0;
+    line-height:40px;
+    padding:0 10px 0 50px;
+    -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+    border:1px solid #dbdbdb;
+    color:#666;
+    font-size:13px;
+    -webkit-appearance:none;
+    border-radius:0;
+  }
+</style>

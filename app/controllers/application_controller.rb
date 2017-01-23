@@ -3,90 +3,19 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
-  before_filter :detect_browser, :set_visitor, :prepare_exception_notifier
-  before_action :updating, unless: -> { request.format.json? }
+  before_action :set_visitor, only: [:index, :show]
+  before_action :prepare_exception_notifier
 
-  MOBILE_BROWSERS = ["android", "iphone", "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;", "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2","pocket","kindle", "mobile","pda","psp","treo"]
   include PushSend
 
-  def updating
-    if request.path != "/update"
-      redirect_to "/update"
-    end
-  end
-
-  def auth_user
-    render :template => "/landing" unless current_user
-  end
-
-  def auth_admin
-    render  :template => "/admin/not_auth" unless current_user && current_user.user_role == "admin"
-  end
-
   def set_visitor
-    @uniq_key = cookies["uniq_key"]
-    @visitor = Visitor.find_by_uniq_key( Digest::MD5.hexdigest(@uniq_key ) ) unless @uniq_key.blank?
-    if @visitor.blank?
-      @uniq_key = Time.now.to_f.to_s + rand(1000000).to_s if @uniq_key.blank?
+    @uniq_key = cookies["visitor_uniq_key"]
+    if @uniq_key.blank?
+      @uniq_key = Time.now.to_f.to_s + rand(1000000).to_s
       hash_uniq_key = Digest::MD5.hexdigest(@uniq_key)
-      @visitor = Visitor.create(:uniq_key => hash_uniq_key, :remote_ip => get_remote_ip)
-    end
-  end
-
-  def detect_browser
-    if params[:view]
-      if params[:view] == 'mobile'
-        session[:view] = 'mobile'
-        session[:browser] = nil
-      elsif params[:view] == 'standard'
-        session[:view] = 'standard'
-        session[:browser] = nil
-      end
-      session[:view_force] = true
+      @visitor = Visitor.create(uniq_key: hash_uniq_key, remote_ip: get_remote_ip)
     else
-      unless session[:view_force]
-        if request.headers["HTTP_USER_AGENT"]
-          agent = request.headers["HTTP_USER_AGENT"].downcase
-
-          session[:view] = nil
-          MOBILE_BROWSERS.each do |m|
-            if agent.match(m)
-              session[:view] = 'mobile'
-              session[:browser] = m
-            break
-            end
-          end
-
-          #아이폰 모바일 앱 검출
-          if session[:browser] == 'iphone'
-            if ( request.headers["HTTP_USER_AGENT"].include?('vaskit_iphone') == false && !request.headers["MyUserAgent"] )
-              session[:browser] = 'iphone-web'
-            end
-          end
-
-          #안드로이드 모바일웹 검출
-          if session[:browser] == 'android'
-            if ( request.headers["HTTP_USER_AGENT"].include?('VaskitAndroid') == false )
-              session[:browser] = 'android-web'
-            end
-          end
-
-          if agent.match('ipad')
-            session[:view] = 'mobile'
-            session[:browser] = 'iphone-web'
-          end
-
-          # ipad 검출
-          # if agent.match('ipad')
-            # session[:view] = 'mobile'
-            # session[:browser] = 'ipad'
-          # end
-        end
-        unless session[:view]
-          session[:view] = 'standard'
-          session[:browser] = nil
-        end
-      end
+      @visitor = Visitor.find_by_uniq_key(Digest::MD5.hexdigest(@uniq_key))
     end
   end
 
@@ -100,43 +29,63 @@ class ApplicationController < ActionController::Base
     ret.split(",")[0]
   end
 
-  def set_gcm_key
-    gcm_key = cookies["gcm_key"]
-    device_id = cookies["device_id"]
-    app_ver = cookies["app_ver"]
-    if gcm_key != nil && device_id != nil
-      user_gcm_key = UserGcmKey.find_by(:gcm_key => gcm_key)
-      if current_user
-        if user_gcm_key
-          user_gcm_key.update(:user_id => current_user.id, :device_id => device_id, :app_ver => app_ver)
-        else
-          user_gcm_key = UserGcmKey.create(:user_id => current_user.id, :gcm_key => gcm_key, :device_id => device_id, :app_ver => app_ver)
-        end
-      else
-        # 로그아웃한 경우 또는 앱을 삭제했다가 다시 설치한 경우 기존 정보 제거
-        # 단, 앱 삭제시에는 캐치할 수 없고, 앱 삭제 후 재설치한 직후(1회)에는 cookie 설정이 한템포 늦으므로 타이밍 오류 있음
-        UserGcmKey.where(:device_id => device_id).destroy_all unless device_id == nil
-      end
-
-      # 앱 뱃지 카운트 초기화
-      if user_gcm_key != nil && app_ver != nil
-        registration_ids = []
-        registration_ids << user_gcm_key.gcm_key
-        if current_user
-          alrams = Alram.where(:user_id => current_user.id).order("updated_at desc").limit(20)
-          count = alrams.pluck(:is_read).count(false)
-        else
-          count = 0
-        end
-        push_send(registration_ids, "false", count, "", "", "")
-      end
-    end
-  end
+  # def welcome
+  #   referer_host = request.referer ? URI.parse(URI.encode(request.referer.strip)).host.to_s : "None"
+  #   unless referer_host == request.host
+  #     referer = request.referer ? URI.parse(URI.encode(request.referer.strip)).to_s : "None"
+  #     ua = request.headers['User-Agent'] ? request.headers['User-Agent'] : "unknown"
+  #
+  #     if ua.match(/iPhone/i)
+  #       device = cookies['gcm_key'] ? "App_iOS" : "iPhone"
+  #     elsif ua.match(/Android/i)
+  #       device = cookies['gcm_key'] ? "App_AOS" : "Android"
+  #     elsif ua.match(/Win|Windows/i)
+  #       device = "Windows"
+  #     elsif ua.match(/Mac|MacIntel/i)
+  #       device = "Mac"
+  #     elsif ua.match(/Linux/i)
+  #       device = "Linux"
+  #     elsif ua.match(/iPod|Windows CE|BlackBerry|Symbian|Windows Phone|webOS|Opera Mini|Opera Mobi|POLARIS|IEMobile|lgtelecom|nokia|SonyEricsson/i)
+  #       device = "mobile_etc"
+  #     else
+  #       device = "unknown"
+  #     end
+  #
+  #     if ua.match(/NAVER/i)
+  #       browser = "NaverAPP"
+  #     elsif ua.match(/Daum/i)
+  #       browser = "DaumAPP"
+  #     elsif ua.match(/KAKAOTALK|KAKAOSTORY/i)
+  #       browser = "KakaoAPP"
+  #     elsif ua.match(/Facebook|FB/i)
+  #       browser = "FacebookAPP"
+  #     elsif ua.match(/MSIE|Trident/i)
+  #       browser = "IE"
+  #     elsif ua.match(/Edge/i)
+  #       browser = "Edge"
+  #     elsif ua.match(/Opera|OPR|OPiOS/i)
+  #       browser = "Opera"
+  #     elsif ua.match(/Chrome|CriOS/i)
+  #       browser = "Chrome"
+  #     elsif ua.match(/Firefox|FxiOS/i)
+  #       browser = "FireFox"
+  #     elsif ua.match(/Safari/i)
+  #       browser = "Safari"
+  #     else
+  #       browser = "unknown"
+  #     end
+  #
+  #     user_id = current_user.id unless current_user.blank?
+  #     visitor_id = @visitor.id unless @visitor.blank?
+  #     UserVisit.create(:user_id => user_id, :visitor_id => visitor_id, :device => device, :browser => browser, :referer_host => referer_host, :referer_full => referer, :user_agent => ua)
+  #   end
+  # end
 
   private
   def prepare_exception_notifier
     request.env["exception_notifier.exception_data"] = {
-      :user_string_id => current_user ? current_user.string_id : "visitor"
+      user_string_id: current_user ? current_user.string_id : "visitor",
+      ip_adress: get_remote_ip
     }
   end
 

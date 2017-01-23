@@ -1,0 +1,580 @@
+<script type="text/template" id="commentTemplate">
+  {{ var direction = ask.left_ask_deal_id == comment.ask_deal_id ? 'left' : 'right' }}
+  {{ var gender = comment.user.gender ? 'male' : 'female' }}
+  {{ var reply = comment.comment_id == null ? 'original' : 'reply' }}
+  <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} clearfix animated bounceIn" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" comment-user-id="{{= comment.user.id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}" onanimationend="$(this).removeClass('animated bounceIn');">
+    {{ if (reply == "reply") { }}
+      <i class="fa fa-reply comment_reply_icon"></i>
+    {{ } }}
+    <img class="comment_user_pic" src="{{= get_avatar(comment.user) }}">
+    <div class="comment_user_id">
+      {{ if (comment.user.id == 1) { }}
+        <span class="comment_user_profile label vaskit">VASKIT</span>
+      {{ } else if (current_user && comment.user.id == current_user.id) { }}
+        <span class="comment_user_profile label me">ME</span>
+      {{ } else if (comment.user.id == ask.user_id) { }}
+        <span class="comment_user_profile label asker">ASKER</span>
+      {{ } else { }}
+        <span class="comment_user_profile {{= gender }}">{{=get_user_ages(comment.user.birthday)}}</span>
+      {{ } }}
+      <span class="comment_user_string_id">{{=comment.user.string_id}}</span>
+      <div class="comment_menu_btn">
+        <span class="comment_like_count">{{= comment.like_count == 0 ? "" :numberWithCommas(comment.like_count) }}</span>
+        <i class="fa {{= already_like ? 'fa-heart' : 'fa-heart-o'}} comment_like_icon"></i>
+      </div>
+    </div>
+    <div class="comment_bubble">
+      <div class="comment_bubble_arrow"></div>
+      <div class="comment_content">{{= comment.is_deleted ? '삭제된 댓글입니다' : taggingKeywords(comment.content) }}</div>
+      <div class="comment_date">{{= get_past_time(comment.created_at) }}</div>
+    </div>
+  </li>
+</script>
+
+<script type="text/template" id="commentWritingSignTemplate">
+  {{ var direction = is_left ? "left" : "right" }}
+  {{ var reply = is_reply ? "reply" : "" }}
+  <li class="comment_box is_writing {{= direction }} {{= reply }} clearfix" onclick="cancle_comment_writing();">
+    {{ if (is_reply) { }}
+      <i class="fa fa-reply comment_reply_icon"></i>
+    {{ } }}
+    <div class="comment_writing_sign">
+      <span class="comment_writing_profile" style="background-image: url('{{= get_avatar(current_user) }}');"></span>
+      <span class="comment_writing_arrow"></span>
+      <span class="comment_writing_user_id">{{= current_user ? current_user.string_id : '' }}</span>
+      <span class="comment_writing_label">{{= label }}</span>
+      <span class="comment_writing_cancle">&times; 취소</span>
+    </div>
+  </li>
+</script>
+
+<script>
+  var commentTemplate = _.template($("#commentTemplate").html());
+  var commentWritingSignTemplate = _.template($("#commentWritingSignTemplate").html());
+
+  function new_comment() {
+    var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+    var current_comment_container = current_wrapper.find(".container.bottom");
+    var current_comment_input_init = current_comment_container.find(".comment_input_init");
+    var current_comment_input = current_comment_container.find(".comment_input");
+
+    current_comment_input.val("");
+    current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('new'); }).click();
+  };
+
+  function reply_comment(comment_id) {
+    var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+    var current_comment_container = current_wrapper.find(".container.bottom");
+    var current_comment_input_init = current_comment_container.find(".comment_input_init");
+    var current_comment_input = current_comment_container.find(".comment_input");
+
+    back_button();
+    current_comment_input.val("");
+    current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('reply', comment_id); }).click();
+  };
+
+  function edit_comment(comment_id) {
+    var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+    var current_comment_container = current_wrapper.find(".container.bottom");
+    var current_comment_input_init = current_comment_container.find(".comment_input_init");
+    var current_comment_input = current_comment_container.find(".comment_input");
+
+    var current_comment_box = current_wrapper.find(".comment_box."+comment_id).last();
+    var current_comment_content = current_comment_box.find(".comment_content").html().replace(new RegExp('<br>', 'g'), '\n');
+
+    back_button();
+    current_comment_input.val(current_comment_content);
+    current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('edit', comment_id); }).click();
+  };
+
+  function cancle_comment_writing() {
+    var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+    var current_comment_container = current_wrapper.find(".container.bottom");
+    var current_comment_input_init = current_comment_container.find(".comment_input_init");
+    var current_comment_input = current_comment_container.find(".comment_input");
+    var current_comment_lists = current_wrapper.find(".comment_list");
+    var is_writing_box = current_wrapper.find(".comment_box.is_writing");
+    var current_comment_input_submit = current_comment_container.find(".comment_input_submit");
+    var current_comment_input_submit_btn_text = current_comment_input_submit.find(".submit_btn_text");
+
+    current_comment_lists.find(".comment_box:hidden").show();
+    is_writing_box.remove();
+    current_comment_input.val("").removeClass("filled");
+    current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('new'); });
+    current_comment_input_submit.removeClass("ready").off("click");
+    current_comment_input_submit_btn_text.html("전송");
+  };
+
+  function comment_input_activate(comment_type, comment_id) {
+    var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+    var current_ask_container = current_wrapper.find(".container.main");
+    var ask_box = current_ask_container.find(".ask");
+    var ask_id = Number(ask_box.attr("ask-id"));
+    var ask_user_id = Number(ask_box.attr("ask-user-id"));
+    var current_comment_container = current_wrapper.find(".container.bottom");
+    var current_comment_input_init = current_comment_container.find(".comment_input_init");
+    var current_comment_input = current_comment_container.find(".comment_input");
+    var current_comment_input_menu = current_comment_container.find(".comment_input_menu");
+    var current_comment_input_submit = current_comment_container.find(".comment_input_submit");
+    var current_comment_input_submit_btn_text = current_comment_input_submit.find(".submit_btn_text");
+    var current_comment_lists = current_wrapper.find(".comment_list");
+    var ask_comment_count = parseInt(current_ask_container.find(".ask_comment_count").html());
+    var is_vote = ask_box.hasClass("is_voted");
+    var is_writing_box = current_wrapper.find(".comment_box.is_writing");
+    var is_writing = is_writing_box.length > 0;
+
+    if (!is_vote) {
+      notify("먼저 투표에 참여해주세요!");
+      current_ask_container.scroll_to(0);
+    } else {
+      visitor_check(function(){
+        scroll_init(comment_type, comment_id);
+        bubble_init(comment_type, comment_id);
+        toggle_init(comment_type, comment_id);
+        send_init(comment_type, comment_id);
+        input_init(comment_type, comment_id);
+      });
+    };
+
+    function scroll_init(comment_type, comment_id) {
+      setTimeout(function(){
+        if (comment_type == "new") {
+          // current_ask_container.scroll_to(true);
+          var st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
+          var target_comment_box = current_ask_container.find(".comment_box").last();
+          var target_comment_box_top = target_comment_box.offset().top;
+          var target_comment_box_height = target_comment_box.height();
+          var st_destination = st_now + target_comment_box_top + target_comment_box_height - 35;
+          current_ask_container.scroll_to(st_destination);
+        } else if (comment_type == "edit") {
+          var st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
+          var target_comment_box = current_ask_container.find(".comment_box."+comment_id).last();
+          var target_comment_box_top = target_comment_box.offset().top;
+          target_comment_box_top = target_comment_box_top == 0 ? target_comment_box.next().offset().top : target_comment_box_top;
+          var st_destination = st_now + target_comment_box_top - 10;
+          current_ask_container.scroll_to(st_destination);
+        } else if(comment_type == "reply") {
+          var st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
+          var target_comment_box = current_ask_container.find(".comment_box."+comment_id).last();
+          var target_comment_box_top = target_comment_box.offset().top;
+          var target_comment_box_height = target_comment_box.height();
+          var st_destination = st_now + target_comment_box_top + target_comment_box_height - 60;
+          current_ask_container.scroll_to(st_destination);
+        }
+      }, 500);
+    };
+
+    function bubble_init(comment_type, comment_id) {
+      current_comment_lists.find(".comment_box:hidden").show();
+      is_writing_box.remove();
+      if (comment_type == "new") {
+        var is_left = Boolean(current_comment_input_menu.attr("left"));
+        var target_comment_lists = is_left ? current_comment_lists.not(".right") : current_comment_lists.not(".left");
+        target_comment_lists.append(commentWritingSignTemplate({label: "작성중", is_left: is_left, is_reply: false}));
+      } else if (comment_type == "edit") {
+        var target_comment_boxes = current_comment_lists.find(".comment_box."+comment_id);
+        var is_left = target_comment_boxes.hasClass("left");
+        var is_reply = target_comment_boxes.hasClass("reply");
+        target_comment_boxes.hide();
+        target_comment_boxes.after(commentWritingSignTemplate({label: "수정중", is_left: is_left, is_reply: is_reply}));
+      } else if (comment_type == "reply") {
+        var target_comment_boxes = current_comment_lists.find(".comment_box."+comment_id);
+        var is_left = target_comment_boxes.hasClass("left");
+        target_comment_boxes.after(commentWritingSignTemplate({label: "답글 작성중", is_left: is_left, is_reply: true}));
+      };
+    };
+
+    function toggle_init(comment_type, comment_id) {
+      if (comment_type == "edit" || comment_type == "reply") {
+        var toggle_btn_is_left = Boolean(current_comment_input_menu.attr("left"));
+        var target_comment_boxes = current_comment_lists.find(".comment_box."+comment_id);
+        var original_comment_is_left = target_comment_boxes.hasClass("left");
+        if (toggle_btn_is_left != original_comment_is_left) toggle_comment(current_comment_input_menu);
+      }
+    };
+
+    function send_init(comment_type, comment_id) {
+      if (comment_type == "new") {
+        current_comment_input_submit_btn_text.html("전송");
+      } else if (comment_type == "edit") {
+        current_comment_input_submit_btn_text.html("수정");
+      } else if (comment_type == "reply") {
+        current_comment_input_submit_btn_text.html("답글");
+      };
+      current_comment_input_submit.off("click")
+                                  .on("click", function(){
+                                    send_comment(comment_type, comment_id);
+                                  });
+
+      function send_comment(comment_type, comment_id) {
+        var content = current_comment_input.val().replace(/\s*$/, ""); // 뒤 공백문자 제거
+        var is_left = Boolean(current_comment_input_menu.attr("left"));
+
+        var is_writing_box = current_wrapper.find(".comment_box.is_writing");
+
+        var all_ask_divs = $("#main_view").find(".ask.ask_"+ask_id);
+        var all_ask_comment_count_spans = all_ask_divs.find(".ask_comment_count");
+        var all_ask_comment_divs = $("#main_view").find(".comment.ask_"+ask_id);
+        var all_ask_comment_lists = is_left ? all_ask_comment_divs.find(".comment_list").not(".right") : all_ask_comment_divs.find(".comment_list").not(".left");
+
+        visitor_check(function(){
+          if ((content == "" || content == null)) {
+            notify('의견을 입력해주세요');
+          } else if (content.length > 250) {
+            notify('250자 이상은 입력이 불가능합니다');
+          } else {
+            $.ajax({
+              url: comment_type == "edit" ? "/comments/"+comment_id+".json" : "/comments.json",
+              dataType: "json",
+              type: comment_type == "edit" ? "PUT" : "POST",
+              data: {content: content, ask_id: ask_id, is_left: is_left, comment_id: comment_id},
+              // async: false,  // 코멘트 중복 전송을 방지
+              error: function() {
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data) {
+                if (data.status == "success") {
+                  current_comment_input_init.attr("onclick", "new_comment();");
+                  current_comment_input.val("").blur();
+                  current_comment_input_submit.removeClass("ready").off("click");
+                  current_comment_input_submit_btn_text.html("전송");
+                  if (ask_comment_count == 0) all_ask_comment_lists.find(".comment_blank").animateCssHide("fadeOut");
+                  if (comment_type == "edit") {
+                    current_comment_lists.find(".comment_box."+comment_id).remove();
+                  } else {
+                    all_ask_comment_count_spans.html(ask_comment_count+1);
+                  }
+                  is_writing_box.replaceWith(commentTemplate({ask: data.ask, comment: data.comment, already_like: false}));
+
+                  // 첨부 이미지 관련
+                };
+              },
+              beforeSend: function() {
+                loadingStart();
+              },
+              complete: function() {
+                loadingEnd();
+              }
+            });
+          }
+        });
+      };
+    };
+
+    var iOSKeypadCheck;
+    function input_init(comment_type, comment_id) {
+      var keyPressed = [];
+      current_comment_input.off("keydown keyup input focus blur")
+                           .on("keydown", function(e) {
+                             keyPressed[e.keyCode] = true;
+                             if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
+                               e.preventDefault();
+                               current_comment_input_submit.click();
+                             }
+                           })
+                           .on("keyup", function(e) {
+                             keyPressed[e.keyCode] = false;
+                             $(this).val().length == 0 ? current_comment_input_submit.removeClass("ready") : current_comment_input_submit.addClass("ready");
+                             keyPressed = [];
+                           })
+                           .on("input", function(e) {
+                             if (this.scrollHeight < $(window).height() / 2) {
+                               $(this).css({height: "auto", overflowY: "hidden"}).height(this.scrollHeight);
+                             } else {
+                               $(this).css({height: "auto", overflowY: "scroll"}).height(this.scrollHeight);
+                             }
+                             current_comment_container.height(this.scrollHeight + 32);
+                           })
+                           .on("focus", function(e) {
+                             if (current_user == null) {
+                               $(this).blur();
+                               visitor_check();
+                             } else {
+                               $(this).height(this.scrollHeight);
+                               current_comment_container.height(this.scrollHeight + 32);
+                               $(this).removeClass("filled");
+                               $(this).selectRange($(this).val().length, $(this).val().length);
+                               // iOS web 키패드 이슈
+                               if (userDevice.isIOS && !userApp) {
+                                 iOSKeypadCheck = setInterval(function(){
+                                   console.log('키패드 체크');
+                                   if (document.body.scrollTop > 0) {
+                                     $("html").css({height: window.innerHeight - document.body.scrollTop + 10});
+                                     window.scrollTo(0,0);
+                                   }
+                                 },25);
+                               }; // iOS web 키패드 이슈
+                             };
+                           })
+                           .on("blur", function(e) {
+                             // iOS web 키패드 이슈
+                             if (userDevice.isIOS && !userApp) {
+                               clearInterval(iOSKeypadCheck);
+                               setTimeout(function(){
+                                 $("html").css({height: ''});
+                                 window.scrollTo(0,0);
+                               },50);
+                             }; // iOS web 키패드 이슈
+                             $(this).height(50 - 32);
+                             current_comment_container.height(50);
+                             $(this).val().length == 0 ? $(this).removeClass("filled") : $(this).addClass("filled");
+                             $(this).attr("disabled",true);
+                           }).attr("disabled",false).focus();
+    };
+
+  };  // end of comment_input_activate()
+
+
+
+  // function open_new_comment_menu(target) {
+  //   var ask_wrapper = target.parentsUntil(this, ".wrapper");
+  //   var comment_container = ask_wrapper.find(".container.bottom");
+  //   var comment_input = comment_container.find(".comment_input");
+  //
+  //   var is_left = Boolean(target.attr("left"));
+  //
+  //   var options = {
+  //                   menus: [
+  //                     {
+  //                       name: is_left ? "오른쪽에 댓글 달기" : "왼쪽에 댓글 달기",
+  //                       func: "back_button(); toggle_comment();"
+  //                     },
+  //                     {
+  //                       name: "이미지 첨부하기",
+  //                       func: "back_button(); attach_comment_image();"
+  //                     }
+  //                   ]
+  //                 };
+  //   go_url('menu', options);
+  // };
+  //
+  // function attach_comment_image() {
+  //   notify('이미지 첨부 - 준비중');
+  //   back_button();
+  // };
+  //
+  function toggle_comment(target) {
+    var is_left = Boolean(target.attr("left"));
+    var current_wrapper = target.parentsUntil(this, ".wrapper");
+    var current_comment_lists = current_wrapper.find(".comment_list");
+    var target_comment_lists = is_left ? current_comment_lists.not(".right") : current_comment_lists.not(".left");
+    var is_writing_box = target_comment_lists.find(".comment_box.is_writing");
+    var is_writing = is_writing_box.length > 0;
+    var is_writing_direction_left = is_writing_box.hasClass("left");
+    var is_reply = is_writing_box.hasClass("reply");
+
+    if (is_left) {
+      target.removeAttr("left").removeClass("left").addClass("right");
+      if (is_writing && is_writing_direction_left && !is_reply) is_writing_box.removeClass("left").addClass("right");
+    } else {
+      target.attr("left", true).removeClass("right").addClass("left");
+      if (is_writing && !is_writing_direction_left && !is_reply) is_writing_box.removeClass("right").addClass("left");
+    }
+  };
+
+  function open_comment_menu(target) {
+    window.event.cancelBubble = true;
+    var options;
+    var is_deleted = Boolean(target.attr("is-deleted"));
+
+    visitor_check(function() {
+      if (is_deleted) {
+        notify('삭제된 댓글입니다');
+      } else {
+        var comment_id = target.attr("comment-id");
+        var original_comment_id = target.attr("original-comment-id");
+        var comment_user_id = target.attr("comment-user-id");
+        var comment_user_string_id = target.find(".comment_user_string_id").text();
+        var comment_content = target.find(".comment_content").text();
+        var already_like = target.find(".comment_like_icon").hasClass("fa-heart");
+        if (comment_user_id == current_user.id) {
+          options = {
+                      description: "<b>"+comment_user_string_id+"님의 댓글</b><br>"+comment_content,
+                      menus: [
+                        {
+                          name: "대댓글 달기",
+                          func: "reply_comment("+original_comment_id+");"
+                        },
+                        {
+                          name: "댓글 수정",
+                          func: "edit_comment("+comment_id+");"
+                        },
+                        {
+                          name: "댓글 삭제",
+                          func: "delete_comment("+comment_id+");"
+                        }
+                      ]
+                    }
+        } else {
+          options = {
+                      description: "<b>"+comment_user_string_id+"님의 댓글</b><br>"+comment_content,
+                      menus: [
+                        {
+                          name: already_like ? "좋아요 취소" : "좋아요",
+                          func: "like_comment("+comment_id+");"
+                        },
+                        {
+                          name: "대댓글 달기",
+                          func: "reply_comment("+original_comment_id+");"
+                        },
+                        {
+                          name: "신고하기",
+                          func: "report_comment("+comment_id+");"
+                        }
+                      ]
+                    }
+        }
+        go_url('menu', options);
+      }
+    });
+  };
+
+  function like_comment(comment_id) {
+    var all_comment_boxes = $("#main_view").find(".comment_box."+comment_id);
+    var all_comment_like_icons = all_comment_boxes.find(".comment_like_icon");
+    var all_comment_like_counts = all_comment_boxes.find(".comment_like_count");
+    var comment_like_count = parseInt(all_comment_like_counts.last().html());
+
+    $.ajax({
+		        url: "/comments/"+comment_id+"/like.json",
+		        type: 'POST',
+		        dataType: 'json',
+		        error: function() {
+		          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+		        },
+		        success: function(data) {
+		        	if (data.already_like) {
+                all_comment_like_icons.removeClass("fa-heart").addClass("fa-heart-o").animateCss("jello");
+                comment_like_count == 1 ? all_comment_like_counts.html("") : all_comment_like_counts.html(comment_like_count - 1);
+		        	} else {
+                all_comment_like_icons.removeClass("fa-heart-o").addClass("fa-heart").animateCss("tada");
+                comment_like_count > 0 ? all_comment_like_counts.html(comment_like_count + 1) : all_comment_like_counts.html("1");
+		        	}
+		        },
+		        beforeSend: function(){
+              back_button();
+		        },
+		        complete: function(){
+		        }
+			});
+  };
+
+  function delete_comment(comment_id) {
+    if (confirm("의견을 정말로 삭제하시겠어요?")) {
+      var all_comment_boxes = $("#main_view").find(".comment_box."+comment_id);
+      $.ajax({
+              url: "/comments/"+comment_id+".json",
+              dataType: 'json',
+              type: 'DELETE',
+              error: function() {
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data) {
+                if (data.status == "success") {
+                  all_comment_boxes.animateCssRemove("bounceOutDown");
+                } else if (data.status == "not_authorized") {
+                  notify('권한이 없습니다');
+                };
+              },
+              beforeSend: function(){
+                back_button();
+  		        }
+      });
+    };
+  };
+
+</script>
+
+<script type="text/template" id="reportInputTemplate">
+  <li class="menu_list">
+    <textarea id="report_message" class="input text_field" rows="5" placeholder="신고하실 내용을 입력해주세요"></textarea>
+  </li>
+  <li class="menu_list" onclick="submit_report('{{= target }}', {{= target_id}}, {{= report_type}});">제출하기</li>
+</script>
+
+<script>
+  var reportInputTemplate = _.template($("#reportInputTemplate").html());
+
+  function report_ask(ask_id) {
+    var options = {
+                menus: [
+                  {
+                    name: "구매결정과는 무관한 내용이군요",
+                    func: "submit_report('ask', " + ask_id + ", 1);"
+                  },
+                  {
+                    name: "광고성, 홍보성이 짙은 내용이군요",
+                    func: "submit_report('ask', " + ask_id + ", 2);"
+                  },
+                  {
+                    name: "비윤리적인 내용은 보고싶지 않아요",
+                    func: "submit_report('ask', " + ask_id + ", 3);"
+                  },
+                  {
+                    name: "직접 입력하겠어요",
+                    func: "open_report('ask', " + ask_id + ", 4, $(this));"
+                  }
+                ]
+              };
+    go_url('menu', options);
+  };
+
+  function report_comment(comment_id) {
+    back_button();
+    var options = {
+                menus: [
+                  {
+                    name: "구매결정과는 무관한 내용이군요",
+                    func: "submit_report('comment', " + comment_id + ", 1);"
+                  },
+                  {
+                    name: "광고성, 홍보성이 짙은 내용이군요",
+                    func: "submit_report('comment', " + comment_id + ", 2);"
+                  },
+                  {
+                    name: "비윤리적인 내용은 보고싶지 않아요",
+                    func: "submit_report('comment', " + comment_id + ", 3);"
+                  },
+                  {
+                    name: "직접 입력하겠어요",
+                    func: "open_report('comment', " + comment_id + ", 4, $(this));"
+                  }
+                ]
+              };
+    setTimeout(function(){
+      go_url('menu', options);
+    }, 250);
+  };
+
+  function open_report(target, target_id, report_type, elem) {
+    elem.prevAll().remove();
+    elem.after(reportInputTemplate({target: target, target_id: target_id, report_type: report_type}));
+  };
+
+  function submit_report(target, target_id, report_type) {
+    var message = $("#report_message").val();
+    $.ajax({
+	        url: "/log_reports.json",
+          dataType: "json",
+	        type: "POST",
+	        data: {target: target, target_id: target_id, report_type: report_type, message: message},
+					error: function(){
+	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+	        },
+	        success: function(data){
+	        	if (data.already_report) {
+	        		notify("이미 신고하신 항목입니다");
+	        	} else {
+	        		notify("신고가 정상적으로 접수되었습니다. 감사합니다!");
+	        	}
+            back_button();
+	        },
+	        beforeSend: function(){
+						loadingStart();
+	        },
+	        complete: function(){
+						loadingEnd();
+	        }
+		});
+  };
+</script>

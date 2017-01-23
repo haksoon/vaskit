@@ -1,0 +1,267 @@
+<script type="text/template" id="shareTemplate">
+  <div class="wrapper full" id="share_screen">
+    <div class="container top dark" ontouchmove="return false;">
+      <span class="header_title" onclick="$(this).scroll_to();">{{= share_type == "ask" ? "질문" : "컬렉션" }} 공유하기</span>
+      <span class="header_btn right back_btn" onclick="back_button();"><i class="fa fa-angle-down"></i></span>
+    </div>
+    <div class="container main">
+      <div class="clearfix share_image_area animated fadeIn" ontouchstart="removeIOSRubberEffect($(this));">
+        {{ if (share_type == "ask") { }}
+          {{= shareAskTemplate({ask: share_data}) }}
+        {{ } else if (share_type == "collection") { }}
+          {{= shareCollectionTemplate({collection: share_data}) }}
+        {{ } }}
+      </div>
+      <div class="clearfix scroll_box x-axis share_btn_area animated slideInUp" ontouchmove="return false;">
+        <span class="share_btn_text share_facebook_btn_text">페이스북</span>
+        <span class="share_btn" id="share_facebook_btn"><i class="fa fa-facebook"></i></span>
+        <span class="share_btn_text share_kakao_btn_text">카카오톡</span>
+        <span class="share_btn" id="share_kakao_btn"><i class="fa fa-comment"></i></span>
+        <span class="share_btn_text share_url_btn_text">링크복사</span>
+        <span class="share_btn" id="share_url_btn"><i class="fa fa-link"></i></span>
+        <span class="share_btn_text share_close_btn_text">닫기</span>
+        <span class="share_btn share_close_btn" onclick="back_button();">&times;</span>
+        <input id="share_url" type="text" value="">
+      </div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="shareAskTemplate">
+  <div id="share_image" class="ask ask_detail contents_box">
+    <div class="clearfix">
+      <div class="ask_image_box">
+        <img class="ask_image left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
+        <img class="ask_image right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
+      </div>
+    </div>
+    <div class="clearfix">
+      {{ if ((ask.left_ask_deal.title != "" && ask.left_ask_deal.title != null) || (ask.right_ask_deal.title != "" && ask.right_ask_deal.title != null)) { }}
+      <div class="ask_table_row title">
+        <span class="ask_table_cell left text_box_short">{{= fieldWithBlank(ask.left_ask_deal.title) }}</span>
+        <span class="ask_table_cell right text_box_short">{{= fieldWithBlank(ask.right_ask_deal.title) }}</span>
+        <i class="ask_table_icon vaskit_icon title"></i>
+      </div>
+      {{ } }}
+      {{ if ((ask.left_ask_deal.brand != "" && ask.left_ask_deal.brand != null) || (ask.right_ask_deal.brand != "" && ask.right_ask_deal.brand != null)) { }}
+      <div class="ask_table_row brand">
+        <span class="ask_table_cell left text_box_short">{{= fieldWithBlank(ask.left_ask_deal.brand) }}</span>
+        <span class="ask_table_cell right text_box_short">{{= fieldWithBlank(ask.right_ask_deal.brand) }}</span>
+        <i class="ask_table_icon vaskit_icon brand"></i>
+      </div>
+      {{ } }}
+      {{ if (ask.left_ask_deal.price != null && ask.right_ask_deal.price != null) { }}
+      <div class="ask_table_row price">
+        <span class="ask_table_cell left text_box_short">{{= fieldWithBlank(numberWithCommas(ask.left_ask_deal.price)) }}원</span>
+        <span class="ask_table_cell right text_box_short">{{= fieldWithBlank(numberWithCommas(ask.right_ask_deal.price)) }}원</span>
+        <i class="ask_table_icon vaskit_icon price"></i>
+      </div>
+      {{ } }}
+      {{ if ((ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) || (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null)) { }}
+      <div class="ask_table_row link">
+        {{ var aLink = document.createElement("a") }}
+        {{ if (ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) { }}
+          {{ aLink.href = ask.left_ask_deal.link }}
+          <span class="ask_table_cell left text_box_short"><a href="{{= aLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(aLink.host) }}</a></span>
+        {{ } else { }}
+          <span class="ask_table_cell left text_box_short">{{= fieldWithBlank(aLink.host) }}</span>
+        {{ } }}
+        {{ var bLink = document.createElement("a") }}
+        {{ if (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null) { }}
+          {{ bLink.href = ask.right_ask_deal.link }}
+          <span class="ask_table_cell left text_box_short"><a href="{{= bLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(bLink.host) }}</a></span>
+        {{ } else { }}
+          <span class="ask_table_cell left text_box_short">{{= fieldWithBlank(bLink.host) }}</span>
+        {{ } }}
+        <i class="ask_table_icon vaskit_icon link"></i>
+      </div>
+      {{ } }}
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="shareCollectionTemplate">
+  <div id="share_image" class="clearfix collection_thumbnail contents_box">
+    <div class="collection_title">
+      <p class="collection_description">{{= collection.description }}</p>
+      <p class="collection_name">{{= collection.name }}</p>
+    </div>
+    <img class="collection_image" src="{{=get_image_url(collection, 'collections', 'original')}}" alt="">
+  </div>
+</script>
+
+
+
+<script>
+  var shareTemplate = _.template($("#shareTemplate").html());
+  var shareAskTemplate = _.template($("#shareAskTemplate").html());
+  var shareCollectionTemplate = _.template($("#shareCollectionTemplate").html());
+
+  function show_share(share_type, target_id) {
+    var share_url = "<%= CONFIG['host'] %>" + "/" + share_type + "s/" + target_id;
+    if ($("#share_screen").length == 0) {
+      $.ajax({
+            url: "/shares/new.json",
+            dataType: "json",
+            type: "GET",
+            data: {share_type: share_type, target_id: target_id},
+            error: function(){
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data){
+              open_full_view(shareTemplate({share_type: share_type, target_id: target_id, share_data: data.share_data}));
+              $("#share_facebook_btn").on("click", function(){ share_facebook() });
+              $("#share_kakao_btn").on("click", function(){ share_katalk(data.share_data) });
+              $("#share_url_btn").on("click", function(){ copy_url() });
+              $("#share_url").val(share_url);
+              if (userApp) setAppStatusBar("dark");
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+      });
+    }
+    return null;
+
+    function share_facebook() {
+      if (userApp) {
+        if (window.HybridApp) {
+          HybridApp.shareFacebook(share_url);
+        } else {
+          window.location = "vaskit://shareFacebook/////" + share_url;
+        }
+      } else {
+        if (typeof(FB) != 'undefined' && FB != null) {
+          FB.init({
+            appId      : '<%=Facebook::CONFIG["app_id"]%>',
+            status     : true,
+            xfbml      : true,
+            version    : 'v2.5' // or v2.0, v2.1, v2.2, v2.3
+          });
+        }
+        FB.ui({
+          method: 'share',
+          href: share_url,
+        }, function(response){});
+      }
+
+      share_log("facebook");
+    };
+
+    function share_katalk(share_data) {
+      var captured_img;
+      var image_url = "http://vaskit.kr/images/logo/logo_share_800_420.png";
+      var image_width = '800';
+      var image_height = '420';
+      var label = "꼼꼼한 소비자들의 깐깐한 선택,\n#둘중에뭐사지?\n#혼자고민고민하지마\n\nVASKIT에서 당신의 고민거리를 이야기해보세요!\n\n" + share_url;
+      var share_js = "go_url('" + share_type + "', " + target_id + ")";
+
+      if (share_type == "ask") {
+        label = "둘중에뭐사지? 골라주세요!\n\n" + share_data.left_ask_deal.title + "\n vs \n" + share_data.right_ask_deal.title + ",\n당신의 선택은?\n\n" + share_url;
+      } else if (share_type == "collection") {
+        label = "[ VASKIT's pick,\n깐슈머들의 위시리스트! ]\n\n" + share_url;
+      }
+
+      html2canvas(document.getElementById("share_image"), {
+        allowTaint: true,
+        onrendered: function(canvas) {
+          try {
+            var captured_img = canvas.toDataURL("image/png");
+            $.ajax({
+                  url: "/shares.json",
+                  dataType: "json",
+                  type: "POST",
+                  data: { File: captured_img },
+                  error: function(){
+                    notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+                  },
+                  success: function(data){
+                    image_url = "<%= CONFIG['host'] %>" + data.image_url;
+                    image_width = canvas.width;
+                    image_height = canvas.height;
+                    send_kakao();
+                  },
+                  beforeSend: function(){
+                    loadingStart();
+                  },
+                  complete: function(){
+                    loadingEnd();
+                  }
+            });
+          } catch(err) {
+            send_kakao();
+          }
+        }
+      });
+
+      function send_kakao() {
+        Kakao.cleanup();
+        Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+        Kakao.Link.cleanup();
+        Kakao.Link.sendTalkLink({
+          label: label,
+          image: {
+            src:  image_url,
+            width: image_width,
+            height: image_height
+          },
+          appButton: {
+            text: "Let's VASKIT!",
+            webUrl: share_url,
+            execParams: {
+              iphone: {
+                js: share_js
+              },
+              android: { // 순서 바뀌면 안됨
+                url: share_url,
+                js: share_js
+              }
+            }
+          },
+          installTalk: false
+        });
+      };
+
+      share_log("katalk");
+    };
+
+    function copy_url() {
+      copyfieldvalue(event, "share_url") ? notify('주소가 복사되었습니다!') : prompt('아래의 주소를 복사해주세요!', share_url);
+      share_log("url");
+    };
+
+    function share_log(channel) {
+      var ask_id = share_type == "ask" ? target_id : null;
+      var collection_id = share_type == "collection" ? target_id : null;
+      $.ajax({
+        url: "/share_logs.json",
+        dataType: "json",
+        type: "POST",
+        data: {channel: channel, ask_id: ask_id, collection_id: collection_id}
+      });
+    }
+
+  };
+
+  function hide_share() {
+    close_full_view();
+    if (userApp) setAppStatusBar();
+  };
+
+  function copyfieldvalue(e, id){
+    if (document.execCommand("copy")) {
+      var field = document.getElementById(id);
+      field.focus();
+      field.setSelectionRange(0, field.value.length);
+      document.execCommand("copy");
+      field.blur();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+</script>

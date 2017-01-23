@@ -1,134 +1,126 @@
 Rails.application.routes.draw do
-  get 'update', :to => "etc#update"
-  post 'etc/update_contact', :to => "etc#update_contact"
+
+  # HTTP RESETful
+  # get: index, show, new, edit
+  # post: create
+  # put/patch: update -> put은 해당 자원 전체가 교체되는 것, patch는 해당 자원의 일부가 변경되는 것
+  # delete: destroy
 
   resources :asks do
     member do
       get 'show_detail'
       post 'like'
-      get 'ask_complete'
-      get 'create_complete'
     end
   end
-  resources :ask_completes
-  resources :ask_deals
-  resources :categories
-  resources :comments do
+
+  resources :votes, only: [:create, :destroy]
+
+  resources :comments, only: [:create, :update, :destroy] do
     member do
       post 'like'
-      delete 'comment_del'
     end
   end
-  resources :ask_likes
-  resources :comment_likes
-  resources :deals do
+
+  resources :preview_images, only: [:show, :create, :update]
+
+  resources :deals, only: [] do
     collection do
       get 'get_naver_deals'
       post 'create_by_naver'
     end
   end
-  resources :hash_tags
-  resources :notices
-  resources :mail_logs
-  resources :preview_images do
-    collection do
-      post 'crop'
-      patch 'crop'
-    end
-    member do
-      patch 'crop'
-    end
-  end
-  resources :share_logs
-  devise_for :users, :controllers => {
-    :sessions => 'users/sessions',
-    :registrations => 'users/registrations',
-    :passwords => 'users/passwords'
-  }
-  devise_scope :user do
-    get 'users/facebook', :to => "users/facebook#auth"
-    get 'users/check_email', :to => "users/registrations#check_email" #AJS추가
-    get 'users/get_user_data', :to => "users/sessions#get_user_data" #AJS추가
-    get 'users/get_my_asks', :to => "users/sessions#get_my_asks" #AJS추가
-    get 'users/alram_check', :to => "users/sessions#alram_check" #AJS추가
-    put 'users/change_nickname', :to => "users/sessions#change_nickname"
-    get 'users/change_password', :to => "users/registrations#edit"
-    put 'users/toggle_receive_notice', :to => "users/sessions#toggle_receive_notice"
-    put 'users/toggle_alram_option', :to => "users/sessions#toggle_alram_option"
-    delete 'users/:id', :to => "users/registrations#destroy"
-  end
-  resources :user_categories
-  resources :visitors
-  resources :votes do
-    collection do
-      post 'vote_cancle', :to => "votes#vote_cancle"
-    end
-  end
-  resources :search do
+
+
+  resources :collections, only: [:index, :show]
+
+  resources :search, only: [:index] do
     collection do
       get 'get_keyword'
     end
   end
-  resources :home do
-    collection do
-      get 'set_category'
-      get 'no_result'
-    end
+
+  resources :user_gcm_keys, only: [:create]
+
+  devise_for :users, :controllers => {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    passwords: 'users/passwords'
+  }
+  devise_scope :user do
+    post 'users/facebook', to: "users/facebook#auth"
+    post 'users/sign_up', to: "users/registrations#create"
+    post 'users/check_email', to: "users/registrations#check_email"
+
+    get 'users/forgot_password', to: "users/passwords#new"
+    get 'users/reset_password', to: "users/passwords#edit"
+
+    get 'users/alarm_check', to: "users/sessions#alarm_check"
+    get 'users/get_user_profile', to: "users/sessions#get_user_profile"
+    get 'users/get_user_alarms', to: "users/sessions#get_user_alarms"
+    get 'users/get_my_asks', to: "users/sessions#get_my_asks"
+
+    get 'users/', to: "users/sessions#users"
+    get 'users/history', to: "users/sessions#history"
+    get 'users/settings', to: "users/sessions#settings"
+
+    get 'users/settings/edit_profile', to: "users/sessions#edit_profile"
+    delete 'users/destroy_user_picture', to: "users/sessions#destroy_user_picture"
+    put 'users/change_nickname', to: "users/sessions#change_nickname"
+
+    get 'users/settings/edit_password', to: "users/sessions#edit_password"
+    put 'users/change_password', to: "users/sessions#update_password"
+
+    get 'users/settings/edit_push_alarm', to: "users/sessions#edit_push_alarm"
+    get 'users/settings/edit_email_alarm', to: "users/sessions#edit_email_alarm"
+    put 'users/toggle_alarm_option', to: "users/sessions#toggle_alarm_option"
   end
 
-  resources :inquiry
+  resources :videos, only: [:index]
 
-  get 'landing', :to => "etc#landing" #AJS추가 랜딩페이지 URL 변경
-  resources :etc do
+  resources :log_errors, only: [:create]
+  resources :log_inquiries, only: [:create]
+  resources :log_reports, only: [:create]
+
+  resources :shares, only: [:new, :create]
+  resources :share_logs, only: [:create]
+
+  resources :alarms, only: [:index]
+
+  resources :etc, only: [] do
     collection do
       get 'access_term'
       get 'privacy_policy'
-      get 'inquiry'
-      get 'help'
-      post 'create_inquiry'
+      get 'contact_us'
+      get 'faq_help'
     end
   end
 
-  post 'error_report', :to => "error_logs#error_report" #AJS추가 에러 리포트
-
-  resources :alrams do
-    collection do
-      put 'read'
-      put 'all_read'
-    end
-  end
-  resources :reports
-
-  resources :rank_asks
-
-  post 'get_videos', :to => "videos#get_videos"
+  get 'landing', to: "home#landing"
 
   # Admin Page
-  resources :admin do
-    collection do
-      get 'table'
-      get 'table/:table_name', :to => "admin#table"
-
-      get 'analysis'
-
-      get 'notice'
-      post 'create_notice'
-
-      get 'rank_asks'
-      post 'load_more_asks'
-      post 'submit_rank_ask'
-      delete 'delete_rank_ask'
-
-      get 'video'
-      post 'create_video'
+  namespace :admin do
+    get '/', to: "home#index"
+    resources :tables, only: [:index] do
+      get ':table_name', to: "tables#index", on: :collection
     end
+    resources :analysis, only: [:index]
+    resources :notice, only: [:index, :create]
+    resources :rank_asks, only: [:index, :create, :destroy]
+    resources :collections, only: [:index, :show, :create, :update] do
+      member do
+        post 'image_upload'
+      end
+    end
+    resources :collection_to_asks, only: [:index, :create, :update, :destroy]
+    resources :collection_to_collection_keywords, only: [:index, :create, :destroy]
+    resources :collection_keywords, only: [:index]
+    resources :videos, only: [:index, :create]
   end
 
-  resources :error_logs
-  resources :user_gcm_keys
-  resources :user_visits
-
-  # get "/:string_id", :to => "etc#user"
+  # Templates
+  get "templates/faq_help", to: "templates#faq_help"
+  get "templates/access_term", to: "templates#access_term"
+  get "templates/privacy_policy", to: "templates#privacy_policy"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

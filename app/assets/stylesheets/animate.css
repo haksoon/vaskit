@@ -2704,7 +2704,13 @@
     transform: scale3d(.3, .3, .3);
   }
 
-  50% {
+  /*50% {
+    opacity: 1;
+  }*/
+
+  25% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
     opacity: 1;
   }
 }
@@ -2716,7 +2722,13 @@
     transform: scale3d(.3, .3, .3);
   }
 
-  50% {
+  /*50% {
+    opacity: 1;
+  }*/
+
+  25% {
+    -webkit-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
     opacity: 1;
   }
 }
