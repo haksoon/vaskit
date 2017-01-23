@@ -4,9 +4,16 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_filter :detect_browser, :set_visitor, :prepare_exception_notifier
+  before_action :updating, unless: -> { request.format.json? }
 
   MOBILE_BROWSERS = ["android", "iphone", "ipod", "opera mini", "blackberry", "palm","hiptop","avantgo","plucker", "xiino","blazer","elaine", "windows ce; ppc;", "windows ce; smartphone;","windows ce; iemobile", "up.browser","up.link","mmp","symbian","smartphone", "midp","wap","vodafone","o2","pocket","kindle", "mobile","pda","psp","treo"]
   include PushSend
+
+  def updating
+    if request.path != "/update"
+      redirect_to "/update"
+    end
+  end
 
   def auth_user
     render :template => "/landing" unless current_user

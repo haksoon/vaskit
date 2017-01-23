@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'update', :to => "etc#update"
+  post 'etc/update_contact', :to => "etc#update_contact"
+
   resources :asks do
     member do
       get 'show_detail'

@@ -23,4 +23,12 @@ class EtcController < ApplicationController
   def help
   end
 
+  def update
+  end
+
+  def update_contact
+    AdminMailer.delay.update_contact(params[:contact])
+    render json: {}
+  end
+
 end
