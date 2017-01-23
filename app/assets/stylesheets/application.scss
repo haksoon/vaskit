@@ -410,8 +410,8 @@ body {
 }
 
 /* ============================== Seg1 컬렉션/asks 관련 ============================== */
-#recent_asks_seg { min-height: calc(60vw + 107px); }
-.recent_asks_thumbnail { padding: 16px 0; margin-top: 8px;
+#recent_asks_seg { min-height: calc(60vw + 107px); margin-top: 8px; }
+.recent_asks_thumbnail { padding: 16px 0;
     .recent_asks_title { animation: bounce 1s 1;
       .recent_asks_name { margin: 0; padding: 0 0 6px 0; text-align: center; color: #555; @include fontExtraBold; font-size: 20px; }
       .recent_asks_description { margin: 0; padding: 0; text-align: center; color: #999; @include fontLight; font-size: 14px; }

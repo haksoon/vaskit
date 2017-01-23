@@ -157,7 +157,7 @@
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
     <span class="header_btn right" onclick="go_url('share', 'collection, {{= collection_to_asks[0].collection.id }}');"><i class="vaskit_icon share_icon"></i></span>
   </div>
-  <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="animate_collection_image($(this));">
+  <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="//animate_collection_image($(this));">
     <div class="collection_blank"></div>
     <div class="clearfix">
       {{ for (var i=0; i < collection_to_asks.length; i++) { }}

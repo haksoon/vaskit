@@ -98,7 +98,7 @@ function setGCM(key, device_id, app_ver) {
                   <img src='/images/logo/logo_landing.png' style='width: 180px; margin-bottom: -60px;'>\
                   <br>완전히 달라진 VASKIT!\
                   <br>앱을 업데이트해주세요 🙈<br>\
-                  <a href='market://details?id=com.vaskit.msh.vaskit'>\
+                  <a href='https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit'>\
                     <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' style='width: 220px;'>\
                   </a>\
                 </div>\
