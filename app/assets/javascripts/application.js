@@ -177,7 +177,7 @@ function setUserApp() {
   userApp                        = true;
   userDevice.isMobile            = true;
   getUserToken();
-  close_app_banner();
+  // close_app_banner();
 };
 
 function getUserToken() {
