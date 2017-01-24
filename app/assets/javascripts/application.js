@@ -49,7 +49,7 @@ if (window.location.pathname.indexOf("admin") == -1) {
   $(window).ready(function(){
     if ($.cookie('visitor_uniq_key') == null) {
       var uniq_key = (new Date().getTime() / 1000).toString() + (Math.random() * 1000000).toFixed(0).toString();
-      $.cookie('visitor_uniq_key' , uniq_key, { expires : 30000, path : '/' });
+      $.cookie('visitor_uniq_key', uniq_key, { expires : 30000, path : '/' });
     }
     if ($.cookie('visitor_votes') != null) $.cookie('visitor_votes', null);
     loadingStart();
@@ -108,7 +108,7 @@ function getIOSApp() {}; // 앱스토어 1.0.3 버전 검수용
 
 // Device Check
 var userApp = false;               // 앱이면 true, 앱이 아니면 false, AOS/iOS는 window.HybridApp으로 판별
-    userDevice = {
+var userDevice = {
         isAndroid     : false,    // 금액입력필드 키보드 타입 조정
         isIOS         : false,    // 해시태그 입력필드 마진 조정
         isWinPC       : false,
@@ -181,31 +181,22 @@ function setUserApp() {
 };
 
 function getUserToken() {
-  if (window.HybridApp) {
-    HybridApp.getUserToken("hello world");        // AOS
-  } else {
-    window.location = "vaskit://getUserToken";    // iOS
-  }
+  setTimeout(function(){
+    if (window.HybridApp) {
+      HybridApp.getUserToken("hello world");        // AOS
+    } else {
+      window.location = "vaskit://getUserToken";    // iOS
+    }
+  }, 2000);
 };
 
 function setUserToken(gcm_key, device_id, app_ver) {
   // App에서 호출
   $.ajax({
-          url: '/user_gcm_keys.json',
-          dataType: 'json',
-          type: 'POST',
-          data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver},
-          error: function() {
-            return false;
-          },
-          success: function(data) {
-          },
-          beforeSend: function() {
-            loadingStart();
-          },
-          complete: function() {
-            loadingEnd();
-          }
+    url: "/user_gcm_keys.json",
+    dataType: "json",
+    type: "POST",
+    data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver}
   });
 };
 
@@ -219,11 +210,14 @@ function setAppStatusBar(type) {
   } else {
     var r = 249, g = 249, b = 249, a = 1, textColor = 1;
   }
-  if (window.HybridApp) {
-    // HybridApp.setAppStatusBar(r + ", " + g + ", " + b + ", " + a * 255 + ", " + textColor);        // AOS
-  } else {
-    window.location = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
-  }
+
+  setTimeout(function(){
+    if (window.HybridApp) {
+      HybridApp.setAppStatusBar(a * 255 + ", " + r + ", " + g + ", " + b + ", " + textColor);        // AOS
+    } else {
+      window.location = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
+    }
+  }, 250);
 };
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

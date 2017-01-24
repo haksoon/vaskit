@@ -155,9 +155,9 @@
             },
             success: function(data) {
               alarm_check();
-              go_url('landing');
               user_profile_on();
               user_alarms_on();
+              go_url('landing');
               if (userApp) getUserToken();
             },
             beforeSend: function() {

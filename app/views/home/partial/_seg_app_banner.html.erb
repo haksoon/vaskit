@@ -53,8 +53,8 @@
     if (segNextFunc[currentSeg].length > 0) {
       var app_function = segNextFunc[currentSeg][segNextFunc[currentSeg].length-1];
       var app_function_name = app_function.callback.replace("show_", "");
-      var app_function_args = app_function.arguments;
-      var app_js = "go_url('"+app_function_name+"','"+app_function_args+"')";
+      var app_function_args = JSON.stringify(app_function.arguments);
+      var app_js = "go_url('" + app_function_name + "', " + app_function_args + ")";
       var app_url = location.href;
 
       aos_intent_link = "intent://vaskit.kr?url="+app_url+"&js="+app_js+"#Intent;scheme=vaskit;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.vaskit.msh.vaskit;end";

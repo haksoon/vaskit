@@ -48,45 +48,8 @@
 </script>
 
 <div style="padding:10px;">
-  <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 발행하기</h4>
-  <p style="margin:10px 0; font-size:13px; color:#999;">
-    발행하기 버튼을 누르면 메인 피드의 가장 상단에 반영됩니다.
-  </p>
-  <a href="#" id="collection_main_show_btn" onclick="toggle_main_show(); return false;" class="collection_main_show_btn <%= @collection.show == true ? 'cancel' : '' %>"><%= @collection.show == true ? '발행취소' : '발행하기' %></a>
-</div>
-
-<script>
-  function toggle_main_show() {
-    if (confirm("메인 피드 화면이 변경됩니다\n진행하시겠습니까?")) {
-      $.ajax({
-        url: '/admin/collections/'+collection_id+'.json',
-        type: 'PUT',
-        error: function(){
-          return false;
-        },
-        success: function(data){
-          var btn = $("#collection_main_show_btn");
-          if (data.status == "off") {
-            btn.removeClass("cancel").text("발행하기");
-            alert("발행 취소 완료");
-          } else if (data.status == "on") {
-            btn.addClass("cancel").text("발행취소");
-            alert("발행 완료, 메인피드 화면을 확인하세요");
-          }
-        },
-        beforeSend: function(){
-          $(".loading").show();
-        },
-        complete: function(){
-          $(".loading").hide();
-        }
-      });
-    }
-  };
-</script>
-
-<div style="padding:10px;">
   <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 키워드 생성</h4>
+  <p style="margin:10px 0; font-size:13px; color:#999;">키워드는 하나씩 입력해주세요</p>
   <p id="collection_keywords" style="margin:10px 0; padding:0 5px; font-size:14px; color:#999;">
     <i class="fa fa-tag" style="font-size:14px; color:#ee6e01;"></i>&nbsp;
     <% @collection.collection_to_collection_keywords.each do |collection_to_collection_keyword| %>
@@ -187,6 +150,7 @@
               var related_collection = data.related_collections[i];
               $("#related_collections_result").append(relatedCollectionResultTemplate({name: related_collection.name}));
             }
+            $("#collection_keyword_input").val("").focus();
           } else if (data.status == "already_exists") {
             alert('이미 존재하는 키워드입니다');
           }
@@ -270,6 +234,14 @@
 <script>
   var collectionToAsksTemplate = _.template($('#collection_to_asks_template').html());
 
+  $("#collection_to_ask_input").keydown(function(e){
+    if (e.keyCode == '13') {
+      e.preventDefault();
+      $(this).blur();
+      $("#collection_to_ask_submit_btn").click();
+    }
+  })
+
   !(function load_collection_to_asks() {
     $.ajax({
       url: "/admin/collection_to_asks.json",
@@ -313,6 +285,7 @@
           $("#blank_collection_to_asks").remove();
           $("#collection_to_asks").append(collectionToAsksTemplate({collection_to_asks: collection_to_asks}));
           $("#collection_to_asks_count").html("컬렉션 컨텐츠 미리보기 (" + $("#collection_to_asks").find(".collection_to_ask").length + "개)");
+          $("#collection_to_ask_input").val("").focus();
         },
         beforeSend: function(){
           $(".loading").show();
@@ -372,6 +345,44 @@
         success: function(data){
           $("#collection_to_ask_"+collection_to_ask_id).remove();
           $("#collection_to_asks_count").html("컬렉션 컨텐츠 미리보기 (" + $("#collection_to_asks").find(".collection_to_ask").length + "개)");
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  };
+</script>
+
+<div style="padding:10px;">
+  <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 발행하기</h4>
+  <p style="margin:10px 0; font-size:13px; color:#999;">
+    발행하기 버튼을 누르면 메인 피드의 가장 상단에 반영됩니다.
+  </p>
+  <a href="#" id="collection_main_show_btn" onclick="toggle_main_show(); return false;" class="collection_main_show_btn <%= @collection.show == true ? 'cancel' : '' %>"><%= @collection.show == true ? '발행취소' : '발행하기' %></a>
+</div>
+
+<script>
+  function toggle_main_show() {
+    if (confirm("메인 피드 화면이 변경됩니다\n진행하시겠습니까?")) {
+      $.ajax({
+        url: '/admin/collections/'+collection_id+'.json',
+        type: 'PUT',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          var btn = $("#collection_main_show_btn");
+          if (data.status == "off") {
+            btn.removeClass("cancel").text("발행하기");
+            alert("발행 취소 완료");
+          } else if (data.status == "on") {
+            btn.addClass("cancel").text("발행취소");
+            alert("발행 완료, 메인피드 화면을 확인하세요");
+          }
         },
         beforeSend: function(){
           $(".loading").show();
