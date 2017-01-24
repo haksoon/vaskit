@@ -40,8 +40,9 @@
                 url: "/log_errors.json",
                 type: "POST",
                 data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj },
-                beforeSend: function(){ alert("앗! 오류가 발생하여 앱을 재시작합니다"); },
-                complete: function(){ window.location = href; }
+                complete: function(){
+                  if (confirm("앗! 오류가 발생했습니다...\n앱을 재시작하시겠어요?")) window.location = href;
+                }
           });
           return false;
         }

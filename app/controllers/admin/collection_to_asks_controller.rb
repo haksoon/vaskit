@@ -3,7 +3,7 @@ class Admin::CollectionToAsksController < Admin::HomeController
   # # GET /admin/collection_to_asks/:id.json
   def index
     collection_to_asks = CollectionToAsk.where(collection_id: params[:collection_id]).as_json(include: [:collection, ask: {include: [:user, :left_ask_deal, :right_ask_deal]}])
-    render :json => {collection_to_asks: collection_to_asks}
+    render json: {collection_to_asks: collection_to_asks}
   end
 
   # POST /admin/collection_to_asks.json
@@ -23,7 +23,7 @@ class Admin::CollectionToAsksController < Admin::HomeController
     collection_to_asks = CollectionToAsk.where("collection_id = ? AND ask_id IN (?)", collection_id, success_ids).as_json(include: [:collection, ask: {include: [:user, :left_ask_deal, :right_ask_deal]}])
 
     # 해당 ask가 몇 번 포함되어있는지 warning 줄 것
-    render :json => {success_ids: success_ids, collection_to_asks: collection_to_asks}
+    render json: {success_ids: success_ids, collection_to_asks: collection_to_asks}
   end
 
   # POST /admin/collection_to_asks/:id.json
@@ -45,7 +45,7 @@ class Admin::CollectionToAsksController < Admin::HomeController
       target_collection_to_ask_id = target_collection_to_ask.id
     end
 
-    render :json => {status: status, target_collection_to_ask_id: target_collection_to_ask_id}
+    render json: {status: status, target_collection_to_ask_id: target_collection_to_ask_id}
   end
 
   # DELETE /admin/collection_to_asks/:id.json
@@ -58,7 +58,7 @@ class Admin::CollectionToAsksController < Admin::HomeController
       seq = collection_to_ask.seq - 1
       collection_to_ask.update(seq: seq)
     end
-    render :json => {}
+    render json: {}
   end
 
 end

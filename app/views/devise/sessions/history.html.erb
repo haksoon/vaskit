@@ -1,5 +1,5 @@
 <script>
-  $(window).ready(function(){
+  $(window).load(function(){
     <% if current_user %>
       go_seg(4);
       go_url('user_history', '<%= @type %>');
