@@ -107,8 +107,13 @@ class Users::SessionsController < Devise::SessionsController
   # GET /users/history?type=___
   def history
     @type = params[:type]
-    @my_votes = Vote.where(user_id: current_user.id)
-    @my_likes = AskLike.where(user_id: current_user.id)
+    if current_user
+      @my_votes = Vote.where(user_id: current_user.id)
+      @my_likes = AskLike.where(user_id: current_user.id)
+    else
+      @my_votes = []
+      @my_likes = []
+    end
 
     case @type
         when "my_asks_in_progress"

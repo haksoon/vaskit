@@ -27,9 +27,10 @@
 </script>
 
 <script type="text/template" id="recentAskSegTemplate">
-  {{ for (var i=0; i < asks.length; i++) { }}
+  <div class="recent_asks_scroll">
+    {{ for (var i=0; i < asks.length; i++) { }}
     {{ var ask = asks[i] }}
-    <div class="recent_asks_image_seg" style="left: calc((60vw + 26px) * {{= i }} + 16px); animation-delay: {{= i * 0.1 }}s;">
+    <div class="recent_asks_image_seg">
       <div class="recent_asks_image_square right">
         <div class="recent_asks_image">
           <img src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
@@ -41,8 +42,9 @@
         </div>
       </div>
     </div>
-  {{ } }}
-  <div class="recent_asks_more_btn" style="left: calc((60vw + 26px) * {{= i }} + 16px);">모두보기 <i class="fa fa-hand-pointer-o"></i></div>
+    {{ } }}
+    <div class="recent_asks_more_btn"><span class="recent_asks_more_icon">모두보기 <i class="fa fa-hand-pointer-o"></i></span></div>
+  </div>
 </script>
 
 <script type="text/template" id="collectionTemplate">

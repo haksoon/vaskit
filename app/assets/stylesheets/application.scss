@@ -410,24 +410,28 @@ body {
 }
 
 /* ============================== Seg1 컬렉션/asks 관련 ============================== */
-#recent_asks_seg { min-height: calc(60vw + 107px); margin-top: 8px; }
+#recent_asks_seg { height: calc(60vw + 107px); max-height: 507px; margin-top: 8px; }
 .recent_asks_thumbnail { padding: 16px 0;
     .recent_asks_title { animation: bounce 1s 1;
       .recent_asks_name { margin: 0; padding: 0 0 6px 0; text-align: center; color: #555; @include fontExtraBold; font-size: 20px; }
       .recent_asks_description { margin: 0; padding: 0; text-align: center; color: #999; @include fontLight; font-size: 14px; }
     }
-    .recent_asks_image_box { height: calc(60vw + 20px); margin: 10px 0 0;
-        .recent_asks_image_seg { position: absolute; top: 0; width: calc(60vw + 10px); height: calc(60vw + 10px); background-color: #fff; animation: zoomInUp .75s 1;
-            .recent_asks_image_square { position: absolute; width: 60vw; height: 60vw; background-color: #f9f9f9;
-              &.right { top: 0; left: 0;}
-              &.left { top: 10px; left: 10px; }
-              .recent_asks_image { position: relative; width: 100%; overflow: hidden; border: 0.5px solid #c7c6c4; border-radius: 2px; box-sizing: border-box;
-                  &:before { content: ''; display: block; padding-top: 100%; }
-                  img { position: absolute; top: 0; width: 100%; }
-              }
+    .recent_asks_image_box { height: calc(60vw + 20px);  max-height: 420px; margin: 10px 0 0;
+      .recent_asks_scroll { position: absolute; top: 0; left: 0; width: calc((60vw + 26px) * 5 + 100px); max-width: calc((400px + 26px) * 5 + 100px); height: calc(60vw + 20px); max-height: 420px; padding: 0 16px;
+        .recent_asks_image_seg { position: relative; float: left; margin-right: 16px; width: calc(60vw + 10px); height: calc(60vw + 10px); max-width: 410px; max-height: 410px; background-color: #fff; animation: zoomInUp .75s 1;
+          .recent_asks_image_square { position: absolute; width: 60vw; height: 60vw; max-width: 400px; max-height: 400px; background-color: #f9f9f9;
+            &.right { top: 0; left: 0;}
+            &.left { top: 10px; left: 10px; }
+            .recent_asks_image { position: relative; width: 100%; overflow: hidden; border: 0.5px solid #c7c6c4; border-radius: 2px; box-sizing: border-box;
+              &:before { content: ''; display: block; padding-top: 100%; }
+              img { position: absolute; top: 0; width: 100%; }
             }
+          }
         }
-        .recent_asks_more_btn { position: absolute; top: 0;  width: 100px; height: 60vw; line-height: 60vw; text-align: center; padding-right: 16px; font-size: 13px; }
+        .recent_asks_more_btn { position: relative; float: left; width: 100px; height: 60vw; max-height: 410px; display: table; text-align: center; font-size: 13px;
+          .recent_asks_more_icon { display: table-cell; text-align: center; vertical-align: middle; }
+        }
+      }
     }
 }
 

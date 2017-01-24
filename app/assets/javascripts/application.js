@@ -177,6 +177,7 @@ function setUserApp() {
   userApp                        = true;
   userDevice.isMobile            = true;
   getUserToken();
+  close_app_banner();
 };
 
 function getUserToken() {
@@ -212,7 +213,7 @@ function setAppStatusBar(type) {
 
   setTimeout(function(){
     if (window.HybridApp) {
-      HybridApp.setAppStatusBar(a * 255 + ", " + r + ", " + g + ", " + b + ", " + textColor);        // AOS
+      // HybridApp.setAppStatusBar(a * 255 + ", " + r + ", " + g + ", " + b + ", " + textColor);        // AOS
     } else {
       window.location = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
     }
