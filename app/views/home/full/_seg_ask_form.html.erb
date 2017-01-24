@@ -278,7 +278,7 @@
   <div class="input_container">
     <div class="ask_image_seg" onclick="ask_form_card_image_upload_click($(this));">
       <img src="{{= get_image_url(ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-      <span class="ask_image_crop_btn {{= is_left? 'left' : 'right' }} {{= ask_deal.deal_id ? 'on' : '' }}" onclick="go_url('image_edit', $(this));" img-id=""><i class="fa fa-crop"></i></span>
+      <span class="ask_image_crop_btn {{= is_left? 'left' : 'right' }} {{= ask_deal.deal_id ? 'on' : '' }}" onclick="go_url('image_edit', $(this));" img-id="" cropping-type="ask_form"><i class="fa fa-crop"></i></span>
     </div>
     <div class="input_div title" onclick="ask_form_card_input_init($(this));">
       <input class="input text_field {{= is_left? 'left' : 'right' }} form_data" type="text"

@@ -120,7 +120,13 @@
                 img_to_be_changed.attr("src", data.image_url).animateCss("pulse");
                 go_back(1);
                 close_full_view();
-                if (cropping_type == "user_profile") {
+
+                // 타입 별로 추가 행동들을 정의
+                if (cropping_type == "ask_form") {
+                  var is_left = target.hasClass("left");
+                  var step_3_inner = $("#ask_form").find(".inner.step_3")
+                  is_left ? step_3_inner.find(".ask_image.left").attr("src", data.image_url) : step_3_inner.find(".ask_image.right").attr("src", data.image_url);
+                } else if (cropping_type == "user_profile") {
                   $("#user_profile_pic").attr("src", data.image_url);
                 };
               },
