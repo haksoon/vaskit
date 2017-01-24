@@ -245,8 +245,20 @@ class AsksController < ApplicationController
       end
       left_deal_params.except!(:image_id)
 
-      left_deal = Deal.find(left_deal_params[:deal_id])
-      left_deal_params[:is_modify] = true unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
+      if left_deal_params[:deal_id].blank?
+        left_deal = Deal.create(title: left_deal_params[:title],
+                                brand: left_deal_params[:brand],
+                                price: left_deal_params[:price],
+                                link: left_deal_params[:link],
+                                image: left_image,
+                                spec1: left_deal_params[:spec1],
+                                spec2: left_deal_params[:spec2],
+                                spec3: left_deal_params[:spec3])
+        left_deal_params[:is_modify] = true
+      else
+        left_deal = Deal.find(left_deal_params[:deal_id])
+        left_deal_params[:is_modify] = true unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
+      end
 
       unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(left_deal_params)
       @ask.left_ask_deal.update(unlocked_params)
@@ -258,8 +270,20 @@ class AsksController < ApplicationController
       end
       right_deal_params.except!(:image_id)
 
-      right_deal = Deal.find(right_deal_params[:deal_id])
-      right_deal_params[:is_modify] = true unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
+      if right_deal_params[:deal_id].blank?
+        right_deal = Deal.create(title: right_deal_params[:title],
+                                brand: right_deal_params[:brand],
+                                price: right_deal_params[:price],
+                                link: right_deal_params[:link],
+                                image: right_image,
+                                spec1: right_deal_params[:spec1],
+                                spec2: right_deal_params[:spec2],
+                                spec3: right_deal_params[:spec3])
+        right_deal_params[:is_modify] = true
+      else
+        right_deal = Deal.find(right_deal_params[:deal_id])
+        right_deal_params[:is_modify] = true unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
+      end
 
       unlocked_params = ActiveSupport::HashWithIndifferentAccess.new(right_deal_params)
       @ask.right_ask_deal.update(unlocked_params)
