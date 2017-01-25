@@ -579,6 +579,7 @@
 	        success: function(data){
 	        	if (is_left) {
               step_1_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left}));
+              step_1_inner.find(".deal_id").val(data.deal.id);
               step_1_inner.find(".preview_img_id").val(data.preview_img_id);
               step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
               step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
@@ -590,6 +591,7 @@
               step_3_inner.find(".ask_table_row.link").find(".ask_table_cell.left").html(fieldWithLink(data.deal.link));
 	        	} else {
               step_2_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left}));
+              step_2_inner.find(".deal_id").val(data.deal.id);
               step_2_inner.find(".preview_img_id").val(data.preview_img_id);
               step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
               step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);

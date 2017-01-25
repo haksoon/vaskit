@@ -66,10 +66,10 @@ if (window.location.pathname.indexOf("admin") == -1) {
     // 기본화면 초기화
     go_seg(1);
   }).load(function(){
+    setUserDevice();
     set_collections();
     user_profile_on();
     user_alarms_on();
-    setUserDevice();
     open_app_banner();
     loadingEnd();
     $(".loading_div").removeAttr("ontouchmove");
@@ -212,7 +212,7 @@ function setAppStatusBar(type) {
 
   setTimeout(function(){
     if (window.HybridApp) {
-      // HybridApp.setAppStatusBar(a * 255 + ", " + r + ", " + g + ", " + b + ", " + textColor);        // AOS
+      HybridApp.setAppStatusBar(r, g, b, a * 255, textColor);        // AOS
     } else {
       window.location = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
     }

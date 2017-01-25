@@ -222,6 +222,9 @@ class AsksController < ApplicationController
     left_deal_params = params[:left_deal]
     right_deal_params = params[:right_deal]
 
+    left_deal_params[:price] = left_deal_params[:price].sub(/^[0]*/, "").gsub(",", "").to_i if left_deal_params != nil && left_deal_params[:price] != nil
+    right_deal_params[:price] = right_deal_params[:price].sub(/^[0]*/, "").gsub(",", "").to_i if right_deal_params != nil && right_deal_params[:price] != nil
+
     if left_deal_params[:image_id].blank? && @ask.left_ask_deal.image == nil
       status = "no_left_image"
       render json: {status: status}
@@ -254,7 +257,7 @@ class AsksController < ApplicationController
                                 spec1: left_deal_params[:spec1],
                                 spec2: left_deal_params[:spec2],
                                 spec3: left_deal_params[:spec3])
-        left_deal_params[:is_modify] = true
+        left_deal_params[:is_modify] = false
       else
         left_deal = Deal.find(left_deal_params[:deal_id])
         left_deal_params[:is_modify] = true unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
@@ -279,7 +282,7 @@ class AsksController < ApplicationController
                                 spec1: right_deal_params[:spec1],
                                 spec2: right_deal_params[:spec2],
                                 spec3: right_deal_params[:spec3])
-        right_deal_params[:is_modify] = true
+        right_deal_params[:is_modify] = false
       else
         right_deal = Deal.find(right_deal_params[:deal_id])
         right_deal_params[:is_modify] = true unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i

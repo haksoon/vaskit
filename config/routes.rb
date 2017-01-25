@@ -41,7 +41,7 @@ Rails.application.routes.draw do
 
   resources :user_gcm_keys, only: [:create]
 
-  devise_for :users, :controllers => {
+  devise_for :users, controllers: {
     registrations: 'users/registrations',
     sessions: 'users/sessions',
     passwords: 'users/passwords'

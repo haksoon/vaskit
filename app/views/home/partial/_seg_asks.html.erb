@@ -1,9 +1,9 @@
 <script type="text/template" id="asksListTemplate">
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'asks');" url="{{=url}}">
-    {{ var l = asks.length }}
-    {{ if (l == 0) { }}
+    {{ if (asks == null || asks.length == 0) { }}
       <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
     {{ } else { }}
+      {{ var l = asks.length }}
       {{ for (var i=0; i < l; i++) { }}
         {{ var ask = asks[i] }}
         {{= askThumbnailTemplate({ask:ask}) }}

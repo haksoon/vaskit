@@ -110,32 +110,32 @@ class Users::SessionsController < Devise::SessionsController
     if current_user
       @my_votes = Vote.where(user_id: current_user.id)
       @my_likes = AskLike.where(user_id: current_user.id)
+      case @type
+          when "my_asks_in_progress"
+            @asks = Ask.where(user_id: current_user.id, be_completed: false)
+                       .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
+          when "my_asks"
+            @asks = Ask.where(user_id: current_user.id)
+                       .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
+          when "my_likes"
+            @asks = Ask.where(id: @my_likes.map(&:ask_id).uniq)
+                       .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
+          when "my_votes"
+            @asks = Ask.where(id: @my_votes.map(&:ask_id).uniq)
+                       .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
+          when "my_comments"
+            @asks = Ask.where(id: Comment.where(user_id: current_user.id).map(&:ask_id).uniq)
+                       .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
+                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
+      end
     else
+      @asks = []
       @my_votes = []
       @my_likes = []
-    end
-
-    case @type
-        when "my_asks_in_progress"
-          @asks = Ask.where(user_id: current_user.id, be_completed: false)
-                     .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
-        when "my_asks"
-          @asks = Ask.where(user_id: current_user.id)
-                     .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
-        when "my_likes"
-          @asks = Ask.where(id: @my_likes.map(&:ask_id).uniq)
-                     .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
-        when "my_votes"
-          @asks = Ask.where(id: @my_votes.map(&:ask_id).uniq)
-                     .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
-        when "my_comments"
-          @asks = Ask.where(id: Comment.where(user_id: current_user.id).map(&:ask_id).uniq)
-                     .page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, {comments: {include: :user}} ])
     end
 
     respond_to do |format|

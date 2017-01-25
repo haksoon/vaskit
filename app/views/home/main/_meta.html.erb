@@ -46,11 +46,7 @@
         <% url = edit_ask_url %>
     <% end %>
 <% elsif (controller.controller_name == "search") %>
-    <% if (controller.action_name == "index" && controller.request.query_string == "") %>
-        <% title = "VASKIT | 검색하기" %>
-        <% description = "지금까지와는 또다른 쇼핑검색! 소비자들의 선택을 검색해보세요!" %>
-        <% url = search_index_url %>
-    <% elsif (controller.action_name == "index" && controller.request.query_string != "") %>
+    <% if (controller.action_name == "index" && controller.request.params[:type] != "" && controller.request.params[:keyword] != "") %>
         <% case @type %>
         <% when "hash_tag" %>
             <% title = "VASKIT | " + controller.request.params[:keyword] + " - 해쉬태그 검색결과" %>
@@ -70,6 +66,10 @@
         <% end %>
         <% keywords = controller.request.params[:keyword] + ", 쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" %>
         <% url = search_index_url + "?type=" + controller.request.params[:type] + "&keyword=" + controller.request.params[:keyword] %>
+    <% else  %>
+        <% title = "VASKIT | 검색하기" %>
+        <% description = "지금까지와는 또다른 쇼핑검색! 소비자들의 선택을 검색해보세요!" %>
+        <% url = search_index_url %>
     <% end %>
 <% elsif (controller.controller_name == "sessions") %>
     <% if (controller.action_name == "users") %>
@@ -94,7 +94,7 @@
             <% title = "VASKIT | 제시한 의견" %>
             <% description = "나의 제시한 의견입니다" %>
         <% end %>
-        <% url = user_history_url + "?type=" + controller.request.params[:type] %>
+        <% url = users_history_url + "?type=" + controller.request.params[:type] %>
     <% elsif (controller.action_name == "settings") %>
         <% title = "VASKIT | 계정 설정하기" %>
         <% description = "계정 정보를 설정할 수 있어요" %>
