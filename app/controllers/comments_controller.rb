@@ -24,7 +24,7 @@ class CommentsController < ApplicationController
 
     comment = comment.as_json(include: [:user])
 
-    render :json => {status: status, ask: ask, comment: comment}
+    render json: {status: status, ask: ask, comment: comment}
   end
 
   # PUT /comments/:id.json
@@ -43,7 +43,7 @@ class CommentsController < ApplicationController
       status = "not_authorized"
     end
 
-    render :json => {status: status, ask: ask, comment: comment}
+    render json: {status: status, ask: ask, comment: comment}
 
     # comment = Comment.find_by_id(params[:id])
     # comment_preview_image = PreviewImage.find_by_id(params[:image_id])
@@ -79,7 +79,7 @@ class CommentsController < ApplicationController
     else
       status = "not_authorized"
     end
-    render :json => {status: status}
+    render json: {status: status}
   end
 
   # POST /comments/:id/like.json
@@ -93,7 +93,7 @@ class CommentsController < ApplicationController
     else
       comment_like = CommentLike.create(user_id: current_user.id, comment_id: params[:id])
     end
-    render :json => {already_like: already_like, comment_like: comment_like}
+    render json: {already_like: already_like, comment_like: comment_like}
   end
 
 end

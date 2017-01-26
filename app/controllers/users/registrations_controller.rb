@@ -38,14 +38,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
     elsif data[:password] != data[:password_confirmation]
       render json: {status: "password_confirm_error"}
     else
-      if data[:birthday].blank? && (data["birthday(1i)"] == nil || data["birthday(2i)"] == nil || data["birthday(3i)"] == nil || data["birthday(1i)"] == "" || data["birthday(2i)"] == "" || data["birthday(3i)"] == "")
+      if data["birthday(1i)"] == nil || data["birthday(2i)"] == nil || data["birthday(3i)"] == nil || data["birthday(1i)"] == "" || data["birthday(2i)"] == "" || data["birthday(3i)"] == ""
         render json: {status: "birthday_not_selected"}
       elsif data[:gender] == nil || data[:gender] == ""
         render json: {status: "gender_not_selected"}
       elsif data[:agree_access_term] != "1"
         render json: {status: "agree_access_term"}
       else
-        data[:birthday] = Date.new(data["birthday(1i)"].to_i, data["birthday(2i)"].to_i, data["birthday(3i)"].to_i).strftime("%m/%d/%Y") if data[:birthday].blank?
+        data[:birthday] = Date.new(data["birthday(1i)"].to_i, data["birthday(2i)"].to_i, data["birthday(3i)"].to_i).strftime("%m/%d/%Y")
 
         data[:string_id] = User.get_uniq_string_id( data[:email].split("@")[0] )
         data[:remember_me] = true

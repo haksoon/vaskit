@@ -9,7 +9,7 @@
         <% title = "VASKIT | 세상의 모든 결정장애자들을 위하여!" %>
         <% description = "#둘중에뭐사지? #혼자고민하지마! 꼼꼼한 소비자들의 깐깐한 선택, VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" %>
         <% url = root_url %>
-    <% elsif (controller.controller_name == "landing") %>
+    <% elsif (controller.action_name == "landing") %>
         <% title = "VASKIT | 지금 바로 가입하세요!" %>
         <% description = "VASKIT에 오신 것을 환영합니다!" %>
         <% url = landing_url %>
@@ -46,7 +46,7 @@
         <% url = edit_ask_url %>
     <% end %>
 <% elsif (controller.controller_name == "search") %>
-    <% if (controller.action_name == "index" && controller.request.params[:type] != "" && controller.request.params[:keyword] != "") %>
+    <% if (controller.action_name == "index" && controller.request.params[:type] != nil && controller.request.params[:keyword] != nil) %>
         <% case @type %>
         <% when "hash_tag" %>
             <% title = "VASKIT | " + controller.request.params[:keyword] + " - 해쉬태그 검색결과" %>
@@ -76,7 +76,7 @@
         <% title = "VASKIT | 마이 페이지" %>
         <% description = "마이 페이지" %>
         <% url = users_url %>
-    <% elsif (controller.action_name == "history") %>
+    <% elsif (controller.action_name == "history" && controller.request.params[:type] != nil) %>
         <% case @type %>
         <% when "my_asks_in_progress" %>
             <% title = "VASKIT | 진행중인 질문" %>

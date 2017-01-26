@@ -12,9 +12,9 @@ class Users::PasswordsController < Devise::PasswordsController
     yield resource if block_given?
 
     if successfully_sent?(resource)
-      render :json => {:status => "success"}
+      render json: {status: "success"}
     else
-      render :json => {:status => "fail"}
+      render json: {status: "fail"}
     end
   end
 
@@ -28,20 +28,20 @@ class Users::PasswordsController < Devise::PasswordsController
     data = params[:data][:user]
 
     if data[:password].length < 8
-      render :json => {:status => "not_enough_password"}
+      render json: {status: "not_enough_password"}
     elsif data[:password] != data[:password_confirmation]
-      render :json => {:status => "password_confirm_error"}
+      render json: {status: "password_confirm_error"}
     else
       self.resource = resource_class.reset_password_by_token(data)
       if resource.sign_up_type == "facebook"
-        resource.update(:sign_up_type => "both")
+        resource.update(sign_up_type: "both")
       end
       yield resource if block_given?
       if resource.errors.empty?
         sign_in(resource_name, resource)
-        render :json => {:status => "success", :string_id => resource.string_id}
+        render json: {status: "success", string_id: resource.string_id}
       else
-        render :json => {:status => "fail"}
+        render json: {status: "fail"}
       end
     end
   end

@@ -68,6 +68,8 @@ class ApplicationController < ActionController::Base
     user_id = current_user.id unless current_user.blank?
     visitor_id = @visitor.id unless @visitor.blank?
 
+    debugger
+
     if referer_host == request.host
       user_visit = UserVisit.where(visitor_id: @visitor.id).last
       if Time.now - user_visit.updated_at > 60 * 60 * 24

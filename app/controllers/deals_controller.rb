@@ -15,7 +15,7 @@ class DealsController < ApplicationController
     shop_http.use_ssl = true
     shop_http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     shop_request = Net::HTTP::Get.new(shop_uri.request_uri)
-    shop_request.initialize_http_header({"X-Naver-Client-Id"=>client_id, "X-Naver-Client-Secret"=> client_secret})
+    shop_request.initialize_http_header({"X-Naver-Client-Id" => client_id, "X-Naver-Client-Secret" => client_secret})
     shop_response = shop_http.request(shop_request)
     shop_doc = Nokogiri::XML(shop_response.body)
     shop_result = Hash.from_xml(shop_doc.to_s)
@@ -26,7 +26,7 @@ class DealsController < ApplicationController
     image_http.use_ssl = true
     image_http.verify_mode = OpenSSL::SSL::VERIFY_PEER
     image_request = Net::HTTP::Get.new(image_uri.request_uri)
-    image_request.initialize_http_header({"X-Naver-Client-Id"=>client_id, "X-Naver-Client-Secret"=> client_secret})
+    image_request.initialize_http_header({"X-Naver-Client-Id" => client_id, "X-Naver-Client-Secret" => client_secret})
     image_response = image_http.request(image_request)
     image_doc = Nokogiri::XML(image_response.body)
     image_result = Hash.from_xml(image_doc.to_s)

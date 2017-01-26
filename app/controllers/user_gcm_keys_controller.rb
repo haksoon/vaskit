@@ -42,7 +42,7 @@ class UserGcmKeysController < ApplicationController
       push_send_IOS(registration_ids, "", "false", count, "", "", "")
     end
 
-    render :json => {status: status}
+    render json: {status: status}
   end
 
 end

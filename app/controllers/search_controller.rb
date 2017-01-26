@@ -44,7 +44,7 @@ class SearchController < ApplicationController
     respond_to do |format|
       format.html {}
       format.json {
-        render :json => {asks: @asks}
+        render json: {asks: @asks}
       }
     end
   end
@@ -72,7 +72,7 @@ class SearchController < ApplicationController
       users = User.where("string_id LIKE ?", "%#{keyword}%").where(id: asks.map(&:user_id)).select(:string_id).distinct(:string_id) #AJS추가(수정) - 유저의 경우에도 string_id가 keyword가 되도록 로직 변경
     end
     is_empty_result = true if users.blank? && hash_tags.blank? && ask_deals.blank? && brand.blank?
-    render :json => {collections: collections, hash_tags: hash_tags, ask_deal: ask_deal, brand: brand, users: users, is_empty_result: is_empty_result}
+    render json: {collections: collections, hash_tags: hash_tags, ask_deal: ask_deal, brand: brand, users: users, is_empty_result: is_empty_result}
   end
 
 end
