@@ -23,16 +23,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
       data[:sign_up_type] = "facebook"
       data[:password] = "is_facebook"
       data[:password_confirmation] = data[:password]
+      unless data[:birthday].blank?
+        data["birthday(1i)"] = data[:birthday].split("-")[0]
+        data["birthday(2i)"] = data[:birthday].split("-")[1]
+        data["birthday(3i)"] = data[:birthday].split("-")[2]
+      end
     end
 
     if data[:email].blank?
       render json: {status: "blank_email"}
-    elsif data[:password].blank?
-      render json: {status: "blank_password"}
     elsif !data[:email].match(reg)
       render json: {status: "not_email"}
     elsif !User.find_for_database_authentication(email: data[:email]).blank?
       render json: {status: "already_exist_email"}
+    elsif data[:password].blank?
+      render json: {status: "blank_password"}
     elsif data[:password].length < 8
       render json: {status: "not_enough_password"}
     elsif data[:password] != data[:password_confirmation]
@@ -46,7 +51,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
         render json: {status: "agree_access_term"}
       else
         data[:birthday] = Date.new(data["birthday(1i)"].to_i, data["birthday(2i)"].to_i, data["birthday(3i)"].to_i)
-
         data[:string_id] = User.get_uniq_string_id( data[:email].split("@")[0] )
         data[:remember_me] = true
 
@@ -67,10 +71,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
         resource.save
         if resource.persisted?
           sign_up(resource_name, resource)
+          UserMailer.delay.welcome_email(resource)
           render json: {status: "success", string_id: data[:string_id]}
-
-          user = User.find_by(email: data[:email])
-          UserMailer.delay.welcome_email(user)
         end
       end
     end

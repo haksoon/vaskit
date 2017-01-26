@@ -56,6 +56,7 @@ group :development, :test do
 
   gem 'letter_opener'
   gem 'meta_request'
+  gem "better_errors"
 end
 
 gem 'gcm'
@@ -63,6 +64,7 @@ gem 'fcm'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
-gem 'exception_notification'
 gem 'slack-notifier'
+gem 'exception_notification'
+
 gem 'sitemap_generator'

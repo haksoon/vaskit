@@ -19,10 +19,16 @@ class Users::FacebookController < Devise::PasswordsController
     if user.blank?
       if email && name && facebook_id && gender && birthday
         string_id = User.get_uniq_string_id( email.split("@")[0] )
-        user = User.create(email: email, password: "is_facebook", password_confirmation: "is_facebook",
-                           facebook_id: facebook_id, string_id: string_id, name: name,
-                           birthday: birthday, gender: gender,
-                           sign_up_type: "facebook", remember_me: true, avatar: avatar)
+        user = User.create(email: email,
+                           password: "is_facebook", password_confirmation: "is_facebook",
+                           facebook_id: facebook_id,
+                           string_id: string_id,
+                           name: name,
+                           birthday: birthday,
+                           gender: gender,
+                           sign_up_type: "facebook",
+                           remember_me: true,
+                           avatar: avatar)
         sign_in user
         render json: {status: "success", string_id: user.string_id}
       else

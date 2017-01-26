@@ -58,7 +58,7 @@
         <%= f.hidden_field :name, value: "{{=data.name}}" %>
         <%= f.hidden_field :gender, value: "{{=data.gender}}" %>
         <%= f.hidden_field :avatar, value: "{{=data.avatar}}" %>
-        <%= f.check_box :agree_access_term, { checked: true, required: true } %>
+        <%= f.check_box :agree_access_term, { checked: true } %>
       </div>
     </div>
   <% end %>
@@ -262,7 +262,6 @@
             success: function(data) {
               if (data.status === "not_enough") {
                 go_url('login_with_FB_edit', data);
-                if (userApp) setAppStatusBar();
               } else if (data.status === "success") {
                 notify(data.string_id + "님, 어서오세요!");
                 alarm_check();
@@ -281,9 +280,9 @@
   };
 
   function show_login_with_FB_edit(data) {
-    notify("추가 정보를 입력해주세요");
     $("#landing_page").addClass("prev");
     $("#login_page").html(facebookLoginTemplate({data: data})).removeClass("next");
+    if (userApp) setAppStatusBar();
     $("#login_page_sub").html("");
     $("#facebook_form input").keypress(function(e) {
 		  if (e.keyCode == '13') {
@@ -294,6 +293,7 @@
   	});
 	  $.each($("#facebook_form #user_birthday_1i option"), function( index, value ) { if (index > 0) value.text = value.text+"년"; });
 	  $.each($("#facebook_form #user_birthday_3i option"), function( index, value ) { if (index > 0) value.text = value.text+"일"; });
+    notify("추가 정보를 입력해주세요");
     var url = '/users/sign_up';
     return url;
   };
@@ -471,27 +471,14 @@
               if (data.status === "blank_email") {
                 notify("이메일을 입력해주세요");
                 $("#facebook_form #user_email").focus();
-              } else if (data.status === "blank_password") {
-                notify("비밀번호를 입력해주세요");
-                $("#facebook_form #user_password").focus();
               } else if (data.status === "not_email") {
                 notify("잘못된 이메일 형식이네요");
                 $("#facebook_form #user_email").focus();
               } else if (data.status === "already_exist_email") {
                 notify("이미 가입된 이메일이네요");
                 $("#facebook_form #user_email").focus();
-              } else if (data.status === "not_enough_password") {
-                notify("비밀번호는 8자 이상 입력해주세요");
-                $("#facebook_form #user_password").val("").focus();
-              } else if (data.status === "password_confirm_error") {
-                notify("비밀번호를 다시 확인해주세요");
-                $("#facebook_form #user_password_confirmation").val("").focus();
               } else if (data.status === "birthday_not_selected") {
                 notify("생년월일을 입력해주세요");
-              } else if (data.status === "gender_not_selected") {
-                notify("성별을 선택해주세요");
-              } else if (data.status === "agree_access_term") {
-                notify("이용약관에 동의해주세요");
               } else if (data.status === "success") {
                 notify(data.string_id + "님, 환영합니다 :)");
                 alarm_check();

@@ -50,7 +50,7 @@ class User < ActiveRecord::Base
     noti_gender = self.gender == true ? "남성" : "여성"
     noti_message = "- 가입방식: " + self.sign_up_type.to_s + "\n- 이메일: " + self.email.to_s + "\n- 성별: " + noti_gender.to_s + "\n- 생년월일: " + self.birthday.to_s
     noti_color = "#FF7200"
-    slack_notifier(noti_title, noti_message, noti_emoji)
+    slack_notifier(noti_title, noti_message, noti_color)
   end
   handle_asynchronously :signup_submit_notifier
 
