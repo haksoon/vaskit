@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 class Users::SessionsController < Devise::SessionsController
-  after_action :user_visits, only: [:create]
 
   # GET /users/sign_in
   def new
@@ -32,6 +31,7 @@ class Users::SessionsController < Devise::SessionsController
       elsif resource.valid_password?(data[:password])
         sign_in(resource_name, resource)
         resource.remember_me!
+        user_visits
         render json: { status: "success", string_id: resource.string_id }
       else
         render json: { status: "invalid_password" }

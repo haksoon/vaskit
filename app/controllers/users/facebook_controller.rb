@@ -1,6 +1,5 @@
 # coding : utf-8
 class Users::FacebookController < Devise::PasswordsController
-  after_action :user_visits, only: [:auth]
 
   # POST /users/facebook.json
   def auth
@@ -30,6 +29,8 @@ class Users::FacebookController < Devise::PasswordsController
                            remember_me: true,
                            avatar: avatar)
         sign_in user
+        user_visits
+        UserMailer.delay.welcome_email(user)
         render json: {status: "success", string_id: user.string_id}
       else
         render json: {status: "not_enough", facebook_id: facebook_id, email: email, name: name, birthday: birthday, gender: gender, avatar: data[:picture][:data][:url]}
@@ -41,6 +42,7 @@ class Users::FacebookController < Devise::PasswordsController
         user.update(facebook_id: facebook_id, sign_up_type: "both", remember_me: true)
       end
       sign_in user
+      user_visits
       render json: {status: "success", string_id: user.string_id}
     else
       if user.avatar.blank?
@@ -49,6 +51,7 @@ class Users::FacebookController < Devise::PasswordsController
         user.update(remember_me: true)
       end
       sign_in user
+      user_visits
       render json: {status: "success", string_id: user.string_id}
     end
   end

@@ -1,6 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
-  before_action :configure_permitted_parameters
-  after_action :user_visits, only: [:create]
+  before_action :configure_permitted_parameters, only: [:create]
 
   # GET /users/sign_up
   def new
@@ -57,20 +56,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
         build_resource({
           email: data[:email],
           password: data[:password],
-          birthday: data[:birthday],
-          gender: data[:gender],
-          string_id: data[:string_id],
           sign_up_type: data[:sign_up_type],
-          facebook_id: data[:facebook_id],
+          string_id: data[:string_id],
           name: data[:name],
-          remember_me: data[:remember_me],
+          gender: data[:gender],
+          birthday: data[:birthday],
+          facebook_id: data[:facebook_id],
           agree_access_term: data[:agree_access_term],
+          remember_me: data[:remember_me],
           avatar: data[:avatar]
         })
 
         resource.save
         if resource.persisted?
           sign_up(resource_name, resource)
+          user_visits
           UserMailer.delay.welcome_email(resource)
           render json: {status: "success", string_id: data[:string_id]}
         end
@@ -87,8 +87,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   protected
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [
-      :email, :password, :password_confirmation, :remember_me, :sign_up_type, :string_id, :name, :gender, :birthday, :facebook_id, :agree_access_term, :avatar ])
-    devise_parameter_sanitizer.permit(:account_update, keys: [
-      :current_password, :password, :password_confirmation, :sign_up_type ])
+      :email, :password, :password_confirmation, :sign_up_type, :string_id, :name, :gender, :birthday, :facebook_id, :agree_access_term, :remember_me, :avatar
+    ])
   end
 end
