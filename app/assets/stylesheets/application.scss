@@ -448,8 +448,8 @@ body {
 .collection_detail { position: absolute; top: 50px; left: 0; display: table; width: 100vw; height: 75vw; max-width: $layout-width; max-height: ($layout-width / 4 * 3);
                       background-size: cover; background-position: center center; transform-origin: bottom center;
     .collection_title { display: table-cell; text-align: center; vertical-align: middle;
-        .collection_name { display: inline-block; margin: 0 0 5px 0; padding: 5px 10px; color: #555; background-color: rgba(255,255,255,0.75); @include fontExtraBold; font-size: 20px; }
         .collection_description { display: inline-block; margin: 0; padding: 5px 10px; color: #eee; background-color: rgba(0,0,0,0.75); @include fontLight; font-size: 14px; }
+        .collection_name { display: inline-block; margin: 5px 0 0 0; padding: 5px 10px; color: #555; background-color: rgba(255,255,255,0.75); @include fontExtraBold; font-size: 20px; }
     }
 }
 .collection_blank { width: 100vw; height: 75vw; max-width: $layout-width; max-height: ($layout-width / 4 * 3); border-bottom: 1px solid #bdbdbd; box-sizing: border-box; }

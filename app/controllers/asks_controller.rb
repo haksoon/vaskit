@@ -207,8 +207,12 @@ class AsksController < ApplicationController
       format.html
       format.json {
         if current_user && current_user.id == @ask.user_id
-          ask = @ask.as_json(include: [:left_ask_deal, :right_ask_deal])
-          status = "success"
+          if @ask.be_completed == true
+            status = "already_completed"
+          else
+            ask = @ask.as_json(include: [:left_ask_deal, :right_ask_deal])
+            status = "success"
+          end
         else
           status = "not_authorized"
         end

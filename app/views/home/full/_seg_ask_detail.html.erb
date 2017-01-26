@@ -156,10 +156,12 @@
         {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
       </div>
       <div class="ask_message_menu">
-        {{ if (current_user && current_user.id == ask.user.id && ask.be_completed == false) { }}
-          <span onclick="go_url('ask_form', {{= ask.id }});">질문 수정</span>
-          &middot;
-          <span onclick="submit_ask_complete({{= ask.id }});">질문 종료</span>
+        {{ if (current_user && current_user.id == ask.user.id) { }}
+          {{ if (ask.be_completed == false) { }}
+            <span onclick="go_url('ask_form', {{= ask.id }});">질문 수정</span>
+            &middot;
+            <span onclick="submit_ask_complete({{= ask.id }});">질문 종료</span>
+          {{ } }}
         {{ } else { }}
           <span onclick="report_ask({{= ask.id }});">신고하기</span>
         {{ } }}

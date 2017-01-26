@@ -36,12 +36,15 @@
           return false;
         },
         success: function(data){
-          if (data.status == "success") {
-            open_full_view(askFormTemplate({ask: data.ask}));
-            if (userApp) setAppStatusBar("dark");
+          if (data.status == "already_completed") {
+            notify('이미 종료된 투표입니다');
+            go_back(1);
           } else if (data.status == "not_authorized") {
             notify('권한이 없습니다');
             go_back(1);
+          } else if (data.status == "success") {
+            open_full_view(askFormTemplate({ask: data.ask}));
+            if (userApp) setAppStatusBar("dark");
           };
         },
         beforeSend: function(){

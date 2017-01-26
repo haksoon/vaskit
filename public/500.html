@@ -1,173 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>VASKIT | 500</title>
   <meta charset="utf-8">
+  <link rel="apple-touch-icon" sizes="57x57" href="/images/logo/favicon/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/images/logo/favicon/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/images/logo/favicon/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/images/logo/favicon/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/images/logo/favicon/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/images/logo/favicon/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/images/logo/favicon/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/images/logo/favicon/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/logo/favicon/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="/images/logo/favicon/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="/images/logo/favicon/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/images/logo/favicon/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="/images/logo/favicon/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
   <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1.0 user-scalable=0">
   <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
-  <title>VASKIT</title>
+
   <style type="text/css">
-    body {
-      position:absolute;
-      margin:0 auto;
-      width:80%; height:100%;
-      margin-left:10%;
-      display:table;
-    }
-    div.background_color {
-      position:fixed; bottom:0; left:0;
-      width:100%; height:100%;
-      background:#ffcc5a;
-      background:linear-gradient(#fff 0%, #fff 60%, #dbdbdb 75%, #FFCC5A 75%);
-      background:-webkit-linear-gradient(#fff 0%, #fff 60%, #dbdbdb 75%, #FFCC5A 75%);
-      background:   -moz-linear-gradient(#fff 0%, #fff 60%, #dbdbdb 75%, #FFCC5A 75%);
-      background:    -ms-linear-gradient(#fff 0%, #fff 60%, #dbdbdb 75%, #FFCC5A 75%);
-      background:     -o-linear-gradient(#fff 0%, #fff 60%, #dbdbdb 75%, #FFCC5A 75%);
-      z-index:-1;
-    }
-    div.outer {
-      display:table-cell;
-      text-align:left;
-      vertical-align:middle;
-      background-color:transparent;
-      max-width:1024px;
-      z-index:1;
-    }
-    div.inner {
-      display:inline-block;
-      padding:10px;
-      margin:20px auto;
-    }
-    img.cover {
-      position:absolute; bottom:25%; right:0;
-      width:500px;
-      z-index:0;
-    }
-    h1 {
-      margin:20px;
-      color:#ee6e01;
-      font-size:48px;
-      margin-bottom:0px;
-    }
-    h1 span {
-      vertical-align:text-top;
-      font-size:80px;
-    }
-    p {
-      margin:20px;
-      margin-top:0px;
-      color:#9d9fa1;
-      text-align:left;
-      line-height:1.5;
-    }
-    a {
-      display:inline-block;
-      color:#383838; font-size:24px;
-      text-decoration:none;
-      margin:20px; margin-top:0px;
-      padding:10px 12px 6px 15px;
-      border-bottom:2px dashed #ee6e01;
-      font-weight:bold;
-      transition:all 0.3s ease-in-out;
-    }
-    a:hover, a:focus {
-      color:#fff; background:#ee6e01;
-      border-radius:10px;
-      outline:0;
-    }
-    a:hover i, a:focus i {
-      animation:backward 0.5s infinite normal;
-      -webkit-animation:backward 0.5s infinite normal;
-    }
-    @keyframes backward {
-      0% { transform:translateX(0px); }
-      100% { transform:translateX(-5px); }
-    }
-    @-webkit-keyframes backward {
-      0% { -webkit-transform:translateX(0px); }
-      100% { -webkit-transform:translateX(-5px); }
+    body { position: absolute; width: 100%; height: 100%; margin: 0; background-color: #ff7800; display:table; }
+    div.outer { display: table-cell; text-align: center; vertical-align: middle; z-index:1; }
+    div.inner { display: inline-block; width: 80%; padding: 10px; margin: 50px auto; }
+    h1 { height: 20vw; margin: 20px 0; color: #fff; font-size: 7vw; text-align: right; }
+    h1 span { font-size: 20vw; }
+    p { margin: 0; font-size: 15px; text-align: left; line-height: 1.5; color: #fff; }
+    a { display: inline-block; width: 100%; height: 12vh; line-height: 12vh; margin: 20px 0 0;
+        color: #ff7200; background-color: #fff; font-size: 24px; font-weight: bold; text-decoration: none; border-radius: 10px;
+        transition: color .25s, background-color .25s;
+      }
+    a:active, a:hover, a:focus { color: #fff; background-color: #333; }
+
+    @-webkit-keyframes bounce {
+      from, 4%, 10.6%, 16%, to {
+        -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+      }
+
+      8%, 8.6% {
+        -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        -webkit-transform: translate3d(0, -30px, 0);
+        transform: translate3d(0, -30px, 0);
+      }
+
+      14% {
+        -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        -webkit-transform: translate3d(0, -15px, 0);
+        transform: translate3d(0, -15px, 0);
+      }
+
+      18% {
+        -webkit-transform: translate3d(0,-4px,0);
+        transform: translate3d(0,-4px,0);
+      }
     }
 
-    #help {
-      position:fixed;
-      display:none;
-      bottom:25%; right:30px;
-    }
-    .icon {
-      color:#ee6e01; font-size:60px;
-      z-index:1;
-    }
-    #help_bubble {
-      background:#4b3d3d; color:#fff;
-      width:60px; box-sizing:border-box;
-      padding:6px 12px; border-radius:5px;
-      float:left; margin:0px 12px 0px 0px;
-    }
-    #bubble {
-      content:'';
-      border-left:5px solid #4b3d3d;
-      border-top:5px solid transparent;
-      border-bottom:5px solid transparent;
-      position:absolute; top:10px; left:60px;
-    }
-    #bubble_div {
-      float:left;
-      transform-origin:right bottom;
-      -webkit-transform-origin:right bottom;
-      animation:bubble 0.5s ease infinite alternate;
-      -webkit-animation:bubble 0.5s ease infinite alternate;
-    }
-    @keyframes bubble {
-      0% { transform:translateY(0px) rotateZ(0deg); }
-      100% { transform:translateY(-10px) rotateZ(15deg); }
-    }
-    @-webkit-keyframes bubble {
-      0% { -webkit-transform:translateY(0px) rotateZ(0deg); }
-      100% { -webkit-transform:translateY(-10px) rotateZ(15deg); }
+    @keyframes bounce {
+      from, 4%, 10.6%, 16%, to {
+        -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+        -webkit-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+      }
+
+      8%, 8.6% {
+        -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        -webkit-transform: translate3d(0, -30px, 0);
+        transform: translate3d(0, -30px, 0);
+      }
+
+      14% {
+        -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+        -webkit-transform: translate3d(0, -15px, 0);
+        transform: translate3d(0, -15px, 0);
+      }
+
+      18% {
+        -webkit-transform: translate3d(0,-4px,0);
+        transform: translate3d(0,-4px,0);
+      }
     }
 
-    @media (max-width:950px) {
-      body { width:100%; margin-left:0; }
-      div.inner { position:fixed; top:0px; left:0px; margin:0 auto; }
-      a {
-        color:#fff; background:#ee6e01;
-        border-radius:10px;
-        outline:0;
-      }
-      a i {
-        animation:backward 0.5s infinite normal;
-        -webkit-animation:backward 0.5s infinite normal;
-      }
-      img.cover {
-        display:none;
-      }
-      #help {
-        display:block;
-      }
+    .bounce {
+      -webkit-animation-duration: 5s;
+      animation-duration: 5s;
+      -webkit-animation-fill-mode: both;
+      animation-fill-mode: both;
+      -webkit-animation-name: bounce;
+      animation-name: bounce;
+      -webkit-transform-origin: center bottom;
+      transform-origin: center bottom;
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
     }
   </style>
 </head>
-
 <body>
-  <!-- This file lives in public/404.html -->
-  <div class="background_color"></div>
-  <img src="/images/logo/cover.png" alt="" class="cover">
   <div class="outer">
     <div class="inner">
-      <h1><span>500</span> ERR</h1>
+      <p>으으으음... 뭔가 잘못되었군요</p>
+      <h1 class="bounce">ERROR <span>500</span></h1>
       <p>
-        으으으음. 뭔가 잘못되었군요.<br>
-        하지만 걱정마세요.<br>당신을 올바른 길로 인도해드리죠.<br>
+        하지만 걱정마세요!<br>
+        오늘도 어디로 가야 할지<br>
+        결정장애에 시달리는 당신,<br>
+        저만 따라오세요!<br>
       </p>
-      <a href="http://vaskit.kr">
-        <i class="fa fa-backward"></i>&nbsp;Let's VASKIT!
-      </a>
-      <div id="help">
-        <div id="bubble_div">
-          <p id="help_bubble">Help!</p>
-          <div id="bubble"></div>
-        </div>
-        <i class="fa fa-child icon" aria-hidden="true"></i>
-      </div>
+      <a href="http://vaskit.kr">Let's VASKIT!</a>
     </div>
   </div>
 </body>

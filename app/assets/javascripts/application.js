@@ -762,21 +762,26 @@ function taggingKeywords(origin_string, img_hidden) {
   html_tmp = $("#taggingTmp");
 
   var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
-  var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
   if (hash_tags != null) {
     hash_tags.sort(function(a,b){ return b.length - a.length; });
-    $.each(hash_tags, function( index, hash_tag ) {
-      hash_tag = hash_tag.replace(",","");
-      html_tmp.highlight(hash_tag, { element:'a', className: 'hash_tag '+index});
-      $.each(html_tmp.find(".hash_tag."+index), function( index2, element ){
-        hash_tag = hash_tag.replace('#', '').replace("?","");
-        $(element).attr({
+    $.each(hash_tags, function(index, hash_tag) {
+      hash_tag = hash_tag.replace(",", "");
+      html_tmp.highlight(hash_tag, {element: "a", className: "hash_tag " + index});
+      $.each(html_tmp.find(".hash_tag."+index), function(index2, element){
+        hash_tag = hash_tag.replace("#", "").replace("?", "");
+        $(element).text("").attr({
           href: "/search?type=hash_tag&keyword="+encodeURIComponent(hash_tag),
-          onclick: "go_url('search_result', {type: 'hash_tag', keyword: '" + hash_tag + "'}); return false;"
+          onclick: "go_url('search_result', {type: 'hash_tag', keyword: '" + hash_tag + "'}); return false;",
+          keyword: hash_tag
         });
       });
     });
-  }
+    $.each(html_tmp.find(".hash_tag"), function(index, element){
+      var hash_tag_keyword = "#" + $(element).attr("keyword");
+      $(element).text(hash_tag_keyword);
+    });
+  };
+  var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
   if (links != null) {
     links.sort(function(a,b){ return b.length - a.length; });
     var link_tags = [];
@@ -791,7 +796,7 @@ function taggingKeywords(origin_string, img_hidden) {
     });
     if (!img_hidden) {
       $.each(img_tags, function(index, img){
-        html_tmp.highlight(img, {element:'img', className: 'link_img '+index});
+        html_tmp.highlight(img, {element: "img", className: "link_img "+index});
         $.each(html_tmp.find(".link_img."+index), function(index2, element){
           $(element).attr({
             src: img,
@@ -801,7 +806,7 @@ function taggingKeywords(origin_string, img_hidden) {
       });
     }
     $.each(links, function(index, link){
-      html_tmp.highlight(link, {element:'a', className: 'link '+index});
+      html_tmp.highlight(link, {element: "a", className: "link "+index});
       $.each(html_tmp.find(".link."+index), function(index2, element){
         $(element).attr({
           href: link,
@@ -810,7 +815,7 @@ function taggingKeywords(origin_string, img_hidden) {
         });
       });
     });
-  }
+  };
 
   var html_output = html_tmp.html();
   html_tmp.remove();
