@@ -1,20 +1,20 @@
 class AdminMailer < ActionMailer::Base
   default from: %{"VASKIT admin" <notice@vaskit.kr>},
-          to: ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr']
+          to: ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr', 'sunghomoon@vaskit.kr', 'emma@vaskit.kr']
 
   def signup_submitted(user)
     @user = user
     mail(subject: "[VASKIT] 새로운 사용자가 회원가입하였습니다.")
   end
 
-  def ask_submitted(ask, to)
+  def ask_submitted(ask)
     @ask = ask
-    mail(to: to, subject: "[VASKIT] 새로운 질문이 작성되었습니다.")
+    mail(subject: "[VASKIT] 새로운 질문이 작성되었습니다.")
   end
 
-  def ask_edit_submitted(ask, to)
+  def ask_edit_submitted(ask)
     @ask = ask
-    mail(to: to, subject: "[VASKIT] 사용자가 질문을 수정하였습니다.")
+    mail(to: 'junsikahn@vaskit.kr', subject: "[VASKIT] 사용자가 질문을 수정하였습니다.")
   end
 
   def inquiry_submitted(inquiry)
@@ -171,7 +171,7 @@ class AdminMailer < ActionMailer::Base
 
   def client_error(log)
     @log = log
-    mail(from: %{"Error notifier" <notice@vaskit.kr>}, to: 'junsikahn@vaskit.kr', subject: "[ERROR] #{log.error_message}")
+    mail(from: %{"Client Error" <notice@vaskit.kr>}, to: 'junsikahn@vaskit.kr', subject: "[Client ERROR] #{log.error_message}")
   end
 
 end

@@ -59,21 +59,11 @@ class Ask < ActiveRecord::Base
   end
 
   def ask_new_submit_mailer
-    if User.find(self.user_id).user_role == "user"
-      admins = ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr']
-      admins.each do |admin|
-        AdminMailer.delay.ask_submitted(self, admin)
-      end
-    end
+    AdminMailer.delay.ask_submitted(self) if User.find(self.user_id).user_role == "user"
   end
 
   def ask_edit_submit_mailer
-    if User.find(self.user_id).user_role == "user"
-      admins = ['junsikahn@vaskit.kr']
-      admins.each do |admin|
-        AdminMailer.delay.ask_edit_submitted(self, admin)
-      end
-    end
+    AdminMailer.delay.ask_edit_submitted(self) if User.find(self.user_id).user_role == "user"
   end
 
 end

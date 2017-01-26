@@ -11,10 +11,12 @@ class LogErrorsController < ApplicationController
     line = params[:line]
     col = params[:col]
 
+
     if current_user
       log = LogError.create(user_id: current_user.id, error: obj, error_href: href, user_agent: ua, error_message: msg, error_url: url, error_line: line, error_col: col)
     else
-      log = LogError.create(user_id: nil, error: obj, error_href: href, user_agent: ua, error_message: msg, error_url: url, error_line: line, error_col: col)
+      set_visitor
+      log = LogError.create(visitor_id: @visitor.id, error: obj, error_href: href, user_agent: ua, error_message: msg, error_url: url, error_line: line, error_col: col)
     end
     AdminMailer.delay.client_error(log)
     render json: {}

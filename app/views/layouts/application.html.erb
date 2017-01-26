@@ -33,6 +33,11 @@
   	<%= csrf_meta_tags %>
 
     <script>
+        $.cookie('uniq_key', null);
+        $.cookie('visitor_uniq_key', null);
+        if ($.cookie('visitor_key') == null) $.cookie('visitor_key', '<%= @uniq_key %>', { expires : 30000, path : '/' });
+        $.cookie('visitor_votes', null);
+
         window.onerror = function(msg, url, line, col, obj) {
           href = window.location.href;
           obj = obj == null ? 'obj is null' : obj.stack;
@@ -40,9 +45,9 @@
                 url: "/log_errors.json",
                 type: "POST",
                 data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj },
-                complete: function(){
-                  if (confirm("앗! 오류가 발생했습니다...\n앱을 재시작하시겠어요?")) window.location = href;
-                }
+                // complete: function(){
+                //   if (confirm("앗! 오류가 발생했습니다...\n앱을 재시작하시겠어요?")) window.location = href;
+                // }
           });
           return false;
         }
@@ -74,7 +79,10 @@
       </div>
     </div>
     <div class="layout notice_div" style="display:none;"><div class="notice_msg"></div></div>
-    <div class="layout loading_div" onclick="return false;" ontouchmove="return false;"><div class="loading_bar">&nbsp;</div></div>
+    <div class="layout loading_div" onclick="return false;" ontouchmove="return false;">
+      <div class="loading_bar">&nbsp;</div>
+      <div class="loading_init"><div class="align_middle"><div class="loading_welcome animated slideInRight">Welcome to VASKIT!</div></div></div>
+    </div>
     <div>
       <%= render :partial => "home/main/seg1" %>
       <%= render :partial => "home/main/seg2" %>

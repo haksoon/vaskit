@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
 class Users::SessionsController < Devise::SessionsController
-  respond_to :json
+  after_action :user_visits, only: [:create]
 
   # GET /users/sign_in
   def new
+    respond_to do |format|
+      format.html {}
+      format.json {
+        render json: {}
+      }
+    end
   end
 
   # POST /users/sign_in.json

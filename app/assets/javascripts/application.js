@@ -47,11 +47,6 @@ _.templateSettings = {
 // init VASKIT Frame
 if (window.location.pathname.indexOf("admin") == -1) {
   $(window).ready(function(){
-    if ($.cookie('visitor_uniq_key') == null) {
-      var uniq_key = (new Date().getTime() / 1000).toString() + (Math.random() * 1000000).toFixed(0).toString();
-      $.cookie('visitor_uniq_key', uniq_key, { expires : 30000, path : '/' });
-    }
-    if ($.cookie('visitor_votes') != null) $.cookie('visitor_votes', null);
     loadingStart();
     alarm_check();
     history.replaceState({pageHistory:currentHistory}, null, null);
@@ -66,13 +61,16 @@ if (window.location.pathname.indexOf("admin") == -1) {
     // 기본화면 초기화
     go_seg(1);
   }).load(function(){
-    setUserDevice();
     set_collections();
     user_profile_on();
     user_alarms_on();
-    open_app_banner();
-    loadingEnd();
-    $(".loading_div").removeAttr("ontouchmove");
+    setUserDevice();
+    $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
+      open_app_banner();
+      loadingEnd();
+      $(".loading_init").remove();
+      $(".loading_div").removeAttr("ontouchmove");
+    });
   });
 };
 // End init VASKIT Frame
@@ -954,16 +952,11 @@ $.fn.extend({
             $(this).hide().removeClass('animated ' + animationName);
         });
     },
-    animateCssRemove: function (animationName) {
+    animateCssRemove: function (animationName, callback) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         $(this).addClass('animated ' + animationName).one(animationEnd, function() {
             $(this).remove();
-        });
-    },
-    removeClassRemove: function (className) {
-        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
-        $(this).removeClass(className).one(transitionEnd, function() {
-            $(this).remove();
+            if (typeof callback === "function") callback();
         });
     },
     transitionEmpty: function (callback) {

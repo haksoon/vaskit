@@ -1,10 +1,15 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters
-
-  respond_to :json
+  after_action :user_visits, only: [:create]
 
   # GET /users/sign_up
   def new
+    respond_to do |format|
+      format.html
+      format.json {
+        render json: {}
+      }
+    end
   end
 
   # POST /users/sign_up.json

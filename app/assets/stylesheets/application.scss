@@ -387,9 +387,8 @@ body {
 }
 
 
-.no_result { position: absolute; top: 0; left: 0; display: table; width: 100%; height: 100%; color: #999;
-  .align_middle { display: table-cell; text-align: center; vertical-align: middle; }
-}
+.no_result { position: absolute; top: 0; left: 0; display: table; width: 100%; height: 100%; color: #999; }
+.align_middle { display: table-cell; text-align: center; vertical-align: middle; }
 
 .highlight { color: #FF7800; }
 .fa-heart.comment_like_icon { color: #FF7800; }
@@ -405,8 +404,9 @@ body {
   .notice_msg { display: table-cell; padding: 0 20px; text-align: center; vertical-align: middle; }
 }
 
-.loading_div { position: fixed; top: 0px; width: 100%; height: 100%; z-index: 990; display: none; -webkit-tap-highlight-color: transparent;
+.loading_div { position: fixed; top: 0px; width: 100%; height: 100%; z-index: 990; display: none; overflow: hidden; -webkit-tap-highlight-color: transparent;
   .loading_bar { display: none; width: 0%; height: 5px; background-color: #666; }
+  .loading_init { position: absolute; top: 50px; width: 100%; height: calc(100% - 100px); display: table; background-color: #fff; line-height: 40px; @include fontNumber; }
 }
 
 /* ============================== Seg1 컬렉션/asks 관련 ============================== */

@@ -1,5 +1,6 @@
 # coding : utf-8
 class Users::FacebookController < Devise::PasswordsController
+  after_action :user_visits, only: [:auth]
 
   # POST /users/facebook.json
   def auth
