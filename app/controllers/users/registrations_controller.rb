@@ -45,7 +45,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       elsif data[:agree_access_term] != "1"
         render json: {status: "agree_access_term"}
       else
-        data[:birthday] = Date.new(data["birthday(1i)"].to_i, data["birthday(2i)"].to_i, data["birthday(3i)"].to_i).strftime("%m/%d/%Y")
+        data[:birthday] = Date.new(data["birthday(1i)"].to_i, data["birthday(2i)"].to_i, data["birthday(3i)"].to_i)
 
         data[:string_id] = User.get_uniq_string_id( data[:email].split("@")[0] )
         data[:remember_me] = true
@@ -71,7 +71,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
           user = User.find_by(email: data[:email])
           UserMailer.delay.welcome_email(user)
-          AdminMailer.delay.signup_submitted(user)
         end
       end
     end

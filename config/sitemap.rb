@@ -26,15 +26,34 @@ SitemapGenerator::Sitemap.create do
   #   end
 
   add landing_path
-  add new_ask_path
 
+  add collections_path
+  Collection.find_each do |collection|
+    add collection_path(collection.id), :lastmod => collection.updated_at
+  end
+
+  add asks_path
   Ask.find_each do |ask|
     add ask_path(ask.id), :lastmod => ask.updated_at
   end
+  add new_ask_path
 
+  add users_path
+  add users_history_path
+  add users_settings_path
+  add users_settings_edit_profile_path
+  add users_settings_edit_password_path
+  add users_settings_edit_push_alarm_path
+  add users_settings_edit_email_alarm_path
+
+  add new_user_session_path
+  add new_user_registration_path
+
+  add users_forgot_password_path
+  add users_reset_password_path
+
+  add contact_us_etc_index_path
+  add faq_help_etc_index_path
   add access_term_etc_index_path
   add privacy_policy_etc_index_path
-  add inquiry_etc_index_path
-  add help_etc_index_path
-
 end

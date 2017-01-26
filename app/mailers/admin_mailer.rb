@@ -2,31 +2,6 @@ class AdminMailer < ActionMailer::Base
   default from: %{"VASKIT admin" <notice@vaskit.kr>},
           to: ['junsikahn@vaskit.kr', 'haksoon@vaskit.kr', 'seokkiyoon@vaskit.kr', 'sunghomoon@vaskit.kr', 'emma@vaskit.kr']
 
-  def signup_submitted(user)
-    @user = user
-    mail(subject: "[VASKIT] 새로운 사용자가 회원가입하였습니다.")
-  end
-
-  def ask_submitted(ask)
-    @ask = ask
-    mail(subject: "[VASKIT] 새로운 질문이 작성되었습니다.")
-  end
-
-  def ask_edit_submitted(ask)
-    @ask = ask
-    mail(to: 'junsikahn@vaskit.kr', subject: "[VASKIT] 사용자가 질문을 수정하였습니다.")
-  end
-
-  def inquiry_submitted(inquiry)
-    @inquiry = inquiry
-    mail(subject: "[VASKIT] 문의가 접수되었습니다.")
-  end
-
-  def report_submitted(report)
-    @report = report
-    mail(subject: "[VASKIT] 신고가 접수되었습니다.")
-  end
-
   def daily_summary
     user_summaries = User.find_by_sql(<<-SQL.squish)
       SELECT U.id AS 'user_id', U.email, U.string_id, U.name, date_format(addtime(U.created_at, '09:00:00'), '%Y-%m-%d') AS 'created_at', date_format(UV.recent_visit, '%Y-%m-%d') AS 'recent_visit',

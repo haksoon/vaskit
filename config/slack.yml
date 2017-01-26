@@ -1,0 +1,7 @@
+# config/slack.yml
+development:
+  webhook_url: "https://hooks.slack.com/services/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"
+  channel: "#test"
+production:
+  webhook_url: "https://hooks.slack.com/services/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"
+  channel: "#97_app_notifier"

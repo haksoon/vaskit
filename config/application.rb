@@ -30,11 +30,11 @@ module Vaskit
     config.active_job.queue_adapter = :delayed_job
 
     config.middleware.use ExceptionNotification::Rack,
-    :email => {
-      :deliver_with => :deliver_now, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
-      :email_prefix => "[ERROR] ",
-      :sender_address => %{"Error notifier" <notice@vaskit.kr>},
-      :exception_recipients => %w{junsikahn@vaskit.kr}
+    email: {
+      deliver_with: :deliver_now, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
+      email_prefix: "[ERROR] ",
+      sender_address: %{"Error notifier" <notice@vaskit.kr>},
+      exception_recipients: %w{junsikahn@vaskit.kr}
     }
   end
 end

@@ -9,8 +9,10 @@ class Ask < ActiveRecord::Base
   has_many :comments
   has_one :rank_ask
   has_one :ask_complete
-  after_create :generate_hash_tags, :ask_new_submit_mailer
-  after_update :generate_hash_tags, :ask_edit_submit_mailer
+
+  include SlackNotifier
+  after_create :generate_hash_tags, :ask_new_submit_notifier
+  after_update :generate_hash_tags, :ask_edit_submit_notifier
 
   ASK_PER = 5
 
@@ -58,12 +60,30 @@ class Ask < ActiveRecord::Base
     end
   end
 
-  def ask_new_submit_mailer
-    AdminMailer.delay.ask_submitted(self) if User.find(self.user_id).user_role == "user"
+  def ask_new_submit_notifier
+    if self.user.user_role == "user"
+      ask_user_gender = self.user.gender == true ? "남성" : "여성"
+      ask_user_age = Time.now.year - self.user.birthday.year + 1
+      ask_url = CONFIG["host"] + "/asks/" + self.id.to_s
+      noti_title = "새로운 질문이 작성되었습니다"
+      noti_message = "- 작성자 : " + self.user.string_id.to_s + "(" + ask_user_gender.to_s + ", " + ask_user_age.to_s + "세)" + "\n- 내용\n" + self.message.to_s + "\n" + ask_url.to_s
+      noti_color = "#FF7200"
+      slack_notifier(noti_title, noti_message, noti_color)
+    end
   end
+  handle_asynchronously :ask_new_submit_notifier
 
-  def ask_edit_submit_mailer
-    AdminMailer.delay.ask_edit_submitted(self) if User.find(self.user_id).user_role == "user"
+  def ask_edit_submit_notifier
+    if self.user.user_role == "user"
+      ask_user_gender = self.user.gender == true ? "남성" : "여성"
+      ask_user_age = Time.now.year - self.user.birthday.year + 1
+      ask_url = CONFIG["host"] + "/asks/" + self.id.to_s
+      noti_title = self.be_completed == true ? "사용자가 질문을 종료하였습니다" : "사용자가 질문을 수정하였습니다"
+      noti_message = "- 작성자 : " + self.user.string_id.to_s + "(" + ask_user_gender.to_s + ", " + ask_user_age.to_s + "세)" + "\n- 내용\n" + self.message.to_s + "\n" + ask_url.to_s
+      noti_color = "#333333"
+      slack_notifier(noti_title, noti_message, noti_color)
+    end
   end
+  handle_asynchronously :ask_edit_submit_notifier
 
 end

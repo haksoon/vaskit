@@ -14,6 +14,9 @@ class User < ActiveRecord::Base
   before_create :rename_file
   before_update :rename_file
 
+  include SlackNotifier
+  after_create :signup_submit_notifier
+
   def rename_file
     if self.avatar_file_name != nil
       if ["jpg", "jpeg", "gif", "png"].include? (self.avatar_file_name.split(".").last)
@@ -41,5 +44,14 @@ class User < ActiveRecord::Base
     tmp_string_id
     ###########################
   end
+
+  def signup_submit_notifier
+    noti_title = "새로운 사용자가 회원가입하였습니다"
+    noti_gender = self.gender == true ? "남성" : "여성"
+    noti_message = "- 가입방식: " + self.sign_up_type.to_s + "\n- 이메일: " + self.email.to_s + "\n- 성별: " + noti_gender.to_s + "\n- 생년월일: " + self.birthday.to_s
+    noti_color = "#FF7200"
+    slack_notifier(noti_title, noti_message, noti_emoji)
+  end
+  handle_asynchronously :signup_submit_notifier
 
 end
