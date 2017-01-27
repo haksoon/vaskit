@@ -18,7 +18,7 @@
     </div>
     <div class="clearfix scroll_box x-axis recent_asks_image_box">
       {{ if (asks == null) { }}
-        <div class='no_result' style='height: 210px;'><p class='align_middle'>새로운 질문 탐색중 <i class='fa fa-spinner fa-spin'></i></p></div>
+        <div class="no_result"><p class="align_middle">새로운 질문 탐색중 <i class="fa fa-spinner fa-spin"></i></p></div>
       {{ } else { }}
         {{= recentAskSegTemplate({asks: asks}) }}
       {{ } }}

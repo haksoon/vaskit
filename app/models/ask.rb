@@ -66,7 +66,8 @@ class Ask < ActiveRecord::Base
       ask_user_age = Time.now.year - self.user.birthday.year + 1
       ask_url = CONFIG["host"] + "/asks/" + self.id.to_s
       noti_title = "새로운 질문이 작성되었습니다"
-      noti_message = "- 작성자 : " + self.user.string_id.to_s + "(" + ask_user_gender.to_s + ", " + ask_user_age.to_s + "세)" + "\n- 내용\n" + self.message.to_s + "\n" + ask_url.to_s
+      noti_title += "\n" + ask_url.to_s
+      noti_message = "- 작성자 : " + self.user.string_id.to_s + "(" + ask_user_gender.to_s + ", " + ask_user_age.to_s + "세)" + "\n- 내용\n" + self.message.to_s
       noti_color = "#FF7200"
       slack_notifier(noti_title, noti_message, noti_color)
     end
@@ -79,7 +80,8 @@ class Ask < ActiveRecord::Base
       ask_user_age = Time.now.year - self.user.birthday.year + 1
       ask_url = CONFIG["host"] + "/asks/" + self.id.to_s
       noti_title = self.be_completed == true ? "사용자가 질문을 종료하였습니다" : "사용자가 질문을 수정하였습니다"
-      noti_message = "- 작성자 : " + self.user.string_id.to_s + "(" + ask_user_gender.to_s + ", " + ask_user_age.to_s + "세)" + "\n- 내용\n" + self.message.to_s + "\n" + ask_url.to_s
+      noti_title += "\n" + ask_url.to_s
+      noti_message = "- 작성자 : " + self.user.string_id.to_s + "(" + ask_user_gender.to_s + ", " + ask_user_age.to_s + "세)" + "\n- 내용\n" + self.message.to_s
       noti_color = "#333333"
       slack_notifier(noti_title, noti_message, noti_color)
     end

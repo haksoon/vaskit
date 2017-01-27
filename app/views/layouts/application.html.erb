@@ -81,7 +81,18 @@
     <div class="layout notice_div" style="display:none;"><div class="notice_msg"></div></div>
     <div class="layout loading_div" onclick="return false;" ontouchmove="return false;">
       <div class="loading_bar">&nbsp;</div>
-      <div class="loading_init"><div class="align_middle"><div class="loading_welcome animated slideInRight">Welcome to VASKIT!</div></div></div>
+      <div class="loading_init">
+        <div class="align_middle">
+          <div class="loading_spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+          </div>
+          <div class="loading_welcome animated slideInRight">Welcome to VASKIT!</div>
+        </div>
+      </div>
     </div>
     <div>
       <%= render partial: "home/main/seg1" %>

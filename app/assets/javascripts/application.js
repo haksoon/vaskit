@@ -65,12 +65,13 @@ if (window.location.pathname.indexOf("admin") == -1) {
     user_profile_on();
     user_alarms_on();
     setUserDevice();
-    $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
-      open_app_banner();
-      loadingEnd();
-      $(".loading_init").remove();
-      $(".loading_div").removeAttr("ontouchmove");
-    });
+    setTimeout(function(){
+      $(".loading_spinner").animateCssRemove("fadeOut");
+      $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
+        open_app_banner();
+        loadingEnd();
+      });
+    }, 1000);
   });
 };
 // End init VASKIT Frame
@@ -663,6 +664,8 @@ function loadingStart() {
 
 function loadingEnd() {
   var loading_bar = $(".loading_bar");
+  $(".loading_init").remove();
+  $(".loading_div").removeAttr("ontouchmove");
   loading_bar.stop().animate({width:"100%"},100,function(){
     loading_bar.delay(300).animate({height:"0px"},100,function(){
       loading_bar.css({width:"0%", height:"5px", display:"none"});

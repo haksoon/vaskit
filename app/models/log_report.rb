@@ -26,7 +26,8 @@ class LogReport < ActiveRecord::Base
     report_user_id = report_user == nil ? "비회원" : report_user.string_id
 
     noti_title = "신고가 접수되었습니다"
-    noti_message = "- 신고자 : " + report_user_id.to_s + "\n- 신고내용\n" + report_message.to_s + "\n- 신고대상: " + target_content.to_s + "\n" + target_url.to_s
+    noti_title += "\n" + target_url.to_s
+    noti_message = "- 신고자 : " + report_user_id.to_s + "\n- 신고내용\n" + report_message.to_s + "\n- 신고대상: " + target_content.to_s
     noti_color = "#999999"
     slack_notifier(noti_title, noti_message, noti_color)
   end

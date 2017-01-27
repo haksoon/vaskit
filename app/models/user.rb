@@ -46,10 +46,15 @@ class User < ActiveRecord::Base
   end
 
   def signup_submit_notifier
+    user_gender = self.gender == true ? "남성" : "여성"
+    user_count = User.all.count
     noti_title = "새로운 사용자가 회원가입하였습니다"
-    noti_gender = self.gender == true ? "남성" : "여성"
-    noti_message = "- 가입방식: " + self.sign_up_type.to_s + "\n- 이메일: " + self.email.to_s + "\n- 성별: " + noti_gender.to_s + "\n- 생년월일: " + self.birthday.to_s
-    noti_color = "#FF7200"
+    noti_title += "\n가입자 " + user_count.to_s + "명 돌파!!!!!" if user_count % 50 == 0
+    noti_message = "- 가입방식: " + self.sign_up_type.to_s
+    noti_message += "\n- 이메일: " + self.email.to_s
+    noti_message += "\n- 성별: " + user_gender.to_s
+    noti_message += "\n- 생년월일: " + self.birthday.to_s
+    noti_color = "#FFCC5A"
     slack_notifier(noti_title, noti_message, noti_color)
   end
   handle_asynchronously :signup_submit_notifier
