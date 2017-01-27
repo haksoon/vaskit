@@ -56,7 +56,6 @@ group :development, :test do
 
   gem 'letter_opener'
   gem 'meta_request'
-  gem "better_errors"
 end
 
 gem 'gcm'
