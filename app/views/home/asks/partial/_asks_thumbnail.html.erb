@@ -1,71 +1,22 @@
 <script type="text/template" id="asksListTemplate">
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'asks');" url="{{=url}}">
-    {{ if (asks == null || asks.length == 0) { }}
-      <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
-    {{ } else { }}
-      {{ var l = asks.length }}
-      {{ for (var i=0; i < l; i++) { }}
-        {{ var ask = asks[i] }}
-        {{= askThumbnailTemplate({ask:ask}) }}
-      {{ } }}
-      {{ if (l == <%= Ask::ASK_PER %>) { }}
-        <div class="loading_icon" page="2" loading="true"><i class="fa fa-spinner fa-spin"></i></div>
+    <div class="clearfix">
+      {{ if (asks == null || asks.length == 0) { }}
+        <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
       {{ } else { }}
-        <div class="loading_icon" page="2">- End of Contents -</i></div>
+        {{ var l = asks.length }}
+        {{ for (var i=0; i < l; i++) { }}
+          {{ var ask = asks[i] }}
+          {{= askThumbnailTemplate({ask:ask}) }}
+        {{ } }}
+        {{ if (l == <%= Ask::ASK_PER %>) { }}
+          <div class="loading_icon" page="2" loading="true"><i class="fa fa-spinner fa-spin"></i></div>
+        {{ } else { }}
+          <div class="loading_icon" page="2">- End of Contents -</i></div>
+        {{ } }}
       {{ } }}
-    {{ } }}
+    </div>
   </div>
-</script>
-
-<script>
-  function endless_loading(target, type) {
-    var loading_icon = target.find(".loading_icon");
-    var loading = Boolean(loading_icon.attr("loading"));
-    if (loading && nearBottomOfContainer(target)) {
-      var url = target.attr("url");
-      var page = Number(loading_icon.attr("page"));
-      $.ajax({
-              url: url,
-              dataType: "json",
-              type: "GET",
-              data: {page: page},
-              error: function(){
-                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
-              },
-              success: function(data) {
-                var is_more_load;
-                if (type == "asks") {
-                  var asks = data.asks;
-                  for (var i=0; i < asks.length; i++) {
-                    var ask = asks[i];
-                    loading_icon.before(askThumbnailTemplate({ask:ask}));
-                  };
-                  is_more_load = asks.length == <%= Ask::ASK_PER %> ? true : false;
-                } else if (type == "collections") {
-                  var collections = data.collections;
-                  for (var i=0; i < collections.length; i++) {
-                    var collection = collections[i]
-                    loading_icon.before(collectionTemplate({collection: collection}));
-                  };
-                  is_more_load = collections.length == <%= Collection::COLLECTION_PER %> ? true : false;
-                };
-                if (is_more_load) {
-                  loading_icon.attr("page", Number(page)+1);
-                  loading_icon.attr("loading", true);
-                } else {
-                  loading_icon.html("- End of Contents -").animateCss("flipInY");
-                }
-              },
-              beforeSend: function(){
-                loadingStart();
-                loading_icon.removeAttr("loading");
-              },
-              complete: function(){
-                loadingEnd();
-              }
-      });
-    };
-  };
 </script>
 
 <script type="text/template" id="askThumbnailTemplate">

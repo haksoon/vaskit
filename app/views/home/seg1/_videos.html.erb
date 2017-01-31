@@ -1,0 +1,93 @@
+<script type="text/template" id="videoAsksTemplate">
+  <a href="/videos" class="clearfix collection_thumbnail contents_box" onclick="go_url('video_asks'); return false;">
+    <div class="collection_title">
+      <p class="collection_description">비교영상 찍는게 취미인 한 남자가 있어</p>
+      <p class="collection_name">VASKIT맨의 비교영상</p>
+    </div>
+    <img class="collection_image" src="{{=get_image_url(videos[0], 'videos', 'original')}}" alt="" onerror="imgError(this);">
+  </a>
+</script>
+
+<script type="text/template" id="videoAsksShowTemplate">
+  <div class="container top" ontouchmove="return false;">
+    <span class="header_title" onclick="$(this).scroll_to();">VASKIT맨의 비교영상</span>
+    <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+  </div>
+  <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'videos');" url="/videos">
+    <div class="clearfix">
+      {{ var l = videos.length }}
+      {{ for (var i=0; i < l; i++) { }}
+        {{ var video = videos[i] }}
+        {{= videoThumbnailTemplate({video:video}) }}
+      {{ } }}
+      <div class="loading_icon" page="2" loading="true"><i class="fa fa-spinner fa-spin"></i></div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="videoThumbnailTemplate">
+  <div class="video_thumbnail">
+    <a class="clearfix video_header" href="/asks/{{= video.ask_id }}" onclick="go_url('ask', {{= video.ask_id }}); return false;">
+      <div class="video_title"><span class="video_ribbon"></span><i class="fa fa-tv"></i> {{= video.title }}</div>
+      <div class="video_ask_link">관련 질문 보기 <i class="fa fa-caret-right"></i></div>
+    </a>
+    <div class="video_body">
+      <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
+      <iframe class="video_player" onload="$(this).prevAll().remove();"
+        src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F{{= video.url }}%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>" width="100%" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
+    </div>
+  </div>
+</script>
+
+<script>
+  var videoAsksTemplate = _.template($("#videoAsksTemplate").html());
+  var videoAsksShowTemplate = _.template($("#videoAsksShowTemplate").html());
+  var videoThumbnailTemplate = _.template($("#videoThumbnailTemplate").html());
+
+  function set_video_asks() {
+    var video_asks_seg = $("#video_asks_seg");
+    $.ajax({
+      url: "/videos",
+      dataType: "json",
+      type: "GET",
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        var videos = data.videos;
+        video_asks_seg.html(videoAsksTemplate({videos: videos}));
+      }
+    });
+  };
+
+  function show_video_asks() {
+    if (userApp && !window.HybridApp) {
+      alert('최신 버전에서 지원됩니다\n앱을 업데이트해주세요');
+    } else {
+      var url = "/videos";
+      $.ajax({
+        url: url,
+        dataType: "json",
+        type: "GET",
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          var html = videoAsksShowTemplate({videos: data.videos, url: url});
+          create_wrapper(html);
+        },
+        beforeSend: function(){
+          loadingStart();
+        },
+        complete: function(){
+          loadingEnd();
+        }
+      });
+      return url;
+    }
+  };
+
+  function hide_video_asks() {
+    remove_wrapper();
+  };
+</script>

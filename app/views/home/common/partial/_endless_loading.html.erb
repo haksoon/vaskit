@@ -1,0 +1,57 @@
+<script>
+  function endless_loading(target, type) {
+    var loading_icon = target.find(".loading_icon");
+    var loading = Boolean(loading_icon.attr("loading"));
+    if (loading && nearBottomOfContainer(target)) {
+      var url = target.attr("url");
+      var page = Number(loading_icon.attr("page"));
+      $.ajax({
+              url: url,
+              dataType: "json",
+              type: "GET",
+              data: {page: page},
+              error: function(){
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data) {
+                var is_more_load;
+                if (type == "asks") {
+                  var asks = data.asks;
+                  for (var i=0; i < asks.length; i++) {
+                    var ask = asks[i];
+                    loading_icon.before(askThumbnailTemplate({ask:ask}));
+                  };
+                  is_more_load = asks.length == <%= Ask::ASK_PER %> ? true : false;
+                } else if (type == "collections") {
+                  var collections = data.collections;
+                  for (var i=0; i < collections.length; i++) {
+                    var collection = collections[i]
+                    loading_icon.before(collectionTemplate({collection: collection}));
+                  };
+                  is_more_load = collections.length == <%= Collection::COLLECTION_PER %> ? true : false;
+                } else if (type == "videos") {
+                  var videos = data.videos;
+                  for (var i=0; i < videos.length; i++) {
+                    var video = videos[i]
+                    loading_icon.before(videoThumbnailTemplate({video: video}));
+                  };
+                  is_more_load = videos.length == <%= Video::VIDEO_PER %> ? true : false;
+                };
+                if (is_more_load) {
+                  loading_icon.attr("page", Number(page)+1);
+                  loading_icon.attr("loading", true);
+                } else {
+                  loading_icon.html("- End of Contents -").animateCss("flipInY");
+                }
+              },
+              beforeSend: function(){
+                loadingStart();
+                loading_icon.removeAttr("loading");
+              },
+              complete: function(){
+                loadingEnd();
+              }
+      });
+    };
+  };
+</script>

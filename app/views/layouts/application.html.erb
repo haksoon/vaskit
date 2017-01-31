@@ -54,6 +54,15 @@
     </script>
   </head>
   <body data-no-turbolink="true" class="clearfix">
+    <script>
+      (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=false&version=v2.5&appId=<%=Facebook::CONFIG["app_id"]%>";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
     <div class="background" ontouchmove="return false;"></div>
     <div id="app_banner" class="layout viewer appBanner"></div>
     <div id="main_view" class="layout viewer">
@@ -97,18 +106,18 @@
     <div>
       <%= render partial: "home/main/seg1" %>
       <%= render partial: "home/main/seg2" %>
+      <%= render partial: "home/main/seg3" %>
       <%= render partial: "home/main/seg4" %>
-      <%= render partial: "home/partial/seg_asks" %>
-      <%= render partial: "home/partial/seg_ask_image" %>
-      <%= render partial: "home/partial/seg_comments" %>
-      <%= render partial: "home/partial/seg_menu" %>
-      <%= render partial: "home/partial/seg_user_settings" %>
-      <%= render partial: "home/partial/seg_app_banner" %>
-      <%= render partial: "home/full/seg_image_cropping" %>
-      <%= render partial: "home/full/seg_share" %>
-      <%= render partial: "home/full/seg_ask_detail" %>
-      <%= render partial: "home/full/seg_ask_form" %>
-      <%= render partial: "home/full/seg_login" %>
+      <%= render partial: "home/asks/partial/asks_thumbnail" %>
+      <%= render partial: "home/asks/full/ask_detail" %>
+      <%= render partial: "home/asks/partial/ask_image" %>
+      <%= render partial: "home/asks/partial/comments" %>
+      <%= render partial: "home/common/partial/endless_loading" %>
+      <%= render partial: "home/common/full/menu" %>
+      <%= render partial: "home/common/full/share" %>
+      <%= render partial: "home/common/full/image_cropping" %>
+      <%= render partial: "home/common/partial/app_banner" %>
+      <%= render partial: "home/full/landing" %>
       <%= yield %>
     </div>
   </body>

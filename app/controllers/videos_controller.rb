@@ -3,8 +3,13 @@ class VideosController < ApplicationController
 
   # GET /videos.json
   def index
-    videos = Video.all.order("id desc")
-    render :json => {:videos => videos}
+    respond_to do |format|
+      format.html
+      format.json {
+        videos = Video.page(params[:page]).per(Video::VIDEO_PER).order(updated_at: :desc)
+        render json: {videos: videos}
+      }
+    end
   end
 
 end

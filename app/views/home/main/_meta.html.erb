@@ -45,6 +45,12 @@
         <% keywords = @ask.left_ask_deal.title + ", " + @ask.right_ask_deal.title + ", " + HashTag.where(ask_id: @ask.id).pluck(:keyword).join(", ") %>
         <% url = edit_ask_url %>
     <% end %>
+<% elsif (controller.controller_name == "videos") %>
+    <% if (controller.action_name == "index") %>
+        <% title = "VASKIT | VASKIT맨의 비교영상" %>
+        <% description = "VASKIT맨이 직접 두가지 제품을 비교해드립니다!" %>
+        <% url = videos_url %>
+    <% end %>
 <% elsif (controller.controller_name == "search") %>
     <% if (controller.action_name == "index" && controller.request.params[:type] != nil && controller.request.params[:keyword] != nil) %>
         <% case @type %>

@@ -455,7 +455,24 @@ body {
     }
 }
 
-// .collection_thumbnail { padding: 10px; text-align: center;
+.video_thumbnail { padding-bottom: 20px; background-color: #fff;
+  .video_header { display: block; padding: 5px 0; background-color: #333; color: #fff;
+    .video_title { position: relative; height: 30px; line-height: 30px; padding: 0 16px; @include fontBold;
+      .video_ribbon { position: absolute; top: 5px; left: 0; width: 5px; height: 20px; background-color: #ff7200; }
+    }
+    .video_ask_link { height: 20px; line-height: 20px; padding-left: 16px; float: left; font-size: 12px; }
+  }
+  .video_body { position: relative; width: 100%; height: 100%;
+                height: calc((100vw - 6px) * 280 / 500 + 3px); max-height: (($layout-width - 6px) * 280 / 500 + 3px);
+                border: 3px solid #333; border-top: none; box-sizing: border-box; background-color: #fff; overflow: hidden;
+    .video_player { position: relative; display: block; width: 100%; height: 100%;
+                    width: 100vw; max-width: $layout-width;
+                    height: calc((100vw - 6px) * 280 / 500 + 3px); max-height: ($layout-width * 280 / 500); margin: 0 -3px;
+    }
+  }
+}
+
+
 .collection_thumbnail { padding: 16px; text-align: center; margin-bottom: 8px;
     &:last-of-type { margin-bottom: 0; }
     .collection_title { animation: zoomIn 1s 1;

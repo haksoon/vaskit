@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
 
   def signup_submit_notifier
     user_gender = self.gender == true ? "남성" : "여성"
-    user_count = User.all.count
+    user_count = User.where(user_role: "user").count
     noti_title = "새로운 사용자가 회원가입하였습니다"
     noti_title += "\n가입자 " + user_count.to_s + "명 돌파!!!!!" if user_count % 50 == 0
     noti_message = "- 가입방식: " + self.sign_up_type.to_s

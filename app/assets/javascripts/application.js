@@ -62,6 +62,7 @@ if (window.location.pathname.indexOf("admin") == -1) {
     go_seg(1);
   }).load(function(){
     set_collections();
+    set_video_asks();
     user_profile_on();
     user_alarms_on();
     setUserDevice();
@@ -69,6 +70,7 @@ if (window.location.pathname.indexOf("admin") == -1) {
       $(".loading_spinner").animateCssRemove("fadeOut");
       $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
         open_app_banner();
+        if (userApp && !window.HybridApp) { $("#video_asks_seg").remove(); }
         loadingEnd();
       });
     }, 1000);
