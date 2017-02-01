@@ -7,7 +7,6 @@ class Ask < ActiveRecord::Base
   has_many :ask_likes
   has_many :hash_tags
   has_many :comments
-  has_one :rank_ask
   has_one :ask_complete
 
   include SlackNotifier

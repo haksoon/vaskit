@@ -105,7 +105,6 @@ Rails.application.routes.draw do
     end
     resources :analysis, only: [:index]
     resources :notice, only: [:index, :create]
-    resources :rank_asks, only: [:index, :create, :destroy]
     resources :collections, only: [:index, :show, :create, :update] do
       member do
         post 'image_upload'
