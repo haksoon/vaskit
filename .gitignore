@@ -8,6 +8,7 @@
 /.bundle
 
 Gemfile.lock
+/config/config.yml
 /config/database.yml
 
 # Ignore the default SQLite database.
@@ -24,3 +25,4 @@ Gemfile.lock
 /public/paperclip/*
 /public/assets/*
 .byebug_history
+.DS_Store

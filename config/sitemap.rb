@@ -38,6 +38,8 @@ SitemapGenerator::Sitemap.create do
   end
   add new_ask_path
 
+  add videos_path
+
   add users_path
   add users_history_path
   add users_settings_path
