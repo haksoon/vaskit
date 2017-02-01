@@ -194,8 +194,11 @@ class AsksController < ApplicationController
       params[:ask][:right_ask_deal_id] = right_ask_deal.id
       params[:ask][:message].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
       ask = Ask.create(ask_params)
-      status = "success"
-      render json: {status: status, ask: ask}
+
+      ask.generate_hash_tags
+      ask.ask_notifier("new")
+
+      render json: {status: "success", ask: ask}
     end
 
   end
@@ -298,8 +301,11 @@ class AsksController < ApplicationController
       # ask
       params[:ask][:message].gsub!(/\S#\S/){|message| message.gsub("#", " #")} #해시태그 띄어쓰기 해줌
       @ask.update(ask_params)
-      status = "success"
-      render json: {status: status, ask: @ask}
+
+      @ask.generate_hash_tags
+      @ask.ask_notifier("edit")
+
+      render json: {status: "success", ask: @ask}
     end
   end
 
@@ -307,19 +313,20 @@ class AsksController < ApplicationController
   # DELETE /asks/:id.json
   def destroy
     @ask.update(be_completed: true)
+    @ask.ask_notifier("complete")
     AskComplete.create(user_id: current_user.id, ask_id: @ask.id)
     render json: {}
   end
 
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ask
-      @ask = Ask.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_ask
+    @ask = Ask.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def ask_params
-      params.require(:ask).permit(:user_id, :left_ask_deal_id, :right_ask_deal_id, :message, :be_completed, :admin_choice, :spec1, :spec2, :spec3)
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def ask_params
+    params.require(:ask).permit(:user_id, :left_ask_deal_id, :right_ask_deal_id, :message, :be_completed, :admin_choice, :spec1, :spec2, :spec3)
+  end
 end
