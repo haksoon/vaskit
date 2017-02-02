@@ -70,7 +70,6 @@ if (window.location.pathname.indexOf("admin") == -1) {
       $(".loading_spinner").animateCssRemove("fadeOut");
       $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
         open_app_banner();
-        if (userApp && !window.HybridApp) { $("#video_asks_seg").remove(); }
         loadingEnd();
       });
     }, 1000);
@@ -149,7 +148,15 @@ function setUserDevice() {
     userDevice.isPC              = true;
   }
 
-  if (ua.match(/NAVER/i)) {
+  if (ua.match(/VASKIT_IOS_APP/i)) {
+    userApp                      = true;
+    userDevice.isMobile          = true;
+    userBrowser.isSafari         = true;
+  } else if (ua.match(/VASKIT_AOS_APP/i)) {
+    userApp                      = true;
+    userDevice.isMobile          = true;
+    userBrowser.isChrome         = true;
+  } else if (ua.match(/NAVER/i)) {
     userBrowser.isNaver          = true;
   } else if (ua.match(/Daum/)) {
     userBrowser.isDaum           = true;
@@ -190,6 +197,7 @@ function getUserToken() {
   }, 2000);
 };
 
+var userAppVer = false;                                                       // 임시 코드
 function setUserToken(gcm_key, device_id, app_ver) {
   // App에서 호출
   $.ajax({
@@ -198,6 +206,7 @@ function setUserToken(gcm_key, device_id, app_ver) {
     type: "POST",
     data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver}
   });
+  if (device_id.match(/ios/) && app_ver == "2.1.3") userAppVer = true;        // 임시 코드
 };
 
 function setAppStatusBar(type) {

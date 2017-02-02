@@ -59,21 +59,23 @@ class Ask < ActiveRecord::Base
 
   def ask_notifier(type)
     if self.user.user_role == "user"
-      ask_user_gender = self.user.gender == true ? "남성" : "여성"
-      ask_user_age = Time.now.year - self.user.birthday.year + 1
-      ask_url = CONFIG["host"] + "/asks/" + self.id.to_s
+      noti_title = "[" + self.id.to_s + "번](" + CONFIG["host"] + "/asks/" + self.id.to_s + ")"
+      noti_message = "- 작성자 : " + self.user.string_id.to_s + " (" + (self.user.gender == true ? '남성' : '여성').to_s + ", " + (Time.now.year - self.user.birthday.year + 1).to_s + "세)"
       if type == "new"
-        noti_title = "새로운 질문이 작성되었습니다"
+        noti_title += " / 새로운 질문이 작성되었습니다"
         noti_color = "#FF7200"
       elsif type == "edit"
-        noti_title = "사용자가 질문을 수정하였습니다"
+        noti_title += " / 사용자가 질문을 수정하였습니다"
         noti_color = "#666666"
       elsif type == "complete"
-        noti_title = "사용자가 질문을 종료하였습니다"
+        noti_title += " / 사용자가 질문을 종료하였습니다"
+        noti_message += "\n- 투표 " + (self.left_ask_deal.vote_count + self.right_ask_deal.vote_count).to_s + "표"
+        noti_message += " / 댓글 " + (self.left_ask_deal.comment_count + self.right_ask_deal.comment_count).to_s + "개"
+        noti_message += " / 공감 " + self.like_count.to_s + "회"
         noti_color = "#333333"
       end
-      noti_title += "\n" + ask_url.to_s
-      noti_message = "- 작성자 : " + self.user.string_id.to_s + "(" + ask_user_gender.to_s + ", " + ask_user_age.to_s + "세)" + "\n- 내용\n" + self.message.to_s
+      noti_message += "\n- 내용\n" + self.message.to_s
+
       slack_notifier(noti_title, noti_message, noti_color)
     end
   end

@@ -46,15 +46,21 @@ class User < ActiveRecord::Base
   end
 
   def signup_submit_notifier
-    user_gender = self.gender == true ? "남성" : "여성"
     user_count = User.where(user_role: "user").count
-    noti_title = "새로운 사용자가 회원가입하였습니다"
-    noti_title += "\n가입자 " + user_count.to_s + "명 돌파!!!!!" if user_count % 50 == 0
-    noti_message = "- 가입방식: " + self.sign_up_type.to_s
-    noti_message += "\n- 이메일: " + self.email.to_s
-    noti_message += "\n- 성별: " + user_gender.to_s
-    noti_message += "\n- 생년월일: " + self.birthday.to_s
+
+    noti_title = ""
+    noti_title += ":metal: 가입자 " + user_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,') + "명 돌파!!!!!\n" if user_count % 50 == 0
+    noti_title += "새로운 사용자가 회원가입하였습니다"
+
+    noti_message = (self.gender == true ? ':mens: 남성' : ':womens: 여성').to_s + " / " + (Time.now.year - self.birthday.year + 1).to_s + "세 / " + self.email.to_s
+    if self.sign_up_type == "facebook"
+      noti_message += "\n[" + self.name + "님의 페이스북 프로필 보기](https://www.facebook.com/" + self.facebook_id.to_s + ")"
+    elsif self.sign_up_type == "email"
+      noti_message += "\n이메일 가입 유저입니다"
+    end
+
     noti_color = "#FFCC5A"
+
     slack_notifier(noti_title, noti_message, noti_color)
   end
   handle_asynchronously :signup_submit_notifier

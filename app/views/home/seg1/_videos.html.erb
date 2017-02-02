@@ -61,7 +61,7 @@
   };
 
   function show_video_asks() {
-    if (userApp && !window.HybridApp) {
+    if (userApp && !window.HybridApp && !userAppVer) {
       alert('최신 버전에서 지원됩니다\n앱을 업데이트해주세요');
     } else {
       var url = "/videos";

@@ -37,7 +37,11 @@ class ApplicationController < ActionController::Base
         device = "unknown"
     end
 
-    if ua.match(/NAVER/i)
+    if ua.match(/VASKIT_IOS_APP/i)
+        browser = "VASKIT_IOS_APP"
+    elsif ua.match(/VASKIT_AOS_APP/i)
+        browser = "VASKIT_AOS_APP"
+    elsif ua.match(/NAVER/i)
         browser = "NaverAPP"
     elsif ua.match(/Daum/i)
         browser = "DaumAPP"
