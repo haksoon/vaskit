@@ -198,6 +198,7 @@ function getUserToken() {
 };
 
 var userAppVer = false;                                                       // 임시 코드
+var userAppVerLoading = true;
 function setUserToken(gcm_key, device_id, app_ver) {
   // App에서 호출
   $.ajax({
@@ -206,7 +207,10 @@ function setUserToken(gcm_key, device_id, app_ver) {
     type: "POST",
     data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver}
   });
-  if (device_id.match(/ios/) && app_ver == "2.1.3") userAppVer = true;        // 임시 코드
+  if (device_id.match(/ios/) && app_ver == "2.1.3") {
+    userAppVer = true;
+    userAppVerLoading = false;
+  }        // 임시 코드
 };
 
 function setAppStatusBar(type) {
