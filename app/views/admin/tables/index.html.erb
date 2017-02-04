@@ -1,5 +1,5 @@
 <div style="padding:10px;">
-	<select id="table_setting" style="width:100%; height:40px; line-height:40px; background-color:#fff; padding:0 5px; margin-top:10px;">
+	<select id="table_setting" style="width:100%; height:40px; line-height:40px; background-color:#fff; padding:0 5px; margin-top:10px; border: 1px solid #999;">
 		<option value="" disabled="true" selected="selected">조회할 DB를 선택하세요</option>
     <% @tables.each do |table| %>
       <option value="<%=table%>"><%=table%></option>
@@ -38,7 +38,7 @@
 		</div>
 		<div style="margin-top:10px; text-align:center;">
 			<a href="#" onclick="navigate_page(false); return false;" class="navigate_btn" style="float: left;"><i class="fa fa-angle-double-left"></i> 이전</a>
-			<select id="table_page" style="width:45%; height:40px; line-height:40px; background-color:#fff; padding:0 10px; direction:rtl; border-radius:0;">
+			<select id="table_page" style="width:45%; height:40px; line-height:40px; background-color:#fff; padding:0 10px; direction:rtl; border: 1px solid #999; border-radius:0;">
 				<% 1.step @record_count do |r| %>
 					<option value="<%=r%>"><%=r%></option>
 				<% end %>

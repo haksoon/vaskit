@@ -584,8 +584,16 @@ body {
     }
 
     .ask_user { position: relative; width: 100%; line-height: 20px; box-sizing: border-box; @include fontNumber; color: #999; font-size: 13px; background-color: #fff;
-        .user_profile { position: absolute; border-radius: 50%; z-index: 5; }
-        .ask_count_span { height: 100%; float: right; margin-left: 8px; color: #999;
+        .ask_user_pic { position: absolute; border-radius: 50%; z-index: 5; }
+        .ask_user_profile { font-size: 10px;
+          &.label { color: #FF7200; }
+          &.male { color: #0389ed; }
+          &.female { color: #ea065e; }
+        }
+        .ask_user_id {
+          &.vaskit { color: #FF7200; }
+        }
+        .ask_count_span { height: 100%; float: right; margin-left: 8px;
             .vaskit_icon { width: 14px; height: 14px; margin: 3px 0; vertical-align: top;
                 &.comment_icon { background-position: -30px -85px; }
                 &.ask_like_icon { background-position: -0px -85px; }
@@ -597,7 +605,7 @@ body {
 
     &.ask_thumbnail {
         .ask_user { height: 30px; padding: 10px 15px 0 40px;
-            .user_profile { top: 10px; left: 10px; width: 20px; height: 20px; }
+            .ask_user_pic { top: 10px; left: 10px; width: 20px; height: 20px; }
         }
         .ask_message { padding: 0 30px 0 10px; height: 30px; line-height: 30px; }
         .ask_message_more { position: absolute; bottom: 0; right: 0; display: block; width: 40px; height: 30px; line-height: 30px; text-align:center; font-size: 12px; color: #999; background-color: #fff; }
@@ -605,7 +613,7 @@ body {
 
     &.ask_detail {
         .ask_user { height: 40px; padding: 15px 20px 5px 60px;
-            .user_profile { top: 16px; left: 16px; width: 30px; height: 30px; }
+            .ask_user_pic { top: 16px; left: 16px; width: 30px; height: 30px; }
         }
         .ask_message { padding: 0 20px 0 60px; line-height: 1.6; }
         .ask_message_menu { display: block; height: 35px; line-height: 20px; text-align: right; padding: 5px 20px 10px 60px; box-sizing: border-box; font-size: 12px; color: #999; background-color: #fff;
@@ -723,11 +731,14 @@ body {
     .comment_box { margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s;
       .comment_reply_icon { position: absolute; top: 10px; color: #dbdbdb; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
-      .comment_user_id { position: relative; height: 14px; margin: 4px 5px 2px; font-size: 11px; @include fontNumber;
+      .comment_user { position: relative; height: 14px; margin: 4px 5px 2px; font-size: 11px; color: #999; @include fontNumber;
         .comment_user_profile { font-size: 10px;
           &.label { color: #FF7200; }
           &.male { color: #0389ed; }
           &.female { color: #ea065e; }
+        }
+        .comment_user_id {
+          &.vaskit { color: #FF7200; }
         }
         .comment_menu_btn { font-size: 10px; color: #ccc;
           .comment_like_count { color: #666; }
@@ -745,9 +756,9 @@ body {
         &.reply { margin-left: 35px; margin-right: 45px; }
         .comment_reply_icon { left: -10px; transform: rotate(180deg); }
         .comment_user_pic { float: left; }
-        .comment_user_id { margin-left: 45px;
+        .comment_user { margin-left: 45px;
           .comment_user_profile { float: left; margin-right: 5px; margin-top: 1px; }
-          .comment_user_string_id { float: left; }
+          .comment_user_id { float: left; }
           .comment_menu_btn { float: right; margin-top: 1px;
             .comment_like_count { float: left; }
             .comment_like_icon { margin-left: 3px; }
@@ -762,9 +773,9 @@ body {
         &.reply { margin-left: 45px; margin-right: 35px; }
         .comment_reply_icon { right: -10px; transform: scale(1, -1); }
         .comment_user_pic { float: right; }
-        .comment_user_id { margin-right: 45px;
+        .comment_user { margin-right: 45px;
           .comment_user_profile { float: right; margin-left: 5px; margin-top: 1px; }
-          .comment_user_string_id { float: right; }
+          .comment_user_id { float: right; }
           .comment_menu_btn { float: left; margin-top: 1px;
             .comment_like_count { float: right; }
             .comment_like_icon { margin-right: 3px; }
@@ -778,7 +789,7 @@ body {
 
       &.is_writing { height: 30px; margin-top: 5px;
         .comment_writing_sign { height: 30px; line-height: 30px; clear: both;
-          .comment_writing_profile { width: 36px; height: 36px; margin-top: -3px; box-sizing: border-box; border: 3px solid #FF7200; border-radius: 50%; background-repeat: no-repeat; background-position: center center; background-size: 100%; }
+          .comment_writing_pic { width: 36px; height: 36px; margin-top: -3px; box-sizing: border-box; border: 3px solid #FF7200; border-radius: 50%; background-repeat: no-repeat; background-position: center center; background-size: 100%; }
           .comment_writing_arrow {display: inline-block; content: ''; margin: 10px 5px; border-width: 5px; border-style: solid; border-color: transparent; border-top-color: #FF7200; }
           .comment_writing_user_id { height: 26px; line-height: 26px; margin: 2px 0; padding: 0 10px; border-radius: 6px; @include fontNumber; font-size: 12px; color: #fff; background-color: #FF7200; }
           .comment_writing_label { height: 26px; margin: 2px 5px; font-size: 10px; color: #FF7200; animation: flash 5s infinite; }
@@ -787,13 +798,13 @@ body {
         &.left {
           span, i { float: left; }
           span:last-of-type { float: right; }
-          .comment_writing_profile { margin-left: -3px; }
+          .comment_writing_pic { margin-left: -3px; }
           .comment_writing_arrow {margin-right: -3px; border-right-color: #FF7200; }
         }
         &.right {
           span, i { float: right; }
           span:last-of-type { float: left; }
-          .comment_writing_profile { margin-right: -3px; }
+          .comment_writing_pic { margin-right: -3px; }
           .comment_writing_arrow {margin-left: -3px; border-left-color: #FF7200; }
         }
       }
@@ -1052,8 +1063,8 @@ body {
       position: relative; width: calc(100% - 50px); height: 160px; margin: 30px 15px 10px 50px; padding: 10px; box-sizing: border-box;
       border-radius: 7px; background-color: #fff; border-bottom: 1px solid #ccc; transition: border .5s;
       &.on { border-bottom: 1px solid #ff7200; }
-      .user_profile { position: absolute; top: -14px; left: -44px; width: 30px; height: 30px; border-radius: 50%; }
-      .user_id { position: absolute; top: -20px; left: 0px; color: #999; @include fontNumber; font-size: 13px; }
+      .ask_user_pic { position: absolute; top: -14px; left: -44px; width: 30px; height: 30px; border-radius: 50%; }
+      .ask_user_id { position: absolute; top: -20px; left: 0px; color: #999; @include fontNumber; font-size: 13px; }
       .ask_message_arrow { position: absolute; display: inline-block; content: ''; top: 7px; left: -7px; border-width: 5px; border-style: solid; border-color: transparent; transition: border-color .25s;
                             border-right-color: #fff; border-top-color: #fff; }
       .ask_message_input, .hashtag_backdrop { position: absolute;
@@ -1133,7 +1144,7 @@ body {
 
 .alarm_list { height: calc(100% - 40px); overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;
   .alarm_item { display: block; min-height: 52px; padding: 15px 140px 25px 50px; font-size: 13px; color: #666; background-color: #fff; border-bottom: 1px solid #dbdbdb; text-align: left; transition: background 1s;
-      .alarm_user_profile { position: absolute; top: 15px; left: 10px; width: 30px; height: 30px; border-radius: 50%; }
+      .alarm_user_pic { position: absolute; top: 15px; left: 10px; width: 30px; height: 30px; border-radius: 50%; }
       .alarm_highlight { color: #998674; }
       .alarm_imgs { position: absolute; top: 15px; right: 10px; width: 120px; height: 60px; overflow: hidden; background-color: #fff; border: 1px solid #eee; transition: border .5s;
           .alarm_img_thumbnail { width: 50%; float: left; }

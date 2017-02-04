@@ -1,10 +1,10 @@
 class Alarm < ActiveRecord::Base
   belongs_to :ask
   belongs_to :comment
-  belongs_to :user, :class_name => 'User', :foreign_key => 'user_id'
-  belongs_to :send_user, :class_name => 'User', :foreign_key => 'send_user_id'
-  belongs_to :ask_owner_user, :class_name => 'User', :foreign_key => 'ask_owner_user_id'
-  belongs_to :comment_owner_user, :class_name => 'User', :foreign_key => 'comment_owner_user_id'
+  belongs_to :user, class_name: 'User', foreign_key: 'user_id'
+  belongs_to :send_user, class_name: 'User', foreign_key: 'send_user_id'
+  belongs_to :ask_owner_user, class_name: 'User', foreign_key: 'ask_owner_user_id'
+  belongs_to :comment_owner_user, class_name: 'User', foreign_key: 'comment_owner_user_id'
 
   include PushSend
   after_create :alarm_push_send

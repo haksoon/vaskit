@@ -61,6 +61,7 @@ if (window.location.pathname.indexOf("admin") == -1) {
     // 기본화면 초기화
     go_seg(1);
   }).load(function(){
+    set_recent_asks();
     set_collections();
     set_video_asks();
     user_profile_on();
@@ -502,12 +503,6 @@ function show_seg(seg_id) {
       // 보조 컨테이너가 열려있는 경우 메인으로 돌아감
       $(".seg"+seg_id+" .wrapper.main").removeClass("prev");
       $(".seg"+seg_id+" .wrapper.sub").removeClass("prev").addClass("next").transitionRemove();
-      if (seg_id === 1) {
-        set_recent_asks();
-      } else if (seg_id === 4) {
-        user_profile_on();
-        user_alarms_on();
-      }
     } else {
       // 메인 컨테이너가 열려있는 경우 상단으로 돌아감
       $(".seg"+seg_id+" .wrapper.main .container.main").animate({scrollTop:0}, 250);
@@ -577,6 +572,15 @@ function remove_wrapper() {
   }
   last_wrapper.removeClass("prev");
   now_wrapper.addClass("next").transitionRemove();
+
+  if (last_wrapper.hasClass("main")) {
+    if (currentSeg === 1) {
+      set_recent_asks();
+    } else if (currentSeg === 4) {
+      user_profile_on();
+      user_alarms_on();
+    }
+  }
 };
 
 $.fn.scroll_to = function(destination) {
@@ -726,6 +730,15 @@ function alarm_check(last_alarm_count) {
     }
   });
 };
+
+// Tutorial
+var is_tutorial_vs = true;
+var is_tutorial_vs_detail = true;
+var is_tutorial_ask = true;
+
+function tutorial_vs() { if (is_tutorial_vs) { notify('VS버튼을 터치해서 투표에 참여하세요!'); is_tutorial_vs = false; } }
+function tutorial_vs_detail() { if (is_tutorial_vs_detail) { notify('상세보기 버튼을 눌러 상세한 투표결과를 볼 수 있어요!'); is_tutorial_vs_detail = false; } }
+function tutorial_ask() { if (is_tutorial_ask) { notify('검색창에서 제품을 검색해서 입력해보세요!'); is_tutorial_ask = false; } }
 
 
 // Image Load

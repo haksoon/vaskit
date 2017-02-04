@@ -7,17 +7,19 @@
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}
     <img class="comment_user_pic" src="{{= get_avatar(comment.user) }}">
-    <div class="comment_user_id">
+    <div class="comment_user">
       {{ if (comment.user.id == 1) { }}
-        <span class="comment_user_profile label vaskit">VASKIT</span>
+        <span class="comment_user_id label vaskit">VASKIT</span>
       {{ } else if (current_user && comment.user.id == current_user.id) { }}
         <span class="comment_user_profile label me">ME</span>
+        <span class="comment_user_id">{{=comment.user.string_id}}</span>
       {{ } else if (comment.user.id == ask.user_id) { }}
         <span class="comment_user_profile label asker">ASKER</span>
+        <span class="comment_user_id">{{=comment.user.string_id}}</span>
       {{ } else { }}
         <span class="comment_user_profile {{= gender }}">{{=get_user_ages(comment.user.birthday)}}</span>
+        <span class="comment_user_id">{{=comment.user.string_id}}</span>
       {{ } }}
-      <span class="comment_user_string_id">{{=comment.user.string_id}}</span>
       <div class="comment_menu_btn">
         <span class="comment_like_count">{{= comment.like_count == 0 ? "" :numberWithCommas(comment.like_count) }}</span>
         <i class="fa {{= already_like ? 'fa-heart' : 'fa-heart-o'}} comment_like_icon"></i>
@@ -39,7 +41,7 @@
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}
     <div class="comment_writing_sign">
-      <span class="comment_writing_profile" style="background-image: url('{{= get_avatar(current_user) }}');"></span>
+      <span class="comment_writing_pic" style="background-image: url('{{= get_avatar(current_user) }}');"></span>
       <span class="comment_writing_arrow"></span>
       <span class="comment_writing_user_id">{{= current_user ? current_user.string_id : '' }}</span>
       <span class="comment_writing_label">{{= label }}</span>
@@ -384,7 +386,7 @@
         var comment_id = target.attr("comment-id");
         var original_comment_id = target.attr("original-comment-id");
         var comment_user_id = target.attr("comment-user-id");
-        var comment_user_string_id = target.find(".comment_user_string_id").text();
+        var comment_user_string_id = target.find(".comment_user_id").text();
         var comment_content = target.find(".comment_content").text();
         var already_like = target.find(".comment_like_icon").hasClass("fa-heart");
         if (comment_user_id == current_user.id) {

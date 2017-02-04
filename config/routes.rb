@@ -100,6 +100,7 @@ Rails.application.routes.draw do
   # Admin Page
   namespace :admin do
     get '/', to: "home#index"
+    resources :asks, only: [:index, :create]
     resources :tables, only: [:index] do
       get ':table_name', to: "tables#index", on: :collection
     end

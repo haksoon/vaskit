@@ -140,15 +140,24 @@
       </div>
       <div class="vs_result_detail">
       </div>
+      {{ tutorial_vs_detail() }}
       <div class="vs_result_detail_btn" onclick="toggle_vote_detail($(this));">
         <span>상세보기 <i class="fa fa-angle-down"></i></span>
         <span>불러오는중... <i class="fa fa-spinner fa-spin"></i></span>
         <span>상세닫기 <i class="fa fa-angle-up"></i></span>
       </div>
       <div class="ask_user">
+        <img class="ask_user_pic" src="{{= get_avatar(ask.user) }}">
         {{ var gender = ask.user.gender ? 'male' : 'female' }}
-        <img class="user_profile" src="{{= get_avatar(ask.user) }}">
-        <span class="user_id">{{=ask.user.string_id}}</span>
+        {{ if (ask.user.id == 1) { }}
+          <span class="ask_user_id vaskit">VASKIT</span>
+        {{ } else if (current_user && ask.user.id == current_user.id) { }}
+          <span class="ask_user_id">{{=ask.user.string_id}}</span>
+          <span class="ask_user_profile label me">ME</span>
+        {{ } else { }}
+          <span class="ask_user_id">{{=ask.user.string_id}}</span>
+          <span class="ask_user_profile {{= gender }}">{{=get_user_ages(ask.user.birthday)}}</span>
+        {{ } }}
         <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
         <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
       </div>

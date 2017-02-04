@@ -201,7 +201,7 @@
   			}
   		} else {
         var search_focus_index = Number(search_preview_container.attr("index"));
-  			if (search_focus_index == 0) {
+  			if (search_focus_index == -1) {
   				search_preview_container.attr("index", search_result_length - 1);
   				search_preview_container.scrollTop(search_result_height * search_result_length);
   			} else {

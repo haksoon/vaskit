@@ -4,6 +4,7 @@
       {{ if (asks == null || asks.length == 0) { }}
         <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
       {{ } else { }}
+        {{ tutorial_vs() }}
         {{ var l = asks.length }}
         {{ for (var i=0; i < l; i++) { }}
           {{ var ask = asks[i] }}
@@ -62,8 +63,17 @@
         {{ var already_like = $.grep(ask.ask_likes, function(obj) { return (obj.user_id == current_user.id) }).length > 0 ? true : false }}
       {{ } }}
       <div class="ask_user">
-        <img class="user_profile" src="{{= get_avatar(ask.user) }}">
-        <span class="user_id">{{= ask.user.string_id }}</span>
+        <img class="ask_user_pic" src="{{= get_avatar(ask.user) }}">
+        {{ var gender = ask.user.gender ? 'male' : 'female' }}
+        {{ if (ask.user.id == 1) { }}
+          <span class="ask_user_id vaskit">VASKIT</span>
+        {{ } else if (current_user && ask.user.id == current_user.id) { }}
+          <span class="ask_user_id">{{=ask.user.string_id}}</span>
+          <span class="ask_user_profile label me">ME</span>
+        {{ } else { }}
+          <span class="ask_user_id">{{=ask.user.string_id}}</span>
+          <span class="ask_user_profile {{= gender }}">{{=get_user_ages(ask.user.birthday)}}</span>
+        {{ } }}
         <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
         <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
       </div>

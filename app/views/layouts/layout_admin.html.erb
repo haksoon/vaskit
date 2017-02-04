@@ -70,11 +70,11 @@
   	<div class="loading" style="display:none;"><div>Loading...</div></div>
     <div style="padding:10px; background-color:#ffe4a9; border-bottom:5px solid #ffcc5a;">
       <a href="/admin" onclick='$(".loading").show();'><h1 style="color:#666; margin:10px 5px;">VASKIT admin page</h1></a>
+      <a href="/admin/asks?page=1" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 댓글 달기</a>
+      <a href="/admin/collections" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 컬렉션 관리</a>
+      <a href="/admin/videos" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 비디오 관리</a>
       <a href="/admin/tables" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> DB조회</a>
       <a href="/admin/analysis" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 통계분석</a>
-      <a href="/admin/notice" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 공지사항</a>
-      <a href="/admin/collections" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 컬렉션관리</a>
-      <a href="/admin/videos" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 비디오 컨텐츠</a>
       <a data-method="delete" rel="nofollow" href="/users/sign_out" class="menu_btn" style="color:#ee6e01; font-size:12px; float:right;"><i class="fa fa-sign-out"></i> 로그아웃</a>
     </div>
   	<%= yield %>

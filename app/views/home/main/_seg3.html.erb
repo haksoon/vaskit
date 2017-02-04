@@ -1,4 +1,5 @@
 <script type="text/template" id="askFormTemplate">
+  {{ tutorial_ask() }}
   <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check($(this));", onchange: "ask_progress_check($(this));"}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
       <span class="header_title">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
@@ -779,8 +780,8 @@
   </div>
   <div class="input_container" onclick="ask_form_message_input_init($(this));">
 		<div class="hashtag_container">
-      <img class="user_profile" src="{{= get_avatar(current_user) }}" alt="">
-      <span class="user_id">{{= current_user.string_id }}</span>
+      <img class="ask_user_pic" src="{{= get_avatar(current_user) }}" alt="">
+      <span class="ask_user_id">{{= current_user.string_id }}</span>
       <div class="ask_message_arrow"></div>
       <textarea class="input text_field ask_message_input form_data" type="text"
                   name="ask[message]"
