@@ -35,8 +35,8 @@
       </div>
       <ul class="recent_search_list">
         {{ recent_search_list = recent_search_list.split(".") }}
-        {{ for (var i=0; i < recent_search_list.length; i++) { }}
-          {{ var search = JSON.parse(recent_search_list[i]) }}
+        {{ for (var i=recent_search_list.length; i > 0; i--) { }}
+          {{ var search = JSON.parse(recent_search_list[i-1]) }}
           {{ var keyword = search.keyword }}
           {{ var type = search.type }}
           {{= searchPreviewTemplate({keyword: keyword, type: type, id: null}) }}

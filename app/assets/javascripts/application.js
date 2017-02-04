@@ -485,6 +485,7 @@ function show_seg(seg_id) {
     $(".seg.seg1").css("transform","translateX(0%)");
     $(".seg.seg2").css("transform","translateX(100%)");
     $(".seg.seg4").css("transform","translateX(200%)");
+    set_recent_asks();
   } else if (seg_id === 2) {
     var url = '/search';
     $(".seg.seg1").css("transform","translateX(-100%)");
@@ -495,6 +496,7 @@ function show_seg(seg_id) {
     $(".seg.seg1").css("transform","translateX(-200%)");
     $(".seg.seg2").css("transform","translateX(-100%)");
     $(".seg.seg4").css("transform","translateX(0%)");
+    user_profile_on();
   }
 
   if ($(".seg.on").hasClass("seg"+seg_id)) {
@@ -518,12 +520,6 @@ function show_seg(seg_id) {
     // 사용자가 이동하기 원하는 탭을 활성화함
     $(".seg"+seg_id).removeClass("prev next").addClass("on");
     $(".tab_icon.seg"+seg_id).addClass("on");
-
-    if (seg_id === 1) {
-      set_recent_asks();
-    } else if (seg_id === 4) {
-      user_profile_on();
-    }
 
     return url;
   };

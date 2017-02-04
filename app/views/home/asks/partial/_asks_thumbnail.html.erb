@@ -1,10 +1,10 @@
 <script type="text/template" id="asksListTemplate">
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'asks');" url="{{=url}}">
-    <div class="clearfix">
-      {{ if (asks == null || asks.length == 0) { }}
-        <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
-      {{ } else { }}
-        {{ tutorial_vs() }}
+    {{ if (asks == null || asks.length == 0) { }}
+      <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
+    {{ } else { }}
+      {{ tutorial_vs() }}
+      <div class="clearfix">
         {{ var l = asks.length }}
         {{ for (var i=0; i < l; i++) { }}
           {{ var ask = asks[i] }}
@@ -15,8 +15,8 @@
         {{ } else { }}
           <div class="loading_icon" page="2">- End of Contents -</i></div>
         {{ } }}
-      {{ } }}
-    </div>
+      </div>
+    {{ } }}
   </div>
 </script>
 
