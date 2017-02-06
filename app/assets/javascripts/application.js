@@ -48,6 +48,7 @@ _.templateSettings = {
 if (window.location.pathname.indexOf("admin") == -1) {
   $(window).ready(function(){
     loadingStart();
+    setUserDevice();
     alarm_check();
     history.replaceState({pageHistory:currentHistory}, null, null);
     $(window).unbind("popstate").bind("popstate", go_popstate);
@@ -66,11 +67,10 @@ if (window.location.pathname.indexOf("admin") == -1) {
     set_video_asks();
     user_profile_on();
     user_alarms_on();
-    setUserDevice();
     setTimeout(function(){
+      open_app_banner();
       $(".loading_spinner").animateCssRemove("fadeOut");
       $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
-        open_app_banner();
         loadingEnd();
       });
     }, 1000);
@@ -151,10 +151,12 @@ function setUserDevice() {
 
   if (ua.match(/VASKIT_IOS_APP/i)) {
     userApp                      = true;
+    userDevice.isIOS             = true;
     userDevice.isMobile          = true;
     userBrowser.isSafari         = true;
   } else if (ua.match(/VASKIT_AOS_APP/i)) {
     userApp                      = true;
+    userDevice.isAndroid         = true;
     userDevice.isMobile          = true;
     userBrowser.isChrome         = true;
   } else if (ua.match(/NAVER/i)) {

@@ -77,6 +77,8 @@
       <a href="/admin/analysis" onclick='$(".loading").show();' class="menu_btn"><i class="fa fa-caret-right"></i> 통계분석</a>
       <a data-method="delete" rel="nofollow" href="/users/sign_out" class="menu_btn" style="color:#ee6e01; font-size:12px; float:right;"><i class="fa fa-sign-out"></i> 로그아웃</a>
     </div>
-  	<%= yield %>
+    <div style="max-width: 800px; margin: 0 auto;">
+      <%= yield %>
+    </div>
   </body>
 </html>

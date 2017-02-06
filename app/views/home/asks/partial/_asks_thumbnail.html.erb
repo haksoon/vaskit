@@ -236,8 +236,6 @@
       mouseStartX = mouseEndX = e.originalEvent.touches[0].clientX;
       mouseStartY = mouseEndY = e.originalEvent.touches[0].clientY;
 
-      console.log('touchstart');
-
       // unbind mouse events to prevent repeated binding
       mouseTarget.unbind("mousedown", mouseDownListener);
 

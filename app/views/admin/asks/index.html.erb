@@ -4,17 +4,20 @@
 		<table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center;">
 		  <thead>
 		    <tr style="height:40px; background-color:#998674; color:#fff;">
-          <th>선택</th>
-          <th>내용</th>
-          <th>미리보기</th>
+          <th>작성자</th>
+          <th>이미지</th>
+          <th>댓글갯수</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		    <% @asks.each do |ask| %>
-					<tr onclick="$(this).find('input').click();">
-            <td><input type="checkbox" style="-webkit-appearance: checkbox;" value="<%= ask.id %>" onchange="$('input[type=checkbox]').prop('checked', false); $(this).prop('checked', true); $('#comment_ask_id').val($(this).val());"></td>
-						<td><%= ask.message %></td>
-            <td><%= link_to ask.id, ask_url(ask.id), target: "_blank"  %></td>
+					<tr onclick="window.location.assign('<%= admin_ask_path(ask.id) %>');" style="cursor: pointer;">
+            <td><%= ask.user.string_id.to_s + "\n(" + ask.user.user_role.to_s + ")" %></td>
+            <td>
+              <img src="<%= ask.left_ask_deal.image(:normal) %>" alt="" style="display:inline-block; width:50%; float:left;" onerror="imgError(this);">
+              <img src="<%= ask.right_ask_deal.image(:normal) %>" alt="" style="display:inline-block; width:50%; float:left;" onerror="imgError(this);">
+            </td>
+            <td><%= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count %>개</td>
 	       	</tr>
 		    <% end %>
 		  </tbody>
@@ -30,23 +33,6 @@
 		<a href="#" onclick="navigate_page(true); return false;" class="navigate_btn" style="float: right;">다음 <i class="fa fa-angle-double-right"></i></a>
 	</div>
 </div>
-<div style="padding:10px;">
-  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 댓글 작성할 ID 선택</h2>
-  <select id="admin_users" style="width:100%; height:40px; line-height:40px; background-color:#fff; padding:0 10px; border: 1px solid #999; border-radius:0;">
-    <option value="">선택해주세요</option>
-    <% @admin_users.each do |c| %>
-      <option value="<%=c.id%>"><%=c.string_id.to_s + " / " + (c.gender ==  true ? '남성' : '여성').to_s + " / " + (Time.now.year - c.birthday.year + 1).to_s + "세"%></option>
-    <% end %>
-  </select>
-</div>
-<div style="padding:10px;">
-  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 댓글 전송</h2>
-  <input id="comment_ask_id" type="hidden">
-  <textarea id="comment_message" class="comment_input" type="text" placeholder="댓글 내용 입력"></textarea>
-  <a href="#" onclick="send_admin_comment(true); return false;" style="display:block; width: 49%; float: left; background-color:#4b3d3d; color:#fff; font-size:14px; margin:10px 0; height:50px; line-height:50px; text-align:center;">왼쪽에 입력</a>
-  <a href="#" onclick="send_admin_comment(false); return false;" style="display:block; width: 49%; float: right; background-color:#4b3d3d; color:#fff; font-size:14px; margin:10px 0; height:50px; line-height:50px; text-align:center;">오른쪽에 입력</a>
-</div>
-
 
 <style>
 	.navigate_btn {
@@ -59,20 +45,8 @@
 		color: #fff;
 		font-size: 13px;
 	}
-  .comment_input {
-    display:block;
-    width:100%;
-    height:120px;
-    padding:10px;
-    -webkit-box-sizing:border-box;
-            box-sizing:border-box;
-    border:1px solid #dbdbdb;
-    color:#666;
-    font-size:14px;
-    -webkit-appearance:none;
-    border-radius:0;
-  }
 </style>
+
 <script>
   $("#ask_page").on("change",function(){
     $(".loading").show();
@@ -83,6 +57,8 @@
     var currentPage = Number(document.location.search.replace("?page=",""));
     $("#ask_page option[value="+currentPage+"]").attr("selected","selected");
   };
+
+  $("body").highlight("(user)", {element: "span", className: "highlight"});
 
   function navigate_page(is_next) {
     var currentPage = Number(document.location.search.replace("?page=",""));
@@ -105,33 +81,4 @@
     }
     document.location.assign("/admin/asks?page=" + nextPage);
   }
-
-  function send_admin_comment(is_left) {
-    var admin_user_id = $("#admin_users").val();
-    var comment_ask_id = $("#comment_ask_id").val();
-    var comment_message = $("#comment_message").val();
-
-    if (admin_user_id =="" || comment_ask_id == "" || comment_message == "") {
-      alert("입력한 항목이 충분하지 않습니다");
-    } else if (confirm("댓글을 전송하시겠어요?\n")) {
-      $.ajax({
-        url: "/admin/asks.json",
-        dataType: 'json',
-        type: 'POST',
-        data: {admin_user_id: admin_user_id, comment_ask_id: comment_ask_id, comment_message: comment_message, is_left: is_left},
-        error: function(){
-          return false;
-        },
-        success: function(data){
-          $("#comment_message").val("");
-        },
-        beforeSend: function(){
-          $(".loading").show();
-        },
-        complete: function(){
-          $(".loading").hide();
-        }
-      });
-    }
-  };
 </script>
