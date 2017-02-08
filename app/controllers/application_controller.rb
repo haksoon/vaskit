@@ -99,9 +99,10 @@ class ApplicationController < ActionController::Base
   private
 
   def auth_app
+    debugger
     if cookies["_vaskit_session"].nil? && !cookies["app_user"].blank?
       crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-      app_user = crypt.decrypt_and_verify(cookies["app_user"])
+      app_user = crypt.decrypt_and_verify(cookies["app_user"]).gsub("app_user:","")
       resource = User.find_for_database_authentication(id: app_user)
       if !resource.blank?
         sign_in(:user, resource)
@@ -115,7 +116,8 @@ class ApplicationController < ActionController::Base
       cookies["app_user"] = { value: nil, expires: 3.months.from_now, path: "/" }
     elsif user && user.sign_up_type != "facebook"
       crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
-      app_user = crypt.encrypt_and_sign(user.id)
+      app_user = crypt.encrypt_and_sign("app_user:" + user.id.to_s)
+      debugger
       cookies["app_user"] = { value: app_user, expires: 3.months.from_now, path: "/" }
     end
   end
