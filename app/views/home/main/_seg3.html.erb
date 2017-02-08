@@ -519,6 +519,7 @@
 
               if (naver_deal_items == null && naver_deal_images == null) {
                 notify("검색 결과가 없습니다");
+                back_button();
               } else {
                 ask_form_header_title.html(keyword + " 검색결과");
                 ask_form_back_btn.html("닫기");
@@ -528,6 +529,9 @@
             },
             beforeSend: function(){
               loadingStart();
+              ask_form_header_title.html("검색중 <i class='fa fa-spinner fa-spin'></i>");
+              ask_form_back_btn.html("");
+              ask_form_submit_btn.hide();
             },
             complete: function(){
               loadingEnd();
@@ -543,8 +547,8 @@
     var current_step = Number(ask_form_submit_btn.attr("step"));
     var card_search_result_div = ask_form.find(".card_search_result");
     var card_search_input = ask_form.find(".card_search_input");
-    current_step == 1 ? ask_form_back_btn.html("취소") : ask_form_back_btn.html("이전");
     ask_form_header_title.html("질문 작성하기");
+    current_step == 1 ? ask_form_back_btn.html("취소") : ask_form_back_btn.html("이전");
     ask_form_submit_btn.show();
     card_search_input.val("");
     card_search_result_div.addClass("bottom").transitionEmpty();
@@ -571,6 +575,8 @@
     var step_1_inner = ask_form.find(".inner.step_1");
     var step_2_inner = ask_form.find(".inner.step_2");
     var step_3_inner = ask_form.find(".inner.step_3");
+    var ask_form_header_title = ask_form.find(".header_title");
+    var ask_form_back_btn = ask_form.find(".header_btn.left");
     var item = naver_deal_items.length > 1 ? $.grep(naver_deal_items, function(obj) { return obj.productId === product_id; })[0] : naver_deal_items;
 
 		$.ajax({
@@ -610,6 +616,8 @@
 					},
 					beforeSend: function(){
 						loadingStart();
+            ask_form_header_title.html("제품정보 업로드중 <i class='fa fa-spinner fa-spin'></i>");
+            ask_form_back_btn.html("");
 					},
 					complete: function(){
             loadingEnd();
@@ -625,6 +633,8 @@
     var step_1_inner = ask_form.find(".inner.step_1");
     var step_2_inner = ask_form.find(".inner.step_2");
     var step_3_inner = ask_form.find(".inner.step_3");
+    var ask_form_header_title = ask_form.find(".header_title");
+    var ask_form_back_btn = ask_form.find(".header_btn.left");
 
     $.ajax({
 	        url: "/preview_images.json",
@@ -654,6 +664,8 @@
 					},
 	        beforeSend: function(){
 						loadingStart();
+            ask_form_header_title.html("이미지 업로드중 <i class='fa fa-spinner fa-spin'></i>");
+            ask_form_back_btn.html("");
 					},
 					complete: function(){
 						loadingEnd();
