@@ -83,7 +83,7 @@ class Ask < ActiveRecord::Base
 
       if type == "new" && Rails.env == "production"
         noti_title = "새로운 질문이 작성되었습니다! 댓글을 작성해주세요 :)"
-        noti_title += "\n[링크로 이동](" + CONFIG["host"] + "/asks/" + self.id.to_s + ")"
+        noti_title += "\n[질문으로 이동](" + CONFIG["host"] + "/asks/" + self.id.to_s + ")"
         noti_message = self.message.to_s
         noti_color = "#FF7200"
         slack_notifier_alba(noti_title, noti_message, noti_color)
