@@ -297,11 +297,11 @@
                                $(this).removeClass("filled");
                                $(this).selectRange($(this).val().length, $(this).val().length);
                                // iOS web 키패드 이슈
-                               if (userDevice.isIOS && !userApp) {
+                               if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
                                  iOSKeypadCheck = setInterval(function(){
                                    console.log('키패드 체크');
                                    if (document.body.scrollTop > 0) {
-                                     $("html").css({height: window.innerHeight - document.body.scrollTop + 10});
+                                     userApp ? $("html").css({height: window.innerHeight - document.body.scrollTop}) : $("html").css({height: window.innerHeight - document.body.scrollTop + 10});
                                      window.scrollTo(0,0);
                                    }
                                  },25);
@@ -310,7 +310,7 @@
                            })
                            .on("blur", function(e) {
                              // iOS web 키패드 이슈
-                             if (userDevice.isIOS && !userApp) {
+                             if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
                                clearInterval(iOSKeypadCheck);
                                setTimeout(function(){
                                  $("html").css({height: ''});

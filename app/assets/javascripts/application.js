@@ -210,8 +210,10 @@ function setUserToken(gcm_key, device_id, app_ver) {
     type: "POST",
     data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver}
   });
-  if (device_id.match(/ios/) && app_ver == "2.1.3") {
+  if (device_id.match(/ios/) && Number(app_ver.split(".").join("") >= 213)) {
     userAppVer = true;
+    userAppVerLoading = false;
+  } else {
     userAppVerLoading = false;
   }        // 임시 코드
 };
