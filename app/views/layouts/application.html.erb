@@ -54,15 +54,6 @@
     </script>
   </head>
   <body data-no-turbolink="true" class="clearfix">
-    <script>
-      (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=false&version=v2.5&appId=<%=Facebook::CONFIG["app_id"]%>";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));
-    </script>
     <div class="background" ontouchmove="return false;"></div>
     <div id="app_banner" class="layout viewer appBanner"></div>
     <div id="main_view" class="layout viewer">

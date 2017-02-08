@@ -71,6 +71,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         if resource.persisted?
           sign_up(resource_name, resource)
           user_visits
+          auth_app_create(resource)
           UserMailer.delay.welcome_email(resource)
           render json: {status: "success", string_id: data[:string_id]}
         end

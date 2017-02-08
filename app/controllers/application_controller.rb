@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_action :set_visitor, unless: -> { request.format.json? }
   before_action :user_visits, unless: -> { request.format.json? }
+  before_action :auth_app, unless: -> { request.format.json? }
   before_action :prepare_exception_notifier
 
   include PushSend
@@ -16,6 +17,11 @@ class ApplicationController < ActionController::Base
       @visitor = Visitor.create(uniq_key: Digest::MD5.hexdigest(@uniq_key), remote_ip: get_remote_ip)
     else
       @visitor = Visitor.find_by_uniq_key(Digest::MD5.hexdigest(@uniq_key))
+      if @visitor.nil?
+        cookies["visitor_key"] = { value: Time.now.to_f.to_s + rand(1000000).to_s, expires: 3.months.from_now, path: "/" }
+        @uniq_key = cookies["visitor_key"]
+        @visitor = Visitor.create(uniq_key: Digest::MD5.hexdigest(@uniq_key), remote_ip: get_remote_ip)
+      end
     end
   end
 
@@ -89,7 +95,31 @@ class ApplicationController < ActionController::Base
     return ret.split(",")[0]
   end
 
+
   private
+
+  def auth_app
+    if cookies["_vaskit_session"].nil? && !cookies["app_user"].blank?
+      crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
+      app_user = crypt.decrypt_and_verify(cookies["app_user"])
+      resource = User.find_for_database_authentication(id: app_user)
+      if !resource.blank?
+        sign_in(:user, resource)
+        resource.remember_me!
+      end
+    end
+  end
+
+  def auth_app_create(user)
+    if user.nil?
+      cookies["app_user"] = { value: nil, expires: 3.months.from_now, path: "/" }
+    elsif user && user.sign_up_type != "facebook"
+      crypt = ActiveSupport::MessageEncryptor.new(Rails.application.secrets.secret_key_base)
+      app_user = crypt.encrypt_and_sign(user.id)
+      cookies["app_user"] = { value: app_user, expires: 3.months.from_now, path: "/" }
+    end
+  end
+
   def prepare_exception_notifier
     request.env["exception_notifier.exception_data"] = {
       user_string_id: current_user ? current_user.string_id : "visitor",

@@ -576,7 +576,6 @@ function remove_wrapper() {
       set_recent_asks();
     } else if (currentSeg === 4) {
       user_profile_on();
-      user_alarms_on();
     }
   }
 };

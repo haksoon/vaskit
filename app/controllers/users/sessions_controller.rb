@@ -32,6 +32,7 @@ class Users::SessionsController < Devise::SessionsController
         sign_in(resource_name, resource)
         resource.remember_me!
         user_visits
+        auth_app_create(resource)
         render json: { status: "success", string_id: resource.string_id }
       else
         render json: { status: "invalid_password" }
@@ -42,6 +43,7 @@ class Users::SessionsController < Devise::SessionsController
   # DELETE /users/sign_out.json
   def destroy
     sign_out_all_scopes
+    auth_app_create(nil)
     render json: {}
   end
 

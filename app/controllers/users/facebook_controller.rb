@@ -57,6 +57,7 @@ class Users::FacebookController < Devise::PasswordsController
       user_visits
       render json: {status: "success", string_id: user.string_id}
     end
+    auth_app_create(nil)
   end
 
 end
