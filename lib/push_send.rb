@@ -32,6 +32,7 @@ module PushSend
   # AOS 푸쉬 보내기
   def push_send_AOS(registration_ids, msg, type, count, id, link, js)
     fcm = FCM.new(PushSend::FCM_API_KEY)
+
     options = {                 # options 의 모든 전달값은 String으로 전달할 것
       data: {
         title: "VASKIT",        # 알림 타이틀
@@ -43,6 +44,7 @@ module PushSend
         js: js                  # 알림항목과 연결할 JavaScript
       }
     }
+
     response = fcm.send(registration_ids, options)
     logger.debug response
   end

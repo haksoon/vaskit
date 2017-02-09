@@ -15,68 +15,11 @@
 //= require turbolinks
 //= require_tree .
 
-
-// ga
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-75373901-1', 'auto');
-ga('send', 'pageview');
-// ga
-
-// Facebook Pixel Code
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-
-fbq('init', '521318198062554');
-fbq('track', "PageView");
-// End Facebook Pixel Code
-
-
 // init Template
 _.templateSettings = {
     interpolate: /\{\{\=(.+?)\}\}/g,
     evaluate: /\{\{(.+?)\}\}/g
 };
-
-// init VASKIT Frame
-if (window.location.pathname.indexOf("admin") == -1) {
-  $(window).ready(function(){
-    loadingStart();
-    setUserDevice();
-    alarm_check();
-    history.replaceState({pageHistory:currentHistory}, null, null);
-    $(window).unbind("popstate").bind("popstate", go_popstate);
-
-    // seg1 초기화
-    $("#collections").html(collectionsTemplate());
-    // seg2 초기화
-    $("#search").html(searchTemplate());
-    // seg4 초기화
-    $("#my_page").html(myPageTemplate());
-    // 기본화면 초기화
-    go_seg(1);
-  }).load(function(){
-    set_recent_asks();
-    set_collections();
-    set_video_asks();
-    user_profile_on();
-    user_alarms_on();
-    setTimeout(function(){
-      open_app_banner();
-      $(".loading_spinner").animateCssRemove("fadeOut");
-      $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
-        loadingEnd();
-      });
-    }, 1000);
-  });
-};
-// End init VASKIT Frame
 
  // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용
  $(window).load(function(){
@@ -93,17 +36,17 @@ function setGCM(key, device_id, app_ver) {
   $.cookie('gcm_key', null);
   $.cookie('device_id', null);
   $.cookie('app_ver', null);
-  var html = "<div class='no_result'>\
-                <div class='align_middle' style='color: #fff;'>\
-                  <img src='/images/logo/logo_landing.png' style='width: 180px; margin-bottom: -60px;'>\
-                  <br>완전히 달라진 VASKIT!\
-                  <br>앱을 업데이트해주세요 🙈\
-                </div>\
-              </div>";
+  var html = "<div class='no_result'>" +
+             "<div class='align_middle' style='color: #fff;'>" +
+             "<img src='/images/logo/logo_landing.png' style='width: 180px; margin-bottom: -60px;'>" +
+             "<br>완전히 달라진 VASKIT!" +
+             "<br>앱을 업데이트해주세요 🙈" +
+             "</div>" +
+             "</div>";
   $("body").html(html);
-};
+}
 
-function getIOSApp() {}; // 앱스토어 1.0.3 버전 검수용
+function getIOSApp() {} // 앱스토어 1.0.3 버전 검수용
 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용
 
 // Device Check
@@ -180,7 +123,7 @@ function setUserDevice() {
   } else if (ua.match(/Safari/i)) {
     userBrowser.isSafari         = true;
   }
-};
+}
 
 // App Check & Push Setting
 function setUserApp() {
@@ -188,7 +131,7 @@ function setUserApp() {
   userApp                        = true;
   userDevice.isMobile            = true;
   getUserToken();
-};
+}
 
 function getUserToken() {
   setTimeout(function(){
@@ -198,7 +141,7 @@ function getUserToken() {
       window.location = "vaskit://getUserToken";    // iOS
     }
   }, 2000);
-};
+}
 
 var userAppVer = false;                                                       // 임시 코드
 var userAppVerLoading = true;
@@ -216,17 +159,30 @@ function setUserToken(gcm_key, device_id, app_ver) {
   } else {
     userAppVerLoading = false;
   }        // 임시 코드
-};
+}
 
 function setAppStatusBar(type) {
   // type => { normal, dark, orange }
   // textColor => { 0: white, 1: black }
+  var r, g, b, a, textColor;
   if (type == "dark") {
-    var r = 51, g = 51, b = 51, a = 1, textColor = 0;
+    r = 51;
+    g = 51;
+    b = 51;
+    a = 1;
+    textColor = 0;
   } else if (type == "orange") {
-    var r = 255, g = 120, b = 0, a = 1, textColor = 0;
+    r = 255;
+    g = 120;
+    b = 0;
+    a = 1;
+    textColor = 0;
   } else {
-    var r = 249, g = 249, b = 249, a = 1, textColor = 1;
+    r = 249;
+    g = 249;
+    b = 249;
+    a = 1;
+    textColor = 1;
   }
 
   setTimeout(function(){
@@ -236,7 +192,7 @@ function setAppStatusBar(type) {
       window.location = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
     }
   }, 250);
-};
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -254,64 +210,72 @@ var segNextFunc = {1: [], 2: [], 4: []};
 var segURL = {1: [], 2: [], 4: []};
 
 function go_popstate(e) {
+  var url;
+  var func;
   var state = e.originalEvent.state;
   if (state.pageHistory < currentHistory) {
-    console.log(currentHistory+" -> "+state.pageHistory+'...뒤로 갑니다');
-    // 뒤로 가는 경우
+    // console.log(currentHistory+" -> "+state.pageHistory+'...뒤로 갑니다'); // 뒤로 가는 경우
 
-    var func = segPrevFunc[currentSeg][segHistory[currentSeg]];
-    if (segHistory[currentSeg] == 0) {
+    func = segPrevFunc[currentSeg][segHistory[currentSeg]];
+    if (segHistory[currentSeg] === 0) {
       if (segOrder.pop() && segOrder.length > 0) {
-        console.log('segOrder 순서 제거, 이전 탭으로 이동');
+        // console.log('segOrder 순서 제거, 이전 탭으로 이동');
         currentSeg = segOrder[segOrder.length -1];
-        var url = segURL[currentSeg][segHistory[currentSeg]];
+        url = segURL[currentSeg][segHistory[currentSeg]];
       } else {
-        console.log('뒤로가기의 마지막입니다...');
+        // console.log('뒤로가기의 마지막입니다...');
       }
     } else {
       segHistory[currentSeg] -= 1;
-      var url = segURL[currentSeg][segHistory[currentSeg]];
+      url = segURL[currentSeg][segHistory[currentSeg]];
     }
 
     if (func) {
-      typeof func.arguments == "string" ? window[func.callback].apply(null, func.arguments.split(", ")) : window[func.callback](func.arguments); // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+      if (typeof func.arguments == "string") {  // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+        window[func.callback].apply(null, func.arguments.split(", "));
+      } else {
+        window[func.callback](func.arguments);
+      }
       history.replaceState(history.state, null, url);
       currentHistory = history.state.pageHistory;
-      console.log(func.callback+"("+func.arguments+") 실행");
+      // console.log(func.callback+"("+func.arguments+") 실행");
     } else {
       history.forward();
       currentHistory = history.state.pageHistory;
-      console.log("더이상 실행할 뒤로가기 없음");
+      // console.log("더이상 실행할 뒤로가기 없음");
     }
 
   } else if (state.pageHistory > currentHistory) {
-    console.log(currentHistory+" -> "+state.pageHistory+'...앞으로 갑니다');
-    // 앞으로 가는 경우
+    // console.log(currentHistory+" -> "+state.pageHistory+'...앞으로 갑니다'); // 앞으로 가는 경우
 
-    var func = segNextFunc[currentSeg][segHistory[currentSeg]];
+    func = segNextFunc[currentSeg][segHistory[currentSeg]];
     if (segHistory[currentSeg] == segURL[currentSeg].length - 1) {
       if (segNextFunc[currentSeg].length == segHistory[currentSeg] + 1) {
-        console.log('segOrder 순서 추가, 다음 탭으로 이동');
+        // console.log('segOrder 순서 추가, 다음 탭으로 이동');
         segOrder.push(segNextFunc[currentSeg][segHistory[currentSeg]].arguments);
         currentSeg = segOrder[segOrder.length -1];
-        var url = segURL[currentSeg][segHistory[currentSeg]];
+        url = segURL[currentSeg][segHistory[currentSeg]];
       } else {
-        console.log('앞으로가기의 마지막입니다...');
+        // console.log('앞으로가기의 마지막입니다...');
       }
     } else {
       segHistory[currentSeg] += 1;
-      var url = segURL[currentSeg][segHistory[currentSeg]];
+      url = segURL[currentSeg][segHistory[currentSeg]];
     }
 
     if (func) {
-      typeof func.arguments == "string" ? window[func.callback].apply(null, func.arguments.split(", ")) : window[func.callback](func.arguments); // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+      if (typeof func.arguments == "string") { // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+        window[func.callback].apply(null, func.arguments.split(", "));
+      } else {
+        window[func.callback](func.arguments);
+      }
       history.replaceState(history.state, null, url);
       currentHistory = history.state.pageHistory;
-      console.log(func.callback+"("+func.arguments+") 실행");
+      // console.log(func.callback+"("+func.arguments+") 실행");
     } else {
       history.back();
       currentHistory = history.state.pageHistory;
-      console.log("더이상 실행할 앞으로가기 없음");
+      // console.log("더이상 실행할 앞으로가기 없음");
     }
 
   }
@@ -322,20 +286,19 @@ function go_seg(seg_id) {
   if (currentSeg == seg_id) {
     if (segHistory[currentSeg] > 0) {
       go_back(segHistory[currentSeg]);
-      console.log("동일 탭으로 이동 & 기록 삭제");
+      // console.log("동일 탭으로 이동 & 기록 삭제");
     } else {
-      console.log("동일 탭으로 이동 But 기록 없음");
+      // console.log("동일 탭으로 이동 But 기록 없음");
     }
   } else {
     var lastSeg = currentSeg;
     currentSeg = seg_id;
     if (segOrder.indexOf(currentSeg) == -1) {
-      // 처음으로 진입하는 탭의 경우
-      console.log('처음으로 진입하는 탭의 경우');
+      // console.log('처음으로 진입하는 탭의 경우'); // 처음으로 진입하는 탭의 경우
 
       segOrder.push(currentSeg);
 
-      if (lastSeg == 0) {
+      if (lastSeg === 0) {
         segPrevFunc[currentSeg].splice(0,1,{
           callback : "go_exit",
           arguments : null
@@ -350,16 +313,15 @@ function go_seg(seg_id) {
           arguments : lastSeg
         });
         segNextFunc[currentSeg].splice(segHistory[lastSeg],1);
-      };
+      }
       segURL[currentSeg].splice(segHistory[currentSeg],1,url);
 
       history.pushState({pageHistory:currentHistory+1}, null, url);
       currentHistory = history.state.pageHistory;
 
-      console.log(currentHistory+"로 진행, 신규 탭 추가, 현재 탭 히스토리 : "+segOrder);
+      // console.log(currentHistory+"로 진행, 신규 탭 추가, 현재 탭 히스토리 : "+segOrder);
     } else {
-      // 이미 기존에 진행한 탭 히스토리가 있을 경우
-      console.log('이미 기존에 진행한 탭 히스토리가 있을 경우');
+      // console.log('이미 기존에 진행한 탭 히스토리가 있을 경우'); // 이미 기존에 진행한 탭 히스토리가 있을 경우
 
       segOrder.splice(segOrder.indexOf(currentSeg),1);
       segOrder.push(currentSeg);
@@ -382,20 +344,20 @@ function go_seg(seg_id) {
       history.pushState({pageHistory:currentHistory+1}, null, url);
       currentHistory = history.state.pageHistory;
 
-      console.log(currentHistory+"로 진행, 기존 탭 진행, 현재 탭 히스토리 : "+segOrder);
+      // console.log(currentHistory+"로 진행, 기존 탭 진행, 현재 탭 히스토리 : "+segOrder);
     }
   }
-};
+}
 
-function show_history(seg_id) {
-  console.log(currentHistory);
-  console.log("뒤로가기 함수");
-  console.log(segPrevFunc[seg_id]);
-  console.log("앞으로가기 함수");
-  console.log(segNextFunc[seg_id]);
-  console.log(segURL[seg_id]);
-  console.log(segHistory[seg_id]);
-};
+// function show_history(seg_id) {
+//   console.log(currentHistory);
+//   console.log("뒤로가기 함수");
+//   console.log(segPrevFunc[seg_id]);
+//   console.log("앞으로가기 함수");
+//   console.log(segNextFunc[seg_id]);
+//   console.log(segURL[seg_id]);
+//   console.log(segHistory[seg_id]);
+// }
 
 function go_url(func_name, func_args) {
   if (window.event) window.event.cancelBubble = true;
@@ -418,8 +380,8 @@ function go_url(func_name, func_args) {
   history.pushState({pageHistory:currentHistory+1}, null, url);
   currentHistory = history.state.pageHistory;
 
-  console.log("url, 히스토리 변경... show_"+func_name+" 실행하여 "+currentHistory+"로 진행");
-};
+  // console.log("url, 히스토리 변경... show_"+func_name+" 실행하여 "+currentHistory+"로 진행");
+}
 
 var back_button_clicked = false;
 function back_button() {
@@ -432,7 +394,7 @@ function back_button() {
   } else {
     return false;
   }
-};
+}
 
 function go_back(length) {
   $(window).unbind("popstate");
@@ -451,11 +413,11 @@ function go_back(length) {
     $(window).bind("popstate", go_popstate);
   },100);
 
-  console.log("히스토리 삭제 ("+ length +"개)");
-};
+  // console.log("히스토리 삭제 ("+ length +"개)");
+}
 
 function go_exit() {
-  console.log('bye...');
+  // console.log('bye...');
   if (userApp) {
     go_back(currentHistory+1);
   } else {
@@ -464,7 +426,7 @@ function go_exit() {
       go_back(currentHistory+1);
     },500);
   }
-};
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -480,23 +442,24 @@ function visitor_check(callback) {
     go_url('landing');
     notify("로그인 해주세요!");
   }
-};
+}
 
 // 탭 이동
 function show_seg(seg_id) {
+  var url;
   if (seg_id === 1) {
-    var url = '/collections';
+    url = '/collections';
     $(".seg.seg1").css("transform","translateX(0%)");
     $(".seg.seg2").css("transform","translateX(100%)");
     $(".seg.seg4").css("transform","translateX(200%)");
     set_recent_asks();
   } else if (seg_id === 2) {
-    var url = '/search';
+    url = '/search';
     $(".seg.seg1").css("transform","translateX(-100%)");
     $(".seg.seg2").css("transform","translateX(0%)");
     $(".seg.seg4").css("transform","translateX(100%)");
   } else if (seg_id === 4) {
-    var url = '/users';
+    url = '/users';
     $(".seg.seg1").css("transform","translateX(-200%)");
     $(".seg.seg2").css("transform","translateX(-100%)");
     $(".seg.seg4").css("transform","translateX(0%)");
@@ -526,8 +489,8 @@ function show_seg(seg_id) {
     $(".tab_icon.seg"+seg_id).addClass("on");
 
     return url;
-  };
-};
+  }
+}
 
 // Full View
 function open_full_view(html) {
@@ -538,11 +501,11 @@ function open_full_view(html) {
   setTimeout(function(){
     new_viewer.removeClass("off");
   },250);
-};
+}
 
 function close_full_view() {
   $("#main_view").children().last().addClass("off").transitionRemove();
-};
+}
 
 function create_wrapper(html, is_full) {
   var target_seg = $("#seg_"+currentSeg);
@@ -553,11 +516,11 @@ function create_wrapper(html, is_full) {
   new_wrapper = target_seg.find(".wrapper.new");
   new_wrapper.html(html).removeClass("new");
   setTimeout(function(){
-    is_full ? $("#footer").addClass("hide") : $("#footer").removeClass("hide");
+    if (is_full) { $("#footer").addClass("hide"); } else { $("#footer").removeClass("hide"); }
     prev_wrappers.addClass("prev");
     new_wrapper.removeClass("next");
   },250);
-};
+}
 
 function remove_wrapper() {
   var target_seg = $("#seg_"+currentSeg);
@@ -580,7 +543,7 @@ function remove_wrapper() {
       user_profile_on();
     }
   }
-};
+}
 
 $.fn.scroll_to = function(destination) {
   var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
@@ -589,9 +552,9 @@ $.fn.scroll_to = function(destination) {
   var top = 0;
   var bottom = main_container.prop("scrollHeight");
 
-  if (destination == null) {
+  if (destination === null) {
     destination = st_now > 0 ? top : bottom;
-  } else if (destination == true) {
+  } else if (destination === true) {
     destination = bottom;
   }
 
@@ -601,7 +564,7 @@ $.fn.scroll_to = function(destination) {
 function nearBottomOfContainer(element) {
   // return element.scrollHeight - element.scrollTop - element.offsetHeight < 500;
   return element.prop("scrollHeight") - (element.scrollTop() + element.height()) < 50;
-};
+}
 
 function removeIOSRubberEffect(element) {
   if (userDevice.isIOS) {
@@ -620,14 +583,14 @@ function removeIOSRubberEffect(element) {
         element.scrollTop(1);
       } else if (vp_bottom === vp_scroll) {
         element.scrollTop(vp_top-1);
-      };
+      }
     }
   }
-};
+}
 
 // Template Load
 function load_template(title, callback) {
-  if ($("#"+title+"_template").length == 0) {
+  if ($("#"+title+"_template").length === 0) {
     $.ajax({
       url: '/templates/'+title,
       dataType: 'HTML',
@@ -647,7 +610,7 @@ function load_template(title, callback) {
   } else {
     if (typeof callback === "function") callback();
   }
-};
+}
 
 // 노티스, 로딩바
 function notify(msg, onclick){
@@ -668,7 +631,7 @@ function notify(msg, onclick){
     });
     return false;
   });
-};
+}
 
 function loadingStart() {
   var loading_bar = $(".loading_bar");
@@ -678,7 +641,7 @@ function loadingStart() {
       loading_bar.animate({width:"98%"},8000);
     });
   });
-};
+}
 
 function loadingEnd() {
   var loading_bar = $(".loading_bar");
@@ -690,13 +653,13 @@ function loadingEnd() {
       $(".loading_div").hide();
     });
   });
-};
+}
 
 // Alarm Check
 var current_user = null;
 var alarm_check_counter;
 function alarm_check(last_alarm_count) {
-  var alarm_count = last_alarm_count == null ? 0 : last_alarm_count;
+  var alarm_count = last_alarm_count === null ? 0 : last_alarm_count;
 
   $.ajax({
     url: "/users/alarm_check.json",
@@ -708,15 +671,15 @@ function alarm_check(last_alarm_count) {
     success: function(data) {
       current_user = data.current_user;
       alarm_count = data.alarm_count;
-      if (current_user == null) {
+      if (current_user === null) {
         $("#my_tab").hide();
         $("#login_tab").show();
       } else {
         $("#my_tab").show();
         $("#login_tab").hide();
       }
-      alarm_count > 0 ? $(".tab_badge").addClass("on").animateCss("wobble") : $(".tab_badge").removeClass("on");
-      if (last_alarm_count != null && alarm_count > last_alarm_count) {
+      if (alarm_count > 0) { $(".tab_badge").addClass("on").animateCss("wobble"); } else { $(".tab_badge").removeClass("on"); }
+      if (last_alarm_count !== null && alarm_count > last_alarm_count) {
         user_alarms_on();
         if (!window.HybridApp) { notify("새로운 알림이 도착했습니다!", "go_seg(4); $('#footer').removeClass('hide'); open_user_alarms();"); }
       }
@@ -725,10 +688,10 @@ function alarm_check(last_alarm_count) {
       clearInterval(alarm_check_counter);
     },
     complete: function() {
-      alarm_check_counter = setInterval(function() { alarm_check(alarm_count) }, 60000);
+      alarm_check_counter = setInterval(function() { alarm_check(alarm_count); }, 60000);
     }
   });
-};
+}
 
 // Tutorial
 var is_tutorial_vs = true;
@@ -743,56 +706,47 @@ function tutorial_ask() { if (is_tutorial_ask) { notify('검색창에서 제품�
 // Image Load
 function get_image_url(data, model_name, extention) {
 	try {
-		var image_url = ""; //static url
-    image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
-		var image_file_name = data.image_file_name;
-		if(image_file_name.indexOf(".") == -1){
-			image_file_name = image_file_name + ".";
-		}
-	  	image_url += image_file_name;
-	  	return image_url;
-	}
-	catch(err) {
-	    return "/images/custom/card_image_preview.png";
+		var image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+    var image_file_name = data.image_file_name;
+    if (image_file_name.indexOf(".") == -1) image_file_name += ".";
+	  image_url += image_file_name;
+	  return image_url;
+	} catch(err) {
+	  return "/images/custom/card_image_preview.png";
 	}
 }
 
 function imgError(image, alter_url) {
   image.onerror = "";
-  if (alter_url == null) alter_url = "/images/custom/card_image_preview.png";
+  if (alter_url === undefined) alter_url = "/images/custom/card_image_preview.png";
   image.src = alter_url;
-  console.log('이미지 교체...');
   return true;
 }
 
 function get_avatar(data) {
 	try {
-		var avatar_url = "";
-    avatar_url = "/assets/users/"+data.id+"/original/";
-		var avatar_file_name = data.avatar_file_name;
-		if(avatar_file_name.indexOf(".") == -1){
-			avatar_file_name = avatar_file_name + ".";
-		}
-	  	avatar_url += avatar_file_name;
-	  	return avatar_url;
+		var avatar_url = "/assets/users/"+data.id+"/original/";
+    var avatar_file_name = data.avatar_file_name;
+    if (avatar_file_name.indexOf(".") == -1) avatar_file_name += ".";
+	  avatar_url += avatar_file_name;
+	  return avatar_url;
+	} catch(err) {
+	  return "/images/custom/user_profile_preview.png";
 	}
-	catch(err) {
-	    return "/images/custom/user_profile_preview.png";
-	}
-};
+}
 
 
 // 해쉬태그, 링크 하이라이트
 function taggingKeywords(origin_string, img_hidden) {
   var html_tmp = document.createElement("div");
   var html_txt = document.createTextNode(origin_string);
-  html_tmp.id = "taggingTmp"
+  html_tmp.id = "taggingTmp";
   html_tmp.appendChild(html_txt);
   document.body.appendChild(html_tmp);
   html_tmp = $("#taggingTmp");
 
   var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
-  if (hash_tags != null) {
+  if (hash_tags !== null) {
     hash_tags.sort(function(a,b){ return b.length - a.length; });
     $.each(hash_tags, function(index, hash_tag) {
       hash_tag = hash_tag.replace(",", "");
@@ -810,9 +764,9 @@ function taggingKeywords(origin_string, img_hidden) {
       var hash_tag_keyword = "#" + $(element).attr("keyword");
       $(element).text(hash_tag_keyword);
     });
-  };
+  }
   var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
-  if (links != null) {
+  if (links !== null) {
     links.sort(function(a,b){ return b.length - a.length; });
     var link_tags = [];
     var img_tags = [];
@@ -845,7 +799,7 @@ function taggingKeywords(origin_string, img_hidden) {
         });
       });
     });
-  };
+  }
 
   var html_output = html_tmp.html();
   html_tmp.remove();
@@ -853,32 +807,32 @@ function taggingKeywords(origin_string, img_hidden) {
   return html_output.replace(/^\s*/g, '')                             // 앞 공백 제거
                     .replace(/\s*$/g, '')                             // 뒷 공백 제거
                     .replace(new RegExp('\r?\n', 'g'), '<br>');       // 줄바꿈 처리
-};
+}
 
 // Form 필수 입력값 체크
 function form_check(form) {
-  var fields = $.map(form.find("[required]"), function(value, index) { return [value] });
-  var check_boxs = $.map(form.find("[required][type=checkbox]"), function(value, index) { return [value] });
-  if ( fields.every(function (item, index) { return item.value.length > 0 }) && check_boxs.every(function (item, index) { return item.checked == true }) ) {
+  var fields = $.map(form.find("[required]"), function(value, index) { return [value]; });
+  var check_boxs = $.map(form.find("[required][type=checkbox]"), function(value, index) { return [value]; });
+  if ( fields.every(function (item, index) { return item.value.length > 0; }) && check_boxs.every(function (item, index) { return item.checked === true; }) ) {
     form.find(".submit_btn").addClass("ready");
   } else {
     form.find(".submit_btn").removeClass("ready");
   }
-};
+}
 
 // 각종 표기법
 function truncate(string, range) {
-  if (range == null) range = 30;
+  if (range === null) range = 30;
   if (string.length > range)
     return string.substring(0,range)+'&middot;&middot;&middot;';
   else
     return string;
-};
+}
 
 
 // 금액 필드 콤마찍기
 function fieldWithBlank(text) {
-  return (text == null || text.length == 0) ? "-" : text;
+  return (text === null || text.length === 0) ? "-" : text;
 }
 
 function fieldWithLink(link) {
@@ -891,7 +845,7 @@ function fieldWithLink(link) {
 }
 
 function numberWithCommas(x) {
-  if (x != null) x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (x !== null) x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return x;
 }
 
@@ -910,11 +864,11 @@ function inputNumberWithCommas(obj) {
 function get_user_ages(birthday) {
   try {
     var ret = "";
-    if (birthday == null || birthday == ""){
+    if (birthday === null || birthday === ""){
       ret = "기타";
     } else {
       var current_user_year = parseInt(birthday.split("-")[0]);
-      var current_year = (new Date).getFullYear();
+      var current_year = new Date().getFullYear();
       var user_age = current_year - current_user_year + 1;
 
       user_age = Math.floor(user_age/10) * 10;
@@ -936,15 +890,15 @@ function get_past_time(time) {
         hour = Math.floor(diff / 1000 / 60 / 60),
         min = Math.floor(diff / 1000 / 60);
 
-    if (month != 0) {
+    if (month !== 0) {
         return month + "개월 전";
-    } else if (week != 0) {
+    } else if (week !== 0) {
         return week + "주 전";
-    } else if (day != 0) {
+    } else if (day !== 0) {
         return day + "일 전";
-    } else if (hour != 0) {
+    } else if (hour !== 0) {
         return hour + "시간 전";
-    } else if (min != 0) {
+    } else if (min !== 0) {
         if (min < 60 && min >= 50) {
             return "50분 전";
         } else if (min < 50 && min >= 40) {
@@ -1040,65 +994,64 @@ $.fn.scrollEnd = function(callback, timeout) {
 
 
 // doubletap 이벤트 생성
-(function($){
-	"use strict";
-
-	var tapTimer,
-		moved     = false,   // flag to know if the finger had moved while touched the device
-		threshold = 250;     // ms
-
-	$.event.special.doubleTap = {
-	      setup    : setup,
-        teardown : teardown,
-        handler  : handler
-	};
-
-  $.event.special.tap = {
-        setup    : setup,
-        teardown : teardown,
-        handler  : handler
-  };
-
-	function setup(data, namespaces){
-	  var elm = $(this);
-
-		if (elm.data('tap_event') == true) return;
-
-		elm.bind('touchend.tap', handler).bind('touchmove.tap', function(){
-	    moved = true;
-    }).data('tap_event', true);
-	}
-
-	function teardown(namespaces) {
-    $(this).unbind('touchend.tap touchmove.tap');
-  }
-
-	function handler(event){
-		if( moved ){ // reset
-			moved = false;
-			return false;
-		}
-
-		var elem   	  = event.target,
-  			$elem 	  = $(elem),
-  			lastTouch = $elem.data('lastTouch') || 0,
-  			now 	    = event.timeStamp,
-  			delta 	  = now - lastTouch;
-
-		// double-tap condition
-		if ( delta > 20 && delta < threshold ) {
-			clearTimeout(tapTimer);
-			return $elem.data('lastTouch', 0).trigger('doubleTap');
-		} else {
-      $elem.data('lastTouch', now);
-    }
-
-		tapTimer = setTimeout(function(){
-			$elem.trigger('tap');
-		}, threshold);
-	}
-})(jQuery);
-
+// (function($){
+// 	"use strict";
+//
+// 	var tapTimer,
+// 		moved     = false,   // flag to know if the finger had moved while touched the device
+// 		threshold = 250;     // ms
+//
+// 	$.event.special.doubleTap = {
+// 	      setup    : setup,
+//         teardown : teardown,
+//         handler  : handler
+// 	};
+//
+//   $.event.special.tap = {
+//         setup    : setup,
+//         teardown : teardown,
+//         handler  : handler
+//   };
+//
+// 	function setup(data, namespaces){
+// 	  var elm = $(this);
+//
+// 		if (elm.data('tap_event') === true) return;
+//
+// 		elm.bind('touchend.tap', handler).bind('touchmove.tap', function(){
+// 	    moved = true;
+//     }).data('tap_event', true);
+// 	}
+//
+// 	function teardown(namespaces) {
+//     $(this).unbind('touchend.tap touchmove.tap');
+//   }
+//
+// 	function handler(event){
+// 		if( moved ){ // reset
+// 			moved = false;
+// 			return false;
+// 		}
+//
+// 		var elem   	  = event.target,
+//   			$elem 	  = $(elem),
+//   			lastTouch = $elem.data('lastTouch') || 0,
+//   			now 	    = event.timeStamp,
+//   			delta 	  = now - lastTouch;
+//
+// 		// double-tap condition
+// 		if ( delta > 20 && delta < threshold ) {
+// 			clearTimeout(tapTimer);
+// 			return $elem.data('lastTouch', 0).trigger('doubleTap');
+// 		} else {
+//       $elem.data('lastTouch', now);
+//     }
+//
+// 		tapTimer = setTimeout(function(){
+// 			$elem.trigger('tap');
+// 		}, threshold);
+// 	}
+// })(jQuery);
 
 // $(document).ready(function() {
 //   $("select").on("focus", function(){

@@ -5,7 +5,6 @@
     <div id="alarm_list" class="alarm_list" ontouchstart="removeIOSRubberEffect($(this));">
     {{ for (var i=0; i < alarms.length; i++) { }}
       {{ var alarm = alarms[i] }}
-      {{ console.log(alarm) }}
       {{ if (alarm.alarm_type.match("vote_")) { }}
 				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id}}">
           <img class="alarm_user_pic" src="{{= get_avatar(alarm.user) }}" alt="">

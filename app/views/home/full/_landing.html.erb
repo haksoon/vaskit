@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="login_btn_area">
-        <a class="login_btn facebook" href="https://www.facebook.com/dialog/oauth?client_id=<%=Facebook::CONFIG['app_id']%>&redirect_uri=<%=CONFIG['host']%>/users/facebook&scope=email,public_profile,user_birthday" onclick="login_with_FB(); return false;">페이스북으로 계속하기</a>
+        <a class="login_btn facebook" href="https://www.facebook.com/dialog/oauth?client_id=<%=Facebook::CONFIG['app_id']%>&redirect_uri=<%=CONFIG['host']%>/users/facebook&scope=email,public_profile,user_birthday" onclick="login_with_FB($(this)); return false;">페이스북으로 계속하기</a>
         <a class="login_btn sign_in" href="/users/sign_in" onclick="go_url('sign_in'); return false;">로그인</a>
         <a class="login_btn sign_up" href="/users/sign_up" onclick="go_url('sign_up'); return false;">회원가입</a>
       </div>
@@ -219,12 +219,13 @@
     if (userApp) setAppStatusBar();
   };
 
-  function login_with_FB() {
+  function login_with_FB(target) {
     // 기본 인자들을 WEB에서 APP으로 전달
     var scope = "public_profile,email,user_birthday";
     var scope_for_ios = "public_profile,email,user_birthday" + ",email,email,email";
     var fields = "name,gender,picture.width(200).height(200).type(square),email,birthday";
     // 기본 인자들을 WEB에서 APP으로 전달
+    target.html("로그인중입니다 <i class='fa fa-spinner fa-spin'></i>");
     if (userApp) {
       if (window.HybridApp) {
         HybridApp.facebookLogin(scope, fields);
