@@ -41,11 +41,13 @@ class UserGcmKeysController < ApplicationController
       count = alarms.pluck(:is_read).count(false).to_s
     end
 
-    if device_id.match(/android/)
-      push_send_AOS(registration_ids, "", "false", count, "", "", "")
-    elsif device_id.match(/ios/)
-      push_send_IOS(registration_ids, "", "false", count, "", "", "")
-    end
+    payload = {
+      type: "false",
+      count: count,
+    }
+
+    push_send_AOS(registration_ids, payload) if device_id.match(/android/)
+    push_send_IOS(registration_ids, payload) if device_id.match(/ios/)
 
     render json: {status: status}
   end

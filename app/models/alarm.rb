@@ -91,10 +91,19 @@ class Alarm < ActiveRecord::Base
       else
         type = "false"
       end
-      push_send_IOS(registration_ids_ios, msg, type, count, id, link, js)
-      push_send_AOS(registration_ids_aos, msg, type, count, id, link, js)
+
+      payload = {
+        msg: msg,
+        type: type,
+        count: count,
+        id: id,
+        link: link,
+        js: js,
+      }
+
+      push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
+      push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?
     end
   end
-  handle_asynchronously :alarm_push_send
 
 end

@@ -7,7 +7,7 @@
     <i class="fa fa-align-left" style="font-size:14px; color:#ee6e01;"></i>&nbsp;
     <%= @collection.description %>
   </p>
-  <img id="collection_image" src="<%= @collection.image.url(:original) %>" style="display: block; width: 900px; margin: 10px auto;">
+  <img id="collection_image" src="<%= @collection.image.url(:original) %>" style="display: block; width: 100%; margin: 10px auto;">
   <input id="collection_image_upload" type="file" style="width: 100%; height: 40px;" onchange="upload_collection_image();">
   <p style="margin:10px 0; font-size:13px; color:#999;">
     컬렉션 대표이미지 권장 해상도는 900 * 600 픽셀 입니다<br>
@@ -16,7 +16,7 @@
 </div>
 
 <script>
-  var collection_id = <%= @collection.id %>
+  var collection_id = <%= @collection.id %>;
 
   function upload_collection_image() {
     var fileObj = $(this);
@@ -49,24 +49,27 @@
 
 <div style="padding:10px;">
   <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 키워드 생성</h4>
-  <p style="margin:10px 0; font-size:13px; color:#999;">키워드는 하나씩 입력해주세요</p>
-  <p id="collection_keywords" style="margin:10px 0; padding:0 5px; font-size:14px; color:#999;">
-    <i class="fa fa-tag" style="font-size:14px; color:#ee6e01;"></i>&nbsp;
-    <% @collection.collection_to_collection_keywords.each do |collection_to_collection_keyword| %>
-      <%= collection_to_collection_keyword.collection_keyword.keyword %>,&nbsp;
-    <% end %>
-  </p>
+  <p style="margin:10px 0; font-size:13px; color:#999;">키워드는 하나씩 입력해주세요<br>키워드를 삭제하려면 태그를 누르세요</p>
+  <p id="collection_keywords" style="margin:10px 0; padding: 10px 10px 5px; font-size:14px; color:#999; background-color: #eee; min-height: 40px;"></p>
   <div style="position:relative;">
     <span class="collection_input_icon" onclick="$('#collection_keyword_input').focus();"><i class="fa fa-hashtag"></i></span>
-    <input id="collection_keyword_input" class="collection_input" type="text" placeholder="컬렉션의 키워드를 입력하세요"/>
-    <span id="collection_keyword_submit_btn" class="collection_input_icon right_btn" onclick="create_collection_keywords(); return false;">추가 <i class="fa fa-database"></i></span>
+    <input id="collection_keyword_input" class="collection_input" type="text" placeholder="<%= @collection.show == true ? '이미 발행한 컬렉션은 키워드를 추가할 수 없습니다' : '컬렉션의 키워드를 입력하세요' %>" <%= @collection.show == true ? 'disabled' : '' %>/>
+    <span id="collection_keyword_submit_btn" class="collection_input_icon right_btn <%= @collection.show == true ? 'inactive' : '' %>" onclick="create_collection_keywords($('#collection_keyword_input').val()); return false;">추가 <i class="fa fa-database"></i></span>
   </div>
   <div id="collection_keyword_result"></div>
   <div id="related_collections_result"></div>
 </div>
 
 <script type="text/template" id="collection-keyword-result-template">
-  <span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:6px 0; text-align:center; color:#666; font-size:13px;'>{{= keyword }} ({{= refer_count }}회)</span>
+  {{ if (type == "blank_keyword") { }}
+    <span style="display:block; padding: 10px; text-align: center; color:#666; background-color: #eee; font-size:13px;">검색어를 입력해주세요</span>
+  {{ } else if (type == "new_keyword") { }}
+    <span onclick="" style="display:block; padding: 10px; text-align: center; color:#666; background-color: #eee; font-size:13px;">키워드를 새로 생성하려면 엔터를 누르세요</span>
+  {{ } else if (type == "added_keyword") { }}
+    <a href="#" onclick="delete_collection_keywords($(this), '{{= keyword}}'); return false;" style="display: inline-block; margin: 0 5px 5px 0; padding: 10px; text-align: center; color:#fff; background-color: #ff7800; font-size:13px;">{{= keyword }}</a>
+  {{ } else if (type == "preview_keyword") { }}
+    <a href="#" onclick="create_collection_keywords('{{= keyword}}'); return false;" style="display: inline-block; margin: 0 5px 5px 0; padding: 10px; text-align: center; color:#666; background-color: #eee; font-size:13px;">{{= keyword }} ({{= refer_count }}회)</a>
+  {{ } }}
 </script>
 
 <script type="text/template" id="related-collection-result-template">
@@ -77,62 +80,57 @@
   var collectionKeywordResultTemplate = _.template($("#collection-keyword-result-template").html());
   var relatedCollectionResultTemplate = _.template($("#related-collection-result-template").html());
 
-  $("#collection_keyword_input").off("keydown keyup");
-  $("#collection_keyword_input").keydown(function(e){
-    if (e.keyCode == '13') {
-      e.preventDefault();
-      $(this).blur();
-      $("#collection_keyword_submit_btn").click();
-    }
-  }).keyup(function(e) {
-    var keyword = $("#collection_keyword_input").val();
-    var result_div = $("#collection_keyword_result");
-    if (keyword.length == 0) {
-      var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>검색어를 입력해주세요</span>";
-      result_div.html(empty_span);
-    } else {
-      $.ajax({
-        url: "/admin/collection_keywords.json",
-        type: 'GET',
-        data: {keyword: keyword},
-        dataType: 'json',
-        error: function(){
-          return false;
-        },
-        success: function(data) {
-          result_div.html("");
+  <% @collection.collection_to_collection_keywords.each do |collection_to_collection_keyword| %>
+    $("#collection_keywords").append(collectionKeywordResultTemplate({type: "added_keyword", keyword: '<%= collection_to_collection_keyword.collection_keyword.keyword %>'}));
+  <% end %>
 
-          var collection_keywords = data.collection_keywords;
+  $("#collection_keyword_input").off("keydown keyup")
+                                .keydown(function(e){
+                                  if (e.keyCode == '13') {
+                                    e.preventDefault();
+                                    $(this).blur();
+                                    $("#collection_keyword_submit_btn").click();
+                                  }
+                                }).keyup(function(e) {
+                                  var keyword = $("#collection_keyword_input").val();
+                                  var result_div = $("#collection_keyword_result");
+                                  if (keyword.length === 0) {
+                                    result_div.html(collectionKeywordResultTemplate({type: "blank_keyword"}));
+                                  } else {
+                                    $.ajax({
+                                      url: "/admin/collection_keywords.json",
+                                      type: 'GET',
+                                      data: {keyword: keyword},
+                                      dataType: 'json',
+                                      error: function(){
+                                        return false;
+                                      },
+                                      success: function(data) {
+                                        result_div.html("");
 
-          if (collection_keywords.length == 0) {
-            if (keyword != ""){
-              var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 키워드가 없습니다<br>키워드를 새로 생성하려면 엔터 누르세요</span>";
-              result_div.html(empty_span);
-            };
-          } else {
-            for (var i = 0; i < collection_keywords.length; i++) {
-              var collection_keyword = collection_keywords[i];
-              result_div.append(collectionKeywordResultTemplate({keyword: collection_keyword.keyword, refer_count: collection_keyword.refer_count}));
-            }
-          }
-        },
-        beforeSend: function() {
-          var keys = [13, 27, 40, 39, 38, 37]
-          if ($.inArray(e.keyCode, keys) != -1) return false;
-        }
-      });
-    }
-  });
+                                        var collection_keywords = data.collection_keywords;
 
-  function create_collection_keywords() {
-    var keyword = $("#collection_keyword_input").val();
-    if (collection_id == "" || collection_id == null) {
-      alert('컬렉션을 선택하세요');
-      $("#collection_keyword_input").focus().select();
-      return false;
-    } else if (keyword == "") {
-        alert('keyword를 입력하세요');
-        $("#collection_keyword_input").focus();
+                                        if (collection_keywords.length === 0) {
+                                          if (keyword !== "") result_div.html(collectionKeywordResultTemplate({type: "new_keyword"}));
+                                        } else {
+                                          for (var i = 0; i < collection_keywords.length; i++) {
+                                            var collection_keyword = collection_keywords[i];
+                                            result_div.append(collectionKeywordResultTemplate({type: "preview_keyword", keyword: collection_keyword.keyword, refer_count: collection_keyword.refer_count}));
+                                          }
+                                        }
+                                      },
+                                      beforeSend: function() {
+                                        var keys = [13, 27, 40, 39, 38, 37];
+                                        if ($.inArray(e.keyCode, keys) != -1) return false;
+                                      }
+                                    });
+                                  }
+                                });
+
+  function create_collection_keywords(keyword) {
+    if (keyword === "") {
+        alert('키워드를 입력하세요');
+        $("#collection_keyword_input").focus().select();
         return false;
     } else {
       $.ajax({
@@ -145,15 +143,17 @@
         },
         success: function(data){
           if (data.status == "success") {
-            $("#collection_keywords").append(" "+keyword + ",");
+            $("#collection_keywords").append(collectionKeywordResultTemplate({type: "added_keyword", keyword: keyword}));
             for (var i = 0; i < data.related_collections.length; i++) {
               var related_collection = data.related_collections[i];
               $("#related_collections_result").append(relatedCollectionResultTemplate({name: related_collection.name}));
             }
-            $("#collection_keyword_input").val("").focus();
+            alert('키워드를 추가하였습니다');
           } else if (data.status == "already_exists") {
-            alert('이미 존재하는 키워드입니다');
+            alert('이미 입력한 키워드입니다');
           }
+          $("#collection_keyword_input").val("").focus();
+          $("#collection_keyword_result").html("");
           $("#related_collections_result").html("");
         },
         beforeSend: function(){
@@ -164,6 +164,32 @@
         }
       });
     }
+  }
+
+  function delete_collection_keywords(target, keyword) {
+      $.ajax({
+        url: "/admin/collection_to_collection_keywords/" + collection_id,
+        dataType: 'json',
+        type: 'DELETE',
+        data: {keyword: keyword},
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          if (data.status == "published") {
+            alert('이미 발행한 컬렉션은 키워드를 삭제할 수 없습니다');
+          } else if (data.status == "success") {
+            target.remove();
+            alert('키워드 삭제 완료!');
+          }
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
   }
 </script>
 
@@ -178,7 +204,7 @@
   <div style="position:relative;">
     <span class="collection_input_icon" onclick="$('#collection_to_ask_input').focus();">id</span>
     <input id="collection_to_ask_input" class="collection_input" type="text" placeholder="컨텐츠의 ask id를 입력하세요"/>
-    <span id="collection_to_ask_submit_btn" class="collection_input_icon right_btn" onclick="create_collection_to_asks(); return false;">추가 <i class="fa fa-database"></i></span>
+    <span id="collection_to_ask_submit_btn" class="collection_input_icon right_btn cancel" onclick="create_collection_to_asks(); return false;">추가 <i class="fa fa-database"></i></span>
   </div>
   <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center; margin-top:10px;">
     <thead>
@@ -235,12 +261,12 @@
   var collectionToAsksTemplate = _.template($('#collection_to_asks_template').html());
 
   $("#collection_to_ask_input").keydown(function(e){
-    if (e.keyCode == '13') {
-      e.preventDefault();
-      $(this).blur();
-      $("#collection_to_ask_submit_btn").click();
-    }
-  })
+                                  if (e.keyCode == '13') {
+                                    e.preventDefault();
+                                    $(this).blur();
+                                    $("#collection_to_ask_submit_btn").click();
+                                  }
+                                });
 
   !(function load_collection_to_asks() {
     $.ajax({
@@ -266,7 +292,7 @@
 
   function create_collection_to_asks() {
     var ask_ids = $("#collection_to_ask_input").val();
-    if (ask_ids == "") {
+    if (ask_ids === "") {
         alert('ask_id를 입력하세요');
         $("#collection_to_ask_input").focus();
         return false;
@@ -295,7 +321,7 @@
         }
       });
     }
-  };
+  }
 
   function sort_collection_to_ask(collection_to_ask_id, is_up) {
     $.ajax({
@@ -308,7 +334,7 @@
       },
       success: function(data){
         if (data.status == "not_exists") {
-          var message = is_up ? "첫번째 컨텐츠입니다" : "마지막 컨텐츠입니다"
+          var message = is_up ? "첫번째 컨텐츠입니다" : "마지막 컨텐츠입니다";
           alert(message);
         } else if (data.status == "success") {
           var collection_to_ask = $("#collection_to_ask_"+collection_to_ask_id);
@@ -331,7 +357,7 @@
         $(".loading").hide();
       }
     });
-  };
+  }
 
   function destroy_collection_to_ask(collection_to_ask_id) {
     if (confirm("정말로 삭제하시겠어요?")) {
@@ -354,7 +380,7 @@
         }
       });
     }
-  };
+  }
 </script>
 
 <div style="padding:10px;">
@@ -362,37 +388,78 @@
   <p style="margin:10px 0; font-size:13px; color:#999;">
     발행하기 버튼을 누르면 메인 피드의 가장 상단에 반영됩니다.
   </p>
+  <p style="padding: 0 10px;"><input style="-webkit-appearance:checkbox;" type="checkbox" id="push_check_box" <%= @collection.show == true ? 'disabled' : '' %>>&nbsp;&nbsp;모든 사용자에게 아래 내용으로 푸쉬 보내기 (발행하는 순간 전송됩니다)</p>
+  <input id="push_text" class="collection_input" type="text" placeholder="VASKIT에 새로운 컬렉션이 발행되었습니다 지금 바로 확인해보세요!" <%= @collection.show == true ? 'disabled' : '' %> style="padding: 0 10px;"/>
   <a href="#" id="collection_main_show_btn" onclick="toggle_main_show(); return false;" class="collection_main_show_btn <%= @collection.show == true ? 'cancel' : '' %>"><%= @collection.show == true ? '발행취소' : '발행하기' %></a>
 </div>
 
 <script>
   function toggle_main_show() {
-    if (confirm("메인 피드 화면이 변경됩니다\n진행하시겠습니까?")) {
-      $.ajax({
-        url: '/admin/collections/'+collection_id+'.json',
-        type: 'PUT',
-        error: function(){
-          return false;
-        },
-        success: function(data){
-          var btn = $("#collection_main_show_btn");
-          if (data.status == "off") {
-            btn.removeClass("cancel").text("발행하기");
-            alert("발행 취소 완료");
-          } else if (data.status == "on") {
-            btn.addClass("cancel").text("발행취소");
-            alert("발행 완료, 메인피드 화면을 확인하세요");
+    if ($("#collection_image").attr("src") == "/images/custom/card_image_preview.png") {
+      alert("대표 이미지를 추가해주세요");
+    } else if ($("#collection_keywords").children().length === 0) {
+      alert("태그를 추가해주세요");
+    } else if ($("#collection_to_asks").children().length < 5) {
+      alert("컨텐츠를 충분히 생성해주세요 (최소 5개)");
+    } else {
+      var confirm_text = "메인 피드 화면이 변경됩니다\n진행하시겠습니까?\n\n푸쉬를 전송하려면 취소하고 푸쉬 체크해주세요";
+      var push_checked = $("#push_check_box").is(":checked");
+      var push_text = $("#push_text").val() === "" ? $("#push_text").attr("placeholder") : $("#push_text").val();
+      if (push_checked) confirm_text = "!!!!!!!!!!경고!!!!!!!!!!\n모든 사용자에게 푸쉬가 전송됩니다!!!!!\n아래의 메세지를 한번 더 확인해 주세요\n\n" + push_text + "\n\n또한, 메인 피드 화면이 변경됩니다\n진행하시겠습니까?";
+      if (confirm(confirm_text)) {
+        $.ajax({
+          url: '/admin/collections/'+collection_id+'.json',
+          type: 'PUT',
+          data: {push_checked: push_checked, push_text: push_text},
+          error: function(){
+            return false;
+          },
+          success: function(data){
+            var btn = $("#collection_main_show_btn");
+            var collection_keyword_input = $("#collection_keyword_input");
+            var collection_keyword_submit_btn = $("#collection_keyword_submit_btn");
+            var collection_keyword_delete = $("#collection_keyword_delete");
+            var collection_keyword_delete_btn = $("#collection_keyword_delete_btn");
+            var push_check_box = $("#push_check_box");
+            var push_text = $("#push_text");
+            if (data.status == "off") {
+              btn.removeClass("cancel").text("발행하기");
+              collection_keyword_input.removeAttr("disabled");
+              collection_keyword_input.attr("placeholder", "컬렉션의 키워드를 입력하세요");
+              collection_keyword_submit_btn.removeClass("inactive");
+              collection_keyword_delete.removeAttr("disabled");
+              push_check_box.removeAttr("disabled");
+              push_text.removeAttr("disabled");
+              collection_keyword_delete.attr("placeholder", "삭제할 키워드를 입력하세요");
+              collection_keyword_delete_btn.removeClass("inactive");
+              alert("발행 취소 완료");
+            } else if (data.status == "on") {
+              btn.addClass("cancel").text("발행취소");
+              collection_keyword_input.attr("disabled", "disabled");
+              collection_keyword_input.val("");
+              collection_keyword_input.attr("placeholder", "이미 발행한 컬렉션은 키워드를 추가할 수 없습니다");
+              collection_keyword_submit_btn.addClass("inactive");
+              collection_keyword_delete.attr("disabled", "disabled");
+              collection_keyword_delete.val("");
+              push_check_box.attr("disabled", "disabled");
+              push_check_box.prop("checked", false);
+              push_text.attr("disabled", "disabled");
+              push_text.val("");
+              collection_keyword_delete.attr("placeholder", "이미 발행한 컬렉션은 키워드를 삭제할 수 없습니다");
+              collection_keyword_delete_btn.addClass("inactive");
+              alert("발행 완료, 메인피드 화면을 확인하세요");
+            }
+          },
+          beforeSend: function(){
+            $(".loading").show();
+          },
+          complete: function(){
+            $(".loading").hide();
           }
-        },
-        beforeSend: function(){
-          $(".loading").show();
-        },
-        complete: function(){
-          $(".loading").hide();
-        }
-      });
+        });
+      }
     }
-  };
+  }
 </script>
 
 <style>
@@ -432,6 +499,9 @@
     font-size: 13px;
     border-left:none;
     cursor:pointer;
+  }
+  .collection_input_icon.right_btn.inactive {
+    background-color: #ccc;
   }
   .collection_input {
     display:block;

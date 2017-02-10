@@ -36,7 +36,16 @@ class Admin::CollectionToCollectionKeywordsController < Admin::HomeController
 
   # DELETE /admin/collection_to_collection_keywords/:id.json
   def destroy
+    collection = Collection.find(params[:id])
+    if collection.show
+      status = "published"
+    else
+      keyword_id = CollectionKeyword.find_by(keyword: params[:keyword]).id
+      CollectionToCollectionKeyword.find_by(collection_id: params[:id], collection_keyword_id: keyword_id).destroy
+      status = "success"
+    end
 
+    render json: { status: status }
   end
 
 end

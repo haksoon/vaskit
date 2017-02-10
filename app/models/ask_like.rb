@@ -1,17 +1,20 @@
 class AskLike < ActiveRecord::Base
-  after_create :reload_ask_like_count
+  after_create :reload_ask_like_count, :create_ask_like_alarm
   after_update :reload_ask_like_count
   after_destroy :reload_ask_like_count
 
   def reload_ask_like_count
     ask = Ask.find_by_id(self.ask_id)
     ask.update(like_count: AskLike.where(ask_id: self.ask_id).count)
+  end
 
+  def create_ask_like_alarm
+    ask = Ask.find_by_id(self.ask_id)
     ask_like_count = AskLike.where(ask_id: self.ask_id).where.not(user_id: ask.user_id).count
 
     if ask.user_id != self.user_id
       if User.find_by_id(ask.user_id).alarm_1 == true #알림 옵션 체크
-        alarm = Alarm.where(user_id: ask.user_id, ask_id: ask.id).where("alarm_type like ?", "like_ask_%").first
+        alarm = Alarm.where(user_id: ask.user_id, ask_id: ask.id).where("alarm_type LIKE ?", "like_ask_%").first
         if alarm
           alarm_count = alarm.alarm_type.gsub("like_ask_","").to_i
           if alarm_count < ask_like_count
@@ -23,5 +26,6 @@ class AskLike < ActiveRecord::Base
       end
     end
   end
+  handle_asynchronously :create_ask_like_alarm
 
 end
