@@ -3,7 +3,7 @@
   {{ if (show_comments.length == 0) { }}
     <li class="comment_blank" onclick="comment_input_activate('new');">첫 댓글을 달아주세요!</li>
   {{ } else { }}
-    <li class="comment_blank" style="display: none;">첫 댓글을 달아주세요!</li>
+    <li class="comment_blank" onclick="comment_input_activate('new');" style="display: none;">첫 댓글을 달아주세요!</li>
     {{ var original_comments = $.grep(comments, function(obj) { return obj.comment_id === null }) }}
     {{ for (var i=0; i < original_comments.length; i++) { }}
       {{ var original_comment = original_comments[i] }}
