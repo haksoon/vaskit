@@ -13,6 +13,17 @@ class Comment < ActiveRecord::Base
   after_update :reload_ask_deal_comment_count
   after_destroy :reload_ask_deal_comment_count
 
+  def generate_hash_tags
+    HashTag.destroy_all(ask_id: ask_id, comment_id: id)
+    # 업데이트의 경우 기존 해시태그를 모두 삭제한 후 재설정
+    return if is_deleted
+    hash_tags = content.scan(/#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+/)
+    hash_tags.each do |hash_tag|
+      hash_tag = hash_tag.tr('#', '').tr(',', '')
+      HashTag.create(ask_id: ask_id, comment_id: id, user_id: user_id, keyword: hash_tag)
+    end
+  end
+
   def reload_ask_deal_comment_count
     ask = Ask.find(ask_id)
     ask_deal = ask_deal_id == ask.left_ask_deal_id ? ask.left_ask_deal : ask.right_ask_deal

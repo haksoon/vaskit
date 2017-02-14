@@ -32,85 +32,91 @@
   	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   	<%= csrf_meta_tags %>
 
+    <% if Rails.env == 'production' %>
     <script>
-        // ga
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      // ga
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-        ga('create', 'UA-75373901-1', 'auto');
-        ga('send', 'pageview');
-        // ga
+      ga('create', 'UA-75373901-1', 'auto');
+      ga('send', 'pageview');
+      // ga
+    </script>
+    <script>
+      // Facebook Pixel Code
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '521318198062554');
+      fbq('track', "PageView");
+      // End Facebook Pixel Code
+    </script>
+    <% end %>
+    <script>
+      // Facebook JavaScript SDK
+      (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=false&version=v2.5&appId=<%=Facebook::CONFIG['app_id']%>";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+      // Facebook JavaScript SDK
+    </script>
 
-        // Facebook JavaScript SDK
-        (function(d, s, id){
-          var js, fjs = d.getElementsByTagName(s)[0];
-          if (d.getElementById(id)) {return;}
-          js = d.createElement(s); js.id = id;
-          js.src = "//connect.facebook.net/ko_KR/sdk.js#xfbml=false&version=v2.5&appId=<%=Facebook::CONFIG['app_id']%>";
-          fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-        // Facebook JavaScript SDK
+    <script>
+      $.cookie('uniq_key', null);
+      $.cookie('visitor_uniq_key', null);
+      if ($.cookie('visitor_key') === null) $.cookie('visitor_key', '<%= @uniq_key %>', { expires : 30000, path : '/' });
+      $.cookie('visitor_votes', null);
 
-        // Facebook Pixel Code
-        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-        document,'script','https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '521318198062554');
-        fbq('track', "PageView");
-        // End Facebook Pixel Code
-
-        $.cookie('uniq_key', null);
-        $.cookie('visitor_uniq_key', null);
-        if ($.cookie('visitor_key') === null) $.cookie('visitor_key', '<%= @uniq_key %>', { expires : 30000, path : '/' });
-        $.cookie('visitor_votes', null);
-
-        window.onerror = function(msg, url, line, col, obj) {
-          href = window.location.href;
-          obj = obj === null ? 'obj is null' : obj.stack;
-          $.ajax({
-                url: "/log_errors.json",
-                type: "POST",
-                data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj },
-                // complete: function(){
-                //   if (confirm("앗! 오류가 발생했습니다...\n앱을 재시작하시겠어요?")) window.location = href;
-                // }
-          });
-          return false;
-        };
-
-        // init VASKIT Frame
-        $(window).ready(function(){
-          loadingStart();
-          setUserDevice();
-          alarm_check();
-          history.replaceState({pageHistory:currentHistory}, null, null);
-          $(window).unbind("popstate").bind("popstate", go_popstate);
-
-          $("#collections").html(collectionsTemplate()); // seg1 초기화
-          $("#search").html(searchTemplate()); // seg2 초기화
-          $("#my_page").html(myPageTemplate()); // seg4 초기화
-          go_seg(1); // 기본화면 초기화
-        }).load(function(){
-          set_recent_asks();
-          set_collections();
-          set_video_asks();
-          user_profile_on();
-          user_alarms_on();
-          setTimeout(function(){
-            $(".loading_spinner").animateCssRemove("fadeOut");
-            $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
-              loadingEnd();
-            });
-          }, 1000);
-          setTimeout(function(){
-            open_app_banner();
-          }, 2000);
+      window.onerror = function(msg, url, line, col, obj) {
+        href = window.location.href;
+        obj = obj === null ? 'obj is null' : obj.stack;
+        $.ajax({
+              url: "/log_errors.json",
+              type: "POST",
+              data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj },
+              // complete: function(){
+              //   if (confirm("앗! 오류가 발생했습니다...\n앱을 재시작하시겠어요?")) window.location = href;
+              // }
         });
-        // End init VASKIT Frame
+        return false;
+      };
+
+      // init VASKIT Frame
+      $(window).ready(function(){
+        loadingStart();
+        setUserDevice();
+        alarm_check();
+        history.replaceState({pageHistory:currentHistory}, null, null);
+        $(window).unbind("popstate").bind("popstate", go_popstate);
+
+        $("#collections").html(collectionsTemplate()); // seg1 초기화
+        $("#search").html(searchTemplate()); // seg2 초기화
+        $("#my_page").html(myPageTemplate()); // seg4 초기화
+        go_seg(1); // 기본화면 초기화
+      }).load(function(){
+        set_recent_asks();
+        set_collections();
+        set_video_asks();
+        user_profile_on();
+        user_alarms_on();
+        setTimeout(function(){
+          $(".loading_spinner").animateCssRemove("fadeOut");
+          $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
+            loadingEnd();
+          });
+        }, 1000);
+        setTimeout(function(){
+          open_app_banner();
+        }, 2000);
+      });
+      // End init VASKIT Frame
     </script>
   </head>
   <body data-no-turbolink="true" class="clearfix">

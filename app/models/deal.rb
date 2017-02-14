@@ -9,7 +9,7 @@ class Deal < ActiveRecord::Base
   before_create :rename_file
 
   def rename_file
-    return if image.nil?
+    return if image_file_name.nil?
     extension = image_file_name.split('.').last
     return unless %w[jpg jpeg gif png].include?(extension)
     charset = %w[2 3 4 6 7 9 a b c d e f g h i j k l m n o p q r s t v w x y z]

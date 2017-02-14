@@ -229,10 +229,11 @@ body {
             width: calc(100% - 80px); margin: 0 60px 0 20px; text-align: left;
           }
         }
-        .header_btn { position: absolute; top: 0; height: 50px; line-height: 50px; text-align: center; cursor: pointer; transition: transform .25s, color .25s;
+        .header_btn { position: absolute; top: 0; height: 50px; line-height: 50px; text-align: center; cursor: pointer; transition: transform .25s, color .25s, background-color .25s;
           &.left { width: 60px; left: 0; }
           &.right { width: 50px; right: 0px; }
           &.close_btn, &.back_btn, &.new_btn { font-size: 20px; }
+          &.submit_btn { width: 60px; }
           &.ask_like_btn, &.ask_edit_btn { font-size: 16px; right: 50px;
             .vaskit_icon { width: 18px; height: 18px; margin: 16px; vertical-align: top;
                 &.ask_like_icon { background-position: -0px -100px; }
@@ -397,7 +398,7 @@ body {
 
 .highlight { color: #FF7800; }
 .fa-heart.comment_like_icon { color: #FF7800; }
-.hash_tag { color: #FF7800; transition: background-color .2s;
+.hash_tag { color: #FF7800; padding: 1px 2px 0; border-radius: 3px; transition: background-color .2s;
     &:active { background-color: #ffe4a9; }
 }
 .link { color: #998674; transition: background-color .2s;
@@ -779,16 +780,28 @@ body {
         .comment_reply_icon { right: -10px; transform: scale(1, -1); }
         .comment_user_pic { float: right; }
         .comment_user { margin-right: 45px;
-          .comment_user_profile { float: right; margin-left: 5px; margin-top: 1px; }
-          .comment_user_id { float: right; }
-          .comment_menu_btn { float: left; margin-top: 1px;
-            .comment_like_count { float: right; }
-            .comment_like_icon { margin-right: 3px; }
-          }
+            .comment_user_profile { float: right; margin-left: 5px; margin-top: 1px; }
+            .comment_user_id { float: right; }
+            .comment_menu_btn { float: left; margin-top: 1px;
+                .comment_like_count { float: right; }
+                .comment_like_icon { margin-right: 3px; }
+            }
         }
         .comment_bubble { margin-right: 40px; background-color: #dfdfdf;
-          .comment_bubble_arrow { right: -7px; border-left-color: #dfdfdf; border-top-color: #dfdfdf; }
-          .comment_date { right: -50px; }
+            .comment_bubble_arrow { right: -7px; border-left-color: #dfdfdf; border-top-color: #dfdfdf; }
+            .comment_date { right: -50px; }
+        }
+      }
+      &.vaskit {
+        .comment_bubble { background-color: #FF7800 !important; color: #fff !important; }
+        .comment_bubble_arrow { border-top-color: #FF7800 !important; }
+        &.left { .comment_bubble_arrow { border-right-color: #FF7800 !important; } }
+        &.right { .comment_bubble_arrow { border-left-color: #FF7800 !important; } }
+        .hash_tag { color: #FF7200 !important; background-color: #ffe4a9 !important;
+            &:active { background-color: #fff !important; }
+        }
+        .link { color: #fff !important;
+            &:active { background-color: #ffe4a9 !important; }
         }
       }
       &.deleted { padding: 0 5px; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 0; transform: rotateX(720deg);
@@ -832,8 +845,17 @@ body {
 .comment_input_box { background-color: #fff; outline: 1px solid #ddd; min-height: 50px; max-height: 200px; transition: height .1s;
   .comment_input_init { width: calc(100% - 100px); height: 100%; min-height: 50px; padding: 9px 0px; margin: 0 50px; box-sizing: border-box;
     .comment_input_bubble { background-color: #f2f0f0; padding: 7px 10px; border-radius: 5px 0 0 5px; box-shadow: 1px 1px 1px lightgrey;
-      .comment_input { display: block; width: 100%; max-height: 168px; height: 18px; line-height: 17px; @include fontRegular; font-size: 14px; background-color: #f2f0f0; color: #666;
-        &.filled { -webkit-text-fill-color: #666 !important; }
+      .hashtag_container { position: relative; width: 100%;
+          .comment_input, .hashtag_highlights { font-size: 14px; line-height: 18px; @include fontRegular; }
+          .comment_input, .hashtag_backdrop { display: block; width: 100%; max-height: 168px; height: 18px; background-color: #f2f0f0; color: #666;
+              &.filled { -webkit-text-fill-color: #666 !important; }
+          }
+          .hashtag_backdrop { position: absolute; top: 0; height: 100%; background-color: transparent; overflow: hidden; pointer-events: none; box-sizing: border-box; margin: 0; padding: 0;
+              &.iOS { padding: 0 3px; }
+          }
+          .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: transparent;
+              mark { border-radius: 3px; color: #FF7200; background-color: #f2f0f0; }
+          }
       }
     }
    }
@@ -960,7 +982,7 @@ body {
 /* ============================== Seg3 질문작성하기 관련 ============================== */
 .ask_form {
     .submit_btn { color: #fff !important;
-        &.ready { color: #ff7200 !important; transform: scale(1.2); }
+        &.ready { background-color: #ff7800 !important; @include fontBold; }
     }
     .container.main { background-color: #f2f0f0 !important; }
     .ask_form_progress { position: absolute; bottom: 0; width: 100%; height: 5px; background-color: #333;
@@ -1089,9 +1111,9 @@ body {
           &.iOS { padding: 0 3px; }
       }
       .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: transparent;
-          mark { border-radius: 3px; color: #ee6e01; background-color: rgba(255,204,90,0.5); }
+          mark { border-radius: 3px; color: #FF7200; background-color: #fff; }
       }
-    }
+  }
 
     .ask_image.required, .ask_table_cell.required {
         &.left { transform: translateX(10px); }

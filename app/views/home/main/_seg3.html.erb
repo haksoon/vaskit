@@ -1,10 +1,10 @@
 <script type="text/template" id="askFormTemplate">
   {{ tutorial_ask() }}
-  <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check($(this));", onchange: "ask_progress_check($(this));"}) do |f| %>
+  <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check();", onchange: "ask_progress_check();"}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
       <span class="header_title">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
       <span class="header_btn left" onclick="back_button();">취소</span>
-      <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음</span>
+      <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음 <i class='fa fa-caret-right'></i></span>
     </div>
     <div class="container main">
       <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.left_ask_deal, is_left: true}) }}</div>
@@ -28,7 +28,7 @@
   function show_ask_form(ask_id) {
     var url = '/asks/';
     if ($("#ask_form").length === 0) {
-      url += ask_id === null ? 'new' : ask_id+'/edit';
+      url += ask_id === undefined ? 'new' : ask_id+'/edit';
       $.ajax({
         url: url,
         dataType: "json",
@@ -123,7 +123,7 @@
     }
   }
 
-  function ask_progress_check(target) {
+  function ask_progress_check() {
     var ask_form = $("#ask_form");
     var inners = ask_form.find(".inner");
     var ask_form_progress_bar = ask_form.find(".ask_form_progress.bar");
@@ -143,8 +143,9 @@
   }
 
 
-  function show_next_ask_form(target) {
+  function show_next_ask_form() {
     var ask_form = $("#ask_form");
+    var target = ask_form.find(".submit_btn");
     var ask_id = Number(target.attr("ask-id"));
     var back_btn = ask_form.find(".header_btn.left");
     var current_step = Number(target.attr("step"));
@@ -158,17 +159,17 @@
       // 2번 스텝으로 진행
       step_1_inner.addClass("prev");
       step_2_inner.removeClass("next").scrollTop(0);
-      target.html("다음").attr("step", 2);
-      back_btn.html("이전");
+      target.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
+      back_btn.html("<i class='fa fa-caret-left'></i> 이전");
       card_search_input_init.removeAttr("is-left");
     } else if (current_step == 2) {
       // 3번 스텝으로 진행
       step_2_inner.addClass("prev");
       step_3_inner.removeClass("next").scrollTop(0);
       target.html("완료").attr("step", 3);
-      back_btn.html("이전");
+      back_btn.html("<i class='fa fa-caret-left'></i> 이전");
       card_search_input_init.addClass("hide");
-      if (userDevice.isIOS) hashtag_backdrop.addClass("iOS");
+      ask_progress_check();
     } else if (current_step == 3) {
       ask_form.find(".form_data").removeAttr('disabled');
       var data = ask_form.serializeArray();
@@ -247,8 +248,9 @@
     }
   }
 
-  function hide_next_ask_form(target) {
+  function hide_next_ask_form() {
     var ask_form = $("#ask_form");
+    var target = ask_form.find(".submit_btn");
     var back_btn = ask_form.find(".header_btn.left");
     var current_step = Number(target.attr("step"));
     var step_1_inner = ask_form.find(".inner.step_1");
@@ -256,21 +258,20 @@
     var step_3_inner = ask_form.find(".inner.step_3");
     var card_search_input_init = ask_form.find(".card_search_input_init");
 
+    target.removeClass("ready");
     if (current_step == 3) {
       step_3_inner.addClass("next");
       step_2_inner.removeClass("prev").scrollTop(0);
-      target.html("다음").attr("step", 2);
-      back_btn.html("이전");
+      target.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
+      back_btn.html("<i class='fa fa-caret-left'></i> 이전");
       card_search_input_init.removeAttr("is-left").removeClass("hide");
     } else if (current_step == 2) {
       step_2_inner.addClass("next");
       step_1_inner.removeClass("prev").scrollTop(0);
-      target.html("다음").attr("step", 1);
+      target.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 1);
       back_btn.html("취소");
       card_search_input_init.attr("is-left", true).removeClass("hide");
     }
-
-    back_button();
   }
 </script>
 
@@ -417,7 +418,7 @@
                       step_2_inner.find(".ask_image_seg").removeClass("required");
                       step_3_inner.find(".ask_image.right").attr("src", data.image_url);
         	        	}
-                    ask_progress_check(ask_form);
+                    ask_progress_check();
                   },
                   beforeSend: function(){
                     loadingStart();
@@ -549,7 +550,7 @@
     var card_search_result_div = ask_form.find(".card_search_result");
     var card_search_input = ask_form.find(".card_search_input");
     ask_form_header_title.html("질문 작성하기");
-    if (current_step == 1) { ask_form_back_btn.html("취소"); } else { ask_form_back_btn.html("이전"); }
+    if (current_step == 1) { ask_form_back_btn.html("취소"); } else { ask_form_back_btn.html("<i class='fa fa-caret-left'></i> 이전"); }
     ask_form_submit_btn.show();
     card_search_input.val("");
     card_search_result_div.addClass("bottom").transitionEmpty();
@@ -613,7 +614,7 @@
               step_3_inner.find(".ask_table_row.price").find(".ask_table_cell.right").html(numberWithCommas(data.deal.price)+"원");
               step_3_inner.find(".ask_table_row.link").find(".ask_table_cell.right").html(fieldWithLink(data.deal.link));
 	        	}
-            ask_progress_check(ask_form);
+            ask_progress_check();
 					},
 					beforeSend: function(){
 						loadingStart();
@@ -661,7 +662,7 @@
               step_2_inner.find(".ask_image_seg").removeClass("required");
               step_3_inner.find(".ask_image.right").attr("src", data.image_url);
 	        	}
-            ask_progress_check(ask_form);
+            ask_progress_check();
 					},
 	        beforeSend: function(){
 						loadingStart();
@@ -798,7 +799,7 @@
       <textarea class="input text_field ask_message_input form_data" type="text"
                   name="ask[message]"
                   placeholder="구매를 고민하고 있는 상황을 알려주세요! &#13;&#10;#고민고민하지마 #VASKIT" required disabled>{{= ask.message }}</textarea>
-			<div class="hashtag_backdrop">
+			<div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}">
         <div class="hashtag_highlights">{{= applyHashtag(ask.message) }}</div>
       </div>
 		</div>
@@ -855,8 +856,7 @@
   }
 
   function applyHashtag(text) {
-    if (text !== null) text = text.replace(/\n$/g, '\n\n').replace(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g, '<mark>$&</mark>');
+    if (text !== null) text = text.replace(/\n$/g, '\n\n').replace(/#$|(#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+)/g, '<mark>$&</mark>');
     return text;
   }
-
 </script>

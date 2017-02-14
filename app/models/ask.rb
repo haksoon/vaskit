@@ -51,7 +51,7 @@ class Ask < ActiveRecord::Base
   def generate_hash_tags
     HashTag.destroy_all(ask_id: id)
     # 업데이트의 경우 기존 해시태그를 모두 삭제한 후 재설정
-    hash_tags = message.scan(/#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*/)
+    hash_tags = message.scan(/#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+/)
     hash_tags.each do |hash_tag|
       hash_tag = hash_tag.tr('#', '').tr(',', '')
       HashTag.create(ask_id: id, user_id: user_id, keyword: hash_tag)

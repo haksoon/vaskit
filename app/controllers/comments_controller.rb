@@ -20,12 +20,12 @@ class CommentsController < ApplicationController
                                content: content,
                                comment_id: original_comment_id,
                                image: comment_image)
+      comment.generate_hash_tags
+      comment = comment.as_json(include: [:user])
       status = 'success'
     else
       status = 'not_authorized'
     end
-
-    comment = comment.as_json(include: [:user])
 
     render json: { status: status, ask: ask, comment: comment }
   end
@@ -39,6 +39,7 @@ class CommentsController < ApplicationController
 
     if current_user && current_user.id == comment.user_id
       comment.update(content: content)
+      comment.generate_hash_tags
       ask = Ask.find(comment.ask_id)
       comment = comment.as_json(include: [:user])
       status = 'success'
@@ -73,12 +74,14 @@ class CommentsController < ApplicationController
   def destroy
     comment = Comment.find(params[:id])
     if current_user && comment.user_id == current_user.id
-      comment.update(is_deleted: true)
       status = 'success'
+      comment.update(is_deleted: true)
+      comment.generate_hash_tags
       status = 'reply_exist' unless Comment.find_by_comment_id(params[:id]).nil?
     else
       status = 'not_authorized'
     end
+
     render json: { status: status }
   end
 

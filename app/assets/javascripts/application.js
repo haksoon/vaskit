@@ -745,7 +745,7 @@ function taggingKeywords(origin_string, img_hidden) {
   document.body.appendChild(html_tmp);
   html_tmp = $("#taggingTmp");
 
-  var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g);
+  var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+)/g);
   if (hash_tags !== null) {
     hash_tags.sort(function(a,b){ return b.length - a.length; });
     $.each(hash_tags, function(index, hash_tag) {

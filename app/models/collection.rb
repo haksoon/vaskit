@@ -14,7 +14,7 @@ class Collection < ActiveRecord::Base
   before_update :rename_file
 
   def rename_file
-    return if image.nil?
+    return if image_file_name.nil?
     extension = image_file_name.split('.').last
     return unless %w[jpg jpeg gif png].include?(extension)
     self.image_file_name = "collection.#{extension}"

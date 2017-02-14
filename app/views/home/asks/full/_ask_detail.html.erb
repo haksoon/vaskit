@@ -182,7 +182,12 @@
   <div class="container bottom comment_input_box ask ask_{{= ask.id }}" ontouchmove="return false;">
       <div class="comment_input_init" onclick="new_comment();">
         <div class="comment_input_bubble">
-          <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;"></textarea>
+          <div class="hashtag_container">
+            <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;"></textarea>
+      			<div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}">
+              <div class="hashtag_highlights"></div>
+            </div>
+      		</div>
         </div>
       </div>
       <div class="comment_input_btn comment_input_menu {{= vote_direction == 'right' ? 'right' : 'left' }}" onclick="toggle_comment($(this));" left="{{= vote_direction == 'right' ? '' : 'true' }}">

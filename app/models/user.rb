@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   after_create :signup_submit_notifier
 
   def rename_file
-    return if avatar.nil?
+    return if avatar_file_name.nil?
     extension = avatar_file_name.split('.').last
     return unless %w[jpg jpeg gif png].include?(extension)
     self.avatar_file_name = "data.#{extension}"
