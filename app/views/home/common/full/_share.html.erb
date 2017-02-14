@@ -99,7 +99,7 @@
 
   function show_share(share_type, target_id) {
     var share_url = "<%= CONFIG['host'] %>" + "/" + share_type + "s/" + target_id;
-    if ($("#share_screen").length == 0) {
+    if ($("#share_screen").length === 0) {
       $.ajax({
             url: "/shares/new.json",
             dataType: "json",
@@ -110,9 +110,9 @@
             },
             success: function(data){
               open_full_view(shareTemplate({share_type: share_type, target_id: target_id, share_data: data.share_data}));
-              $("#share_facebook_btn").on("click", function(){ share_facebook() });
-              $("#share_kakao_btn").on("click", function(){ share_katalk(data.share_data) });
-              $("#share_url_btn").on("click", function(){ copy_url() });
+              $("#share_facebook_btn").on("click", function(){ share_facebook(); });
+              $("#share_kakao_btn").on("click", function(){ share_katalk(data.share_data); });
+              $("#share_url_btn").on("click", function(){ copy_url(); });
               $("#share_url").val(share_url);
               if (userApp) setAppStatusBar("dark");
             },
@@ -134,7 +134,7 @@
           window.location = "vaskit://shareFacebook/////" + share_url;
         }
       } else {
-        if (typeof(FB) != 'undefined' && FB != null) {
+        if (typeof(FB) != 'undefined' && FB !== null) {
           FB.init({
             appId      : '<%=Facebook::CONFIG["app_id"]%>',
             status     : true,
@@ -149,7 +149,7 @@
       }
 
       share_log("facebook");
-    };
+    }
 
     function share_katalk(share_data) {
       var captured_img;
@@ -223,15 +223,19 @@
           },
           installTalk: false
         });
-      };
+      }
 
       share_log("katalk");
-    };
+    }
 
     function copy_url() {
-      copyfieldvalue(event, "share_url") ? notify('주소가 복사되었습니다!') : prompt('아래의 주소를 복사해주세요!', share_url);
+      if (copyfieldvalue(event, "share_url")) {
+        notify('주소가 복사되었습니다!');
+      } else {
+          prompt('아래의 주소를 복사해주세요!', share_url);
+      }
       share_log("url");
-    };
+    }
 
     function share_log(channel) {
       var ask_id = share_type == "ask" ? target_id : null;
@@ -243,13 +247,12 @@
         data: {channel: channel, ask_id: ask_id, collection_id: collection_id}
       });
     }
-
-  };
+  }
 
   function hide_share() {
     close_full_view();
     if (userApp) setAppStatusBar();
-  };
+  }
 
   function copyfieldvalue(e, id){
     if (document.execCommand("copy")) {

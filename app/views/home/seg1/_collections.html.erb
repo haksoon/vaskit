@@ -59,16 +59,16 @@
             success: function(data){
               var collections = data.collections;
               for (var i=0; i < collections.length; i++) {
-                var collection = collections[i]
+                var collection = collections[i];
                 $("#collections_seg").find(".loading_icon").before(collectionTemplate({collection: collection}));
-              };
+              }
             },
             beforeSend: function(){
             },
             complete: function(){
             }
     });
-  };
+  }
 
   function show_collection(collection_id) {
     var url = "/collections/"+collection_id;
@@ -101,23 +101,24 @@
             }
     });
     return url;
-  };
+  }
 
   function hide_collection() {
     remove_wrapper();
-  };
+  }
 
   function animate_collection_image(target) {
     var current_wrapper = target.parentsUntil(this, ".wrapper");
     var img = current_wrapper.find(".collection_detail");
     var st = target.scrollTop();
     var vh = target.innerHeight();
+    var scale = 1;
     if (st < 0) {
-      var scale = -(st / vh) * 2 + 1;
+      scale = -(st / vh) * 2 + 1;
       img.clearQueue().css({transformOrigin: "top center", transform: "scale(" + scale + ")"});
     } else {
-      var scale = (st / vh) * 1.2 + 1;
+      scale = (st / vh) * 1.2 + 1;
       img.clearQueue().css({transformOrigin: "bottom center", transform: "scale(" + scale + ")"});
-    };
-  };
+    }
+  }
 </script>

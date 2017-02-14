@@ -39,15 +39,15 @@
         e.preventDefault();
         $(this).blur();
         password_reset();
-      };
+      }
     });
     var url = '/users/reset_password';
     return url;
-  };
+  }
 
   function hide_reset_password() {
     login_back();
-  };
+  }
 
   function password_reset() {
     var user = $("#password_reset_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
@@ -80,5 +80,5 @@
               loadingEnd();
             }
     });
-  };
+  }
 </script>

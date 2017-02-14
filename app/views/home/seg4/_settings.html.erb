@@ -180,7 +180,7 @@
       <span class="setting_title"><i class="fa fa-caret-right"></i> 당신의 예쁜 모습을 보여주세요!</span>
       <div class="profile_div" style="padding: 10px 0 20px;">
         <img id="preview_user_profile" class="profile_pic" src="{{= get_avatar(current_user) }}">
-        <span id="preview_user_profile_edit_btn" style="display: none;" onclick="go_url('image_edit', $(this), 'user_profile');" img-id="" is-circle="true" cropping-type="user_profile"><i class="fa fa-crop"></i></span>
+        <span id="preview_user_profile_edit_btn" style="display: none;" onclick="go_url('image_edit', $(this));" img-id="" is-circle="true" cropping-type="user_profile"><i class="fa fa-crop"></i></span>
         <input type="file" id="user_picture_file" name="user_picture" accept="image/*" style="display:inline; width:1px; height:1px; visibility:hidden;" onchange="update_user_picture();">
       </div>
       <span class="setting_menu" onclick="$('#user_picture_file').click(); $('#user_picture_uploading').addClass('fa-spinner');">사진 변경 <i id="user_picture_uploading" class="fa fa-spin" style="color: #999;"></i></span>

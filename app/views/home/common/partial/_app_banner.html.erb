@@ -34,13 +34,13 @@
       $("#app_banner").css({height: "50px"}).html(appBannerPCTemplate());
     } else {
       $("#app_banner").remove();
-    };
-  };
+    }
+  }
 
   function close_app_banner() {
     $("#main_view").removeClass("onAppBanner");
     $("#app_banner").css({height: 0}).transitionRemove();
-  };
+  }
 
   function open_in_app() {
     var playstore_link = "https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit",
@@ -60,16 +60,16 @@
       aos_intent_link = "intent://vaskit.kr?url="+app_url+"&js="+app_js+"#Intent;scheme=vaskit;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.vaskit.msh.vaskit;end";
       aos_app_link = "vaskit://vaskit.kr?url="+app_url+"&js="+app_js;
       ios_app_link = "fb532503193593128://kr.vaskit.msh.vaskit.fb532503193593128?js="+app_js;
-    };
+    }
 
     //If the app is not installed the script will wait for 2sec and redirect to app store.
-    var loadedAt = +new Date;
+    var loadedAt = +new Date();
     if (userDevice.isIOS) {
       try {
         window.location = ios_app_link;
       } catch(err) {
       }
-      setTimeout(function() { if (+new Date - loadedAt < 2000) window.location = appstore_link; }, 25);
+      setTimeout(function() { if (+new Date() - loadedAt < 2000) window.location = appstore_link; }, 25);
     } else if (userDevice.isAndroid) {
       if (userBrowser.isChrome || userBrowser.isNaver || userBrowser.isKakao || userBrowser.isFacebook) {
         window.location = aos_intent_link;
@@ -79,8 +79,8 @@
           // 이 부분이 이상하게 동작함
         } catch(err) {
         }
-        setTimeout(function() { if (+new Date - loadedAt < 2000) window.location = playstore_link; }, 25);
+        setTimeout(function() { if (+new Date() - loadedAt < 2000) window.location = playstore_link; }, 25);
       }
-    };
-  };
+    }
+  }
 </script>

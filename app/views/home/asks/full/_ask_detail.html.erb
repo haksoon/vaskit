@@ -215,23 +215,7 @@
     </div>
     <ul class="comment_list">
       <li class="comment_list_background"></li>
-      {{ if (ask.comments.length == 0) { }}
-        <li class="comment_blank" onclick="comment_input_activate('new');">첫 댓글을 달아주세요!</li>
-      {{ } else { }}
-        <li class="comment_blank" style="display: none;">첫 댓글을 달아주세요!</li>
-        {{ var original_comments = $.grep(ask.comments, function(obj) { return (obj.ask_id == ask.id && obj.comment_id == null) }) }}
-        {{ for (var i=0; i < original_comments.length; i++) { }}
-          {{ var original_comment = original_comments[i] }}
-          {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === original_comment.id}).length == 0 ? false : true }}
-          {{= commentTemplate({ask: ask, comment: original_comment, already_like: already_like}) }}
-          {{ var reply_comments = $.grep(ask.comments, function(obj) { return (obj.ask_id == ask.id && obj.comment_id == original_comment.id) }) }}
-          {{ for (var j=0; j < reply_comments.length; j++) { }}
-            {{ var reply_comment = reply_comments[j] }}
-            {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === reply_comment.id}).length == 0 ? false : true }}
-            {{= commentTemplate({ask: ask, comment: reply_comment, already_like: already_like}) }}
-          {{ } }}
-        {{ } }}
-      {{ } }}
+      {{= commentsTemplate({ask: ask, comments: ask.comments, like_comments: like_comments}) }}
     </ul>
   </div>
 </script>
@@ -261,11 +245,11 @@
       }
     });
     return url;
-  };
+  }
 
   function hide_ask() {
     remove_wrapper();
-  };
+  }
 
   function like_ask(target) {
     var ask_id = target.attr("ask-id");
@@ -288,17 +272,17 @@
                   target.removeClass("is_liked").animateCss("jello");
                   all_ask_like_icons.removeClass("is_liked");
                   all_ask_like_texts.removeClass("is_liked");
-                  ask_like_count == 1 ? all_ask_like_counts.html(0) : all_ask_like_counts.html(ask_like_count-1);
+                  if (ask_like_count == 1) { all_ask_like_counts.html(0); } else { all_ask_like_counts.html(ask_like_count-1); }
                 } else {
                   target.addClass("is_liked").animateCss("tada");
                   all_ask_like_icons.addClass("is_liked");
                   all_ask_like_texts.addClass("is_liked");
                   all_ask_like_counts.html(ask_like_count+1);
-                };
+                }
               }
       });
     });
-  };
+  }
 
   function toggle_vote_detail(target) {
     var ask_container = target.parentsUntil(this, ".container.main");
@@ -330,15 +314,15 @@
                   success: function(data) {
                     var detail_vote_count = data.detail_vote_count;
                     var html = "";
-                    var gender_total_count = detail_vote_count.left.male_count + detail_vote_count.right.male_count
-                                           + detail_vote_count.left.female_count + detail_vote_count.right.female_count;
-                    var age_total_count = detail_vote_count.left.age_20_1_count + detail_vote_count.right.age_20_1_count
-                                        + detail_vote_count.left.age_20_2_count + detail_vote_count.right.age_20_2_count
-                                        + detail_vote_count.left.age_20_3_count + detail_vote_count.right.age_20_3_count
-                                        + detail_vote_count.left.age_30_1_count + detail_vote_count.right.age_30_1_count
-                                        + detail_vote_count.left.age_30_2_count + detail_vote_count.right.age_30_2_count
-                                        + detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count
-                                        + detail_vote_count.left.etc_count + detail_vote_count.right.etc_count;
+                    var gender_total_count = detail_vote_count.left.male_count + detail_vote_count.right.male_count;
+                        gender_total_count += detail_vote_count.left.female_count + detail_vote_count.right.female_count;
+                    var age_total_count = detail_vote_count.left.age_20_1_count + detail_vote_count.right.age_20_1_count;
+                        age_total_count += detail_vote_count.left.age_20_2_count + detail_vote_count.right.age_20_2_count;
+                        age_total_count += detail_vote_count.left.age_20_3_count + detail_vote_count.right.age_20_3_count;
+                        age_total_count += detail_vote_count.left.age_30_1_count + detail_vote_count.right.age_30_1_count;
+                        age_total_count += detail_vote_count.left.age_30_2_count + detail_vote_count.right.age_30_2_count;
+                        age_total_count += detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count;
+                        age_total_count += detail_vote_count.left.etc_count + detail_vote_count.right.etc_count;
 
                     html += "<div style='border-top: 1px solid #dbdbdb;'>" + askResultTemplate({type: "남성", left_count: detail_vote_count.left.male_count, right_count: detail_vote_count.right.male_count, total_count: gender_total_count }) + "</div>";
                     html += "<div>" + askResultTemplate({type: "여성", left_count: detail_vote_count.left.female_count, right_count: detail_vote_count.right.female_count, total_count: gender_total_count }) + "</div>";
@@ -349,7 +333,7 @@
                     html += "<div>" + askResultTemplate({type: "30중", left_count: detail_vote_count.left.age_30_2_count, right_count: detail_vote_count.right.age_30_2_count, total_count: age_total_count }) + "</div>";
                     html += "<div>" + askResultTemplate({type: "30후", left_count: detail_vote_count.left.age_30_3_count, right_count: detail_vote_count.right.age_30_3_count, total_count: age_total_count }) + "</div>";
                     html += "<div>" + askResultTemplate({type: "기타", left_count: detail_vote_count.left.etc_count, right_count: detail_vote_count.right.etc_count, total_count: age_total_count }) + "</div>";
-                    html += "<div style='height: 27px; line-height: 28px; border-top: 1px solid #dbdbdb;'><i class='fa fa-id-badge'></i> 비회원 투표 결과는 제외한 수치입니다</div>"
+                    html += "<div style='height: 27px; line-height: 28px; border-top: 1px solid #dbdbdb;'><i class='fa fa-id-badge'></i> 비회원 투표 결과는 제외한 수치입니다</div>";
 
                     vs_result_detail.html(html).addClass("is_loading").one(transitionEnd, function() {
                         vs_result_detail.addClass("is_opened").removeClass("is_loading");
@@ -364,10 +348,10 @@
                     loadingEnd();
                   }
           });
-        };
+        }
       });
-    };
-  };
+    }
+  }
 
   function submit_ask_complete(ask_id) {
     if (confirm('질문을 종료하시겠어요?')) {
@@ -391,7 +375,7 @@
             complete: function(){
               loadingEnd();
             }
-      })
+      });
     }
   }
 </script>

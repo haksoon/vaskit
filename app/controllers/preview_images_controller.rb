@@ -1,6 +1,4 @@
-# coding : utf-8
 class PreviewImagesController < ApplicationController
-
   # GET /preview_images/:id.json
   def show
     preview_image_url = PreviewImage.find(params[:id]).image.url(:crop)
@@ -9,13 +7,15 @@ class PreviewImagesController < ApplicationController
 
   # POST /preview_images.json
   def create
-    if params[:File]
-      image = params[:File]
-    elsif params[:image_url]
-      image = open(params[:image_url])
-    end
+    image =
+      if params[:File]
+        params[:File]
+      elsif params[:image_url]
+        open(params[:image_url])
+      end
     preview_image = PreviewImage.create(user_id: current_user.id, image: image)
-    image_url = preview_image.image.url(:square) unless preview_image.image.blank? # preview로 original size 이미지를 제공하는 것이 좋으나, 모바일 디바이스에서 메모리로 인한 오류가 발생하여 최대폭 1024px로 제한
+    # preview로 original size 이미지를 제공하는 것이 좋으나, 모바일 디바이스에서 메모리로 인한 오류가 발생하여 최대폭 1024px로 제한
+    image_url = preview_image.image.url(:square) unless preview_image.image.blank?
     render json: { image_url: image_url, preview_img_id: preview_image.id }
   end
 
@@ -28,7 +28,7 @@ class PreviewImagesController < ApplicationController
     preview_image.crop_h = params[:crop_h].to_i
     preview_image.reprocess_image
 
-    if params[:cropping_type] == "user_profile"
+    if params[:cropping_type] == 'user_profile'
       user = User.find(current_user.id)
       user.update(avatar: preview_image.image.styles[:square])
       image_url = user.avatar.url(:original)
@@ -38,5 +38,4 @@ class PreviewImagesController < ApplicationController
 
     render json: { image_url: image_url }
   end
-
 end

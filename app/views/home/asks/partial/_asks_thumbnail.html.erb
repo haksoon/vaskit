@@ -181,7 +181,7 @@
     function clickListener(e) {
       e.preventDefault();
       e.stopPropagation();
-    };
+    }
 
     function mouseDownListener(e){
       e.preventDefault();
@@ -204,7 +204,7 @@
 
       // Custom Code
       start(e);
-    };
+    }
 
     function mouseMoveListener(e){
       e.preventDefault();
@@ -213,7 +213,7 @@
 
       // Custom Code
       moving(e);
-    };
+    }
 
     function mouseUpListener(e){
       e.preventDefault();
@@ -228,7 +228,7 @@
 
       // Custom Code
       end(e);
-    };
+    }
 
     function touchStartListener(e){
       e.preventDefault();
@@ -241,7 +241,7 @@
 
       // Custom Code
       start(e);
-    };
+    }
 
     function touchMoveListener(e){
       e.preventDefault();
@@ -252,14 +252,14 @@
 
       // Custom Code
       moving(e);
-    };
+    }
 
     function touchEndListener(e){
       e.preventDefault();
 
       // Custom Code
       end(e);
-    };
+    }
 
 
     function start(e) {
@@ -283,7 +283,7 @@
         top: mouseStartY - ask_image_box_top,
         left: mouseStartX - ask_image_box_left
       });
-    };
+    }
 
     function moving(e) {
       target.clearQueue().css({
@@ -299,8 +299,8 @@
       } else {
         left_img.clearQueue().css({left: "-3vw"});
         right_img.clearQueue().css({right: "-3vw"});
-      };
-    };
+      }
+    }
 
     function end(e) {
       ask_box.removeClass("is_voting");
@@ -331,10 +331,10 @@
           top: '50%',
           left: '50%'
         }, 250, 'easeInOutBack');
-      };
-    };
+      }
+    }
 
-  };
+  }
 
   function vote(target, ask_id, is_left) {
     var vote_id;
@@ -384,14 +384,14 @@
       });
     } else {
       var votes = $.cookie('visitor_votes');
-      var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".");
+      var votes_array = (votes === null || votes === "") ? [] : votes.split(".");
 
-      vote_id = votes_array.length == 0 ? 0 : JSON.parse(votes_array[votes_array.length-1]).id + 1;
+      vote_id = votes_array.length === 0 ? 0 : JSON.parse(votes_array[votes_array.length-1]).id + 1;
       for (var i=0; i<votes_array.length; i++) {
         var vote = votes_array[i];
         vote = JSON.parse(vote);
         if (vote.ask_id == ask_id) votes_array.splice(i,1);
-      };
+      }
       var this_vote = JSON.stringify({
         id: vote_id,
         ask_id: ask_id,
@@ -420,7 +420,7 @@
 
       if (votes_array.length > 4) visitor_check();
     }
-  };
+  }
 
 
   function vote_cancel(target, ask_id, vote_id) {
@@ -452,12 +452,12 @@
       });
     } else {
       var votes = $.cookie('visitor_votes');
-      var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".");
+      var votes_array = (votes === null || votes === "") ? [] : votes.split(".");
       for (var i=0; i<votes_array.length; i++) {
         var vote = votes_array[i];
         vote = JSON.parse(vote);
         if (vote.id == vote_id) votes_array.splice(i,1);
-      };
+      }
 
       votes = votes_array.join(".");
       $.cookie('visitor_votes', votes, { expires : 30000, path : '/' });
@@ -470,5 +470,5 @@
                     left: '50%'
                   });
     }
-  };
+  }
 </script>

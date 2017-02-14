@@ -71,8 +71,8 @@
     var search_input_submit = target.find(".search_input_submit");
     var search_input_reset = target.find(".search_input_reset");
 
-    search_input_submit.off("click").on("click", function(){ search_by_key() });
-    search_input_reset.off("click").on("click", function(){ search_keyword_reset() });
+    search_input_submit.off("click").on("click", function(){ search_by_key(); });
+    search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
     search_input.off("keydown keyup blur")
                 .on("keydown", function(e) {
               		if (e.keyCode == '13') {
@@ -82,16 +82,16 @@
               		} else if (e.keyCode == '27') {
               			e.preventDefault();
               			search_keyword_reset();
-              		} else if (e.keyCode == '40') {
+              		} else if (e.keyCode == '40' && $(this).val().length > 0) {
               			e.preventDefault();
               			navigate_by_key(true);
-              		} else if (e.keyCode == '38') {
+              		} else if (e.keyCode == '38' && $(this).val().length > 0) {
               			e.preventDefault();
               			navigate_by_key(false);
               		}
               	}).on("keyup", function(e) {
                   var keyword = $(this).val();
-                  if (keyword.length == 0) {
+                  if (keyword.length === 0) {
                     search_input_reset.hide();
                     search_input_submit.removeClass("ready");
                     var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>검색어를 입력해주세요</span>";
@@ -112,26 +112,23 @@
                         search_preview_container.html("");
 
                         if (data.is_empty_result) {
-                          if (keyword != ""){
+                          if (keyword !== ""){
                             var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다</span>";
                             search_preview_container.html(empty_span);
-                          };
+                          }
                         } else {
                           $.each(data.collections, function(index, collection) {
                             search_preview_container.append(searchPreviewTemplate({keyword:collection.name, type: 'collection', id: collection.id}));
-                          })
+                          });
                           $.each(data.hash_tags, function(index, hash_tag) {
                             search_preview_container.append(searchPreviewTemplate({keyword:hash_tag.keyword, type: 'hash_tag', id: null}));
                           });
-
-                          if (data.ask_deal) {
-                            search_preview_container.append(searchPreviewTemplate({keyword:keyword, type: 'ask_deal', id: null}));
-                          };
-
-                          if (data.brand) {
-                            search_preview_container.append(searchPreviewTemplate({keyword:keyword, type: 'brand', id: null}));
-                          };
-
+                          $.each(data.ask_deals, function(index, ask_deal) {
+                            search_preview_container.append(searchPreviewTemplate({keyword:ask_deal.title, type: 'ask_deal', id: null}));
+                          });
+                          $.each(data.brands, function(index, brand) {
+                            search_preview_container.append(searchPreviewTemplate({keyword:brand.brand, type: 'brand', id: null}));
+                          });
                           $.each(data.users, function(index, user) {
                             search_preview_container.append(searchPreviewTemplate({keyword:user.string_id, type: 'user', id: null}));
                           });
@@ -142,7 +139,7 @@
                         }
                       },
                       beforeSend: function() {
-                        var keys = [13, 27, 40, 39, 38, 37]
+                        var keys = [13, 27, 40, 39, 38, 37];
                         if ($.inArray(e.keyCode, keys) != -1) return false;
                       }
                     });
@@ -151,14 +148,14 @@
                   target.addClass("on");
               	}).on("blur", function(){
                   target.removeClass("on");
-                  if ($(this).val().length == 0) search_preview_container.html(recentSearchTemplate());
+                  if ($(this).val().length === 0) search_preview_container.html(recentSearchTemplate());
                   $(this).attr("disabled",true);
                 }).attr("disabled",false).focus();
 
     function search_by_key() {
       var keyword = search_input.val();
       var search_focus = search_preview_container.find(".search_preview_list.search_focus");
-      if (keyword == "" || keyword == undefined) {
+      if (keyword === "" || keyword === undefined) {
         notify("검색어를 입력해주세요");
         target.click();
       } else if ( search_focus.length == 1 ) {
@@ -166,24 +163,25 @@
       } else {
         var search_options = { type: "none", keyword: keyword };
         go_url('search_result', search_options);
-      };
-    };
+      }
+    }
 
     function search_keyword_reset() {
       search_preview_container.html("").attr("index", -1);
       search_input_reset.hide();
   		search_input.val("");
       target.click();
-  	};
+  	}
 
     function navigate_by_key(is_down) {
       var search_results = search_preview_container.find(".search_preview_list");
   		var search_result_length = search_results.length;
       var search_result_height = search_results.outerHeight();
   		var vp_height = search_preview_container.innerHeight();
+      var search_focus_index, search_focus, focus_bottom, vp_top, focus_text;
 
   		if (is_down) {
-        var search_focus_index = Number(search_preview_container.attr("index"));
+        search_focus_index = Number(search_preview_container.attr("index"));
   			if (search_focus_index == search_result_length - 1) {
   				search_preview_container.attr("index", 0);
   				search_preview_container.scrollTop(0);
@@ -193,14 +191,14 @@
         search_focus_index = Number(search_preview_container.attr("index"));
   			search_results.removeClass("search_focus");
   			search_results.eq(search_focus_index).addClass("search_focus");
-        var search_focus = search_preview_container.find(".search_preview_list.search_focus");
-  			var focus_bottom = search_result_height * (search_focus_index + 1);
-  			var vp_top = search_preview_container.scrollTop();
+        search_focus = search_preview_container.find(".search_preview_list.search_focus");
+  			focus_bottom = search_result_height * (search_focus_index + 1);
+  			vp_top = search_preview_container.scrollTop();
   			if (focus_bottom > vp_top + vp_height) {
   				search_preview_container.scrollTop(focus_bottom-vp_height);
   			}
   		} else {
-        var search_focus_index = Number(search_preview_container.attr("index"));
+        search_focus_index = Number(search_preview_container.attr("index"));
   			if (search_focus_index == -1) {
   				search_preview_container.attr("index", search_result_length - 1);
   				search_preview_container.scrollTop(search_result_height * search_result_length);
@@ -210,17 +208,17 @@
         search_focus_index = Number(search_preview_container.attr("index"));
   			search_results.removeClass("search_focus");
   			search_results.eq(search_focus_index).addClass("search_focus");
-        var search_focus = search_preview_container.find(".search_preview_list.search_focus");
-  			var focus_top = search_result_height * search_focus_index;
-  			var vp_top = search_preview_container.scrollTop();
+        search_focus = search_preview_container.find(".search_preview_list.search_focus");
+  			focus_top = search_result_height * search_focus_index;
+  			vp_top = search_preview_container.scrollTop();
   			if (focus_top < vp_top) {
   				search_preview_container.scrollTop(focus_top);
   			}
   		}
 
-  		var focus_text = search_focus.text().replace(/(^\s*)|(\s*$)/g, "");
+  		focus_text = search_focus.text().replace(/(^\s*)|(\s*$)/g, "");
   		search_input.val(focus_text);
-  	};
+  	}
 
     function navigate_by_mouse() {
       var search_results = search_preview_container.find(".search_preview_list");
@@ -232,8 +230,8 @@
                       var focus_text = $(this).text().replace(/(^\s*)|(\s*$)/g, "");
                       search_input.val(focus_text);
                     });
-    };
-  };
+    }
+  }
 </script>
 
 <script type="text/template" id="searchResultTemplate">
@@ -276,17 +274,17 @@
 
     url = url + "?type="+encodeURIComponent(type)+"&keyword="+encodeURIComponent(keyword);
     return url;
-  };
+  }
 
   function save_recent_search(type, keyword) {
     var recent_search_list = $.cookie('recent_search_list');
-    var search_array = recent_search_list == null ? new Array() : recent_search_list.split(".");
+    var search_array = recent_search_list === null ? [] : recent_search_list.split(".");
 
     for (var i=0; i<search_array.length; i++) {
       var search = search_array[i];
       search = JSON.parse(search);
       if (search.type == type && search.keyword == keyword) search_array.splice(i,1);
-    };
+    }
     var this_search = JSON.stringify({
       type: type,
       keyword: keyword
@@ -294,14 +292,14 @@
     search_array.push(this_search);
     recent_search_list = search_array.join(".");
     $.cookie('recent_search_list', recent_search_list, { expires : 30000, path : '/' });
-  };
+  }
 
   function reset_recent_search() {
     $.cookie('recent_search_list', null);
     $(".search_preview").html(recentSearchTemplate());
-  };
+  }
 
   function hide_search_result() {
     remove_wrapper();
-  };
+  }
 </script>

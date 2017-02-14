@@ -160,17 +160,17 @@
       forgotPasswordTemplate = _.template($('#forgotPasswordTemplate').html());
 
   function show_landing() {
-    if ($("#landing_page").length == 0) {
+    if ($("#landing_page").length === 0) {
       open_full_view(landingTemplate());
       if (userApp) setAppStatusBar("orange");
     }
     var url = '/landing';
     return url;
-  };
+  }
 
   function hide_landing() {
     history.go(1);
-  };
+  }
 
   function login_success(length) {
     go_back(length);
@@ -178,7 +178,7 @@
     if (userApp) getUserToken();
     if (userApp) setAppStatusBar();
     try {
-      if ($.cookie('visitor_votes') != null) {
+      if ($.cookie('visitor_votes') !== null) {
         var votes_array = $.cookie('visitor_votes').split(".");
         for (var i=0; i < votes_array.length; i++) {
           var vote = votes_array[i];
@@ -200,24 +200,24 @@
             }
           });
         }
-      };
+      }
     } catch(err) {
       $.cookie('visitor_votes', null);
-    };
-  };
+    }
+  }
 
   function landing_back() {
     $("#landing_page").removeClass("prev");
     $("#login_page").addClass("next").removeClass("prev");
     $("#login_page_sub").addClass("next");
     if (userApp) setAppStatusBar("orange");
-  };
+  }
 
   function login_back() {
     $("#login_page").removeClass("prev");
     $("#login_page_sub").addClass("next");
     if (userApp) setAppStatusBar();
-  };
+  }
 
   function login_with_FB(target) {
     // 기본 인자들을 WEB에서 APP으로 전달
@@ -233,7 +233,7 @@
         window.location = "vaskit://facebookLogin/////"+scope_for_ios+"/////"+fields;
       }
     } else {
-      if (typeof(FB) != 'undefined' && FB != null) {
+      if (typeof(FB) != 'undefined' && FB !== null) {
         FB.init({
           appId      : '<%=Facebook::CONFIG["app_id"]%>',
           status     : true,
@@ -249,7 +249,7 @@
         }
       }, {scope: scope});
     }
-	};
+	}
 
   function login_with_FB_continue(response) {
     $.ajax({
@@ -278,7 +278,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 
   function show_login_with_FB_edit(data) {
     $("#landing_page").addClass("prev");
@@ -290,18 +290,18 @@
       	e.preventDefault();
         $(this).blur();
       	sign_up_FB();
-    	};
+    	}
   	});
 	  $.each($("#facebook_form #user_birthday_1i option"), function( index, value ) { if (index > 0) value.text = value.text+"년"; });
 	  $.each($("#facebook_form #user_birthday_3i option"), function( index, value ) { if (index > 0) value.text = value.text+"일"; });
     notify("추가 정보를 입력해주세요");
     var url = '/users/sign_up';
     return url;
-  };
+  }
 
   function hide_login_with_FB_edit() {
     landing_back();
-  };
+  }
 
   function show_sign_up() {
     $("#landing_page").addClass("prev");
@@ -313,17 +313,17 @@
       	e.preventDefault();
         $(this).blur();
       	sign_up();
-    	};
+    	}
   	});
 	  $.each($("#sign_up_form #user_birthday_1i option"), function( index, value ) { if (index > 0) value.text = value.text+"년"; });
 	  $.each($("#sign_up_form #user_birthday_3i option"), function( index, value ) { if (index > 0) value.text = value.text+"일"; });
     var url = '/users/sign_up';
     return url;
-  };
+  }
 
   function hide_sign_up() {
     landing_back();
-  };
+  }
 
   function show_sign_in() {
     $("#landing_page").addClass("prev");
@@ -335,15 +335,15 @@
       	e.preventDefault();
         $(this).blur();
       	sign_in();
-    	};
+    	}
   	});
     var url = '/users/sign_in';
     return url;
-  };
+  }
 
   function hide_sign_in() {
     landing_back();
-  };
+  }
 
   function show_forgot_password() {
     $("#login_page").addClass("prev");
@@ -355,21 +355,21 @@
       	e.preventDefault();
         $(this).blur();
       	forgot_password();
-    	};
+    	}
   	});
     var url = '/users/forgot_password';
     return url;
-  };
+  }
 
   function hide_forgot_password() {
     login_back();
-  };
+  }
 
   function email_check(target, is_new) {
     var email = target.val();
     var checker = target.next(".checker");
     var reg = /^[0-9a-zA-Z-_.]+@[a-z0-9]+[.][a-z]{2,3}[.]?[a-z]{0,2}$/;
-    if ( email == "" || email.indexOf("@") == -1 ) {
+    if (email === "" || email.indexOf("@") == -1) {
       checker.html("<i class='fa fa-keyboard-o'></i>");
     } else if ( !reg.test(email) ) {
       checker.html("<i class='fa fa-exclamation-triangle' style='color: orange;'></i>");
@@ -384,9 +384,9 @@
         },
         success: function(data) {
           if (is_new) {
-            data.is_new_email ? checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>") : checker.html("<i class='fa fa-remove' style='color: red;'></i>");
+            if (data.is_new_email) { checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>"); } else { checker.html("<i class='fa fa-remove' style='color: red;'></i>"); }
           } else {
-            data.is_new_email ? checker.html("<i class='fa fa-remove' style='color: red;'></i>") : checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>");
+            if (data.is_new_email) { checker.html("<i class='fa fa-remove' style='color: red;'></i>"); } else { checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>"); }
           }
         },
         beforeSend: function() {
@@ -394,36 +394,36 @@
         },
         complete: function() {
         }
-      })
+      });
     }
-  };
+  }
 
   function password_check(target) {
     var password = target.val();
     var checker = target.next(".checker");
-    if ( password.length >= 8 ) {
+    if (password.length >= 8) {
       checker.html("<i class='fa fa-lock' style='color: lightgreen;'></i>");
     } else {
       checker.html("<i class='fa fa-unlock-alt'></i>");
-    };
-  };
+    }
+  }
 
   function password_confirm_check(target) {
     var password = target.parent().prev().children("[type=password]").val();
     var confirm = target.val();
     var checker = target.next(".checker");
-    if ( confirm.length == 0 ) {
+    if (confirm.length === 0) {
       checker.html("<i class='fa fa-keyboard-o'></i>");
     } else {
-      if ( password.length != 0 ) {
-        if ( password === confirm ) {
+      if (password.length !== 0) {
+        if (password === confirm) {
           checker.html("<i class='fa fa-check' style='color: lightgreen;'></i>");
         } else {
           checker.html("<i class='fa fa-remove' style='color: red;'></i>");
         }
       }
     }
-  };
+  }
 
   function select_gender(gender) {
     var male = $(".gender_btn.male");
@@ -440,23 +440,23 @@
       male.removeClass("on");
       female.addClass("on");
       gender_bar.addClass("on").addClass("female").removeClass("male");
-		};
+		}
     form_check($("#facebook_form"));
     form_check($("#sign_up_form"));
-	};
+	}
 
   function access_term_agree() {
     var check_box = $("#user_agree_access_term"),
         check_icon = $("#agree_access_term_btn i");
-    if ( check_box.prop("checked") == false ) {
+    if (check_box.prop("checked") === false) {
       check_box.prop("checked", true);
       check_icon.removeClass("fa-square").addClass("fa-check-square");
     } else {
       check_box.prop("checked", false);
       check_icon.removeClass("fa-check-square").addClass("fa-square");
-    };
+    }
     form_check($("#sign_up_form"));
-  };
+  }
 
 
   function sign_up_FB() {
@@ -495,7 +495,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 
   function sign_up() {
     var user = $("#sign_up_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
@@ -546,7 +546,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 
   function sign_in() {
     var user = $("#sign_in_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
@@ -593,7 +593,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 
   function forgot_password() {
     var user = $("#forgot_password_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
@@ -623,5 +623,5 @@
               loadingEnd();
             }
     });
-  };
+  }
 </script>

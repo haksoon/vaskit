@@ -14,14 +14,14 @@
 <script>
   var imageCropTemplate = _.template($("#imageCropTemplate").html());
 
-  function show_image_edit(target, cropping_type) {
+  function show_image_edit(target) {
     window.event.cancelBubble = true;
+    var cropper = null;
     var img_to_be_changed = target.parent().find("img");
     var preview_img_id = Number(target.attr("img-id"));
     var is_circle = Boolean(target.attr("is-circle"));
     var cropping_type = target.attr("cropping-type");
-    var cropper;
-    if ($("#image_crop_form").length == 0) {
+    if ($("#image_crop_form").length === 0) {
       $.ajax({
               url: "/preview_images/" + preview_img_id + ".json",
               dataType: "json",
@@ -40,11 +40,11 @@
                 loadingEnd();
               }
       });
-    };
+    }
 
     function init_image_cropper() {
       var preview_image = document.getElementById("image_to_crop");
-      if (cropper != null) cropper.destroy();
+      if (cropper !== null) cropper.destroy();
       var crop_option = {
         viewMode: 1,
         dragMode: 'move',
@@ -100,8 +100,8 @@
         image_save_btn.attr("crop-y", cropper.getData(true).y);
         image_save_btn.attr("crop-w", cropper.getData(true).width);
         image_save_btn.attr("crop-h", cropper.getData(true).height);
-      };
-    };
+      }
+    }
 
     function submit_image_cropper(submit_btn) {
       var crop_x = submit_btn.attr("crop-x");
@@ -124,11 +124,11 @@
                 // 타입 별로 추가 행동들을 정의
                 if (cropping_type == "ask_form") {
                   var is_left = target.hasClass("left");
-                  var step_3_inner = $("#ask_form").find(".inner.step_3")
-                  is_left ? step_3_inner.find(".ask_image.left").attr("src", data.image_url) : step_3_inner.find(".ask_image.right").attr("src", data.image_url);
+                  var step_3_inner = $("#ask_form").find(".inner.step_3");
+                  if (is_left) { step_3_inner.find(".ask_image.left").attr("src", data.image_url); } else { step_3_inner.find(".ask_image.right").attr("src", data.image_url); }
                 } else if (cropping_type == "user_profile") {
                   $("#user_profile_pic").attr("src", data.image_url);
-                };
+                }
               },
               beforeSend: function(){
                 loadingStart();
@@ -137,11 +137,8 @@
                 loadingEnd();
               }
       });
-    };
-
-  };
-
-
+    }
+  }
 
   function hide_image_edit() {
     if (confirm('편집중인 내용이 저장되지 않습니다. 종료하시겠어요?')) {
@@ -149,6 +146,5 @@
     } else {
       history.go(1);
     }
-  };
-
+  }
 </script>

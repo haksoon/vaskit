@@ -27,8 +27,8 @@
 
   function show_ask_form(ask_id) {
     var url = '/asks/';
-    if ($("#ask_form").length == 0) {
-      url += ask_id == null ? 'new' : ask_id+'/edit';
+    if ($("#ask_form").length === 0) {
+      url += ask_id === null ? 'new' : ask_id+'/edit';
       $.ajax({
         url: url,
         dataType: "json",
@@ -46,13 +46,13 @@
           } else if (data.status == "success") {
             open_full_view(askFormTemplate({ask: data.ask}));
             if (userApp) setAppStatusBar("dark");
-          };
+          }
         },
         beforeSend: function(){
-          if (ask_id != null) loadingStart();
+          if (ask_id !== null) loadingStart();
         },
         complete: function(){
-          if (ask_id != null) loadingEnd();
+          if (ask_id !== null) loadingEnd();
         }
       });
     }
@@ -67,7 +67,7 @@
     } else {
       history.go(1);
     }
-  };
+  }
 
   function card_search_input_init(target) {
     var ask_form = $("#ask_form");
@@ -78,8 +78,8 @@
     var is_left = Boolean(target.attr("is-left"));
 
     all_inners.find(".input.text_field").attr('disabled', true);
-    card_search_input_submit.off("click").on("click", function(){ search_by_key() });
-    card_search_input_reset.off("click").on("click", function(){ search_keyword_reset() });
+    card_search_input_submit.off("click").on("click", function(){ search_by_key(); });
+    card_search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
     card_search_input.off("keydown keyup")
                       .on("keydown", function(e) {
                    	    if (e.keyCode == '13') {
@@ -92,7 +92,7 @@
                         }
                    	  }).on("keyup", function(e) {
                         var keyword = $(this).val();
-                        if (keyword.length == 0) {
+                        if (keyword.length === 0) {
                           card_search_input_reset.hide();
                           card_search_input_submit.removeClass("ready");
                         } else {
@@ -108,20 +108,20 @@
 
     function search_by_key() {
       var keyword = card_search_input.val();
-      if (keyword == "" || keyword == undefined) {
+      if (keyword === "" || keyword === undefined) {
         notify("검색어를 입력해주세요");
         target.click();
       } else {
         go_url('card_search_result', { is_left: is_left, keyword: keyword });
-      };
-    };
+      }
+    }
 
     function search_keyword_reset() {
       card_search_input_reset.hide();
       card_search_input.val("");
       target.click();
-    };
-  };
+    }
+  }
 
   function ask_progress_check(target) {
     var ask_form = $("#ask_form");
@@ -130,17 +130,17 @@
     var ask_form_submit_btn = ask_form.find(".submit_btn");
 
     var progress = [];
-    var required_fields = $.map($(inners).find("[required]"), function(value, index) { return [value] });
+    var required_fields = $.map($(inners).find("[required]"), function(value, index) { return [value]; });
     $.each(required_fields, function(index, field){
       var value = field.value.replace(/^\s*/g, '').replace(/\s*$/g, '');
-      if (value != "") progress.push(index);
+      if (value !== "") progress.push(index);
     });
 
     var percent = progress.length / required_fields.length * 100;
     ask_form_progress_bar.css({width: percent+"%"});
-    percent < 100 ? ask_form_submit_btn.removeClass("ready") : ask_form_submit_btn.addClass("ready");
-    percent < 100 ? ask_form_progress_bar.removeClass("ready") : ask_form_progress_bar.addClass("ready");
-  };
+    if (percent < 100) { ask_form_submit_btn.removeClass("ready"); } else { ask_form_submit_btn.addClass("ready"); }
+    if (percent < 100) { ask_form_progress_bar.removeClass("ready"); } else { ask_form_progress_bar.addClass("ready"); }
+  }
 
 
   function show_next_ask_form(target) {
@@ -172,7 +172,7 @@
     } else if (current_step == 3) {
       ask_form.find(".form_data").removeAttr('disabled');
       var data = ask_form.serializeArray();
-      data = $.grep(data, function(obj){ return obj.value != ""});
+      data = $.grep(data, function(obj){ return obj.value !== ""; });
       data = data.reduce(function(obj, item) {
   	    obj[item.name] = item.value;
   	    return obj;
@@ -182,10 +182,11 @@
 
 
     function ask_form_submit(data, ask_id) {
+      var required_field;
       $.ajax({
-  	        url: ask_id == 0 ? "/asks.json" : "/asks/" + ask_id + ".json",
+  	        url: ask_id === 0 ? "/asks.json" : "/asks/" + ask_id + ".json",
             dataType: "json",
-  	        type: ask_id == 0 ? "POST" : "PUT",
+  	        type: ask_id === 0 ? "POST" : "PUT",
   	        data: data,
   	        error: function(){
   	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
@@ -195,35 +196,35 @@
                 go_back(1);
                 notify('A제품 이미지를 추가해주세요');
                 step_1_inner.find(".ask_image_seg").addClass("required");
-                var required_field = step_3_inner.find(".ask_image.left");
+                required_field = step_3_inner.find(".ask_image.left");
                 required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
               } else if(data.status == "no_left_title") {
                 go_back(1);
                 notify('A제품 제품명을 입력해주세요');
                 step_1_inner.find(".form_data").parent(".title").addClass("required");
-                var required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.left");
+                required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.left");
                 required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
               } else if(data.status == "no_right_image") {
                 go_back(1);
                 notify('B제품 이미지를 추가해주세요');
                 step_2_inner.find(".ask_image_seg").addClass("required");
-                var required_field = step_3_inner.find(".ask_image.right");
+                required_field = step_3_inner.find(".ask_image.right");
                 required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
               } else if(data.status == "no_right_title") {
                 go_back(1);
                 notify('B제품 제품명을 입력해주세요');
                 step_2_inner.find(".form_data").parent(".title").addClass("required");
-                var required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.right");
+                required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.right");
                 required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required") }, 1000);
+                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
               } else if(data.status == "no_ask_message") {
                 go_back(1);
                 notify('메세지를 입력해주세요');
                 step_3_inner.animate({scrollTop: step_3_inner.prop("scrollHeight")}, 250);
-                var required_field = step_3_inner.find(".ask_message_input");
+                required_field = step_3_inner.find(".ask_message_input");
                 required_field.parentsUntil(this, ".hashtag_container").animateCss("bounce");
                 required_field.parentsUntil(this, ".input_container").click();
               } else if(data.status == "success") {
@@ -231,7 +232,7 @@
                 setTimeout(function(){
                   close_full_view();
                   if (userApp) setAppStatusBar();
-                  ask_id == 0 ? notify('게시글 작성 완료! 친구들에게 공유해보세요 :)') : notify('게시글 수정 완료! 친구들에게 공유해보세요 :)');
+                  if (ask_id === 0) { notify('게시글 작성 완료! 친구들에게 공유해보세요 :)'); } else { notify('게시글 수정 완료! 친구들에게 공유해보세요 :)'); }
                   go_url('ask', data.ask.id);
                 }, 500);
               }
@@ -243,8 +244,8 @@
               loadingEnd();
   					}
   		});
-    };
-  };
+    }
+  }
 
   function hide_next_ask_form(target) {
     var ask_form = $("#ask_form");
@@ -270,7 +271,7 @@
     }
 
     back_button();
-  };
+  }
 </script>
 
 
@@ -353,9 +354,9 @@
                           var input_direction = input_information[0].replace("_deal","");
                           var input_type = input_information[1];
                           var input_value = $(this).val();
-                          if (input_value.length != 0) {
+                          if (input_value.length !== 0) {
                             if (input_type == "price") {
-                              input_value = numberWithCommas(input_value)+"원"
+                              input_value = numberWithCommas(input_value)+"원";
                             } else if (input_type == "link") {
                               input_value = fieldWithLink(input_value);
                             }
@@ -364,7 +365,7 @@
                           // $(this).attr('disabled',true);
                         }).attr('disabled',false);
     target.find(".input.text_field").focus();
-  };
+  }
 
   function ask_form_card_image_upload_click(target) {
     var current_inner = target.parentsUntil(this, ".inner");
@@ -374,7 +375,7 @@
     setTimeout(function(){
       target.removeClass("is_uploading");
     }, 1000);
-  };
+  }
 
   function ask_form_card_image_upload(target) {
     var ask_form = $("#ask_form");
@@ -428,7 +429,7 @@
                 }).fail(function (data) {}).done(function () {});
               });
           });
-  };
+  }
 </script>
 
 
@@ -517,7 +518,7 @@
               naver_deal_items = data.shop_result.rss.channel.item;
               naver_deal_images = data.image_result.rss.channel.item;
 
-              if (naver_deal_items == null && naver_deal_images == null) {
+              if (naver_deal_items === null && naver_deal_images === null) {
                 notify("검색 결과가 없습니다");
                 back_button();
               } else {
@@ -525,7 +526,7 @@
                 ask_form_back_btn.html("닫기");
                 ask_form_submit_btn.hide();
                 card_search_result_div.html(cardSearchResultTemplate({items: naver_deal_items, image_items: naver_deal_images})).removeClass("bottom");
-              };
+              }
             },
             beforeSend: function(){
               loadingStart();
@@ -537,7 +538,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 
   function hide_card_search_result() {
     var ask_form = $("#ask_form");
@@ -548,11 +549,11 @@
     var card_search_result_div = ask_form.find(".card_search_result");
     var card_search_input = ask_form.find(".card_search_input");
     ask_form_header_title.html("질문 작성하기");
-    current_step == 1 ? ask_form_back_btn.html("취소") : ask_form_back_btn.html("이전");
+    if (current_step == 1) { ask_form_back_btn.html("취소"); } else { ask_form_back_btn.html("이전"); }
     ask_form_submit_btn.show();
     card_search_input.val("");
     card_search_result_div.addClass("bottom").transitionEmpty();
-  };
+  }
 
   function toggle_search_result(target) {
     var target_name = target.hasClass("naver_product") ? "naver_product" : "naver_image";
@@ -565,8 +566,8 @@
       naver_product.toggleClass("on");
       naver_image.toggleClass("on");
       card_search_result_list.scrollTop(0);
-    };
-  };
+    }
+  }
 
   function select_naver_product(product_id) {
     var ask_form = $("#ask_form");
@@ -624,7 +625,7 @@
             back_button();
 					}
 		});
-  };
+  }
 
   function select_naver_image(image_url) {
     var ask_form = $("#ask_form");
@@ -672,8 +673,7 @@
             back_button();
 					}
 		});
-
-  };
+  }
 </script>
 
 
@@ -813,7 +813,7 @@
     var input_length_index = (input_container.find(".input_div.spec:visible").length) / 3 + 1;
     input_container.find(".input_div.spec.spec_" + input_length_index).addClass("is_opened");
     if (input_length_index == 3) target.hide();
-  };
+  }
 
   function ask_form_message_input_init(target) {
     var ask_form_message_input = target.find(".ask_message_input");
@@ -844,19 +844,19 @@
       var text = target.val();
       var highlightedText = applyHashtag(text);
       hashtag_highlights.html(highlightedText);
-    };
+    }
 
     function hashtagScroll(target) {
       var scrollTop = target.scrollTop();
       var scrollLeft = target.scrollLeft();
       hashtag_backdrop.scrollTop(scrollTop);
       hashtag_backdrop.scrollLeft(scrollLeft);
-    };
-  };
+    }
+  }
 
   function applyHashtag(text) {
-    if (text != null) text = text.replace(/\n$/g, '\n\n').replace(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g, '<mark>$&</mark>');
+    if (text !== null) text = text.replace(/\n$/g, '\n\n').replace(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]*)/g, '<mark>$&</mark>');
     return text;
-  };
+  }
 
 </script>

@@ -1,6 +1,4 @@
-# coding : utf-8
 class EtcController < ApplicationController
-
   # GET /etc/access_term
   def access_term
   end
@@ -16,5 +14,4 @@ class EtcController < ApplicationController
   # GET /etc/faq_help
   def faq_help
   end
-
 end
