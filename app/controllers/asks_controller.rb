@@ -20,7 +20,7 @@ class AsksController < ApplicationController
 
         # 손거울 파우치 이벤트
         if params[:page].nil?
-          event = Ask.find(70)
+          event = Ask.find(1799)
           asks.unshift(event)
         end
         # 손거울 파우치 이벤트
