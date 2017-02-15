@@ -79,6 +79,7 @@ module PushSend
 
     response = fcm.send(registration_ids, options)
     logger.debug response
+    return response
   end
 
   # AOS 푸쉬 보내기
@@ -100,6 +101,7 @@ module PushSend
 
     response = fcm.send(registration_ids, options)
     logger.debug response
+    return response
   end
 
   def self.token_check

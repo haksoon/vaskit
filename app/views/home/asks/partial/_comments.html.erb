@@ -343,11 +343,13 @@
                               // iOS web 키패드 이슈
                               if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
                                 iOSKeypadCheck = setInterval(function(){
-                                  if (document.body.scrollTop > 0) {
-                                    if (userApp) { $("html").css({height: window.innerHeight - document.body.scrollTop}); } else { $("html").css({height: window.innerHeight - document.body.scrollTop + 10}); }
+                                  var st = document.body.scrollTop;
+                                  if (st > 0) {
+                                    var target_height = window.innerHeight - st;
+                                    if (userApp) { $("html").css({height: target_height}); } else { $("html").css({height: target_height + 10}); }
                                     window.scrollTo(0,0);
                                   }
-                                },25);
+                                }, 25);
                               } // iOS web 키패드 이슈
                               hashtagInput($(this));
                            })
