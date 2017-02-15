@@ -45,12 +45,12 @@ class Collection < ActiveRecord::Base
         related_collections_ids = related_collections_ids.uniq.sort_by{ |x| related_collections_ids.grep(x).size }.reverse
 
         # 해당 컬렉션의 연관 컬렉션 목록을 DB에 입력
-        related_collections_set = ","
+        related_collections_set = ','
         for i in 0...10
-          related_collections_set += related_collections_ids[i].to_s + "," unless related_collections_ids[i].blank?
+          related_collections_set += related_collections_ids[i].to_s + ',' unless related_collections_ids[i].blank?
         end
       else
-        related_collections_set = ","
+        related_collections_set = ','
       end
       related_collection.record_timestamps = false
       related_collection.update(related_collections: related_collections_set)

@@ -10,7 +10,7 @@
           {{ var ask = asks[i] }}
           {{= askThumbnailTemplate({ask:ask}) }}
         {{ } }}
-        {{ if (l == <%= Ask::ASK_PER %>) { }}
+        {{ if (l >= <%= Ask::ASK_PER %>) { }}
           <div class="loading_icon" page="2" loading="true"><i class="fa fa-spinner fa-spin"></i></div>
         {{ } else { }}
           <div class="loading_icon" page="2">- End of Contents -</i></div>
@@ -56,7 +56,15 @@
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
-  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+  {{ // 손거울 파우치 이벤트 }}
+  {{ var is_event = ask.id == 70 ? true : false }}
+  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }} {{= is_event ? 'event' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+    {{ if (is_event) { }}
+      <div style="padding: 0 10px; height: 30px; line-height: 30px; background-color: #ff7800; color: #fff;">
+        <i class="fa fa-star"></i> VASKIT 이벤트 진행중! <span style="float: right; font-size: 11px;"><i class="fa fa-clock-o"></i> {{= Math.floor((new Date("Feb 26, 2017").getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 ) }}일 남음</span>
+      </div>
+    {{ } }}
+    {{ // 손거울 파우치 이벤트 }}
     <div class="clearfix">
       {{ var already_like = false }}
       {{ if (current_user) { }}

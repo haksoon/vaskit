@@ -49,12 +49,12 @@
 <script type="text/template" id="searchPreviewTemplate">
   {{ if (type == "collection") { }}
     <a href="{{= '/collections/' + id }}" class="search_preview_list" onclick="go_url('collection', {{= id }}); return false;">
-      <i class="search_preview_icon vaskit_icon {{= type }}"></i>
+      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>
       {{= unescape(keyword) }}
     </a>
   {{ } else { }}
     <a href="{{= '/search?type=' + escape(type) + '&keyword=' + escape(keyword) }}" class="search_preview_list" onclick="go_url('search_result', {type: '{{=type}}', keyword: '{{=escape(keyword)}}'}); return false;">
-      <i class="search_preview_icon vaskit_icon {{= type }}"></i>{{= unescape(keyword) }}
+      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
     </a>
   {{ } }}
 </script>
@@ -237,7 +237,7 @@
 <script type="text/template" id="searchResultTemplate">
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">
-      <i class="search_preview_icon vaskit_icon {{= type }}"></i>{{= unescape(keyword) }} 검색결과</span>
+      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }} 검색결과</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
   </div>
   {{= asksListTemplate({asks: asks, url: url}) }}

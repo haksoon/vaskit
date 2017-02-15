@@ -610,6 +610,11 @@ body {
     .ask_message { position: relative; width: 100%; box-sizing: border-box; color: #666; background-color: #fff; }
 
     &.ask_thumbnail {
+        // 손거울 파우치 이벤트
+        &.event { padding-bottom: 0; margin-bottom: 10px; border: 2px solid #ff7200; border-bottom-width: 3px;
+           .vs_help { display: none; }
+        }
+        // 손거울 파우치 이벤트
         .ask_user { height: 30px; padding: 10px 15px 0 40px;
             .ask_user_pic { top: 10px; left: 10px; width: 20px; height: 20px; }
         }
@@ -959,24 +964,24 @@ body {
   }
   .search_preview_list { display: block; height: 50px; line-height: 50px; padding: 0 10px 0 40px; box-sizing: border-box; color: #666; background-color: #fff; border-bottom: 1px solid #eee; overflow: hidden; transition: background-color .1s;
     .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; margin: 17px 7px; background-position-y: -56px;
-      &.collection { background-position-x: 0px; }
-      &.hash_tag { background-position-x: -16px; }
-      &.ask_deal { background-position-x: -32px; }
-      &.brand { background-position-x: -48px; }
-      &.user { background-position-x: -64px; }
-      &.none { background-position-x: -80px; }
+      &.collection_icon { background-position-x: 0px; }
+      &.hash_tag_icon { background-position-x: -16px; }
+      &.ask_deal_icon { background-position-x: -32px; }
+      &.brand_icon { background-position-x: -48px; }
+      &.user_icon { background-position-x: -64px; }
+      &.none_icon { background-position-x: -80px; }
     }
     &.search_focus { background-color: #ffe4a9; }
   }
 }
 
 .container.top .header_title .search_preview_icon { display: inline-block; width: 16px; height: 16px; margin: 17px 5px 17px -5px; vertical-align: top; background-position-y: -56px;
-  &.collection { background-position-x: 0px; }
-  &.hash_tag { background-position-x: -16px; }
-  &.ask_deal { background-position-x: -32px; }
-  &.brand { background-position-x: -48px; }
-  &.user { background-position-x: -64px; }
-  &.none { background-position-x: -80px; }
+  &.collection_icon { background-position-x: 0px; }
+  &.hash_tag_icon { background-position-x: -16px; }
+  &.ask_deal_icon { background-position-x: -32px; }
+  &.brand_icon { background-position-x: -48px; }
+  &.user_icon { background-position-x: -64px; }
+  &.none_icon { background-position-x: -80px; }
 }
 
 /* ============================== Seg3 질문작성하기 관련 ============================== */

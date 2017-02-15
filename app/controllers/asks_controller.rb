@@ -17,6 +17,14 @@ class AsksController < ApplicationController
           asks = asks.where.not(user_id: current_user.id)
           asks = asks.where('id NOT IN (?)', my_votes) unless my_votes.length.zero?
         end
+
+        # 손거울 파우치 이벤트
+        if params[:page].nil?
+          event = Ask.find(70)
+          asks.unshift(event)
+        end
+        # 손거울 파우치 이벤트
+
         asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, { comments: { include: :user } }])
         render json: { asks: asks }
       end
