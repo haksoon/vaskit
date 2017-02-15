@@ -14,7 +14,7 @@ class Video < ActiveRecord::Base
   before_update :rename_file
 
   def rename_file
-    return if image_file_name.nil?
+    return if image.blank?
     extension = image_file_name.split('.').last
     return unless %w[jpg jpeg gif png].include?(extension)
     self.image_file_name = "video.#{extension}"

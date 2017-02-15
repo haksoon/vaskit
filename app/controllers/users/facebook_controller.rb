@@ -10,10 +10,10 @@ class Users::FacebookController < Devise::PasswordsController
     birthday = Date.strptime(data[:birthday], '%m/%d/%Y') unless data[:birthday].nil?
     avatar = open(data[:picture][:data][:url]) unless data[:picture].nil?
 
-    user = User.where(facebook_id: facebook_id).first
-    user = User.where(email: email, facebook_id: '').first if user.blank?
+    user = User.find_by(facebook_id: facebook_id)
+    user = User.find_by(email: email) if user.nil?
 
-    if user.blank?
+    if user.nil?
       if !email.nil? && !name.nil? && !facebook_id.nil? && !gender.nil? && !birthday.nil?
         string_id = User.get_uniq_string_id(email.split('@')[0])
         user = User.create(email: email,
