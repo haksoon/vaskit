@@ -84,7 +84,7 @@
     var current_comment_input_init = current_comment_container.find(".comment_input_init");
     var current_comment_input = current_comment_container.find(".comment_input");
 
-    current_comment_input.val("").blur();
+    current_comment_input.val("");
     current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('new'); }).click();
   }
 
@@ -95,7 +95,7 @@
     var current_comment_input = current_comment_container.find(".comment_input");
 
     back_button();
-    current_comment_input.val("").blur();
+    current_comment_input.val("");
     current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('reply', comment_id); }).click();
   }
 
@@ -106,7 +106,8 @@
     var current_comment_input = current_comment_container.find(".comment_input");
 
     var current_comment_box = current_wrapper.find(".comment_box."+comment_id).last();
-    var current_comment_content = current_comment_box.find(".comment_content").text().replace(new RegExp('<br>', 'g'), '\n');
+    var current_comment_html = current_comment_box.find(".comment_content").html().replace(new RegExp('<br>', 'g'), '\n');
+    var current_comment_content = $(document.createElement('div')).html(current_comment_html).text();
 
     back_button();
     current_comment_input.val(current_comment_content);
