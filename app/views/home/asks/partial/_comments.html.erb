@@ -126,7 +126,7 @@
 
     current_comment_lists.find(".comment_box:hidden").show();
     is_writing_box.remove();
-    current_comment_input.val("").blur();
+    current_comment_input.val("");
     current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('new'); });
     current_comment_input_submit.removeClass("ready").off("click");
     current_comment_input_submit_btn_text.html("전송");
@@ -350,7 +350,10 @@
                                     if (userApp) { $("html").css({height: target_height}); } else { $("html").css({height: target_height + 10}); }
                                     window.scrollTo(0,0);
                                   }
-                                }, 25);
+                                }, 1);
+                                setTimeout(function(){
+                                  clearInterval(iOSKeypadCheck);
+                                }, 500);
                               } // iOS web 키패드 이슈
                               hashtagInput($(this));
                            })
