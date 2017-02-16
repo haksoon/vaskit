@@ -22,28 +22,32 @@ class Ask < ActiveRecord::Base
     age_30_2_end = Date.new(Time.now.year - 35, 1, 1)
     age_30_3_end = Date.new(Time.now.year - 38, 1, 1)
 
+    ask_votes = Vote.joins('JOIN users ON votes.user_id = users.id')
+    left_votes = ask_votes.where("votes.ask_deal_id = #{left_ask_deal_id}")
+    right_votes = ask_votes.where("votes.ask_deal_id = #{right_ask_deal_id}")
+
     {
       left: {
-        male_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.gender = true').where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        female_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.gender = false').where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        age_20_1_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_20, age_20_1_end).where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        age_20_2_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_20_1_end, age_20_2_end).where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        age_20_3_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_20_2_end, age_30).where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        age_30_1_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_30, age_30_1_end).where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        age_30_2_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_30_1_end, age_30_2_end).where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        age_30_3_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_30_2_end, age_30_3_end).where('votes.ask_deal_id = ?', left_ask_deal_id).count,
-        etc_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday IS NULL OR (users.birthday > ? OR users.birthday < ?)', age_20, age_30_3_end).where('votes.ask_deal_id = ?', left_ask_deal_id).count
+        male_count: left_votes.where('users.gender = true').count,
+        female_count: left_votes.where('users.gender = false').count,
+        age_20_1_count: left_votes.where("users.birthday < '#{age_20}' AND users.birthday > '#{age_20_1_end}'").count,
+        age_20_2_count: left_votes.where("users.birthday < '#{age_20_1_end}' AND users.birthday > '#{age_20_2_end}'").count,
+        age_20_3_count: left_votes.where("users.birthday < '#{age_20_2_end}' AND users.birthday > '#{age_30}'").count,
+        age_30_1_count: left_votes.where("users.birthday < '#{age_30}' AND users.birthday > '#{age_30_1_end}'").count,
+        age_30_2_count: left_votes.where("users.birthday < '#{age_30_1_end}' AND users.birthday > '#{age_30_2_end}'").count,
+        age_30_3_count: left_votes.where("users.birthday < '#{age_30_2_end}' AND users.birthday > '#{age_30_3_end}'").count,
+        etc_count: left_votes.where("users.birthday IS NULL OR (users.birthday > '#{age_20}' OR users.birthday < '#{age_30_3_end}')").count
       },
       right: {
-        male_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.gender = true').where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        female_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.gender = false').where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        age_20_1_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_20, age_20_1_end).where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        age_20_2_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_20_1_end, age_20_2_end).where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        age_20_3_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_20_2_end, age_30).where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        age_30_1_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_30, age_30_1_end).where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        age_30_2_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_30_1_end, age_30_2_end).where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        age_30_3_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday < ? AND users.birthday > ?', age_30_2_end, age_30_3_end).where('votes.ask_deal_id = ?', right_ask_deal_id).count,
-        etc_count: Vote.joins('JOIN users ON votes.user_id = users.id').where('users.birthday IS NULL OR (users.birthday > ? OR users.birthday < ?)', age_20, age_30_3_end).where('votes.ask_deal_id = ?', right_ask_deal_id).count
+        male_count: right_votes.where('users.gender = true').count,
+        female_count: right_votes.where('users.gender = false').count,
+        age_20_1_count: right_votes.where("users.birthday < '#{age_20}' AND users.birthday > '#{age_20_1_end}'").count,
+        age_20_2_count: right_votes.where("users.birthday < '#{age_20_1_end}' AND users.birthday > '#{age_20_2_end}'").count,
+        age_20_3_count: right_votes.where("users.birthday < '#{age_20_2_end}' AND users.birthday > '#{age_30}'").count,
+        age_30_1_count: right_votes.where("users.birthday < '#{age_30}' AND users.birthday > '#{age_30_1_end}'").count,
+        age_30_2_count: right_votes.where("users.birthday < '#{age_30_1_end}' AND users.birthday > '#{age_30_2_end}'").count,
+        age_30_3_count: right_votes.where("users.birthday < '#{age_30_2_end}' AND users.birthday > '#{age_30_3_end}'").count,
+        etc_count: right_votes.where("users.birthday IS NULL OR (users.birthday > '#{age_20}' OR users.birthday < '#{age_30_3_end}')").count
       }
     }
   end
