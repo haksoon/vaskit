@@ -19,11 +19,11 @@
       인기 검색어
     </div>
     <ul class="recent_search_list">
-      {{= searchPreviewTemplate({keyword: "쿠션", type: "ask_deal", id: null}) }}
-      {{= searchPreviewTemplate({keyword: "겨울", type: "hash_tag", id: null}) }}
-      {{= searchPreviewTemplate({keyword: "촉촉", type: "hash_tag", id: null}) }}
-      {{= searchPreviewTemplate({keyword: "여행", type: "hash_tag", id: null}) }}
-      {{= searchPreviewTemplate({keyword: "남친선물", type: "hash_tag", id: null}) }}
+      {{= searchPreviewTemplate({type: "ask_deal", keyword: "쿠션", id: null, time: null}) }}
+      {{= searchPreviewTemplate({type: "hash_tag", keyword: "겨울", id: null, time: null}) }}
+      {{= searchPreviewTemplate({type: "hash_tag", keyword: "촉촉", id: null, time: null}) }}
+      {{= searchPreviewTemplate({type: "hash_tag", keyword: "여행", id: null, time: null}) }}
+      {{= searchPreviewTemplate({type: "hash_tag", keyword: "남친선물", id: null, time: null}) }}
     </ul>
   </div>
   <div class="recent_search">
@@ -39,7 +39,8 @@
           {{ var search = JSON.parse(recent_search_list[i-1]) }}
           {{ var keyword = search.keyword }}
           {{ var type = search.type }}
-          {{= searchPreviewTemplate({keyword: keyword, type: type, id: null}) }}
+          {{ var time = search.time }}
+          {{= searchPreviewTemplate({type: type, keyword: keyword, id: null, time: time}) }}
         {{ } }}
       </ul>
     {{ } }}
@@ -49,12 +50,17 @@
 <script type="text/template" id="searchPreviewTemplate">
   {{ if (type == "collection") { }}
     <a href="{{= '/collections/' + id }}" class="search_preview_list" onclick="go_url('collection', {{= id }}); return false;">
-      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>
-      {{= unescape(keyword) }}
+      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
+      {{ if (time) { }}
+        <span style="float: right; margin-right: 7px; font-size: 10px; color: #999;">{{= get_past_time(time) }}</span>
+      {{ } }}
     </a>
   {{ } else { }}
     <a href="{{= '/search?type=' + escape(type) + '&keyword=' + escape(keyword) }}" class="search_preview_list" onclick="go_url('search_result', {type: '{{=type}}', keyword: '{{=escape(keyword)}}'}); return false;">
       <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
+      {{ if (time) { }}
+        <span style="float: right; margin-right: 7px; font-size: 10px; color: #999;">{{= get_past_time(time) }}</span>
+      {{ } }}
     </a>
   {{ } }}
 </script>
@@ -118,19 +124,19 @@
                           }
                         } else {
                           $.each(data.collections, function(index, collection) {
-                            search_preview_container.append(searchPreviewTemplate({keyword:collection.name, type: 'collection', id: collection.id}));
+                            search_preview_container.append(searchPreviewTemplate({type: 'collection', keyword:collection.name, id: collection.id, time: null}));
                           });
                           $.each(data.hash_tags, function(index, hash_tag) {
-                            search_preview_container.append(searchPreviewTemplate({keyword:hash_tag.keyword, type: 'hash_tag', id: null}));
+                            search_preview_container.append(searchPreviewTemplate({type: 'hash_tag', keyword:hash_tag.keyword, id: null, time: null}));
                           });
                           $.each(data.ask_deals, function(index, ask_deal) {
-                            search_preview_container.append(searchPreviewTemplate({keyword:ask_deal.title, type: 'ask_deal', id: null}));
+                            search_preview_container.append(searchPreviewTemplate({type: 'ask_deal', keyword:ask_deal.title, id: null, time: null}));
                           });
                           $.each(data.brands, function(index, brand) {
-                            search_preview_container.append(searchPreviewTemplate({keyword:brand.brand, type: 'brand', id: null}));
+                            search_preview_container.append(searchPreviewTemplate({type: 'brand', keyword:brand.brand, id: null, time: null}));
                           });
                           $.each(data.users, function(index, user) {
-                            search_preview_container.append(searchPreviewTemplate({keyword:user.string_id, type: 'user', id: null}));
+                            search_preview_container.append(searchPreviewTemplate({type: 'user', keyword:user.string_id, id: null, time: null}));
                           });
 
                           search_preview_container.highlight(keyword);
@@ -279,7 +285,7 @@
   function save_recent_search(type, keyword) {
     var recent_search_list = $.cookie('recent_search_list');
     var search_array = recent_search_list === null ? [] : recent_search_list.split(".");
-
+    if (search_array.length >= 10) search_array = search_array.splice(search_array.length-9, search_array.length);
     for (var i=0; i<search_array.length; i++) {
       var search = search_array[i];
       search = JSON.parse(search);
@@ -287,7 +293,8 @@
     }
     var this_search = JSON.stringify({
       type: type,
-      keyword: keyword
+      keyword: keyword,
+      time: Date.now()
     });
     search_array.push(this_search);
     recent_search_list = search_array.join(".");
