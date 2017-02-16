@@ -109,7 +109,12 @@ Rails.application.routes.draw do
       get ':table_name', to: "tables#index", on: :collection
     end
     resources :analysis, only: [:index]
-    resources :notice, only: [:index, :create]
+    resources :notice, only: [:index, :create] do
+      collection do
+        post 'check_user_gcm'
+        post 'notice_push_send'
+      end
+    end
     resources :collections, only: [:index, :show, :create, :update] do
       member do
         post 'image_upload'

@@ -1,5 +1,40 @@
 <div style="padding:10px;">
-  <div style="margin-bottom:30px;">
+  <div style="margin-bottom:40px;">
+    <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 푸쉬 알림</h2>
+  </div>
+  <div style="margin-bottom:10px;">
+    <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 알림 대상</h4>
+    <div style="margin-bottom:10px;">
+      <input style="-webkit-appearance:radio;" type="radio" name="filter_radio" value="all" onclick="filter_checked('all');" checked="checked"> 전체
+    </div>
+    <div style="margin-bottom:10px;">
+      <input style="-webkit-appearance:radio;" type="radio" name="filter_radio" value="filter" onclick="filter_checked('filter');"> 필터
+      <div style="margin:0 50px;" id="push_user_filter"></div>
+    </div>
+    <div style="margin-bottom:10px;">
+      <input style="-webkit-appearance:radio;" type="radio" name="filter_radio" value="specific" onclick="filter_checked('specific');"> 특정 유저
+      <div style="margin:0 50px;" id="push_user_specific"></div>
+    </div>
+  </div>
+  <div style="margin-bottom:10px;"><br>
+    <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 알림 내용</h4>
+    <p style="margin:10px 0; font-size:13px; color:#999;">전송될 푸쉬 알림의 내용을 입력해주세요</p>
+    <input id="push_notice_msg" type="text" name="point" class="push_notice_msg" placeholder="알림 내용을 입력해주세요" />
+  </div>
+  <div style="margin-bottom:10px;"><br>
+    <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 연결 링크</h4>
+    <p style="margin:10px 0; font-size:13px; color:#999;">푸쉬 알림을 통해 앱 실행시 열릴 페이지의 링크를 입력해주세요<br>ex) http://vaskit.kr/asks/70</p>
+    <div style="position:relative; margin-bottom:10px;">
+      <input id="push_notice_link" type="text" name="point" class="push_notice_msg" placeholder="연결 링크를 입력해주세요" />
+      <span id="push_notice_link_btn" class="push_user_specific_id_btn" onclick="add_push_link()">선택</span>
+    </div>
+    <div style="margin-bottom:40px; position: relative;">
+      <iframe id="vaskit_iframe" src="" style="width:300px; height:550px; display:none; margin:0 25%; position: relative;"></iframe>
+      <div id="vaskit_iframe_cover" style="width:100%; height:560px; display:none; position: absolute; top: 0;"></div>
+    </div>
+    <a href="#" id="send_push_notice" onclick="send_push_notice(); return false;" style="display:block; background-color:#4b3d3d; color:#fff; font-size:14px; margin:10px 0; height:50px; line-height:50px; text-align:center;">전송</a>
+  </div>
+  <!-- <div style="margin-bottom:30px;">
     <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 이메일 공지사항</h2>
     <input id="notice_title" type="text" name="point" placeholder="제목을 입력하세요" />
     <textarea id="notice_message" rows="5" placeholder="내용을 입력하세요"></textarea>
@@ -25,8 +60,80 @@
         <% end %>
       </tbody>
     </table>
-  </div>
+  </div> -->
 </div>
+
+<script type="text/template" id="pushUserFilterTemplate">
+  <div style="margin-bottom:10px;">
+    <p style="margin:10px 0; font-size:13px; color:#999;">
+      사용하지 않을 항목의 필터에 대해서는 모두 체크해주셔야 합니다.<br>
+      ex) 만일 20대 여성 사용자에게 푸쉬를 보내고 싶은경우,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      여성, 20대 초반, 20대 중반, 20대 후반, IOS, AOS를 체크해주세요
+    </p>
+    <div style="display:inline-block; width: 60px;">성별</div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_gender" value="male" id="male" >
+      <label for="male">남성</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_gender" value="female" id="female">
+      <label for="female">여성</label>
+    </div>
+  </div>
+  <div style="margin-bottom:10px;">
+    <div style="display:inline-block; width: 60px;">연령</div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_age" value="early_20" id="early_20">
+      <label for="early_20">20대 초반</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_age" value="middle_20" id="middle_20">
+      <label for="middle_20">20대 중반</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_age" value="latter_20" id="latter_20">
+      <label for="latter_20">20대 후반</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_age" value="early_30" id="early_30">
+      <label for="early_30">30대 초반</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_age" value="middle_30" id="middle_30">
+      <label for="middle_30">30대 중반</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_age" value="latter_30" id="latter_30">
+      <label for="latter_30">30대 후반</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_age" value="etc" id="etc">
+      <label for="etc">기타</label>
+    </div>
+  </div>
+  <div style="margin-bottom:10px;">
+    <div style="display:inline-block; width: 60px;">기기</div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_device" value="ios" id="ios">
+      <label for="ios">IOS</label>
+    </div>
+    <div style="display:inline-block; margin:0 5px;">
+      <input style="-webkit-appearance:checkbox;" type="checkbox" name="filter_device" value="aos" id="aos">
+      <label for="aos">AOS</label>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="pushUserSpecificTemplate">
+  <div style="margin-bottom:10px;">
+    <p style="margin:10px 0; font-size:13px; color:#999;">푸쉬를 전송할 특정 유저의 id를 입력해주세요<br>아이디는 숫자만, 한번에 한개씩만 입력 가능합니다</p>
+    <div style="position:relative;">
+      <input id="push_user_specific_id" type="text" class="push_notice_msg" placeholder="유저 id를 입력해주세요" />
+      <span id="push_user_specific_id_btn" class="push_user_specific_id_btn" onclick="create_specific_id()">추가</span>
+    </div>
+    <div style="margin:10px 0;" id="push_user_specific_ids">user ID: &nbsp;</div>
+  </div>
+</script>
 
 <style>
   #notice_title {
@@ -56,10 +163,48 @@
     -webkit-appearance:none;
     border-radius:0;
   }
+  .push_user_specific_id_btn {
+    position: absolute;
+    top: 0px;
+    height: 40px;
+  	box-sizing: border-box;
+    text-align: center;
+    line-height: 40px;
+    font-weight: bold;
+    border: 1px solid #dbdbdb;
+    right:0px;
+    background-color: #f18b33;
+    color:#fff;
+    width: 60px;
+    font-size: 13px;
+    border-left:none;
+    cursor:pointer;
+  }
+  .push_notice_msg {
+    display:block;
+    width:100%;
+    height:40px;
+    line-height:40px;
+    padding:0 10px;
+    -webkit-box-sizing:border-box;
+            box-sizing:border-box;
+    border:1px solid #dbdbdb;
+    color:#666;
+    font-size:14px;
+    -webkit-appearance:none;
+    border-radius:0;
+  }
 </style>
 
 <script>
-  alert('레이아웃이 준비되기 전까지\n해당 페이지를 통한\n이메일 공지사항 전송을\n최대한 자제해주세요');
+  //alert('레이아웃이 준비되기 전까지\n해당 페이지를 통한\n이메일 공지사항 전송을\n최대한 자제해주세요');
+  var pushUserFilterTemplate = _.template($("#pushUserFilterTemplate").html());
+  var pushUserSpecificTemplate = _.template($("#pushUserSpecificTemplate").html());
+  var pushUserSpecificIds = []
+  var push_link = "";
+  var push_js = "";
+  var check_link_btn_clicked = 0;//iframe에 load listener를 한개만 설정하기 위해 쓰이는 변수
+  var check_iframe_loading = 0;//iframe 로딩중에 전송을 막기위한 변수
 
 	function create_notice() {
 		var notice_title = $("#notice_title").val();
@@ -89,4 +234,175 @@
       });
     }
 	}
+
+  $("#push_notice_link").keydown(function(e){
+                                  if (e.keyCode == '13') {
+                                    e.preventDefault();
+                                    $(this).blur();
+                                    $("#push_notice_link_btn").click();
+                                  }
+                                });
+
+  function filter_checked(is_checked) {
+    if (is_checked == "filter") {
+      $("#push_user_filter").html(pushUserFilterTemplate());
+      $("#push_user_specific").html("");
+      pushUserSpecificIds = [];
+    }else if (is_checked == "specific") {
+      $("#push_user_filter").html("");
+      $("#push_user_specific").html(pushUserSpecificTemplate());
+      $("#push_user_specific_id").keydown(function(e){
+                                      if (e.keyCode == '13') {
+                                        e.preventDefault();
+                                        $(this).blur();
+                                        $("#push_user_specific_id_btn").click();
+                                      }
+                                    });
+      pushUserSpecificIds = [];
+    }else {
+      $("#push_user_filter").html("");
+      $("#push_user_specific").html("");
+      pushUserSpecificIds = [];
+    }
+    return true;
+  }
+
+  function create_specific_id() {
+    var push_user_specific_id = $("#push_user_specific_id").val();
+
+    if (push_user_specific_id == ""){
+			alert("id를 입력해주세요");
+		} else {
+      $.ajax({
+        url: "/admin/notice/check_user_gcm.json",
+        type: 'POST',
+        data: {'id': push_user_specific_id},
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          if (data.device > 0) {
+            for (var i = 0; i < pushUserSpecificIds.length; i++) {
+              if (pushUserSpecificIds[i] == push_user_specific_id) {
+                alert("이미 추가한 id입니다!");
+                $("#push_user_specific_id").val("");
+                $("#push_user_specific_id").focus();
+                return false;
+              }
+            }
+            alert(data.device+"개의 기기에서 로그인한 유저입니다!");
+            $("#push_user_specific_ids").append(push_user_specific_id+", ");
+            pushUserSpecificIds.push(push_user_specific_id);
+          } else {
+            alert("해당 id로 로그인된 기기가 없습니다ㅜ");
+          }
+          $("#push_user_specific_id").val("");
+          $("#push_user_specific_id").focus();
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  }
+
+  function add_push_link() {
+    var link = $("#push_notice_link").val();
+    if (link == "") {
+      alert("링크를 입력해 주세요!!");
+    } else if (link.match("<%= CONFIG["host"]%>") == null) {
+      alert("VASKIT 내부 링크만 가능합니다");
+      $("#push_notice_link").val("");
+      $("#push_notice_link").focus();
+    } else {
+      $("#vaskit_iframe").attr("src", link).show();
+      $("#vaskit_iframe_cover").show();
+      push_link = link;
+      check_iframe_loading = 1;
+      if (check_link_btn_clicked == 0) {
+        $("#vaskit_iframe").load(function(){
+          var vaskit_iframe_odj = document.getElementById("vaskit_iframe");
+          var vaskit_iframe_odjDoc = vaskit_iframe_odj.contentWindow || vaskit_iframe_odj.contentDocument;
+          push_js = vaskit_iframe_odjDoc.get_js_function()
+          check_iframe_loading = 0;
+        });
+        check_link_btn_clicked = 1;
+      }
+    }
+  }
+
+  function send_push_notice() {
+    var msg = $("#push_notice_msg").val();
+    var filter_radio = $("input:radio[name='filter_radio']:checked").val();
+    var filter_data = {};
+
+    if (filter_radio == null) {
+      alert("알림 대상을 선택해주세요");
+    } else if(msg == null || msg == "") {
+      alert("알림 내용을 입력해주세요");
+    } else if (push_link == null || push_link == "") {
+      alert("연결 링크를 입력해주세요");
+    } else if (check_iframe_loading == 1) {
+      alert("미리보기 로딩 중에는 푸쉬를 전송할 수 없습니다! 잠시만 기다려주세요");
+    } else if ($("#push_notice_link").val() != push_link) {
+      alert("뭔가 이상합니다!! 입력 되어있는 링크와 미리보기가 일치하는지 한번 더 확인해주세요");
+    } else if (confirm("지정 사용자에게 푸쉬 알림이 전송됩니다!!!!!\n내용과 링크 미리보기를 한번 더 확인하고 신중하게 결정해주세요!!")) {
+      if (filter_radio == "filter") {
+        var gender = [];
+        var age = [];
+        var device = [];
+
+        $('input:checkbox[name="filter_gender"]:checked').each(function (index) {
+          gender.push($(this).val());
+        });
+        $('input:checkbox[name="filter_age"]:checked').each(function (index) {
+          age.push($(this).val());
+        });
+        $('input:checkbox[name="filter_device"]:checked').each(function (index) {
+          device.push($(this).val());
+        });
+
+        if(gender.length == 0) {
+          alert("대상 성별을 한개 이상 선택해주세요");
+          return false;
+        } else if(age.length == 0) {
+          alert("대상 연령을 한개 이상 선택해주세요");
+          return false;
+        } else if(device.length == 0) {
+          alert("대상 기기를 한개 이상 선택해주세요");
+          return false;
+        }
+
+        filter_data = {'gender': gender, 'age': age, 'device': device};
+      } else if (filter_radio == "specific") {
+        if(pushUserSpecificIds.length == 0) {
+          alert("대상 사용자를 한명 이상 선택해주세요");
+          return false;
+        }
+        filter_data = {'user_ids': pushUserSpecificIds}
+      }
+      $.ajax({
+        url: "/admin/notice/notice_push_send.json",
+        type: 'POST',
+        data: {'filter': filter_radio, 'filter_data': filter_data, 'msg': msg, 'link': push_link, 'js': push_js},
+        dataType: 'json',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          location.reload();
+        },
+        beforeSend: function(){
+          $(".loading").show();
+        },
+        complete: function(){
+          $(".loading").hide();
+        }
+      });
+    }
+  }
 </script>

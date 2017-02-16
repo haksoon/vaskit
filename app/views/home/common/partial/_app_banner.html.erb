@@ -83,4 +83,15 @@
       }
     }
   }
+
+  function get_js_function() {
+    if (segNextFunc[currentSeg].length > 0) {
+      var app_function = segNextFunc[currentSeg][segNextFunc[currentSeg].length-1];
+      var app_function_name = app_function.callback.replace("show_", "");
+      var app_function_args = JSON.stringify(app_function.arguments);
+      var app_js = "go_url('" + app_function_name + "', " + app_function_args + ")";
+      return app_js;
+    }
+    return false;
+  }
 </script>
