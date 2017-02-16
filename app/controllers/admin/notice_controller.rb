@@ -1,8 +1,10 @@
 class Admin::NoticeController < Admin::HomeController
   # GET /admin/notice
   def index
-    @notices = Notice.all.order(id: :desc)
-    render layout: 'layout_admin'
+    # @notices = Notice.all.order("id desc")
+    @log_push_admin = LogPushAdmin.all.order("id desc").limit(10)
+    @log_push_admin_count = LogPushAdmin.all.count/10+1
+    render :layout => "layout_admin"
   end
 
   # POST /admin/notice.json
@@ -123,5 +125,11 @@ class Admin::NoticeController < Admin::HomeController
     end
 
     render json: {}
+  end
+
+  def get_notice_push_list
+    log_push_admin_count = LogPushAdmin.all.count
+    log_push_list = LogPushAdmin.where("id < ? AND id > ?", log_push_admin_count - params[:start_point].to_i, log_push_admin_count - params[:end_point].to_i).order("id desc")
+    render :json => {:result => log_push_list}
   end
 end

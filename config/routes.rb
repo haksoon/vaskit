@@ -113,6 +113,7 @@ Rails.application.routes.draw do
       collection do
         post 'check_user_gcm'
         post 'notice_push_send'
+        post 'get_notice_push_list'
       end
     end
     resources :collections, only: [:index, :show, :create, :update] do

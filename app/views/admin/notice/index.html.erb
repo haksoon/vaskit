@@ -19,7 +19,7 @@
   <div style="margin-bottom:10px;"><br>
     <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 알림 내용</h4>
     <p style="margin:10px 0; font-size:13px; color:#999;">전송될 푸쉬 알림의 내용을 입력해주세요</p>
-    <input id="push_notice_msg" type="text" name="point" class="push_notice_msg" placeholder="알림 내용을 입력해주세요" />
+    <textarea id="push_notice_msg" placeholder="알림 내용을 입력해주세요" class="notice_message"></textarea>
   </div>
   <div style="margin-bottom:10px;"><br>
     <h4 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 연결 링크</h4>
@@ -33,6 +33,42 @@
       <div id="vaskit_iframe_cover" style="width:100%; height:560px; display:none; position: absolute; top: 0;"></div>
     </div>
     <a href="#" id="send_push_notice" onclick="send_push_notice(); return false;" style="display:block; background-color:#4b3d3d; color:#fff; font-size:14px; margin:10px 0; height:50px; line-height:50px; text-align:center;">전송</a>
+  </div>
+  <div style="margin-bottom:10px;">
+    <p style="margin:30px 0 10px; padding:0 5px;"><i class="fa fa-info-circle"></i> 푸쉬 알림 전송 리스트</p>
+    <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center;">
+      <thead>
+        <tr style="height:40px; background-color:#998674; color:#fff;">
+          <th style="width:50px;">ID</th>
+          <th style="width:100px;">제목</th>
+          <th>내용</th>
+          <th style="width:80px;">전송 요청</th>
+          <th style="width:80px;">전송 성공</th>
+          <th style="width:120px;">전송일</th>
+        </tr>
+      </thead>
+      <tbody id="push_list_tbody">
+        <% @log_push_admin.each do |log_push_admin| %>
+          <tr>
+            <td><%=log_push_admin.id%></td>
+            <td><%=log_push_admin.push_type%></td>
+            <td><%=log_push_admin.message%></td>
+            <td><%=log_push_admin.total_count%>개</td>
+            <td><%=log_push_admin.success_count%>개</td>
+            <td><%=log_push_admin.created_at.to_date.to_s(:korean_date)%></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div style="position: relative;">
+    <select id="navigate_page" style="margin:0 25%; width:50%; height:40px;background-color:#fff; padding:0 10px; direction:rtl; border: 1px solid #999; border-radius:0;">
+      <% for i in 1..(@log_push_admin_count) %>
+        <option value="<%= i %>" ><%= i %></option>
+      <% end %>
+    </select>
+    <span id="navigate_back_btn" onclick="navigate_btn_clecked(false);" class="push_user_specific_id_btn" style="left:0px; width:20%; background-color: #dbdbdb;">이전</span>
+    <span id="navigate_forward_btn" onclick="navigate_btn_clecked(true);" class="push_user_specific_id_btn" style="width:20%; background-color: #dbdbdb;">다음</span>
   </div>
   <!-- <div style="margin-bottom:30px;">
     <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 이메일 공지사항</h2>
@@ -51,13 +87,13 @@
         </tr>
       </thead>
       <tbody>
-        <% @notices.each do |notice| %>
+        <% # @notices.each do |notice| %>
           <tr>
-            <td><%=notice.title%></td>
-            <td><%=notice.message%></td>
-            <td><%=notice.created_at.to_date.to_s(:korean_date)%></td>
+            <td><%#=notice.title%></td>
+            <td><%#=notice.message%></td>
+            <td><%#=notice.created_at.to_date.to_s(:korean_date)%></td>
           </tr>
-        <% end %>
+        <% # end %>
       </tbody>
     </table>
   </div> -->
@@ -150,7 +186,7 @@
     -webkit-appearance:none;
     border-radius:0;
   }
-  #notice_message {
+  .notice_message {
     display:block;
     width:100%;
     margin-top:10px;
@@ -205,6 +241,7 @@
   var push_js = "";
   var check_link_btn_clicked = 0;//iframe에 load listener를 한개만 설정하기 위해 쓰이는 변수
   var check_iframe_loading = 0;//iframe 로딩중에 전송을 막기위한 변수
+  var cur_page = 1;
 
 	function create_notice() {
 		var notice_title = $("#notice_title").val();
@@ -234,6 +271,11 @@
       });
     }
 	}
+
+  $("#navigate_page").on("change",function(){
+		cur_page = parseInt($(this).val());
+    navigate_page()
+	});
 
   $("#push_notice_link").keydown(function(e){
                                   if (e.keyCode == '13') {
@@ -404,5 +446,55 @@
         }
       });
     }
+  }
+
+  function navigate_btn_clecked(is_forward) {
+    if(is_forward) {
+      if(cur_page == "<%= @log_push_admin_count%>") {
+        alert("마지막 페이지 입니다!!");
+      }else {
+        cur_page = String(parseInt(cur_page) + 1);
+        $("#navigate_page").val(cur_page);
+        navigate_page();
+      }
+    }else {
+      if(cur_page == "1") {
+        alert("첫 페이지 입니다!!");
+      }else {
+        cur_page = String(parseInt(cur_page) - 1);
+        $("#navigate_page").val(cur_page);
+        navigate_page();
+      }
+    }
+  }
+
+  function navigate_page() {
+    start_point = (parseInt(cur_page)-1)*10-1;
+    end_point = parseInt(cur_page)*10;
+    $.ajax({
+      url: "/admin/notice/get_notice_push_list",
+      type: 'POST',
+      data: {'start_point': start_point, 'end_point':end_point},
+      dataType: 'json',
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        $("#push_list_tbody").html("");
+
+        for(var i in data.result) {
+          var r = data.result[i];
+          var time = r.created_at;
+          time = time.split("T")[0].replace("-","년 ").replace("-","월 ") +"일"
+          $("#push_list_tbody").append("<tr><td>"+r.id+"</td><td>"+r.push_type+"</td><td>"+r.message+"</td><td>"+r.total_count+"개</td><td>"+r.success_count+"개</td><td>"+time+"</td></tr>");
+        }
+      },
+      beforeSend: function(){
+        $(".loading").show();
+      },
+      complete: function(){
+        $(".loading").hide();
+      }
+    });
   }
 </script>
