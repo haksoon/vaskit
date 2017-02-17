@@ -67,7 +67,8 @@ class Users::SessionsController < Devise::SessionsController
       my_asks_count = Ask.where(user_id: current_user.id).count
       my_likes_count = AskLike.where(user_id: current_user.id).count
       my_votes_count = Vote.where(user_id: current_user.id).count
-      my_comments_count = Comment.where(user_id: current_user.id).count
+      my_comments_count = Comment.where(user_id: current_user.id,
+                                        is_deleted: false).count
     end
     render json: {
       current_user: current_user,
@@ -121,7 +122,8 @@ class Users::SessionsController < Devise::SessionsController
           @asks =
             case @type
             when 'my_asks_in_progress'
-              Ask.where(user_id: current_user.id, be_completed: false)
+              Ask.where(user_id: current_user.id,
+                        be_completed: false)
             when 'my_asks'
               Ask.where(user_id: current_user.id)
             when 'my_likes'
@@ -131,7 +133,8 @@ class Users::SessionsController < Devise::SessionsController
               my_votes = Vote.where(user_id: current_user.id)
               Ask.where(id: my_votes.map(&:ask_id).uniq)
             when 'my_comments'
-              my_comments = Comment.where(user_id: current_user.id)
+              my_comments = Comment.where(user_id: current_user.id,
+                                          is_deleted: false)
               Ask.where(id: my_comments.map(&:ask_id).uniq)
             end
           @asks = @asks.page(params[:page]).per(Ask::ASK_PER).order(id: :desc)

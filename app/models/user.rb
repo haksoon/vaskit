@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   def signup_submit_notifier
     user_count = User.where(user_role: 'user').count
     noti_title = ''
-    noti_title += ":metal: 가입자 #{user_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,')}명 돌파!!!!!\n" if user_count % 50.zero?
+    noti_title += ":metal: 가입자 #{user_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,')}명 돌파!!!!!\n" if (user_count % 50).zero?
     noti_title += '새로운 사용자가 회원가입하였습니다'
     noti_message = "#{gender == true ? ':mens: 남성' : ':womens: 여성'} / #{Time.now.year - birthday.year + 1}세 / #{email}"
     if sign_up_type == 'facebook'

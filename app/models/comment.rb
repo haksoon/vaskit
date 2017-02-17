@@ -38,7 +38,7 @@ class Comment < ActiveRecord::Base
     # 본인의 질문에 대한 댓글 알림 (type:comment)
     if user_id != ask.user_id
       return unless User.find(ask.user_id).alarm_3 == true
-      comment_count = Comment.where(ask_id: ask.id)
+      comment_count = Comment.where(ask_id: ask.id, is_deleted: false)
                              .where.not(user_id: ask.user_id).count
       alarm = Alarm.where(user_id: ask.user_id,
                           ask_id: ask.id)
@@ -58,15 +58,15 @@ class Comment < ActiveRecord::Base
     if comment_id.nil?
       # 본인이 댓글 단 질문에 추가 댓글 알림 (type:sub_comment)
       # 과거에 달았던 애가 있는지 체크
-      sub_comments = Comment.where(ask_id: ask.id,
-                                   is_deleted: false)
-                             .where("id < #{id}").uniq
+      sub_comments = Comment.where(ask_id: ask.id, is_deleted: false)
+                            .where("id < #{id}").uniq
       sub_comments.each_with_index do |sub_comment|
         next unless sub_comment.user_id != ask.user_id && sub_comment.user_id != user_id
         next unless User.find(sub_comment.user_id).alarm_6 == true
         sub_comment = Comment.where(ask_id: ask.id,
+                                    is_deleted: false,
                                     user_id: sub_comment.user_id).first
-        user_count = Comment.where(ask_id: ask.id)
+        user_count = Comment.where(ask_id: ask.id, is_deleted: false)
                             .where("id > #{sub_comment.id}")
                             .where.not(user_id: sub_comment.user_id).count
         alarm = Alarm.where(user_id: sub_comment.user_id,
@@ -93,7 +93,8 @@ class Comment < ActiveRecord::Base
       # 본인의 댓글에 대한 대댓글 알림 (type:reply_comment)
       if original_comment.user_id != user_id
         return unless User.find(original_comment.user_id).alarm_5 == true
-        comment_count = Comment.where(comment_id: comment_id).count
+        comment_count = Comment.where(comment_id: comment_id,
+                                      is_deleted: false).count
         alarm = Alarm.where(user_id: original_comment.user_id,
                             ask_id: ask.id)
                      .where('alarm_type LIKE ?', 'reply_comment_%').first
@@ -118,8 +119,10 @@ class Comment < ActiveRecord::Base
         next unless user_id != reply_sub_comment.user_id
         next unless User.find(reply_sub_comment.user_id).alarm_6 == true
         reply_sub_comment = Comment.where(comment_id: original_comment.id,
+                                          is_deleted: false,
                                           user_id: reply_sub_comment.user_id).first
-        user_count = Comment.where(comment_id: original_comment.id)
+        user_count = Comment.where(comment_id: original_comment.id,
+                                   is_deleted: false)
                             .where("id > #{reply_sub_comment.id}")
                             .where.not(user_id: reply_sub_comment.user_id).count
         alarm = Alarm.where(user_id: reply_sub_comment.user_id,
