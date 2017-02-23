@@ -28,7 +28,7 @@
 
 <script type="text/template" id="videoThumbnailTemplate">
   <div class="video_thumbnail">
-    <a class="clearfix video_header" href="/videos/{{= video.id }}" onclick="go_url('video_ask', {{= video.id }}); return false;">
+    <div class="clearfix video_header" href="/videos/{{= video.id }}" onclick="go_url('video_ask', {{= video.id }}); return false;">
       <div class="video_title text_box_short"><i class="fa fa-tv"></i> {{= video.title }}</div>
       <span class="video_ribbon"></span>
       <div class="video_image">
@@ -39,7 +39,7 @@
         {{= taggingKeywords(video.description) }}
       </div>
       <div class="video_ask_link">비교영상 보기 <i class="fa fa-caret-right"></i></div>
-    </a>
+    </div>
   </div>
 </script>
 
