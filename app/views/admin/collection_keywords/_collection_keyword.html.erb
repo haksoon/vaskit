@@ -1,0 +1,13 @@
+<%= link_to "<div class='btn-group'>
+              <button type='button' class='btn btn-primary'>
+                #{@keyword.keyword}
+                <span class='label label-default'>#{@keyword.refer_count}회</span>
+              </button>
+              <button type='button' class='btn btn-danger' onclick='destroy_keyword(#{@keyword.id}); return false;'>
+                <i class='fa fa-trash'></i>
+              </button>
+            </div>".html_safe,
+            '#',
+            { id: "collection_keyword_#{@keyword.id}",
+              style: 'display: inline-block; margin: 5px;',
+              onclick: "return false;" } %>

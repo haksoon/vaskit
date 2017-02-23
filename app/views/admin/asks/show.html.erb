@@ -1,102 +1,149 @@
-<div style="padding:10px;">
-  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 질문 내용
-    <span style="float: right;"><%= link_to @ask.id.to_s + " 보기", ask_url(@ask.id), target: "_blank"  %></span>
-  </h2>
-  <div class="clearfix">
-    <span> <%= @ask.user.string_id %> (<%= @ask.user.gender == true ? '남성' : '여성' %> <%= Time.now.year - @ask.user.birthday.year %>세)</span>
-    <span style="float:right;">댓글 <%= @ask.left_ask_deal.comment_count + @ask.right_ask_deal.comment_count %>개</span>
-    <span style="float:right;">투표 <%= @ask.left_ask_deal.vote_count + @ask.right_ask_deal.vote_count %>표&nbsp;/&nbsp;</span>
-    <br>
-    <p><%= @ask.message %></p>
+<div class="jumbotron clearfix">
+  <h1><%= @ask.user.string_id %> 님의 질문</h1>
+  <p>어드민 ID로 질문에 대한 댓글을 작성할 수 있습니다</p>
+  <%= link_to '목록으로',
+              admin_asks_path,
+              { class: 'btn btn-default btn-lg' } %>
+  <div class="pull-right">
+    <div class="btn-group">
+      <button class="btn btn-lg" type="button">
+        <%= @ask.user.gender == true ? '남성' : '여성' %>
+      </button>
+      <button class="btn btn-lg" type="button">
+        <%= Time.now.year - @ask.user.birthday.year %>세
+      </button>
+      <button class="btn btn-lg" type="button">
+        투표 <span class="badge"><%= @ask.left_ask_deal.vote_count + @ask.right_ask_deal.vote_count %></span>
+      </button>
+      <button class="btn btn-lg" type="button">
+        댓글 <span class="badge"><%= @ask.left_ask_deal.comment_count + @ask.right_ask_deal.comment_count %></span>
+      </button>
+      <button class="btn btn-lg" type="button">
+        공감 <span class="badge"><%= @ask.like_count %></span>
+      </button>
+    </div>
+    <%= link_to '질문 상세보기',
+                ask_path(@ask.id),
+                {
+                  class: 'btn btn-default btn-lg',
+                  target: '_blank'
+                } %>
   </div>
-  <div class="clearfix">
-    <img src="<%= @ask.left_ask_deal.image(:normal) %>" alt="" style="display:inline-block; width:50%; float:left;" onerror="imgError(this);">
-    <img src="<%= @ask.right_ask_deal.image(:normal) %>" alt="" style="display:inline-block; width:50%; float:left;" onerror="imgError(this);">
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">질문 상세보기</div>
+  <div class="panel-body">
+    <blockquote><%= raw tagging_keywords(@ask.message) %></blockquote>
+    <%= image_tag @ask.left_ask_deal.image.url(:normal),
+                  { width: '50%',
+                    class: 'img-thumbnail pull-left' } %>
+    <%= image_tag @ask.right_ask_deal.image.url(:normal),
+                  { width: '50%',
+                    class: 'img-thumbnail pull-left' } %>
   </div>
-  <div style="padding: 10px; background-color: #eee; text-align: center;">
-    댓글 목록
-    <% if @ask.comments.length == 0 %>
-      <p>아직 댓글이 없습니다</p>
+
+  <!-- Table -->
+  <table class="table table-bordered table-responsive table-hover">
+    <% if @ask.comments.blank? %>
+      <tr><td>아직 댓글이 없습니다</td></tr>
     <% else %>
       <% @ask.comments.each do |comment| %>
-      <% direction = comment.ask_deal_id == @ask.left_ask_deal_id ? "left" : "right" %>
-      <div style="text-align: <%= direction %>; width: 75%; margin: <%= direction == 'left' ? '0 25% 0 0' : '0 0 0 25%' %>;">
-        <p style="background-color: #ccc; padding: 5px;"><img style="width: 40px; margin-right: 5px;" src="<%= comment.user.avatar(:original)%>"><%= comment.user.string_id %>: <%= comment.content %></p>
-      </div>
+        <% if comment.ask_deal_id == @ask.left_ask_deal_id %>
+        <tr class="text-left">
+          <td>
+            <%= image_tag comment.user.avatar.url(:original),
+                          { width: '50px',
+                            class: 'img-rounded' } %>
+            <kbd><%= comment.user.string_id %></kbd>
+            <p class="list-group-item-text"><%= raw tagging_keywords(comment.content) %></p>
+          </td>
+        </tr>
+        <% else %>
+          <tr class="text-right">
+            <td>
+              <kbd><%= comment.user.string_id %></kbd>
+              <%= image_tag comment.user.avatar.url(:original),
+                            { width: '50px',
+                              class: 'img-rounded' } %>
+              <p class="list-group-item-text"><%= raw tagging_keywords(comment.content) %></p>
+            </td>
+          </tr>
+        <% end %>
       <% end %>
+    <% end %>
+  </table>
+</div>
+
+<div class="panel panel-success">
+  <div class="panel-heading">댓글 작성하기</div>
+  <div class="panel-body">
+    <%= simple_form_for @comment,
+                        url: admin_ask_path(@ask.id),
+                        method: :patch,
+                        html: {
+                                oninput: "form_check($(this));", onchange: "form_check($(this));"
+                              } do |f| %>
+      <%= f.input :user_id,
+                  as: :grouped_select,
+                  collection: {
+                                'VASKIT': @admin_users.where(id: 1),
+                                '20대 여성': @admin_users.where(gender: false).where("birthday < '#{Date.new(Time.now.year - 18, 1, 1)}' AND birthday > '#{Date.new(Time.now.year - 28, 1, 1)}'").where.not(id: 1),
+                                '30대 여성': @admin_users.where(gender: false).where("birthday < '#{Date.new(Time.now.year - 28, 1, 1)}' AND birthday > '#{Date.new(Time.now.year - 38, 1, 1)}'").where.not(id: 1),
+                                '기타 여성': @admin_users.where(gender: false).where("birthday > '#{Date.new(Time.now.year - 18, 1, 1)}' OR birthday < '#{Date.new(Time.now.year - 38, 1, 1)}'").where.not(id: 1),
+                                '20대 남성': @admin_users.where(gender: true).where("birthday < '#{Date.new(Time.now.year - 18, 1, 1)}' AND birthday > '#{Date.new(Time.now.year - 28, 1, 1)}'").where.not(id: 1),
+                                '30대 남성': @admin_users.where(gender: true).where("birthday < '#{Date.new(Time.now.year - 28, 1, 1)}' AND birthday > '#{Date.new(Time.now.year - 38, 1, 1)}'").where.not(id: 1),
+                                '기타남성': @admin_users.where(gender: true).where("birthday > '#{Date.new(Time.now.year - 18, 1, 1)}' OR birthday < '#{Date.new(Time.now.year - 38, 1, 1)}'").where.not(id: 1)
+                              },
+                  group_method: :last,
+                  value_method: :id,
+                  label_method: :string_id,
+                  error: '',
+                  label: '1. 작성 ID 선택',
+                  prompt: '댓글을 작성할 ID를 선택해주세요',
+                  input_html: {
+                                class: 'form-control required_form',
+                              } %>
+      <%= f.input :content,
+                  as: :text,
+                  error: '',
+                  label: '2. 댓글 내용 입력',
+                  input_html: {
+                                rows: 5,
+                                class: 'required_form',
+                                placeholder: '댓글을 입력하세요'
+                              } %>
+      <%= f.input :ask_deal_id,
+                  as: :select,
+                  collection: [ ['왼쪽', @ask.left_ask_deal_id], ['오른쪽', @ask.right_ask_deal_id] ],
+                  error: '',
+                  label: '3. 댓글 방향 선택',
+                  prompt: '댓글 방향을 선택해주세요',
+                  input_html: {
+                                class: 'form-control required_form'
+                              } %>
+      <%= f.input :image,
+                  as: :file,
+                  error: '',
+                  label: '(옵션) 댓글 사진 입력',
+                  input_html: {
+                                class: 'hidden',
+                                onchange: 'preview_thumbnail(this, $(thumbnail_image));'
+                              } %>
+      <div class="well">
+        <%= image_tag @comment.image.url(:original),
+                     { id: 'thumbnail_image',
+                       class: 'img-thumbnail center-block',
+                       style: 'cursor: pointer;',
+                       onclick: '$("#comment_image").click();' } %>
+      </div>
+      <%= f.button :submit,
+                   '댓글 달기',
+                   class: 'btn-block btn-success',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { disable_with: '전송중...' } %>
     <% end %>
   </div>
 </div>
-
-<div style="padding:10px;">
-  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 댓글 전송</h2>
-  <select id="admin_users" style="width:100%; height:40px; line-height:40px; background-color:#fff; padding:0 10px; border: 1px solid #999; border-radius:0;">
-    <option value="">댓글을 작성할 ID를 선택해주세요</option>
-    <optgroup label="VASKIT">
-      <option value="1">VASKIT</option>
-    </optgroup>
-    <optgroup label="여성">
-      <% @admin_users.where(gender: false).each do |c| %>
-        <option value="<%=c.id%>"><%= (Time.now.year - c.birthday.year + 1).to_s + "세 / " + c.string_id.to_s %></option>
-      <% end %>
-    </optgroup>
-    <optgroup label="남성">
-      <% @admin_users.where(gender: true).each do |c| %>
-        <option value="<%=c.id%>"><%= (Time.now.year - c.birthday.year + 1).to_s + "세 / " + c.string_id.to_s %></option>
-      <% end %>
-    </optgroup>
-  </select>
-  <textarea id="comment_message" class="comment_input" type="text" placeholder="댓글 내용 입력"></textarea>
-  <a href="#" onclick="send_admin_comment(true); return false;" style="display:block; width: 49%; float: left; background-color:#4b3d3d; color:#fff; font-size:14px; height:50px; line-height:50px; text-align:center;">왼쪽에 입력</a>
-  <a href="#" onclick="send_admin_comment(false); return false;" style="display:block; width: 49%; float: right; background-color:#4b3d3d; color:#fff; font-size:14px; height:50px; line-height:50px; text-align:center;">오른쪽에 입력</a>
-</div>
-
-<style>
-  .comment_input {
-    display:block;
-    width:100%;
-    height:120px;
-    margin: 10px 0;
-    padding:10px;
-    -webkit-box-sizing:border-box;
-            box-sizing:border-box;
-    border:1px solid #dbdbdb;
-    color:#666;
-    font-size:14px;
-    -webkit-appearance:none;
-    border-radius:0;
-  }
-</style>
-
-<script>
-  function send_admin_comment(is_left) {
-    var ask_id = document.location.pathname.replace("/admin/asks/", "");
-    var admin_user_id = $("#admin_users").val();
-    var comment_message = $("#comment_message").val();
-
-    if (admin_user_id =="") {
-      alert("아이디를 선택해주세요");
-    } else if (comment_message == "") {
-      alert("댓글 내용을 입력해주세요");
-    } else if (confirm("댓글을 전송하시겠어요?\n")) {
-      $.ajax({
-        url: "/admin/asks/" + ask_id + "/comment_create.json",
-        dataType: 'json',
-        type: 'POST',
-        data: {admin_user_id: admin_user_id, comment_message: comment_message, is_left: is_left},
-        error: function(){
-          return false;
-        },
-        success: function(data){
-          window.location.reload();
-        },
-        beforeSend: function(){
-          $(".loading").show();
-        },
-        complete: function(){
-          $(".loading").hide();
-        }
-      });
-    }
-  };
-</script>

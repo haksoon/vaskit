@@ -1,0 +1,20 @@
+<% @keywords.each do |keyword| %>
+  <%= link_to "<div class='btn-group'>
+                <button type='button' class='btn btn-default'>
+                  #{keyword.keyword}
+                  <span class='label label-default'>#{keyword.refer_count}회</span>
+                </button>
+              </div>".html_safe,
+              '#',
+              { style: 'display: inline-block; margin: 5px;',
+                onclick: "select_keyword('#{keyword.keyword}'); return false;" } %>
+<% end %>
+
+<% if @new_keyword %>
+  <%= link_to "<button type='button' id='keyword_new_submit' class='btn btn-success'>
+                 '#{@new_keyword}' 추가하기
+               </button>".html_safe,
+              '#',
+              { style: 'display: inline-block; margin: 5px;',
+                onclick: "select_keyword(); return false;" } %>
+<% end %>

@@ -1,0 +1,24 @@
+<ul class="list-group" style="margin-bottom: 0;">
+  <% if @related_collections.nil? %>
+    <li class="list-group-item list-group-item-danger">
+      먼저 키워드를 추가해주세요
+    </li>
+  <% elsif @related_collections.blank? %>
+    <li class="list-group-item list-group-item-warning">
+      연관컬렉션이 아직 없습니다<br>
+      키워드를 잘 추가해주세요
+    </li>
+  <% else %>
+    <li class="list-group-item list-group-item-success">
+      <%= @related_collections.length %>개의 연관컬렉션이 예상됩니다
+    </li>
+    <% @related_collections.each do |collection| %>
+      <li class="list-group-item">
+        <%= link_to collection_path(collection.id), target: '_blank', class: 'center-block' do %>
+          <button type="button" class="btn btn-link"><%= "#{collection.id} #{collection.name}" %></button>
+          <%= image_tag "http://vaskit.kr/#{collection.image.url(:original)}", class: 'img-thumbnail' %>
+        <% end %>
+      </li>
+    <% end %>
+<% end %>
+</ul>

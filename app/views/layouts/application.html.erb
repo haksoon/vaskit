@@ -80,10 +80,7 @@
         $.ajax({
               url: "/log_errors.json",
               type: "POST",
-              data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj },
-              // complete: function(){
-              //   if (confirm("앗! 오류가 발생했습니다...\n앱을 재시작하시겠어요?")) window.location = href;
-              // }
+              data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj }
         });
         return false;
       };

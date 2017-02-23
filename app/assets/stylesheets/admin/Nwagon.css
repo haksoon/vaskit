@@ -96,7 +96,7 @@ ul.accessibility {font-size: 1px;height: 1px; line-height: 1px; overflow: hidden
 .Nwagon_radar .labels text:hover{text-decoration:underline;}
 .Nwagon_radar .xAxis text{fill:#000;font-family:'나눔고딕', '돋움', Dotum;font-size:8px;}
 .Nwagon_radar .foreground polyline.polygon{opacity:0.4;}
-.Nwagon_radar .foreground circle{stroke-width:8,stroke:transparent}
+.Nwagon_radar .foreground circle{stroke-width:8;stroke:transparent}
 .Nwagon_radar .foreground circle.dim{fill:#fff;stroke:#aaa;stroke-width:1;}
 
 /* < IE8  */

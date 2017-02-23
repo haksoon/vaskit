@@ -27,7 +27,7 @@
 </script>
 
 <script type="text/template" id="facebookLoginTemplate">
-  <%= form_for(:user, url: registration_path(:user), remote: true, html: {id: "facebook_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+  <%= form_for(:user, url: registration_path(:user), remote: true, html: {id: "facebook_form", style: "height: 100%;", oninput: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
     <div class="container top" ontouchmove="return false;">
       <span class="header_title">회원가입</span>
       <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
@@ -65,7 +65,7 @@
 </script>
 
 <script type="text/template" id="signUpTemplate">
-  <%= form_for(:user, url: registration_path(:user), remote: true, html: {id: "sign_up_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+  <%= form_for(:user, url: registration_path(:user), remote: true, html: {id: "sign_up_form", style: "height: 100%;", oninput: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
     <div class="container top" ontouchmove="return false;">
       <span class="header_title">회원가입</span>
       <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
@@ -115,7 +115,7 @@
 </script>
 
 <script type="text/template" id="signInTemplate">
-  <%= form_for(:user, url: session_path(:user), remote: true, html: {id: "sign_in_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+  <%= form_for(:user, url: session_path(:user), remote: true, html: {id: "sign_in_form", style: "height: 100%;", oninput: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
     <div class="container top" ontouchmove="return false;">
       <span class="header_title">이메일 로그인</span>
       <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
@@ -137,7 +137,7 @@
 </script>
 
 <script type="text/template" id="forgotPasswordTemplate">
-  <%= form_for(:user, url: user_password_path, remote: true, html: {id: "forgot_password_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+  <%= form_for(:user, url: user_password_path, remote: true, html: {id: "forgot_password_form", style: "height: 100%;", oninput: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
     <div class="container top landing" ontouchmove="return false;">
       <span class="header_title">비밀번호를 잊으셨나요?</span>
       <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>

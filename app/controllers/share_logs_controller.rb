@@ -5,7 +5,8 @@ class ShareLogsController < ApplicationController
     ShareLog.create(user_id: user_id,
                     channel: params[:channel],
                     ask_id: params[:ask_id],
-                    collection_id: params[:collection_id])
+                    collection_id: params[:collection_id],
+                    video_id: params[:video_id])
     render json: {}
   end
 end

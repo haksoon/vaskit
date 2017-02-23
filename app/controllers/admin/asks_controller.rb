@@ -1,38 +1,57 @@
 class Admin::AsksController < Admin::HomeController
+  before_action :set_ask, only: [:show, :update]
+  before_action :load_admin_users, only: [:show, :update]
 
   # GET /admin/asks
   def index
-    @asks = Ask.where(be_completed: false).page(params[:page]).per(5).order(id: :desc)
-    @asks_count = Ask.where(be_completed: false).count / 10 + 1
-    render layout: "layout_admin"
+    @asks = Ask.where(be_completed: false)
+               .page(params[:page]).per(10).order(id: :desc)
   end
 
-  #GET /admin/asks/:id
+  # GET /admin/asks/:id
   def show
-    @ask = Ask.find(params[:id])
-    @admin_users = User.where(user_role: "admin").order(birthday: :desc)
-    render layout: "layout_admin"
+    @comment = Comment.new
   end
 
-  # POST /admin/asks/:id/comment_create.json
-  def comment_create
-    ask_id = params[:id]
-    admin_user_id = params[:admin_user_id]
-    comment_message = params[:comment_message]
-    is_left = params[:is_left]
+  # PATCH /admin/asks/:id
+  def update
+    params[:comment][:ask_id] = @ask.id
 
-    ask = Ask.find(ask_id)
-    ask_deal_id = is_left == "true" ? ask.left_ask_deal_id : ask.right_ask_deal_id
-
-    vote = Vote.find_by(ask_id: ask_id, user_id: admin_user_id)
-    if vote
-      vote.update(ask_deal_id: ask_deal_id)
+    @comment = Comment.new(comment_params)
+    if @comment.save
+      flash['success'] = '댓글을 성공적으로 작성하였습니다'
+      vote = Vote.find_by(ask_id: @ask.id, user_id: params[:comment][:user_id])
+      if vote.nil?
+        flash['info'] = '아직 투표하지 않은 유저이므로 투표에 참여하였습니다'
+        vote = Vote.create(ask_id: @ask.id, ask_deal_id: params[:comment][:ask_deal_id], user_id: params[:comment][:user_id])
+      elsif vote && vote.ask_deal_id != params[:comment][:ask_deal_id].to_i
+        flash['warning'] = '이미 반대 방향에 투표한 유저이므로 투표를 수정하였습니다'
+        vote.update(ask_deal_id: params[:comment][:ask_deal_id])
+      end
+      redirect_to admin_ask_path(@ask.id)
     else
-      vote = Vote.create(ask_id: ask_id, ask_deal_id: ask_deal_id, user_id: admin_user_id)
+      flash['error'] = '필수 입력값을 모두 입력해주세요'
+      render :show
     end
-
-    Comment.create(user_id: admin_user_id, ask_id: ask_id, ask_deal_id: ask_deal_id, content: comment_message)
-    render json: {status: 'ok'}
   end
 
+  private
+
+  def set_ask
+    @ask = Ask.find(params[:id])
+  end
+
+  def load_admin_users
+    @admin_users = User.where(user_role: 'admin')
+                       .order(birthday: :desc)
+  end
+
+  def comment_params
+    params.require(:comment).permit(:user_id,
+                                    :content,
+                                    :ask_id,
+                                    :ask_deal_id,
+                                    :comment_id,
+                                    :image)
+  end
 end

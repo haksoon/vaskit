@@ -1,4 +1,5 @@
 class Ask < ActiveRecord::Base
+  belongs_to :collection
   belongs_to :user
   belongs_to :category
   belongs_to :left_ask_deal, class_name: 'AskDeal', foreign_key: 'left_ask_deal_id'

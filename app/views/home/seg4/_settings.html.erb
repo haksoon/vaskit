@@ -308,7 +308,7 @@
 </script>
 
 <script type="text/template" id="editPasswordTemplate">
-  <%= form_for(:user, url: users_change_password_path, remote: true, html: {id: "edit_password_form", style: "height: 100%;", onkeyup: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
+  <%= form_for(:user, url: users_change_password_path, remote: true, html: {id: "edit_password_form", style: "height: 100%;", oninput: "form_check($(this));", onchange: "form_check($(this));"}) do |f| %>
     <div class="container top" ontouchmove="return false;">
       <span class="header_title" onclick="$(this).scroll_to();">비밀번호 변경하기</span>
       <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>

@@ -1,0 +1,49 @@
+<tr id="collection_ask_col_1_<%= @ask.id %>">
+  <td rowspan="2"><kbd><%= @ask.id %></kbd></td>
+  <td colspan="5">
+    <%= image_tag @ask.left_ask_deal.image.url(:normal),
+                  { width: '50%', class: 'img-thumbnail pull-left' } %>
+    <%= image_tag @ask.right_ask_deal.image.url(:normal),
+                  { width: '50%', class: 'img-thumbnail pull-left' } %>
+  </td>
+  <td colspan="3">
+    <%= raw tagging_keywords(@ask.message) %>
+  </td>
+</tr>
+<tr id="collection_ask_col_2_<%= @ask.id %>">
+  <td><%= @ask.user.string_id %></td>
+  <td><%= format_datetime(@ask.created_at, 'past') %></td>
+  <td>
+    <button class="btn btn-default"><%= "투표 #{@ask.left_ask_deal.vote_count + @ask.right_ask_deal.vote_count}개" %></button>
+  </td>
+  <td>
+    <button class="btn btn-default"><%= "댓글 #{@ask.left_ask_deal.comment_count + @ask.right_ask_deal.comment_count}개" %></button>
+  </td>
+  <td>
+    <button class="btn btn-default"><%= "공감 #{@ask.like_count}개" %></button>
+  </td>
+  <td>
+    <%= link_to '열기',
+                ask_path(@ask.id),
+                { class: 'btn btn-default',
+                  target: '_blank' } %>
+  </td>
+  <td>
+    <div class="btn-group">
+      <%= link_to '<i class="fa fa-caret-up"></i>'.html_safe,
+                  '#',
+                  { class: 'btn btn-info',
+                    onclick: "sort_ask_up(#{@ask.id}); return false;" } %>
+      <%= link_to '<i class="fa fa-caret-down"></i>'.html_safe,
+                  '#',
+                  { class: 'btn btn-info',
+                    onclick: "sort_ask_down(#{@ask.id}); return false;" } %>
+    </div>
+  </td>
+  <td>
+    <%= link_to '<i class="fa fa-trash"></i>'.html_safe,
+                '#',
+                { class: 'btn btn-danger',
+                  onclick: "destroy_ask(#{@ask.id}); return false;" } %>
+  </td>
+</tr>

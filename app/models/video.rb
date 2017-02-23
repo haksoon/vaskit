@@ -6,6 +6,12 @@ class Video < ActiveRecord::Base
   validates_attachment_size :image, less_than: 20.megabytes
   validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
 
+  validates :title, presence: true
+  validates :description, presence: true
+  validates :ask_id, presence: true
+  validates :url, presence: true
+  validates :image, presence: true
+
   belongs_to :ask
 
   VIDEO_PER = 3

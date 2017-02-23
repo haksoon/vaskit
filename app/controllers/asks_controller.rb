@@ -34,19 +34,6 @@ class AsksController < ApplicationController
   # GET /asks/:id
   # GET /asks/:id.json
   def show
-    if current_user
-      all_alarms = Alarm.where(ask_id: params[:id],
-                               user_id: current_user.id,
-                               is_read: false)
-      unless all_alarms.blank?
-        last_alarm = all_alarms.last
-        all_alarms.update_all(is_read: true)
-        last_alarm.record_timestamps = false
-        last_alarm.update(is_read: true)
-        last_alarm.record_timestamps = true
-      end
-    end
-
     respond_to do |format|
       format.html
       format.json do
@@ -68,6 +55,20 @@ class AsksController < ApplicationController
         end
 
         ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :hash_tags, { comments: { include: :user } }])
+
+        if current_user
+          all_alarms = Alarm.where(ask_id: params[:id],
+                                   user_id: current_user.id,
+                                   is_read: false)
+          unless all_alarms.blank?
+            last_alarm = all_alarms.last
+            all_alarms.update_all(is_read: true)
+            last_alarm.record_timestamps = false
+            last_alarm.update(is_read: true)
+            last_alarm.record_timestamps = true
+          end
+        end
+
         render json: {
           ask: ask,
           already_like: already_like,

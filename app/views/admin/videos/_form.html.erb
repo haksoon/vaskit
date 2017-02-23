@@ -1,0 +1,139 @@
+<%= simple_form_for @video,
+                    url: @video.id.nil? ? admin_videos_path : admin_video_path(@video.id),
+                    html: { oninput: "form_check($(this));", onchange: "form_check($(this));" } do |f| %>
+  <% if @video.id.nil? %>
+    <div class="jumbotron clearfix">
+      <h1>비교영상 생성하기</h1>
+      <p>새로운 비교영상을 생성합니다</p>
+      <%= link_to '목록으로', admin_videos_path, class: 'btn btn-default btn-lg' %>
+      <%= f.button :submit, '생성하기',
+                   class: 'btn btn-success btn-lg pull-right',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { confirm: '정말로 생성하시겠어요?', disable_with: '생성중...' } %>
+    </div>
+    <div class="panel panel-success">
+      <!-- Default panel contents -->
+      <div class="panel-heading">비교영상 생성</div>
+  <% else %>
+    <div class="jumbotron clearfix">
+      <h1>비교영상 수정하기</h1>
+      <p>비교영상의 내용을 수정합니다</p>
+      <%= link_to '목록으로', admin_videos_path, class: 'btn btn-default btn-lg' %>
+      <%= f.button :submit, '수정하기',
+                   class: 'btn btn-warning btn-lg pull-right',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { confirm: '정말로 수정하시겠어요?', disable_with: '수정중...' } %>
+    </div>
+    <div class="panel panel-warning">
+      <!-- Default panel contents -->
+      <div class="panel-heading"><kbd><%= @video.id %>번</kbd> 비교영상 수정</div>
+  <% end %>
+      <div class="panel-body">
+        <div class="form-inputs">
+          <%= f.input :title,
+                      as: :string,
+                      error: '',
+                      label: '1. 제목 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '비교영상 제목을 입력하세요'
+                                  } %>
+          <%= f.input :description,
+                      as: :text,
+                      error: '',
+                      label: '2. 설명 입력',
+                      input_html: {
+                                    rows: 5,
+                                    class: 'required_form',
+                                    placeholder: '비교영상 설명을 입력하세요'
+                                  } %>
+          <%= f.input :ask_id,
+                      error: '',
+                      label: '3. 질문 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '질문 ID를 입력해주세요',
+                                    pattern: '[0-9]*',
+                                    onchange: 'ask_link_preview();'
+                                  } %>
+          <div id="ask_link_preview" class="well <%= 'hidden' if @video.ask_id.blank? %>">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="<%= "#{CONFIG["host"]}/asks/#{@video.ask_id}" unless @video.ask_id.blank? %>"></iframe>
+              <div class="iframe_cover" onclick="window.open($(this).prev('iframe').attr('src'));"></div>
+            </div>
+          </div>
+          <%= f.input :url,
+                      as: :select,
+                      collection: @facebook_video_list.collect { |video| [video['description'].truncate(100), video['id']] },
+                      include_blank: '페이스북 영상을 선택해주세요',
+                      error: '',
+                      label: '4. 영상 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    onchange: 'video_link_preview();'
+                                  } %>
+          <div id="video_link_preview" class="well <%= 'hidden' if @video.url.blank? %>">
+            <div class="embed-responsive embed-responsive-16by9">
+              <iframe class="embed-responsive-item" src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.url}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" %>"></iframe>
+              <div class="iframe_cover" onclick="window.open($(this).prev('iframe').attr('src'));"></div>
+            </div>
+          </div>
+          <%= f.input :image,
+                      error: '',
+                      hint: '권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요'.html_safe,
+                      label: '5. 썸네일 입력' do %>
+            <%= f.input_field :image,
+                              as: :file,
+                              class: 'hidden',
+                              onchange: 'preview_thumbnail(this, $(thumbnail_image));' %>
+            <%= check_box_tag 'image_attached', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
+          <% end %>
+          <div class="well">
+            <%= image_tag @video.image.url(:original),
+                         { id: 'thumbnail_image',
+                           class: 'img-thumbnail center-block',
+                           style: 'cursor: pointer;',
+                           onclick: '$("#video_image").click();' } %>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<script>
+  function ask_link_preview() {
+    var input = $("#video_ask_id");
+    var ask_id = input.val();
+    var preview = $("#ask_link_preview");
+    var preview_frame = preview.find("iframe");
+
+    if (ask_id.match(new RegExp(/^[\d]+$/))) {
+      var link = "<%= "#{CONFIG["host"]}/asks/" %>" + ask_id;
+      preview.removeClass("hidden");
+      preview_frame.attr("src", link);
+    } else {
+      preview.addClass("hidden");
+      preview_frame.attr("src", "");
+      input.val("").focus();
+    }
+  }
+
+  function video_link_preview() {
+    var input = $("#video_url");
+    var video_url = input.val();
+    var preview = $("#video_link_preview");
+    var preview_frame = preview.find("iframe");
+
+    if (video_url !== "") {
+      var link = "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F" + video_url + "%2F&width=500&height=280&show_text=false&appId=<%= Facebook::CONFIG['app_id'] %>";
+      preview.removeClass("hidden");
+      preview_frame.attr("src", link);
+    } else {
+      preview.addClass("hidden");
+      preview_frame.attr("src", "");
+      input.focus().select();
+    }
+  }
+</script>

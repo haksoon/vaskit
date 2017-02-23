@@ -1,84 +1,57 @@
-<div style="padding:10px;">
-  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 댓글 작성할 질문 선택</h2>
-	<div style="overflow:auto; -webkit-overflow-scrolling:touch;">
-		<table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center;">
-		  <thead>
-		    <tr style="height:40px; background-color:#998674; color:#fff;">
-          <th>작성자</th>
-          <th>이미지</th>
-          <th>댓글갯수</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		    <% @asks.each do |ask| %>
-					<tr onclick="window.location.assign('<%= admin_ask_path(ask.id) %>');" style="cursor: pointer;">
-            <td><%= ask.user.string_id.to_s + "\n(" + ask.user.user_role.to_s + ")" %></td>
-            <td>
-              <img src="<%= ask.left_ask_deal.image(:normal) %>" alt="" style="display:inline-block; width:50%; float:left;" onerror="imgError(this);">
-              <img src="<%= ask.right_ask_deal.image(:normal) %>" alt="" style="display:inline-block; width:50%; float:left;" onerror="imgError(this);">
-            </td>
-            <td><%= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count %>개</td>
-	       	</tr>
-		    <% end %>
-		  </tbody>
-		</table>
-	</div>
-	<div style="margin-top:10px; text-align:center;">
-		<a href="#" onclick="navigate_page(false); return false;" class="navigate_btn" style="float: left;"><i class="fa fa-angle-double-left"></i> 이전</a>
-		<select id="ask_page" style="width:45%; height:40px; line-height:40px; background-color:#fff; padding:0 10px; direction:rtl; border: 1px solid #999; border-radius:0;">
-			<% 1.step @asks_count do |c| %>
-				<option value="<%=c%>"><%=c%></option>
-			<% end %>
-		</select>
-		<a href="#" onclick="navigate_page(true); return false;" class="navigate_btn" style="float: right;">다음 <i class="fa fa-angle-double-right"></i></a>
-	</div>
+<div class="jumbotron clearfix">
+  <h1>댓글 관리하기</h1>
+  <p>어드민 ID로 질문에 대한 댓글을 작성할 수 있습니다</p>
 </div>
 
-<style>
-	.navigate_btn {
-		display: block;
-		width: 25%;
-		height: 40px;
-		line-height: 40px;
-		text-align: center;
-		background-color: #dbdbdb;
-		color: #fff;
-		font-size: 13px;
-	}
-</style>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">질문 전체목록</div>
 
-<script>
-  $("#ask_page").on("change",function(){
-    $(".loading").show();
-    document.location.search = "?page=" + $(this).val();
-  });
+  <!-- Table -->
+  <table class="table table-bordered table-responsive table-hover">
+    <thead>
+      <tr>
+        <th style="width: 10%;">ID</th>
+        <th style="width: 10%;">작성자</th>
+        <th style="width: 10%;">작성일</th>
+        <th style="width: 20%;">이미지</th>
+        <th style="width: 10%;">투표</th>
+        <th style="width: 10%;">댓글</th>
+        <th style="width: 20%;">열기</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @asks.each do |ask| %>
+        <tr class="<%= 'info' if ask.user.user_role == 'user' %>">
+          <td><kbd><%= ask.id %></kbd></td>
+          <td><%= ask.user.string_id %></td>
+          <td><%= format_datetime(ask.created_at, 'past') %></td>
+          <td>
+            <%= link_to admin_ask_path(ask.id) do
+              image_tag ask.left_ask_deal.image.url(:normal),
+                        { width: '50%', class: 'img-thumbnail pull-left' }
+            end %>
+            <%= link_to admin_ask_path(ask.id) do
+              image_tag ask.right_ask_deal.image.url(:normal),
+                        { width: '50%', class: 'img-thumbnail pull-left' }
+            end %>
+          </td>
+          <td><%= link_to "#{ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}개",
+                          admin_ask_path(ask.id),
+                          { class: 'btn btn-default btn-block' } %></td>
+          <td><%= link_to "#{ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count}개",
+                          admin_ask_path(ask.id),
+                          { class: 'btn btn-default btn-block' } %></td>
+          <td><%= link_to '열기',
+                          admin_ask_path(ask.id),
+                          { class: 'btn btn-info btn-block' } %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-  if (document.location.search != "") {
-    var currentPage = Number(document.location.search.replace("?page=",""));
-    $("#ask_page option[value="+currentPage+"]").attr("selected","selected");
-  };
-
-  $("body").highlight("(user)", {element: "span", className: "highlight"});
-
-  function navigate_page(is_next) {
-    var currentPage = Number(document.location.search.replace("?page=",""));
-    var nextPage;
-
-    $(".loading").show();
-
-    if (currentPage == 1 && !is_next) {
-      alert('첫 페이지입니다');
-      $(".loading").hide();
-      return false;
-    } else if (currentPage == $("#ask_page option").length && is_next) {
-      alert('마지막 페이지입니다');
-      $(".loading").hide();
-      return false;
-    } else if (is_next) {
-      nextPage = currentPage += 1;
-    } else {
-      nextPage = currentPage -= 1;
-    }
-    document.location.assign("/admin/asks?page=" + nextPage);
-  }
-</script>
+  <!-- Table Pagination -->
+  <div class="panel-footer" style="text-align: center;">
+    <%= paginate @asks %>
+  </div>
+</div>

@@ -8,9 +8,9 @@ class CollectionsController < ApplicationController
       format.html
       format.json do
         collections = Collection.where(show: true)
-                                .order(updated_at: :desc)
                                 .page(params[:page])
                                 .per(Collection::COLLECTION_PER)
+                                .order(id: :desc)
         render json: { collections: collections }
       end
     end

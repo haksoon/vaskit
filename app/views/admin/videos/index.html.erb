@@ -1,137 +1,68 @@
-<div style="padding:10px;">
-  <div style="margin-bottom:30px;">
-    <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 비디오 컨텐츠</h2>
-    <img id="video_thumbnail_preview" src="" style="display: block; margin: 10px auto; width:100%; max-width: 800px; display: none;">
-    <div id="video_contents">
-      <input id="video_thumbnail" class="video_input" type="file"/ onchange="preview_video_thumbnail(this);">
-      <input id="video_ask_id" class="video_input" type="text" placeholder="질문 id 입력 (숫자)" />
-      <input id="video_title" class="video_input" type="text" placeholder="제목 입력 (A vs B, 제품명 비교!)" />
-      <input id="video_url" class="video_input" type="text" placeholder="URL 입력 (16자리 숫자)" />
-    </div>
-    <iframe id="video_ask_preview" width="100%" height="320" src="" frameborder="0" allowfullscreen="" style="display:none; outline: 3px solid #ff7200;"></iframe>
-    <iframe id="video_preview" width="100%" height="320" src="" frameborder="0" allowfullscreen="" style="display:none; outline: 3px solid #ff7200; margin-top: 10px;"></iframe>
-    <div id="video_push" style="display:none;">
-      <p style="padding: 0 10px;"><input style="-webkit-appearance:checkbox;" type="checkbox" id="video_push_check_box">&nbsp;&nbsp;모든 사용자에게 아래 내용으로 푸쉬 보내기 (발행하는 순간 전송됩니다)</p>
-      <input id="video_push_text" class="video_input" type="text" placeholder="VASKIT맨의 새로운 비교영상! 지금 바로 확인해보세요!"/>
-    </div>
-    <a id="video_submit" href="#" onclick="preview_video(); return false;" style="display:block; background-color:#4b3d3d; color:#fff; font-size:14px; margin:10px 0; height:50px; line-height:50px; text-align:center;">미리보기</a>
-  </div>
-  <div>
-    <p style="margin:30px 0 10px; padding:0 5px;"><i class="fa fa-info-circle"></i> 게시 비디오 리스트</p>
-    <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center;">
-      <thead>
-        <tr style="height:40px; background-color:#998674; color:#fff;">
-          <th style="width:120px;">게시일</th>
-          <th>제목</th>
-          <th>질문</th>
-          <th>링크</th>
+<div class="jumbotron clearfix">
+  <h1>비교영상 목록</h1>
+  <p>비교영상을 생성하거나 수정, 삭제할 수 있습니다</p>
+  <%= link_to '새로운 비교영상 생성하기',
+              new_admin_video_path,
+              { class: 'btn btn-success btn-lg pull-right' } %>
+</div>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">비교영상 전체목록</div>
+
+  <!-- Table -->
+  <table class="table table-bordered table-responsive table-striped table-hover">
+    <thead>
+      <tr>
+        <th style="width: 5%;">ID</th>
+        <th style="width: 20%;">생성일</th>
+        <th style="width: 15%;">VASKIT</th>
+        <th style="width: 15%;">페이스북</th>
+        <th style="width: 15%;">조회</th>
+        <th style="width: 15%;">수정</th>
+        <th style="width: 15%;">발행</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @videos.each do |video| %>
+        <tr>
+          <th><kbd><%= video.id %>번</kbd></th>
+          <td class="text-center"><%= format_datetime(video.created_at, 'past') %></td>
+          <td>
+            <%= link_to 'VASKIT',
+                        video_path(video.id),
+                        { class: 'btn btn-default btn-block', target: '_blank' } %></td>
+          <td>
+            <%= link_to '페이스북',
+                        "http://www.facebook.com/vaskit.kr/videos/#{video.url}",
+                        { class: 'btn btn-default btn-block', target: '_blank' } %></td>
+          <td>
+            <%= link_to '조회',
+                        admin_video_path(video.id),
+                        { class: 'btn btn-info btn-block' } %></td>
+          <td>
+            <%= link_to '수정',
+                        edit_admin_video_path(video.id),
+                        { class: 'btn btn-warning btn-block' } %></td>
+          <td>
+            <% if video.show %>
+              <%= link_to '발행취소', admin_video_path(video.id), { class: 'btn btn-danger btn-block', method: :delete, data: { confirm: '정말로 발행을 취소하시겠어요?', disable_with: '취소중...' } } %>
+            <% else %>
+              <%= link_to '발행하기', admin_video_path(video.id), { class: 'btn btn-success btn-block', method: :delete, data: { confirm: '정말로 발행하시겠어요?', disable_with: '발행중...' } } %>
+            <% end %>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        <% @videos.each do |video| %>
-          <tr>
-            <td><%=video.created_at.to_date.to_s(:korean_date)%></td>
-            <td><%=video.title%></td>
-            <td><a href="/asks/<%=video.ask_id%>" target="_blank"><%=video.ask_id%></a></td>
-            <td><a href="http://www.facebook.com/vaskit.kr/videos/<%=video.url%>" target="_blank"><i class="fa fa-tv"></i></a></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+        <tr>
+          <th></th>
+          <td><%= image_tag video.image.url(:original), width: '100%' %></td>
+          <td><%= video.title %></td>
+          <td colspan="4"><%= raw tagging_keywords(video.description) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <!-- Table Pagination -->
+  <div class="panel-footer" style="text-align: center;">
+    <%= paginate @videos %>
   </div>
 </div>
-
-<style>
-  .video_input {
-    display:block;
-    width:100%;
-    height:40px;
-    line-height:40px;
-    padding:0 10px;
-    margin-bottom: 10px;
-    -webkit-box-sizing:border-box;
-            box-sizing:border-box;
-    border:1px solid #dbdbdb;
-    color:#666;
-    font-size:14px;
-    -webkit-appearance:none;
-    border-radius:0;
-  }
-</style>
-
-<script>
-
-  function preview_video_thumbnail(input) {
-    var thumbnail_image = $("#video_thumbnail_preview");
-    if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function(e) { thumbnail_image.show().attr("src", e.target.result); };
-      reader.readAsDataURL(input.files[0]);
-    }
-  }
-
-  function preview_video() {
-    var video_thumbnail = $("#video_thumbnail")[0].files;
-    var ask_id = $("#video_ask_id").val();
-    var title = $("#video_title").val();
-    var url = $("#video_url").val();
-    if (video_thumbnail.length === 0 || ask_id.length === 0 || title.length === 0 || url.length === 0){
-      alert("입력한 항목이 충분하지 않습니다");
-    } else {
-      alert("미리보기 화면을 확인하신 후\n게시하기 버튼을 눌러주세요");
-      ask_id = "/asks/" + ask_id;
-      url = "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F" + url + "%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>";
-      $("#video_ask_preview").attr("src", ask_id).show();
-      $("#video_preview").attr("src", url).show();
-      $("#video_contents").hide();
-      $("#video_push").show();
-      $("#video_submit").attr("onclick", "create_video(); return false;").css("background-color", "#ff7200").html("게시하기");
-    }
-  }
-
-  function create_video() {
-    var video_thumbnail = $("#video_thumbnail")[0].files;
-    var ask_id = $("#video_ask_id").val();
-    var title = $("#video_title").val();
-    var url = $("#video_url").val();
-    if (video_thumbnail.length === 0 || ask_id.length === 0 || title.length === 0 || url.length === 0){
-      alert("입력한 항목이 충분하지 않습니다");
-    } else {
-      var confirm_text = "메인 피드 화면이 변경됩니다\n진행하시겠습니까?\n\n푸쉬를 전송하려면 취소하고 푸쉬 체크해주세요";
-      var push_checked = $("#video_push_check_box").is(":checked");
-      var push_text = $("#video_push_text").val() === "" ? $("#video_push_text").attr("placeholder") : $("#video_push_text").val();
-      if (push_checked) confirm_text = "!!!!!!!!!!경고!!!!!!!!!!\n모든 사용자에게 푸쉬가 전송됩니다!!!!!\n아래의 메세지를 한번 더 확인해 주세요\n\n" + push_text + "\n\n또한, 메인 피드 화면이 변경됩니다\n진행하시겠습니까?";
-      if (confirm(confirm_text)) {
-        var formData = new FormData();
-        $.each( video_thumbnail, function( i, file ) {
-    	    formData.append('File', file);
-          formData.append('ask_id', ask_id);
-          formData.append('title', title);
-          formData.append('url', url);
-          formData.append('push_checked', push_checked);
-          formData.append('push_text', push_text);
-        });
-        $.ajax({
-                url: "/admin/videos.json",
-                dataType: 'json',
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                error: function(){
-                  return false;
-                },
-                success: function(data){
-                  location.reload();
-                },
-                beforeSend: function(){
-                  $(".loading").show();
-                },
-                complete: function(){
-                  $(".loading").hide();
-                }
-        });
-      }
-    }
-  }
-</script>

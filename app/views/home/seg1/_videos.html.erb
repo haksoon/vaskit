@@ -12,6 +12,7 @@
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">VASKIT맨의 비교영상</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+    <span class="header_btn right"><a href="https://facebook.com/vaskit.kr" target="_blank" style="color: #999; font-size: 20px;"><i class="fa fa-facebook-official"></i></a></span>
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'videos');" url="/videos">
     <div class="clearfix">
@@ -27,22 +28,57 @@
 
 <script type="text/template" id="videoThumbnailTemplate">
   <div class="video_thumbnail">
-    <a class="clearfix video_header" href="/asks/{{= video.ask_id }}" onclick="go_url('ask', {{= video.ask_id }}); return false;">
-      <div class="video_title"><span class="video_ribbon"></span><i class="fa fa-tv"></i> {{= video.title }}</div>
-      <div class="video_ask_link">관련 질문 보기 <i class="fa fa-caret-right"></i></div>
+    <a class="clearfix video_header" href="/videos/{{= video.id }}" onclick="go_url('video_ask', {{= video.id }}); return false;">
+      <div class="video_title text_box_short"><i class="fa fa-tv"></i> {{= video.title }}</div>
+      <span class="video_ribbon"></span>
+      <div class="video_image">
+        <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
+        <i class="fa fa-play"></i>
+      </div>
+      <div class="video_description">
+        {{= taggingKeywords(video.description) }}
+      </div>
+      <div class="video_ask_link">비교영상 보기 <i class="fa fa-caret-right"></i></div>
     </a>
-    <div class="video_body">
-      <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
-      <iframe class="video_player" onload="$(this).prevAll().remove();"
-        src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F{{= video.url }}%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>" width="100%" scrolling="no" frameborder="0" allowTransparency="true"></iframe>
-    </div>
   </div>
+</script>
+
+<script type="text/template" id="videoAskShowTemplate">
+  <div class="container top" ontouchmove="return false;">
+    <span class="header_title" onclick="$(this).scroll_to();">{{= video.title }}</span>
+    <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
+    <span class="header_btn right" onclick="go_url('share', 'video, {{= video.id }}');"><i class="vaskit_icon share_icon"></i></span>
+  </div>
+  <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
+    <div class="video_detail">
+      {{ if (userApp && !window.HybridApp && (!userAppVer || userAppVerLoading)) { }}
+        <a class="video_image" href="https://facebook.com/vaskit.kr/videos/{{= video.url }}" target="_blank">
+          <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
+          <i class="fa fa-play"></i>
+        </a>
+      {{ } else { }}
+        <div class="video_player_div">
+          <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
+          <iframe class="video_player" onload="$(this).prevAll().remove();"
+                  src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F{{= video.url }}%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>"
+                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+        </div>
+      {{ } }}
+      <div class="video_description">
+        {{= taggingKeywords(video.description) }}
+      </div>
+    </div>
+    {{= askDetailBodyTemplate({ask: ask, already_like: already_like}) }}
+    {{= commentListTemplate({ask: ask, like_comments: like_comments}) }}
+  </div>
+  {{= commentInputTemplate({ask: ask}) }}
 </script>
 
 <script>
   var videoAsksTemplate = _.template($("#videoAsksTemplate").html());
   var videoAsksShowTemplate = _.template($("#videoAsksShowTemplate").html());
   var videoThumbnailTemplate = _.template($("#videoThumbnailTemplate").html());
+  var videoAskShowTemplate = _.template($("#videoAskShowTemplate").html());
 
   function set_video_asks() {
     var video_asks_seg = $("#video_asks_seg");
@@ -61,35 +97,56 @@
   }
 
   function show_video_asks() {
-    if (userApp && !window.HybridApp && userAppVerLoading) {
-      alert('아직 VASKIT맨이 분장중입니다...\n잠시 후 다시 시도해주세요!');
-    } else if (userApp && !window.HybridApp && !userAppVer) {
-      alert('최신 버전에서 지원됩니다\n앱을 업데이트해주세요');
-    } else {
-      var url = "/videos";
-      $.ajax({
-        url: url,
-        dataType: "json",
-        type: "GET",
-        error: function(){
-          return false;
-        },
-        success: function(data){
-          var html = videoAsksShowTemplate({videos: data.videos, url: url});
-          create_wrapper(html);
-        },
-        beforeSend: function(){
-          loadingStart();
-        },
-        complete: function(){
-          loadingEnd();
-        }
-      });
-      return url;
-    }
+    var url = "/videos";
+    $.ajax({
+      url: url,
+      dataType: "json",
+      type: "GET",
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        var html = videoAsksShowTemplate({videos: data.videos, url: url});
+        create_wrapper(html);
+      },
+      beforeSend: function(){
+        loadingStart();
+      },
+      complete: function(){
+        loadingEnd();
+      }
+    });
+    return url;
   }
 
   function hide_video_asks() {
+    remove_wrapper();
+  }
+
+  function show_video_ask(video_id) {
+    var url = '/videos/' + video_id;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'GET',
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        var html = videoAskShowTemplate({video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
+        create_wrapper(html, true);
+      },
+      beforeSend: function(){
+        loadingStart();
+      },
+      complete: function(){
+        loadingEnd();
+      }
+    });
+    return url;
+  }
+
+  function hide_video_ask() {
     remove_wrapper();
   }
 </script>

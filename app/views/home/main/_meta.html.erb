@@ -2,7 +2,7 @@
 <% description = "VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" %>
 <% keywords = "쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" %>
 <% url = root_url %>
-<% image_url = "http://vaskit.kr/images/logo/logo_share_1200_630.png" %>
+<% image_url = "#{CONFIG['host']}/images/logo/logo_share_1200_630.png" %>
 
 <% if (controller.controller_name == "home")%>
     <% if (controller.action_name == "index")%>
@@ -20,10 +20,10 @@
         <% description = "최근 쇼핑 트렌드를 놓치고 싶지 않다면? VASKIT 에디터가 엄선한 쇼핑 리스트를 둘러보세요!" %>
         <% url = collections_url %>
     <% elsif (controller.action_name == "show") %>
-        <% title = "VASKIT | " + @collection.name %>
-        <% description = "[깐슈머들의 위시리스트] " + @collection.description %>
+        <% title = "VASKIT | #{@collection.name}" %>
+        <% description = "[깐슈머들의 위시리스트] #{@collection.description}" %>
         <% url = collection_url %>
-        <% image_url = "http://vaskit.kr" + @collection.image.url(:original) %>
+        <% image_url = "#{CONFIG['host']}#{@collection.image.url(:original)}" %>
     <% end %>
 <% elsif (controller.controller_name == "asks") %>
     <% if (controller.action_name == "index") %>
@@ -31,9 +31,9 @@
         <% description = "당신의 현명한 선택을 기다리는 새로운 질문들! VASKIT에서 당신의 결정력을 보여주세요!" %>
         <% url = asks_url %>
     <% elsif (controller.action_name == "show") %>
-        <% title = "VASKIT | " + @ask.left_ask_deal.title.truncate(16) + " vs " + @ask.right_ask_deal.title.truncate(16) %>
-        <% description = @ask.left_ask_deal.title + " vs " + @ask.right_ask_deal.title + ", 당신의 선택은? " + @ask.message.truncate(200) %>
-        <% keywords = @ask.left_ask_deal.title + ", " + @ask.right_ask_deal.title + ", " + HashTag.where(ask_id: @ask.id).pluck(:keyword).join(", ") %>
+        <% title = "VASKIT | #{@ask.left_ask_deal.title.truncate(16)} vs #{@ask.right_ask_deal.title.truncate(16)}" %>
+        <% description = "#{@ask.left_ask_deal.title} vs #{@ask.right_ask_deal.title}, 당신의 선택은? #{@ask.message.truncate(200)}" %>
+        <% keywords = "#{@ask.left_ask_deal.title}, #{@ask.right_ask_deal.title}, #{HashTag.where(ask_id: @ask.id).pluck(:keyword).join(", ")}" %>
         <% url = ask_url %>
     <% elsif (controller.action_name == "new") %>
         <% title = "VASKIT | 질문 작성하기" %>
@@ -41,8 +41,8 @@
         <% url = new_ask_url %>
     <% elsif (controller.action_name == "edit") %>
         <% title = "VASKIT | 질문 수정하기" %>
-        <% description = @ask.left_ask_deal.title + " vs " + @ask.right_ask_deal.title + ", 당신의 선택은? " + @ask.message.truncate(200) %>
-        <% keywords = @ask.left_ask_deal.title + ", " + @ask.right_ask_deal.title + ", " + HashTag.where(ask_id: @ask.id).pluck(:keyword).join(", ") %>
+        <% description = "#{@ask.left_ask_deal.title} vs #{@ask.right_ask_deal.title}, 당신의 선택은? #{@ask.message.truncate(200)}" %>
+        <% keywords = "#{@ask.left_ask_deal.title}, #{@ask.right_ask_deal.title}, #{HashTag.where(ask_id: @ask.id).pluck(:keyword).join(", ")}" %>
         <% url = edit_ask_url %>
     <% end %>
 <% elsif (controller.controller_name == "videos") %>
@@ -50,28 +50,33 @@
         <% title = "VASKIT | VASKIT맨의 비교영상" %>
         <% description = "VASKIT맨이 직접 두가지 제품을 비교해드립니다!" %>
         <% url = videos_url %>
+    <% elsif (controller.action_name == "show") %>
+        <% title = "VASKIT | #{@video.title}" %>
+        <% description = "[VASKIT맨의 비교영상] #{@video.description}" %>
+        <% url = video_url %>
+        <% image_url = "#{CONFIG['host']}#{@video.image.url(:original)}" %>
     <% end %>
 <% elsif (controller.controller_name == "search") %>
     <% if (controller.action_name == "index" && controller.request.params[:type] != nil && controller.request.params[:keyword] != nil) %>
         <% case @type %>
         <% when "hash_tag" %>
-            <% title = "VASKIT | " + controller.request.params[:keyword] + " - 해쉬태그 검색결과" %>
-            <% description = controller.request.params[:keyword] + " - VASKIT 해쉬태그 검색결과입니다" %>
+            <% title = "VASKIT | #{controller.request.params[:keyword]} - 해쉬태그 검색결과" %>
+            <% description = "#{controller.request.params[:keyword]} - VASKIT 해쉬태그 검색결과입니다" %>
         <% when "ask_deal" %>
-            <% title = "VASKIT | " + controller.request.params[:keyword] + " - 제품 검색결과" %>
-            <% description = controller.request.params[:keyword] + " - VASKIT 제품 검색결과입니다" %>
+            <% title = "VASKIT | #{controller.request.params[:keyword]} - 제품 검색결과" %>
+            <% description = "#{controller.request.params[:keyword]} - VASKIT 제품 검색결과입니다" %>
         <% when "brand" %>
-            <% title = "VASKIT | " + controller.request.params[:keyword] + " - 브랜드 검색결과" %>
-            <% description = controller.request.params[:keyword] + " - VASKIT 브랜드 검색결과입니다" %>
+            <% title = "VASKIT | #{controller.request.params[:keyword]} - 브랜드 검색결과" %>
+            <% description = "#{controller.request.params[:keyword]} - VASKIT 브랜드 검색결과입니다" %>
         <% when "user" %>
-            <% title = "VASKIT | " + controller.request.params[:keyword] + " - 사용자 검색결과" %>
-            <% description = controller.request.params[:keyword] + " - VASKIT 사용자 검색결과입니다" %>
+            <% title = "VASKIT | #{controller.request.params[:keyword]} - 사용자 검색결과" %>
+            <% description = "#{controller.request.params[:keyword]} - VASKIT 사용자 검색결과입니다" %>
         <% when "none" %>
-            <% title = "VASKIT | " + controller.request.params[:keyword] + " - 통합 검색결과" %>
-            <% description = controller.request.params[:keyword] + " - VASKIT 통합 검색결과입니다" %>
+            <% title = "VASKIT | #{controller.request.params[:keyword]} - 통합 검색결과" %>
+            <% description = "#{controller.request.params[:keyword]} - VASKIT 통합 검색결과입니다" %>
         <% end %>
-        <% keywords = controller.request.params[:keyword] + ", 쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" %>
-        <% url = search_index_url + "?type=" + controller.request.params[:type] + "&keyword=" + controller.request.params[:keyword] %>
+        <% keywords = "#{controller.request.params[:keyword]}, 쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" %>
+        <% url = "#{search_index_url}?type=#{controller.request.params[:type]}&keyword=#{controller.request.params[:keyword]}" %>
     <% else  %>
         <% title = "VASKIT | 검색하기" %>
         <% description = "지금까지와는 또다른 쇼핑검색! 소비자들의 선택을 검색해보세요!" %>
@@ -100,7 +105,7 @@
             <% title = "VASKIT | 제시한 의견" %>
             <% description = "나의 제시한 의견입니다" %>
         <% end %>
-        <% url = users_history_url + "?type=" + controller.request.params[:type] %>
+        <% url = "#{users_history_url}?type=#{controller.request.params[:type]}" %>
     <% elsif (controller.action_name == "settings") %>
         <% title = "VASKIT | 계정 설정하기" %>
         <% description = "계정 정보를 설정할 수 있어요" %>

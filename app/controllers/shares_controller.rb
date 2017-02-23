@@ -6,6 +6,8 @@ class SharesController < ApplicationController
                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal])
     elsif params[:share_type] == 'collection'
       share_data = Collection.find(params[:target_id])
+    elsif params[:share_type] == 'video'
+      share_data = Video.find(params[:target_id])
     end
     render json: { share_data: share_data }
   end

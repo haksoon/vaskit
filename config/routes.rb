@@ -75,7 +75,7 @@ Rails.application.routes.draw do
     put 'users/toggle_alarm_option', to: "users/sessions#toggle_alarm_option"
   end
 
-  resources :videos, only: [:index]
+  resources :videos, only: [:index, :show]
 
   resources :log_errors, only: [:create]
   resources :log_inquiries, only: [:create]
@@ -100,31 +100,17 @@ Rails.application.routes.draw do
   # Admin Page
   namespace :admin do
     get '/', to: "home#index"
-    resources :asks, only: [:index, :show] do
-      member do
-        post 'comment_create'
-      end
-    end
+    resources :asks, only: [:index, :show, :update]
+    resources :collections
+    resources :collection_keywords, only: [:index, :create]
+    resources :collection_to_collection_keywords, only: [:index]
+    resources :collection_to_asks, only: [:create]
+    resources :videos
+    resources :notices, only: [:index, :new, :create]
     resources :tables, only: [:index] do
       get ':table_name', to: "tables#index", on: :collection
     end
     resources :analysis, only: [:index]
-    resources :notice, only: [:index, :create] do
-      collection do
-        post 'check_user_gcm'
-        post 'notice_push_send'
-        post 'get_notice_push_list'
-      end
-    end
-    resources :collections, only: [:index, :show, :create, :update] do
-      member do
-        post 'image_upload'
-      end
-    end
-    resources :collection_to_asks, only: [:index, :create, :update, :destroy]
-    resources :collection_to_collection_keywords, only: [:index, :create, :destroy]
-    resources :collection_keywords, only: [:index]
-    resources :videos, only: [:index, :create]
   end
 
   # Templates

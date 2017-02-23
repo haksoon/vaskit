@@ -1,134 +1,58 @@
-<div style="padding:10px;">
-  <h2 style="margin:10px 0; padding:0 5px;"><i class="fa fa-check"></i> 컬렉션 생성</h2>
-	<div style="position:relative;">
-    <span class="collection_input_icon">title</span>
-    <input id="collection_input" class="collection_input" type="text" placeholder="생성할 컬렉션의 제목을 입력하세요" />
-  </div>
-  <div style="position:relative;">
-    <span class="collection_input_icon">desc</span>
-    <input id="collection_description" class="collection_input" type="text" placeholder="생성할 컬렉션의 설명을 입력하세요" />
-  </div>
-  <a id="collection_submit_btn" href="#" onclick="create_collection(); return false;" style="display:block; width:100%; height:40px; line-height:40px; text-align:center; background-color:#f18b33; color:#fff; font-size:13px;">생성 <i class="fa fa-database"></i></a>
-  <table border="1" cellspacing="1" cellpadding="2" style="width:100%; font-size:12px; text-align:center; margin-top:10px;">
+<div class="jumbotron clearfix">
+  <h1>컬렉션 목록</h1>
+  <p>컬렉션을 생성하거나 수정, 삭제할 수 있습니다</p>
+  <%= link_to '새로운 컬렉션 생성하기',
+              new_admin_collection_path,
+              { class: 'btn btn-success btn-lg pull-right' } %>
+</div>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">컬렉션 전체목록</div>
+
+  <!-- Table -->
+  <table class="table table-bordered table-responsive table-striped table-hover">
     <thead>
-      <tr style="height:40px; background-color:#998674; color:#fff;">
-        <th>id</th>
-        <th>제목</th>
-        <th>설명</th>
-        <th>컨텐츠</th>
-        <th>태그</th>
-        <th>메인</th>
-        <th>수정</th>
+      <tr>
+        <th style="width: 5%;">ID</th>
+        <th style="width: 5%;">이미지</th>
+        <th style="width: 10%;">제목</th>
+        <th style="width: 10%;">설명</th>
+        <th style="width: 10%;">생성일</th>
+        <th style="width: 10%;">컨텐츠</th>
+        <th style="width: 10%;">키워드</th>
+        <th style="width: 10%;">연관컬렉션</th>
+        <th style="width: 10%;">조회</th>
+        <th style="width: 10%;">수정</th>
+        <th style="width: 10%;">발행</th>
       </tr>
     </thead>
-    <tbody id="recent_asks">
-      <% if @collections.blank? %>
-        <tr>
-          <td colspan="4" style="height:120px;">내용이 없습니다</td>
+    <tbody>
+      <% @collections.each do |collection| %>
+        <tr class="<%= 'success' unless collection.show %>">
+          <th><kbd><%= collection.id %></kbd></th>
+          <td><%= image_tag collection.image.url(:original), width: '100%' %></td>
+          <td><%= collection.name %></td>
+          <td><%= raw tagging_keywords(collection.description) %></td>
+          <td class="text-center"><%= format_datetime(collection.updated_at, 'past') %></td>
+          <td><%= link_to "#{collection.asks.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
+          <td><%= link_to "#{collection.collection_keywords.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
+          <td><%= link_to "#{collection.related_collections.gsub(/^[,]|[,]$/, '').split(',').count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
+          <td><%= link_to '조회', admin_collection_path(collection.id), class: 'btn btn-info btn-block' %></td>
+          <td><%= link_to '수정', edit_admin_collection_path(collection.id), class: 'btn btn-warning btn-block' %></td>
+          <td>
+            <% if collection.show %>
+              <%= link_to '발행취소', admin_collection_path(collection.id), { class: 'btn btn-danger btn-block', method: :delete, data: { confirm: '정말로 발행을 취소하시겠어요?', disable_with: '취소중...' } } %>
+            <% else %>
+              <%= link_to '발행하기', admin_collection_path(collection.id), { class: 'btn btn-success btn-block', method: :delete, data: { confirm: '정말로 발행하시겠어요?', disable_with: '발행중...' } } %>
+            <% end %>
+          </td>
         </tr>
-      <% else %>
-        <% @collections.each do |collection| %>
-            <tr>
-              <td><%= collection.id %></td>
-              <td style="text-align:left;"><%= raw collection.name %></td>
-              <td style="text-align:left;"><%= collection.description %></td>
-              <td><%= collection.collection_to_asks.length %>개</td>
-              <td><%= collection.collection_to_collection_keywords.length %>개</td>
-              <td><i class="fa <%= collection.show == true ? 'fa-check' : 'fa-remove' %>" style="color:<%= collection.show == true ? '#ee6e01' : '#666' %>;"></i></td>
-              <td><%= link_to 'Edit', admin_collection_path(collection.id) %></td>
-            </tr>
-        <% end %>
       <% end %>
     </tbody>
   </table>
+
+  <!-- Table Pagination -->
+  <div class="panel-footer" style="text-align: center;">
+    <%= paginate @collections %>
+  </div>
 </div>
-
-<style>
-  .collection_input_icon {
-    position: absolute;
-    top: 0px;
-    width: 40px;
-    height: 40px;
-  	box-sizing: border-box;
-    text-align: center;
-    line-height: 40px;
-    color: #666;
-    font-size: 12px;
-    font-weight: bold;
-    background-color: #f4f4f4;
-    border: 1px solid #dbdbdb;
-  }
-  .collection_input_icon.right_btn {
-    right:0px;
-    background-color: #f18b33;
-    color:#fff;
-    width: 60px;
-    font-size: 13px;
-    border-left:none;
-    cursor:pointer;
-  }
-  .collection_input {
-    display:block;
-    width:100%;
-    height:40px;
-    margin:10px 0;
-    line-height:40px;
-    padding:0 10px 0 50px;
-    -webkit-box-sizing:border-box;
-            box-sizing:border-box;
-    border:1px solid #dbdbdb;
-    color:#666;
-    font-size:13px;
-    -webkit-appearance:none;
-    border-radius:0;
-  }
-</style>
-
-<script>
-  $("#collection_input, #collection_description").keydown(function(e){
-		if (e.keyCode == '13') {
-			e.preventDefault();
-			$("#collection_submit_btn").click();
-		}
-	});
-
-  $("#collection_ask_input").keydown(function(e){
-		if (e.keyCode == '13') {
-			e.preventDefault();
-			$("#collection_ask_submit_btn").click();
-		}
-	});
-
-  function create_collection() {
-    var name = $("#collection_input").val();
-    var desc = $("#collection_description").val();
-    if (name == "") {
-      alert('제목을 입력하세요');
-      $("#collection_input").focus();
-      return false;
-    } else if (desc == "") {
-      alert('설명을 입력하세요');
-      $("#collection_description").focus();
-      return false;
-    } else {
-      $.ajax({
-        url: "/admin/collections.json",
-        type: 'POST',
-        data: {'name': name, 'desc': desc},
-        dataType: 'json',
-        error: function(){
-          return false;
-        },
-        success: function(data){
-          location.reload();
-        },
-        beforeSend: function(){
-          $(".loading").show();
-        },
-        complete: function(){
-          $(".loading").hide();
-        }
-      });
-    }
-  };
-</script>

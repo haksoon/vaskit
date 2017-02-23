@@ -1,9 +1,9 @@
 <script type="text/template" id="appBannerMobileTemplate">
   <div class="container top dark" ontouchmove="return false;" style="background-color: #ff7800;">
-    <span class="header_title" onclick="open_in_app();" style="text-align: left; margin: 0 50px; font-size: 14px;">
-      <span class="vaskit_icon" style="position: absolute; top: 0; left: 0; display: inline-block; width: 30px; height: 30px; margin: 10px; background-position: -70px -72px;"></span>
-      <span style="float: left;">VASKIT 앱 출시!</span>
-      <span style="float: right; height: 20px; padding: 5px 10px; margin: 10px 0; line-height: 20px; background-color: #fff; color: #ff7800; border-radius: 5px;">앱으로 보기</span>
+    <span class="header_title app_banner" onclick="open_in_app();">
+      <span class="vaskit_icon logo"></span>
+      <span>VASKIT 앱 출시!</span>
+      <span class="app_banner_btn">앱으로 보기</span>
     </span>
     <span class="header_btn right close_btn" onclick="close_app_banner();">&times;</div>
   </div>
@@ -11,8 +11,8 @@
 
 <script type="text/template" id="appBannerPCTemplate">
   <div class="container top dark" ontouchmove="return false;" style="background-color: #ff7800;">
-    <span class="header_title" onclick="open_in_app();" style="text-align: left; margin: 0 50px; font-size: 14px;">
-      <span class="vaskit_icon" style="position: absolute; top: 0; left: 0; display: inline-block; width: 30px; height: 30px; margin: 10px; background-position: -70px -72px;"></span>
+    <span class="header_title app_banner" onclick="open_in_app();">
+      <span class="vaskit_icon logo"></span>
       <span style="width: calc(100% - 360px); float: left;">VASKIT 앱 출시!</span>
       <a href="https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit" target="_blank" style="display: block; width: 180px; float: right; text-align: center; color: #fff;"><i class="fa fa-android"></i> 안드로이드 앱 다운로드</a>
       <a href="http://itunes.apple.com/app/id1188969345" target="_blank" style="display: block; width: 180px; float: right; text-align: center; color: #fff;"><i class="fa fa-apple"></i> 애플 앱 다운로드</a>
@@ -85,13 +85,13 @@
   }
 
   function get_js_function() {
+    var app_js = "";
     if (segNextFunc[currentSeg].length > 0) {
       var app_function = segNextFunc[currentSeg][segNextFunc[currentSeg].length-1];
       var app_function_name = app_function.callback.replace("show_", "");
       var app_function_args = JSON.stringify(app_function.arguments);
-      var app_js = "go_url('" + app_function_name + "', " + app_function_args + ")";
-      return app_js;
+      app_js = "go_url('" + app_function_name + "', " + app_function_args + ")";
     }
-    return false;
+    return app_js;
   }
 </script>

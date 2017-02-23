@@ -1,0 +1,334 @@
+<%= simple_form_for @collection,
+                    url: @collection.id.nil? ? admin_collections_path : admin_collection_path(@collection.id),
+                    html: { id: 'collection_form', oninput: "form_check($(this));", onchange: "form_check($(this));" } do |f| %>
+  <% if @collection.id.nil? %>
+    <div class="jumbotron clearfix">
+      <h1>컬렉션 생성하기</h1>
+      <p>새로운 컬렉션을 생성합니다</p>
+      <%= link_to '목록으로',
+                  admin_collections_path,
+                  class: 'btn btn-default btn-lg' %>
+      <%= f.button :submit,
+                   '생성하기',
+                   class: 'btn btn-lg btn-success pull-right',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { confirm: '정말로 생성하시겠어요?', disable_with: '생성중...' } %>
+    </div>
+    <div class="panel panel-success">
+      <!-- Default panel contents -->
+      <div class="panel-heading">컬렉션 생성</div>
+  <% else %>
+    <div class="jumbotron clearfix">
+      <h1>컬렉션 수정하기</h1>
+      <p>컬렉션의 내용을 수정합니다</p>
+      <%= link_to '목록으로',
+                  admin_collections_path,
+                  class: 'btn btn-default btn-lg' %>
+      <%= f.button :submit,
+                   '수정하기',
+                   class: 'btn btn-warning btn-lg pull-right',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { confirm: '정말로 수정하시겠어요?', disable_with: '수정중...' } %>
+    </div>
+    <div class="panel panel-warning">
+      <!-- Default panel contents -->
+      <div class="panel-heading"><kbd><%= @collection.id %>번</kbd> 컬렉션 수정</div>
+  <% end %>
+      <div class="panel-body">
+        <div class="form-inputs">
+          <%= f.input :name,
+                      as: :string,
+                      error: '',
+                      label: '1. 제목 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '컬렉션 제목을 입력하세요'
+                                  } %>
+          <%= f.input :description,
+                      as: :text,
+                      error: '',
+                      label: '2. 설명 입력',
+                      input_html: {
+                                    rows: 5,
+                                    class: 'required_form',
+                                    placeholder: '컬렉션 설명을 입력하세요'
+                                  } %>
+          <%= f.input :image,
+                      error: '',
+                      hint: '권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요'.html_safe,
+                      label: '3. 썸네일 입력' do %>
+            <%= f.input_field :image,
+                              as: :file,
+                              class: 'hidden',
+                              onchange: 'preview_thumbnail(this, $(thumbnail_image));' %>
+            <%= check_box_tag :image_attached, '', @collection.id.nil? ? false : true, class: 'hidden required_form' %>
+          <% end %>
+          <div class="well">
+            <%= image_tag @collection.image.url(:original),
+                         { id: 'thumbnail_image',
+                           class: 'img-thumbnail center-block',
+                           style: 'cursor: pointer;',
+                           onclick: '$("#collection_image").click();' } %>
+          </div>
+          <%= f.input :collection_keywords,
+                      as: :string,
+                      error: '',
+                      label: '추가된 키워드 리스트',
+                      input_html: {
+                                    value: @collection.collection_keywords.map(&:id),
+                                    readonly: true,
+                                    class: 'required_form',
+                                    placeholder: '컬렉션 키워드를 입력하세요',
+                                    onclick: '$("#keyword").focus(); return false;'
+                                  }  %>
+          <%= f.input :asks,
+                      as: :string,
+                      error: '',
+                      label: '추가된 컨텐츠 리스트',
+                      input_html: {
+                                    value: @collection.asks.map(&:id),
+                                    readonly: true,
+                                    class: 'required_form',
+                                    placeholder: '컬렉션 컨텐츠를 입력하세요',
+                                    onclick: '$("#ask_id").focus(); return false;'
+                                  }  %>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+<div class="panel panel-success">
+  <!-- Default panel contents -->
+  <div class="panel-heading">컬렉션 키워드 생성</div>
+  <%= form_tag(admin_collection_keywords_path,
+              remote: true,
+              method: :get,
+              id: 'collection_keyword_form',
+              oninput: "form_check($(this));", onchange: "form_check($(this));") do %>
+    <div class="panel-body">
+        <div class="form-group">
+          <label for="ask_id">키워드 추가</label>
+          <div class="input-group">
+            <span class="input-group-addon" id="keyword-addon"><span class="glyphicon glyphicon-tag"></span></span>
+            <%= text_field_tag :keyword,
+                               '',
+                               {
+                                 class: 'form-control required_form',
+                                 placeholder: '키워드를 입력해주세요',
+                                 autocomplete: 'off',
+                                 onkeyup: 'preview_keyword();',
+                                 aria: { describedby: "keyword-addon" }
+                               } %>
+            <%= submit_tag '추가하기',
+                           disabled: true,
+                           id: 'keyword_submit',
+                           class: 'btn btn-success hidden' %>
+          </div>
+        </div>
+    </div>
+    <div id="keywords_preview" class="panel-footer"></div>
+  <% end %>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">컬렉션 키워드 리스트</div>
+  <div id="keywords_list" class="panel-body">
+    <% @collection.collection_keywords.each do |keyword| %>
+      <% @keyword = keyword %>
+      <%= render '/admin/collection_keywords/collection_keyword' %>
+    <% end %>
+  </div>
+  <div class="panel-body">
+    <%= link_to '연관컬렉션 미리보기',
+                admin_collection_to_collection_keywords_path,
+                remote: true,
+                id: 'related_collections',
+                class: 'btn btn-danger pull-right',
+                onclick: 'preview_related_collections();',
+                data: {  toggle: 'modal',
+                         target: '#related_collections_preview',
+                         disable_with: '불러오는중...' } %>
+    <!-- Modal -->
+    <div id="related_collections_preview" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">연관컬렉션 미리보기</h4>
+          </div>
+          <div id="related_collections_list" class="modal-body"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function preview_related_collections() {
+    var keyword_ids = $("#collection_collection_keywords").val();
+    $("#related_collections").attr("href", "<%= admin_collection_to_collection_keywords_path %>?collection_id=<%= @collection.id %>&keyword_ids=" + keyword_ids);
+    $("#related_collections_list").html("불러오는 중...");
+  }
+
+  function preview_keyword() {
+    $("#keyword").val(function(index, value){ return value.replace(/\s/, ''); });
+    if ($("#keyword").val().length > 0) {
+      $("#keyword_submit").click();
+    } else {
+      $("#keywords_preview").html('<p class="help-block" style="margin: 0;">키워드를 하나씩 입력해주세요 (공백은 무시됩니다)</p>');
+    }
+  }
+  preview_keyword();
+
+  function select_keyword(keyword) {
+    $("#collection_keyword_form").attr("method", "post");
+    if (keyword !== undefined) {
+      $("#keyword").val(keyword);
+    } else {
+      $("#keyword_new_submit").html("<i class='fa fa-spinner fa-spin'></i>");
+    }
+    $("#keyword_submit").click();
+  }
+
+  function add_keyword(keyword_id) {
+    var old_list = $("#collection_collection_keywords").val() === "" ? [] : $("#collection_collection_keywords").val().split(" ");
+    old_list.push(keyword_id.toString());
+    $("#collection_collection_keywords").val(old_list.join(" "));
+    // 템플릿 렌더링은 백엔드에서 처리
+    form_check($("#collection_form"));
+  }
+
+  function destroy_keyword(keyword_id) {
+    var old_list = $("#collection_collection_keywords").val() === "" ? [] : $("#collection_collection_keywords").val().split(" ");
+    var keyword_index = old_list.indexOf(keyword_id.toString());
+    var keyword = old_list.splice(keyword_index, 1);
+    $("#collection_collection_keywords").val(old_list.join(" "));
+    $("#collection_keyword_" + keyword_id).animate({opacity: '0'}, 500, function(){ $(this).remove(); });
+    form_check($("#collection_form"));
+  }
+</script>
+
+<div class="panel panel-success">
+  <!-- Default panel contents -->
+  <div class="panel-heading">컬렉션 컨텐츠 생성</div>
+  <div class="panel-body">
+    <%= form_tag(admin_collection_to_asks_path,
+                remote: true,
+                oninput: "form_check($(this));", onchange: "form_check($(this));") do %>
+      <div class="form-group">
+        <label for="ask_id">컨텐츠 추가</label>
+        <div class="input-group">
+          <span class="input-group-addon" id="ask_id-addon"><%= "#{asks_path}/" %></span>
+          <%= number_field_tag :ask_id,
+                             '',
+                             {
+                               class: 'form-control required_form',
+                               placeholder: 'ask ID를 입력해주세요',
+                               autocomplete: 'off',
+                               aria: { describedby: 'ask_id-addon' }
+                             } %>
+          <span class="input-group-btn">
+            <%= submit_tag '추가하기',
+                           disabled: true,
+                           id: 'ask_id_submit',
+                           class: 'btn btn-success',
+                           data: { disable_with: '추가중...' } %>
+          </span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="panel-footer"><p class="help-block" style="margin: 0;">숫자로 하나씩 입력해주세요</p></div>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">컬렉션 컨텐츠 리스트</div>
+  <!-- Table -->
+  <table class="table table-bordered table-responsive table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>작성자</th>
+        <th>작성일</th>
+        <th>투표</th>
+        <th>댓글</th>
+        <th>공감</th>
+        <th>열기</th>
+        <th>정렬</th>
+        <th>제거</th>
+      </tr>
+    </thead>
+    <tbody id="asks_list">
+      <% @collection.asks.each do |ask| %>
+        <% @ask = ask %>
+        <%= render '/admin/collection_to_asks/collection_ask' %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  function add_ask(ask_id) {
+    var old_list = $("#collection_asks").val() === "" ? [] : $("#collection_asks").val().split(" ");
+    old_list.push(ask_id.toString());
+    $("#collection_asks").val(old_list.join(" "));
+    // 템플릿 렌더링은 백엔드에서 처리
+    form_check($("#collection_form"));
+  }
+
+  function sort_ask_up(ask_id) {
+    var old_list = $("#collection_asks").val() === "" ? [] : $("#collection_asks").val().split(" ");
+    var ask_index = old_list.indexOf(ask_id.toString());
+    var sub_index = ask_index - 1;
+    if (ask_index > 0) {
+      var ask = old_list[ask_index];
+      var sub = old_list[sub_index];
+      var new_list = old_list.splice(sub_index, 2, ask, sub);
+      $("#collection_asks").val(old_list.join(" "));
+      $("#collection_ask_col_1_" + ask).animate({opacity: '0.5'}, 250, function(){
+        $(this).animate({opacity: '1'}, 250, function() { $(this).animate({opacity: '0.5'}, 200, function(){ $(this).animate({opacity: '1'}, 200); }); });
+      });
+      $("#collection_ask_col_2_" + ask).animate({opacity: '0.5'}, 250, function(){
+        $(this).animate({opacity: '1'}, 250, function() { $(this).animate({opacity: '0.5'}, 200, function(){ $(this).animate({opacity: '1'}, 200); }); });
+        $(this).after($("#collection_ask_col_2_" + sub));
+        $(this).after($("#collection_ask_col_1_" + sub));
+      });
+      form_check($("#collection_form"));
+    }
+  }
+
+  function sort_ask_down(ask_id) {
+    var old_list = $("#collection_asks").val() === "" ? [] : $("#collection_asks").val().split(" ");
+    var ask_index = old_list.indexOf(ask_id.toString());
+    var sub_index = ask_index + 1;
+    if (sub_index < old_list.length) {
+      var ask = old_list[ask_index];
+      var sub = old_list[sub_index];
+      var new_list = old_list.splice(ask_index, 2, sub, ask);
+      $("#collection_asks").val(old_list.join(" "));
+      $("#collection_ask_col_1_" + ask).animate({opacity: '0.5'}, 250, function(){
+        $(this).animate({opacity: '1'}, 250, function() { $(this).animate({opacity: '0.5'}, 200, function(){ $(this).animate({opacity: '1'}, 200); }); });
+        $(this).before($("#collection_ask_col_1_" + sub));
+        $(this).before($("#collection_ask_col_2_" + sub));
+      });
+      $("#collection_ask_col_2_" + ask).animate({opacity: '0.5'}, 250, function(){
+        $(this).animate({opacity: '1'}, 250, function() { $(this).animate({opacity: '0.5'}, 200, function(){ $(this).animate({opacity: '1'}, 200); }); });
+      });
+      form_check($("#collection_form"));
+    }
+  }
+
+  function destroy_ask(ask_id) {
+    var old_list = $("#collection_asks").val() === "" ? [] : $("#collection_asks").val().split(" ");
+    var ask_index = old_list.indexOf(ask_id.toString());
+    var ask = old_list.splice(ask_index, 1);
+    $("#collection_asks").val(old_list.join(" "));
+    $("#collection_ask_col_1_" + ask_id).animate({opacity: '0'}, 500, function(){ $(this).remove(); });
+    $("#collection_ask_col_2_" + ask_id).animate({opacity: '0'}, 500, function(){ $(this).remove(); });
+    form_check($("#collection_form"));
+  }
+</script>

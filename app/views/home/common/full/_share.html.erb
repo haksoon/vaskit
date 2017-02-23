@@ -1,7 +1,15 @@
 <script type="text/template" id="shareTemplate">
+  {{ var share_title = "" }}
+  {{ if (share_type == "ask") { }}
+    {{ share_title = "질문" }}
+  {{ } else if (share_type == "collection") { }}
+    {{ share_title = "컬렉션" }}
+  {{ } else if (share_type == "video") { }}
+    {{ share_title = "비교영상" }}
+  {{ } }}
   <div class="wrapper full" id="share_screen">
     <div class="container top dark" ontouchmove="return false;">
-      <span class="header_title" onclick="$(this).scroll_to();">{{= share_type == "ask" ? "질문" : "컬렉션" }} 공유하기</span>
+      <span class="header_title" onclick="$(this).scroll_to();">{{= share_title }} 공유하기</span>
       <span class="header_btn right back_btn" onclick="back_button();"><i class="fa fa-angle-down"></i></span>
     </div>
     <div class="container main">
@@ -10,6 +18,8 @@
           {{= shareAskTemplate({ask: share_data}) }}
         {{ } else if (share_type == "collection") { }}
           {{= shareCollectionTemplate({collection: share_data}) }}
+        {{ } else if (share_type == "video") { }}
+          {{= shareVideoTemplate({video: share_data}) }}
         {{ } }}
       </div>
       <div class="clearfix scroll_box x-axis share_btn_area animated slideInUp" ontouchmove="return false;">
@@ -90,12 +100,27 @@
   </div>
 </script>
 
-
+<script type="text/template" id="shareVideoTemplate">
+  <div id="share_image" class="video_thumbnail">
+    <div class="clearfix video_header">
+      <div class="video_title text_box_short"><i class="fa fa-tv"></i> {{= video.title }}</div>
+      <span class="video_ribbon"></span>
+      <div class="video_image">
+        <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
+        <i class="fa fa-play"></i>
+      </div>
+      <div class="video_description">
+        {{= taggingKeywords(video.description) }}
+      </div>
+    </div>
+  </div>
+</script>
 
 <script>
   var shareTemplate = _.template($("#shareTemplate").html());
   var shareAskTemplate = _.template($("#shareAskTemplate").html());
   var shareCollectionTemplate = _.template($("#shareCollectionTemplate").html());
+  var shareVideoTemplate = _.template($("#shareVideoTemplate").html());
 
   function show_share(share_type, target_id) {
     var share_url = "<%= CONFIG['host'] %>" + "/" + share_type + "s/" + target_id;
@@ -163,6 +188,14 @@
         label = "둘중에뭐사지? 골라주세요!\n\n" + share_data.left_ask_deal.title + "\n vs \n" + share_data.right_ask_deal.title + ",\n당신의 선택은?\n\n" + share_url;
       } else if (share_type == "collection") {
         label = "[ VASKIT's pick,\n깐슈머들의 위시리스트! ]\n\n" + share_url;
+        image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, "collections", "original");
+        image_width = '900';
+        image_height = '600';
+      } else if (share_type == "video") {
+        label = "[ VASKIT맨의 비교영상 ]\n\n" + share_data.title + "\n\n" + share_data.description + "\n\n" + share_url;
+        image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, "videos", "original");
+        image_width = '900';
+        image_height = '600';
       }
 
       html2canvas(document.getElementById("share_image"), {
@@ -240,11 +273,12 @@
     function share_log(channel) {
       var ask_id = share_type == "ask" ? target_id : null;
       var collection_id = share_type == "collection" ? target_id : null;
+      var video_id = share_type == "video" ? target_id : null;
       $.ajax({
         url: "/share_logs.json",
         dataType: "json",
         type: "POST",
-        data: {channel: channel, ask_id: ask_id, collection_id: collection_id}
+        data: {channel: channel, ask_id: ask_id, collection_id: collection_id, video_id: video_id}
       });
     }
   }
@@ -266,5 +300,4 @@
       return false;
     }
   }
-
 </script>

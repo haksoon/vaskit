@@ -1,0 +1,65 @@
+<div class="jumbotron clearfix">
+  <h1><kbd><%= @video.id %>번</kbd> 비교영상</h1>
+  <p>비교영상을 게시하거나 수정, 삭제할 수 있습니다</p>
+  <%= link_to '목록으로',
+              admin_videos_path,
+              { class: 'btn btn-default btn-lg' } %>
+  <div class="pull-right">
+    <%= link_to '링크열기',
+                video_path(@video.id),
+                { class: 'btn btn-default btn-lg', target: '_blank' } %>
+    <%= link_to '수정하기',
+                edit_admin_video_path(@video.id),
+                { class: 'btn btn-warning btn-lg' } %>
+    <% if @video.show %>
+      <%= link_to '발행취소', admin_video_path(@video.id), { class: 'btn btn-danger btn-lg', method: :delete, data: { confirm: '정말로 발행을 취소하시겠어요?', disable_with: '취소중...' } } %>
+    <% else %>
+      <%= link_to '발행하기', admin_video_path(@video.id), { class: 'btn btn-success btn-lg', method: :delete, data: { confirm: '정말로 발행하시겠어요?', disable_with: '발행중...' } } %>
+    <% end %>
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">비교영상 내용</div>
+  <!-- Table -->
+  <table class="table table-bordered table-responsive">
+    <tr>
+      <th style="width: 100px;">제목</th>
+      <td><%= @video.title %></td>
+    </tr>
+    <tr>
+      <th>설명</th>
+      <td><%= raw tagging_keywords(@video.description) %></td>
+    </tr>
+    <tr>
+      <th>게시일</th>
+      <td><%= format_datetime(@video.created_at, :date) %></td>
+    </tr>
+    <tr>
+      <th>이미지</th>
+      <td><%= image_tag @video.image.url(:original),
+                        { width: '100%' } %></td>
+    </tr>
+    <tr>
+      <th>영상</th>
+      <td>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.url}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" %>"
+                  class="embed-responsive-item"
+                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>질문</th>
+      <td>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="<%= ask_path(@video.ask_id) %>"
+                  class="embed-responsive-item"
+                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>

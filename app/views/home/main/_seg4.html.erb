@@ -15,8 +15,10 @@
 
   function open_user_profile() {
     if ($("#user_tab_profile").hasClass("on")) {
-      $("#user_profile").animate({scrollTop:0},250);
-      user_profile_on();
+      $("#user_profile").css("-webkit-overflow-scrolling", "initial").animate({scrollTop:0}, 250, function(){
+        $(this).css("-webkit-overflow-scrolling", "touch");
+        user_profile_on();
+      });
     } else {
       $("#user_profile").removeClass("prev");
       $("#user_alarm").addClass("next");
@@ -28,8 +30,10 @@
 
   function open_user_alarms() {
     if ($("#user_tab_alarm").hasClass("on")) {
-      $("#user_alarm").animate({scrollTop:0},250);
-      user_alarms_on();
+      $("#alarm_list").css("-webkit-overflow-scrolling", "initial").animate({scrollTop:0}, 250, function(){
+        $(this).css("-webkit-overflow-scrolling", "touch");
+        user_alarms_on();
+      });
     } else {
       $("#user_profile").addClass("prev");
       $("#user_alarm").removeClass("next");

@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
+//= require_tree ./application
 
 // init Template
 _.templateSettings = {
@@ -143,8 +143,8 @@ function getUserToken() {
   }, 2000);
 }
 
-var userAppVer = false;                                                       // 임시 코드
-var userAppVerLoading = true;
+var userAppVer = false;                                                       // 임시 코드 (비교영상 iframe 버전 분기)
+var userAppVerLoading = true;                                                 // 임시 코드 (비교영상 iframe 버전 분기)
 function setUserToken(gcm_key, device_id, app_ver) {
   // App에서 호출
   $.ajax({
@@ -153,12 +153,8 @@ function setUserToken(gcm_key, device_id, app_ver) {
     type: "POST",
     data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver}
   });
-  if (device_id.match(/ios/) && Number(app_ver.split(".").join("") >= 213)) {
-    userAppVer = true;
-    userAppVerLoading = false;
-  } else {
-    userAppVerLoading = false;
-  }        // 임시 코드
+  if (device_id.match(/ios/) && Number(app_ver.split(".").join("") >= 213)) userAppVer = true;      // 임시 코드 (비교영상 iframe 버전 분기)
+  userAppVerLoading = false;                                                                        // 임시 코드 (비교영상 iframe 버전 분기)
 }
 
 function setAppStatusBar(type) {
@@ -474,8 +470,15 @@ function show_seg(seg_id) {
       $(".seg"+seg_id+" .wrapper.sub").removeClass("prev").addClass("next").transitionRemove();
     } else {
       // 메인 컨테이너가 열려있는 경우 상단으로 돌아감
-      $(".seg"+seg_id+" .wrapper.main .container.main").animate({scrollTop:0}, 250);
-      $(".seg"+seg_id+" .wrapper.main .inner").not(".prev").not(".next").animate({scrollTop:0}, 250);
+      if (seg_id === 1 || seg_id ===2) {
+        $(".seg"+seg_id+" .wrapper.main .container.main").css("-webkit-overflow-scrolling", "initial").animate({scrollTop:0}, 250, function(){
+          $(this).css("-webkit-overflow-scrolling", "touch");
+        });
+      } else if (seg_id === 4) {
+        $(".seg"+seg_id+" .wrapper.main .inner").not(".prev").not(".next").css("-webkit-overflow-scrolling", "initial").animate({scrollTop:0}, 250, function(){
+          $(this).css("-webkit-overflow-scrolling", "touch");
+        });
+      }
     }
   } else {
     // 다른 탭으로 이동할 경우
@@ -547,18 +550,20 @@ function remove_wrapper() {
 
 $.fn.scroll_to = function(destination) {
   var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
-  var main_container = current_wrapper.find(".container.main");
-  var st_now = main_container.scrollTop();
+  var current_container = current_wrapper.find(".container.main");
   var top = 0;
-  var bottom = main_container.prop("scrollHeight");
+  var st_now = current_container.scrollTop();
+  var bottom = current_container.prop("scrollHeight");
 
-  if (destination === null) {
+  if (destination === null || destination === undefined) {
     destination = st_now > 0 ? top : bottom;
   } else if (destination === true) {
     destination = bottom;
   }
 
-  main_container.animate({scrollTop: destination}, 250);
+  current_container.css("-webkit-overflow-scrolling", "initial").animate({scrollTop: destination}, 250, function(){
+    current_container.css("-webkit-overflow-scrolling", "touch");
+  });
 };
 
 function nearBottomOfContainer(element) {
@@ -659,8 +664,7 @@ function loadingEnd() {
 var current_user = null;
 var alarm_check_counter;
 function alarm_check(last_alarm_count) {
-  var alarm_count = last_alarm_count === null ? 0 : last_alarm_count;
-
+  var alarm_count = last_alarm_count === undefined ? 0 : last_alarm_count;
   $.ajax({
     url: "/users/alarm_check.json",
     dataType: 'json',
@@ -679,7 +683,7 @@ function alarm_check(last_alarm_count) {
         $("#login_tab").hide();
       }
       if (alarm_count > 0) { $(".tab_badge").addClass("on").animateCss("wobble"); } else { $(".tab_badge").removeClass("on"); }
-      if (last_alarm_count !== null && alarm_count > last_alarm_count) {
+      if (last_alarm_count !== undefined && alarm_count > last_alarm_count) {
         user_alarms_on();
         if (!window.HybridApp) { notify("새로운 알림이 도착했습니다!", "go_seg(4); $('#footer').removeClass('hide'); open_user_alarms();"); }
       }
@@ -738,6 +742,8 @@ function get_avatar(data) {
 
 // 해쉬태그, 링크 하이라이트
 function taggingKeywords(origin_string, img_hidden) {
+  if (origin_string === null) return origin_string;
+
   var html_tmp = document.createElement("div");
   var html_txt = document.createTextNode(origin_string);
   html_tmp.id = "taggingTmp";
@@ -750,19 +756,17 @@ function taggingKeywords(origin_string, img_hidden) {
     hash_tags.sort(function(a,b){ return b.length - a.length; });
     $.each(hash_tags, function(index, hash_tag) {
       hash_tag = hash_tag.replace(",", "");
+      var keyword = hash_tag.replace("#", "").replace("?", "");
       html_tmp.highlight(hash_tag, {element: "a", className: "hash_tag " + index});
-      $.each(html_tmp.find(".hash_tag."+index), function(index2, element){
-        hash_tag = hash_tag.replace("#", "").replace("?", "");
-        $(element).text("").attr({
-          href: "/search?type=hash_tag&keyword="+encodeURIComponent(hash_tag),
-          onclick: "go_url('search_result', {type: 'hash_tag', keyword: '" + hash_tag + "'}); return false;",
-          keyword: hash_tag
-        });
+      html_tmp.find(".hash_tag." + index).html("").attr({
+        href: "/search?type=hash_tag&keyword="+encodeURIComponent(keyword),
+        onclick: "go_url('search_result', {type: 'hash_tag', keyword: '" + keyword + "'}); return false;",
+        keyword: keyword
       });
     });
     $.each(html_tmp.find(".hash_tag"), function(index, element){
-      var hash_tag_keyword = "#" + $(element).attr("keyword");
-      $(element).text(hash_tag_keyword);
+      var keyword = "#" + $(element).attr("keyword");
+      $(element).append(keyword);
     });
   }
   var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
@@ -778,27 +782,40 @@ function taggingKeywords(origin_string, img_hidden) {
         link_tags[link_tags.length] = link;
       }
     });
-    if (!img_hidden) {
-      $.each(img_tags, function(index, img){
-        html_tmp.highlight(img, {element: "img", className: "link_img "+index});
-        $.each(html_tmp.find(".link_img."+index), function(index2, element){
-          $(element).attr({
-            src: img,
+    if (img_tags.length > 0) {
+      if (!img_hidden) {
+        $.each(img_tags, function(index, link) {
+          html_tmp.highlight(link, {element: "a", className: "link_img " + index});
+          html_tmp.find(".link_img." + index).html("").attr({
+            href: link,
+            target: "_blank",
+            onclick: "window.event.cancelBubble = true;"
+          }).append("<img>");
+          html_tmp.find(".link_img." + index + " img").attr({
+            src: link,
             onerror: "imgError(this);"
           });
         });
-      });
+        $.each(html_tmp.find(".link_img"), function(index, element) {
+          var link = $(element).attr("href");
+          $(element).append(link);
+        });
+      }
     }
-    $.each(links, function(index, link){
-      html_tmp.highlight(link, {element: "a", className: "link "+index});
-      $.each(html_tmp.find(".link."+index), function(index2, element){
-        $(element).attr({
+    if (link_tags.length > 0) {
+      $.each(link_tags, function(index, link) {
+        html_tmp.highlight(link, {element: "a", className: "link " + index});
+        html_tmp.find(".link." + index).html("").attr({
           href: link,
           target: "_blank",
           onclick: "window.event.cancelBubble = true;"
         });
       });
-    });
+      $.each(html_tmp.find(".link"), function(index, element) {
+        var link = $(element).attr("href");
+        $(element).append(link);
+      });
+    }
   }
 
   var html_output = html_tmp.html();
@@ -822,7 +839,7 @@ function form_check(form) {
 
 // 각종 표기법
 function truncate(string, range) {
-  if (range === null) range = 30;
+  if (range === undefined) range = 30;
   if (string.length > range)
     return string.substring(0,range)+'&middot;&middot;&middot;';
   else
@@ -832,7 +849,7 @@ function truncate(string, range) {
 
 // 금액 필드 콤마찍기
 function fieldWithBlank(text) {
-  return (text === null || text.length === 0) ? "-" : text;
+  return (text === undefined || text === null || text.length === 0) ? "-" : text;
 }
 
 function fieldWithLink(link) {
@@ -845,7 +862,7 @@ function fieldWithLink(link) {
 }
 
 function numberWithCommas(x) {
-  if (x !== null) x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (x !== null && x !== undefined) x = x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   return x;
 }
 
@@ -864,7 +881,7 @@ function inputNumberWithCommas(obj) {
 function get_user_ages(birthday) {
   try {
     var ret = "";
-    if (birthday === null || birthday === ""){
+    if (birthday === null || birthday === undefined || birthday === "") {
       ret = "기타";
     } else {
       var current_user_year = parseInt(birthday.split("-")[0]);

@@ -13,6 +13,11 @@ class Comment < ActiveRecord::Base
   after_update :reload_ask_deal_comment_count
   after_destroy :reload_ask_deal_comment_count
 
+  validates :ask_id, presence: true
+  validates :ask_deal_id, presence: true
+  validates :content, presence: true
+  validates :user_id, presence: true
+
   def generate_hash_tags
     HashTag.destroy_all(ask_id: ask_id, comment_id: id)
     # 업데이트의 경우 기존 해시태그를 모두 삭제한 후 재설정
