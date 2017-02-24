@@ -36,7 +36,9 @@ class Admin::NoticesController < Admin::HomeController
         User.all
       end
 
-    if params[:filter] == 'filter'
+    if params[:filter] == 'all'
+      filter_user_ids = filter_users.pluck(:id)
+    elsif params[:filter] == 'filter'
       if !params[:filter_gender].nil?
         if params[:filter_gender].length == 1 && params[:filter_gender][0] == 'male'
           filter_users = filter_users.where(gender: true)

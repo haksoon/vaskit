@@ -856,7 +856,9 @@
   }
 
   function applyHashtag(text) {
-    if (text !== null) text = text.replace(/\n$/g, '\n\n').replace(/#$|(#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+)/g, '<mark>$&</mark>');
+    if (text !== null) text = text.replace(/\n$/g, '\n\n')
+                                  .replace(/#$|(#[0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+)/g, '<mark class="hash_tag_in">$&</mark>')
+                                  .replace(/((http(s)?:\/\/)|(www))([\S]*)/g, '<mark class="link_url_in">$&</mark>');
     return text;
   }
 </script>

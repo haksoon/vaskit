@@ -804,14 +804,14 @@ function taggingKeywords(origin_string, img_hidden) {
     }
     if (link_tags.length > 0) {
       $.each(link_tags, function(index, link) {
-        html_tmp.highlight(link, {element: "a", className: "link " + index});
-        html_tmp.find(".link." + index).html("").attr({
+        html_tmp.highlight(link, {element: "a", className: "link_url " + index});
+        html_tmp.find(".link_url." + index).html("").attr({
           href: link,
           target: "_blank",
           onclick: "window.event.cancelBubble = true;"
         });
       });
-      $.each(html_tmp.find(".link"), function(index, element) {
+      $.each(html_tmp.find(".link_url"), function(index, element) {
         var link = $(element).attr("href");
         $(element).append(link);
       });
@@ -845,7 +845,6 @@ function truncate(string, range) {
   else
     return string;
 }
-
 
 // 금액 필드 콤마찍기
 function fieldWithBlank(text) {
@@ -997,6 +996,19 @@ $.fn.selectRange = function(start, end) {
   });
 };
 
+// input, textarea 값 복사하기
+function copyfieldvalue(event, field_id){
+  if (document.execCommand("copy")) {
+    var field = document.getElementById(field_id);
+    field.focus();
+    field.setSelectionRange(0, field.value.length);
+    document.execCommand("copy");
+    field.blur();
+    return true;
+  } else {
+    return false;
+  }
+}
 
 // extension: scrollEnd detection
 $.fn.scrollEnd = function(callback, timeout) {

@@ -179,56 +179,61 @@
     function share_katalk(share_data) {
       var captured_img;
       var image_url = "http://vaskit.kr/images/logo/logo_share_800_420.png";
-      var image_width = '800';
-      var image_height = '420';
+      var image_width = "800";
+      var image_height = "420";
       var label = "꼼꼼한 소비자들의 깐깐한 선택,\n#둘중에뭐사지?\n#혼자고민고민하지마\n\nVASKIT에서 당신의 고민거리를 이야기해보세요!\n\n" + share_url;
       var share_js = "go_url('" + share_type + "', " + target_id + ")";
 
       if (share_type == "ask") {
         label = "둘중에뭐사지? 골라주세요!\n\n" + share_data.left_ask_deal.title + "\n vs \n" + share_data.right_ask_deal.title + ",\n당신의 선택은?\n\n" + share_url;
+        img_capture_send_kakao();
       } else if (share_type == "collection") {
         label = "[ VASKIT's pick,\n깐슈머들의 위시리스트! ]\n\n" + share_url;
         image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, "collections", "original");
-        image_width = '900';
-        image_height = '600';
+        image_width = "900";
+        image_height = "600";
+        send_kakao();
       } else if (share_type == "video") {
         label = "[ VASKIT맨의 비교영상 ]\n\n" + share_data.title + "\n\n" + share_data.description + "\n\n" + share_url;
         image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, "videos", "original");
-        image_width = '900';
-        image_height = '600';
+        image_width = "800";
+        image_height = "450";
+        send_kakao();
       }
 
-      html2canvas(document.getElementById("share_image"), {
-        allowTaint: true,
-        onrendered: function(canvas) {
-          try {
-            var captured_img = canvas.toDataURL("image/png");
-            $.ajax({
-                  url: "/shares.json",
-                  dataType: "json",
-                  type: "POST",
-                  data: { File: captured_img },
-                  error: function(){
-                    notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
-                  },
-                  success: function(data){
-                    image_url = "<%= CONFIG['host'] %>" + data.image_url;
-                    image_width = canvas.width;
-                    image_height = canvas.height;
-                    send_kakao();
-                  },
-                  beforeSend: function(){
-                    loadingStart();
-                  },
-                  complete: function(){
-                    loadingEnd();
-                  }
-            });
-          } catch(err) {
-            send_kakao();
+      function img_capture_send_kakao() {
+        html2canvas(document.getElementById("share_image"), {
+          allowTaint: true,
+          onrendered: function(canvas) {
+            try {
+              var captured_img = canvas.toDataURL("image/png");
+              $.ajax({
+                    url: "/shares.json",
+                    dataType: "json",
+                    type: "POST",
+                    data: { File: captured_img },
+                    error: function(){
+                      notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+                    },
+                    success: function(data){
+                      image_url = "<%= CONFIG['host'] %>" + data.image_url;
+                      image_width = canvas.width;
+                      image_height = canvas.height;
+                      send_kakao();
+                    },
+                    beforeSend: function(){
+                      loadingStart();
+                    },
+                    complete: function(){
+                      loadingEnd();
+                    }
+              });
+            } catch(err) {
+              send_kakao();
+            }
           }
-        }
-      });
+        });
+      }
 
       function send_kakao() {
         Kakao.cleanup();
@@ -265,7 +270,7 @@
       if (copyfieldvalue(event, "share_url")) {
         notify('주소가 복사되었습니다!');
       } else {
-          prompt('아래의 주소를 복사해주세요!', share_url);
+        prompt('아래의 주소를 복사해주세요!', share_url);
       }
       share_log("url");
     }
@@ -286,18 +291,5 @@
   function hide_share() {
     close_full_view();
     if (userApp) setAppStatusBar();
-  }
-
-  function copyfieldvalue(e, id){
-    if (document.execCommand("copy")) {
-      var field = document.getElementById(id);
-      field.focus();
-      field.setSelectionRange(0, field.value.length);
-      document.execCommand("copy");
-      field.blur();
-      return true;
-    } else {
-      return false;
-    }
   }
 </script>

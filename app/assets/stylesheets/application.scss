@@ -412,7 +412,8 @@ body {
 .hash_tag { color: #FF7800; padding: 1px 2px 0; border-radius: 3px; transition: background-color .2s; -webkit-tap-highlight-color: transparent;
     &:active { background-color: #ffe4a9; }
 }
-.link { color: #998674; transition: background-color .2s; -webkit-tap-highlight-color: transparent;
+.link_url { display: inline; color: cornflowerblue; border-bottom: 1px dotted; word-break: break-all; transition: background-color .2s; -webkit-tap-highlight-color: transparent;
+    &:before { content: '[링크] '; }
     &:active { background-color: #ffe4a9; }
 }
 .link_img { display: block; color: #999; font-size: 10px; line-height: 12px; text-align: right;
@@ -834,7 +835,7 @@ body {
         .hash_tag { color: #FF7200 !important; background-color: #ffe4a9 !important;
             &:active { background-color: #fff !important; }
         }
-        .link { color: #fff !important;
+        .link_url { color: #fff !important;
             &:active { background-color: #ffe4a9 !important; }
         }
       }
@@ -888,7 +889,10 @@ body {
               &.iOS { padding: 0 3px; }
           }
           .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: transparent;
-              mark { border-radius: 3px; color: #FF7200; background-color: #f2f0f0; }
+              mark { background-color: #f2f0f0;
+                &.hash_tag_in { color: #ff7800; }
+                &.link_url_in { color: cornflowerblue; }
+              }
           }
       }
     }
@@ -1145,7 +1149,10 @@ body {
           &.iOS { padding: 0 3px; }
       }
       .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: transparent;
-          mark { border-radius: 3px; color: #FF7200; background-color: #fff; }
+          mark { background-color: #fff;
+            &.hash_tag_in { color: #ff7800; }
+            &.link_url_in { color: cornflowerblue; }
+          }
       }
   }
 
