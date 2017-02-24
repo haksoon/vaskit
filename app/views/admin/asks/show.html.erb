@@ -35,7 +35,7 @@
   <!-- Default panel contents -->
   <div class="panel-heading">질문 상세보기</div>
   <div class="panel-body">
-    <blockquote><%= raw tagging_keywords(@ask.message) %></blockquote>
+    <blockquote><%= tagging_keywords(@ask.message) %></blockquote>
     <%= image_tag @ask.left_ask_deal.image.url(:normal),
                   { width: '50%',
                     class: 'img-thumbnail pull-left' } %>
@@ -57,7 +57,7 @@
                           { width: '50px',
                             class: 'img-rounded' } %>
             <kbd><%= comment.user.string_id %></kbd>
-            <p class="list-group-item-text"><%= raw tagging_keywords(comment.content) %></p>
+            <p class="list-group-item-text"><%= tagging_keywords(comment.content) %></p>
           </td>
         </tr>
         <% else %>
@@ -67,7 +67,7 @@
               <%= image_tag comment.user.avatar.url(:original),
                             { width: '50px',
                               class: 'img-rounded' } %>
-              <p class="list-group-item-text"><%= raw tagging_keywords(comment.content) %></p>
+              <p class="list-group-item-text"><%= tagging_keywords(comment.content) %></p>
             </td>
           </tr>
         <% end %>

@@ -21,7 +21,7 @@ class Admin::VideosController < Admin::HomeController
     @video = Video.new(video_params)
 
     if @video.save
-      flash['success'] = "비교영상을 성공적으로 게시하였습니다 <a href='#{video_path(@video.id)}' target='_blank' class='alert-link'>링크</a>"
+      flash['success'] = "#{@video.id}번 비교영상을 성공적으로 생성하였습니다"
       redirect_to admin_videos_path
     else
       flash['error'] = '필수 입력값을 모두 입력해주세요'
@@ -36,7 +36,7 @@ class Admin::VideosController < Admin::HomeController
   # PATCH /admin/videos/:id
   def update
     if @video.update(video_params)
-      flash['success'] = "비교영상을 성공적으로 수정하였습니다 <a href='#{video_path(@video.id)}' target='_blank' class='alert-link'>링크</a>"
+      flash['success'] = "#{@video.id}번 비교영상을 성공적으로 수정하였습니다"
       redirect_to admin_videos_path
     else
       flash['error'] = '필수 입력값을 모두 입력해주세요'
@@ -46,12 +46,15 @@ class Admin::VideosController < Admin::HomeController
 
   # DELETE /admin/videos/:id
   def destroy
-    if @video.show
-      @video.update(show: false)
-      flash['warning'] = '비교영상을 발행 취소하였습니다'
+    @video.toggle(:show)
+    if @video.save && @video.show
+      if @video.show
+        flash['success'] = "#{@video.id}번 비교영상을 성공적으로 발행하였습니다 <a href='#{video_path(@video.id)}' target='_blank' class='alert-link'>링크</a>"
+      else
+        flash['warning'] = "#{@video.id}번 비교영상을 발행 취소하였습니다"
+      end
     else
-      @video.update(show: true)
-      flash['success'] = "비교영상을 성공적으로 발행하였습니다 <a href='#{video_path(@video.id)}' target='_blank' class='alert-link'>링크</a>"
+      flash['error'] = "#{@video.id}번 비교영상 발행 전 필수 입력값을 모두 입력해주세요"
     end
     redirect_to :back
   end

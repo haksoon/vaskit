@@ -62,6 +62,7 @@
             <%= f.input_field :image,
                               as: :file,
                               class: 'hidden',
+                              onclick: 'this.nextElementSibling.checked = true;',
                               onchange: 'preview_thumbnail(this, $(thumbnail_image));' %>
             <%= check_box_tag :image_attached, '', @collection.id.nil? ? false : true, class: 'hidden required_form' %>
           <% end %>

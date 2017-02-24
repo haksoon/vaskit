@@ -347,13 +347,10 @@
                              hashtagInput($(this));
                            })
                            .on("scroll", function(e) {
+                             $(this).css({overflowY: "scroll"});
                              hashtagScroll($(this));
                            })
                            .on("focus", function(e) {
-                              $(this).height(this.scrollHeight);
-                              current_comment_container.height(this.scrollHeight + 32);
-                              $(this).removeClass("filled");
-                              $(this).selectRange($(this).val().length, $(this).val().length);
                               // iOS web 키패드 이슈
                               if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
                                 iOSKeypadCheck = setInterval(function(){
@@ -368,6 +365,11 @@
                                   clearInterval(iOSKeypadCheck);
                                 }, 500);
                               } // iOS web 키패드 이슈
+                              current_comment_lists.css({paddingBottom: "150px"});
+                              if ($(this).height() == (50 - 32)) $(this).selectRange($(this).val().length, $(this).val().length);
+                              $(this).height(this.scrollHeight);
+                              current_comment_container.height(this.scrollHeight + 32);
+                              $(this).removeClass("filled");
                               hashtagInput($(this));
                            })
                            .on("blur", function(e) {
@@ -379,6 +381,7 @@
                                  window.scrollTo(0,0);
                                },50);
                              } // iOS web 키패드 이슈
+                             current_comment_lists.css({paddingBottom: "10px"});
                              $(this).height(50 - 32);
                              current_comment_container.height(50);
                              if ($(this).val().length === 0) {

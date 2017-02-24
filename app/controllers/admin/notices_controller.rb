@@ -18,28 +18,31 @@ class Admin::NoticesController < Admin::HomeController
 
     push_type = params[:type]
     params[:js] = '' if params[:js].nil? || params[:js] == 'false'
-    payload = {
-      msg: params[:msg],
-      type: 'true',
-      count: nil,
-      id: 1,
-      link: params[:link],
-      js: params[:js]
-    }
-
-    ios_checked = true
-    aos_checked = true
-    filter_users =
-      if Rails.env == 'development'
-        User.where(user_role: 'admin')
-      else
-        User.all
-      end
+    payload = { msg: params[:msg],
+                type: 'true',
+                count: nil,
+                id: 1,
+                link: params[:link],
+                js: params[:js] }
 
     if params[:filter] == 'all'
-      filter_user_ids = filter_users.pluck(:id)
+      if Rails.env == 'development'
+        admin_user_ids = User.where(user_role: 'admin').pluck(:id)
+        registration_ids_ios = UserGcmKey.where(user_id: admin_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
+        registration_ids_aos = UserGcmKey.where(user_id: admin_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
+      else
+        registration_ids_ios = UserGcmKey.where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
+        registration_ids_aos = UserGcmKey.where('device_id LIKE ?', 'android%').pluck(:gcm_key)
+      end
     elsif params[:filter] == 'filter'
-      if !params[:filter_gender].nil?
+      filter_users =
+        if Rails.env == 'development'
+          User.where(user_role: 'admin')
+        else
+          User.all
+        end
+
+      unless params[:filter_gender].nil?
         if params[:filter_gender].length == 1 && params[:filter_gender][0] == 'male'
           filter_users = filter_users.where(gender: true)
         elsif params[:filter_gender].length == 1 && params[:filter_gender][0] == 'female'
@@ -47,7 +50,7 @@ class Admin::NoticesController < Admin::HomeController
         end
       end
 
-      if !params[:filter_age].nil?
+      unless params[:filter_age].nil?
         if params[:filter_age].length > 0 && params[:filter_age].length < 7
           age_filter = []
           age_20 = Date.new(Time.now.year - 18, 1, 1)
@@ -70,6 +73,8 @@ class Admin::NoticesController < Admin::HomeController
         end
       end
 
+      ios_checked = true
+      aos_checked = true
       if !params[:filter_device].nil? && params[:filter_device].length == 1
         ios_checked = false
         aos_checked = false
@@ -80,12 +85,13 @@ class Admin::NoticesController < Admin::HomeController
       end
 
       filter_user_ids = filter_users.pluck(:id)
+      registration_ids_ios = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key) if ios_checked
+      registration_ids_aos = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key) if aos_checked
     elsif params[:filter] == 'specific'
       filter_user_ids = params[:filter_user_id]
+      registration_ids_ios = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
+      registration_ids_aos = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
     end
-
-    registration_ids_ios = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key) if ios_checked
-    registration_ids_aos = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key) if aos_checked
 
     response_ios = push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
     response_aos = push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?

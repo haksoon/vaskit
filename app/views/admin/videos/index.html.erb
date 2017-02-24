@@ -55,7 +55,7 @@
           <th></th>
           <td><%= image_tag video.image.url(:original), width: '100%' %></td>
           <td><%= video.title %></td>
-          <td colspan="4"><%= raw tagging_keywords(video.description) %></td>
+          <td colspan="4"><%= tagging_keywords(video.description) %></td>
         </tr>
       <% end %>
     </tbody>

@@ -30,9 +30,9 @@ module Admin::ApplicationHelper
       keyword = hash_tag.delete('#').delete('?')
       string = highlight(string,
                          hash_tag,
-                         highlighter: "<a href='#{CONFIG["host"]}/search?type=hash_tag&keyword=#{keyword}' target='_blank' class='hash_tag'>#{hash_tag}</a>")
+                         highlighter: "<a href='#{CONFIG["host"]}/search?type=hash_tag&keyword=#{keyword}' target='_blank' class='hash_tag'>#{keyword}</a>")
     end
-    string.gsub(/\r?\n/, '<br>')
+    simple_format(string.gsub(/\r?\n/, '<br>').html_safe, {}, wrapper_tag: 'div')
   end
 
   def format_datetime(datetime, type = :datetime)

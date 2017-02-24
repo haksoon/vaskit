@@ -27,7 +27,7 @@
         <tr>
           <td><kbd><%= notice.id %></kbd></td>
           <td><%= notice.push_type %></td>
-          <td><%= notice.message %></td>
+          <td><%= simple_format(notice.message, {}, wrapper_tag: 'div') %></td>
           <td><%= notice.total_count %>개</td>
           <td><%= notice.success_count %>개</td>
           <td><%= notice.failure_count %>개</td>

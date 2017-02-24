@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # HTTP RESETful
   # get: index, show, new, edit
   # post: create
@@ -30,7 +29,6 @@ Rails.application.routes.draw do
     end
   end
 
-
   resources :collections, only: [:index, :show]
 
   resources :search, only: [:index] do
@@ -47,32 +45,32 @@ Rails.application.routes.draw do
     passwords: 'users/passwords'
   }
   devise_scope :user do
-    post 'users/facebook', to: "users/facebook#auth"
-    post 'users/sign_up', to: "users/registrations#create"
-    post 'users/check_email', to: "users/registrations#check_email"
+    post 'users/facebook', to: 'users/facebook#auth'
+    post 'users/sign_up', to: 'users/registrations#create'
+    post 'users/check_email', to: 'users/registrations#check_email'
 
-    get 'users/forgot_password', to: "users/passwords#new"
-    get 'users/reset_password', to: "users/passwords#edit"
+    get 'users/forgot_password', to: 'users/passwords#new'
+    get 'users/reset_password', to: 'users/passwords#edit'
 
-    get 'users/alarm_check', to: "users/sessions#alarm_check"
-    get 'users/get_user_profile', to: "users/sessions#get_user_profile"
-    get 'users/get_user_alarms', to: "users/sessions#get_user_alarms"
-    get 'users/get_my_asks', to: "users/sessions#get_my_asks"
+    get 'users/alarm_check', to: 'users/sessions#alarm_check'
+    get 'users/get_user_profile', to: 'users/sessions#get_user_profile'
+    get 'users/get_user_alarms', to: 'users/sessions#get_user_alarms'
+    get 'users/get_my_asks', to: 'users/sessions#get_my_asks'
 
-    get 'users/', to: "users/sessions#users"
-    get 'users/history', to: "users/sessions#history"
-    get 'users/settings', to: "users/sessions#settings"
+    get 'users/', to: 'users/sessions#users'
+    get 'users/history', to: 'users/sessions#history'
+    get 'users/settings', to: 'users/sessions#settings'
 
-    get 'users/settings/edit_profile', to: "users/sessions#edit_profile"
-    delete 'users/destroy_user_picture', to: "users/sessions#destroy_user_picture"
-    put 'users/change_nickname', to: "users/sessions#change_nickname"
+    get 'users/settings/edit_profile', to: 'users/sessions#edit_profile'
+    delete 'users/destroy_user_picture', to: 'users/sessions#destroy_user_picture'
+    put 'users/change_nickname', to: 'users/sessions#change_nickname'
 
-    get 'users/settings/edit_password', to: "users/sessions#edit_password"
-    put 'users/change_password', to: "users/sessions#update_password"
+    get 'users/settings/edit_password', to: 'users/sessions#edit_password'
+    put 'users/change_password', to: 'users/sessions#update_password'
 
-    get 'users/settings/edit_push_alarm', to: "users/sessions#edit_push_alarm"
-    get 'users/settings/edit_email_alarm', to: "users/sessions#edit_email_alarm"
-    put 'users/toggle_alarm_option', to: "users/sessions#toggle_alarm_option"
+    get 'users/settings/edit_push_alarm', to: 'users/sessions#edit_push_alarm'
+    get 'users/settings/edit_email_alarm', to: 'users/sessions#edit_email_alarm'
+    put 'users/toggle_alarm_option', to: 'users/sessions#toggle_alarm_option'
   end
 
   resources :videos, only: [:index, :show]
@@ -95,11 +93,11 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'landing', to: "home#landing"
+  get 'landing', to: 'home#landing'
 
   # Admin Page
   namespace :admin do
-    get '/', to: "home#index"
+    get '/', to: 'home#index'
     resources :asks, only: [:index, :show, :update]
     resources :collections
     resources :collection_keywords, only: [:index, :create]
@@ -108,15 +106,15 @@ Rails.application.routes.draw do
     resources :videos
     resources :notices, only: [:index, :new, :create]
     resources :tables, only: [:index] do
-      get ':table_name', to: "tables#index", on: :collection
+      get ':table_name', to: 'tables#index', on: :collection
     end
     resources :analysis, only: [:index]
   end
 
   # Templates
-  get "templates/faq_help", to: "templates#faq_help"
-  get "templates/access_term", to: "templates#access_term"
-  get "templates/privacy_policy", to: "templates#privacy_policy"
+  get 'templates/faq_help', to: 'templates#faq_help'
+  get 'templates/access_term', to: 'templates#access_term'
+  get 'templates/privacy_policy', to: 'templates#privacy_policy'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

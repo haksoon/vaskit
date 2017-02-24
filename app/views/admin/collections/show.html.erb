@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <th>설명</th>
-          <td><%= raw tagging_keywords(@collection.description) %></td>
+          <td><%= tagging_keywords(@collection.description) %></td>
         </tr>
         <tr>
           <th>키워드</th>
@@ -117,7 +117,7 @@
               <td>
                 <dl>
                   <dt><%= ask.user.string_id %>님의 질문</dt>
-                  <dd><%= raw tagging_keywords(ask.message) %></dd>
+                  <dd><%= tagging_keywords(ask.message) %></dd>
                 </dl>
                 <%= image_tag ask.left_ask_deal.image.url(:normal),
                               { width: '50%', class: 'img-thumbnail pull-left' } %>

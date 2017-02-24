@@ -235,8 +235,8 @@
       <div class="comment_input_init" onclick="new_comment();">
         <div class="comment_input_bubble">
           <div class="hashtag_container">
-            <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;"></textarea>
-            <div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}">
+            <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;" onscroll="window.event.cancelBubble = true;"></textarea>
+            <div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}" onclick="window.event.cancelBubble = false;" ontouchstart="window.event.cancelBubble = false;" ontouchmove="window.event.cancelBubble = false;">
               <div class="hashtag_highlights"></div>
             </div>
           </div>

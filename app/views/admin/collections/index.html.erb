@@ -32,7 +32,7 @@
           <th><kbd><%= collection.id %></kbd></th>
           <td><%= image_tag collection.image.url(:original), width: '100%' %></td>
           <td><%= collection.name %></td>
-          <td><%= raw tagging_keywords(collection.description) %></td>
+          <td><%= tagging_keywords(collection.description) %></td>
           <td class="text-center"><%= format_datetime(collection.updated_at, 'past') %></td>
           <td><%= link_to "#{collection.asks.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
           <td><%= link_to "#{collection.collection_keywords.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>

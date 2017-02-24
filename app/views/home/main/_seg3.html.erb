@@ -798,8 +798,9 @@
       <div class="ask_message_arrow"></div>
       <textarea class="input text_field ask_message_input form_data" type="text"
                   name="ask[message]"
+                  ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;" onscroll="window.event.cancelBubble = true;"
                   placeholder="구매를 고민하고 있는 상황을 알려주세요! &#13;&#10;#고민고민하지마 #VASKIT" required disabled>{{= ask.message }}</textarea>
-			<div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}">
+			<div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}" onclick="window.event.cancelBubble = false;" ontouchstart="window.event.cancelBubble = false;" ontouchmove="window.event.cancelBubble = false;">
         <div class="hashtag_highlights">{{= applyHashtag(ask.message) }}</div>
       </div>
 		</div>
@@ -829,7 +830,7 @@
     all_inners.find(".input.text_field").attr('disabled', true);
     current_inner.find(".input.text_field").removeAttr('disabled');
 
-    ask_form_message_input.off("input scroll blur")
+    ask_form_message_input.off("input scroll focus blur")
                           .on("input", function(e){
                             hashtagInput($(this));
                           }).on("scroll", function(e){
@@ -838,7 +839,6 @@
                             hashtag_container.addClass("on");
                           }).on("blur", function(e) {
                             hashtag_container.removeClass("on");
-                            // $(this).attr('disabled',true);
                           }).attr('disabled',false).focus();
 
     function hashtagInput(target) {
