@@ -61,7 +61,7 @@
   <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }} {{= is_event ? 'event' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
     {{ if (is_event) { }}
       <div style="padding: 0 10px; height: 30px; line-height: 30px; background-color: #ff7800; color: #fff;">
-        <i class="fa fa-star"></i> VASKIT 이벤트 진행중! <span style="float: right; font-size: 11px;"><i class="fa fa-clock-o"></i> {{= Math.floor((new Date("Feb 26, 2017").getTime() - new Date().getTime()) / 1000 / 60 / 60 / 24 ) }}일 남음</span>
+        <i class="fa fa-star"></i> VASKIT 이벤트 진행중! <span class="event_notice" style="float: right; font-size: 11px;"><i class="fa fa-clock-o"></i> 이벤트 마지막 날입니다!</span>
       </div>
     {{ } }}
     {{ // 손거울 파우치 이벤트 }}

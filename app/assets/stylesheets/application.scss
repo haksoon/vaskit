@@ -643,6 +643,15 @@ body {
         // 손거울 파우치 이벤트
         &.event { padding-bottom: 0; margin-bottom: 10px; border: 2px solid #ff7200; border-bottom-width: 3px;
            .vs_help { display: none; }
+           .event_notice { i { animation: shaking 2s infinite; } }
+           @keyframes shaking {
+             from, 25%, to { -webkit-transform: translate3d(0, 0, 0);
+                             transform: translate3d(0, 0, 0); }
+             5%, 15% { -webkit-transform: translate3d(-1px, -1px, 0);
+                        transform: translate3d(-1px, -1px, 0); }
+             10%, 20% { -webkit-transform: translate3d(1px, 1px, 0);
+                        transform: translate3d(1px, 1px, 0); }
+           }
         }
         // 손거울 파우치 이벤트
         .ask_user { height: 30px; padding: 10px 15px 0 40px;
