@@ -18,13 +18,6 @@ class AsksController < ApplicationController
           asks = asks.where('id NOT IN (?)', my_votes) unless my_votes.length.zero?
         end
 
-        # 손거울 파우치 이벤트
-        if params[:page].nil?
-          event = Ask.find(1799)
-          asks.unshift(event)
-        end
-        # 손거울 파우치 이벤트
-
         asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, { comments: { include: :user } }])
         render json: { asks: asks }
       end
@@ -102,12 +95,11 @@ class AsksController < ApplicationController
   # GET /asks/new
   # GET /asks/new.json
   def new
-    @ask = Ask.new
     respond_to do |format|
       format.html
       format.json do
         if current_user
-          ask = @ask.as_json
+          ask = Ask.new.as_json
           ask['left_ask_deal'] = ask['right_ask_deal'] = AskDeal.new.as_json
           status = 'success'
         else
@@ -343,6 +335,14 @@ class AsksController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def ask_params
-    params.require(:ask).permit(:user_id, :left_ask_deal_id, :right_ask_deal_id, :message, :be_completed, :admin_choice, :spec1, :spec2, :spec3)
+    params.require(:ask)
+          .permit(:user_id,
+                  :left_ask_deal_id,
+                  :right_ask_deal_id,
+                  :message,
+                  :be_completed,
+                  :spec1,
+                  :spec2,
+                  :spec3)
   end
 end

@@ -56,15 +56,7 @@
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
-  {{ // 손거울 파우치 이벤트 }}
-  {{ var is_event = ask.id == 1799 ? true : false }}
-  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }} {{= is_event ? 'event' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
-    {{ if (is_event) { }}
-      <div style="padding: 0 10px; height: 30px; line-height: 30px; background-color: #ff7800; color: #fff;">
-        <i class="fa fa-star"></i> VASKIT 이벤트 진행중! <span class="event_notice" style="float: right; font-size: 11px;"><i class="fa fa-clock-o"></i> 이벤트 마지막 날입니다!</span>
-      </div>
-    {{ } }}
-    {{ // 손거울 파우치 이벤트 }}
+  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
     <div class="clearfix">
       {{ var already_like = false }}
       {{ if (current_user) { }}
