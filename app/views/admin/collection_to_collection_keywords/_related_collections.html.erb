@@ -1,24 +1,38 @@
-<ul class="list-group" style="margin-bottom: 0;">
-  <% if @related_collections.nil? %>
-    <li class="list-group-item list-group-item-danger">
-      먼저 키워드를 추가해주세요
-    </li>
-  <% elsif @related_collections.blank? %>
-    <li class="list-group-item list-group-item-warning">
-      연관컬렉션이 아직 없습니다<br>
-      키워드를 잘 추가해주세요
-    </li>
-  <% else %>
-    <li class="list-group-item list-group-item-success">
-      <%= @related_collections.length %>개의 연관컬렉션이 예상됩니다
-    </li>
-    <% @related_collections.each do |collection| %>
-      <li class="list-group-item">
-        <%= link_to collection_path(collection.id), target: '_blank', class: 'center-block' do %>
-          <button type="button" class="btn btn-link"><%= "#{collection.id} #{collection.name}" %></button>
-          <%= image_tag "http://vaskit.kr/#{collection.image.url(:original)}", class: 'img-thumbnail' %>
+<% if @related_collections.nil? %>
+  <li class="list-group-item list-group-item-danger" style="margin-top: 10px;">
+    먼저 키워드를 추가해주세요
+  </li>
+<% elsif @related_collections.blank? %>
+  <li class="list-group-item list-group-item-warning" style="margin-top: 10px;">
+    연관컬렉션이 아직 없습니다<br>
+    키워드를 잘 추가해주세요
+  </li>
+<% else %>
+  <li class="list-group-item list-group-item-info" style="margin-top: 10px;">
+    <%= @related_collections.length %>개의 연관컬렉션이 예상됩니다
+  </li>
+  <% @related_collections.each do |collection| %>
+    <li class="list-group-item">
+      <p>
+        <span class="label label-info"><%= collection.id %></span>
+        <span class="label label-default"><%= collection.name %></span>
+      </p>
+      <% collection_keyword_ids = params[:keyword_ids].split(" ") %>
+      <% collection.collection_keywords.each do |keyword| %>
+        <% if collection_keyword_ids.include?(keyword.id.to_s) %>
+        <%= link_to "<button type='button' class='btn btn-success'>
+                       #{keyword.keyword}
+                     </button>".html_safe,
+                     '#',
+                     { onclick: "return false;" } %>
+        <% else %>
+          <%= link_to "<button type='button' class='btn btn-default'>
+                         #{keyword.keyword}
+                       </button>".html_safe,
+                       '#',
+                       { onclick: "select_keyword('#{keyword.keyword}'); return false;" } %>
         <% end %>
-      </li>
-    <% end %>
+      <% end %>
+    </li>
+  <% end %>
 <% end %>
-</ul>

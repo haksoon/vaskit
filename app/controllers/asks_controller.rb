@@ -15,10 +15,10 @@ class AsksController < ApplicationController
         if current_user
           my_votes = Vote.where(user_id: current_user.id).map(&:ask_id)
           asks = asks.where.not(user_id: current_user.id)
-          asks = asks.where('id NOT IN (?)', my_votes) unless my_votes.length.zero?
+          asks = asks.where.not(id: my_votes) unless my_votes.empty?
         end
 
-        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, { comments: { include: :user } }])
+        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes])
         render json: { asks: asks }
       end
     end
@@ -30,7 +30,7 @@ class AsksController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        ask = Ask.find(params[:id])
+        ask = @ask
 
         already_like = false
         if current_user
@@ -47,7 +47,7 @@ class AsksController < ApplicationController
                                             comment_id: ask_comments)
         end
 
-        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :hash_tags, { comments: { include: :user } }])
+        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, { comments: { include: :user } }])
 
         if current_user
           all_alarms = Alarm.where(ask_id: params[:id],
@@ -115,8 +115,8 @@ class AsksController < ApplicationController
     left_deal_params = params[:left_deal]
     right_deal_params = params[:right_deal]
 
-    left_deal_params[:price] = left_deal_params[:price].sub(/^[0]*/, '').gsub(',', '').to_i if left_deal_params != nil && left_deal_params[:price] != nil
-    right_deal_params[:price] = right_deal_params[:price].sub(/^[0]*/, '').gsub(',', '').to_i if right_deal_params != nil && right_deal_params[:price] != nil
+    left_deal_params[:price] = left_deal_params[:price].sub(/^[0]*/, '').delete(',').to_i if !left_deal_params.nil? && !left_deal_params[:price].nil?
+    right_deal_params[:price] = right_deal_params[:price].sub(/^[0]*/, '').delete(',').to_i if !right_deal_params.nil? && !right_deal_params[:price].nil?
 
     if left_deal_params.nil? || left_deal_params[:image_id].blank?
       status = 'no_left_image'

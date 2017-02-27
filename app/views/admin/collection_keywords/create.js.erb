@@ -3,6 +3,8 @@ if ($("#collection_collection_keywords").val().split(" ").indexOf("<%= @keyword.
 } else {
   add_keyword("<%= @keyword.id %>");
   $("#keywords_list").append("<%= escape_javascript(render 'collection_keyword') %>");
+  form_check($("#collection_form"));
+  $("#related_collections").click();
 };
 $("#keyword").val("").focus();
 $("#keyword_submit").attr("disabled", true);

@@ -512,8 +512,8 @@ body {
 .collection_thumbnail { padding: 16px; text-align: center; margin-bottom: 8px;
     &:last-of-type { margin-bottom: 0; }
     .collection_title { animation: zoomIn 1s 1;
-        .collection_description { margin: 0; padding:0; color: #999; @include fontLight; font-size: 14px; }
-        .collection_name { margin: 0; padding: 5px 0 7px; color: #555; @include fontExtraBold; font-size: 20px; }
+        .collection_description { margin: 0; padding:0; color: #999; font-size: 14px; @include fontLight; @include ellipsis; }
+        .collection_name { margin: 0; padding: 5px 0 7px; color: #555; font-size: 20px; @include fontExtraBold; @include ellipsis; }
     }
     .collection_image { width: 100%; height: auto; margin: 0; border-radius: 3px; animation: zoomIn 1s 1; }
 }
@@ -531,7 +531,10 @@ body {
     .description { font-size: 13px; @include fontLight; color: #999; }
 }
 .related_collections_list { background-color: #f9f9f9; padding: 16px 16px 30px; border-top: 1px solid #dfdfdf;
-  .collection_thumbnail { padding: 16px 0 0; margin-bottom: 0; }
+  .collection_thumbnail { padding: 16px 0 0; margin-bottom: 0;
+    .collection_description { padding:0 10px; @include ellipsis; }
+    .collection_name { padding: 5px 10px 7px; @include ellipsis; }
+  }
   .bx-viewport { border: none; left: 0; border-radius: 3px; }
   .bx-wrapper { margin-bottom: 0; }
   .bx-pager { bottom: -25px; padding-top: 0;

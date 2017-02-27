@@ -18,17 +18,17 @@
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">컬렉션</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
-    <span class="header_btn right" onclick="go_url('share', 'collection, {{= collection_to_asks[0].collection.id }}');"><i class="vaskit_icon share_icon"></i></span>
+    <span class="header_btn right" onclick="go_url('share', 'collection, {{= collection.id }}');"><i class="vaskit_icon share_icon"></i></span>
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="//animate_collection_image($(this));">
     <div class="collection_blank"></div>
     <div class="clearfix">
-      {{ for (var i=0; i < collection_to_asks.length; i++) { }}
-        {{ var ask = collection_to_asks[i].ask }}
+      {{ for (var i=0; i < asks.length; i++) { }}
+        {{ var ask = asks[i] }}
         {{= askThumbnailTemplate({ask:ask}) }}
       {{ } }}
     </div>
-    {{ if (related_collections.length > 0) { }}
+    {{ if (related_collections) { }}
       <div class="related_collections_title"><span class="title">추천 컬렉션</span> <span class="description">이건 어떻게 생각하시나요?</span></div>
       <div class="related_collections_list">
         <div class="clearfix contents_box bxslider">
@@ -82,10 +82,10 @@
             },
             success: function(data){
               var collection = data.collection;
-              var collection_to_asks = data.collection_to_asks;
+              var asks = data.asks;
               var related_collections = data.related_collections;
               var recent_asks = data.recent_asks;
-              var html = collectionShowTemplate({collection: collection, collection_to_asks: collection_to_asks, related_collections: related_collections, recent_asks: recent_asks});
+              var html = collectionShowTemplate({collection: collection, asks: asks, related_collections: related_collections, recent_asks: recent_asks});
               create_wrapper(html);
               var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
               current_wrapper.find(".bxslider").bxSlider({

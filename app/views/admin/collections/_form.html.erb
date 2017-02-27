@@ -136,34 +136,22 @@
 <div class="panel panel-info">
   <!-- Default panel contents -->
   <div class="panel-heading">컬렉션 키워드 리스트</div>
-  <div id="keywords_list" class="panel-body">
-    <% @collection.collection_keywords.each do |keyword| %>
-      <% @keyword = keyword %>
-      <%= render '/admin/collection_keywords/collection_keyword' %>
-    <% end %>
-  </div>
   <div class="panel-body">
+    <div id="keywords_list">
+      <% @collection.collection_keywords.each do |keyword| %>
+        <% @keyword = keyword %>
+        <%= render '/admin/collection_keywords/collection_keyword' %>
+      <% end %>
+    </div>
     <%= link_to '연관컬렉션 미리보기',
                 admin_collection_to_collection_keywords_path,
                 remote: true,
                 id: 'related_collections',
-                class: 'btn btn-danger pull-right',
+                class: 'btn btn-danger',
+                style: 'margin: 5px;',
                 onclick: 'preview_related_collections();',
-                data: {  toggle: 'modal',
-                         target: '#related_collections_preview',
-                         disable_with: '불러오는중...' } %>
-    <!-- Modal -->
-    <div id="related_collections_preview" class="modal fade" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">연관컬렉션 미리보기</h4>
-          </div>
-          <div id="related_collections_list" class="modal-body"></div>
-        </div>
-      </div>
-    </div>
+                data: { disable_with: '<i class="fa fa-spinner fa-spin"></i>' } %>
+    <ul id="related_collections_list" class="list-group" style="margin-bottom: 0;"></ul>
   </div>
 </div>
 
@@ -171,7 +159,6 @@
   function preview_related_collections() {
     var keyword_ids = $("#collection_collection_keywords").val();
     $("#related_collections").attr("href", "<%= admin_collection_to_collection_keywords_path %>?collection_id=<%= @collection.id %>&keyword_ids=" + keyword_ids);
-    $("#related_collections_list").html("불러오는 중...");
   }
 
   function preview_keyword() {
@@ -191,7 +178,7 @@
     } else {
       $("#keyword_new_submit").html("<i class='fa fa-spinner fa-spin'></i>");
     }
-    $("#keyword_submit").click();
+    $("#keyword_submit").removeAttr("disabled").click();
   }
 
   function add_keyword(keyword_id) {
@@ -199,7 +186,6 @@
     old_list.push(keyword_id.toString());
     $("#collection_collection_keywords").val(old_list.join(" "));
     // 템플릿 렌더링은 백엔드에서 처리
-    form_check($("#collection_form"));
   }
 
   function destroy_keyword(keyword_id) {
@@ -209,6 +195,7 @@
     $("#collection_collection_keywords").val(old_list.join(" "));
     $("#collection_keyword_" + keyword_id).animate({opacity: '0'}, 500, function(){ $(this).remove(); });
     form_check($("#collection_form"));
+    $("#related_collections").click();
   }
 </script>
 

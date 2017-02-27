@@ -54,10 +54,10 @@ class Admin::CollectionsController < Admin::HomeController
     min_keywords = 3
     min_contents = 5
 
-    if @collection.collection_keywords.count < min_keywords
+    if !@collection.show && @collection.collection_keywords.count < min_keywords
       flash['error'] = "컬렉션을 발행하려면 키워드를 최소 #{min_keywords}개 이상 포함해주세요"
       redirect_to :back and return
-    elsif @collection.asks.count < min_contents
+    elsif !@collection.show && @collection.asks.count < min_contents
       flash['error'] = "컬렉션을 발행하려면 컨텐츠를 최소 #{min_contents}개 이상 포함해주세요"
       redirect_to :back and return
     end
@@ -98,6 +98,7 @@ class Admin::CollectionsController < Admin::HomeController
   end
 
   def generate_collection_keywords(collection_keyword_ids)
+    @collection.update(related_collections: ',') if @collection.related_collections.nil?
     CollectionToCollectionKeyword.destroy_all(collection_id: @collection.id)
     collection_keyword_ids.split(' ').each do |collection_keyword_id|
       CollectionToCollectionKeyword.create(collection_id: @collection.id,

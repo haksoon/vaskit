@@ -22,38 +22,31 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        collection = @collection
-        collection_to_asks =
-          CollectionToAsk.where(collection_id: params[:id])
-                         .as_json(include: [:collection, ask: { include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes] }])
-
-        related_collections = []
-        if collection.related_collections && collection.related_collections.length > 1
-          related_collections_ids = collection.related_collections
-                                              .gsub(/^[,]|[,]$/, '')
-                                              .split(',')
-          related_collections_ids = related_collections_ids.values_at 0...5 if related_collections_ids.length > 5
-          related_collections = Collection.where(show: true)
-                                          .where('id IN (?)', related_collections_ids)
-                                          .order("FIELD(id,#{related_collections_ids.join(',')})")
+        keyword_ids = CollectionToCollectionKeyword.where(collection_id: @collection.id).pluck(:collection_keyword_id)
+        keyword_collections = CollectionToCollectionKeyword.where(collection_keyword_id: keyword_ids).where.not(collection_id: @collection.id)
+        related_collections_ids = keyword_collections.group(:collection_id).order("collection_count DESC").select(:collection_id, "count(collection_id) AS collection_count").map(&:collection_id)
+        if !related_collections_ids.empty?
+          @related_collections = Collection.where(show: true, id: related_collections_ids)
+                                           .order("FIELD(id,#{related_collections_ids.join(',')})")
+                                           .limit(5)
         else
-          recent_asks = Ask.where(be_completed: false)
-                           .page(params[:page])
-                           .per(Ask::ASK_PER)
-                           .order(id: :desc)
+          @recent_asks = Ask.where(be_completed: false)
+                            .page(params[:page])
+                            .per(Ask::ASK_PER)
+                            .order(id: :desc)
 
           if current_user
             my_votes = Vote.where(user_id: current_user.id).map(&:ask_id)
-            recent_asks = recent_asks.where.not(user_id: current_user.id)
-            recent_asks = recent_asks.where('id NOT IN (?)', my_votes) unless my_votes.length.zero?
+            @recent_asks = @recent_asks.where.not(user_id: current_user.id)
+            @recent_asks = @recent_asks.where.not(id: my_votes) unless my_votes.empty?
           end
         end
 
         render json: {
-          collection: collection,
-          collection_to_asks: collection_to_asks,
-          related_collections: related_collections,
-          recent_asks: recent_asks
+          collection: @collection,
+          asks: @collection.asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes]),
+          related_collections: @related_collections,
+          recent_asks: @recent_asks
         }
       end
     end

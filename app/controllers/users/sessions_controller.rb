@@ -42,7 +42,10 @@ class Users::SessionsController < Devise::SessionsController
   def destroy
     sign_out_all_scopes
     auth_app_create(nil)
-    render json: {}
+    respond_to do |format|
+      format.html { redirect_to root_path }
+      format.json { render json: {} }
+    end
   end
 
   # GET /users/alarm_check.json
