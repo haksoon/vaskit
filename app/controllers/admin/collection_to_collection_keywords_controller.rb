@@ -10,7 +10,8 @@ class Admin::CollectionToCollectionKeywordsController < Admin::HomeController
       if related_collections_ids.blank?
         []
       else
-        Collection.where(show: true, id: related_collections_ids)
+        Collection.where(id: related_collections_ids)
+                  .order(show: :desc)
                   .order("FIELD(id,#{related_collections_ids.join(',')})")
       end
   end

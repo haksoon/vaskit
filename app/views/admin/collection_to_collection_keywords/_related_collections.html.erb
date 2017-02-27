@@ -11,10 +11,17 @@
   <li class="list-group-item list-group-item-info" style="margin-top: 10px;">
     <%= @related_collections.length %>개의 연관컬렉션이 예상됩니다
   </li>
-  <% @related_collections.each do |collection| %>
+  <% @related_collections.each_with_index do |collection, index| %>
     <li class="list-group-item">
       <p>
         <span class="label label-info"><%= collection.id %></span>
+        <% if !collection.show %>
+          <span class="label label-danger">미발행</span>
+        <% elsif index < 5 %>
+          <span class="label label-primary">노출됨</span>
+        <% else %>
+          <span class="label label-warning">노출되지 않음</span>
+        <% end %>
         <span class="label label-default"><%= collection.name %></span>
       </p>
       <% collection_keyword_ids = params[:keyword_ids].split(" ") %>

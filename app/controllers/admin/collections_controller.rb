@@ -103,6 +103,8 @@ class Admin::CollectionsController < Admin::HomeController
     collection_keyword_ids.split(' ').each do |collection_keyword_id|
       CollectionToCollectionKeyword.create(collection_id: @collection.id,
                                            collection_keyword_id: collection_keyword_id)
+      refer_count = CollectionToCollectionKeyword.where(collection_keyword_id: collection_keyword_id).count
+      CollectionKeyword.find(collection_keyword_id).update(refer_count: refer_count)
     end
   end
 end
