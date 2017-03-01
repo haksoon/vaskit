@@ -22,7 +22,7 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        @related_collections = @collection.find_related_collections
+        @related_collections = @collection.find_related_collections.limit(5)
         if @related_collections.blank?
           @recent_asks = Ask.where(be_completed: false)
                             .page(params[:page])
