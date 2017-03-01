@@ -4,7 +4,7 @@
       <p class="collection_description">비교영상 찍는게 취미인 한 남자가 있어</p>
       <p class="collection_name">VASKIT맨의 비교영상</p>
     </div>
-    <img class="collection_image" src="{{=get_image_url(videos[0], 'videos', 'original')}}" alt="" onerror="imgError(this);">
+    <img class="collection_image" src="{{= get_image_url(videos[0], 'videos', 'original') }}" alt="" onerror="imgError(this);">
   </a>
 </script>
 
@@ -51,18 +51,34 @@
   </div>
   <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
     <div class="video_detail">
-      {{ if (userApp && !window.HybridApp && (!userAppVer || userAppVerLoading)) { }}
-        <a class="video_image" href="https://facebook.com/vaskit.kr/videos/{{= video.url }}" target="_blank">
-          <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
-          <i class="fa fa-play"></i>
-        </a>
+      {{ if (video.yt_id === null) { }}
+        {{ if (userApp && !window.HybridApp && (!userAppVer || userAppVerLoading)) { }}
+          <a class="video_image" href="https://facebook.com/vaskit.kr/videos/{{= video.fb_id }}" target="_blank">
+            <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
+            <i class="fa fa-play"></i>
+          </a>
+        {{ } else { }}
+          <div class="video_player_div">
+            <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
+            <iframe class="video_player" onload="$(this).prevAll().remove();"
+                    src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F{{= video.fb_id }}%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>"
+                    width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+          </div>
+        {{ } }}
       {{ } else { }}
-        <div class="video_player_div">
-          <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
-          <iframe class="video_player" onload="$(this).prevAll().remove();"
-                  src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F{{= video.url }}%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>"
-                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
-        </div>
+        {{ if (userApp && !window.HybridApp && (!userAppVer || userAppVerLoading)) { }}
+          <a class="video_image" href="https://www.youtube.com/watch?v={{= video.yt_id }}" target="_blank">
+            <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
+            <i class="fa fa-play"></i>
+          </a>
+        {{ } else { }}
+          <div class="video_player_div">
+            <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
+            <iframe class="video_player" onload="$(this).prevAll().remove();"
+                    src="https://www.youtube.com/embed/{{= video.yt_id }}?autoplay=1&modestbranding=1&rel=0&showinfo=0"
+                    width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+          </div>
+        {{ } }}
       {{ } }}
       <div class="video_description">
         {{= taggingKeywords(video.description) }}

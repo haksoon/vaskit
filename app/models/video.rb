@@ -9,7 +9,8 @@ class Video < ActiveRecord::Base
   validates :title, presence: true
   validates :description, presence: true
   validates :ask_id, presence: true
-  validates :url, presence: true
+  validates :fb_id, presence: true
+  validates :yt_id, presence: true
   validates :image, presence: true
 
   belongs_to :ask

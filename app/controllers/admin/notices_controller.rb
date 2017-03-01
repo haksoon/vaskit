@@ -9,7 +9,29 @@ class Admin::NoticesController < Admin::HomeController
   def new
   end
 
-  # POST /admin/notice.json
+  # GET /admin/notices/test
+  def test
+    return if params[:msg].blank? || params[:link].blank?
+    params[:js] = '' if params[:js].nil? || params[:js] == 'false'
+    payload = { msg: params[:msg],
+                type: 'true',
+                count: nil,
+                id: 1,
+                link: params[:link],
+                js: params[:js] }
+    registration_ids_ios = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
+    registration_ids_aos = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
+
+    response_ios = push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
+    response_aos = push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?
+
+    count = 0
+    count += JSON.parse(response_ios[:body])['success'].to_i unless response_ios.nil?
+    count += JSON.parse(response_aos[:body])['success'].to_i unless response_aos.nil?
+    @string = "#{count}대의 기기에 테스트 알림을 전송하였습니다"
+  end
+
+  # POST /admin/notices
   def create
     if params[:type].blank? || params[:filter].blank? || params[:msg].blank? || params[:link].blank?
       flash['error'] = '필수 입력값을 모두 입력해주세요'

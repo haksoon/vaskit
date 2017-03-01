@@ -3,7 +3,7 @@
     {{ if (asks == null || asks.length == 0) { }}
       <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
     {{ } else { }}
-      {{ tutorial_vs() }}
+      {{ if (localStorage.tutorial === undefined || localStorage.tutorial.match("vote") === null) go_url('tutorial_vote') }}
       <div class="clearfix">
         {{ var l = asks.length }}
         {{ for (var i=0; i < l; i++) { }}

@@ -22,14 +22,8 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        keyword_ids = CollectionToCollectionKeyword.where(collection_id: @collection.id).pluck(:collection_keyword_id)
-        keyword_collections = CollectionToCollectionKeyword.where(collection_keyword_id: keyword_ids).where.not(collection_id: @collection.id)
-        related_collections_ids = keyword_collections.group(:collection_id).order("collection_count DESC").select(:collection_id, "count(collection_id) AS collection_count").map(&:collection_id)
-        if !related_collections_ids.empty?
-          @related_collections = Collection.where(show: true, id: related_collections_ids)
-                                           .order("FIELD(id,#{related_collections_ids.join(',')})")
-                                           .limit(5)
-        else
+        @related_collections = @collection.find_related_collections
+        if @related_collections.blank?
           @recent_asks = Ask.where(be_completed: false)
                             .page(params[:page])
                             .per(Ask::ASK_PER)

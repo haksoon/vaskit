@@ -66,6 +66,71 @@
         </tr>
       </tr>
     </table>
+
+    <!-- Chart -->
+    <div class="panel-footer">
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-info">[차트1] 투표, 방문 비중</li>
+        <li class="list-group-item">
+          <div id="pie_chart_1" class="ct-chart ct-perfect-fourth"></div>
+        </li>
+        <li class="list-group-item list-group-item-info">[차트2] 댓글, 질문, 회원수 비중</li>
+        <li class="list-group-item">
+          <div id="pie_chart_2" class="ct-chart ct-perfect-fourth"></div>
+        </li>
+      </ul>
+    </div>
+
+    <script>
+      $(window).ready(function(){
+        new Chartist.Bar('#pie_chart_1', {
+          labels: ['투표', '방문'],
+          series: [
+                    [ {meta: '실유저', value: <%= @real_vote_count %>}, {meta: '실유저', value: <%= @real_visit_count %>} ],
+                    [ {meta: '어드민', value: <%= @admin_vote_count %>}, {meta: '어드민', value: <%= @admin_visit_count %>} ],
+                    [ {meta: '알바', value: <%= @alba_vote_count %>}, {meta: '알바', value: <%= @alba_visit_count %>} ]
+                  ]
+        }, {
+          stackBars: true,
+          axisY: {
+            labelInterpolationFnc: function(value) {
+              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+          },
+          plugins: [ Chartist.plugins.tooltip({ currency: " " }) ]
+        }).on('draw', function(data){
+          if(data.type === 'bar') {
+            data.element.attr({
+              style: 'stroke-width: 20%;'
+            });
+          }
+        });
+
+        new Chartist.Bar('#pie_chart_2', {
+          labels: ['댓글', '질문', '회원수'],
+          series: [
+                    [ {meta: '실유저', value: <%= @real_comment_count %>}, {meta: '실유저', value: <%= @real_ask_count %>}, {meta: '실유저', value: <%= @real_user_count %>} ],
+                    [ {meta: '어드민', value: <%= @admin_comment_count %>}, {meta: '어드민', value: <%= @admin_ask_count %>}, {meta: '어드민', value: <%= @admin_user_count %>} ],
+                    [ {meta: '알바', value: <%= @alba_comment_count %>}, {meta: '알바', value: <%= @alba_ask_count %>}, {meta: '알바', value: <%= @alba_user_count %>} ]
+                  ]
+        }, {
+          stackBars: true,
+          axisY: {
+            labelInterpolationFnc: function(value) {
+              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+          },
+          plugins: [ Chartist.plugins.tooltip({ currency: " " }) ]
+        }).on('draw', function(data){
+          if(data.type === 'bar') {
+            data.element.attr({
+              style: 'stroke-width: 20%;'
+            });
+          }
+        });
+
+      });
+    </script>
   <% elsif @summaries %>
     <!-- Table -->
     <table class="table">
@@ -101,154 +166,234 @@
     <div class="panel-footer">
       <ul class="list-group">
         <li class="list-group-item list-group-item-info">[차트1] 방문, 투표횟수 추이</li>
-        <li class="list-group-item"><div id="chart_1"></div></li>
+        <li class="list-group-item"><div id="chart_1" class="ct-chart ct-perfect-fourth"></div></li>
         <li class="list-group-item list-group-item-info">[차트2] Active Users 추이</li>
-        <li class="list-group-item"><div id="chart_2"></div></li>
+        <li class="list-group-item"><div id="chart_2" class="ct-chart ct-perfect-fourth"></div></li>
         <li class="list-group-item list-group-item-info">[차트3] 신규 가입자수 추이</li>
-        <li class="list-group-item"><div id="chart_3"></div></li>
+        <li class="list-group-item"><div id="chart_3" class="ct-chart ct-perfect-fourth"></div></li>
         <li class="list-group-item list-group-item-info">[차트4] 댓글 작성 추이</li>
-        <li class="list-group-item"><div id="chart_4"></div></li>
+        <li class="list-group-item"><div id="chart_4" class="ct-chart ct-perfect-fourth"></div></li>
         <li class="list-group-item list-group-item-info">[차트5] 질문, 좋아요, 공감, 공유 추이</li>
-        <li class="list-group-item"><div id="chart_5"></div></li>
+        <li class="list-group-item"><div id="chart_5" class="ct-chart ct-perfect-fourth"></div></li>
       </ul>
     </div>
 
     <script>
-      var summaries = <%= raw @summaries.to_json %>;
-      var chart_1_list = [],
-          chart_2_list = [],
-          chart_3_list = [],
-          chart_4_list = [],
-          chart_5_list = [];
+      $(window).ready(function(){
+        var summaries = <%= raw @summaries.to_json %>;
 
-      $.each(summaries, function(index, summary) {
-        var a = [];
-        a.push(summary.visit_count);
-        a.push(summary.vote_count);
-        chart_1_list.unshift(a);
-        var b = [];
-        b.push(summary.active_user);
-        chart_2_list.unshift(b);
-        var c = [];
-        c.push(summary.signup_count);
-        chart_3_list.unshift(c);
-        var d = [];
-        d.push(summary.comment_count);
-        chart_4_list.unshift(d);
-        var e = [];
-        e.push(summary.ask_count);
-        e.push(summary.comment_like_count);
-        e.push(summary.ask_like_count);
-        e.push(summary.share_count);
-        chart_5_list.unshift(e);
+        var label_list = [],
+            visit_list = [],
+            vote_list = [],
+            comment_list = [],
+            ask_list = [],
+            comment_like_list = [],
+            ask_like_list = [],
+            share_list = [],
+            signup_list = [],
+            active_user_list = [];
+
+        $.each(summaries, function(index, summary) {
+          label_list.push(summary.period);
+          visit_list.push({meta: '방문', value: summary.visit_count});
+          vote_list.push({meta: '투표', value: summary.vote_count});
+          comment_list.push({meta: '댓글', value: summary.comment_count});
+          ask_list.push({meta: '질문', value: summary.ask_count});
+          comment_like_list.push({meta: '좋아요', value: summary.comment_like_count});
+          ask_like_list.push({meta: '공감해요', value: summary.ask_like_count});
+          share_list.push({meta: '공유', value: summary.share_count});
+          signup_list.push({meta: '가입', value: summary.signup_count});
+          active_user_list.push({meta: 'Active', value: summary.active_user});
+        });
+
+        var chart_options = {
+          showArea: true,
+          axisX: {
+            showGrid: false
+          },
+          axisY: {
+            labelInterpolationFnc: function(value) {
+              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+          },
+          plugins: [ Chartist.plugins.tooltip({ currency: " " }) ]
+        };
+
+        new Chartist.Line('#chart_1', {
+          labels: label_list,
+          series: [
+            visit_list,
+            vote_list
+          ]
+        }, chart_options);
+
+        new Chartist.Line('#chart_2', {
+          labels: label_list,
+          series: [
+            active_user_list
+          ]
+        }, chart_options);
+
+        new Chartist.Line('#chart_3', {
+          labels: label_list,
+          series: [
+            signup_list
+          ]
+        }, chart_options);
+
+        new Chartist.Line('#chart_4', {
+          labels: label_list,
+          series: [
+            comment_list
+          ]
+        }, chart_options);
+
+        new Chartist.Line('#chart_5', {
+          labels: label_list,
+          series: [
+            ask_list,
+            comment_like_list,
+            ask_like_list,
+            share_list
+          ]
+        }, chart_options);
       });
 
-      var options_1 = {
-        'legend':{
-          names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
-          hrefs: []
-        },
-        'dataset':{
-          title:'일자별 방문, 투표 횟수',
-          values: chart_1_list,
-          colorset: ['#DC143C', '#EE6E01'],
-          fields:['방문', '투표']
-        },
-        'chartDiv' : 'chart_1',
-        'chartType' : 'line',
-        'chartSize' : { width: 1000, height: 600 },
-        'minValue' : 0,
-        'increment' : 100,
-        'isGuideLineNeeded' : true
-      };
-      Nwagon.chart(options_1);
 
-      var options_2 = {
-        'legend':{
-          names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
-          hrefs: []
-        },
-        'dataset':{
-          title:'일자별 Active Users',
-          values: chart_2_list,
-          colorset: ['#FFCC5A'],
-          fields:['DAU']
-        },
-        'chartDiv' : 'chart_2',
-        'chartType' : 'line',
-        'chartSize' : { width: 1000, height: 600 },
-        'minValue' : 0,
-        'increment' : 10,
-        'isGuideLineNeeded' : true
-      };
-      Nwagon.chart(options_2);
-
-      var options_3 = {
-        'legend':{
-          names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
-          hrefs: []
-        },
-        'dataset':{
-          title:'일자별 신규 가입자수',
-          values: chart_3_list,
-          colorset: ['RED'],
-          fields:['신규']
-        },
-        'chartDiv' : 'chart_3',
-        'chartType' : 'line',
-        'chartSize' : { width: 1000, height: 600 },
-        'minValue' : 0,
-        'increment' : 5,
-        'isGuideLineNeeded' : true
-      };
-      Nwagon.chart(options_3);
-
-      var options_4 = {
-        'legend':{
-          names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
-          hrefs: []
-        },
-        'dataset':{
-          title:'일자별 댓글, 질문, 좋아요, 공감, 공유횟수',
-          values: chart_4_list,
-          colorset: ['GREEN'],
-          fields:['댓글']
-        },
-        'chartDiv' : 'chart_4',
-        'chartType' : 'line',
-        'chartSize' : { width: 1000, height: 600 },
-        'minValue' : 0,
-        'increment' : 5,
-        'isGuideLineNeeded' : true
-      };
-      Nwagon.chart(options_4);
-
-      var options_5 = {
-        'legend':{
-          names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
-          hrefs: []
-        },
-        'dataset':{
-          title:'일자별 질문, 좋아요, 공감, 공유횟수',
-          values: chart_5_list,
-          colorset: ['#EE6E01', '#FFCC5A', '#EE065E', '#DBDBDB'],
-          fields:['질문', '좋아요', '공감', '공유']
-        },
-        'chartDiv' : 'chart_5',
-        'chartType' : 'line',
-        'chartSize' : { width: 1000, height: 600 },
-        'minValue' : 0,
-        'increment' : 5,
-        'isGuideLineNeeded' : true
-      };
-      Nwagon.chart(options_5);
-
-      for (var i=1; i <= 5; i++) {
-        var chart = document.getElementById("chart_"+i);
-        var graph = chart.getElementsByClassName("Nwagon_line");
-            graph[0].setAttribute("height", "600");
-            graph[0].setAttribute("viewBox","100 -600 500 700");
-      }
+      // var summaries = <%= raw @summaries.to_json %>;
+      // var chart_1_list = [],
+      //     chart_2_list = [],
+      //     chart_3_list = [],
+      //     chart_4_list = [],
+      //     chart_5_list = [];
+      //
+      // $.each(summaries, function(index, summary) {
+      //   var a = [];
+      //   a.push(summary.visit_count);
+      //   a.push(summary.vote_count);
+      //   chart_1_list.unshift(a);
+      //   var b = [];
+      //   b.push(summary.active_user);
+      //   chart_2_list.unshift(b);
+      //   var c = [];
+      //   c.push(summary.signup_count);
+      //   chart_3_list.unshift(c);
+      //   var d = [];
+      //   d.push(summary.comment_count);
+      //   chart_4_list.unshift(d);
+      //   var e = [];
+      //   e.push(summary.ask_count);
+      //   e.push(summary.comment_like_count);
+      //   e.push(summary.ask_like_count);
+      //   e.push(summary.share_count);
+      //   chart_5_list.unshift(e);
+      // });
+      //
+      // var options_1 = {
+      //   'legend':{
+      //     names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      //     hrefs: []
+      //   },
+      //   'dataset':{
+      //     title:'일자별 방문, 투표 횟수',
+      //     values: chart_1_list,
+      //     colorset: ['#DC143C', '#EE6E01'],
+      //     fields:['방문', '투표']
+      //   },
+      //   'chartDiv' : 'chart_1',
+      //   'chartType' : 'line',
+      //   'chartSize' : { width: 1000, height: 600 },
+      //   'minValue' : 0,
+      //   'increment' : 100,
+      //   'isGuideLineNeeded' : true
+      // };
+      //
+      // var options_2 = {
+      //   'legend':{
+      //     names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      //     hrefs: []
+      //   },
+      //   'dataset':{
+      //     title:'일자별 Active Users',
+      //     values: chart_2_list,
+      //     colorset: ['#FFCC5A'],
+      //     fields:['DAU']
+      //   },
+      //   'chartDiv' : 'chart_2',
+      //   'chartType' : 'line',
+      //   'chartSize' : { width: 1000, height: 600 },
+      //   'minValue' : 0,
+      //   'increment' : 10,
+      //   'isGuideLineNeeded' : true
+      // };
+      // Nwagon.chart(options_2);
+      //
+      // var options_3 = {
+      //   'legend':{
+      //     names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      //     hrefs: []
+      //   },
+      //   'dataset':{
+      //     title:'일자별 신규 가입자수',
+      //     values: chart_3_list,
+      //     colorset: ['RED'],
+      //     fields:['신규']
+      //   },
+      //   'chartDiv' : 'chart_3',
+      //   'chartType' : 'line',
+      //   'chartSize' : { width: 1000, height: 600 },
+      //   'minValue' : 0,
+      //   'increment' : 5,
+      //   'isGuideLineNeeded' : true
+      // };
+      // Nwagon.chart(options_3);
+      //
+      // var options_4 = {
+      //   'legend':{
+      //     names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      //     hrefs: []
+      //   },
+      //   'dataset':{
+      //     title:'일자별 댓글, 질문, 좋아요, 공감, 공유횟수',
+      //     values: chart_4_list,
+      //     colorset: ['GREEN'],
+      //     fields:['댓글']
+      //   },
+      //   'chartDiv' : 'chart_4',
+      //   'chartType' : 'line',
+      //   'chartSize' : { width: 1000, height: 600 },
+      //   'minValue' : 0,
+      //   'increment' : 5,
+      //   'isGuideLineNeeded' : true
+      // };
+      // Nwagon.chart(options_4);
+      //
+      // var options_5 = {
+      //   'legend':{
+      //     names: ['10일전','9일전','8일전','7일전','6일전','5일전','4일전','3일전','어제','오늘'],
+      //     hrefs: []
+      //   },
+      //   'dataset':{
+      //     title:'일자별 질문, 좋아요, 공감, 공유횟수',
+      //     values: chart_5_list,
+      //     colorset: ['#EE6E01', '#FFCC5A', '#EE065E', '#DBDBDB'],
+      //     fields:['질문', '좋아요', '공감', '공유']
+      //   },
+      //   'chartDiv' : 'chart_5',
+      //   'chartType' : 'line',
+      //   'chartSize' : { width: 1000, height: 600 },
+      //   'minValue' : 0,
+      //   'increment' : 5,
+      //   'isGuideLineNeeded' : true
+      // };
+      // Nwagon.chart(options_5);
+      //
+      // for (var i=1; i <= 5; i++) {
+      //   var chart = document.getElementById("chart_"+i);
+      //   var graph = chart.getElementsByClassName("Nwagon_line");
+      //       graph[0].setAttribute("height", "600");
+      //       graph[0].setAttribute("viewBox","100 -600 500 700");
+      // }
     </script>
   <% elsif @asks %>
     <!-- Table -->

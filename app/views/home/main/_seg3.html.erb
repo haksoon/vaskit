@@ -1,14 +1,15 @@
 <script type="text/template" id="askFormTemplate">
-  {{ tutorial_ask() }}
+  {{ if (localStorage.tutorial === undefined || localStorage.tutorial.match("ask") === null) go_url('tutorial_ask') }}
   <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check();", onchange: "ask_progress_check();"}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
       <span class="header_title">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
+      <span class="ask_form_step">1 / 3 STEP</span>
       <span class="header_btn left" onclick="back_button();">취소</span>
       <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음 <i class='fa fa-caret-right'></i></span>
     </div>
     <div class="container main">
-      <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.left_ask_deal, is_left: true}) }}</div>
-      <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.right_ask_deal, is_left: false}) }}</div>
+      <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.left_ask_deal, is_left: true, is_blank: ask.id == null ? true : false}) }}</div>
+      <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.right_ask_deal, is_left: false, is_blank: ask.id == null ? true : false}) }}</div>
       <div class="inner step_3 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardResultTemplate({ask: ask}) }}</div>
       <div class="card_search_input_init" onclick="card_search_input_init($(this));" is-left="true" ontouchmove="return false;">
         <input class="input text_field left right card_search_input" type="text" placeholder="제품명을 검색해서 입력해보세요!" disabled>
@@ -45,6 +46,12 @@
             go_back(1);
           } else if (data.status == "success") {
             open_full_view(askFormTemplate({ask: data.ask}));
+            window.onbeforeunload = function(e) {
+              var string = '변경사항이 저장되지 않을 수 있습니다';
+              e = e || window.event;
+              if (e) e.returnValue = string;      // For IE<8 and Firefox prior to version 4
+              return string;                      // For Chrome, Safari, IE8+ and Opera 12+
+            };
             if (userApp) setAppStatusBar("dark");
           }
         },
@@ -63,6 +70,7 @@
   function hide_ask_form() {
     if (confirm('작성중인 내용이 삭제됩니다. 종료하시겠어요?')) {
       close_full_view();
+      window.onbeforeunload = null;
       if (userApp) setAppStatusBar();
     } else {
       history.go(1);
@@ -94,10 +102,10 @@
                         var keyword = $(this).val();
                         if (keyword.length === 0) {
                           card_search_input_reset.hide();
-                          card_search_input_submit.removeClass("ready");
+                          card_search_input_submit.addClass("blank");
                         } else {
                           card_search_input_reset.show();
-                          card_search_input_submit.addClass("ready");
+                          card_search_input_submit.removeClass("blank");
                         }
                       }).on("focus", function(e){
                         target.addClass("on");
@@ -145,10 +153,11 @@
 
   function show_next_ask_form() {
     var ask_form = $("#ask_form");
-    var target = ask_form.find(".submit_btn");
-    var ask_id = Number(target.attr("ask-id"));
+    var submit_btn = ask_form.find(".submit_btn");
+    var ask_id = Number(submit_btn.attr("ask-id"));
     var back_btn = ask_form.find(".header_btn.left");
-    var current_step = Number(target.attr("step"));
+    var current_step = Number(submit_btn.attr("step"));
+    var ask_form_step = ask_form.find(".ask_form_step");
     var step_1_inner = ask_form.find(".inner.step_1");
     var step_2_inner = ask_form.find(".inner.step_2");
     var step_3_inner = ask_form.find(".inner.step_3");
@@ -159,15 +168,17 @@
       // 2번 스텝으로 진행
       step_1_inner.addClass("prev");
       step_2_inner.removeClass("next").scrollTop(0);
-      target.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
+      submit_btn.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
       back_btn.html("<i class='fa fa-caret-left'></i> 이전");
+      ask_form_step.html("2 / 3 STEP");
       card_search_input_init.removeAttr("is-left");
     } else if (current_step == 2) {
       // 3번 스텝으로 진행
       step_2_inner.addClass("prev");
       step_3_inner.removeClass("next").scrollTop(0);
-      target.html("완료").attr("step", 3);
+      submit_btn.html("완료").attr("step", 3);
       back_btn.html("<i class='fa fa-caret-left'></i> 이전");
+      ask_form_step.html("3 / 3 STEP");
       card_search_input_init.addClass("hide");
       ask_progress_check();
     } else if (current_step == 3) {
@@ -250,26 +261,29 @@
 
   function hide_next_ask_form() {
     var ask_form = $("#ask_form");
-    var target = ask_form.find(".submit_btn");
+    var submit_btn = ask_form.find(".submit_btn");
     var back_btn = ask_form.find(".header_btn.left");
-    var current_step = Number(target.attr("step"));
+    var current_step = Number(submit_btn.attr("step"));
+    var ask_form_step = ask_form.find(".ask_form_step");
     var step_1_inner = ask_form.find(".inner.step_1");
     var step_2_inner = ask_form.find(".inner.step_2");
     var step_3_inner = ask_form.find(".inner.step_3");
     var card_search_input_init = ask_form.find(".card_search_input_init");
 
-    target.removeClass("ready");
+    submit_btn.removeClass("ready");
     if (current_step == 3) {
       step_3_inner.addClass("next");
       step_2_inner.removeClass("prev").scrollTop(0);
-      target.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
+      submit_btn.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
       back_btn.html("<i class='fa fa-caret-left'></i> 이전");
+      ask_form_step.html("2 / 3 STEP");
       card_search_input_init.removeAttr("is-left").removeClass("hide");
     } else if (current_step == 2) {
       step_2_inner.addClass("next");
       step_1_inner.removeClass("prev").scrollTop(0);
-      target.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 1);
+      submit_btn.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 1);
       back_btn.html("취소");
+      ask_form_step.html("1 / 3 STEP");
       card_search_input_init.attr("is-left", true).removeClass("hide");
     }
   }
@@ -280,10 +294,37 @@
 
 
 <script type="text/template" id="askFormCardTemplate">
+  <div class="ask_form_card_title">
+    <div class="ask_form_card_title_text">
+      {{ if (is_left) { }}
+      <i class="fa fa-check"></i> 고민중인 제품 한 개를 먼저 알려주세요
+      {{ } else { }}
+      <i class="fa fa-check"></i> 이제, 비교중인 다른 제품도 알려주세요
+      {{ } }}
+    </div>
+  </div>
+  {{ if (is_blank) { }}
+    <div class="ask_form_btn_div">
+      <div class="ask_form_btn" onclick="$('.card_search_input_init').click();">
+        <div class="ask_form_btn_text">
+          <div>{{= is_left ? "A제품" : "B제품" }}</div>
+          <b class="highlight">검색</b>하여 입력하기<span></span>
+        </div>
+      </div>
+    </div>
+    <div class="ask_form_btn_div">
+      <div class="ask_form_btn" onclick="activate_ask_form_btn($(this));">
+        <div class="ask_form_btn_text">
+          <i class="fa fa-caret-down"></i> 직접 입력하기
+        </div>
+      </div>
+    </div>
+  {{ } }}
   {{ var deal_direction = is_left ? "left_deal" : "right_deal" }}
-  <div class="input_container">
+  <div class="input_container" style="{{= is_blank ? 'display: none;' : '' }}">
     <div class="ask_image_seg" onclick="ask_form_card_image_upload_click($(this));">
       <img src="{{= get_image_url(ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
+      <span class="ask_image_upload_btn">이미지 업로드</span>
       <span class="ask_image_crop_btn {{= is_left? 'left' : 'right' }} {{= ask_deal.deal_id ? 'on' : '' }}" onclick="go_url('image_edit', $(this));" img-id="" cropping-type="ask_form"><i class="fa fa-crop"></i></span>
     </div>
     <div class="input_div title" onclick="ask_form_card_input_init($(this));">
@@ -324,6 +365,15 @@
 
 <script>
   var askFormCardTemplate = _.template($('#askFormCardTemplate').html());
+
+  function activate_ask_form_btn(target) {
+    var current_inner = target.parentsUntil(this, ".inner");
+    var ask_form_btns = current_inner.find(".ask_form_btn_div");
+    var input_container = current_inner.find(".input_container");
+
+    ask_form_btns.addClass("closed");
+    input_container.show();
+  }
 
   function ask_form_card_input_init(target) {
     var ask_form = $("#ask_form");
@@ -371,10 +421,13 @@
   function ask_form_card_image_upload_click(target) {
     var current_inner = target.parentsUntil(this, ".inner");
     var image_file = current_inner.find(".image_file");
+    var ask_image_upload_btn = current_inner.find(".ask_image_upload_btn");
     target.addClass("is_uploading");
+    ask_image_upload_btn.html("파일을 선택해주세요");
     image_file.click();
     setTimeout(function(){
       target.removeClass("is_uploading");
+      ask_image_upload_btn.html("이미지 업로드");
     }, 1000);
   }
 
@@ -406,6 +459,7 @@
                     if (is_left) {
                       step_1_inner.find(".preview_img_id").val(data.preview_img_id);
                       step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+                      step_1_inner.find(".ask_image_upload_btn").addClass("on");
                       step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
                       // 결과값 업데이트
                       step_1_inner.find(".ask_image_seg").removeClass("required");
@@ -413,6 +467,7 @@
         	        	} else {
                       step_2_inner.find(".preview_img_id").val(data.preview_img_id);
                       step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+                      step_2_inner.find(".ask_image_upload_btn").addClass("on");
                       step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
                       // 결과값 업데이트
                       step_2_inner.find(".ask_image_seg").removeClass("required");
@@ -425,6 +480,7 @@
                   },
                   complete: function(){
                     loadingEnd();
+                    if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
                     fileObj.replaceWith(fileObj.clone(true));
                   }
                 }).fail(function (data) {}).done(function () {});
@@ -548,10 +604,12 @@
     var ask_form_submit_btn = ask_form.find(".submit_btn");
     var current_step = Number(ask_form_submit_btn.attr("step"));
     var card_search_result_div = ask_form.find(".card_search_result");
+    var card_search_input_reset = ask_form.find(".card_search_input_reset");
     var card_search_input = ask_form.find(".card_search_input");
     ask_form_header_title.html("질문 작성하기");
     if (current_step == 1) { ask_form_back_btn.html("취소"); } else { ask_form_back_btn.html("<i class='fa fa-caret-left'></i> 이전"); }
     ask_form_submit_btn.show();
+    card_search_input_reset.hide();
     card_search_input.val("");
     card_search_result_div.addClass("bottom").transitionEmpty();
   }
@@ -590,10 +648,11 @@
 	        },
 	        success: function(data){
 	        	if (is_left) {
-              step_1_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left}));
+              step_1_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left, is_blank: false}));
               step_1_inner.find(".deal_id").val(data.deal.id);
               step_1_inner.find(".preview_img_id").val(data.preview_img_id);
               step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_1_inner.find(".ask_image_upload_btn").addClass("on");
               step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
               // 결과값 업데이트
               step_3_inner.find(".ask_image.left").attr("src", data.image_url);
@@ -602,10 +661,11 @@
               step_3_inner.find(".ask_table_row.price").find(".ask_table_cell.left").html(numberWithCommas(data.deal.price)+"원");
               step_3_inner.find(".ask_table_row.link").find(".ask_table_cell.left").html(fieldWithLink(data.deal.link));
 	        	} else {
-              step_2_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left}));
+              step_2_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left, is_blank: false}));
               step_2_inner.find(".deal_id").val(data.deal.id);
               step_2_inner.find(".preview_img_id").val(data.preview_img_id);
               step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_2_inner.find(".ask_image_upload_btn").addClass("on");
               step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
               // 결과값 업데이트
               step_3_inner.find(".ask_image.right").attr("src", data.image_url);
@@ -624,6 +684,7 @@
 					complete: function(){
             loadingEnd();
             back_button();
+            if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
 					}
 		});
   }
@@ -650,6 +711,7 @@
             if (is_left) {
               step_1_inner.find(".preview_img_id").val(data.preview_img_id);
               step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_1_inner.find(".ask_image_upload_btn").addClass("on");
               step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
               // 결과값 업데이트
               step_1_inner.find(".ask_image_seg").removeClass("required");
@@ -657,6 +719,7 @@
 	        	} else {
               step_2_inner.find(".preview_img_id").val(data.preview_img_id);
               step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
+              step_2_inner.find(".ask_image_upload_btn").addClass("on");
               step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
               // 결과값 업데이트
               step_2_inner.find(".ask_image_seg").removeClass("required");
@@ -672,10 +735,12 @@
 					complete: function(){
 						loadingEnd();
             back_button();
+            if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
 					}
 		});
   }
 </script>
+
 
 
 

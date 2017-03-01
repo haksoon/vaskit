@@ -21,6 +21,9 @@ _.templateSettings = {
     evaluate: /\{\{(.+?)\}\}/g
 };
 
+// 안드로이드 브라우저 재접속시 AJAX 캐시로 인해 json 데이터가 렌더링되는 문제점 방지
+$.ajaxSetup({cache: false});
+
  // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용
  $(window).load(function(){
   if (window.HybridApp) {
@@ -696,16 +699,6 @@ function alarm_check(last_alarm_count) {
     }
   });
 }
-
-// Tutorial
-var is_tutorial_vs = true;
-var is_tutorial_vs_detail = true;
-var is_tutorial_ask = true;
-
-function tutorial_vs() { if (is_tutorial_vs) { notify('VS버튼을 터치해서 투표에 참여하세요!'); is_tutorial_vs = false; } }
-function tutorial_vs_detail() { if (is_tutorial_vs_detail) { notify('상세보기 버튼을 눌러 상세한 투표결과를 볼 수 있어요!'); is_tutorial_vs_detail = false; } }
-function tutorial_ask() { if (is_tutorial_ask) { notify('검색창에서 제품을 검색해서 입력해보세요!'); is_tutorial_ask = false; } }
-
 
 // Image Load
 function get_image_url(data, model_name, extention) {

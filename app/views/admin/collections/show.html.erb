@@ -41,8 +41,12 @@
         <tr>
           <th>키워드</th>
           <td>
-            <% @collection.collection_keywords.each do |keyword| %>
-              <span class="label label-danger"><%= keyword.keyword %></span>
+            <% if @collection.collection_keywords.blank? %>
+              키워드를 추가해주세요
+            <% else %>
+              <% @collection.collection_keywords.each do |keyword| %>
+                <span class="label label-danger"><%= keyword.keyword %></span>
+              <% end %>
             <% end %>
           </td>
         </tr>
@@ -62,20 +66,20 @@
     <!-- Default panel contents -->
     <div class="panel-heading" role="tab">
       <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-        연관 컬렉션 <span class="badge pull-right"><%= "#{@collection.related_collections.gsub(/^[,]|[,]$/, '').split(',').length}개" %></span>
+        연관 컬렉션 <span class="badge pull-right"><%= "#{@related_collections.length}개" %></span>
       </a>
     </div>
 
     <!-- Table -->
     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel">
       <table class="table table-bordered table-responsive">
-        <% if @collection.related_collections.gsub(/^[,]|[,]$/, '').split(',').length == 0 %>
-          <tr class="danger">
+        <% if @related_collections.blank? %>
+          <tr>
             <th style="width: 100px;">연관컬렉션</th>
             <td>키워드를 더 추가해주세요</td>
           </tr>
         <% else %>
-          <% @collection.related_collections.gsub(/^[,]|[,]$/, '').split(',').each_with_index do |id, index| %>
+          <% @related_collections.each_with_index do |id, index| %>
             <tr>
               <th style="width: 100px;">연관 컬렉션 <%= index + 1 %></th>
               <td>
@@ -105,8 +109,8 @@
     <!-- Table -->
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel">
       <table class="table table-bordered table-responsive">
-        <% if @collection.asks.length == 0 %>
-          <tr class="danger">
+        <% if @collection.asks.blank? %>
+          <tr>
             <th style="width: 100px;">컨텐츠</th>
             <td>컨텐츠를 추가해주세요</td>
           </tr>

@@ -1,0 +1,110 @@
+<div class="layout tutorial_overlay" style="display: none;" ontouchmove="return false;"></div>
+
+<script type="text/template" id="voteTutorialTemplate">
+  <div class="tutorial_div">
+    <div class="tutorial_msg" id="vote_tutorial">
+      <div class="tutorial_title"><i class="fa fa-question-circle-o"></i> 투표는 어떻게 하냐구요?</div>
+      <div class="tutorial_preview">
+        <div class="ask clearfix">
+          <div class="ask_image_box">
+            <img class="ask_image left" src="/images/custom/card_image_preview.png" onerror="imgError(this);">
+            <img class="ask_image right" src="/images/custom/card_image_preview.png" onerror="imgError(this);">
+          </div>
+          <div class="vs_btn">vs</div>
+        </div>
+      </div>
+      <div class="tutorial_description">
+        <span class="highlight">VS 버튼</span>을 터치하여 좌우로 움직여보세요
+        <br>추천하고 싶은 제품 위에서 손을 놓으면!
+        <br><br>캬~ 참 쉽죠?</div>
+      <div class="tutorial_btn" onclick="back_button();">가릿!</div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="askTutorialTemplate">
+  <div class="tutorial_div">
+    <div class="tutorial_msg" id="ask_tutorial">
+      <div class="tutorial_title"><i class="fa fa-question-circle-o"></i> 질문을 좀 더 쉽게 작성하려면?</div>
+      <div class="tutorial_preview">
+        <div class="search_input_box" style="overflow: hidden;">
+          <div action="" class="search_input_init">
+            <div class="input text_field left right search_input">
+              <span class="placeholder"></span>
+            </div>
+            <span class="input btn_field left search_icon"><i class="fa fa-search"></i></span>
+            <span class="input btn_field right search_input_submit"><i class="fa fa-search"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="tutorial_description">
+        A → B → 마무리!
+        <br>질문 작성은 <span class="highlight">총 3단계</span>로 이루어져있어요
+        <br><br>입력할 내용이 너무 많은데...
+        <br>좀 쉽게 입력할 수는 없냐구요?
+        <br>상단 <span class="highlight"><i class="fa fa-search" style="font-size: 12px;"></i>검색창</span>에 제품명을 입력해보세요!
+      </div>
+      <div class="tutorial_btn" onclick="back_button();">가릿!</div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="cropTutorialTemplate">
+  <div class="tutorial_div">
+    <div class="tutorial_msg" id="crop_tutorial">
+      <div class="tutorial_title"><i class="fa fa-question-circle-o"></i> 이미지를 보기 좋게 편집해보세요!</div>
+      <div class="tutorial_preview">
+        <img class="crop_image" src="/images/custom/card_image_preview.png" onerror="imgError(this);">
+        <span class="crop_btn"><i class="fa fa-crop"></i></span>
+      </div>
+      <div class="tutorial_description">
+        업로드한 이미지 구석에 있는
+        <br><span class="highlight"><i class="fa fa-crop"></i> 크롭 버튼</span>을 누르면
+        <br>이미지를 편집할 수 있어요!
+        <br><br>보기 좋은 떡이 먹기도 좋죠?
+        <br>예쁜 이미지로 질문하면 반응도 up,Up,UP!
+      </div>
+      <div class="tutorial_btn" onclick="back_button();">가릿!</div>
+    </div>
+  </div>
+</script>
+
+<script>
+  var voteTutorialTemplate = _.template($("#voteTutorialTemplate").html());
+  var askTutorialTemplate = _.template($("#askTutorialTemplate").html());
+  var cropTutorialTemplate = _.template($("#cropTutorialTemplate").html());
+
+  function show_tutorial_vote() {
+    $(".tutorial_overlay").html(voteTutorialTemplate()).fadeIn();
+  }
+  function hide_tutorial_vote() {
+    if (localStorage.tutorial === undefined) { localStorage.tutorial = "vote,"; } else { localStorage.tutorial += "vote,"; }
+    $(".tutorial_overlay").fadeOut();
+  }
+
+  function show_tutorial_ask() {
+    $(".tutorial_overlay").html(askTutorialTemplate()).fadeIn();
+    $("#ask_tutorial .placeholder").unityping({
+                  string: ['뭐 사지?', '어퓨 텐션팩트', '입생로랑 틴트', '로레알 헤어에센스', '제품명을 검색해서 입력해보세요!'],
+                  typingSpeed: 750, // CPM; Characters per Minute
+                  startDelay: 1500, // ms
+                  backSpeed: 75, // ms
+                  backDelay: 250 // ms
+              });
+    $("#ask_tutorial .search_input").delay(1000).animate({paddingLeft: "15px"}, 250);
+    $("#ask_tutorial .search_icon").delay(1000).animate({left: "-50px"}, 250);
+    $("#ask_tutorial .search_input_submit").delay(1000).animate({right: "0px"}, 250);
+  }
+  function hide_tutorial_ask() {
+    if (localStorage.tutorial === undefined) { localStorage.tutorial = "ask,"; } else { localStorage.tutorial += "ask,"; }
+    $(".tutorial_overlay").fadeOut();
+  }
+
+  function show_tutorial_crop() {
+    $(".tutorial_overlay").html(cropTutorialTemplate()).fadeIn();
+  }
+  function hide_tutorial_crop() {
+    if (localStorage.tutorial === undefined) { localStorage.tutorial = "crop,"; } else { localStorage.tutorial += "crop,"; }
+    $(".tutorial_overlay").fadeOut();
+  }
+</script>

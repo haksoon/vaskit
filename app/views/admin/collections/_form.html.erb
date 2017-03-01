@@ -160,6 +160,7 @@
     var keyword_ids = $("#collection_collection_keywords").val();
     $("#related_collections").attr("href", "<%= admin_collection_to_collection_keywords_path %>?collection_id=<%= @collection.id %>&keyword_ids=" + keyword_ids);
   }
+  $("#related_collections").click();
 
   function preview_keyword() {
     $("#keyword").val(function(index, value){ return value.replace(/\s/, ''); });

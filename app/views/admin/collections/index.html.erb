@@ -36,7 +36,7 @@
           <td class="text-center"><%= format_datetime(collection.updated_at, 'past') %></td>
           <td><%= link_to "#{collection.asks.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
           <td><%= link_to "#{collection.collection_keywords.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
-          <td><%= link_to "#{collection.related_collections.gsub(/^[,]|[,]$/, '').split(',').count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
+          <td><%= link_to "#{collection.find_related_collections.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
           <td><%= link_to '조회', admin_collection_path(collection.id), class: 'btn btn-info btn-block' %></td>
           <td><%= link_to '수정', edit_admin_collection_path(collection.id), class: 'btn btn-warning btn-block' %></td>
           <td>

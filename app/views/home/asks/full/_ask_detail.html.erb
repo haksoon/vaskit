@@ -1,6 +1,6 @@
 <script type="text/template" id="askDetailTemplate">
   <div class="container top ask ask_detail ask_{{= ask.id }}" ontouchmove="return false;">
-    <span class="header_title" onclick="$(this).scroll_to();">{{= ask.user.string_id }}님의 질문</span>
+    <span class="header_title right" onclick="$(this).scroll_to();">{{= ask.user.string_id }}님의 질문</span>
     <span class="header_btn left close_btn" onclick="back_button();">&times;</span>
     <span class="header_btn right" onclick="go_url('share', 'ask, {{= ask.id }}');"><i class="vaskit_icon share_icon"></i></span>
     {{ if (current_user && current_user.id == ask.user_id) { }}
@@ -148,7 +148,6 @@
     </div>
     <div class="vs_result_detail">
     </div>
-    {{ tutorial_vs_detail() }}
     <div class="vs_result_detail_btn" onclick="toggle_vote_detail($(this));">
       <span>상세보기 <i class="fa fa-angle-down"></i></span>
       <span>불러오는중... <i class="fa fa-spinner fa-spin"></i></span>

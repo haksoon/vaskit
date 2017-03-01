@@ -47,7 +47,7 @@ class Admin::VideosController < Admin::HomeController
   # DELETE /admin/videos/:id
   def destroy
     @video.toggle(:show)
-    if @video.save && @video.show
+    if @video.save
       if @video.show
         flash['success'] = "#{@video.id}번 비교영상을 성공적으로 발행하였습니다 <a href='#{video_path(@video.id)}' target='_blank' class='alert-link'>링크</a>"
       else
@@ -77,8 +77,9 @@ class Admin::VideosController < Admin::HomeController
   def video_params
     params.require(:video).permit(:title,
                                   :description,
-                                  :ask_id,
-                                  :url,
-                                  :image)
+                                  :image,
+                                  :fb_id,
+                                  :yt_id,
+                                  :ask_id)
   end
 end

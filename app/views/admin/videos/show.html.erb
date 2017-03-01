@@ -42,10 +42,20 @@
                         { width: '100%' } %></td>
     </tr>
     <tr>
-      <th>영상</th>
+      <th>페북 영상</th>
       <td>
         <div class="embed-responsive embed-responsive-16by9">
-          <iframe src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.url}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" %>"
+          <iframe src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.fb_id}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" %>"
+                  class="embed-responsive-item"
+                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <th>유튜브 영상</th>
+      <td>
+        <div class="embed-responsive embed-responsive-16by9">
+          <iframe src="<%= "https://www.youtube.com/embed/#{@video.yt_id}" %>"
                   class="embed-responsive-item"
                   width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
         </div>

@@ -1,0 +1,7 @@
+<% if params[:msg].blank? %>
+  alert("메세지를 입력해주세요!");
+<% elsif params[:link].blank? %>
+  alert("연결 링크를 입력해주세요!");
+<% else %>
+  alert("<%= @string %>");
+<% end %>

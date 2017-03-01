@@ -27,11 +27,11 @@
       <% collection_keyword_ids = params[:keyword_ids].split(" ") %>
       <% collection.collection_keywords.each do |keyword| %>
         <% if collection_keyword_ids.include?(keyword.id.to_s) %>
-        <%= link_to "<button type='button' class='btn btn-success'>
-                       #{keyword.keyword}
-                     </button>".html_safe,
-                     '#',
-                     { onclick: "return false;" } %>
+          <%= link_to "<button type='button' class='btn btn-success'>
+                         #{keyword.keyword}
+                       </button>".html_safe,
+                       '#',
+                       { onclick: "return false;" } %>
         <% else %>
           <%= link_to "<button type='button' class='btn btn-default'>
                          #{keyword.keyword}

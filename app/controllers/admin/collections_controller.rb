@@ -8,6 +8,7 @@ class Admin::CollectionsController < Admin::HomeController
 
   # GET /admin/collections/:id
   def show
+    @related_collections = @collection.find_related_collections
   end
 
   # GET /admin/collections/new
@@ -64,7 +65,6 @@ class Admin::CollectionsController < Admin::HomeController
 
     @collection.toggle(:show)
     if @collection.save
-      @collection.set_related_collections
       if @collection.show
         flash['success'] = "#{@collection.id}번 컬렉션을 성공적으로 발행하였습니다 <a href='#{collection_path(@collection.id)}' target='_blank' class='alert-link'>링크</a>"
       else
@@ -98,7 +98,6 @@ class Admin::CollectionsController < Admin::HomeController
   end
 
   def generate_collection_keywords(collection_keyword_ids)
-    @collection.update(related_collections: ',') if @collection.related_collections.nil?
     CollectionToCollectionKeyword.destroy_all(collection_id: @collection.id)
     collection_keyword_ids.split(' ').each do |collection_keyword_id|
       CollectionToCollectionKeyword.create(collection_id: @collection.id,

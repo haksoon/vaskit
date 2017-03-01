@@ -98,13 +98,17 @@ Rails.application.routes.draw do
   # Admin Page
   namespace :admin do
     get '/', to: 'home#index'
+    post '/sign_in', to: 'home#create'
+    delete '/sign_out', to: 'home#destroy'
     resources :asks, only: [:index, :show, :update]
     resources :collections
     resources :collection_keywords, only: [:index, :create]
     resources :collection_to_collection_keywords, only: [:index]
     resources :collection_to_asks, only: [:create]
     resources :videos
-    resources :notices, only: [:index, :new, :create]
+    resources :notices, only: [:index, :new, :create] do
+      get '/test', to: 'notices#test', on: :collection
+    end
     resources :tables, only: [:index] do
       get ':table_name', to: 'tables#index', on: :collection
     end
