@@ -22,11 +22,27 @@ _.templateSettings = {
     evaluate: /\{\{(.+?)\}\}/g
 };
 
-function preview_thumbnail(file_input, thumbnail_image) {
+function drag_n_drop_img(target) {
+  if ((('draggable' in target) || ('ondragstart' in target && 'ondrop' in target)) && 'FormData' in window && 'FileReader' in window) {
+    $(target).on('drag dragstart dragend dragover dragenter dragleave drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+              })
+              .on('dragover dragenter', function(e) { $(this).addClass('bg-primary'); })
+              .on('dragleave dragend drop', function(e) { $(this).removeClass('bg-primary'); })
+              .on('drop', function(e) {
+                var file_input = $(this).parentsUntil(this, ".form-group").find("input[type='file']");
+                file_input.prop('files', e.originalEvent.dataTransfer.files);
+                file_input.next().attr("checked", true);
+              });
+  }
+}
+
+function preview_thumbnail(file_input) {
   if (file_input.files && file_input.files[0]) {
     var reader = new FileReader();
     reader.onload = function(e) {
-      thumbnail_image.attr("src", e.target.result);
+      file_input.parentElement.getElementsByTagName("img")[0].src = e.target.result;
       file_input.nextElementSibling.checked = true;
     };
     reader.readAsDataURL(file_input.files[0]);

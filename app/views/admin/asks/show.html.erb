@@ -35,13 +35,7 @@
   <!-- Default panel contents -->
   <div class="panel-heading">질문 상세보기</div>
   <div class="panel-body">
-    <blockquote><%= tagging_keywords(@ask.message) %></blockquote>
-    <%= image_tag @ask.left_ask_deal.image.url(:normal),
-                  { width: '50%',
-                    class: 'img-thumbnail pull-left' } %>
-    <%= image_tag @ask.right_ask_deal.image.url(:normal),
-                  { width: '50%',
-                    class: 'img-thumbnail pull-left' } %>
+    <%= render '/admin/asks/thumbnail', ask: @ask %>
   </div>
 
   <!-- Table -->
@@ -124,20 +118,21 @@
                                 class: 'form-control required_form'
                               } %>
       <%= f.input :image,
-                  as: :file,
                   error: '',
-                  label: '(옵션) 댓글 사진 입력',
-                  input_html: {
-                                class: 'hidden',
-                                onchange: 'preview_thumbnail(this, $(thumbnail_image));'
-                              } %>
-      <div class="well">
-        <%= image_tag @comment.image.url(:original),
-                     { id: 'thumbnail_image',
-                       class: 'img-thumbnail center-block',
-                       style: 'cursor: pointer;',
-                       onclick: '$("#comment_image").click();' } %>
-      </div>
+                  label: '(옵션) 댓글 사진 입력' do %>
+        <%= f.input_field :image,
+                          as: :file,
+                          class: 'hidden',
+                          onchange: 'preview_thumbnail(this);' %>
+        <div class="well">
+          <%= image_tag @comment.image.url(:original),
+                       { id: 'thumbnail_image',
+                         class: 'img-thumbnail center-block',
+                         style: 'cursor: pointer;',
+                         onclick: '$("#video_image").click();',
+                         onload: 'drag_n_drop_img(this);' } %>
+        </div>
+      <% end %>
       <%= f.button :submit,
                    '댓글 달기',
                    class: 'btn-block btn-success',

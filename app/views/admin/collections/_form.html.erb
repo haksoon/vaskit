@@ -57,14 +57,22 @@
                                   } %>
           <%= f.input :image,
                       error: '',
-                      hint: '권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요'.html_safe,
                       label: '3. 썸네일 입력' do %>
             <%= f.input_field :image,
                               as: :file,
                               class: 'hidden',
                               onclick: 'this.nextElementSibling.checked = true;',
-                              onchange: 'preview_thumbnail(this, $(thumbnail_image));' %>
-            <%= check_box_tag :image_attached, '', @collection.id.nil? ? false : true, class: 'hidden required_form' %>
+                              onchange: 'preview_thumbnail(this);' %>
+            <%= check_box_tag 'image_attached', '', @collection.id.nil? ? false : true, class: 'hidden required_form' %>
+            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요<br>권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
+            <div class="well">
+              <%= image_tag @collection.image.url(:original),
+                           { id: 'thumbnail_image',
+                             class: 'img-thumbnail center-block',
+                             style: 'cursor: pointer;',
+                             onclick: '$("#video_image").click();',
+                             onload: 'drag_n_drop_img(this);' } %>
+            </div>
           <% end %>
           <div class="well">
             <%= image_tag @collection.image.url(:original),

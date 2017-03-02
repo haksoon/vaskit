@@ -52,14 +52,14 @@
     <a href="{{= '/collections/' + id }}" class="search_preview_list" onclick="go_url('collection', {{= id }}); return false;">
       <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
       {{ if (time) { }}
-        <span style="float: right; margin-right: 7px; font-size: 10px; color: #999;">{{= get_past_time(time) }}</span>
+        <span class="search_date">{{= get_past_time(time) }}</span>
       {{ } }}
     </a>
   {{ } else { }}
     <a href="{{= '/search?type=' + escape(type) + '&keyword=' + escape(keyword) }}" class="search_preview_list" onclick="go_url('search_result', {type: '{{=type}}', keyword: '{{=escape(keyword)}}'}); return false;">
       <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
       {{ if (time) { }}
-        <span style="float: right; margin-right: 7px; font-size: 10px; color: #999;">{{= get_past_time(time) }}</span>
+        <span class="search_date">{{= get_past_time(time) }}</span>
       {{ } }}
     </a>
   {{ } }}

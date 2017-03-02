@@ -90,7 +90,6 @@ $bg-color-white: #fff;
 html {
     height: 100%;
     overflow: hidden;
-    // &.ios_keyboard_opened { height: calc(100% - 240px); }
 }
 
 body {
@@ -104,10 +103,10 @@ body {
     overflow: hidden;
 }
 
-@media screen and (min-width:801px) {
+@media screen and (min-width: $layout-width + 1px) {
     .layout {
         left: 50%;
-        margin-left: -($layout-width / 2);
+        margin-left: -#{$layout-width / 2};
         max-width: $layout-width;
     }
     .viewer {
@@ -118,7 +117,7 @@ body {
     }
 }
 
-@media screen and (max-width:800px) {
+@media screen and (max-width: $layout-width) {
     .layout {
         left: 0;
         margin-left: 0px;
@@ -452,7 +451,7 @@ body {
 
 .tutorial_overlay { position: fixed; top: 0px; width: 100%; height: 100%; display: table; background-color: rgba(0, 0, 0, 0.25); z-index: 999; -webkit-tap-highlight-color: transparent;
   .tutorial_div { display: table-cell; text-align: center; vertical-align: middle;
-    .tutorial_msg { width: 90vw; max-height: 90vh; overflow-y: scroll; -webkit-overflow-scrolling: touch; margin: 0 auto; padding: 10px; box-sizing: border-box; background-color: #fff; border-radius: 7px; box-shadow: 0 1px 0 #999; animation: slideInUp .5s;
+    .tutorial_msg { width: 90vw; max-width: #{$layout-width * 0.9}; max-height: 90vh; overflow-y: scroll; -webkit-overflow-scrolling: touch; margin: 0 auto; padding: 10px; box-sizing: border-box; background-color: #fff; border-radius: 7px; box-shadow: 0 1px 0 #999; animation: slideInUp .5s;
       .tutorial_title { @include fontBold; font-size: 16px; margin: 5px 0 10px; }
       .tutorial_preview { position: relative; margin: 10px 0; overflow: hidden; }
       .tutorial_description { @include fontLight; font-size: 14px; margin: 10px 0; }
@@ -497,9 +496,9 @@ body {
       .recent_asks_description { margin: 0; padding: 0; text-align: center; color: #999; @include fontLight; font-size: 14px; }
     }
     .recent_asks_image_box { height: calc(60vw + 20px);  max-height: 420px; margin: 10px 0 0;
-      .recent_asks_scroll { position: absolute; top: 0; left: 0; width: calc((60vw + 26px) * 5 + 100px); max-width: calc((400px + 26px) * 5 + 100px); height: calc(60vw + 20px); max-height: 420px; padding: 0 16px;
-        .recent_asks_image_seg { position: relative; float: left; margin-right: 16px; width: calc(60vw + 10px); height: calc(60vw + 10px); max-width: 410px; max-height: 410px; background-color: #fff; animation: zoomInUp .75s 1;
-          .recent_asks_image_square { position: absolute; width: 60vw; height: 60vw; max-width: 400px; max-height: 400px; background-color: #f9f9f9;
+      .recent_asks_scroll { position: absolute; top: 0; left: 0; width: calc((60vw + 26px) * 5 + 100px); max-width: #{($layout-width / 2 + 26px) * 5 + 100px}; height: calc(60vw + 20px); max-height: 420px; padding: 0 16px;
+        .recent_asks_image_seg { position: relative; float: left; margin-right: 16px; width: calc(60vw + 10px); height: calc(60vw + 10px); max-width: #{$layout-width / 2 + 10px}; max-height: #{$layout-width / 2 + 10px}; background-color: #fff; animation: zoomInUp .75s 1;
+          .recent_asks_image_square { position: absolute; width: 60vw; height: 60vw; max-width: #{$layout-width / 2}; max-height: #{$layout-width / 2}; background-color: #f9f9f9;
             &.right { top: 0; left: 0;}
             &.left { top: 10px; left: 10px; }
             .recent_asks_image { position: relative; width: 100%; overflow: hidden; border: 0.5px solid #c7c6c4; border-radius: 2px; box-sizing: border-box;
@@ -508,7 +507,7 @@ body {
             }
           }
         }
-        .recent_asks_more_btn { position: relative; float: left; width: 100px; height: 60vw; max-height: 410px; display: table; text-align: center; font-size: 13px;
+        .recent_asks_more_btn { position: relative; float: left; width: 100px; height: 60vw; max-height: #{$layout-width / 2 + 10px}; display: table; text-align: center; font-size: 13px;
           .recent_asks_more_icon { display: table-cell; text-align: center; vertical-align: middle; }
         }
       }
@@ -535,13 +534,13 @@ body {
   .video_player_div {
     position: relative;
     width: 100%; height: 100%;
-    height: calc((100vw - 10px) * 280 / 500 + 10px); max-height: ($layout-width - 10px) * 280 / 500 + 10px;
+    height: calc((100vw - 10px) * 280 / 500 + 10px); max-height: #{($layout-width - 10px) * 280 / 500 + 10px};
     border: 5px solid #333; box-sizing: border-box; background-color: #fff; overflow: hidden;
     .video_player {
       position: relative; display: block;
       width: 100%; height: 100%;
       width: 100vw; max-width: $layout-width;
-      height: calc((100vw - 10px) * 280 / 500 + 10px); max-height: ($layout-width - 10px) * 280 / 500 + 10px;
+      height: calc((100vw - 10px) * 280 / 500 + 10px); max-height: #{($layout-width - 10px) * 280 / 500 + 10px};
       margin: -5px;
     }
   }
@@ -558,14 +557,14 @@ body {
     .collection_image { width: 100%; height: auto; margin: 0; border-radius: 3px; animation: zoomIn 1s 1; }
 }
 
-.collection_detail { position: absolute; top: 50px; left: 0; display: table; width: 100vw; height: 75vw; max-width: $layout-width; max-height: ($layout-width / 4 * 3);
+.collection_detail { position: absolute; top: 50px; left: 0; display: table; width: 100vw; height: 75vw; max-width: $layout-width; max-height: #{$layout-width / 4 * 3};
                       background-size: cover; background-position: center center; transform-origin: bottom center;
     .collection_title { display: table-cell; text-align: center; vertical-align: middle;
         .collection_description { display: inline-block; margin: 0; padding: 5px 10px; color: #eee; background-color: rgba(0,0,0,0.75); @include fontLight; font-size: 14px; }
         .collection_name { display: inline-block; margin: 5px 0 0 0; padding: 5px 10px; color: #555; background-color: rgba(255,255,255,0.75); @include fontExtraBold; font-size: 20px; }
     }
 }
-.collection_blank { width: 100vw; height: 75vw; max-width: $layout-width; max-height: ($layout-width / 4 * 3); border-bottom: 1px solid #bdbdbd; box-sizing: border-box; }
+.collection_blank { width: 100vw; height: 75vw; max-width: $layout-width; max-height: #{$layout-width / 4 * 3}; border-bottom: 1px solid #bdbdbd; box-sizing: border-box; }
 .related_collections_title { width: 100%; height: 50px; line-height: 60px; text-align: center; background: #fff;
     .title { font-size: 16px; @include fontBold; color: #666; }
     .description { font-size: 13px; @include fontLight; color: #999; }
@@ -980,13 +979,13 @@ body {
     img { width: 30px; height: 30px; }
   }
   .ask_deal_image { position: absolute; width: 100vw; height: 100vw;
-    @media screen and (min-width:801px) { max-width: $layout-width; max-height: $layout-width; }
-    @media screen and (max-width:800px) { max-width: 100vh; max-height: 100vh; left: 50%; transform: translateX(-50%); }
+    @media screen and (min-width: $layout-width + 1px) { max-width: $layout-width; max-height: $layout-width; }
+    @media screen and (max-width: $layout-width) { max-width: 100vh; max-height: 100vh; left: 50%; transform: translateX(-50%); }
   }
   .ask_deal_info { position: relative; width: 100%; height: 100%; overflow-y: scroll; -webkit-overflow-scrolling: touch;
     .blank { position: relative; width: 100vw; height: 100vw; transition: background-color .25s;
-      @media screen and (min-width:801px) { max-width: $layout-width; max-height: $layout-width; }
-      @media screen and (max-width:800px) { max-width: 100vw; max-height: 100vh; }
+      @media screen and (min-width: $layout-width + 1px) { max-width: $layout-width; max-height: $layout-width; }
+      @media screen and (max-width: $layout-width) { max-width: 100vw; max-height: 100vh; }
       &.visible { background-color: rgba(0,0,0,0.75) }
       .fa { position: absolute; width: 100%; height: 50px; line-height: 50px; padding: 0 20px; box-sizing: border-box;
         &.left { width: 50px; left: 0; }
@@ -1033,7 +1032,7 @@ body {
       .recent_search_item { height: 40px; line-height: 40px; }
     }
   }
-  .search_preview_list { display: block; height: 50px; line-height: 50px; padding: 0 10px 0 40px; box-sizing: border-box; color: #666; background-color: #fff; border-bottom: 1px solid #eee; overflow: hidden; transition: background-color .1s;
+  .search_preview_list { position: relative; display: block; height: 50px; line-height: 50px; padding: 0 40px; box-sizing: border-box; color: #666; background-color: #fff; border-bottom: 1px solid #eee; overflow: hidden; transition: background-color .1s; @include ellipsis;
     .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; margin: 17px 7px; background-position-y: -56px;
       &.collection_icon { background-position-x: 0px; }
       &.hash_tag_icon { background-position-x: -16px; }
@@ -1042,6 +1041,7 @@ body {
       &.user_icon { background-position-x: -64px; }
       &.none_icon { background-position-x: -80px; }
     }
+    .search_date { position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
     &.search_focus { background-color: #ffe4a9; }
   }
 }
@@ -1262,8 +1262,7 @@ body {
         }
     }
     #my_asks_in_progress { position: relative; margin-bottom: 10px;
-                          height: calc((50vw - 10px) + 100px); max-height: calc((400px - 10px) + 100px);
-                          // calc 내부에 $layout-width 적용이 안되네
+                          height: calc(50vw - 10px + 100px); max-height: #{$layout-width / 2 - 10px + 100px};
         .ask.ask_thumbnail.contents_box { padding: 0 0 40px 0; border: 1px solid #dbdbdb; border-bottom: none; border-radius: 3px; overflow: hidden; }
         .no_result { background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 3px; overflow: hidden; box-sizing: border-box;
             .new_ask_btn { display: inline-block; padding: 5px 10px; margin-top: 10px; background-color: #ff7800; color: #fff; border-radius: 3px; }

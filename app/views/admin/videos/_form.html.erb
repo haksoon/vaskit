@@ -51,22 +51,23 @@
                                   } %>
           <%= f.input :image,
                       error: '',
-                      hint: '권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요'.html_safe,
                       label: '3. 썸네일 입력' do %>
             <%= f.input_field :image,
                               as: :file,
                               class: 'hidden',
                               onclick: 'this.nextElementSibling.checked = true;',
-                              onchange: 'preview_thumbnail(this, $(thumbnail_image));' %>
+                              onchange: 'preview_thumbnail(this);' %>
             <%= check_box_tag 'image_attached', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
+            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요<br>권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
+            <div class="well">
+              <%= image_tag @video.image.url(:original),
+                           { id: 'thumbnail_image',
+                             class: 'img-thumbnail center-block',
+                             style: 'cursor: pointer;',
+                             onclick: '$("#video_image").click();',
+                             onload: 'drag_n_drop_img(this);' } %>
+            </div>
           <% end %>
-          <div class="well">
-            <%= image_tag @video.image.url(:original),
-                         { id: 'thumbnail_image',
-                           class: 'img-thumbnail center-block',
-                           style: 'cursor: pointer;',
-                           onclick: '$("#video_image").click();' } %>
-          </div>
           <%= f.input :fb_id,
                       as: :select,
                       collection: @facebook_video_list.collect { |video| [video['description'].truncate(100), video['id']] },
@@ -79,8 +80,7 @@
                                   } %>
           <div id="fb_link_preview" class="well <%= 'hidden' if @video.fb_id.blank? %>">
             <div class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.fb_id}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" %>"></iframe>
-              <div class="iframe_cover" onclick="window.open($(this).prev('iframe').attr('src'));"></div>
+              <iframe class="embed-responsive-item" src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.fb_id}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" unless @video.fb_id.blank? %>"></iframe>
             </div>
           </div>
           <%= f.input :yt_id,
@@ -94,8 +94,7 @@
                                   } %>
           <div id="yt_link_preview" class="well <%= 'hidden' if @video.yt_id.blank? %>">
             <div class="embed-responsive embed-responsive-16by9">
-              <iframe class="embed-responsive-item" src="<%= "https://www.youtube.com/embed/#{@video.yt_id}" %>"></iframe>
-              <div class="iframe_cover" onclick="window.open($(this).prev('iframe').attr('src'));"></div>
+              <iframe class="embed-responsive-item" src="<%= "https://www.youtube.com/embed/#{@video.yt_id}" unless @video.yt_id.blank? %>"></iframe>
             </div>
           </div>
           <%= f.input :ask_id,

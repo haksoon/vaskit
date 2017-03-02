@@ -64,11 +64,7 @@
     <tr>
       <th>질문</th>
       <td>
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe src="<%= ask_path(@video.ask_id) %>"
-                  class="embed-responsive-item"
-                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
-        </div>
+        <%= render '/admin/asks/thumbnail', ask: @video.ask %>
       </td>
     </tr>
   </table>

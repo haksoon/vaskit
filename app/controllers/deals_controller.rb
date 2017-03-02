@@ -49,12 +49,20 @@ class DealsController < ApplicationController
       naver_shop_link = "http://shopping.naver.com" + open(naver_deal[:link]).read.split("'")[1]
       naver_shop_doc = Nokogiri::HTML(open(naver_shop_link).read, nil, 'utf-8')
 
-      brand1 = naver_shop_doc.css(".tit span")[0].text
-      brand2 = naver_shop_doc.css(".tit span")[2].text
+      if naver_shop_doc.css(".tit span").size > 0
+        brand1 = naver_shop_doc.css(".tit span")[0].text
+        brand2 = naver_shop_doc.css(".tit span")[2].text
+      elsif naver_shop_doc.css(".info_inner span").size > 0
+        brand1 = naver_shop_doc.css(".info_inner span")[0].text
+        brand2 = naver_shop_doc.css(".info_inner span")[2].text
+      else
+        brand1 = ""
+        brand2 = ""
+      end
       brand = ActionView::Base.full_sanitizer.sanitize(brand1.tr("브랜드 ","")) if brand1.include?("브랜드")
-      brand = ActionView::Base.full_sanitizer.sanitize(brand2.tr("브랜드 ","")) if brand.blank? && brand2.include?("브랜드")
-      brand = ActionView::Base.full_sanitizer.sanitize(brand1.tr("제조사 ","")) if brand.blank? && brand1.include?("제조사")
-      brand = ActionView::Base.full_sanitizer.sanitize(brand2.tr("제조사 ","")) if brand.blank? && brand2.include?("제조사")
+      brand = ActionView::Base.full_sanitizer.sanitize(brand2.tr("브랜드 ","")) if brand.nil? && brand2.include?("브랜드")
+      brand = ActionView::Base.full_sanitizer.sanitize(brand1.tr("제조사 ","")) if brand.nil? && brand1.include?("제조사")
+      brand = ActionView::Base.full_sanitizer.sanitize(brand2.tr("제조사 ","")) if brand.nil? && brand2.include?("제조사")
 
       naver_mall = naver_shop_doc.css(".mall_area div span a")[0]
       unless naver_mall.nil? #판매자가 없을 경우를 배제함

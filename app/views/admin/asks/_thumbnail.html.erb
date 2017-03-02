@@ -1,0 +1,9 @@
+<blockquote style="margin-bottom: 10px; font-size: 1em;">
+  <%= tagging_keywords(ask.message) %>
+</blockquote>
+<%= image_tag ask.left_ask_deal.image.url(:normal),
+              { width: '50%',
+                class: 'img-thumbnail pull-left' } %>
+<%= image_tag ask.right_ask_deal.image.url(:normal),
+              { width: '50%',
+                class: 'img-thumbnail pull-left' } %>
