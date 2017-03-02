@@ -44,7 +44,7 @@ class SearchController < ApplicationController
             Ask.where(id: ask_ids)
           end
         @asks = @asks.page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, { comments: { include: :user } }])
+                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes])
         render json: { asks: @asks }
       end
     end

@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     get 'users/alarm_check', to: 'users/sessions#alarm_check'
     get 'users/get_user_profile', to: 'users/sessions#get_user_profile'
     get 'users/get_user_alarms', to: 'users/sessions#get_user_alarms'
-    get 'users/get_my_asks', to: 'users/sessions#get_my_asks'
+    get 'users/get_my_recent_ask', to: 'users/sessions#get_my_recent_ask'
 
     get 'users/', to: 'users/sessions#users'
     get 'users/history', to: 'users/sessions#history'

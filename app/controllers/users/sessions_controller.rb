@@ -65,18 +65,16 @@ class Users::SessionsController < Devise::SessionsController
   # GET /users/get_user_profile.json
   def get_user_profile
     if current_user
-      my_asks_in_progress_count = Ask.where(user_id: current_user.id,
-                                            be_completed: false).count
-      my_asks_count = Ask.where(user_id: current_user.id).count
+      my_asks_in_progress_count = Ask.where(user_id: current_user.id, be_completed: false).count
+      my_completed_asks_count = Ask.where(user_id: current_user.id, be_completed: true).count
       my_likes_count = AskLike.where(user_id: current_user.id).count
       my_votes_count = Vote.where(user_id: current_user.id).count
-      my_comments_count = Comment.where(user_id: current_user.id,
-                                        is_deleted: false).count
+      my_comments_count = Comment.where(user_id: current_user.id, is_deleted: false).count
     end
     render json: {
       current_user: current_user,
       my_asks_in_progress_count: my_asks_in_progress_count,
-      my_asks_count: my_asks_count,
+      my_completed_asks_count: my_completed_asks_count,
       my_likes_count: my_likes_count,
       my_votes_count: my_votes_count,
       my_comments_count: my_comments_count
@@ -94,21 +92,12 @@ class Users::SessionsController < Devise::SessionsController
     render json: { alarms: alarms, alarm_count: alarm_count }
   end
 
-  # GET /users/get_my_asks.json
-  def get_my_asks
+  # GET /users/get_my_recent_ask.json
+  def get_my_recent_ask
     if current_user
       my_ask = Ask.where(user_id: current_user.id, be_completed: false)
-                  .order(id: :desc).limit(1)
+                  .order(updated_at: :desc).limit(1)
                   .as_json(include: [:left_ask_deal, :right_ask_deal])
-      # my_ask_detail = Views::DetailVoteCount.average_vote_count(my_ask[0].id) unless my_ask.blank?
-      # my_asks = Ask.where(user_id: current_user.id, be_completed: false).order(id: :desc)
-      # my_asks_detail = []
-      # my_asks.each do |my|
-      #   # my_asks_detail << my.detail_vote_count
-      #   my_asks_detail << Views::DetailVoteCount.average_vote_count(my.id)
-      # end
-      # my_asks = my_asks.as_json(include: [:left_ask_deal, :right_ask_deal, :ask_likes, :votes])
-      # render json: { my_asks: my_asks, my_asks_detail: my_asks_detail }
     end
     render json: { my_ask: my_ask }
   end
@@ -125,23 +114,36 @@ class Users::SessionsController < Devise::SessionsController
           @asks =
             case @type
             when 'my_asks_in_progress'
-              Ask.where(user_id: current_user.id,
-                        be_completed: false)
-            when 'my_asks'
-              Ask.where(user_id: current_user.id)
+              Ask.where(user_id: current_user.id, be_completed: false)
+                 .page(params[:page]).per(Ask::ASK_PER)
+                 .order(updated_at: :desc)
+            when 'my_completed_asks'
+              my_completed_asks = AskComplete.where(user_id: current_user.id)
+                                             .page(params[:page]).per(Ask::ASK_PER)
+                                             .order(id: :desc).map(&:ask_id).uniq
+              Ask.where(id: my_completed_asks)
+                 .order("FIELD(id,#{my_completed_asks.join(',')})") unless my_completed_asks.blank?
             when 'my_likes'
               my_likes = AskLike.where(user_id: current_user.id)
-              Ask.where(id: my_likes.map(&:ask_id).uniq)
+                                .page(params[:page]).per(Ask::ASK_PER)
+                                .order(id: :desc).map(&:ask_id).uniq
+              Ask.where(id: my_likes)
+                 .order("FIELD(id,#{my_likes.join(',')})") unless my_likes.blank?
             when 'my_votes'
               my_votes = Vote.where(user_id: current_user.id)
-              Ask.where(id: my_votes.map(&:ask_id).uniq)
+                             .page(params[:page]).per(Ask::ASK_PER)
+                             .order(id: :desc).map(&:ask_id).uniq
+              Ask.where(id: my_votes)
+                 .order("FIELD(id,#{my_votes.join(',')})") unless my_votes.blank?
             when 'my_comments'
-              my_comments = Comment.where(user_id: current_user.id,
-                                          is_deleted: false)
-              Ask.where(id: my_comments.map(&:ask_id).uniq)
+              # 다른 타입은 ask와 1:1 관계이기 때문에 문제 없으나 댓글의 경우 1:다 관계이므로 연속으로 중복된 댓글의 경우 ask 갯수가 ASK_PER에 미달할 가능성이 있어 page/per를 ASK에 적용함
+              my_comments = Comment.where(user_id: current_user.id, is_deleted: false)
+                                   .order(id: :desc).map(&:ask_id).uniq
+              Ask.where(id: my_comments)
+                 .page(params[:page]).per(Ask::ASK_PER)
+                 .order("FIELD(id,#{my_comments.join(',')})") unless my_comments.blank?
             end
-          @asks = @asks.page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :ask_complete, :votes, :ask_likes, { comments: { include: :user } }])
+          @asks = @asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes]) unless @asks.nil?
         end
         render json: { asks: @asks }
       end

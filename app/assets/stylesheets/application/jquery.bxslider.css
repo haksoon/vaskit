@@ -57,6 +57,7 @@
 .bx-wrapper .bx-loading {
 	min-height: 50px;
 	background: url(/images/bxslider/bx_loader.gif) center center no-repeat #fff;
+	background-size: 16px;
 	height: 100%;
 	width: 100%;
 	position: absolute;

@@ -1235,9 +1235,13 @@ body {
 }
 
 
-.profile_div { position: relative; padding: 30px 0 10px; box-sizing: border-box; text-align: center;
-    .profile_pic { display: inline-block; width: 140px; height: 140px; border-radius: 50%; box-shadow: 0px 0px 30px #ccc; }
-    .profile_edit_btn { position: absolute; bottom: 0; left: calc(50% + 40px); display: block; width: 50px; height: 50px; line-height: 50px; color: #ccc; }
+.profile_div { position: relative; text-align: center; padding-top: 10px;
+    .profile_pic { display: inline-block; width: 140px; height: 140px; margin: 20px 0; border-radius: 50%; box-shadow: 0px 0px 30px #ccc; }
+    .profile_edit_btn { position: absolute; bottom: 10px; left: calc(50% + 40px); display: block; width: 50px; height: 50px; line-height: 50px; color: #ccc;
+      &.on { position: relative; bottom: 10px; left: 0; width: 100%; height: 40px; line-height: 40px; color: #fff; background-color: #46b8da; margin-bottom: -10px;
+        &:after { content: ' 프로필 이미지를 지정해주세요!'; }
+      }
+    }
 }
 .profile_title { padding-left: 20px; height: 50px; line-height: 50px; @include fontNumber; color: #ccc;
     .user_id { display: inline-block; color: #999; }
@@ -1245,15 +1249,17 @@ body {
     .user_icon { width: 16px; height: 16px; margin-top: -1px; vertical-align: middle; background-position: -64px -56px; }
     .setting_icon { width: 16px; height: 16px; margin-top: -1px; vertical-align: middle; background-position: -80px -40px; }
 }
-.my_hisotry_div { padding: 0px 10px; text-align: center;
-    .my_hisotry_btn { position: relative; display: block; padding: 0 20px; box-sizing: border-box; margin-bottom: 10px; height: 50px; line-height: 50px; text-align: left; overflow: hidden;
-                      background-color: #f2f0f0; color: #666; border: 1px solid #ccc; border-radius: 3px; transition: background .1s; -webkit-tap-highlight-color: transparent;
+.my_history_div { padding: 0px 10px; text-align: center;
+    .my_history_btn { position: relative; display: block; padding: 0 20px; box-sizing: border-box; margin-bottom: 10px; height: 50px; line-height: 50px; text-align: left; overflow: hidden;
+                      background-color: #f2f0f0; border: 1px solid #ccc; border-radius: 3px; transition: background .1s; -webkit-tap-highlight-color: transparent;
         &.my_asks_in_progress { width: 100%; }
-        &.my_asks, &.my_votes { width: calc(50% - 5px); float: left; }
+        &.my_completed_asks, &.my_votes { width: calc(50% - 5px); float: left; }
         &.my_likes, &.my_comments { width: calc(50% - 5px); float: right; }
         &:active { background-color: #ddd; }
         .my_history_type { display: inline-block; position: absolute; left: 10px; color: #999; }
-        .my_history_count { display: inline-block; position: absolute; right: 10px; @include fontNumber; }
+        .my_history_count { display: inline-block; position: absolute; right: 10px; color: #666; @include fontNumber;
+           small { color: #999; @include fontLight; }
+        }
     }
     #my_asks_in_progress { position: relative; margin-bottom: 10px;
                           height: calc((50vw - 10px) + 100px); max-height: calc((400px - 10px) + 100px);
@@ -1274,6 +1280,7 @@ body {
         .setting_btn { display: block; position: absolute; top: 0; right: 20px; height: 50px; line-height: 50px; color: #999;
             &.toggle_btn { top: 10px; height: 30px; }
         }
+        &.profile_div { height: 100%; background-color: #f9f9f9; }
     }
     .setting_caption { display: block; position: relative; width: 100%; padding: 10px 20px; box-sizing: border-box; border-top: 1px solid #eee; margin-bottom: 20px; font-size: 12px; color: #999; }
 }

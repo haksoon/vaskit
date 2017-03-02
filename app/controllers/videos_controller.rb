@@ -38,7 +38,7 @@ class VideosController < ApplicationController
                                             comment_id: ask_comments)
         end
 
-        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :hash_tags, { comments: { include: :user } }])
+        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, { comments: { include: :user } }])
 
         if current_user
           all_alarms = Alarm.where(ask_id: video.ask_id,

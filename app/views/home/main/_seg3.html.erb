@@ -324,7 +324,7 @@
   <div class="input_container" style="{{= is_blank ? 'display: none;' : '' }}">
     <div class="ask_image_seg" onclick="ask_form_card_image_upload_click($(this));">
       <img src="{{= get_image_url(ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-      <span class="ask_image_upload_btn">이미지 업로드</span>
+      <span class="ask_image_upload_btn {{= is_blank? '' : 'on' }}">이미지 업로드</span>
       <span class="ask_image_crop_btn {{= is_left? 'left' : 'right' }} {{= ask_deal.deal_id ? 'on' : '' }}" onclick="go_url('image_edit', $(this));" img-id="" cropping-type="ask_form"><i class="fa fa-crop"></i></span>
     </div>
     <div class="input_div title" onclick="ask_form_card_input_init($(this));">
@@ -652,7 +652,6 @@
               step_1_inner.find(".deal_id").val(data.deal.id);
               step_1_inner.find(".preview_img_id").val(data.preview_img_id);
               step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-              step_1_inner.find(".ask_image_upload_btn").addClass("on");
               step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
               // 결과값 업데이트
               step_3_inner.find(".ask_image.left").attr("src", data.image_url);
@@ -665,7 +664,6 @@
               step_2_inner.find(".deal_id").val(data.deal.id);
               step_2_inner.find(".preview_img_id").val(data.preview_img_id);
               step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-              step_2_inner.find(".ask_image_upload_btn").addClass("on");
               step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
               // 결과값 업데이트
               step_3_inner.find(".ask_image.right").attr("src", data.image_url);

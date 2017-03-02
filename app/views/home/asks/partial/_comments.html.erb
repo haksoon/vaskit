@@ -545,7 +545,7 @@
   }
 
   function delete_comment(comment_id) {
-    if (confirm("의견을 정말로 삭제하시겠어요?")) {
+    if (confirm('의견을 정말로 삭제하시겠어요?')) {
       var all_comment_boxes = $("#main_view").find(".comment_box."+comment_id);
       var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
       var current_ask_container = current_wrapper.find(".container.main");

@@ -212,6 +212,7 @@ function go_popstate(e) {
   var url;
   var func;
   var state = e.originalEvent.state;
+  if (state === null) return false;
   if (state.pageHistory < currentHistory) {
     // console.log(currentHistory+" -> "+state.pageHistory+'...뒤로 갑니다'); // 뒤로 가는 경우
 
@@ -418,7 +419,7 @@ function go_back(length) {
 function go_exit() {
   // console.log('bye...');
   if (userApp) {
-    go_back(currentHistory+1);
+    if (currentHistory === 0) history.go(1);
   } else {
     $("body").children().animateCssRemove("fadeOut");
     setTimeout(function(){
@@ -439,7 +440,7 @@ function visitor_check(callback) {
     if (typeof callback === "function") callback();
   } else {
     go_url('landing');
-    notify("로그인 해주세요!");
+    notify("더 진행하시려면 로그인을 해주세요!");
   }
 }
 
@@ -976,10 +977,10 @@ $.fn.extend({
 // textarea 내부 선택하기
 $.fn.selectRange = function(start, end) {
   return this.each(function() {
-    if(this.setSelectionRange) {
+    if (this.setSelectionRange) {
       this.focus();
       this.setSelectionRange(start, end);
-    } else if(this.createTextRange) {
+    } else if (this.createTextRange) {
       var range = this.createTextRange();
       range.collapse(true);
       range.moveEnd('character', end);
@@ -990,13 +991,16 @@ $.fn.selectRange = function(start, end) {
 };
 
 // input, textarea 값 복사하기
-function copyfieldvalue(event, field_id){
+function copyfieldvalue(event, input_id){
+  var input = document.getElementById(input_id);
   if (document.execCommand("copy")) {
-    var field = document.getElementById(field_id);
-    field.focus();
-    field.setSelectionRange(0, field.value.length);
+    input.focus();
+    input.setSelectionRange(0, input.value.length);
     document.execCommand("copy");
-    field.blur();
+    input.blur();
+    return true;
+  } else if (window.clipboardData) {
+    window.clipboardData.setData("Text", input.value);
     return true;
   } else {
     return false;
