@@ -1,4 +1,4 @@
-<script type="text/template" id="askFormTemplate">
+off<script type="text/template" id="askFormTemplate">
   {{ if (localStorage.tutorial === undefined || localStorage.tutorial.match("ask") === null) go_url('tutorial_ask') }}
   <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check();", onchange: "ask_progress_check();"}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
@@ -17,9 +17,9 @@
         <span class="input btn_field right card_search_input_submit"><i class="fa fa-search"></i></span>
         <span class="input btn_field text_btn right card_search_input_reset"><i class="fa fa-times-circle"></i></a>
       </div>
+      <div class="inner top card_search_result"></div>
       <div class="ask_form_progress" ontouchmove="return false;"><div class="ask_form_progress bar"></div></div>
     </div>
-    <div class="inner card_search_result bottom"></div>
   <% end %>
 </script>
 
@@ -84,7 +84,9 @@
     var card_search_input_reset = target.find(".card_search_input_reset");
     var card_search_input = target.find(".card_search_input");
     var is_left = Boolean(target.attr("is-left"));
+    var card_search_result_div = ask_form.find(".card_search_result");
 
+    if (!!!card_search_result_div.hasClass("top")) back_button();
     all_inners.find(".input.text_field").attr('disabled', true);
     card_search_input_submit.off("click").on("click", function(){ search_by_key(); });
     card_search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
@@ -494,29 +496,13 @@
 
 
 <script type="text/template" id="cardSearchResultTemplate">
-  <div class="card_search_result_title">
-    <div class="naver_product {{= items == null ? '' : 'on' }}" onclick="toggle_search_result($(this));"><i class="fa fa-shopping-cart"></i> 제품 검색결과</div>
-    <div class="naver_image  {{= items == null ? 'on' : '' }}" onclick="toggle_search_result($(this));"><i class="fa fa-image"></i> 이미지 검색결과</div>
-  </div>
-  <div class="card_search_result_list" ontouchstart="removeIOSRubberEffect($(this));">
-    <div class="naver_product {{= items == null ? '' : 'on' }}">
-      {{ if (items != null) { }}
-        {{ var items_length = items.length ? items.length : 1 }}
-        <table cellspacing="0" cellpadding="0">
-          {{ for(var i=0; i < items_length; i++) { }}
-            {{ var item = items_length == 1 ? items : items[i] }}
-            <tr onclick="select_naver_product('{{= item.productId }}');">
-              <td class="naver_product_image_seg">
-                <img src="{{=item.image}}">
-              </td>
-              <td class="naver_product_info_seg">
-                <p class="mall">{{= item.mallName }}</p>
-                <p class="title">{{= truncate(item.title) }}</p>
-                <p class="price">{{= numberWithCommas(item.lprice) }}원</p>
-              </td>
-            </tr>
-          {{ } }}
+  <div id="card_search_result_list" class="card_search_result_list" ontouchstart="removeIOSRubberEffect($(this));" loading="true">
+    <div class="naver_product">
+      {{ if (naver_deal_items !== null) { }}
+        <table id="naver_deals_table" cellspacing="0" cellpadding="0">
+          {{= naverDealsTemplate({naver_deal_items: naver_deal_items}) }}
         </table>
+        <div class="loading_icon"><i class="fa fa-spinner fa-spin"></i></div>
         <div class="naver_info">
           <b style="color:#18bf2d;">네이버 쇼핑</b> 검색 결과입니다
           <br>원하시는 결과가 없으면 검색어를 수정해보세요
@@ -525,38 +511,39 @@
         <div class="no_result"><p class="align_middle"><i class='fa fa-search'></i> 제품 검색결과가 없습니다</p></div>
       {{ } }}
     </div>
-    <div class="naver_image {{= items == null ? 'on' : '' }}">
-      {{ if (image_items != null) { }}
-        {{ var image_items_length = image_items.length ? image_items.length : 1 }}
-        <div class="naver_image_seg">
-          {{ for(var i=0; i < image_items_length; i++) { }}
-            {{ var image_item = image_items_length == 1 ? image_items : image_items[i] }}
-            {{ var thumbnail = image_item.thumbnail.replace("?q=", "?t=470x180&q=") }}
-            {{ var link = encodeURI(image_item.link) }}
-            {{ if (image_item.sizewidth >= 300 && image_item.sizeheight >= 300) { }}
-              <img src="{{=link}}" onclick="select_naver_image('{{= link }}');" onerror="imgError(this, '{{=thumbnail}}');"/>
-              <p>{{=image_item.sizewidth}} &times; {{=image_item.sizeheight}}</p>
-            {{ } }}
-          {{ } }}
-        </div>
-        <div class="naver_info">
-          <b style="color:#18bf2d;">네이버 이미지</b> 검색 결과입니다
-          <br>원하시는 결과가 없으면 검색어를 수정해보세요
-        </div>
-      {{ } else { }}
-        <div class="no_result"><p class="align_middle"><i class='fa fa-search'></i> 이미지 검색결과가 없습니다</p></div>
-      {{ } }}
-    </div>
   </div>
+</script>
+
+<script type="text/template" id="naverDealsTemplate">
+  {{ var items_length = naver_deal_items.length ? naver_deal_items.length : 1 }}
+  {{ for(var i=0; i < items_length; i++) { }}
+    {{ var item = items_length == 1 ? naver_deal_items : naver_deal_items[i] }}
+    <tr onclick="select_naver_product($(this));"
+        item-title="{{= item.title }}"
+        item-mallName="{{= item.mallName }}"
+        item-lprice="{{= item.lprice }}"
+        item-link="{{= item.link }}"
+        item-image="{{= item.image }}"
+        item-productId="{{= item.productId }}" >
+      <td class="naver_product_image_seg">
+        <img src="{{=item.image}}">
+      </td>
+      <td class="naver_product_info_seg">
+        <p class="mall">{{= item.mallName }}</p>
+        <p class="title">{{= truncate(item.title) }}</p>
+        <p class="price">{{= numberWithCommas(item.lprice) }}원</p>
+      </td>
+    </tr>
+  {{ } }}
 </script>
 
 <script>
   var cardSearchResultTemplate = _.template($('#cardSearchResultTemplate').html());
-
-  var naver_deal_items;
-  var naver_deal_images;
+  var naverDealsTemplate = _.template($('#naverDealsTemplate').html());
 
   function show_card_search_result(options) {
+    var page = 1;
+    var is_more_load = false;
     var is_left = options.is_left;
     var keyword = options.keyword;
     var ask_form = $("#ask_form");
@@ -564,25 +551,29 @@
     var ask_form_back_btn = ask_form.find(".header_btn.left");
     var ask_form_submit_btn = ask_form.find(".submit_btn");
     var card_search_result_div = ask_form.find(".card_search_result");
+
     $.ajax({
-            url: '/deals/get_naver_deals/?keyword='+encodeURIComponent(keyword),
+            url: '/deals/get_naver_deals/?page='+page+'&keyword='+encodeURIComponent(keyword),
             dataType: "json",
             type: "GET",
             error: function(){
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data){
-              naver_deal_items = data.shop_result.rss.channel.item;
-              naver_deal_images = data.image_result.rss.channel.item;
-
-              if (naver_deal_items === null && naver_deal_images === null) {
-                notify("검색 결과가 없습니다");
-                back_button();
+              var naver_deal_items = data.shop_result;
+              ask_form_header_title.html(keyword + " 검색결과");
+              ask_form_back_btn.html("닫기");
+              ask_form_submit_btn.hide();
+              card_search_result_div.html(cardSearchResultTemplate({naver_deal_items: naver_deal_items})).removeClass("top");
+              if (naver_deal_items !== null) is_more_load = naver_deal_items.length >= <%= Deal::NAVER_RESULT_PER %> ? true : false;
+              if (is_more_load) {
+                $("#card_search_result_list").on("scroll", function(){
+                  var loading = Boolean($(this).attr("loading"));
+                  if (loading && nearBottomOfContainer($(this))) load_more_naver_deals($(this));
+                });
               } else {
-                ask_form_header_title.html(keyword + " 검색결과");
-                ask_form_back_btn.html("닫기");
-                ask_form_submit_btn.hide();
-                card_search_result_div.html(cardSearchResultTemplate({items: naver_deal_items, image_items: naver_deal_images})).removeClass("bottom");
+                card_search_result_div.find(".loading_icon").hide();
+                card_search_result_div.find(".naver_info").show();
               }
             },
             beforeSend: function(){
@@ -593,8 +584,39 @@
             },
             complete: function(){
               loadingEnd();
+              page += 1;
             }
     });
+
+    function load_more_naver_deals(target) {
+      $.ajax({
+              url: '/deals/get_naver_deals/?page='+page+'&keyword='+encodeURIComponent(keyword),
+              dataType: "json",
+              type: "GET",
+              error: function(){
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
+              success: function(data){
+                var naver_deal_items = data.shop_result;
+                $("#naver_deals_table").append(naverDealsTemplate({naver_deal_items: naver_deal_items}));
+                is_more_load = (naver_deal_items !== null && naver_deal_items.length >= <%= Deal::NAVER_RESULT_PER %>) ? true : false;
+                if (is_more_load) {
+                  target.attr("loading", true);
+                } else {
+                  card_search_result_div.find(".loading_icon").hide();
+                  card_search_result_div.find(".naver_info").show();
+                }
+              },
+              beforeSend: function(){
+                loadingStart();
+                target.removeAttr("loading");
+              },
+              complete: function(){
+                loadingEnd();
+                page += 1;
+              }
+      });
+    }
   }
 
   function hide_card_search_result() {
@@ -609,26 +631,10 @@
     ask_form_header_title.html("질문 작성하기");
     if (current_step == 1) { ask_form_back_btn.html("취소"); } else { ask_form_back_btn.html("<i class='fa fa-caret-left'></i> 이전"); }
     ask_form_submit_btn.show();
-    card_search_input_reset.hide();
-    card_search_input.val("");
-    card_search_result_div.addClass("bottom").transitionEmpty();
+    card_search_result_div.addClass("top").transitionEmpty();
   }
 
-  function toggle_search_result(target) {
-    var target_name = target.hasClass("naver_product") ? "naver_product" : "naver_image";
-    var card_search_result = target.parentsUntil(this, ".card_search_result");
-    var naver_product = card_search_result.find(".naver_product");
-    var naver_image = card_search_result.find(".naver_image");
-    var card_search_result_list = card_search_result.find(".card_search_result_list");
-
-    if (!target.hasClass("on")) {
-      naver_product.toggleClass("on");
-      naver_image.toggleClass("on");
-      card_search_result_list.scrollTop(0);
-    }
-  }
-
-  function select_naver_product(product_id) {
+  function select_naver_product(target) {
     var ask_form = $("#ask_form");
     var card_search_input_init = ask_form.find(".card_search_input_init");
     var is_left = Boolean(card_search_input_init.attr("is-left"));
@@ -637,7 +643,15 @@
     var step_3_inner = ask_form.find(".inner.step_3");
     var ask_form_header_title = ask_form.find(".header_title");
     var ask_form_back_btn = ask_form.find(".header_btn.left");
-    var item = naver_deal_items.length > 1 ? $.grep(naver_deal_items, function(obj) { return obj.productId === product_id; })[0] : naver_deal_items;
+
+    var item = {
+      'title':     target.attr("item-title"),
+      'productId': target.attr("item-productId"),
+      'lprice':    target.attr("item-lprice"),
+      'mallName':  target.attr("item-mallName"),
+      'image':     target.attr("item-image"),
+      'link':      target.attr("item-link")
+    };
 
 		$.ajax({
 	        url: "/deals/create_by_naver.json",
@@ -678,60 +692,10 @@
 						loadingStart();
             ask_form_header_title.html("제품정보 업로드중 <i class='fa fa-spinner fa-spin'></i>");
             ask_form_back_btn.html("");
+            target.addClass("selected");
 					},
 					complete: function(){
             loadingEnd();
-            back_button();
-            if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
-					}
-		});
-  }
-
-  function select_naver_image(image_url) {
-    var ask_form = $("#ask_form");
-    var card_search_input_init = ask_form.find(".card_search_input_init");
-    var is_left = Boolean(card_search_input_init.attr("is-left"));
-    var step_1_inner = ask_form.find(".inner.step_1");
-    var step_2_inner = ask_form.find(".inner.step_2");
-    var step_3_inner = ask_form.find(".inner.step_3");
-    var ask_form_header_title = ask_form.find(".header_title");
-    var ask_form_back_btn = ask_form.find(".header_btn.left");
-
-    $.ajax({
-	        url: "/preview_images.json",
-          dataType: "json",
-	        type: "POST",
-	        data: {image_url: image_url},
-	        error: function(){
-	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
-	        },
-	        success: function(data){
-            if (is_left) {
-              step_1_inner.find(".preview_img_id").val(data.preview_img_id);
-              step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-              step_1_inner.find(".ask_image_upload_btn").addClass("on");
-              step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
-              // 결과값 업데이트
-              step_1_inner.find(".ask_image_seg").removeClass("required");
-              step_3_inner.find(".ask_image.left").attr("src", data.image_url);
-	        	} else {
-              step_2_inner.find(".preview_img_id").val(data.preview_img_id);
-              step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-              step_2_inner.find(".ask_image_upload_btn").addClass("on");
-              step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
-              // 결과값 업데이트
-              step_2_inner.find(".ask_image_seg").removeClass("required");
-              step_3_inner.find(".ask_image.right").attr("src", data.image_url);
-	        	}
-            ask_progress_check();
-					},
-	        beforeSend: function(){
-						loadingStart();
-            ask_form_header_title.html("이미지 업로드중 <i class='fa fa-spinner fa-spin'></i>");
-            ask_form_back_btn.html("");
-					},
-					complete: function(){
-						loadingEnd();
             back_button();
             if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
 					}

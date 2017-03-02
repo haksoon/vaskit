@@ -6,6 +6,8 @@ class Deal < ActiveRecord::Base
   validates_attachment_size :image, less_than: 20.megabytes
   validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
 
+  NAVER_RESULT_PER = 10
+
   before_create :rename_file
 
   def rename_file

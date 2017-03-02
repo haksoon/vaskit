@@ -21,21 +21,21 @@
                     var ask = asks[i];
                     loading_icon.before(askThumbnailTemplate({ask:ask}));
                   }
-                  is_more_load = asks.length >= <%= Ask::ASK_PER %> ? true : false;
+                  is_more_load = (asks !== null && asks.length >= <%= Ask::ASK_PER %>) ? true : false;
                 } else if (type == "collections") {
                   var collections = data.collections;
                   for (var j=0; j < collections.length; j++) {
                     var collection = collections[j];
                     loading_icon.before(collectionTemplate({collection: collection}));
                   }
-                  is_more_load = collections.length >= <%= Collection::COLLECTION_PER %> ? true : false;
+                  is_more_load = (collections !== null && collections.length >= <%= Collection::COLLECTION_PER %>) ? true : false;
                 } else if (type == "videos") {
                   var videos = data.videos;
                   for (var k=0; k < videos.length; k++) {
                     var video = videos[k];
                     loading_icon.before(videoThumbnailTemplate({video: video}));
                   }
-                  is_more_load = videos.length >= <%= Video::VIDEO_PER %> ? true : false;
+                  is_more_load = (videos !== null && videos.length >= <%= Video::VIDEO_PER %>) ? true : false;
                 }
                 if (is_more_load) {
                   loading_icon.attr("page", Number(page)+1);
