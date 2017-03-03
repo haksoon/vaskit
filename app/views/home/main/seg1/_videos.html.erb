@@ -51,8 +51,9 @@
   </div>
   <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
     <div class="video_detail">
-      {{ if (video.yt_id === null) { }}
-        {{ if (userApp && !window.HybridApp && (!userAppVer || userAppVerLoading)) { }}
+      {{ var app_ver_loading_tmp = userApp && userDevice.isIOS && (!userAppVer || userAppVerLoading) }}
+      {{ if (video.yt_id === null || (userApp && userDevice.isIOS)) { }}
+        {{ if (app_ver_loading_tmp) { }}
           <a class="video_image" href="https://facebook.com/vaskit.kr/videos/{{= video.fb_id }}" target="_blank">
             <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
             <i class="fa fa-play"></i>
@@ -66,7 +67,7 @@
           </div>
         {{ } }}
       {{ } else { }}
-        {{ if (userApp && !window.HybridApp && (!userAppVer || userAppVerLoading)) { }}
+        {{ if (app_ver_loading_tmp) { }}
           <a class="video_image" href="https://www.youtube.com/watch?v={{= video.yt_id }}" target="_blank">
             <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
             <i class="fa fa-play"></i>

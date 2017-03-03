@@ -5,38 +5,46 @@ class DealsController < ApplicationController
 
   # GET /deals/get_naver_deals.json
   def get_naver_deals
-    keyword = params[:keyword]
-    page = Deal::NAVER_RESULT_PER * (params[:page].to_i - 1) + 1
+    shop_result = nil
 
-    shop_url = URI.encode("https://openapi.naver.com/v1/search/shop.xml?query=#{keyword}&display=#{Deal::NAVER_RESULT_PER}&start=#{page}&sort=sim")
-    shop_uri = URI.parse(shop_url)
-    shop_http = Net::HTTP.new(shop_uri.host, shop_uri.port)
-    shop_http.use_ssl = true
-    shop_http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-    shop_request = Net::HTTP::Get.new(shop_uri.request_uri)
-    shop_request.initialize_http_header('X-Naver-Client-Id' => CLIENT_ID, 'X-Naver-Client-Secret' => CLIENT_SECRET)
-    shop_response = shop_http.request(shop_request)
-    shop_doc = Nokogiri::XML(shop_response.body)
-    shop_result = Hash.from_xml(shop_doc.to_s)['rss']['channel']['item']
+    unless params[:page].blank? && params[:keyword].blank?
+      keyword = params[:keyword]
+      page = Deal::NAVER_RESULT_PER * (params[:page].to_i - 1) + 1
+
+      shop_url = URI.encode("https://openapi.naver.com/v1/search/shop.xml?query=#{keyword}&display=#{Deal::NAVER_RESULT_PER}&start=#{page}&sort=sim")
+      shop_uri = URI.parse(shop_url)
+      shop_http = Net::HTTP.new(shop_uri.host, shop_uri.port)
+      shop_http.use_ssl = true
+      shop_http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+      shop_request = Net::HTTP::Get.new(shop_uri.request_uri)
+      shop_request.initialize_http_header('X-Naver-Client-Id' => CLIENT_ID, 'X-Naver-Client-Secret' => CLIENT_SECRET)
+      shop_response = shop_http.request(shop_request)
+      shop_doc = Nokogiri::XML(shop_response.body)
+      shop_result = Hash.from_xml(shop_doc.to_s)['rss']['channel']['item']
+    end
 
     render json: { shop_result: shop_result }
   end
 
   # GET /deals/get_naver_images.json
   # def get_naver_images
-  #   keyword = params[:keyword]
-  #   page = Deal::NAVER_RESULT_PER * (params[:page].to_i - 1) + 1
+  #   image_result = nil
   #
-  #   image_url = URI.encode("https://openapi.naver.com/v1/search/image.xml?query=#{keyword}&display=#{Deal::NAVER_RESULT_PER}&start=#{page}&sort=sim")
-  #   image_uri = URI.parse(image_url)
-  #   image_http = Net::HTTP.new(image_uri.host, image_uri.port)
-  #   image_http.use_ssl = true
-  #   image_http.verify_mode = OpenSSL::SSL::VERIFY_PEER
-  #   image_request = Net::HTTP::Get.new(image_uri.request_uri)
-  #   image_request.initialize_http_header('X-Naver-Client-Id' => CLIENT_ID, 'X-Naver-Client-Secret' => CLIENT_SECRET)
-  #   image_response = image_http.request(image_request)
-  #   image_doc = Nokogiri::XML(image_response.body)
-  #   image_result = Hash.from_xml(image_doc.to_s)['rss']['channel']['item']
+  #   unless params[:page].blank? && params[:keyword].blank?
+  #     keyword = params[:keyword]
+  #     page = Deal::NAVER_RESULT_PER * (params[:page].to_i - 1) + 1
+  #
+  #     image_url = URI.encode("https://openapi.naver.com/v1/search/image.xml?query=#{keyword}&display=#{Deal::NAVER_RESULT_PER}&start=#{page}&sort=sim")
+  #     image_uri = URI.parse(image_url)
+  #     image_http = Net::HTTP.new(image_uri.host, image_uri.port)
+  #     image_http.use_ssl = true
+  #     image_http.verify_mode = OpenSSL::SSL::VERIFY_PEER
+  #     image_request = Net::HTTP::Get.new(image_uri.request_uri)
+  #     image_request.initialize_http_header('X-Naver-Client-Id' => CLIENT_ID, 'X-Naver-Client-Secret' => CLIENT_SECRET)
+  #     image_response = image_http.request(image_request)
+  #     image_doc = Nokogiri::XML(image_response.body)
+  #     image_result = Hash.from_xml(image_doc.to_s)['rss']['channel']['item']
+  #   end
   #
   #   render json: { image_result: image_result }
   # end

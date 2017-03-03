@@ -1120,7 +1120,7 @@ body {
               .naver_product {
                   table { width: 100%;
                     tr { -webkit-tap-highlight-color: transparent;
-                      &.selected { img { transform: rotateY(1800deg); } }
+                      &.selected { img { transform: scale(0.75) rotateY(1800deg); } }
                       .naver_product_image_seg { width: 50%; height: auto; padding: 10px; border-bottom: 1px solid #dbdbdb; cursor: pointer;
                         img { display: block; width: 100%; height: auto; transition: transform 2s cubic-bezier(0.52, 1.14, 0.58, 1); }
                       }
