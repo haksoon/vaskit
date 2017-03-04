@@ -10,32 +10,34 @@
   <div class="panel-heading">푸쉬알림 히스토리</div>
 
   <!-- Table -->
-  <table class="table table-bordered table-responsive table-striped table-hover">
-    <thead>
-      <tr>
-        <th style="width: 50px;">ID</th>
-        <th style="width: 100px;">구분</th>
-        <th>내용</th>
-        <th style="width: 80px;">전송 요청</th>
-        <th style="width: 80px;">전송 성공</th>
-        <th style="width: 80px;">전송 실패</th>
-        <th style="width: 120px;">전송일</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @notices.each do |notice| %>
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
         <tr>
-          <td><kbd><%= notice.id %></kbd></td>
-          <td><%= notice.push_type %></td>
-          <td><%= simple_format(notice.message, {}, wrapper_tag: 'div') %></td>
-          <td><%= notice.total_count %>개</td>
-          <td><%= notice.success_count %>개</td>
-          <td><%= notice.failure_count %>개</td>
-          <td><%= format_datetime(notice.created_at, :datetime) %></td>
+          <th style="width: 50px;">ID</th>
+          <th style="width: 100px;">구분</th>
+          <th>내용</th>
+          <th style="width: 80px;">전송 요청</th>
+          <th style="width: 80px;">전송 성공</th>
+          <th style="width: 80px;">전송 실패</th>
+          <th style="width: 120px;">전송일</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @notices.each do |notice| %>
+          <tr>
+            <td><kbd><%= notice.id %></kbd></td>
+            <td><%= notice.push_type %></td>
+            <td><%= simple_format(notice.message, {}, wrapper_tag: 'div') %></td>
+            <td><%= notice.total_count %>개</td>
+            <td><%= notice.success_count %>개</td>
+            <td><%= notice.failure_count %>개</td>
+            <td><%= format_datetime(notice.created_at, :datetime) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
   <!-- Table Pagination -->
   <div class="panel-footer" style="text-align: center;">

@@ -169,9 +169,9 @@
   var pushTypeSpecificTemplate = _.template($("#pushTypeSpecificTemplate").html());
 
   function push_test_send() {
-    var msg = $("#msg").val();
-    var link = $("#link").val();
-    var js = $("#js").val();
+    var msg = encodeURIComponent($("#msg").val());
+    var link = encodeURIComponent($("#link").val());
+    var js = encodeURIComponent($("#js").val());
     $("#push_test_btn").attr("href", "<%= test_admin_notices_path %>?msg=" + msg + "&link=" + link + "&js=" + js);
   }
 

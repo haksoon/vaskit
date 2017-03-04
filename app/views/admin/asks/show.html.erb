@@ -39,35 +39,37 @@
   </div>
 
   <!-- Table -->
-  <table class="table table-bordered table-responsive table-hover">
-    <% if @ask.comments.blank? %>
-      <tr><td>아직 댓글이 없습니다</td></tr>
-    <% else %>
-      <% @ask.comments.each do |comment| %>
-        <% if comment.ask_deal_id == @ask.left_ask_deal_id %>
-        <tr class="text-left">
-          <td>
-            <%= image_tag comment.user.avatar.url(:original),
-                          { width: '50px',
-                            class: 'img-rounded' } %>
-            <kbd><%= comment.user.string_id %></kbd>
-            <p class="list-group-item-text"><%= tagging_keywords(comment.content) %></p>
-          </td>
-        </tr>
-        <% else %>
-          <tr class="text-right">
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <% if @ask.comments.blank? %>
+        <tr><td>아직 댓글이 없습니다</td></tr>
+      <% else %>
+        <% @ask.comments.each do |comment| %>
+          <% if comment.ask_deal_id == @ask.left_ask_deal_id %>
+          <tr class="text-left">
             <td>
-              <kbd><%= comment.user.string_id %></kbd>
               <%= image_tag comment.user.avatar.url(:original),
                             { width: '50px',
                               class: 'img-rounded' } %>
+              <kbd><%= comment.user.string_id %></kbd>
               <p class="list-group-item-text"><%= tagging_keywords(comment.content) %></p>
             </td>
           </tr>
+          <% else %>
+            <tr class="text-right">
+              <td>
+                <kbd><%= comment.user.string_id %></kbd>
+                <%= image_tag comment.user.avatar.url(:original),
+                              { width: '50px',
+                                class: 'img-rounded' } %>
+                <p class="list-group-item-text"><%= tagging_keywords(comment.content) %></p>
+              </td>
+            </tr>
+          <% end %>
         <% end %>
       <% end %>
-    <% end %>
-  </table>
+    </table>
+  </div>
 </div>
 
 <div class="panel panel-success">

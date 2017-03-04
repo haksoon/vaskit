@@ -28,7 +28,7 @@
         {{= askThumbnailTemplate({ask:ask}) }}
       {{ } }}
     </div>
-    {{ if (related_collections) { }}
+    {{ if (related_collections.length > 0) { }}
       <div class="related_collections_title"><span class="title">추천 컬렉션</span> <span class="description">이건 어떻게 생각하시나요?</span></div>
       <div class="related_collections_list">
         <div class="clearfix contents_box bxslider">

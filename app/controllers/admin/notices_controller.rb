@@ -13,7 +13,7 @@ class Admin::NoticesController < Admin::HomeController
   def test
     return if params[:msg].blank? || params[:link].blank?
     params[:js] = '' if params[:js].nil? || params[:js] == 'false'
-    payload = { msg: params[:msg],
+    payload = { msg: "#{params[:msg]}\n[테스트 푸쉬 by #{current_user.string_id}]",
                 type: 'true',
                 count: nil,
                 id: 1,

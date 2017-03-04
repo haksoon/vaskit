@@ -141,10 +141,25 @@
   }
 
   function hide_image_edit() {
-    if (confirm('편집중인 내용이 저장되지 않습니다. 종료하시겠어요?')) {
-      close_full_view();
-    } else {
-      history.go(1);
-    }
+    history.go(1);
+    var options = {
+                description: "편집중인 내용이 저장되지 않습니다. 종료하시겠어요?",
+                menus: [
+                  {
+                    name: "종료",
+                    func: "cancle_image_edit();",
+                    class: "confirmation"
+                  }
+                ]
+              };
+    setTimeout(function(){
+      go_url('menu', options);
+    }, 50);
+  }
+
+  function cancle_image_edit() {
+    go_back(2);
+    hide_menu();
+    close_full_view();
   }
 </script>

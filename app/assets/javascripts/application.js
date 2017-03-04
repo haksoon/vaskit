@@ -241,7 +241,6 @@ function go_popstate(e) {
       // console.log(func.callback+"("+func.arguments+") 실행");
     } else {
       history.forward();
-      currentHistory = history.state.pageHistory;
       // console.log("더이상 실행할 뒤로가기 없음");
     }
 
@@ -274,7 +273,6 @@ function go_popstate(e) {
       // console.log(func.callback+"("+func.arguments+") 실행");
     } else {
       history.back();
-      currentHistory = history.state.pageHistory;
       // console.log("더이상 실행할 앞으로가기 없음");
     }
 
@@ -349,15 +347,15 @@ function go_seg(seg_id) {
   }
 }
 
-// function show_history(seg_id) {
-//   console.log(currentHistory);
-//   console.log("뒤로가기 함수");
-//   console.log(segPrevFunc[seg_id]);
-//   console.log("앞으로가기 함수");
-//   console.log(segNextFunc[seg_id]);
-//   console.log(segURL[seg_id]);
-//   console.log(segHistory[seg_id]);
-// }
+function show_history(seg_id) {
+  console.log(currentHistory);
+  console.log("뒤로가기 함수");
+  console.log(segPrevFunc[seg_id]);
+  console.log("앞으로가기 함수");
+  console.log(segNextFunc[seg_id]);
+  console.log(segURL[seg_id]);
+  console.log(segHistory[seg_id]);
+}
 
 function go_url(func_name, func_args) {
   if (window.event) window.event.cancelBubble = true;
@@ -390,7 +388,7 @@ function back_button() {
     back_button_clicked = true;
     setTimeout(function(){
       back_button_clicked = false;
-    },500);
+    }, 200);
   } else {
     return false;
   }
@@ -511,7 +509,7 @@ function open_full_view(html) {
 }
 
 function close_full_view() {
-  $("#main_view").children().last().addClass("off").transitionRemove();
+  $("#main_view").children(".viewer").not(".menu").last().addClass("off").transitionRemove();
 }
 
 function create_wrapper(html, is_full) {
@@ -704,7 +702,7 @@ function alarm_check(last_alarm_count) {
 // Image Load
 function get_image_url(data, model_name, extention) {
 	try {
-		var image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+		var image_url = "http://vaskit.kr/assets/"+model_name+"/"+data.id+"/"+extention+"/";
     var image_file_name = data.image_file_name;
     if (image_file_name.indexOf(".") == -1) image_file_name += ".";
 	  image_url += image_file_name;
@@ -723,7 +721,7 @@ function imgError(image, alter_url) {
 
 function get_avatar(data) {
 	try {
-		var avatar_url = "/assets/users/"+data.id+"/original/";
+		var avatar_url = "http://vaskit.kr/assets/users/"+data.id+"/original/";
     var avatar_file_name = data.avatar_file_name;
     if (avatar_file_name.indexOf(".") == -1) avatar_file_name += ".";
 	  avatar_url += avatar_file_name;

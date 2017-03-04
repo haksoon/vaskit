@@ -545,45 +545,60 @@
   }
 
   function delete_comment(comment_id) {
-    if (confirm('의견을 정말로 삭제하시겠어요?')) {
-      var all_comment_boxes = $("#main_view").find(".comment_box."+comment_id);
-      var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
-      var current_ask_container = current_wrapper.find(".container.main");
-      var ask_box = current_ask_container.find(".ask");
-      var ask_id = Number(ask_box.attr("ask-id"));
-      var all_ask_divs = $("#main_view").find(".ask.ask_"+ask_id);
-      var all_ask_comment_count_spans = all_ask_divs.find(".ask_comment_count");
-      var all_ask_comment_divs = $("#main_view").find(".comment.ask_"+ask_id);
-      var all_ask_comment_lists = all_ask_comment_divs.find(".comment_list");
-      var ask_comment_count = parseInt(all_ask_comment_count_spans.last().html());
-      $.ajax({
-              url: "/comments/"+comment_id+".json",
-              dataType: 'json',
-              type: 'DELETE',
-              error: function() {
-                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
-              },
-              success: function(data) {
-                if (data.status == "success") {
-                  all_comment_boxes.animateCssRemove("bounceOutDown");
-                  ask_comment_count -= 1;
-                  all_ask_comment_count_spans.html(ask_comment_count);
-                  if (ask_comment_count === 0) all_ask_comment_lists.find(".comment_blank").show().animateCss("fadeIn");
-                } else if (data.status == "reply_exist") {
-                  all_comment_boxes.addClass("deleted").attr("is-deleted", true);
-                  all_comment_boxes.find(".comment_content").html("삭제된 댓글입니다");
-                  ask_comment_count -= 1;
-                  all_ask_comment_count_spans.html(ask_comment_count);
-                  if (ask_comment_count === 0) all_ask_comment_lists.find(".comment_blank").show().animateCss("fadeIn");
-                } else if (data.status == "not_authorized") {
-                  notify('권한이 없습니다');
-                }
-              },
-              beforeSend: function(){
-                back_button();
-  		        }
-      });
-    }
+    back_button();
+    var options = {
+                description: "정말로 삭제하시겠어요?",
+                menus: [
+                  {
+                    name: "댓글 삭제",
+                    func: "delete_comment_confirmed(" + comment_id + ");",
+                    class: "confirmation"
+                  }
+                ]
+              };
+    setTimeout(function(){
+      go_url('menu', options);
+    }, 250);
+  }
+
+  function delete_comment_confirmed(comment_id) {
+    var all_comment_boxes = $("#main_view").find(".comment_box."+comment_id);
+    var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+    var current_ask_container = current_wrapper.find(".container.main");
+    var ask_box = current_ask_container.find(".ask");
+    var ask_id = Number(ask_box.attr("ask-id"));
+    var all_ask_divs = $("#main_view").find(".ask.ask_"+ask_id);
+    var all_ask_comment_count_spans = all_ask_divs.find(".ask_comment_count");
+    var all_ask_comment_divs = $("#main_view").find(".comment.ask_"+ask_id);
+    var all_ask_comment_lists = all_ask_comment_divs.find(".comment_list");
+    var ask_comment_count = parseInt(all_ask_comment_count_spans.last().html());
+    $.ajax({
+            url: "/comments/"+comment_id+".json",
+            dataType: 'json',
+            type: 'DELETE',
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              if (data.status == "success") {
+                all_comment_boxes.animateCssRemove("bounceOutDown");
+                ask_comment_count -= 1;
+                all_ask_comment_count_spans.html(ask_comment_count);
+                if (ask_comment_count === 0) all_ask_comment_lists.find(".comment_blank").show().animateCss("fadeIn");
+              } else if (data.status == "reply_exist") {
+                all_comment_boxes.addClass("deleted").attr("is-deleted", true);
+                all_comment_boxes.find(".comment_content").html("삭제된 댓글입니다");
+                ask_comment_count -= 1;
+                all_ask_comment_count_spans.html(ask_comment_count);
+                if (ask_comment_count === 0) all_ask_comment_lists.find(".comment_blank").show().animateCss("fadeIn");
+              } else if (data.status == "not_authorized") {
+                notify('권한이 없습니다');
+              }
+            },
+            beforeSend: function(){
+              back_button();
+		        }
+    });
   }
 
 </script>

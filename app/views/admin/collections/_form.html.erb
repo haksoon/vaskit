@@ -245,27 +245,29 @@
   <!-- Default panel contents -->
   <div class="panel-heading">컬렉션 컨텐츠 리스트</div>
   <!-- Table -->
-  <table class="table table-bordered table-responsive table-hover">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>작성자</th>
-        <th>작성일</th>
-        <th>투표</th>
-        <th>댓글</th>
-        <th>공감</th>
-        <th>열기</th>
-        <th>정렬</th>
-        <th>제거</th>
-      </tr>
-    </thead>
-    <tbody id="asks_list">
-      <% @collection.asks.each do |ask| %>
-        <% @ask = ask %>
-        <%= render '/admin/collection_to_asks/collection_ask' %>
-      <% end %>
-    </tbody>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>작성자</th>
+          <th>작성일</th>
+          <th>투표</th>
+          <th>댓글</th>
+          <th>공감</th>
+          <th>열기</th>
+          <th>정렬</th>
+          <th>제거</th>
+        </tr>
+      </thead>
+      <tbody id="asks_list">
+        <% @collection.asks.each do |ask| %>
+          <% @ask = ask %>
+          <%= render '/admin/collection_to_asks/collection_ask' %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>

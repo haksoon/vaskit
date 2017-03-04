@@ -18,28 +18,30 @@
 		<div class="panel-heading"><%= @tableModel.name %></div>
 
 		<!-- Table -->
-		<table class="table table-bordered table-condensed table-responsive table-striped table-hover">
-			<thead>
-				<tr>
-					<% @record_names.each do |name| %>
-						<th><%=name%></th>
-					<% end %>
-				</tr>
-			</thead>
-			<tbody>
-				<% @records.each do |record| %>
-					<tr>
-						<% @record_names.each do |name| %>
-							<% if record[name].class == ActiveSupport::TimeWithZone %>
-								<td><%= format_datetime(record[name], :date) %></td>
-							<% else %>
-								<td><%= record[name] %></td>
-							<% end %>
-						<% end %>
-					</tr>
-				<% end %>
-			</tbody>
-		</table>
+    <div class="table-responsive">
+  		<table class="table table-bordered table-condensed table-striped table-hover">
+  			<thead>
+  				<tr>
+  					<% @record_names.each do |name| %>
+  						<th><%=name%></th>
+  					<% end %>
+  				</tr>
+  			</thead>
+  			<tbody>
+  				<% @records.each do |record| %>
+  					<tr>
+  						<% @record_names.each do |name| %>
+  							<% if record[name].class == ActiveSupport::TimeWithZone %>
+  								<td><%= format_datetime(record[name], :date) %></td>
+  							<% else %>
+  								<td><%= record[name] %></td>
+  							<% end %>
+  						<% end %>
+  					</tr>
+  				<% end %>
+  			</tbody>
+  		</table>
+    </div>
 
 		<!-- Table Pagination -->
 		<div class="panel-footer" style="text-align: center;">

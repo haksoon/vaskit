@@ -8,7 +8,7 @@
         {{ } }}
         {{ for (var i = 0; i < options.menus.length; i++) { }}
           {{ var menu = options.menus[i] }}
-          <li class="menu_list" onclick="{{= menu.func }}">{{=menu.name}}</li>
+          <li class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{=menu.name}}</li>
         {{ } }}
       </ul>
       <ul class="menu_lists">
@@ -28,15 +28,29 @@
     setTimeout(function(){
       menu.removeClass("ready");
       menu_box.removeClass("ready");
-    },50);
+    }, 100);
+    $(document).on("keydown", menu_keybinding);
   }
 
   function hide_menu() {
-    var menu = $(".viewer.menu").last();
+    var menu = $(".viewer.menu").first();
     var menu_box = menu.find(".menu_box");
     menu.addClass("ready");
     menu_box.addClass("ready").transitionRemove(function(){
       menu.remove();
     });
+    $(document).off("keydown", menu_keybinding);
+  }
+
+  function menu_keybinding(e) {
+    var menu = $(".viewer.menu").last();
+    var menu_box = menu.find(".menu_box");
+    if (e.keyCode == '13') {
+      e.preventDefault();
+      menu_box.find('.confirmation').click();
+    } else if (e.keyCode == '27') {
+      e.preventDefault();
+      back_button();
+    }
   }
 </script>

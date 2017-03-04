@@ -68,13 +68,28 @@ off<script type="text/template" id="askFormTemplate">
   }
 
   function hide_ask_form() {
-    if (confirm('작성중인 내용이 삭제됩니다. 종료하시겠어요?')) {
-      close_full_view();
-      window.onbeforeunload = null;
-      if (userApp) setAppStatusBar();
-    } else {
-      history.go(1);
-    }
+    history.go(1);
+    var options = {
+                description: "작성중인 내용이 삭제됩니다. 종료하시겠어요?",
+                menus: [
+                  {
+                    name: "질문 작성 종료",
+                    func: "close_ask_form();",
+                    class: "confirmation"
+                  }
+                ]
+              };
+    setTimeout(function(){
+      go_url('menu', options);
+    }, 50);
+  }
+
+  function close_ask_form() {
+    go_back(2);
+    hide_menu();
+    close_full_view();
+    window.onbeforeunload = null;
+    if (userApp) setAppStatusBar();
   }
 
   function card_search_input_init(target) {

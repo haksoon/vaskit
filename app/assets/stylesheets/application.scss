@@ -1335,6 +1335,7 @@ body {
               &:last-of-type { border-radius: 0 0 5px 5px; border-bottom: none; }
               &:only-of-type { border-radius: 5px; border-bottom: none; }
               &:active, &:hover { background-color: #f0f0f0; }
+              &.confirmation { color: #FF7800; }
             }
         }
     }

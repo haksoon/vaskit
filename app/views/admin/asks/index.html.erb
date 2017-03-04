@@ -8,47 +8,49 @@
   <div class="panel-heading">질문 전체목록</div>
 
   <!-- Table -->
-  <table class="table table-bordered table-responsive table-hover">
-    <thead>
-      <tr>
-        <th style="width: 10%;">ID</th>
-        <th style="width: 10%;">작성자</th>
-        <th style="width: 10%;">작성일</th>
-        <th style="width: 20%;">이미지</th>
-        <th style="width: 10%;">투표</th>
-        <th style="width: 10%;">댓글</th>
-        <th style="width: 20%;">열기</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @asks.each do |ask| %>
-        <tr class="<%= 'info' if ask.user.user_role == 'user' %>">
-          <td><kbd><%= ask.id %></kbd></td>
-          <td><%= ask.user.string_id %></td>
-          <td><%= format_datetime(ask.created_at, 'past') %></td>
-          <td>
-            <%= link_to admin_ask_path(ask.id) do
-              image_tag ask.left_ask_deal.image.url(:normal),
-                        { width: '50%', class: 'img-thumbnail pull-left' }
-            end %>
-            <%= link_to admin_ask_path(ask.id) do
-              image_tag ask.right_ask_deal.image.url(:normal),
-                        { width: '50%', class: 'img-thumbnail pull-left' }
-            end %>
-          </td>
-          <td><%= link_to "#{ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}개",
-                          admin_ask_path(ask.id),
-                          { class: 'btn btn-default btn-block' } %></td>
-          <td><%= link_to "#{ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count}개",
-                          admin_ask_path(ask.id),
-                          { class: 'btn btn-default btn-block' } %></td>
-          <td><%= link_to '열기',
-                          admin_ask_path(ask.id),
-                          { class: 'btn btn-info btn-block' } %></td>
+  <div class="table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead>
+        <tr>
+          <th style="width: 10%;">ID</th>
+          <th style="width: 10%;">작성자</th>
+          <th style="width: 10%;">작성일</th>
+          <th style="width: 20%;">이미지</th>
+          <th style="width: 10%;">투표</th>
+          <th style="width: 10%;">댓글</th>
+          <th style="width: 20%;">열기</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @asks.each do |ask| %>
+          <tr class="<%= 'info' if ask.user.user_role == 'user' %>">
+            <td><kbd><%= ask.id %></kbd></td>
+            <td><%= ask.user.string_id %></td>
+            <td><%= format_datetime(ask.created_at, 'past') %></td>
+            <td>
+              <%= link_to admin_ask_path(ask.id) do
+                image_tag ask.left_ask_deal.image.url(:normal),
+                          { width: '50%', class: 'img-thumbnail pull-left' }
+              end %>
+              <%= link_to admin_ask_path(ask.id) do
+                image_tag ask.right_ask_deal.image.url(:normal),
+                          { width: '50%', class: 'img-thumbnail pull-left' }
+              end %>
+            </td>
+            <td><%= link_to "#{ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count}개",
+                            admin_ask_path(ask.id),
+                            { class: 'btn btn-default btn-block' } %></td>
+            <td><%= link_to "#{ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count}개",
+                            admin_ask_path(ask.id),
+                            { class: 'btn btn-default btn-block' } %></td>
+            <td><%= link_to '열기',
+                            admin_ask_path(ask.id),
+                            { class: 'btn btn-info btn-block' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
   <!-- Table Pagination -->
   <div class="panel-footer" style="text-align: center;">

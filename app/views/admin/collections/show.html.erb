@@ -29,36 +29,38 @@
     </div>
     <!-- Table -->
     <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel">
-      <table class="table table-bordered table-responsive">
-        <tr>
-          <th style="width: 100px;">제목</th>
-          <td><%= @collection.name %></td>
-        </tr>
-        <tr>
-          <th>설명</th>
-          <td><%= tagging_keywords(@collection.description) %></td>
-        </tr>
-        <tr>
-          <th>키워드</th>
-          <td>
-            <% if @collection.collection_keywords.blank? %>
-              키워드를 추가해주세요
-            <% else %>
-              <% @collection.collection_keywords.each do |keyword| %>
-                <span class="label label-danger"><%= keyword.keyword %></span>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <tr>
+            <th style="width: 100px;">제목</th>
+            <td><%= @collection.name %></td>
+          </tr>
+          <tr>
+            <th>설명</th>
+            <td><%= tagging_keywords(@collection.description) %></td>
+          </tr>
+          <tr>
+            <th>키워드</th>
+            <td>
+              <% if @collection.collection_keywords.blank? %>
+                키워드를 추가해주세요
+              <% else %>
+                <% @collection.collection_keywords.each do |keyword| %>
+                  <span class="label label-danger"><%= keyword.keyword %></span>
+                <% end %>
               <% end %>
-            <% end %>
-          </td>
-        </tr>
-        <tr>
-          <th>게시일</th>
-          <td><%= format_datetime(@collection.created_at, :date) %></td>
-        </tr>
-        <tr>
-          <th>이미지</th>
-          <td><%= image_tag @collection.image.url(:original), width: '100%' %></td>
-        </tr>
-      </table>
+            </td>
+          </tr>
+          <tr>
+            <th>게시일</th>
+            <td><%= format_datetime(@collection.created_at, :date) %></td>
+          </tr>
+          <tr>
+            <th>이미지</th>
+            <td><%= image_tag @collection.image.url(:original), width: '100%' %></td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -72,29 +74,31 @@
 
     <!-- Table -->
     <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel">
-      <table class="table table-bordered table-responsive">
-        <% if @related_collections.blank? %>
-          <tr>
-            <th style="width: 100px;">연관컬렉션</th>
-            <td>키워드를 더 추가해주세요</td>
-          </tr>
-        <% else %>
-          <% @related_collections.each_with_index do |id, index| %>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <% if @related_collections.blank? %>
             <tr>
-              <th style="width: 100px;">연관 컬렉션 <%= index + 1 %></th>
-              <td>
-                <% collection = Collection.find(id) %>
-                <dl>
-                  <dt><%= collection.name %></dt>
-                  <dd><%= collection.description %></dd>
-                </dl>
-                <%= image_tag collection.image.url(:normal),
-                              { width: '100%', class: 'img-thumbnail' } %>
-              </td>
+              <th style="width: 100px;">연관컬렉션</th>
+              <td>키워드를 더 추가해주세요</td>
             </tr>
+          <% else %>
+            <% @related_collections.each_with_index do |id, index| %>
+              <tr>
+                <th style="width: 100px;">연관 컬렉션 <%= index + 1 %></th>
+                <td>
+                  <% collection = Collection.find(id) %>
+                  <dl>
+                    <dt><%= collection.name %></dt>
+                    <dd><%= collection.description %></dd>
+                  </dl>
+                  <%= image_tag collection.image.url(:normal),
+                                { width: '100%', class: 'img-thumbnail' } %>
+                </td>
+              </tr>
+            <% end %>
           <% end %>
-        <% end %>
-      </table>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -108,30 +112,32 @@
 
     <!-- Table -->
     <div id="collapseThree" class="panel-collapse collapse" role="tabpanel">
-      <table class="table table-bordered table-responsive">
-        <% if @collection.asks.blank? %>
-          <tr>
-            <th style="width: 100px;">컨텐츠</th>
-            <td>컨텐츠를 추가해주세요</td>
-          </tr>
-        <% else %>
-          <% @collection.asks.each_with_index do |ask, index| %>
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <% if @collection.asks.blank? %>
             <tr>
-              <th style="width: 100px;">컨텐츠 <%= index + 1 %></th>
-              <td>
-                <dl>
-                  <dt><%= ask.user.string_id %>님의 질문</dt>
-                  <dd><%= tagging_keywords(ask.message) %></dd>
-                </dl>
-                <%= image_tag ask.left_ask_deal.image.url(:normal),
-                              { width: '50%', class: 'img-thumbnail pull-left' } %>
-                <%= image_tag ask.right_ask_deal.image.url(:normal),
-                              { width: '50%', class: 'img-thumbnail pull-left' } %>
-              </td>
+              <th style="width: 100px;">컨텐츠</th>
+              <td>컨텐츠를 추가해주세요</td>
             </tr>
+          <% else %>
+            <% @collection.asks.each_with_index do |ask, index| %>
+              <tr>
+                <th style="width: 100px;">컨텐츠 <%= index + 1 %></th>
+                <td>
+                  <dl>
+                    <dt><%= ask.user.string_id %>님의 질문</dt>
+                    <dd><%= tagging_keywords(ask.message) %></dd>
+                  </dl>
+                  <%= image_tag ask.left_ask_deal.image.url(:normal),
+                                { width: '50%', class: 'img-thumbnail pull-left' } %>
+                  <%= image_tag ask.right_ask_deal.image.url(:normal),
+                                { width: '50%', class: 'img-thumbnail pull-left' } %>
+                </td>
+              </tr>
+            <% end %>
           <% end %>
-        <% end %>
-      </table>
+        </table>
+      </div>
     </div>
   </div>
 </div>

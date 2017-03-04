@@ -23,49 +23,51 @@
   <!-- Default panel contents -->
   <div class="panel-heading">비교영상 내용</div>
   <!-- Table -->
-  <table class="table table-bordered table-responsive">
-    <tr>
-      <th style="width: 100px;">제목</th>
-      <td><%= @video.title %></td>
-    </tr>
-    <tr>
-      <th>설명</th>
-      <td><%= tagging_keywords(@video.description) %></td>
-    </tr>
-    <tr>
-      <th>게시일</th>
-      <td><%= format_datetime(@video.created_at, :date) %></td>
-    </tr>
-    <tr>
-      <th>이미지</th>
-      <td><%= image_tag @video.image.url(:original),
-                        { width: '100%' } %></td>
-    </tr>
-    <tr>
-      <th>페북 영상</th>
-      <td>
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.fb_id}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" %>"
-                  class="embed-responsive-item"
-                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th>유튜브 영상</th>
-      <td>
-        <div class="embed-responsive embed-responsive-16by9">
-          <iframe src="<%= "https://www.youtube.com/embed/#{@video.yt_id}" %>"
-                  class="embed-responsive-item"
-                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <th>질문</th>
-      <td>
-        <%= render '/admin/asks/thumbnail', ask: @video.ask %>
-      </td>
-    </tr>
-  </table>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th style="width: 100px;">제목</th>
+        <td><%= @video.title %></td>
+      </tr>
+      <tr>
+        <th>설명</th>
+        <td><%= tagging_keywords(@video.description) %></td>
+      </tr>
+      <tr>
+        <th>게시일</th>
+        <td><%= format_datetime(@video.created_at, :date) %></td>
+      </tr>
+      <tr>
+        <th>이미지</th>
+        <td><%= image_tag @video.image.url(:original),
+                          { width: '100%' } %></td>
+      </tr>
+      <tr>
+        <th>페북 영상</th>
+        <td>
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.fb_id}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" %>"
+                    class="embed-responsive-item"
+                    width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>유튜브 영상</th>
+        <td>
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe src="<%= "https://www.youtube.com/embed/#{@video.yt_id}" %>"
+                    class="embed-responsive-item"
+                    width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th>질문</th>
+        <td>
+          <%= render '/admin/asks/thumbnail', ask: @video.ask %>
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

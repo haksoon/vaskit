@@ -29,6 +29,11 @@
   <div class="recent_search">
     {{ var recent_search_list = $.cookie('recent_search_list') }}
     {{ if (recent_search_list != null) { }}
+      {{ localStorage.recent_search_list = recent_search_list }}
+      {{ $.cookie('recent_search_list', null) }}
+    {{ } }}
+    {{ recent_search_list = localStorage.recent_search_list }}
+    {{ if (recent_search_list !== undefined) { }}
       <div class="recent_search_title">
         <i class="fa fa-caret-right"></i> 최근 검색어
         <span class="recent_search_reset" onclick="reset_recent_search();">&times; 삭제</span>
@@ -37,7 +42,7 @@
         {{ recent_search_list = recent_search_list.split(".") }}
         {{ for (var i=recent_search_list.length; i > 0; i--) { }}
           {{ var search = JSON.parse(recent_search_list[i-1]) }}
-          {{ var keyword = search.keyword }}
+          {{ var keyword = search.keyword.replace(new RegExp(/[_][d][o][t][_]/, "g"), ".") }}
           {{ var type = search.type }}
           {{ var time = search.time }}
           {{= searchPreviewTemplate({type: type, keyword: keyword, id: null, time: time}) }}
@@ -79,7 +84,7 @@
 
     search_input_submit.off("click").on("click", function(){ search_by_key(); });
     search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
-    search_input.off("keydown keyup blur")
+    search_input.off("keydown keyup focus blur")
                 .on("keydown", function(e) {
               		if (e.keyCode == '13') {
               			e.preventDefault();
@@ -88,12 +93,12 @@
               		} else if (e.keyCode == '27') {
               			e.preventDefault();
               			search_keyword_reset();
-              		} else if (e.keyCode == '40' && $(this).val().length > 0) {
+              		} else if (e.keyCode == '40') {
               			e.preventDefault();
-              			navigate_by_key(true);
-              		} else if (e.keyCode == '38' && $(this).val().length > 0) {
+              			if ($(this).val().length > 0) navigate_by_key(true);
+              		} else if (e.keyCode == '38') {
               			e.preventDefault();
-              			navigate_by_key(false);
+              			if ($(this).val().length > 0) navigate_by_key(false);
               		}
               	}).on("keyup", function(e) {
                   var keyword = $(this).val();
@@ -205,7 +210,7 @@
   			}
   		} else {
         search_focus_index = Number(search_preview_container.attr("index"));
-  			if (search_focus_index == -1) {
+  			if (search_focus_index < 1) {
   				search_preview_container.attr("index", search_result_length - 1);
   				search_preview_container.scrollTop(search_result_height * search_result_length);
   			} else {
@@ -283,8 +288,9 @@
   }
 
   function save_recent_search(type, keyword) {
-    var recent_search_list = $.cookie('recent_search_list');
-    var search_array = recent_search_list === null ? [] : recent_search_list.split(".");
+    var recent_search_list = localStorage.recent_search_list;
+    var search_array = recent_search_list === undefined ? [] : recent_search_list.split(".");
+    keyword = keyword.replace(new RegExp(/[.]/, 'g'), "_dot_");
     if (search_array.length >= 10) search_array = search_array.splice(search_array.length-9, search_array.length);
     for (var i=0; i<search_array.length; i++) {
       var search = search_array[i];
@@ -298,11 +304,11 @@
     });
     search_array.push(this_search);
     recent_search_list = search_array.join(".");
-    $.cookie('recent_search_list', recent_search_list, { expires : 30000, path : '/' });
+    localStorage.recent_search_list = recent_search_list;
   }
 
   function reset_recent_search() {
-    $.cookie('recent_search_list', null);
+    localStorage.removeItem('recent_search_list');
     $(".search_preview").html(recentSearchTemplate());
   }
 

@@ -38,7 +38,7 @@ class Collection < ActiveRecord::Base
                                                  .select(:collection_id, 'count(collection_id) AS collection_count')
                                                  .map(&:collection_id)
     if related_collections_ids.empty?
-      []
+      Collection.none
     else
       Collection.where(show: true, id: related_collections_ids)
                 .order("FIELD(id,#{related_collections_ids.join(',')})")

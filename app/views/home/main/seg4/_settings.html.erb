@@ -41,61 +41,61 @@
     create_wrapper(html);
     var url = '/users/settings';
     return url;
-  };
+  }
 
   function hide_settings() {
     remove_wrapper();
-  };
+  }
 
   function show_edit_profile() {
     var html = editProfileTemplate();
     create_wrapper(html);
     var url = '/users/settings/edit_profile';
     return url;
-  };
+  }
   function hide_edit_profile() {
     remove_wrapper();
-  };
+  }
 
   function show_edit_password() {
     var html = editPasswordTemplate();
     create_wrapper(html);
     var url = '/users/settings/edit_password';
     return url;
-  };
+  }
   function hide_edit_password() {
     remove_wrapper();
-  };
+  }
 
   function show_edit_push_alarm() {
     var html = editPushAlarmTemplate();
     create_wrapper(html);
     var url = '/users/settings/edit_push_alarm';
     return url;
-  };
+  }
   function hide_edit_push_alarm() {
     remove_wrapper();
-  };
+  }
 
   function show_edit_email_alarm() {
     var html = editEmailAlarmTemplate();
     create_wrapper(html);
     var url = '/users/settings/edit_email_alarm';
     return url;
-  };
+  }
   function hide_edit_email_alarm() {
     remove_wrapper();
-  };
+  }
 
   function show_contact_us() {
     var html = contactUsTemplate();
     create_wrapper(html);
     var url = '/etc/contact_us';
     return url;
-  };
+  }
   function hide_contact_us() {
     remove_wrapper();
-  };
+  }
 
   function show_faq_help() {
     load_template('faq_help', function(){
@@ -104,10 +104,10 @@
     });
     var url = '/etc/faq_help';
     return url;
-  };
+  }
   function hide_faq_help() {
     close_full_view();
-  };
+  }
 
   function show_access_term() {
     load_template('access_term', function(){
@@ -116,10 +116,10 @@
     });
     var url = '/etc/access_term';
     return url;
-  };
+  }
   function hide_access_term() {
     close_full_view();
-  };
+  }
 
   function show_privacy_policy() {
     load_template('privacy_policy', function(){
@@ -128,10 +128,10 @@
     });
     var url = '/etc/privacy_policy';
     return url;
-  };
+  }
   function hide_privacy_policy() {
     close_full_view();
-  };
+  }
 
   function open_sign_out_menu() {
     var options = {
@@ -142,9 +142,9 @@
                     func: "back_button(); sign_out();"
                   }
                 ]
-              }
+              };
     go_url('menu', options);
-  };
+  }
 
   function sign_out() {
     $.ajax({
@@ -167,7 +167,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 </script>
 
 <script type="text/template" id="editProfileTemplate">
@@ -177,19 +177,21 @@
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));">
     <div class="settings">
-      <span class="setting_title"><i class="fa fa-caret-right"></i> 당신의 예쁜 모습을 보여주세요!</span>
-      <div class="profile_div setting_menu">
+      <span class="setting_title">
+        <i class="fa fa-caret-right"></i> 당신의 예쁜 모습을 보여주세요!
+        <input type="file" id="user_picture_file" name="user_picture" accept="image/*" style="display:inline; width:1px; height:1px; visibility:hidden;" onchange="update_user_picture();">
+      </span>
+      <div class="profile_div setting_menu" onclick="$('#user_picture_file').click(); $('#user_picture_uploading').addClass('fa-spinner');">
         <img id="preview_user_profile" class="profile_pic" src="{{= get_avatar(current_user) }}">
         <span id="preview_user_profile_edit_btn" style="display: none;" onclick="go_url('image_edit', $(this));" img-id="" is-circle="true" cropping-type="user_profile"><i class="fa fa-crop"></i></span>
-        <input type="file" id="user_picture_file" name="user_picture" accept="image/*" style="display:inline; width:1px; height:1px; visibility:hidden;" onchange="update_user_picture();">
       </div>
-      <span class="setting_menu" onclick="$('#user_picture_file').click(); $('#user_picture_uploading').addClass('fa-spinner');">사진 변경 <i id="user_picture_uploading" class="fa fa-spin" style="color: #999;"></i></span>
-      <span class="setting_menu" onclick="destroy_user_picture();">사진 삭제</span>
+      <span class="setting_menu" onclick="$('#user_picture_file').click(); $('#user_picture_uploading').addClass('fa-spinner');">프로필 이미지 변경하기 <i id="user_picture_uploading" class="fa fa-spin setting_btn" style="color: #999;"></i></span>
+      <span class="setting_menu" onclick="destroy_user_picture();">프로필 이미지 삭제하기</span>
     </div>
     <div class="settings">
       <span class="setting_title"><i class="fa fa-caret-right"></i> 닉네임 변경하기</span>
       <span class="setting_menu" style="margin-bottom: 10px; border-bottom: 1px solid #eee; padding: 0px;" onclick="change_nickname_input_init();">
-        <input id="change_nickname_input" type="text" class="input text_field right" placeholder="{{=current_user.string_id}}" disabled>
+        <input id="change_nickname_input" type="text" class="input text_field right" placeholder="{{= current_user.string_id }}" disabled>
         <span id="change_nickname_submit" onclick="change_nickname();" class="input btn_field text_btn right">변경</span>
       </span>
     </div>
@@ -206,15 +208,19 @@
                                   	e.preventDefault();
                                     $(this).blur();
                                   	change_nickname();
-                                	};
+                                	}
                               	}).keyup(function(e){
-                                  $(this).val().length == 0 ? $("#change_nickname_submit").removeClass("ready") : $("#change_nickname_submit").addClass("ready");
+                                  if ($(this).val().length === 0) {
+                                    $("#change_nickname_submit").removeClass("ready");
+                                  } else {
+                                    $("#change_nickname_submit").addClass("ready");
+                                  }
                                 }).on("focus", function(){
                                   $(this).attr("placeholder", "변경할 닉네임을 입력해주세요");
                                 }).on("blur", function(){
                                   $(this).attr('disabled',true);
                                 }).attr('disabled',false).focus();
-  };
+  }
 
   function update_user_picture() {
     var fileObj = $("#user_picture_file");
@@ -243,9 +249,27 @@
               }
 		    }).fail(function (data) {}).done(function () {});
 		});
-  };
+  }
 
   function destroy_user_picture() {
+    if (get_avatar(current_user) == "/images/custom/user_profile_preview.png") {
+      notify("프로필 이미지가 없습니다");
+    } else {
+      var options = {
+        description: "프로필 이미지를 정말로 삭제하시겠어요?",
+        menus: [
+          {
+            name: "이미지 삭제",
+            func: "destroy_user_picture_confirmed();",
+            class: "confirmation"
+          }
+        ]
+      };
+      go_url('menu', options);
+    }
+  }
+
+  function destroy_user_picture_confirmed() {
     $.ajax({
           url: '/users/destroy_user_picture.json',
           type: 'DELETE',
@@ -257,18 +281,19 @@
           },
           beforeSend: function() {
             loadingStart();
+            back_button();
           },
           complete: function() {
             user_profile_on();
             loadingEnd();
           }
-    })
-  };
+    });
+  }
 
   function change_nickname() {
     var english = /^[a-z0-9]*$/;
 		var string_id = $("#change_nickname_input").val();
-		if ( string_id == "" || string_id == null ){
+		if ( string_id === "" || string_id === null ){
 			notify("빈칸입니다!");
       $("#change_nickname_input").focus();
 		} else if ( string_id == current_user.string_id ) {
@@ -303,8 +328,8 @@
               loadingEnd();
 	          }
 			});
-		};
-  };
+		}
+  }
 </script>
 
 <script type="text/template" id="editPasswordTemplate">
@@ -383,7 +408,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 </script>
 
 <script type="text/template" id="editPushAlarmTemplate">
@@ -451,7 +476,7 @@
               loadingEnd();
             }
     });
-  };
+  }
 </script>
 
 <script type="text/template" id="contactUsTemplate">
@@ -484,7 +509,7 @@
   function contact_us() {
     var message = $("#contact_us_message").val();
     var contact = $("#contact_us_user").val();
-    if (message.length == 0) {
+    if (message.length === 0) {
       notify("질의하실 내용을 입력해 주세요");
       $("#contact_us_message").focus();
     } else {
@@ -508,6 +533,6 @@
           loadingEnd();
         }
       });
-    };
-  };
+    }
+  }
 </script>
