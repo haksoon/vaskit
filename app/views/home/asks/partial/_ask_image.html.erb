@@ -190,7 +190,7 @@
     function end(e) {
       if (mouseEndY - mouseStartY > deltaY) {
         e.preventDefault();
-        back_button();
+        history.back();
       } else {
         img_layer.clearQueue().animate({top: "0%"}, 100);
         if (Math.abs(mouseEndX - mouseStartX) > deltaX) {

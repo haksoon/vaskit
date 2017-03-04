@@ -105,7 +105,7 @@
     var current_comment_input_init = current_comment_container.find(".comment_input_init");
     var current_comment_input = current_comment_container.find(".comment_input");
 
-    back_button();
+    history.back();
     current_comment_input.val("");
     current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('reply', comment_id); }).click();
   }
@@ -120,7 +120,7 @@
     var current_comment_html = current_comment_box.find(".comment_content").html().trim().replace(new RegExp('<br>', 'g'), '\n');
     var current_comment_content = $(document.createElement('div')).html(current_comment_html).text();
 
-    back_button();
+    history.back();
     current_comment_input.val(current_comment_content);
     current_comment_input_init.removeAttr("onclick").off("click").on("click", function(){ comment_input_activate('edit', comment_id); }).click();
   }
@@ -379,7 +379,7 @@
                                setTimeout(function(){
                                  $("html").css({height: ''});
                                  window.scrollTo(0,0);
-                               },50);
+                               }, 50);
                              } // iOS web 키패드 이슈
                              current_comment_lists.css({paddingBottom: "10px"});
                              $(this).height(50 - 32);
@@ -422,11 +422,11 @@
   //                   menus: [
   //                     {
   //                       name: is_left ? "오른쪽에 댓글 달기" : "왼쪽에 댓글 달기",
-  //                       func: "back_button(); toggle_comment();"
+  //                       func: "history.back(); toggle_comment();"
   //                     },
   //                     {
   //                       name: "이미지 첨부하기",
-  //                       func: "back_button(); attach_comment_image();"
+  //                       func: "history.back(); attach_comment_image();"
   //                     }
   //                   ]
   //                 };
@@ -435,7 +435,7 @@
   //
   // function attach_comment_image() {
   //   notify('이미지 첨부 - 준비중');
-  //   back_button();
+  //   history.back();
   // };
   //
   function toggle_comment(target) {
@@ -504,7 +504,7 @@
                         },
                         {
                           name: "신고하기",
-                          func: "report_comment("+comment_id+");"
+                          func: "history.back(); report_content('comment', "+comment_id+");"
                         }
                       ]
                     };
@@ -537,7 +537,7 @@
 		        	}
 		        },
 		        beforeSend: function(){
-              back_button();
+              history.back();
 		        },
 		        complete: function(){
 		        }
@@ -545,7 +545,7 @@
   }
 
   function delete_comment(comment_id) {
-    back_button();
+    history.back();
     var options = {
                 description: "정말로 삭제하시겠어요?",
                 menus: [
@@ -558,7 +558,7 @@
               };
     setTimeout(function(){
       go_url('menu', options);
-    }, 250);
+    }, 50);
   }
 
   function delete_comment_confirmed(comment_id) {
@@ -596,103 +596,9 @@
               }
             },
             beforeSend: function(){
-              back_button();
+              history.back();
 		        }
     });
   }
 
-</script>
-
-<script type="text/template" id="reportInputTemplate">
-  <li class="menu_list">
-    <textarea id="report_message" class="input text_field" rows="5" placeholder="신고하실 내용을 입력해주세요"></textarea>
-  </li>
-  <li class="menu_list" onclick="submit_report('{{= target }}', {{= target_id}}, {{= report_type}});">제출하기</li>
-</script>
-
-<script>
-  var reportInputTemplate = _.template($("#reportInputTemplate").html());
-
-  function report_ask(ask_id) {
-    var options = {
-                menus: [
-                  {
-                    name: "구매결정과는 무관한 내용이군요",
-                    func: "submit_report('ask', " + ask_id + ", 1);"
-                  },
-                  {
-                    name: "광고성, 홍보성이 짙은 내용이군요",
-                    func: "submit_report('ask', " + ask_id + ", 2);"
-                  },
-                  {
-                    name: "비윤리적인 내용은 보고싶지 않아요",
-                    func: "submit_report('ask', " + ask_id + ", 3);"
-                  },
-                  {
-                    name: "직접 입력하겠어요",
-                    func: "open_report('ask', " + ask_id + ", 4, $(this));"
-                  }
-                ]
-              };
-    visitor_check(function(){ go_url('menu', options); });
-  }
-
-  function report_comment(comment_id) {
-    back_button();
-    var options = {
-                menus: [
-                  {
-                    name: "구매결정과는 무관한 내용이군요",
-                    func: "submit_report('comment', " + comment_id + ", 1);"
-                  },
-                  {
-                    name: "광고성, 홍보성이 짙은 내용이군요",
-                    func: "submit_report('comment', " + comment_id + ", 2);"
-                  },
-                  {
-                    name: "비윤리적인 내용은 보고싶지 않아요",
-                    func: "submit_report('comment', " + comment_id + ", 3);"
-                  },
-                  {
-                    name: "직접 입력하겠어요",
-                    func: "open_report('comment', " + comment_id + ", 4, $(this));"
-                  }
-                ]
-              };
-    setTimeout(function(){
-      go_url('menu', options);
-    }, 250);
-  }
-
-  function open_report(target, target_id, report_type, elem) {
-    elem.prevAll().remove();
-    elem.after(reportInputTemplate({target: target, target_id: target_id, report_type: report_type}));
-  }
-
-  function submit_report(target, target_id, report_type) {
-    var message = $("#report_message").val();
-    $.ajax({
-	        url: "/log_reports.json",
-          dataType: "json",
-	        type: "POST",
-	        data: {target: target, target_id: target_id, report_type: report_type, message: message},
-					error: function(){
-	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
-	        },
-	        success: function(data){
-	        	if (data.already_report) {
-	        		notify("이미 신고하신 항목입니다");
-	        	} else {
-	        		notify("신고가 정상적으로 접수되었습니다. 감사합니다!");
-	        	}
-            back_button();
-	        },
-	        beforeSend: function(){
-						loadingStart();
-	        },
-	        complete: function(){
-						loadingEnd();
-	        }
-		});
-  }
 </script>

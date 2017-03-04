@@ -89,31 +89,33 @@
         </div>
       </div>
     </div>
-    <div class="container">
-      <!-- Breadcrumb -->
-      <% if controller_name != 'home' %>
-        <ol class="breadcrumb">
-          <li><%= link_to 'Home', admin_path %></li>
-          <% if action_name == 'index' %>
-            <li class="active"><%= controller_name.capitalize %></li>
-          <% else %>
-            <li><%= link_to controller_name.capitalize, "/#{controller_path}" %></li>
-            <li class="active"><%= action_name.capitalize  %></li>
-            <% if !params[:id].nil? %>
-            <li class="active"><%= params[:id] %></li>
+    <% if current_user && current_user.user_role == 'admin' %>
+      <div class="container">
+        <!-- Breadcrumb -->
+        <% if controller_name != 'home' %>
+          <ol class="breadcrumb">
+            <li><%= link_to 'Home', admin_path %></li>
+            <% if action_name == 'index' %>
+              <li class="active"><%= controller_name.capitalize %></li>
+            <% else %>
+              <li><%= link_to controller_name.capitalize, "/#{controller_path}" %></li>
+              <li class="active"><%= action_name.capitalize  %></li>
+              <% if !params[:id].nil? %>
+              <li class="active"><%= params[:id] %></li>
+              <% end %>
             <% end %>
-          <% end %>
-        </ol>
-      <% end %>
-      <!-- Flash Message -->
-      <% flash.each do |type, message| %>
-        <div class="alert <%= bootstrap_for(type)[:type] %> alert-dismissable fade in">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-          <b><%= bootstrap_for(type)[:exclamation] %></b>
-          <%= message.html_safe %>
-        </div>
-      <% end %>
-    </div>
+          </ol>
+        <% end %>
+        <!-- Flash Message -->
+        <% flash.each do |type, message| %>
+          <div class="alert <%= bootstrap_for(type)[:type] %> alert-dismissable fade in">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <b><%= bootstrap_for(type)[:exclamation] %></b>
+            <%= message.html_safe %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
     <div class="container">
       <!-- Contents -->
       <%= yield %>

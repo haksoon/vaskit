@@ -24,7 +24,7 @@
          url('/images/fonts/NanumSquareR.woff') format('woff'),
          url('/images/fonts/NanumSquareR.ttf') format('truetype');
     font-weight: normal;
-    font-style: normal
+    font-style: normal;
 }
 @font-face {
     font-family: 'NanumSquareL';
@@ -33,7 +33,7 @@
          url('/images/fonts/NanumSquareL.woff') format('woff'),
          url('/images/fonts/NanumSquareL.ttf') format('truetype');
     font-weight: normal;
-    font-style: normal
+    font-style: normal;
 }
 @font-face {
     font-family: 'NanumSquareB';
@@ -42,7 +42,7 @@
          url('/images/fonts/NanumSquareB.woff') format('woff'),
          url('/images/fonts/NanumSquareB.ttf') format('truetype');
     font-weight: normal;
-    font-style: normal
+    font-style: normal;
 }
 @font-face {
     font-family: 'NanumSquareEB';
@@ -51,7 +51,7 @@
          url('/images/fonts/NanumSquareEB.woff') format('woff'),
          url('/images/fonts/NanumSquareEB.ttf') format('truetype');
     font-weight: normal;
-    font-style: normal
+    font-style: normal;
 }
 
 @mixin layout {
@@ -231,7 +231,8 @@ body {
           }
           &.app_banner { text-align: left; margin: 0 50px; font-size: 14px;
             &:active { transform: initial; }
-            .app_banner_btn { float: right; height: 20px; padding: 5px 10px; margin: 10px 0; line-height: 20px; background-color: #fff; color: #ff7800; border-radius: 5px; transition: color .25s, background-color .25s;
+            .app_banner_btn { display: block; height: 30px; line-height: 30px; text-align: center; margin: 10px 0;
+                              background-color: #fff; color: #ff7800; border-radius: 5px; transition: color .25s, background-color .25s;
               &:active { background-color: #ff7800; color: #fff; }
             }
           }
@@ -316,6 +317,10 @@ body {
 }
 
 /* ============================== 기본 Components ============================== */
+
+.hidden {
+  display: none;
+}
 
 .contents_box {
     display: block;
@@ -427,24 +432,26 @@ body {
 
 .loading_div { position: fixed; top: 0px; width: 100%; height: 100%; z-index: 990; display: none; overflow: hidden; -webkit-tap-highlight-color: transparent;
   .loading_bar { display: none; width: 0%; height: 5px; background-color: #666; }
-  .loading_init { position: absolute; top: 50px; width: 100%; height: calc(100% - 100px); display: table; background-color: #fff; line-height: 40px; @include fontNumber;
-    .loading_spinner { margin: 0px auto; width: 35px; height: 20px;
-      div { float: left; width: 5px; height: 100%; margin: 0 1px; background-color: #FF7200;
-        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        &.rect2 { -webkit-animation-delay: -1.2s; animation-delay: -1.2s;}
-        &.rect2 { -webkit-animation-delay: -1.1s; animation-delay: -1.1s;}
-        &.rect3 { -webkit-animation-delay: -1.0s; animation-delay: -1.0s;}
-        &.rect4 { -webkit-animation-delay: -0.9s; animation-delay: -0.9s;}
-        &.rect5 { -webkit-animation-delay: -0.8s; animation-delay: -0.8s;}
-        @-webkit-keyframes sk-stretchdelay {
-          0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
-          20% { -webkit-transform: scaleY(1.0) }
-        }
-        @keyframes sk-stretchdelay {
-          0%, 40%, 100% { -webkit-transform: scaleY(0.4); transform: scaleY(0.4); }
-          20% { -webkit-transform: scaleY(1.0); transform: scaleY(1.0); }
-        }
+}
+
+#loading_init { position: absolute; top: 0px; width: 100%; height: calc(100% - 50px); z-index: 5;
+                display: table; background-color: #fff; line-height: 40px; @include fontNumber; box-shadow: none !important;
+  #loading_spinner { margin: 0px auto; width: 35px; height: 20px;
+    div { float: left; width: 5px; height: 100%; margin: 0 1px; background-color: #FF7200;
+      -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+      animation: sk-stretchdelay 1.2s infinite ease-in-out;
+      &.rect2 { -webkit-animation-delay: -1.2s; animation-delay: -1.2s;}
+      &.rect2 { -webkit-animation-delay: -1.1s; animation-delay: -1.1s;}
+      &.rect3 { -webkit-animation-delay: -1.0s; animation-delay: -1.0s;}
+      &.rect4 { -webkit-animation-delay: -0.9s; animation-delay: -0.9s;}
+      &.rect5 { -webkit-animation-delay: -0.8s; animation-delay: -0.8s;}
+      @-webkit-keyframes sk-stretchdelay {
+        0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+        20% { -webkit-transform: scaleY(1.0) }
+      }
+      @keyframes sk-stretchdelay {
+        0%, 40%, 100% { -webkit-transform: scaleY(0.4); transform: scaleY(0.4); }
+        20% { -webkit-transform: scaleY(1.0); transform: scaleY(1.0); }
       }
     }
   }
@@ -588,6 +595,7 @@ body {
 
 .ask { text-align: left;
     &.ask_thumbnail { padding: 0 0 50px 0; background-color: #fff; }
+    &.ask_detail .header_title { color: #666; font-size: 14px; @include fontNumber; }
     .ask_image_box { position: relative; width: 100%; overflow: hidden; background-color: #f9f9f9; transition: background-color .5s;
       &:before { content: ''; display: block; padding-top: 50%; }
       .ask_image { position: absolute; top: 0; width: 50%; box-sizing: border-box; transition: left .25s, right .25s, transform .5s, filter .5s;
@@ -695,8 +703,9 @@ body {
             .ask_user_pic { top: 16px; left: 16px; width: 30px; height: 30px; }
         }
         .ask_message { padding: 0 20px 0 60px; line-height: 1.6; }
-        .ask_message_menu { display: block; height: 35px; line-height: 20px; text-align: right; padding: 5px 20px 10px 60px; box-sizing: border-box; font-size: 12px; color: #999; background-color: #fff;
+        .ask_message_menu { position: relative; display: block; height: 35px; line-height: 20px; text-align: right; padding: 5px 20px 10px 60px; box-sizing: border-box; font-size: 12px; color: #999; background-color: #fff;
             .ask_created_at { float: left; }
+            .ask_menu_btn { position: absolute; top: 5px; right: -100%; display: inline-block; background-color: #fff; transition: right .25s; }
         }
     }
 
@@ -1329,15 +1338,46 @@ body {
     .menu_box { position: absolute; bottom: 0; width: 100%; line-height: 50px; text-align: center; transition: transform .25s;
         &.ready { transform: translateY(100%); }
         .menu_lists { margin: 0; padding: 0 10px 10px 10px; list-style: none; box-sizing: border-box;
-            .menu_description { padding: 10px; line-height: 1.2; font-size: 12px; background-color: #fff; color: #999; border-bottom: 1px solid #999; border-radius: 5px 5px 0 0; }
-            .menu_list { background-color: #fff; color: #333; border-bottom: 1px solid #999; -webkit-tap-highlight-color: transparent;
+            .menu_description { padding: 10px; line-height: 1.2; font-size: 12px; background-color: #fff; color: #999; border-bottom: 1px solid #999;
+              &:first-of-type { border-radius: 5px 5px 0 0; }
+              &:last-of-type { border-radius: 0 0 5px 5px; border-bottom: none; }
+              &:only-of-type { border-radius: 5px; border-bottom: none; }
+            }
+            .menu_list { background-color: #fff; color: #333; border-bottom: 1px solid #999; -webkit-tap-highlight-color: transparent; overflow: hidden; transition: color .25s;
               &:first-of-type { border-radius: 5px 5px 0 0; }
               &:last-of-type { border-radius: 0 0 5px 5px; border-bottom: none; }
               &:only-of-type { border-radius: 5px; border-bottom: none; }
               &:active, &:hover { background-color: #f0f0f0; }
-              &.confirmation { color: #FF7800; }
+              &.confirmation { color: #FF7800;
+                &.not_ready { color: #ccc; }
+              }
             }
         }
+    }
+}
+
+#ask_complete_ask_deal_select { position: relative;
+  div { width: 50%; float: left; overflow: hidden;
+    img { width: 100%; transition: filter .5s, transform .25s;
+      &.unselected { filter: blur(5px) grayscale(100%); }
+      &.selected { transform: scale(1.1); }
+    }
+  }
+  span {
+    position: absolute; top: 100%; left: 25%; width: 50%; height: 100%;
+    opacity: 0;
+    border-bottom: 5px solid #FF7800;
+    box-sizing: border-box;
+    transition: opacity .5s, left .25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    &.left { top: 0%; left: 0%; opacity: 1; }
+    &.right { top: 0%; left: 50%; opacity: 1; }
+  }
+}
+
+#star_rating_wrap {
+    ul { list-style: none; min-width: 250px; margin: 0 auto; padding: 0;
+        li { display: inline-block; width: 50px; line-height: 50px; font-size: 18px; color: #FFCC5A; transition: transform .2s; }
+        li.on { transform: scale(1.25); }
     }
 }
 

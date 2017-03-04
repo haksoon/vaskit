@@ -66,7 +66,7 @@ class Users::SessionsController < Devise::SessionsController
   def get_user_profile
     if current_user
       my_asks_in_progress_count = Ask.where(user_id: current_user.id, be_completed: false).count
-      my_completed_asks_count = Ask.where(user_id: current_user.id, be_completed: true).count
+      my_completed_asks_count = AskComplete.where(user_id: current_user.id).count
       my_likes_count = AskLike.where(user_id: current_user.id).count
       my_votes_count = Vote.where(user_id: current_user.id).count
       my_comments_count = Comment.where(user_id: current_user.id, is_deleted: false).count

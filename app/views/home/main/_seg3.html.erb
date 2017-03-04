@@ -2,7 +2,7 @@ off<script type="text/template" id="askFormTemplate">
   {{ if (localStorage.tutorial === undefined || localStorage.tutorial.match("ask") === null) go_url('tutorial_ask') }}
   <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check();", onchange: "ask_progress_check();"}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
-      <span class="header_title">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
+      <span class="header_title" onclick="$(this).scroll_to();">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
       <span class="ask_form_step">1 / 3 STEP</span>
       <span class="header_btn left" onclick="back_button();">취소</span>
       <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음 <i class='fa fa-caret-right'></i></span>
@@ -101,7 +101,7 @@ off<script type="text/template" id="askFormTemplate">
     var is_left = Boolean(target.attr("is-left"));
     var card_search_result_div = ask_form.find(".card_search_result");
 
-    if (!!!card_search_result_div.hasClass("top")) back_button();
+    if (!!!card_search_result_div.hasClass("top")) history.back();
     all_inners.find(".input.text_field").attr('disabled', true);
     card_search_input_submit.off("click").on("click", function(){ search_by_key(); });
     card_search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
@@ -711,7 +711,7 @@ off<script type="text/template" id="askFormTemplate">
 					},
 					complete: function(){
             loadingEnd();
-            back_button();
+            history.back();
             if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
 					}
 		});
@@ -872,14 +872,38 @@ off<script type="text/template" id="askFormTemplate">
     all_inners.find(".input.text_field").attr('disabled', true);
     current_inner.find(".input.text_field").removeAttr('disabled');
 
+    var iOSKeypadCheck;
     ask_form_message_input.off("input scroll focus blur")
                           .on("input", function(e){
                             hashtagInput($(this));
                           }).on("scroll", function(e){
                             hashtagScroll($(this));
                           }).on("focus", function(e){
+                            // iOS web 키패드 이슈
+                            if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
+                              iOSKeypadCheck = setInterval(function(){
+                                var st = document.body.scrollTop;
+                                if (st > 0) {
+                                  var target_height = window.innerHeight - st;
+                                  if (userApp) { $("html").css({height: target_height}); } else { $("html").css({height: target_height + 10}); }
+                                  window.scrollTo(0,0);
+                                }
+                              }, 1);
+                              setTimeout(function(){
+                                clearInterval(iOSKeypadCheck);
+                              }, 500);
+                            } // iOS web 키패드 이슈
+                            current_inner.scroll_to(true);
                             hashtag_container.addClass("on");
                           }).on("blur", function(e) {
+                            // iOS web 키패드 이슈
+                            if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
+                              clearInterval(iOSKeypadCheck);
+                              setTimeout(function(){
+                                $("html").css({height: ''});
+                                window.scrollTo(0,0);
+                              }, 50);
+                            } // iOS web 키패드 이슈
                             hashtag_container.removeClass("on");
                           }).attr('disabled',false).focus();
 

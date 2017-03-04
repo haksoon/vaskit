@@ -102,15 +102,17 @@
         set_video_asks();
         user_profile_on();
         user_alarms_on();
+        loadingEnd();
         setTimeout(function(){
-          $(".loading_spinner").animateCssRemove("fadeOut");
-          $(".loading_welcome").animateCssRemove("slideOutLeft", function(){
-            loadingEnd();
+          $("#loading_spinner").animateCssRemove("fadeOut");
+          $("#loading_welcome").animateCssRemove("slideOutLeft", function(){
+            setTimeout(function(){
+              $("#loading_init").animateCssRemove("fadeOutDownBig", function(){
+                open_app_banner();
+              });
+            }, 50);
           });
-        }, 1000);
-        setTimeout(function(){
-          open_app_banner();
-        }, 2000);
+        }, 500);
       });
       // End init VASKIT Frame
     </script>
@@ -139,23 +141,15 @@
           <i class="tab_icon vaskit_icon seg4 login"></i>
         </a>
       </div>
-    </div>
-    <div class="layout notice_div" style="display:none;"><div class="notice_msg"></div></div>
-    <div class="layout loading_div" onclick="return false;" ontouchmove="return false;">
-      <div class="loading_bar">&nbsp;</div>
-      <div class="loading_init">
+      <div id="loading_init" class="viewer full">
         <div class="align_middle">
-          <div class="loading_spinner">
-            <div class="rect1"></div>
-            <div class="rect2"></div>
-            <div class="rect3"></div>
-            <div class="rect4"></div>
-            <div class="rect5"></div>
-          </div>
-          <div class="loading_welcome animated slideInRight">Welcome to VASKIT!</div>
+          <div id="loading_spinner"><div class="rect1"></div><div class="rect2"></div><div class="rect3"></div><div class="rect4"></div><div class="rect5"></div></div>
+          <div id="loading_welcome" class="animated slideInRight">Welcome to VASKIT!</div>
         </div>
       </div>
     </div>
+    <div class="layout notice_div" style="display:none;"><div class="notice_msg"></div></div>
+    <div class="layout loading_div" onclick="return false;" ontouchmove="return false;"><div class="loading_bar">&nbsp;</div></div>
     <div>
       <%= render partial: "home/main/seg1" %>
       <%= render partial: "home/main/seg2" %>
@@ -171,6 +165,7 @@
       <%= render partial: "home/common/full/tutorial" %>
       <%= render partial: "home/common/full/image_cropping" %>
       <%= render partial: "home/common/partial/app_banner" %>
+      <%= render partial: "home/common/partial/report" %>
       <%= render partial: "home/full/landing" %>
       <%= yield %>
     </div>

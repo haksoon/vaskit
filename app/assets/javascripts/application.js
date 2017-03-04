@@ -409,7 +409,7 @@ function go_back(length) {
   setTimeout(function(){
     history.replaceState(history.state, null, url);
     $(window).bind("popstate", go_popstate);
-  },100);
+  }, 100);
 
   // console.log("히스토리 삭제 ("+ length +"개)");
 }
@@ -422,7 +422,7 @@ function go_exit() {
     $("body").children().animateCssRemove("fadeOut");
     setTimeout(function(){
       go_back(currentHistory+1);
-    },500);
+    }, 1000);
   }
 }
 
@@ -505,7 +505,7 @@ function open_full_view(html) {
   new_viewer.html(html).removeClass("new");
   setTimeout(function(){
     new_viewer.removeClass("off");
-  },250);
+  }, 50);
 }
 
 function close_full_view() {
@@ -524,7 +524,7 @@ function create_wrapper(html, is_full) {
     if (is_full) { $("#footer").addClass("hide"); } else { $("#footer").removeClass("hide"); }
     prev_wrappers.addClass("prev");
     new_wrapper.removeClass("next");
-  },250);
+  }, 50);
 }
 
 function remove_wrapper() {
@@ -551,11 +551,23 @@ function remove_wrapper() {
 }
 
 $.fn.scroll_to = function(destination) {
-  var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+  var current_wrapper;
+  if ($("#main_view").find(".viewer.full").length > 0) {
+    current_wrapper = $("#main_view").find(".viewer.full").last();
+  } else {
+    current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
+  }
   var current_container = current_wrapper.find(".container.main");
+  var current_inner = current_container.find(".inner").not(".prev").not(".next").not(".top").not(".bottom");
   var top = 0;
-  var st_now = current_container.scrollTop();
-  var bottom = current_container.prop("scrollHeight");
+  var bottom, st_now;
+  if (current_inner.length > 0) {
+    bottom = current_inner.prop("scrollHeight");
+    st_now = current_inner.scrollTop();
+  } else {
+    bottom = current_container.prop("scrollHeight");
+    st_now = current_container.scrollTop();
+  }
 
   if (destination === null || destination === undefined) {
     destination = st_now > 0 ? top : bottom;
@@ -563,9 +575,15 @@ $.fn.scroll_to = function(destination) {
     destination = bottom;
   }
 
-  current_container.css("-webkit-overflow-scrolling", "initial").animate({scrollTop: destination}, 250, function(){
-    current_container.css("-webkit-overflow-scrolling", "touch");
-  });
+  if (current_inner.length > 0) {
+    current_inner.css("-webkit-overflow-scrolling", "initial").animate({scrollTop: destination}, 250, function(){
+      current_inner.css("-webkit-overflow-scrolling", "touch");
+    });
+  } else {
+    current_container.css("-webkit-overflow-scrolling", "initial").animate({scrollTop: destination}, 250, function(){
+      current_container.css("-webkit-overflow-scrolling", "touch");
+    });
+  }
 };
 
 function nearBottomOfContainer(element) {
@@ -813,9 +831,9 @@ function taggingKeywords(origin_string, img_hidden) {
   var html_output = html_tmp.html();
   html_tmp.remove();
 
-  return html_output.replace(/^\s*/g, '')                             // 앞 공백 제거
-                    .replace(/\s*$/g, '')                             // 뒷 공백 제거
-                    .replace(new RegExp('\r?\n', 'g'), '<br>');       // 줄바꿈 처리
+  return html_output.replace(new RegExp(/^\s*/g), '')                             // 앞 공백 제거
+                    .replace(new RegExp(/\s*$/g), '')                             // 뒷 공백 제거
+                    .replace(new RegExp(/\r?\n/g), '<br>');       // 줄바꿈 처리
 }
 
 // Form 필수 입력값 체크
@@ -1004,116 +1022,3 @@ function copyfieldvalue(event, input_id){
     return false;
   }
 }
-
-// extension: scrollEnd detection
-$.fn.scrollEnd = function(callback, timeout) {
-  $(this).scroll(function(){
-    var $this = $(this);
-    if ($this.data('scrollTimeout')) {
-      clearTimeout($this.data('scrollTimeout'));
-    }
-    $this.data('scrollTimeout', setTimeout(callback,timeout));
-  });
-};
-
-
-// doubletap 이벤트 생성
-// (function($){
-// 	"use strict";
-//
-// 	var tapTimer,
-// 		moved     = false,   // flag to know if the finger had moved while touched the device
-// 		threshold = 250;     // ms
-//
-// 	$.event.special.doubleTap = {
-// 	      setup    : setup,
-//         teardown : teardown,
-//         handler  : handler
-// 	};
-//
-//   $.event.special.tap = {
-//         setup    : setup,
-//         teardown : teardown,
-//         handler  : handler
-//   };
-//
-// 	function setup(data, namespaces){
-// 	  var elm = $(this);
-//
-// 		if (elm.data('tap_event') === true) return;
-//
-// 		elm.bind('touchend.tap', handler).bind('touchmove.tap', function(){
-// 	    moved = true;
-//     }).data('tap_event', true);
-// 	}
-//
-// 	function teardown(namespaces) {
-//     $(this).unbind('touchend.tap touchmove.tap');
-//   }
-//
-// 	function handler(event){
-// 		if( moved ){ // reset
-// 			moved = false;
-// 			return false;
-// 		}
-//
-// 		var elem   	  = event.target,
-//   			$elem 	  = $(elem),
-//   			lastTouch = $elem.data('lastTouch') || 0,
-//   			now 	    = event.timeStamp,
-//   			delta 	  = now - lastTouch;
-//
-// 		// double-tap condition
-// 		if ( delta > 20 && delta < threshold ) {
-// 			clearTimeout(tapTimer);
-// 			return $elem.data('lastTouch', 0).trigger('doubleTap');
-// 		} else {
-//       $elem.data('lastTouch', now);
-//     }
-//
-// 		tapTimer = setTimeout(function(){
-// 			$elem.trigger('tap');
-// 		}, threshold);
-// 	}
-// })(jQuery);
-
-// $(document).ready(function() {
-//   $("select").on("focus", function(){
-//     $(this).css("color","#666");
-//   }).on("blur", function() {
-//     if( $(this).val() == "" || $(this).val() == null ) {
-//       $(this).css("color","#ccc");
-//     } else {
-//       $(this).css("color","#666");
-//     }
-//   });
-// 	//ie 에서 placeholder
-// 	(function($) {
-// 	  $.fn.placeholder = function() {
-// 	    if(typeof document.createElement("input").placeholder == 'undefined') {
-// 	      $('[placeholder]').focus(function() {
-// 	        var input = $(this);
-// 	        if (input.val() == input.attr('placeholder')) {
-// 	          input.val('');
-// 	          input.removeClass('placeholder');
-// 	        }
-// 	      }).blur(function() {
-// 	        var input = $(this);
-// 	        if (input.val() == '' || input.val() == input.attr('placeholder')) {
-// 	          input.addClass('placeholder');
-// 	          input.val(input.attr('placeholder'));
-// 	        }
-// 	      }).blur().parents('form').submit(function() {
-// 	        $(this).find('[placeholder]').each(function() {
-// 	          var input = $(this);
-// 	          if (input.val() == input.attr('placeholder')) {
-// 	            input.val('');
-// 	          }
-// 	      })
-// 	    });
-// 	  }
-// 	}
-// 	})( jQuery );
-// 	$.fn.placeholder();
-// 	/////////////////////////////////
-// });

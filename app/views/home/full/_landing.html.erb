@@ -131,7 +131,8 @@
         <span class="input btn_field right checker"><i class="fa fa-unlock-alt"></i></span>
       </div>
       <%= f.hidden_field :remember_me, value: 1, required: true %>
-      <a id="reset_password_btn" href="/users/forgot_password" onclick="go_url('forgot_password'); return false;" style="display:block; height:40px; line-height:40px; margin:0 10px; color:#999; font-size:13px; text-align:right; transition:color 1s, margin 1s;"><i class='fa fa-envelope-o'></i>&nbsp;비밀번호를 잊으셨나요?</a>
+      <a id="reset_password_btn" href="/users/forgot_password" onclick="go_url('forgot_password'); return false;"
+         style="position: absolute; bottom: 0; right: 0; display:block; height:40px; line-height:40px; margin:0 10px; color:#999; font-size:13px;"><i class='fa fa-envelope-o'></i>&nbsp;비밀번호를 잊으셨나요?</a>
     </div>
   <% end %>
 </script>
@@ -612,9 +613,9 @@
                 $("#forgot_password_form input[type=email]").focus();
               } else if (data.status == "success") {
                 notify("메일 전송 완료! 메일함을 확인해주세요 :)");
-                $("#forgot_password_form").find(".top").find(".header_btn").attr("onclick","back_button(); return false;");
                 $("#sign_in_form input[type=email]").val(email);
                 $("#sign_in_form input[type=password]").val("");
+                history.back();
               }
             },
             beforeSend: function() {

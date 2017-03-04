@@ -322,7 +322,7 @@ class AsksController < ApplicationController
   def destroy
     @ask.update(be_completed: true)
     @ask.ask_notifier('complete')
-    AskComplete.create(user_id: current_user.id, ask_id: @ask.id)
+    AskComplete.create(user_id: current_user.id, ask_id: @ask.id, ask_deal_id: params[:ask_deal_id], star_point: params[:star_point])
     render json: {}
   end
 

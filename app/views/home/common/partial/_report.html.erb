@@ -1,0 +1,76 @@
+<script>
+  function report_content(target, target_id) {
+    var options = {
+                description: "어떤 이유로 신고하시겠어요?",
+                menus: [
+                  {
+                    name: "구매결정과는 무관한 내용이군요",
+                    func: "submit_report('" + target + "', " + target_id + ", 1);"
+                  },
+                  {
+                    name: "광고성, 홍보성이 짙은 내용이군요",
+                    func: "submit_report('" + target + "', " + target_id + ", 2);"
+                  },
+                  {
+                    name: "비윤리적인 내용은 보고싶지 않아요",
+                    func: "submit_report('" + target + "', " + target_id + ", 3);"
+                  },
+                  {
+                    name: "직접 입력할래요",
+                    func: "open_report('" + target + "', " + target_id + ");"
+                  }
+                ]
+              };
+    visitor_check(function(){
+      setTimeout(function(){
+        go_url('menu', options);
+      }, 50);
+    });
+  }
+
+  function open_report(target, target_id) {
+    history.back();
+    var options = {
+                description: "직접 입력해주세요",
+                menus: [
+                  {
+                    name: '<textarea id="report_message" class="input text_field" rows="5" placeholder="신고하실 내용을 입력해주세요"></textarea>'
+                  },
+                  {
+                    name: "신고 제출하기",
+                    func: "submit_report('" + target + "', " + target_id + ", 4);"
+                  }
+                ]
+              };
+    setTimeout(function(){
+      go_url('menu', options);
+    }, 50);
+  }
+
+  function submit_report(target, target_id, report_type) {
+    var message = $("#report_message").val();
+    $.ajax({
+	        url: "/log_reports.json",
+          dataType: "json",
+	        type: "POST",
+	        data: {target: target, target_id: target_id, report_type: report_type, message: message},
+					error: function(){
+	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+	        },
+	        success: function(data){
+	        	if (data.already_report) {
+	        		notify("이미 신고하신 항목입니다");
+	        	} else {
+	        		notify("신고가 정상적으로 접수되었습니다. 감사합니다!");
+	        	}
+            history.back();
+	        },
+	        beforeSend: function(){
+						loadingStart();
+	        },
+	        complete: function(){
+						loadingEnd();
+	        }
+		});
+  }
+</script>

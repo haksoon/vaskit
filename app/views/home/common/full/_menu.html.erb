@@ -2,16 +2,27 @@
   <div class="viewer menu ready" ontouchmove="return false;">
     <div class="menu_background" onclick="back_button();"></div>
     <div class="menu_box ready">
-      <ul class="menu_lists">
-        {{ if (options.description != null) { }}
+      <ul class="menu_lists clearfix">
+        {{ if (options.description) { }}
           <li class="menu_description">{{=options.description}}</li>
         {{ } }}
-        {{ for (var i = 0; i < options.menus.length; i++) { }}
-          {{ var menu = options.menus[i] }}
-          <li class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{=menu.name}}</li>
+        {{ if (options.menus) { }}
+          {{ for (var i = 0; i < options.menus.length; i++) { }}
+            {{ var menu = options.menus[i] }}
+            {{ if (menu.description) { }}
+              <li class="menu_description">{{=menu.description}}</li>
+            {{ } }}
+            <li id="{{= menu.id }}" class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{=menu.name}}</li>
+          {{ } }}
         {{ } }}
       </ul>
       <ul class="menu_lists">
+        {{ if (options.bottoms) { }}
+          {{ for (var i = 0; i < options.bottoms.length; i++) { }}
+            {{ var menu = options.bottoms[i] }}
+            <li id="{{= menu.id }}" class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{=menu.name}}</li>
+          {{ } }}
+        {{ } }}
         <li class="menu_list" onclick="back_button();">취소</li>
       </ul>
     </div>
@@ -46,11 +57,9 @@
     var menu = $(".viewer.menu").last();
     var menu_box = menu.find(".menu_box");
     if (e.keyCode == '13') {
-      e.preventDefault();
       menu_box.find('.confirmation').click();
     } else if (e.keyCode == '27') {
-      e.preventDefault();
-      back_button();
+      history.back();
     }
   }
 </script>

@@ -139,7 +139,7 @@
                 menus: [
                   {
                     name: "로그아웃",
-                    func: "back_button(); sign_out();"
+                    func: "history.back(); sign_out();"
                   }
                 ]
               };
@@ -281,7 +281,7 @@
           },
           beforeSend: function() {
             loadingStart();
-            back_button();
+            history.back();
           },
           complete: function() {
             user_profile_on();

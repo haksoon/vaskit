@@ -42,7 +42,7 @@
         {{ recent_search_list = recent_search_list.split(".") }}
         {{ for (var i=recent_search_list.length; i > 0; i--) { }}
           {{ var search = JSON.parse(recent_search_list[i-1]) }}
-          {{ var keyword = search.keyword.replace(new RegExp(/[_][d][o][t][_]/, "g"), ".") }}
+          {{ var keyword = search.keyword.replace(new RegExp(/[_][d][o][t][_]/g), ".") }}
           {{ var type = search.type }}
           {{ var time = search.time }}
           {{= searchPreviewTemplate({type: type, keyword: keyword, id: null, time: time}) }}
@@ -290,7 +290,7 @@
   function save_recent_search(type, keyword) {
     var recent_search_list = localStorage.recent_search_list;
     var search_array = recent_search_list === undefined ? [] : recent_search_list.split(".");
-    keyword = keyword.replace(new RegExp(/[.]/, 'g'), "_dot_");
+    keyword = keyword.replace(new RegExp(/[.]/g), "_dot_");
     if (search_array.length >= 10) search_array = search_array.splice(search_array.length-9, search_array.length);
     for (var i=0; i<search_array.length; i++) {
       var search = search_array[i];

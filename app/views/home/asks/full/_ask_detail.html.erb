@@ -1,6 +1,6 @@
 <script type="text/template" id="askDetailTemplate">
   <div class="container top ask ask_detail ask_{{= ask.id }}" ontouchmove="return false;">
-    <span class="header_title right" onclick="$(this).scroll_to();">{{= ask.user.string_id }}님의 질문</span>
+    <span class="header_title right" onclick="$(this).scroll_to();">{{= (current_user && ask.user_id == current_user.id) ? '나' : ask.user.string_id + "님" }}의 질문</span>
     <span class="header_btn left close_btn" onclick="back_button();">&times;</span>
     <span class="header_btn right" onclick="go_url('share', 'ask, {{= ask.id }}');"><i class="vaskit_icon share_icon"></i></span>
     {{ if (current_user && current_user.id == ask.user_id) { }}
@@ -172,18 +172,24 @@
       {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
     </div>
     <div class="ask_message_menu">
+      <span class="ask_created_at">{{= get_past_time(ask.created_at) }}</span>
       {{ if (current_user && current_user.id == ask.user.id) { }}
         {{ if (ask.be_completed == false) { }}
-          <span onclick="go_url('ask_form', {{= ask.id }});">질문 수정</span>
-          &middot;
-          <span onclick="submit_ask_complete({{= ask.id }});">질문 종료</span>
+          <i class="fa fa-navicon" style="transition: transform .25s;" onclick="$(this).addClass('fa-rotate-90'); $(this).next().css({'right': '20px'});"></i>
+          <div class="ask_menu_btn">
+            <span onclick="go_url('ask_form', {{= ask.id }});">질문 수정</span>
+            &middot;
+            <span onclick="show_ask_complete('{{= escape(JSON.stringify(ask)) }}');">질문 종료</span>
+          </div>
         {{ } }}
       {{ } else { }}
-        <span class="ask_like_btn" onclick="like_ask({{= ask.id }});">공감해요</span>
-        &middot;
-        <span onclick="report_ask({{= ask.id }});">신고하기</span>
+          <i class="fa fa-navicon" style="transition: transform .25s;" onclick="$(this).addClass('fa-rotate-90'); $(this).next().css({'right': '20px'});"></i>
+          <div class="ask_menu_btn">
+            <span class="ask_like_btn" onclick="like_ask({{= ask.id }});">공감해요</span>
+            &middot;
+            <span onclick="report_content('ask', {{= ask.id }});">신고하기</span>
+          </div>
       {{ } }}
-      <span class="ask_created_at">{{= get_past_time(ask.created_at) }}</span>
     </div>
   </div>
 </script>
@@ -410,12 +416,178 @@
     }
   }
 
+  function show_ask_complete(ask) {
+    ask = JSON.parse(unescape(ask));
+    var options = {
+                menus: [
+                  {
+                    description: "어떤 제품을 선택하셨나요?",
+                    name: "<div><img src=" + get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') + " ask-deal-id='" + ask.left_ask_deal_id + "' direction='true'></div>" +
+                          "<div><img src=" + get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') + " ask-deal-id='" + ask.right_ask_deal_id + "'></div>" +
+                          "<span></span>",
+                    id: "ask_complete_ask_deal_select"
+                  },
+                  {
+                    description: "이 질문이 당신의 선택에 얼마나 도움이 되었나요?",
+                    name: "<ul>" +
+                          "<li data-value='1'><i class='fa fa-star-o'></i></li>" +
+                          "<li data-value='2'><i class='fa fa-star-o'></i></li>" +
+                          "<li data-value='3'><i class='fa fa-star-o'></i></li>" +
+                          "<li data-value='4'><i class='fa fa-star-o'></i></li>" +
+                          "<li data-value='5'><i class='fa fa-star-o'></i></li>" +
+                          "</ul>",
+                    id: "star_rating_wrap"
+                  }
+                ],
+                bottoms: [
+                  {
+                    name: "질문 종료하기",
+                    func: "submit_ask_complete(" + ask.id + ");",
+                    id: "submit_ask_complete",
+                    class: "confirmation not_ready"
+                  },
+                  {
+                    name: "<input type='text' id='ask_complete_ask_deal_id'>",
+                    class: "hidden"
+                  },
+                  {
+                    name: "<input type='text' id='ask_complete_star_point'>",
+                    class: "hidden"
+                  }
+                ]
+              };
+    go_url('menu', options);
+
+    $(function(){
+  		// bind events
+      $("#ask_complete_ask_deal_select img").each(function(){
+        $(this).bind("click", select_ask_deal);
+      });
+  		$("#star_rating_wrap").each(function(){
+  			$(this).bind("mousedown", starMouseDownListener);
+  			$(this).bind("touchstart", starTouchStartListener);
+  			$(this).bind("touchmove", starTouchMoveListener);
+  			$(this).bind("touchend", starTouchEndListener);
+  		});
+  	});
+
+    function select_ask_deal(){
+      var ask_deal_id = $(this).attr("ask-deal-id");
+      var direction = Boolean($(this).attr("direction"));
+      var imgs = $("#ask_complete_ask_deal_select").find("img");
+      var span = $("#ask_complete_ask_deal_select").find("span");
+      if (direction) {
+        span.removeClass("right").addClass("left");
+      } else {
+        span.removeClass("left").addClass("right");
+      }
+      imgs.removeClass("selected unselected");
+      imgs.not($(this)).addClass("unselected");
+      $(this).addClass("selected");
+      $("#ask_complete_ask_deal_id").val(ask_deal_id);
+      check_to_submit();
+    }
+
+  	function starMouseDownListener(e){
+  		e.preventDefault();
+
+  		starMouseTarget = $(e.currentTarget);
+  		calculateStarRating(e.pageX);
+
+  		// unbind and bind mouse events to prevent repeated binding
+  		$(document).unbind("mousemove", starMouseMoveListener);
+  		$(document).unbind("mouseup", starMouseUpListener);
+  		$(document).bind("mousemove", starMouseMoveListener);
+  		$(document).bind("mouseup", starMouseUpListener);
+  		// unbind touch events
+  		starMouseTarget.unbind("touchstart", starTouchStartListener);
+  		starMouseTarget.unbind("touchmove", starTouchMoveListener);
+  		starMouseTarget.unbind("touchend", starTouchEndListener);
+  	}
+
+  	function starMouseMoveListener(e){
+  		e.preventDefault();
+
+  		calculateStarRating(e.pageX);
+  	}
+
+  	function starMouseUpListener(e){
+  		e.preventDefault();
+
+  		calculateStarRating(e.pageX);
+  		updateStarPoint();
+
+  		// unbind mouse events
+  		$(document).unbind("mousemove", starMouseMoveListener);
+  		$(document).unbind("mouseup", starMouseUpListener);
+  	}
+
+  	function starTouchStartListener(e){
+  		e.preventDefault();
+
+  		starMouseTarget = $(e.currentTarget);
+  		calculateStarRating(e.originalEvent.touches[0].clientX);
+
+  		starMouseTarget.unbind("mousedown", starMouseDownListener);
+  	}
+
+  	function starTouchMoveListener(e){
+  		e.preventDefault();
+  		calculateStarRating(e.originalEvent.touches[0].clientX);
+  	}
+
+  	function starTouchEndListener(e){
+  		e.preventDefault();
+  		updateStarPoint();
+  	}
+
+  	function calculateStarRating(x){
+  		var li;
+  		var n = 0;
+  		starMouseTarget.find("li").each(function(index){
+  			li = $(this);
+  			if( li.offset().left > x ){
+  				li.removeClass("on");// not selected
+  				li.find("i").removeClass("fa-star").addClass("fa-star-o");
+  			}else{
+  				li.addClass("on");// selected
+  				li.find("i").removeClass("fa-star-o").addClass("fa-star");
+  				n = index + 1;
+  			}
+  		});
+  		starMouseTarget.find("li").data("value", n);
+  	}
+
+  	function updateStarPoint(){
+  		var star_point = $("#star_rating_wrap > ul > li").data("value");
+      $("#ask_complete_star_point").val(star_point);
+      check_to_submit();
+  	}
+
+    function check_to_submit() {
+      var star_point = $("#ask_complete_star_point").val();
+      var ask_deal_id = $("#ask_complete_ask_deal_id").val();
+      if (ask_deal_id !== "" && star_point !== "" && star_point !== "0") {
+        $("#submit_ask_complete").removeClass("not_ready");
+      } else {
+        $("#submit_ask_complete").addClass("not_ready");
+      }
+    }
+  }
+
   function submit_ask_complete(ask_id) {
-    if (confirm('질문을 종료하시겠어요?')) {
+    var ask_deal_id = $("#ask_complete_ask_deal_id").val();
+    var star_point = $("#ask_complete_star_point").val();
+    if (ask_deal_id === "") {
+      notify('선택하신 제품을 알려주세요');
+    } else if (star_point === "" || star_point === "0") {
+      notify('투표의 만족도를 알려주세요');
+    } else {
       $.ajax({
             url: "/asks/" + ask_id,
             dataType: "json",
             type: "DELETE",
+            data: {ask_deal_id: ask_deal_id, star_point: star_point},
             error: function(){
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
@@ -424,10 +596,11 @@
               var all_ask_divs = $("#main_view").find(".ask.ask_"+ask_id);
               var all_ask_completed = all_ask_divs.find(".ask_completed");
               all_ask_completed.addClass("on");
-              back_button();
+              history.back();
             },
             beforeSend: function(){
               loadingStart();
+              history.back();
             },
             complete: function(){
               loadingEnd();
