@@ -5,8 +5,13 @@
   {{ } else { }}
     <li class="comment_blank" onclick="comment_input_activate('new');" style="display: none;">첫 댓글을 달아주세요!</li>
     {{ var original_comments = $.grep(comments, function(obj) { return obj.comment_id === null }) }}
+    {{ var end_line_check = true }}
     {{ for (var i=0; i < original_comments.length; i++) { }}
       {{ var original_comment = original_comments[i] }}
+      {{ if (end_line_check && original_comment.created_at > ask.ask_complete.created_at) { }}
+        <li class="comment_box end_line"><i class="fa fa-caret-down"></i>여기서부터는 투표를 종료하신 이후에 작성된 댓글입니다</li>
+        {{ end_line_check = false }}
+      {{ } }}
       {{ var reply_comments = $.grep(comments, function(obj) { return (obj.comment_id === original_comment.id && obj.is_deleted === false) }) }}
       {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === original_comment.id}).length === 0 ? false : true }}
       {{ if (original_comment.is_deleted == false || (original_comment.is_deleted && reply_comments.length > 0)) { }}
@@ -64,7 +69,24 @@
       </div>
       <div class="comment_date">{{= get_past_time(comment.updated_at) }}</div>
     </div>
+    <div class="comment_likes">
+      {{ if (comment.comment_likes && comment.comment_likes.length > 0) { }}
+        {{= commentLikeTemplate({recent_user: comment.comment_likes[comment.comment_likes.length-1].user.string_id, comment_like_count: comment.comment_likes.length}) }}
+      {{ } }}
+    </div>
   </li>
+</script>
+
+<script type="text/template" id="commentLikeTemplate">
+  {{ if (recent_user !== null) { }}
+    <div class="animated slideInUp">
+      {{ if (comment_like_count == 1) { }}
+        <i class="fa fa-heart animated tada"></i> <span>{{= recent_user }}님</span>이 이 댓글을 좋아합니다
+      {{ } else { }}
+        <i class="fa fa-heart animated tada"></i> <span>{{= recent_user }}님</span> 외 <span>{{= comment_like_count - 1 }}명</span>이 이 댓글을 좋아합니다
+      {{ } }}
+    </div>
+  {{ } }}
 </script>
 
 <script type="text/template" id="commentWritingSignTemplate">
@@ -87,6 +109,7 @@
 <script>
   var commentsTemplate = _.template($("#commentsTemplate").html());
   var commentTemplate = _.template($("#commentTemplate").html());
+  var commentLikeTemplate = _.template($("#commentLikeTemplate").html());
   var commentWritingSignTemplate = _.template($("#commentWritingSignTemplate").html());
 
   function new_comment() {
@@ -518,7 +541,7 @@
     var all_comment_boxes = $("#main_view").find(".comment_box."+comment_id);
     var all_comment_like_icons = all_comment_boxes.find(".comment_like_icon");
     var all_comment_like_counts = all_comment_boxes.find(".comment_like_count");
-    var comment_like_count = parseInt(all_comment_like_counts.last().html());
+    var all_comment_likes = all_comment_boxes.find(".comment_likes");
 
     $.ajax({
 		        url: "/comments/"+comment_id+"/like.json",
@@ -530,11 +553,11 @@
 		        success: function(data) {
 		        	if (data.already_like) {
                 all_comment_like_icons.removeClass("fa-heart").addClass("fa-heart-o").animateCss("jello");
-                if (comment_like_count == 1) { all_comment_like_counts.html(""); } else { all_comment_like_counts.html(comment_like_count - 1); }
 		        	} else {
                 all_comment_like_icons.removeClass("fa-heart-o").addClass("fa-heart").animateCss("tada");
-                if (comment_like_count > 0) { all_comment_like_counts.html(comment_like_count + 1); } else { all_comment_like_counts.html("1"); }
 		        	}
+              if (data.comment_like_count == 0) { all_comment_like_counts.html(""); } else { all_comment_like_counts.html("1"); }
+              all_comment_likes.html(commentLikeTemplate({recent_user: data.recent_user, comment_like_count: data.comment_like_count}));
 		        },
 		        beforeSend: function(){
               history.back();

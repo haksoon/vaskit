@@ -38,7 +38,7 @@ class CollectionsController < ApplicationController
 
         render json: {
           collection: @collection,
-          asks: @collection.asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes]),
+          asks: @collection.asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete]),
           related_collections: @related_collections,
           recent_asks: @recent_asks
         }

@@ -18,7 +18,7 @@ class AsksController < ApplicationController
           asks = asks.where.not(id: my_votes) unless my_votes.empty?
         end
 
-        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes])
+        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete])
         render json: { asks: asks }
       end
     end
@@ -47,7 +47,7 @@ class AsksController < ApplicationController
                                             comment_id: ask_comments)
         end
 
-        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, { comments: { include: :user } }])
+        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, { ask_likes: { include: :user } }, :ask_complete, { comments: { include: [:user, { comment_likes: { include: :user } }] } }])
 
         if current_user
           all_alarms = Alarm.where(ask_id: params[:id],
@@ -79,17 +79,23 @@ class AsksController < ApplicationController
 
   # POST /asks/:id/like.json
   def like
-    already_like = false
-    ask_like = AskLike.where(user_id: current_user.id,
-                             ask_id: params[:id])
-                      .first
-    if ask_like
+    ask_like = AskLike.find_by(user_id: current_user.id,
+                            ask_id: params[:id])
+    if ask_like.nil?
+      already_like = false
+      AskLike.create(user_id: current_user.id, ask_id: params[:id])
+      recent_user = current_user.string_id
+    else
       already_like = true
       ask_like.destroy
-    else
-      ask_like = AskLike.create(user_id: current_user.id, ask_id: params[:id])
+      last_ask_like = AskLike.where(ask_id: params[:id]).last
+      recent_user = last_ask_like.user.string_id unless last_ask_like.nil?
     end
-    render json: { already_like: already_like, ask_like: ask_like }
+    ask_like_count = AskLike.where(ask_id: params[:id]).count
+
+    render json: { already_like: already_like,
+                   recent_user: recent_user,
+                   ask_like_count: ask_like_count }
   end
 
   # GET /asks/new
@@ -320,10 +326,53 @@ class AsksController < ApplicationController
 
   # DELETE /asks/:id.json
   def destroy
-    @ask.update(be_completed: true)
-    @ask.ask_notifier('complete')
-    AskComplete.create(user_id: current_user.id, ask_id: @ask.id, ask_deal_id: params[:ask_deal_id], star_point: params[:star_point])
-    render json: {}
+    # @ask.update(be_completed: true)
+    # ask_complete = AskComplete.create(user_id: current_user.id,
+    #                                   ask_id: @ask.id,
+    #                                   ask_deal_id: params[:ask_deal_id],
+    #                                   star_point: params[:star_point],
+    #                                   left_vote_count: @ask.left_ask_deal.vote_count,
+    #                                   right_vote_count: @ask.right_ask_deal.vote_count)
+    # @ask.ask_notifier('complete')
+    # select_direction = ask_complete.ask_deal_id == @ask.left_ask_deal_id ? 'left' : 'right'
+
+    ask = @ask
+    ask.update(be_completed: true)
+    ask_complete = AskComplete.create(user_id: current_user.id,
+                                      ask_id: ask.id,
+                                      ask_deal_id: params[:ask_deal_id],
+                                      star_point: params[:star_point],
+                                      left_vote_count: ask.left_ask_deal.vote_count,
+                                      right_vote_count: ask.right_ask_deal.vote_count)
+    ask.ask_notifier('complete')
+
+    already_like = false
+    if current_user
+      ask_like = AskLike.where(user_id: current_user.id,
+                               ask_id: params[:id])
+                        .first
+      already_like = ask_like ? true : false
+    end
+
+    like_comments = []
+    if current_user
+      ask_comments = ask.comments.pluck(:id)
+      like_comments = CommentLike.where(user_id: current_user.id,
+                                        comment_id: ask_comments)
+    end
+
+    # select_direction = ask_complete.ask_deal_id == ask.left_ask_deal_id ? 'left' : 'right'
+    # star_point = params[:star_point]
+
+    ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, { ask_likes: { include: :user } }, :ask_complete, { comments: { include: [:user, { comment_likes: { include: :user } }] } }])
+
+    render json: {
+      ask: ask,
+      already_like: already_like,
+      like_comments: like_comments
+    }
+    # render json: { select_direction: select_direction,
+    #                star_point: star_point }
   end
 
   private

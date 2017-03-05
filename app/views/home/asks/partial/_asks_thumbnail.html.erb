@@ -52,7 +52,6 @@
       {{ vote_direction = my_vote[0].is_left ? 'left' : 'right' }}
     {{ } }}
   {{ } }}
-  {{ if (ask.be_completed == true) is_voted = true }}
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
@@ -95,12 +94,16 @@
         </div>
         <div class="vs_help_menu">
           {{ if (current_user == null || current_user.id != ask.user_id) { }}
-            <div class="vs_help_menu_left ask_like_btn ask_like_text {{= already_like ? 'is_liked' : '' }}" onclick="like_ask({{= ask.id }});">공감해요 <i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i></div>
+            <div class="vs_help_menu_left ask_like_btn ask_like_text {{= already_like ? 'is_liked' : '' }}" onclick="window.event.cancelBubble = true; like_ask({{= ask.id }});">공감해요 <i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i></div>
             <div class="vs_help_menu_center" onclick="go_url('ask', {{= ask.id }});">댓글달기 <i class="vaskit_icon comment_icon"></i></div>
             <div class="vs_help_menu_right" onclick="go_url('share', 'ask, {{= ask.id }}');">공유하기 <i class="vaskit_icon share_icon"></i></div>
           {{ } else { }}
             <div class="vs_help_menu_left" onclick="go_url('ask', {{= ask.id }});">내용보기 <i class="fa fa-check"></i></div>
-            <div class="vs_help_menu_center" onclick="go_url('ask_form', {{= ask.id }}); window.event.cancelBubble = true;">수정하기 <i class="fa fa-edit"></i></div>
+            {{ if (!ask.be_completed) { }}
+              <div class="vs_help_menu_center" onclick="go_url('ask_form', {{= ask.id }}); window.event.cancelBubble = true;">수정하기 <i class="fa fa-edit"></i></div>
+            {{ } else { }}
+              <div class="vs_help_menu_center">종료한 투표</div>
+            {{ } }}
             <div class="vs_help_menu_right" onclick="go_url('share', 'ask, {{= ask.id }}');">공유하기 <i class="vaskit_icon share_icon"></i></div>
           {{ } }}
         </div>
@@ -112,20 +115,41 @@
         <img class="ask_image left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
         <img class="ask_image right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
         {{ if (current_user && current_user.id == ask.user_id) { }}
-          {{ var left_ratio = (left_count / ( left_count + right_count ) * 100).toFixed() }}
-          {{ var right_ratio = (right_count / ( left_count + right_count ) * 100).toFixed() }}
-          {{ if (total_count == 0) { }}
+          {{ var left_ratio = total_count == 0 ? '0' : (left_count / ( left_count + right_count ) * 100).toFixed() }}
+          {{ var right_ratio = total_count == 0 ? '0' : (right_count / ( left_count + right_count ) * 100).toFixed() }}
+          {{ if (!ask.be_completed && total_count == 0) { }}
             <span class="my_ask_vote_count blank"><small>이제 곧 투표가 시작됩니다 😬</small></span>
+          {{ } else if (ask.be_completed) { }}
+            {{ var is_select_left = ask.ask_complete.ask_deal_id == ask.left_ask_deal_id }}
+            {{ var is_select_right = ask.ask_complete.ask_deal_id == ask.right_ask_deal_id }}
+            {{ left_count = ask.ask_complete.left_vote_count }}
+            {{ right_count = ask.ask_complete.right_vote_count }}
+            {{ total_count = left_count + right_count }}
+            {{ left_ratio = total_count == 0 ? '0' : (left_count / ( left_count + right_count ) * 100).toFixed() }}
+            {{ right_ratio = total_count == 0 ? '0' : (right_count / ( left_count + right_count ) * 100).toFixed() }}
+            {{ var star_point = "" }}
+            {{ if (ask.ask_complete.star_point === null) { }}
+              {{ star_point = "-" }}
+            {{ } else { }}
+              {{ for (var i=0; i < ask.ask_complete.star_point; i++) { }}
+                {{ star_point += "&#xf005;" }}
+              {{ } }}
+              {{ for (var j=0; j < 5-ask.ask_complete.star_point; j++) { }}
+                {{ star_point += "&#xf006;" }}
+              {{ } }}
+            {{ } }}
+            <span class="my_ask_vote_count left {{= is_select_left ? 'on' : '' }}" star="{{= star_point }}">{{= left_ratio }}<small>%</small></span>
+            <span class="my_ask_vote_count right {{= is_select_right ? 'on' : '' }}" star="{{= star_point }}">{{= right_ratio }}<small>%</small></span>
           {{ } else { }}
             <span class="my_ask_vote_count left">{{= left_ratio }}<small>%</small></span>
             <span class="my_ask_vote_count right">{{= right_ratio }}<small>%</small></span>
           {{ } }}
+          <div class="ask_completed {{= ask.be_completed ? 'on' : '' }}">종료한 투표입니다</div>
         {{ } }}
         <span class="ask_title_label text_box_short left">{{=ask.left_ask_deal.title}}</span>
         <span class="ask_title_label text_box_short right">{{=ask.right_ask_deal.title}}</span>
-        <div class="ask_completed {{= ask.be_completed ? 'on' : '' }}">종료된 투표입니다</div>
       </div>
-      {{ if (ask.be_completed == false && (current_user == null || current_user.id != ask.user_id)) { }}
+      {{ if (current_user == null || current_user.id != ask.user_id) { }}
         <div class="vs_btn {{= is_voted ? '' : 'animated rubberBand' }} {{= vote_direction }}" onanimationstart="vs_init($(this));" onmouseover="vs_init($(this));" onanimationend="$(this).removeClass('animated rubberBand');" vote-id="{{= vote_id }}" vote-direction="{{= vote_direction }}">vs</div>
       {{ } }}
     </div>

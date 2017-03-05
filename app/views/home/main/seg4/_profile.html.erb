@@ -50,7 +50,7 @@
         },
         success: function(data){
           current_user = data.current_user;
-          if (current_user == null) {
+          if (current_user === null) {
             $("#user_profile").html("");
           } else {
             $("#user_profile").html(userProfileTemplate({
@@ -65,7 +65,7 @@
           }
         }
     });
-  };
+  }
 
   function get_my_recent_ask() {
     $.ajax({
@@ -77,7 +77,7 @@
         },
         success: function(data){
           var my_ask = data.my_ask[0];
-          if (my_ask != null) {
+          if (my_ask !== null && my_ask !== undefined) {
             my_ask.ask_likes = [];
             my_ask.votes = [];
             my_ask.user = current_user;
@@ -93,7 +93,7 @@
           $("#my_asks_in_progress").html(loading_html);
         }
     });
-  };
+  }
 </script>
 
 <script type="text/template" id="userHistoryTemplate">
@@ -142,9 +142,9 @@
     });
     url = url + '?type='+encodeURIComponent(type);
     return url;
-  };
+  }
 
   function hide_user_history() {
     remove_wrapper();
-  };
+  }
 </script>

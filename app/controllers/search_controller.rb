@@ -43,8 +43,10 @@ class SearchController < ApplicationController
                                  brand_ask_deals.map(&:id)).pluck(:id)
             Ask.where(id: ask_ids)
           end
-        @asks = @asks.page(params[:page]).per(Ask::ASK_PER).order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes])
+        @asks = @asks.page(params[:page])
+                     .per(Ask::ASK_PER)
+                     .order(id: :desc)
+                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete])
         render json: { asks: @asks }
       end
     end

@@ -1,4 +1,7 @@
 class AskLike < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :ask
+
   after_create :reload_ask_like_count, :create_ask_like_alarm
   after_update :reload_ask_like_count
   after_destroy :reload_ask_like_count
@@ -12,7 +15,7 @@ class AskLike < ActiveRecord::Base
 
   def create_ask_like_alarm
     ask = Ask.find_by_id(ask_id)
-
+    return if ask.be_completed
     return if user_id == ask.user_id
     return unless User.find(ask.user_id).alarm_1 == true
     like_count = AskLike.where(ask_id: ask_id)

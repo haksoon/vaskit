@@ -12,6 +12,7 @@ class Vote < ActiveRecord::Base
 
   def create_vote_alarm
     ask = Ask.find(ask_id)
+    return if ask.be_completed
     total_vote_count = ask.left_ask_deal.vote_count + ask.right_ask_deal.vote_count
     return if total_vote_count.zero?
     return unless total_vote_count == 10 || total_vote_count == 25 || (total_vote_count % 50).zero?

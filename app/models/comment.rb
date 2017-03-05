@@ -1,5 +1,6 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
+  has_many :comment_likes
 
   has_attached_file :image,
                     styles: { normal: '300>x' },
@@ -41,8 +42,7 @@ class Comment < ActiveRecord::Base
     ask = Ask.find(ask_id)
 
     # 본인의 질문에 대한 댓글 알림 (type:comment)
-    if user_id != ask.user_id
-      return unless User.find(ask.user_id).alarm_3 == true
+    if !ask.be_completed && user_id != ask.user_id && User.find(ask.user_id).alarm_3 == true
       comment_count = Comment.where(ask_id: ask.id, is_deleted: false)
                              .where.not(user_id: ask.user_id).count
       alarm = Alarm.where(user_id: ask.user_id,
@@ -96,8 +96,7 @@ class Comment < ActiveRecord::Base
       original_comment = Comment.find(comment_id)
 
       # 본인의 댓글에 대한 대댓글 알림 (type:reply_comment)
-      if original_comment.user_id != user_id
-        return unless User.find(original_comment.user_id).alarm_5 == true
+      if original_comment.user_id != user_id && User.find(original_comment.user_id).alarm_5 == true
         comment_count = Comment.where(comment_id: comment_id,
                                       is_deleted: false).count
         alarm = Alarm.where(user_id: original_comment.user_id,

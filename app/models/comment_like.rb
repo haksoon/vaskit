@@ -1,4 +1,7 @@
 class CommentLike < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :comment
+
   after_create :reload_comment_like_count, :create_comment_like_alarm
   after_update :reload_comment_like_count
   after_destroy :reload_comment_like_count

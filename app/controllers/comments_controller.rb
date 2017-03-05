@@ -21,7 +21,7 @@ class CommentsController < ApplicationController
                                comment_id: original_comment_id,
                                image: comment_image)
       comment.generate_hash_tags
-      comment = comment.as_json(include: [:user])
+      comment = comment.as_json(include: :user)
       status = 'success'
     else
       status = 'not_authorized'
@@ -41,7 +41,7 @@ class CommentsController < ApplicationController
       comment.update(content: content)
       comment.generate_hash_tags
       ask = Ask.find(comment.ask_id)
-      comment = comment.as_json(include: [:user])
+      comment = comment.as_json(include: :user)
       status = 'success'
     else
       status = 'not_authorized'
@@ -87,16 +87,23 @@ class CommentsController < ApplicationController
 
   # POST /comments/:id/like.json
   def like
-    comment_like = CommentLike.where(user_id: current_user.id,
-                                     comment_id: params[:id]).first
-    if comment_like
-      already_like = true
-      comment_like.destroy
-    else
+    comment_like = CommentLike.find_by(user_id: current_user.id,
+                                       comment_id: params[:id])
+    if comment_like.nil?
       already_like = false
       comment_like = CommentLike.create(user_id: current_user.id,
                                         comment_id: params[:id])
+      recent_user = current_user.string_id
+    else
+      already_like = true
+      comment_like.destroy
+      last_comment_like = CommentLike.where(comment_id: params[:id]).last
+      recent_user = last_comment_like.user.string_id unless last_comment_like.nil?
     end
-    render json: { already_like: already_like, comment_like: comment_like }
+    comment_like_count = CommentLike.where(comment_id: params[:id]).count
+
+    render json: { already_like: already_like,
+                   recent_user: recent_user,
+                   comment_like_count: comment_like_count }
   end
 end

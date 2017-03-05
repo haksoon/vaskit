@@ -81,6 +81,7 @@ class Ask < ActiveRecord::Base
       noti_message += "\n- 투표 #{(left_ask_deal.vote_count + right_ask_deal.vote_count)}표"
       noti_message += " / 댓글 #{(left_ask_deal.comment_count + right_ask_deal.comment_count)}개"
       noti_message += " / 공감 #{like_count}회"
+      noti_message += "\n- 만족도 별점 #{ask_complete.star_point}점"
       noti_color = '#333333'
     end
     noti_message += "\n- 내용\n#{message}"
