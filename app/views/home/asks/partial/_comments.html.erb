@@ -8,7 +8,7 @@
     {{ var end_line_check = true }}
     {{ for (var i=0; i < original_comments.length; i++) { }}
       {{ var original_comment = original_comments[i] }}
-      {{ if (end_line_check && original_comment.created_at > ask.ask_complete.created_at) { }}
+      {{ if (end_line_check && ask.be_completed && original_comment.created_at > ask.ask_complete.created_at) { }}
         <li class="comment_box end_line"><i class="fa fa-caret-down"></i>여기서부터는 투표를 종료하신 이후에 작성된 댓글입니다</li>
         {{ end_line_check = false }}
       {{ } }}
