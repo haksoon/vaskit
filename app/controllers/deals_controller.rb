@@ -109,7 +109,7 @@ class DealsController < ApplicationController
           table = Hash.new
           trs.css('th').each_with_index { |th, index| table[th.text] = index }
           trs.css('td')[table['제조사']].text unless table['제조사'].nil?
-          trs.css('td')[table['제조사']].text unless table['브랜드'].nil?
+          trs.css('td')[table['브랜드']].text unless table['브랜드'].nil?
         end
 
       brand = naver_deal[:mallName] if brand.nil? && naver_deal[:mallName] != '네이버'
