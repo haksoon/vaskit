@@ -1,6 +1,5 @@
 <% title = "VASKIT" %>
 <% description = "VASKIT에서 당신의 구매고민을 이야기 해보세요 : )" %>
-<% keywords = "쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" %>
 <% url = root_url %>
 <% image_url = "#{CONFIG['host']}/images/logo/logo_share_1200_630.png" %>
 
@@ -33,7 +32,6 @@
     <% elsif (controller.action_name == "show") %>
         <% title = "VASKIT | #{@ask.left_ask_deal.title.truncate(16)} vs #{@ask.right_ask_deal.title.truncate(16)}" %>
         <% description = "#{@ask.left_ask_deal.title} vs #{@ask.right_ask_deal.title}, 당신의 선택은? #{@ask.message.truncate(200)}" %>
-        <% keywords = "#{@ask.left_ask_deal.title}, #{@ask.right_ask_deal.title}, #{HashTag.where(ask_id: @ask.id).pluck(:keyword).join(", ")}" %>
         <% url = ask_url %>
     <% elsif (controller.action_name == "new") %>
         <% title = "VASKIT | 질문 작성하기" %>
@@ -42,7 +40,6 @@
     <% elsif (controller.action_name == "edit") %>
         <% title = "VASKIT | 질문 수정하기" %>
         <% description = "#{@ask.left_ask_deal.title} vs #{@ask.right_ask_deal.title}, 당신의 선택은? #{@ask.message.truncate(200)}" %>
-        <% keywords = "#{@ask.left_ask_deal.title}, #{@ask.right_ask_deal.title}, #{HashTag.where(ask_id: @ask.id).pluck(:keyword).join(", ")}" %>
         <% url = edit_ask_url %>
     <% end %>
 <% elsif (controller.controller_name == "videos") %>
@@ -75,7 +72,6 @@
             <% title = "VASKIT | #{controller.request.params[:keyword]} - 통합 검색결과" %>
             <% description = "#{controller.request.params[:keyword]} - VASKIT 통합 검색결과입니다" %>
         <% end %>
-        <% keywords = "#{controller.request.params[:keyword]}, 쇼핑, 고민, 구매고민, 결정장애, 선택장애, 여성의류, 화장품, 패션, 햄릿증후군, vs" %>
         <% url = "#{search_index_url}?type=#{controller.request.params[:type]}&keyword=#{controller.request.params[:keyword]}" %>
     <% else  %>
         <% title = "VASKIT | 검색하기" %>
@@ -169,16 +165,81 @@
 
 
 <title><%= title %></title>
+<base href="<%= CONFIG['host'] %>">
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+
+<meta name="application-name" content="VASKIT">
 <meta name="title" content="<%= title %>" />
-<meta name="description" content="<%= description %>" />
-<meta name="keywords" content="<%= keywords %>" />
-<meta property="og:title" content="<%= title %>"/>
-<meta property="og:description" content="<%= description %>"/>
-<meta property="og:url" content="<%= url %>"/>
-<meta property="og:image" content="<%= image_url %>"/>
-<meta property="og:site_name" content="VASKIT" />
-<meta property="og:type" content="website" />
-<meta property="og:locale" content="ko_KR" />
-<meta property="fb:app_id" content="532503193593128" />
+<meta name="description" content="<%= description %>">
+
+<meta name="robots" content="index,follow,noodp"><!-- All Search Engines -->
+<meta name="googlebot" content="index,follow"><!-- Google Specific -->
+
+<!-- Verify ownership for Google Search Console -->
+<meta name="google-site-verification" content="k_OYK18dL5birKeDRx_4D1CkkhDIq6ooRJtpOqnt6TY" />
+<!-- Verify ownership for NAVER Search Console -->
 <meta name="naver-site-verification" content="2d90db92ba9197478a54e3eebc7654049863ec15"/>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=521318198062554&ev=PageView&noscript=1"/></noscript>
+
+<!-- Full domain name or web address -->
+<meta name="url" content="<%= CONFIG['host'] %>">
+<meta name="identifier-URL" content="<%= CONFIG['host'] %>"> <!-- Does the same as URL, older and not supported -->
+
+<!-- Favicons -->
+<link rel="manifest" href="/images/logo/favicon/manifest.json">
+<!-- For IE 10 and below -->
+<!-- No link, just place a file called favicon.ico in the root directory -->
+<!-- For IE 11, Chrome, Firefox, Safari, Opera -->
+<link rel="icon" type="image/png" sizes="16x16" href="/images/logo/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/logo/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48"  href="/images/logo/favicon/android-icon-48x48.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/images/logo/favicon/favicon-96x96.png">
+<link rel="icon" type="image/png" sizes="192x192"  href="/images/logo/favicon/android-icon-192x192.png">
+
+<!-- Apple iOS Touch Icons -->
+<link rel="apple-touch-icon" sizes="57x57" href="/images/logo/favicon/apple-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="/images/logo/favicon/apple-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="/images/logo/favicon/apple-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="/images/logo/favicon/apple-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="/images/logo/favicon/apple-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="/images/logo/favicon/apple-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="/images/logo/favicon/apple-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="/images/logo/favicon/apple-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/logo/favicon/apple-icon-180x180.png">
+<link rel="apple-touch-icon-precomposed" href="/images/logo/favicon/apple-icon-precomposed.png">
+<!-- In most cases, one 180×180px touch icon in the head is enough -->
+<!-- If you use art-direction and/or want to have different content for each device, you can add more touch icons -->
+
+<!-- Google Android -->
+<meta name="theme-color" content="#FFF">
+
+<!-- Microsoft Internet Explorer -->
+<meta name="msapplication-TileColor" content="#FFF">
+<meta name="msapplication-TileImage" content="/images/logo/favicon/ms-icon-144x144.png">
+
+
+<!-- Apple iOS -->
+<!-- Smart App Banner -->
+<!-- <meta name="apple-itunes-app" content="app-id=1188969345, affiliate-data=myAffiliateData, app-argument=myURL"> -->
+
+<!-- Disable automatic detection and formatting of possible phone numbers -->
+<meta name="format-detection" content="telephone=no">
+
+<!-- Add to Home Screen -->
+<!-- Apple iOS -->
+<meta name="apple-mobile-web-app-title" content="VASKIT">
+<!-- <meta name="apple-mobile-web-app-capable" content="yes"> -->
+<!-- <meta name="apple-mobile-web-app-status-bar-style" content="default"> -->
+<!-- Google Android -->
+<!-- <meta name="mobile-web-app-capable" content="yes"> -->
+
+<!-- Facebook / Open Graph -->
+<meta property="fb:app_id" content="532503193593128" />
+<meta property="og:url" content="<%= url %>"/>
+<meta property="og:type" content="website" />
+<meta property="og:title" content="<%= title %>"/>
+<meta property="og:image" content="<%= image_url %>"/>
+<meta property="og:description" content="<%= description %>"/>
+<meta property="og:site_name" content="VASKIT" />
+<meta property="og:locale" content="ko_KR" />

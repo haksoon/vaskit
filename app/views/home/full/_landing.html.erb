@@ -3,12 +3,7 @@
     <div class="container main landing" ontouchstart="removeIOSRubberEffect($(this));">
       <div class="landing_background">
         <div class="landing_description">
-          <div class="landing_description_seg">
-            <span>Let's VASKIT!</span>
-            <span>바로 지금 가입하세요!</span>
-            <span>꼼꼼한 소비자들의 깐깐한 선택</span>
-            <span>#둘중에뭐사지? #혼자고민고민하지마</span>
-          </div>
+          <span class="placeholder"></span>
         </div>
       </div>
       <div class="login_btn_area">
@@ -163,6 +158,13 @@
   function show_landing() {
     if ($("#landing_page").length === 0) {
       open_full_view(landingTemplate());
+      $("#landing_page .placeholder").unityping({
+        string: ['#둘중에 뭐사지?', '#혼자고민고민하지마', '꼼꼼한 소비자의 깐깐한 선택!', "Let's VASKIT!", '바로 지금 가입하세요!'],
+        typingSpeed: 1000, // CPM; Characters per Minute
+        backSpeed: 50, // ms
+        startDelay: 1000, // ms
+        backDelay: 100 // ms
+      });
       if (userApp) setAppStatusBar("orange");
     }
     var url = '/landing';

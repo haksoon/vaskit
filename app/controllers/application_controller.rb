@@ -128,10 +128,9 @@ class ApplicationController < ActionController::Base
 
   def auth_app_create(user)
     if user.nil?
-      cookies['app_user'] = { value: nil,
-                              expires: 3.months.from_now,
-                              path: '/' }
+      cookies.delete :app_user
     elsif user && user.sign_up_type != 'facebook'
+      return unless cookies['_vaskit_session'].nil?
       crypt = ActiveSupport::MessageEncryptor.new('24136565f7bb1cdc129a4c6e8209abe831d43b858e9ce9ce70f27a914a0fb60c8098b3f417e16232c4575bd0dd9ee47ac8eac90eaef5894a7044cc6a892f5cb9')
       app_user = crypt.encrypt_and_sign(user.id)
       cookies['app_user'] = { value: app_user,

@@ -85,7 +85,6 @@
 
         that.written = !that.pos.ch ? that.written+sq[that.pos.str][that.pos.ch] : that.written.substr(0, that.written.length-1)+sq[that.pos.str][that.pos.ch];
         that.jq.html(that.written);
-        //that.jq.append('<br>');
 
         // eachTyping callback
         that.options.eachTyping(that.written, that.pos);
@@ -126,36 +125,11 @@
       }, that.options.backSpeed);
     },
     run: function() {
-      this.addCursor('box');
-      //this.addCursor('text', this.options.cursor);
+      this.addCursor('text');
       this.init();
     },
-    addCursor: function(render, symbol) {
-      if(render === 'box') {
-        this.jq.after('<span id="blinker"></span>');
-
-        var fontSize = parseInt(this.jq.css('font-size')),
-          height = fontSize*0.92+'px',
-          top = fontSize*0.13+'px';
-
-        $('#blinker').css({
-          'background-color': '#999',
-          'position': 'relative',
-          'display': 'inline-block',
-          'width': '2px',
-          'height': height,
-          'top': top,
-          'left': '1px',
-          'animation': 'flash 1.5s infinite'
-        });
-      }
-      if(render === 'text') {
-        this.jq.after('<span id="blinker">'+symbol+'</span>');
-        $('#blinker').css({
-          'font-weight': 100,
-          'font-size': parseInt(this.jq.css('font-size'))*1.14+'px'
-        });
-      }
+    addCursor: function(render) {
+      this.jq.after('<span class="blinker" style="animation: flash 1.5s infinite;">|</span>');
     },
     sequencer: function(str) {
       var that = this;
@@ -239,10 +213,9 @@
   $.fn.unityping.defaults = {
     string: ['안녕하세요!', '원하시는 문장을 쓰시면,', '이렇게 타이핑이 됩니다!'],
     typingSpeed: 200,
+    backSpeed: 100,
     startDelay: 0,
     backDelay: 1000,
-    backSpeed: 100,
-    cursor: '|',
     eachTyping: function() {},
     eachBack: function() {},
     onComplete: function() {},

@@ -55,7 +55,15 @@
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
-  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail {{= ask.id == 1959 ? 'event_ask' : '' }} contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+    {{ if (ask.id == 1959) { }}
+      <div class="event_info">
+        <span class="event_title">📍 프로-리뷰왕 이벤트 진행중!</span>
+        {{ var remain_days = Math.floor((new Date("March 14, 2017").getDate() - new Date().getDate())) }}
+        {{ remain_days = remain_days > 0 ? remain_days + "일 남음" : "오늘 종료됩니다!" }}
+        <span class="event_d_day"><i class="fa fa-clock-o"></i> {{= remain_days }}</span>
+      </div>
+    {{ } }}
     <div class="clearfix">
       {{ var already_like = false }}
       {{ if (current_user) { }}

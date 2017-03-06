@@ -8,6 +8,7 @@ class AsksController < ApplicationController
       format.html
       format.json do
         asks = Ask.where(be_completed: false)
+                  .where.not(id: 1959) # 이벤트
                   .page(params[:page])
                   .per(Ask::ASK_PER)
                   .order(id: :desc)
@@ -16,6 +17,11 @@ class AsksController < ApplicationController
           my_votes = Vote.where(user_id: current_user.id).map(&:ask_id)
           asks = asks.where.not(user_id: current_user.id)
           asks = asks.where.not(id: my_votes) unless my_votes.empty?
+        end
+
+        if params[:page].nil? # 이벤트
+          event = Ask.find(1959)
+          asks.unshift(event)
         end
 
         asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete])
@@ -326,16 +332,6 @@ class AsksController < ApplicationController
 
   # DELETE /asks/:id.json
   def destroy
-    # @ask.update(be_completed: true)
-    # ask_complete = AskComplete.create(user_id: current_user.id,
-    #                                   ask_id: @ask.id,
-    #                                   ask_deal_id: params[:ask_deal_id],
-    #                                   star_point: params[:star_point],
-    #                                   left_vote_count: @ask.left_ask_deal.vote_count,
-    #                                   right_vote_count: @ask.right_ask_deal.vote_count)
-    # @ask.ask_notifier('complete')
-    # select_direction = ask_complete.ask_deal_id == @ask.left_ask_deal_id ? 'left' : 'right'
-
     ask = @ask
     ask.update(be_completed: true)
     ask_complete = AskComplete.create(user_id: current_user.id,
@@ -361,9 +357,6 @@ class AsksController < ApplicationController
                                         comment_id: ask_comments)
     end
 
-    # select_direction = ask_complete.ask_deal_id == ask.left_ask_deal_id ? 'left' : 'right'
-    # star_point = params[:star_point]
-
     ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, { ask_likes: { include: :user } }, :ask_complete, { comments: { include: [:user, { comment_likes: { include: :user } }] } }])
 
     render json: {
@@ -371,8 +364,6 @@ class AsksController < ApplicationController
       already_like: already_like,
       like_comments: like_comments
     }
-    # render json: { select_direction: select_direction,
-    #                star_point: star_point }
   end
 
   private

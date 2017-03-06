@@ -132,7 +132,7 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
-    z-index: 0;
+    z-index: -10;
     background-image: url('/images/logo/logo_symbol.png');
     background-image: -webkit-linear-gradient(transparent, transparent), url('/images/logo/logo_symbol.svg');
     background-image: linear-gradient(transparent, transparent), url('/images/logo/logo_symbol.svg');
@@ -593,7 +593,7 @@ body {
 
 
 
-.ask { text-align: left;
+.ask { position: relative; text-align: left;
     &.ask_thumbnail { padding: 0 0 50px 0; background-color: #fff; }
     &.ask_detail .header_title { color: #666; font-size: 14px; @include fontNumber; }
     .ask_image_box { position: relative; width: 100%; overflow: hidden; background-color: #f9f9f9; transition: background-color .5s;
@@ -811,6 +811,13 @@ body {
         .vs_result_detail_btn { border-top: 1px solid #bdbdbd; }
     }
 
+    &.ask_thumbnail.event_ask { border: 2px solid #ff7800; padding-bottom: 40px; margin-bottom: 10px;
+        .event_info { display: block; width: 100%; height: 30px; line-height: 30px; box-sizing: border-box;
+                      font-size: 12px; background-color: #ff7800; color: #fff; }
+        .event_title { display: inline-block; height: 30px; padding: 0 8px 0 5px; border-bottom: 1px dashed #ff7800; box-sizing: border-box;
+                       background-color: #fff; color: #ff7800; border-radius: 5px 5px 0 0; @include fontBold; }
+        .event_d_day { float: right; margin-right: 6px; font-size: 10px; }
+    }
 }
 
 
@@ -1422,27 +1429,8 @@ body {
 /* ============================== Landing 화면 ============================== */
 #landing_page { height: 100%;
   .container.main.landing { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ff7800; color: #fff;
-    .landing_background { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 110px); background: url('/images/logo/logo_landing.png') no-repeat center center; background-size: 200px;
-      .landing_description { position: absolute; bottom: calc(50% - 60px); width: 100%; height: 30px; line-height: 30px; text-align: center; overflow: hidden;
-        .landing_description_seg { animation: landing_slide 10s infinite;
-          span { display: block; }
-          @keyframes landing_slide {
-            0% { transform: translateY(-105px); }
-            2.5% { transform: translateY(-90px); }
-            22.5% { transform: translateY(-90px); }
-            // 25%
-            27.5% { transform: translateY(-60px); }
-            47.5% { transform: translateY(-60px); }
-            // 50%
-            52.5% { transform: translateY(-30px); }
-            72.5% { transform: translateY(-30px); }
-            // 75%
-            77.5% { transform: translateY(-0px); }
-            97.5% { transform: translateY(-0px); }
-            100% { transform: translateY(15px); }
-          }
-        }
-      }
+    .landing_background { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 120px); background: url('/images/logo/logo_landing.png') no-repeat center center; background-size: 200px;
+      .landing_description { position: absolute; bottom: calc(50% - 60px); width: 100%; text-align: center; overflow: hidden; }
     }
     .login_btn_area { position: absolute; bottom: 40px; left: 0; width: 100%; height: 110px; overflow: hidden; padding: 0 10px; box-sizing: border-box; z-index: 10;
       .login_btn { display: block; height: 50px; line-height: 50px; text-align: center; border-radius: 2px; border: 1px solid #fff; box-sizing: border-box;

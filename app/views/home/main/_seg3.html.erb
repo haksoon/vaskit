@@ -1,4 +1,4 @@
-off<script type="text/template" id="askFormTemplate">
+<script type="text/template" id="askFormTemplate">
   {{ if (localStorage.tutorial === undefined || localStorage.tutorial.match("ask") === null) go_url('tutorial_ask') }}
   <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check();", onchange: "ask_progress_check();"}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
