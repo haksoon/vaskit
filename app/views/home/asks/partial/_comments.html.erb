@@ -571,7 +571,7 @@
 		        	} else {
                 all_comment_like_icons.removeClass("fa-heart-o").addClass("fa-heart").animateCss("tada");
 		        	}
-              if (data.comment_like_count == 0) { all_comment_like_counts.html(""); } else { all_comment_like_counts.html("1"); }
+              if (data.comment_like_count === 0) { all_comment_like_counts.html(""); } else { all_comment_like_counts.html("1"); }
               all_comment_likes.html(commentLikeTemplate({recent_user: data.recent_user, comment_like_count: data.comment_like_count}));
 		        },
 		        beforeSend: function(){

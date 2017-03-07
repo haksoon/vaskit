@@ -34,10 +34,32 @@ class ApplicationController < ActionController::Base
   end
 
   def ref_link
-    redirect_to 'http://120.142.32.13:3000/asks/1000?test=true' and return if Rails.env == 'production' && current_user && current_user.id = 410
+    redirect_to 'http://120.142.32.13:3000/asks/1000?test=true' and return if Rails.env == 'production' && current_user && current_user.id == 410
     return if params[:test].blank?
     resource = User.find_for_database_authentication(id: 410)
     sign_in(:user, resource)
+
+    # return if params[:ref].blank?
+    # ref = LogReference.find_by(params[:ref])
+    # return if ref.nil?
+    # ref.increment(:visit_count).save!
+    #
+    # ua = request.headers['User-Agent']
+    # return unless ua =~ /iPhone/i || ua =~ /Android/i
+    #
+    # app_url = "#{CONFIG['host']}#{ref.url}"
+    # app_js = ref.js
+    #
+    # if ref.connect_to_store
+    #   playstore_link = 'https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit'
+    #   appstore_link = 'http://itunes.apple.com/app/id1188969345'
+    #   redirect_to playstore_link and return
+    # end
+    #
+    # aos_intent_link = "intent://vaskit.kr?url=#{app_url}&js=#{app_js}#Intent;scheme=vaskit;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.vaskit.msh.vaskit;end"
+    # aos_app_link = "vaskit://vaskit.kr?url=#{app_url}&js=#{app_js}"
+    #
+    # ios_app_link = "fb532503193593128://kr.vaskit.msh.vaskit.fb532503193593128?js=#{app_js}"
   end
 
   def user_visits
