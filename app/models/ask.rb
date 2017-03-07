@@ -1,18 +1,21 @@
 class Ask < ActiveRecord::Base
-  belongs_to :collection
+  include SlackNotifier
+
+  ASK_PER = 5
+
   belongs_to :user
-  belongs_to :category
   belongs_to :left_ask_deal, class_name: 'AskDeal', foreign_key: 'left_ask_deal_id'
   belongs_to :right_ask_deal, class_name: 'AskDeal', foreign_key: 'right_ask_deal_id'
+  belongs_to :category
   has_many :votes
   has_many :ask_likes
   has_many :hash_tags
   has_many :comments
+  has_many :share_logs
+  has_many :alarms
   has_one :ask_complete
-
-  include SlackNotifier
-
-  ASK_PER = 5
+  has_many :collection_to_asks
+  has_many :collections, through: :collection_to_asks
 
   def detail_vote_count
     age_20 = Date.new(Time.now.year - 18, 1, 1)

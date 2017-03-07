@@ -1,7 +1,7 @@
 <script type="text/template" id="appBannerMobileTemplate">
-  <div class="container top dark" ontouchmove="return false;" style="background-color: #ff7800;">
+  <div class="container top" ontouchmove="return false;" style="border-bottom: none;">
     <span class="header_title app_banner" onclick="open_in_app();">
-      <span class="vaskit_icon logo"></span>
+      <span class="vaskit_icon logo" style="filter: brightness(50%);"></span>
       <span class="app_banner_btn">앱으로 보기</span>
     </span>
     <span class="header_btn right close_btn" onclick="close_app_banner();">&times;</div>
@@ -26,10 +26,10 @@
   function open_app_banner() {
     if (userDevice.isMobile && !userApp && ((userDevice.isIOS) || userDevice.isAndroid)) {
       $("#main_view").addClass("onAppBanner");
-      $("#app_banner").css({height: "50px"}).html(appBannerMobileTemplate());
+      $("#app_banner").addClass("onAppBanner").html(appBannerMobileTemplate());
     } else if (!userDevice.isMobile) {
       $("#main_view").addClass("onAppBanner");
-      $("#app_banner").css({height: "50px"}).html(appBannerPCTemplate());
+      $("#app_banner").addClass("onAppBanner").html(appBannerPCTemplate());
     } else {
       $("#app_banner").remove();
     }
@@ -37,7 +37,7 @@
 
   function close_app_banner() {
     $("#main_view").removeClass("onAppBanner");
-    $("#app_banner").css({height: 0}).transitionRemove();
+    $("#app_banner").removeClass("onAppBanner").transitionEmpty();
   }
 
   function open_in_app() {

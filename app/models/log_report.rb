@@ -1,5 +1,8 @@
 class LogReport < ActiveRecord::Base
   include SlackNotifier
+
+  belongs_to :user
+
   after_create :report_submit_notifier
 
   def report_submit_notifier

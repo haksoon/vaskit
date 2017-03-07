@@ -1,5 +1,8 @@
 class LogInquiry < ActiveRecord::Base
   include SlackNotifier
+
+  belongs_to :user
+
   after_create :inquiry_submit_notifier
 
   def inquiry_submit_notifier

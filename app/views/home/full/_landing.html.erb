@@ -179,6 +179,7 @@
   function login_success(length) {
     go_back(length);
     close_full_view();
+    open_app_banner();
     if (userApp) getUserToken();
     if (userApp) setAppStatusBar();
     try {

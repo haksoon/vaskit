@@ -1,4 +1,6 @@
 class Alarm < ActiveRecord::Base
+  include PushSend
+
   belongs_to :ask
   belongs_to :comment
   belongs_to :user, class_name: 'User', foreign_key: 'user_id'
@@ -6,7 +8,6 @@ class Alarm < ActiveRecord::Base
   belongs_to :ask_owner_user, class_name: 'User', foreign_key: 'ask_owner_user_id'
   belongs_to :comment_owner_user, class_name: 'User', foreign_key: 'comment_owner_user_id'
 
-  include PushSend
   after_create :alarm_push_send
   after_update :alarm_push_send
 

@@ -1,4 +1,9 @@
 class Video < ActiveRecord::Base
+  VIDEO_PER = 3
+
+  belongs_to :ask
+  has_many :share_logs
+
   has_attached_file :image,
                     url: '/assets/videos/:id/:style/:basename.:extension',
                     path: ':rails_root/public/assets/videos/:id/:style/:basename.:extension',
@@ -12,10 +17,6 @@ class Video < ActiveRecord::Base
   validates :fb_id, presence: true
   validates :yt_id, presence: true
   validates :image, presence: true
-
-  belongs_to :ask
-
-  VIDEO_PER = 3
 
   before_create :rename_file
   before_update :rename_file

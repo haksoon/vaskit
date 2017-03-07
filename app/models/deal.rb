@@ -1,12 +1,14 @@
 class Deal < ActiveRecord::Base
+  NAVER_RESULT_PER = 10
+
+  has_many :ask_deals
+
   has_attached_file :image,
                     url: '/assets/deals/:id/:style/:basename.:extension',
                     path: ':rails_root/public/assets/deals/:id/:style/:basename.:extension',
                     default_url: '/images/custom/card_image_preview.png'
   validates_attachment_size :image, less_than: 20.megabytes
   validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
-
-  NAVER_RESULT_PER = 10
 
   before_create :rename_file
 

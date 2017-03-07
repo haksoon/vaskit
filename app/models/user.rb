@@ -4,6 +4,23 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  has_many :alarms
+  has_many :asks
+  has_many :ask_deals
+  has_many :ask_completes
+  has_many :ask_likes
+  has_many :comments
+  has_many :comment_likes
+  has_many :hash_tags
+  has_many :votes
+  has_many :user_gcm_keys
+  has_many :preview_images
+  has_many :share_logs
+  has_many :user_visit
+  has_many :log_reports
+  has_many :log_inquiries
+  has_many :user_categories
+
   has_attached_file :avatar,
                     styles: { original: '200x200#' },
                     url: '/assets/users/:id/:style/:basename.:extension',

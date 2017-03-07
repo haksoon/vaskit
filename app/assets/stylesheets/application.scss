@@ -124,7 +124,7 @@ body {
         max-width: 100%;
     }
     .background {
-        background-color: #eee;
+        background-color: #f9f9f9;
     }
 }
 
@@ -178,8 +178,10 @@ body {
     transition: transform .25s, top .25s, height .25s;
     &.full { transform: translateY(0); z-index: 20; }
     &.off { transform: translateY(100%); }
-    &.appBanner { height: 0px; z-index: 2; box-shadow: none; }
     &.onAppBanner { top: 50px; height: calc(100% - 50px); }
+    &.appBanner { height: 50px !important; top: -50px; z-index: 2; box-shadow: none;
+      &.onAppBanner { top: 0; }
+    }
 }
 
 .seg {
@@ -231,9 +233,9 @@ body {
           }
           &.app_banner { text-align: left; margin: 0 50px; font-size: 14px;
             &:active { transform: initial; }
-            .app_banner_btn { display: block; height: 30px; line-height: 30px; text-align: center; margin: 10px 0;
-                              background-color: #fff; color: #ff7800; border-radius: 5px; transition: color .25s, background-color .25s;
-              &:active { background-color: #ff7800; color: #fff; }
+            .app_banner_btn { display: block; height: 30px; line-height: 30px; text-align: center; margin: 9px 0;
+                              background-color: #fff; color: #999; border: 1px solid #999; border-radius: 3px; transition: color .25s, background-color .25s;
+              &:active { background-color: #999; color: #fff; }
             }
           }
           &.left { width: calc(100% - 80px); margin: 0 60px 0 20px; text-align: left; }
@@ -971,8 +973,8 @@ body {
       }
     }
    }
-   .comment_input_btn { position: absolute; bottom: 0; width: 50px; height: 50px; line-height: 50px; text-align: center; box-sizing: border-box;
-     &.comment_input_menu { height: 100%; padding: 13px 5px; left: 0;
+   .comment_input_btn {
+     &.comment_input_menu { position: absolute; top: 0; left: 0; width: 50px; height: 50px; line-height: 50px; text-align: center; padding: 13px 5px; box-sizing: border-box;
        .toggle_btn_background { position: relative; width: 40px; height: 24px; border-radius: 12px; background-color: #f2f0f0; box-shadow: 1px 1px 1px lightgrey;
          .toggle_btn_on { position: absolute; top: 2px; width: 20px; height: 20px; border-radius: 10px; background-color: #FF7200; transition: left .25s cubic-bezier(0.18, 0.89, 0.32, 1.28);
          }
@@ -990,7 +992,15 @@ body {
          .toggle_btn_text.left { color: #ccc; }
        }
      }
-     &.comment_input_submit { height: 100%; padding: 9px 10px 9px 0; right: 0;
+     &.comment_input_counter { position: absolute; bottom: 0; left: -50px; width: 50px; height: 50px; line-height: 10px; font-size: 10px; text-align: center;
+                               padding: 15px 0; box-sizing: border-box; white-space: nowrap; overflow: hidden; transition: left .25s; @include fontNumber;
+       &:after { content: ' /250'; position: absolute; bottom: 15px; left: 0; width: 100%; color: #ff7800; }
+       &.on { left: 0; }
+       &.over { color: #ff7800;
+         &:before { content: '\f071'; font-family: "FontAwesome"; color: #ffcc5a; position: absolute; top: 2px; left: 0; width: 100%; animation: fadeIn 1.5s infinite; }
+       }
+     }
+     &.comment_input_submit { position: absolute; top: 0; right: 0; width: 50px; height: 100%; line-height: 50px; text-align: center; padding: 9px 10px 9px 0; box-sizing: border-box;
        .submit_btn { display: block; width: 40px; height: 100%; line-height: 32px; border-radius: 0 5px 5px 0; color: #fff; background-color: #ccc; box-shadow: 1px 1px 1px lightgrey; transition: background-color .25s;
          .submit_btn_text { position: absolute; top: 50%; left: 0; width: 40px; line-height: 16px; background-color: transparent; transform: translateY(-50%); }
        }

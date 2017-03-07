@@ -1,4 +1,8 @@
 class Vote < ActiveRecord::Base
+  belongs_to :user
+  belongs_to :ask
+  belongs_to :ask_deal
+
   after_create :reload_ask_deal_vote_count, :create_vote_alarm
   after_update :reload_ask_deal_vote_count
   after_destroy :reload_ask_deal_vote_count

@@ -622,7 +622,7 @@ function load_template(title, callback) {
       method: 'GET',
       async: false,
       success: function(data) {
-        $("body").append(data);
+        $(".template_scripts").append(data);
         if (typeof callback === "function") callback();
       },
       beforeSend: function(){
@@ -660,7 +660,8 @@ function notify(msg, onclick){
 
 function loadingStart() {
   var loading_bar = $(".loading_bar");
-  $(".loading_div").show();
+  var loading_div = $(".loading_div");
+  loading_div.show();
   loading_bar.clearQueue().show().animate({width:"90%"},1000,function(){
     loading_bar.animate({width:"94%"},2000,function(){
       loading_bar.animate({width:"98%"},8000);
@@ -670,14 +671,38 @@ function loadingStart() {
 
 function loadingEnd() {
   var loading_bar = $(".loading_bar");
-  $(".loading_init").remove();
-  $(".loading_div").removeAttr("ontouchmove");
+  var loading_div = $(".loading_div");
   loading_bar.stop().animate({width:"100%"},100,function(){
     loading_bar.delay(300).animate({height:"0px"},100,function(){
       loading_bar.css({width:"0%", height:"5px", display:"none"});
-      $(".loading_div").hide();
+      loading_div.hide();
     });
   });
+}
+
+function loadingProgress() {
+  var loading_div = $(".loading_div");
+  var loading_bar = $(".loading_bar");
+  var xhr = new window.XMLHttpRequest();
+  xhr.upload.addEventListener("progress", function (e) {
+      if (e.lengthComputable) {
+          var percentComplete = e.loaded / e.total * 100 / 4 * 3;
+          loading_div.show();
+          loading_bar.clearQueue().show().animate({width: percentComplete+"%"}, 250);
+      }
+  }, false);
+  xhr.addEventListener("progress", function (e) {
+      if (e.lengthComputable) {
+          var percentComplete = e.loaded / e.total * 100 / 4 * 1 + 75;
+          loading_bar.clearQueue().show().animate({width: percentComplete+"%"}, 250, function(){
+            loading_bar.delay(300).animate({height:"0px"},100,function(){
+              loading_bar.css({width:"0%", height:"5px", display:"none"});
+              loading_div.hide();
+            });
+          });
+      }
+  }, false);
+  return xhr;
 }
 
 // Alarm Check
@@ -971,6 +996,13 @@ $.fn.extend({
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         $(this).addClass('animated ' + animationName).one(animationEnd, function() {
             $(this).remove();
+            if (typeof callback === "function") callback();
+        });
+    },
+    transitionHide: function (callback) {
+        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+        $(this).one(transitionEnd, function() {
+            $(this).hide().off(transitionEnd);
             if (typeof callback === "function") callback();
         });
     },

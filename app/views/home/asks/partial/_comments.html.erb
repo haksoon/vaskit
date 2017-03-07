@@ -178,6 +178,7 @@
     var current_comment_input_init = current_comment_container.find(".comment_input_init");
     var current_comment_input = current_comment_container.find(".comment_input");
     var current_comment_input_menu = current_comment_container.find(".comment_input_menu");
+    var current_comment_input_counter = current_comment_container.find(".comment_input_counter");
     var current_comment_input_submit = current_comment_container.find(".comment_input_submit");
     var current_comment_input_submit_btn_text = current_comment_input_submit.find(".submit_btn_text");
     var current_comment_lists = current_wrapper.find(".comment_list");
@@ -368,6 +369,14 @@
                              }
                              current_comment_container.height(this.scrollHeight + 32);
                              hashtagInput($(this));
+                             var comment_input_count = $(this).val().length;
+                             current_comment_input_counter.html(comment_input_count);
+                             if (comment_input_count > 200) {
+                               if (comment_input_count > 250) { current_comment_input_counter.addClass("over"); } else { current_comment_input_counter.removeClass("over"); }
+                               current_comment_input_counter.addClass("on");
+                             } else {
+                               current_comment_input_counter.removeClass("on");
+                             }
                            })
                            .on("scroll", function(e) {
                              $(this).css({overflowY: "scroll"});
@@ -376,15 +385,19 @@
                            .on("focus", function(e) {
                               // iOS web 키패드 이슈
                               if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
+                                console.log('키패드 포커스 & iOS 체크');
                                 iOSKeypadCheck = setInterval(function(){
+                                  console.log('...');
                                   var st = document.body.scrollTop;
                                   if (st > 0) {
+                                    console.log('@@@@@@@@@@@@@@@@화면 높이 감지@@@@@@@@@@@@@@@@');
                                     var target_height = window.innerHeight - st;
-                                    if (userApp) { $("html").css({height: target_height}); } else { $("html").css({height: target_height + 10}); }
+                                    if (userApp) { $("html").css({height: target_height}); } else { $("html").css({height: target_height + 10}); console.log('!!!!!!!!!!!!!!!!!!화면 높이 변경!!!!!!!!!!!!!!!!!!'); }
                                     window.scrollTo(0,0);
                                   }
                                 }, 1);
                                 setTimeout(function(){
+                                  console.log('setInterval 종료');
                                   clearInterval(iOSKeypadCheck);
                                 }, 500);
                               } // iOS web 키패드 이슈
@@ -392,6 +405,7 @@
                               if ($(this).height() == (50 - 32)) $(this).selectRange($(this).val().length, $(this).val().length);
                               $(this).height(this.scrollHeight);
                               current_comment_container.height(this.scrollHeight + 32);
+                              if ($(this).val().length > 250) current_comment_input_counter.addClass("over");
                               $(this).removeClass("filled");
                               hashtagInput($(this));
                            })
@@ -407,6 +421,7 @@
                              current_comment_lists.css({paddingBottom: "10px"});
                              $(this).height(50 - 32);
                              current_comment_container.height(50);
+                             if ($(this).val().length > 250) current_comment_input_counter.removeClass("over");
                              if ($(this).val().length === 0) {
                                hashtag_highlights.html("");
                                $(this).removeClass("filled");

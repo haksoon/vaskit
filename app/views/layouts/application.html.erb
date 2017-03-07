@@ -83,6 +83,7 @@
           $("#loading_welcome").animateCssRemove("slideOutLeft", function(){
             setTimeout(function(){
               $("#loading_init").animateCssRemove("fadeOutDownBig", function(){
+                $(".loading_div").removeAttr("ontouchmove");
                 open_app_banner();
               });
             }, 50);
@@ -125,7 +126,7 @@
     </div>
     <div class="layout notice_div" style="display:none;"><div class="notice_msg"></div></div>
     <div class="layout loading_div" onclick="return false;" ontouchmove="return false;"><div class="loading_bar">&nbsp;</div></div>
-    <div>
+    <div class="template_scripts">
       <%= render partial: "home/main/seg1" %>
       <%= render partial: "home/main/seg2" %>
       <%= render partial: "home/main/seg3" %>

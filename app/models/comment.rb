@@ -1,6 +1,8 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
   has_many :comment_likes
+  has_many :hash_tags
+  has_many :alarms
 
   has_attached_file :image,
                     styles: { normal: '300>x' },
@@ -10,14 +12,14 @@ class Comment < ActiveRecord::Base
   validates_attachment_size :image, less_than: 20.megabytes
   validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
 
-  after_create :reload_ask_deal_comment_count, :create_comment_alarm
-  after_update :reload_ask_deal_comment_count
-  after_destroy :reload_ask_deal_comment_count
-
   validates :ask_id, presence: true
   validates :ask_deal_id, presence: true
   validates :content, presence: true
   validates :user_id, presence: true
+
+  after_create :reload_ask_deal_comment_count, :create_comment_alarm
+  after_update :reload_ask_deal_comment_count
+  after_destroy :reload_ask_deal_comment_count
 
   def generate_hash_tags
     HashTag.destroy_all(ask_id: ask_id, comment_id: id)

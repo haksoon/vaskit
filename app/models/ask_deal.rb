@@ -7,6 +7,11 @@ class AskDeal < ActiveRecord::Base
   validates_attachment_size :image, less_than: 20.megabytes
   validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
 
+  belongs_to :user
+  belongs_to :deal
+  has_many :votes
+  has_one :ask_complete
+
   before_create :rename_file
 
   def rename_file

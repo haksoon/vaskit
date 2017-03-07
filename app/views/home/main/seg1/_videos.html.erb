@@ -141,26 +141,28 @@
   }
 
   function show_video_ask(video_id) {
-    var url = '/videos/' + video_id;
-    $.ajax({
-      url: url,
-      dataType: 'json',
-      type: 'GET',
-      error: function(){
-        return false;
-      },
-      success: function(data){
-        var html = videoAskShowTemplate({video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
-        create_wrapper(html, true);
-      },
-      beforeSend: function(){
-        loadingStart();
-      },
-      complete: function(){
-        loadingEnd();
-      }
+    visitor_check(function(){
+      var url = '/videos/' + video_id;
+      $.ajax({
+        url: url,
+        dataType: 'json',
+        type: 'GET',
+        error: function(){
+          return false;
+        },
+        success: function(data){
+          var html = videoAskShowTemplate({video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
+          create_wrapper(html, true);
+        },
+        beforeSend: function(){
+          loadingStart();
+        },
+        complete: function(){
+          loadingEnd();
+        }
+      });
+      return url;
     });
-    return url;
   }
 
   function hide_video_ask() {
