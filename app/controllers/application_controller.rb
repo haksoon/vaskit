@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_action :set_visitor, unless: -> { request.format.json? }
-  before_action :ref_link, unless: -> { request.format.json? }
   before_action :user_visits, unless: -> { request.format.json? }
   before_action :auth_app, unless: -> { request.format.json? }
+  before_action :ref_link, unless: -> { request.format.json? }
   before_action :prepare_exception_notifier
 
   include PushSend

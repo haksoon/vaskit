@@ -745,7 +745,7 @@ function alarm_check(last_alarm_count) {
 // Image Load
 function get_image_url(data, model_name, extention) {
 	try {
-		var image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+		var image_url = "http://vaskit.kr/assets/"+model_name+"/"+data.id+"/"+extention+"/";
     var image_file_name = data.image_file_name;
     if (image_file_name.indexOf(".") == -1) image_file_name += ".";
 	  image_url += image_file_name;
@@ -764,7 +764,7 @@ function imgError(image, alter_url) {
 
 function get_avatar(data) {
 	try {
-		var avatar_url = "/assets/users/"+data.id+"/original/";
+		var avatar_url = "http://vaskit.kr/assets/users/"+data.id+"/original/";
     var avatar_file_name = data.avatar_file_name;
     if (avatar_file_name.indexOf(".") == -1) avatar_file_name += ".";
 	  avatar_url += avatar_file_name;
