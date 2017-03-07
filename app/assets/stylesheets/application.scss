@@ -129,7 +129,7 @@ body {
 }
 
 .background {
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 100%;
     z-index: -10;
@@ -150,7 +150,7 @@ body {
   &.logo { position: absolute; top: 0; left: 0; display: inline-block; width: 30px; height: 30px; margin: 10px; background-position: -70px -72px; }
 }
 
-.footer { position: fixed; bottom: 0; width: 100%; height: 50px; line-height: 50px; text-align: center; background-color: #f9f9f9; color: #666; font-size: 18px; overflow: hidden; z-index: 10; transition: transform .5s;
+.footer { position: absolute; bottom: 0; width: 100%; height: 50px; line-height: 50px; text-align: center; background-color: #f9f9f9; color: #666; font-size: 18px; overflow: hidden; z-index: 10; transition: transform .5s;
     &.hide { transform: translateY(100%); }
     .tab { position: absolute; top: 0; width: 25%; height: 50px; text-align: center; background-color: #f9f9f9; color: #eee; font-size: 10px; line-height: 20px; transition: background-color .1s; -webkit-tap-highlight-color: transparent;
         .tab_icon { width: 20px; height: 20px; margin: 15px; background-position-y: -20px;
@@ -428,11 +428,11 @@ body {
   img { display: block; width: 100%; padding-bottom: 5px; }
 }
 
-.notice_div { position: fixed; top: -50px; width: 100%; display: table; height: 50px; line-height: 18px; background-color: rgba(238, 110, 1, 0.9); color: #fff; font-size: 14px; @include fontBold; z-index: 999;
+.notice_div { position: absolute; top: -50px; width: 100%; display: table; height: 50px; line-height: 18px; background-color: rgba(238, 110, 1, 0.9); color: #fff; font-size: 14px; @include fontBold; z-index: 999;
   .notice_msg { display: table-cell; padding: 0 20px; text-align: center; vertical-align: middle; }
 }
 
-.loading_div { position: fixed; top: 0px; width: 100%; height: 100%; z-index: 990; display: none; overflow: hidden; -webkit-tap-highlight-color: transparent;
+.loading_div { position: absolute; top: 0px; width: 100%; height: 100%; z-index: 990; display: none; overflow: hidden; -webkit-tap-highlight-color: transparent;
   .loading_bar { display: none; width: 0%; height: 5px; background-color: #666; }
 }
 
@@ -459,7 +459,7 @@ body {
   }
 }
 
-.tutorial_overlay { position: fixed; top: 0px; width: 100%; height: 100%; display: table; background-color: rgba(0, 0, 0, 0.25); z-index: 999; -webkit-tap-highlight-color: transparent;
+.tutorial_overlay { position: absolute; top: 0px; width: 100%; height: 100%; display: table; background-color: rgba(0, 0, 0, 0.25); z-index: 999; -webkit-tap-highlight-color: transparent;
   .tutorial_div { display: table-cell; text-align: center; vertical-align: middle;
     .tutorial_msg { width: 90vw; max-width: #{$layout-width * 0.9}; max-height: 90vh; overflow-y: scroll; -webkit-overflow-scrolling: touch; margin: 0 auto; padding: 10px; box-sizing: border-box; background-color: #fff; border-radius: 7px; box-shadow: 0 1px 0 #999; animation: slideInUp .5s;
       .tutorial_title { @include fontBold; font-size: 16px; margin: 5px 0 10px; }
@@ -1363,7 +1363,7 @@ body {
       &#share_url_btn { left: 160px; background-color: #999; color: #fff; }
       &.share_close_btn { right: 20px; background-color: #ccc; color: #fff; }
     }
-    #share_url { position: fixed; top: 0%; left: 0%; opacity: 0; }
+    #share_url { position: absolute; top: 0%; left: 0%; opacity: 0; }
   }
 }
 

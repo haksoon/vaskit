@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_action :set_visitor, unless: -> { request.format.json? }
+  # before_action :ref_link, unless: -> { request.format.json? }
   before_action :user_visits, unless: -> { request.format.json? }
   before_action :auth_app, unless: -> { request.format.json? }
   before_action :prepare_exception_notifier
@@ -30,6 +31,36 @@ class ApplicationController < ActionController::Base
                                   remote_ip: remote_ip)
       end
     end
+  end
+
+  def ref_link
+    # redirect_to 'http://120.142.32.13:3000/asks/1000?test=true' and return if Rails.env == 'production' && current_user && current_user.id == 1708
+    # return if params[:test].blank?
+    # resource = User.find_for_database_authentication(id: 410)
+    # sign_in(:user, resource)
+
+    # return if params[:ref].blank?
+    # ref = LogReference.find_by(params[:ref])
+    # return if ref.nil?
+    # ref.increment(:click_count).save!
+    #
+    # ua = request.headers['User-Agent']
+    # return unless ua =~ /iPhone/i || ua =~ /Android/i
+    #
+    # app_url = "#{CONFIG['host']}#{ref.url}"
+    # app_js = ref.js
+    #
+    # if ua =~ /iPhone/i
+    #   appstore_link = 'http://itunes.apple.com/app/id1188969345'
+    #   redirect_to appstore_link and return unless ref.connect_to_store
+    #   ios_app_link = "fb532503193593128://kr.vaskit.msh.vaskit.fb532503193593128?js=#{app_js}"
+    #   redirect_to ios_app_link
+    # elsif ua =~ /Android/i
+    #   playstore_link = 'https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit'
+    #   redirect_to playstore_link and return if ref.connect_to_store
+    #   aos_intent_link = "intent://vaskit.kr?url=#{app_url}&js=#{app_js}#Intent;scheme=vaskit;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.vaskit.msh.vaskit;end"
+    #   aos_app_link = "vaskit://vaskit.kr?url=#{app_url}&js=#{app_js}"
+    # end
   end
 
   def user_visits
