@@ -4,9 +4,9 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_action :set_visitor, unless: -> { request.format.json? }
+  before_action :ref_link, unless: -> { request.format.json? }
   before_action :user_visits, unless: -> { request.format.json? }
   before_action :auth_app, unless: -> { request.format.json? }
-  before_action :ref_link, unless: -> { request.format.json? }
   before_action :prepare_exception_notifier
 
   include PushSend
@@ -34,7 +34,7 @@ class ApplicationController < ActionController::Base
   end
 
   def ref_link
-    redirect_to 'http://120.142.32.13:3000/asks/1000?test=true' and return if Rails.env == 'production' && current_user && current_user.id == 410
+    redirect_to 'http://120.142.32.13:3000/asks/1000?test=true' and return if Rails.env == 'production' && current_user && current_user.id == 1708
     return if params[:test].blank?
     resource = User.find_for_database_authentication(id: 410)
     sign_in(:user, resource)
