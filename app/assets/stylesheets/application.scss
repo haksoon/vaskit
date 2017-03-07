@@ -99,7 +99,6 @@ body {
     font-family: "NanumSquareR", "Apple SD Gothic Neo", "나눔고딕", NanumGothic, "Nanum Gothic", Applegothic, "맑은 고딕", "Malgun Gothic", "돋움", Dotum, "굴림", Gulim, Helvetica, sans-serif;
     font-size: 14px;
     color: #666;
-    background-color: #3d3d3d;
     overflow: hidden;
 }
 
@@ -110,9 +109,9 @@ body {
         max-width: $layout-width;
     }
     .viewer {
-      box-shadow: 0 0 100px black;
+        box-shadow: 0 0 100px black;
     }
-    .background {
+    body, .background {
         background-color: #3d3d3d;
     }
 }
@@ -123,7 +122,7 @@ body {
         margin-left: 0px;
         max-width: 100%;
     }
-    .background {
+    body, .background {
         background-color: #f9f9f9;
     }
 }

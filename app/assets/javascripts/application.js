@@ -613,6 +613,38 @@ function removeIOSRubberEffect(element) {
   }
 }
 
+// iOS web 키패드 이슈
+var iOSKeypadCheck;
+function removeIOSKeyPadEffectOnFocus(e) {
+  if (userDevice.isIOS) {
+    var wh = window.innerHeight;
+    var st = 0;
+    var th = wh;
+    iOSKeypadCheck = setInterval(function(){
+      st = document.body.scrollTop;     // 키패드 높이
+      if (st > 0) {
+        th = wh - st;
+        if (!userApp) th += 10;
+        $("html, body").css({height: th});
+        window.scrollTo(0,0);
+      }
+    }, 1);
+    setTimeout(function(){
+      clearInterval(iOSKeypadCheck);
+    }, 500);
+  }
+}
+
+function removeIOSKeyPadEffectOnBlur(e) {
+  if (userDevice.isIOS) {
+    clearInterval(iOSKeypadCheck);
+    setTimeout(function(){
+      $("html, body").css({height: ''});
+      window.scrollTo(0,0);
+    }, 50);
+  }
+}
+
 // Template Load
 function load_template(title, callback) {
   if ($("#"+title+"_template").length === 0) {
@@ -745,7 +777,7 @@ function alarm_check(last_alarm_count) {
 // Image Load
 function get_image_url(data, model_name, extention) {
 	try {
-		var image_url = "/assets/"+model_name+"/"+data.id+"/"+extention+"/";
+		var image_url = "http://vaskit.kr/assets/"+model_name+"/"+data.id+"/"+extention+"/";
     var image_file_name = data.image_file_name;
     if (image_file_name.indexOf(".") == -1) image_file_name += ".";
 	  image_url += image_file_name;
@@ -764,7 +796,7 @@ function imgError(image, alter_url) {
 
 function get_avatar(data) {
 	try {
-		var avatar_url = "/assets/users/"+data.id+"/original/";
+		var avatar_url = "http://vaskit.kr/assets/users/"+data.id+"/original/";
     var avatar_file_name = data.avatar_file_name;
     if (avatar_file_name.indexOf(".") == -1) avatar_file_name += ".";
 	  avatar_url += avatar_file_name;

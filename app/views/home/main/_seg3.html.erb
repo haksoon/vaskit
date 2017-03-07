@@ -872,38 +872,17 @@
     all_inners.find(".input.text_field").attr('disabled', true);
     current_inner.find(".input.text_field").removeAttr('disabled');
 
-    var iOSKeypadCheck;
     ask_form_message_input.off("input scroll focus blur")
                           .on("input", function(e){
                             hashtagInput($(this));
                           }).on("scroll", function(e){
                             hashtagScroll($(this));
                           }).on("focus", function(e){
-                            // iOS web 키패드 이슈
-                            if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
-                              iOSKeypadCheck = setInterval(function(){
-                                var st = document.body.scrollTop;
-                                if (st > 0) {
-                                  var target_height = window.innerHeight - st;
-                                  if (userApp) { $("html").css({height: target_height}); } else { $("html").css({height: target_height + 10}); }
-                                  window.scrollTo(0,0);
-                                }
-                              }, 1);
-                              setTimeout(function(){
-                                clearInterval(iOSKeypadCheck);
-                              }, 500);
-                            } // iOS web 키패드 이슈
+                            removeIOSKeyPadEffectOnFocus(e);
                             current_inner.scroll_to(true);
                             hashtag_container.addClass("on");
                           }).on("blur", function(e) {
-                            // iOS web 키패드 이슈
-                            if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
-                              clearInterval(iOSKeypadCheck);
-                              setTimeout(function(){
-                                $("html").css({height: ''});
-                                window.scrollTo(0,0);
-                              }, 50);
-                            } // iOS web 키패드 이슈
+                            removeIOSKeyPadEffectOnBlur(e);
                             hashtag_container.removeClass("on");
                           }).attr('disabled',false).focus();
 

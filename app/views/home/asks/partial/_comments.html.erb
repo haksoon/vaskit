@@ -342,7 +342,6 @@
       }
     }
 
-    var iOSKeypadCheck;
     function input_init(comment_type, comment_id) {
       var keyPressed = [];
       var hashtag_container = current_comment_container.find(".hashtag_container");
@@ -383,40 +382,17 @@
                              hashtagScroll($(this));
                            })
                            .on("focus", function(e) {
-                              // iOS web 키패드 이슈
-                              if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
-                                // console.log('키패드 포커스 & iOS 체크');
-                                iOSKeypadCheck = setInterval(function(){
-                                  var st = document.body.scrollTop;
-                                  if (st > 0) {
-                                    // console.log('@@@@@@@@@@@@@@@@화면 높이 감지@@@@@@@@@@@@@@@@');
-                                    var target_height = window.innerHeight - st;
-                                    if (userApp) { $("html, body").css({height: target_height}); } else { $("html, body").css({height: target_height + 10}); } // console.log('!!!!!!!!!!!!!!!!!!화면 높이 변경!!!!!!!!!!!!!!!!!!'); }
-                                  }
-                                  window.scrollTo(0,0);
-                                }, 1);
-                                setTimeout(function(){
-                                  // console.log('setInterval 종료');
-                                  clearInterval(iOSKeypadCheck);
-                                }, 500);
-                              } // iOS web 키패드 이슈
-                              current_comment_lists.css({paddingBottom: "150px"});
-                              if ($(this).height() == (50 - 32)) $(this).selectRange($(this).val().length, $(this).val().length);
-                              $(this).height(this.scrollHeight);
-                              current_comment_container.height(this.scrollHeight + 32);
-                              if ($(this).val().length > 250) current_comment_input_counter.addClass("over");
-                              $(this).removeClass("filled");
-                              hashtagInput($(this));
+                             removeIOSKeyPadEffectOnFocus(e);
+                             current_comment_lists.css({paddingBottom: "150px"});
+                             if ($(this).height() == (50 - 32)) $(this).selectRange($(this).val().length, $(this).val().length);
+                             $(this).height(this.scrollHeight);
+                             current_comment_container.height(this.scrollHeight + 32);
+                             if ($(this).val().length > 250) current_comment_input_counter.addClass("over");
+                             $(this).removeClass("filled");
+                             hashtagInput($(this));
                            })
                            .on("blur", function(e) {
-                             // iOS web 키패드 이슈
-                             if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
-                               clearInterval(iOSKeypadCheck);
-                               setTimeout(function(){
-                                 $("html, body").css({height: ''});
-                                 window.scrollTo(0,0);
-                               }, 50);
-                             } // iOS web 키패드 이슈
+                             removeIOSKeyPadEffectOnBlur(e);
                              current_comment_lists.css({paddingBottom: "10px"});
                              $(this).height(50 - 32);
                              current_comment_container.height(50);
