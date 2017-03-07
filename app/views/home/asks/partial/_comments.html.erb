@@ -385,19 +385,18 @@
                            .on("focus", function(e) {
                               // iOS web 키패드 이슈
                               if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
-                                console.log('키패드 포커스 & iOS 체크');
+                                // console.log('키패드 포커스 & iOS 체크');
                                 iOSKeypadCheck = setInterval(function(){
-                                  console.log('...');
                                   var st = document.body.scrollTop;
                                   if (st > 0) {
-                                    console.log('@@@@@@@@@@@@@@@@화면 높이 감지@@@@@@@@@@@@@@@@');
+                                    // console.log('@@@@@@@@@@@@@@@@화면 높이 감지@@@@@@@@@@@@@@@@');
                                     var target_height = window.innerHeight - st;
-                                    if (userApp) { $("html").css({height: target_height}); } else { $("html").css({height: target_height + 10}); console.log('!!!!!!!!!!!!!!!!!!화면 높이 변경!!!!!!!!!!!!!!!!!!'); }
+                                    if (userApp) { $("html, body").css({height: target_height}); } else { $("html, body").css({height: target_height + 10}); } // console.log('!!!!!!!!!!!!!!!!!!화면 높이 변경!!!!!!!!!!!!!!!!!!'); }
                                     window.scrollTo(0,0);
                                   }
                                 }, 1);
                                 setTimeout(function(){
-                                  console.log('setInterval 종료');
+                                  // console.log('setInterval 종료');
                                   clearInterval(iOSKeypadCheck);
                                 }, 500);
                               } // iOS web 키패드 이슈
@@ -414,7 +413,7 @@
                              if ((userDevice.isIOS && !userApp) || (userApp && userAppVer)) {
                                clearInterval(iOSKeypadCheck);
                                setTimeout(function(){
-                                 $("html").css({height: ''});
+                                 $("html, body").css({height: ''});
                                  window.scrollTo(0,0);
                                }, 50);
                              } // iOS web 키패드 이슈
