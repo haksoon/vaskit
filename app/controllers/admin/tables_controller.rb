@@ -15,8 +15,20 @@ class Admin::TablesController < Admin::HomeController
 
     if params[:table_name]
       @tableModel = params[:table_name].classify.constantize
+      if params[:search_in] && params[:keyword]
+        search_in_length = params[:search_in].length
+        if params[:search_in] == "id" || (search_in_length > 2 && params[:search_in][search_in_length-3..search_in_length-1] == "_id") || (search_in_length > 5 && params[:search_in][search_in_length-6..search_in_length-1] == "_count")
+          @tableModel = @tableModel.where(params[:search_in]+' LIKE ?', params[:keyword])
+        else
+          @tableModel = @tableModel.where(params[:search_in]+' LIKE ?', "%#{params[:keyword]}%")
+        end
+      end
       @records = @tableModel.page(params[:page]).per(50).order(id: :desc)
       @record_names = @tableModel.columns.map(&:name)
+      if params[:order]
+        @records = @tableModel.page(params[:page]).per(50).order(params[:order]+" "+params[:power])
+      end
     end
+    @url = [params[:table_name], params[:search_in], params[:keyword], params[:order], params[:power]]
   end
 end

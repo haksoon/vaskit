@@ -13,6 +13,21 @@
   <div class="panel panel-primary">
     <div class="panel-heading">DB를 선택해주세요</div>
 <% else %>
+  <form class="form-inline">
+    <div class="form-group">
+      <select id="column_select" class="form-control">
+    		<option value="" disabled="true" selected="selected">검색할 column을 선택하세요</option>
+        <% @record_names.each do |name| %>
+          <option value="<%= name %>"><%= name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" id="search_keyword" placeholder="검색 키워드를 입력하세요">
+    </div>
+    <button type="button" class="btn btn-primary" onclick="search()">검색</button>
+  </form>
+
   <div class="panel panel-info">
 		<!-- Default panel contents -->
 		<div class="panel-heading"><%= @tableModel.name %></div>
@@ -23,7 +38,16 @@
   			<thead>
   				<tr>
   					<% @record_names.each do |name| %>
-  						<th><%=name%></th>
+  						<th onclick="order_by('<%=name%>')">
+                <%=name%>
+                <% if name == @url[3]%>
+                  <% if @url[4] == "DESC"%>
+                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
+                  <% else %>
+                    <i class="fa fa-sort-asc" aria-hidden="true"></i>
+                  <% end%>
+                <% end%>
+              </th>
   					<% end %>
   				</tr>
   			</thead>
@@ -54,4 +78,39 @@
 	$("#table_select").on("change", function(){
 		document.location.assign("/admin/tables/" + $(this).val() + "/?page=1");
 	});
+  $("#search_keyword").keypress(function(e) {
+    if (e.keyCode == 13){
+      search();
+      return false;
+    }
+  });
+
+  function order_by(target) {
+    var url = "/admin/tables/<%= @url[0]%>/?page=1"
+    if ("<%= @url[3]%>" != "" && "<%= @url[3]%>" == target) {
+      if("<%= @url[4]%>" == "ASC") {
+        url = url+"&order="+target+"&power=DESC";
+      } else if("<%= @url[4]%>" == "")  {
+        url = url+"&order="+target+"&power=ASC";
+      }
+    } else {
+      url = url+"&order="+target+"&power=ASC";
+    }
+    if ("<%= @url[1]%>" != "" && "<%= @url[2]%>" != "") {
+      url = url + "&search_in=<%= @url[1]%>&keyword=<%= @url[2]%>"
+    }
+    document.location.assign(url);
+  }
+  function search() {
+    console.log("!!!!");
+    var search_in = $("#column_select  option:selected").val();
+    var keyword = $("#search_keyword").val();
+    if (search_in == "") {
+      alert("검색할 column을 선택해주세요!");
+    } else if (keyword == "") {
+      alert("검색 키워드를 입력해주세요!");
+    } else {
+      document.location.assign("/admin/tables/<%= @url[0]%>/?search_in="+search_in+"&keyword="+keyword);
+    }
+  }
 </script>
