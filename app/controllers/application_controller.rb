@@ -119,7 +119,7 @@ class ApplicationController < ActionController::Base
 
     if current_user && referer_host == request.host
       user_visit = UserVisit.where(visitor_id: @visitor.id).last
-      if user_visit && Time.now - user_visit.updated_at < 60 * 60 * 24
+      if user_visit && Time.now - user_visit.updated_at < 60 * 60 * 24 && ref.nil?
         user_visit.update(user_id: user_id)
       else
         UserVisit.create(user_id: user_id,

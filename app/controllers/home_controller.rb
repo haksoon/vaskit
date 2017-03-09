@@ -1,4 +1,6 @@
 class HomeController < ApplicationController
+  skip_before_action :user_visits, only: [:open_app]
+
   # GET /
   def index
   end
