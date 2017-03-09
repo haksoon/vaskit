@@ -420,15 +420,27 @@
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));">
     <div class="settings">
       <span class="setting_title"><i class="fa fa-caret-right"></i> 나의 질문과 관련된 사항을 알려드려요</span>
-      <span class="setting_menu" onclick="toggle_alarm_option('alarm_1');"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림<img id="alarm_1_btn" src="/images/custom/{{= current_user.alarm_1 ? 'on' : 'off' }}_btn.png" class="setting_btn toggle_btn"></span>
-      <span class="setting_menu" onclick="toggle_alarm_option('alarm_2');"><i class="fa fa-check-circle-o"></i>&nbsp;득표수 알림<img id="alarm_2_btn" src="/images/custom/{{= current_user.alarm_2 ? 'on' : 'off' }}_btn.png" class="setting_btn toggle_btn"></span>
-      <span class="setting_menu" onclick="toggle_alarm_option('alarm_3');"><i class="fa fa-send-o"></i>&nbsp;새로운 의견 알림<img id="alarm_3_btn" src="/images/custom/{{= current_user.alarm_3 ? 'on' : 'off' }}_btn.png" class="setting_btn toggle_btn"></span>
+      <span class="setting_menu"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_1');"class="setting_btn toggle_btn {{= current_user.alarm_1 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
+      <span class="setting_menu"><i class="fa fa-check-circle-o"></i>&nbsp;득표수 알림
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_2');"class="setting_btn toggle_btn {{= current_user.alarm_2 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
+      <span class="setting_menu"><i class="fa fa-send-o"></i>&nbsp;새로운 의견 알림
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_3');"class="setting_btn toggle_btn {{= current_user.alarm_3 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
     </div>
     <div class="settings">
       <span class="setting_title"><i class="fa fa-caret-right"></i> 나의 의견과 관련된 사항을 알려드려요</span>
-      <span class="setting_menu" onclick="toggle_alarm_option('alarm_4');"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림<img id="alarm_4_btn" src="/images/custom/{{= current_user.alarm_4 ? 'on' : 'off' }}_btn.png" class="setting_btn toggle_btn"></span>
-      <span class="setting_menu" onclick="toggle_alarm_option('alarm_5');"><i class="fa fa-comments-o"></i>&nbsp;답글 알림<img id="alarm_5_btn" src="/images/custom/{{= current_user.alarm_5 ? 'on' : 'off' }}_btn.png" class="setting_btn toggle_btn"></span>
-      <span class="setting_menu" onclick="toggle_alarm_option('alarm_6');"><i class="fa fa-comment-o"></i>&nbsp;다른 의견 알림<img id="alarm_6_btn" src="/images/custom/{{= current_user.alarm_6 ? 'on' : 'off' }}_btn.png" class="setting_btn toggle_btn"></span>
+      <span class="setting_menu"><i class="fa fa-heart-o"></i>&nbsp;좋아요 알림
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_4');"class="setting_btn toggle_btn {{= current_user.alarm_4 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
+      <span class="setting_menu"><i class="fa fa-comments-o"></i>&nbsp;답글 알림
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_5');"class="setting_btn toggle_btn {{= current_user.alarm_5 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
+      <span class="setting_menu"><i class="fa fa-comment-o"></i>&nbsp;다른 의견 알림
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_6');"class="setting_btn toggle_btn {{= current_user.alarm_6 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
     </div>
   </div>
 </script>
@@ -441,8 +453,12 @@
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));">
     <div class="settings">
       <span class="setting_title"><i class="fa fa-caret-right"></i> 이메일로 소식을 보내드려요</span>
-      <span class="setting_menu" onclick="toggle_alarm_option('receive_notice_email');"><i class="fa fa-bullhorn"></i>&nbsp;주요 공지사항<img id="receive_notice_email_btn" src="/images/custom/{{= current_user.receive_notice_email ? 'on' : 'off' }}_btn.png" class="setting_btn toggle_btn"></span>
-      <span class="setting_menu" onclick="notify('준비중이에요 T_T');"><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트<img src="/images/custom/off_btn.png" class="setting_btn toggle_btn"></span>
+      <span class="setting_menu"><i class="fa fa-bullhorn"></i>&nbsp;주요 공지사항
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('receive_notice_email');"class="setting_btn toggle_btn {{= current_user.receive_notice_email ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
+      <span class="setting_menu" onclick=""><i class="fa fa-bar-chart"></i>&nbsp;주간 리포트
+        <span onclick="notify('준비중이에요 T_T');"class="setting_btn toggle_btn"><span class="toggle_slider"></span></span>
+      </span>
     </div>
   </div>
 </script>
@@ -455,17 +471,15 @@
   function toggle_alarm_option(alarm_option) {
     $.ajax({
             url: '/users/toggle_alarm_option.json',
-            data: {alarm_option: alarm_option},
+            data: { alarm_option: alarm_option },
             type: 'PUT',
             error: function(){
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data){
               if (data.message == "on"){
-                $("#"+alarm_option+"_btn").attr("src","/images/custom/on_btn.png");
                 notify("알람 수신 동의 처리되었습니다");
               } else {
-                $("#"+alarm_option+"_btn").attr("src","/images/custom/off_btn.png");
                 notify("알람 수신 거부 처리되었습니다");
               }
               current_user = data.current_user;

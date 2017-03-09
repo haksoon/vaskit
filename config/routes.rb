@@ -94,6 +94,7 @@ Rails.application.routes.draw do
   end
 
   get 'landing', to: 'home#landing'
+  get 'open_app', to: 'home#open_app'
 
   # Admin Page
   namespace :admin do

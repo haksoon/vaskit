@@ -277,6 +277,7 @@ function go_popstate(e) {
     }
 
   }
+  fixViewportHeight();
 }
 
 function go_seg(seg_id) {
@@ -345,6 +346,7 @@ function go_seg(seg_id) {
       // console.log(currentHistory+"로 진행, 기존 탭 진행, 현재 탭 히스토리 : "+segOrder);
     }
   }
+  fixViewportHeight();
 }
 
 function show_history(seg_id) {
@@ -379,6 +381,7 @@ function go_url(func_name, func_args) {
   currentHistory = history.state.pageHistory;
 
   // console.log("url, 히스토리 변경... show_"+func_name+" 실행하여 "+currentHistory+"로 진행");
+  fixViewportHeight();
 }
 
 var back_button_clicked = false;
@@ -412,6 +415,7 @@ function go_back(length) {
   }, 100);
 
   // console.log("히스토리 삭제 ("+ length +"개)");
+  fixViewportHeight();
 }
 
 function go_exit() {
@@ -419,10 +423,10 @@ function go_exit() {
   if (userApp) {
     if (currentHistory === 0) history.go(1);
   } else {
-    $("body").children().animateCssRemove("fadeOut");
-    setTimeout(function(){
-      go_back(currentHistory+1);
-    }, 1000);
+    $("#main_view").addClass("off").transitionHide(function(){
+      $("body").animateCss("fadeOut");
+      setTimeout(function() { go_back(currentHistory+1); }, 250);
+    });
   }
 }
 
@@ -613,6 +617,11 @@ function removeIOSRubberEffect(element) {
   }
 }
 
+function fixViewportHeight() {
+  var event = new Event('resize');
+  window.dispatchEvent(event);
+}
+
 // iOS web 키패드 이슈
 var iOSKeypadCheck;
 function removeIOSKeyPadEffectOnFocus(e) {
@@ -639,7 +648,8 @@ function removeIOSKeyPadEffectOnBlur(e) {
   if (userDevice.isIOS) {
     clearInterval(iOSKeypadCheck);
     setTimeout(function(){
-      $("html, body").css({height: ''});
+      var th = window.innerHeight;
+      $("html, body").css({height: th});
       window.scrollTo(0,0);
     }, 50);
   }

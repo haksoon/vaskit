@@ -873,9 +873,9 @@
     current_inner.find(".input.text_field").removeAttr('disabled');
 
     ask_form_message_input.off("input scroll focus blur")
-                          .on("input", function(e){
+                          .on("input", _.throttle(function(e){
                             hashtagInput($(this));
-                          }).on("scroll", function(e){
+                          }, 100)).on("scroll", function(e){
                             hashtagScroll($(this));
                           }).on("focus", function(e){
                             removeIOSKeyPadEffectOnFocus(e);

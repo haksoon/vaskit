@@ -10,10 +10,10 @@
 
 <script type="text/template" id="appBannerPCTemplate">
   <div class="container top dark" ontouchmove="return false;">
-    <span class="header_title app_banner" onclick="open_in_app();">
+    <span class="header_title app_banner">
       <span class="vaskit_icon logo"></span>
       <a href="https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit" target="_blank" style="display: block; width: 180px; float: right; text-align: center; color: #fff;"><i class="fa fa-android"></i> 안드로이드 앱 다운로드</a>
-      <a href="http://itunes.apple.com/app/id1188969345" target="_blank" style="display: block; width: 180px; float: right; text-align: center; color: #fff;"><i class="fa fa-apple"></i> 애플 앱 다운로드</a>
+      <a href="http://itunes.apple.com/kr/app/id1188969345?mt=8" target="_blank" style="display: block; width: 180px; float: right; text-align: center; color: #fff;"><i class="fa fa-apple"></i> 애플 앱 다운로드</a>
     </span>
     <span class="header_btn right close_btn" onclick="close_app_banner();">&times;</div>
   </div>
@@ -41,45 +41,11 @@
   }
 
   function open_in_app() {
-    var playstore_link = "https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit",
-        appstore_link = "http://itunes.apple.com/app/id1188969345";
-
-    var aos_intent_link = "intent://vaskit.kr#Intent;scheme=vaskit;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.vaskit.msh.vaskit;end",
-        aos_app_link = "vaskit://vaskit.kr",
-        ios_app_link = "fb532503193593128://kr.vaskit.msh.vaskit.fb532503193593128";
-
-    if (segNextFunc[currentSeg].length > 0) {
-      var app_function = segNextFunc[currentSeg][segNextFunc[currentSeg].length-1];
-      var app_function_name = app_function.callback.replace("show_", "");
-      var app_function_args = JSON.stringify(app_function.arguments);
-      var app_js = "go_url('" + app_function_name + "', " + app_function_args + ")";
-      var app_url = location.href;
-
-      aos_intent_link = "intent://vaskit.kr?url="+app_url+"&js="+app_js+"#Intent;scheme=vaskit;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.vaskit.msh.vaskit;end";
-      aos_app_link = "vaskit://vaskit.kr?url="+app_url+"&js="+app_js;
-      ios_app_link = "fb532503193593128://kr.vaskit.msh.vaskit.fb532503193593128?js="+app_js;
-    }
-
-    //If the app is not installed the script will wait for 2sec and redirect to app store.
-    var loadedAt = +new Date();
-    if (userDevice.isIOS) {
-      try {
-        window.location = ios_app_link;
-      } catch(err) {
-      }
-      setTimeout(function() { if (+new Date() - loadedAt < 2000) window.location = appstore_link; }, 25);
-    } else if (userDevice.isAndroid) {
-      if (userBrowser.isChrome || userBrowser.isNaver || userBrowser.isKakao || userBrowser.isFacebook) {
-        window.location = aos_intent_link;
-      } else {
-        try {
-          window.location = aos_app_link;
-          // 이 부분이 이상하게 동작함
-        } catch(err) {
-        }
-        setTimeout(function() { if (+new Date() - loadedAt < 2000) window.location = playstore_link; }, 25);
-      }
-    }
+    var open_app_path = "<%= CONFIG['host'] %>/?ref=1";
+    var app_url = window.location.href;
+    var app_js = get_js_function();
+    if (app_js !== "") open_app_path += "&app_js=" + app_js + "&app_url=" + app_url;
+    window.open(open_app_path, "_blank");
   }
 
   function get_js_function() {

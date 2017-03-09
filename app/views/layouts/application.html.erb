@@ -60,6 +60,12 @@
         return false;
       };
 
+      window.addEventListener('resize', _.debounce(function(){
+        var th = window.innerHeight;
+        $("html, body").css({height: th});
+        window.scrollTo(0,0);
+      }, 50));
+
       // init VASKIT Frame
       $(window).ready(function(){
         loadingStart();
@@ -79,6 +85,7 @@
         user_alarms_on();
         loadingEnd();
         setTimeout(function(){
+          fixViewportHeight();
           $("#loading_spinner").animateCssRemove("fadeOut");
           $("#loading_welcome").animateCssRemove("slideOutLeft", function(){
             setTimeout(function(){
@@ -93,7 +100,7 @@
       // End init VASKIT Frame
     </script>
   </head>
-  <body data-no-turbolink="true" class="clearfix">
+  <body data-no-turbolink="true">
     <div class="background" ontouchmove="return false;"></div>
     <div id="app_banner" class="layout viewer appBanner"></div>
     <div id="main_view" class="layout viewer">
@@ -126,6 +133,7 @@
     </div>
     <div class="layout notice_div" style="display:none;"><div class="notice_msg"></div></div>
     <div class="layout loading_div" onclick="return false;" ontouchmove="return false;"><div class="loading_bar">&nbsp;</div></div>
+    <div class="layout tutorial_overlay" style="display: none;" ontouchmove="return false;"></div>
     <div class="template_scripts">
       <%= render partial: "home/main/seg1" %>
       <%= render partial: "home/main/seg2" %>

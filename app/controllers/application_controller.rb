@@ -4,9 +4,8 @@ class ApplicationController < ActionController::Base
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_action :set_visitor, unless: -> { request.format.json? }
-  # before_action :ref_link, unless: -> { request.format.json? }
-  before_action :user_visits, unless: -> { request.format.json? }
   before_action :auth_app, unless: -> { request.format.json? }
+  before_action :user_visits, unless: -> { request.format.json? }
   before_action :prepare_exception_notifier
 
   include PushSend
@@ -33,34 +32,31 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def ref_link
-    # redirect_to 'http://120.142.32.13:3000/asks/1000?test=true' and return if Rails.env == 'production' && current_user && current_user.id == 1708
-    # return if params[:test].blank?
-    # resource = User.find_for_database_authentication(id: 410)
-    # sign_in(:user, resource)
+  def remote_ip
+    ret = !request.env['HTTP_X_FORWARDED_FOR'].nil? ? request.env['HTTP_X_FORWARDED_FOR'] : request.env['REMOTE_ADDR']
+    ret.split(',')[0]
+  end
 
-    # return if params[:ref].blank?
-    # ref = LogReference.find_by(params[:ref])
-    # return if ref.nil?
-    # ref.increment(:click_count).save!
-    #
-    # ua = request.headers['User-Agent']
-    # return unless ua =~ /iPhone/i || ua =~ /Android/i
-    #
-    # app_url = "#{CONFIG['host']}#{ref.url}"
-    # app_js = ref.js
-    #
-    # if ua =~ /iPhone/i
-    #   appstore_link = 'http://itunes.apple.com/app/id1188969345'
-    #   redirect_to appstore_link and return unless ref.connect_to_store
-    #   ios_app_link = "fb532503193593128://kr.vaskit.msh.vaskit.fb532503193593128?js=#{app_js}"
-    #   redirect_to ios_app_link
-    # elsif ua =~ /Android/i
-    #   playstore_link = 'https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit'
-    #   redirect_to playstore_link and return if ref.connect_to_store
-    #   aos_intent_link = "intent://vaskit.kr?url=#{app_url}&js=#{app_js}#Intent;scheme=vaskit;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.vaskit.msh.vaskit;end"
-    #   aos_app_link = "vaskit://vaskit.kr?url=#{app_url}&js=#{app_js}"
-    # end
+  def auth_app
+    return unless cookies['_vaskit_session'].nil? && !cookies['app_user'].blank?
+    crypt = ActiveSupport::MessageEncryptor.new('24136565f7bb1cdc129a4c6e8209abe831d43b858e9ce9ce70f27a914a0fb60c8098b3f417e16232c4575bd0dd9ee47ac8eac90eaef5894a7044cc6a892f5cb9')
+    app_user = crypt.decrypt_and_verify(cookies['app_user'])
+    resource = User.find_for_database_authentication(id: app_user)
+    return if resource.blank?
+    sign_in(:user, resource)
+    resource.remember_me!
+  end
+
+  def auth_app_create(user)
+    if user.nil?
+      cookies.delete :app_user
+    elsif user && user.sign_up_type != 'facebook'
+      crypt = ActiveSupport::MessageEncryptor.new('24136565f7bb1cdc129a4c6e8209abe831d43b858e9ce9ce70f27a914a0fb60c8098b3f417e16232c4575bd0dd9ee47ac8eac90eaef5894a7044cc6a892f5cb9')
+      app_user = crypt.encrypt_and_sign(user.id)
+      cookies['app_user'] = { value: app_user,
+                              expires: 3.months.from_now,
+                              path: '/' }
+    end
   end
 
   def user_visits
@@ -118,6 +114,9 @@ class ApplicationController < ActionController::Base
     user_id = current_user.id unless current_user.blank?
     visitor_id = @visitor.id unless @visitor.blank?
 
+    ref = ReferLink.find(params[:ref]) unless params[:ref].blank?
+    refer_link_id = ref.id unless ref.nil?
+
     if current_user && referer_host == request.host
       user_visit = UserVisit.where(visitor_id: @visitor.id).last
       if user_visit && Time.now - user_visit.updated_at < 60 * 60 * 24
@@ -129,7 +128,8 @@ class ApplicationController < ActionController::Base
                          browser: browser,
                          referer_host: referer_host,
                          referer_full: referer,
-                         user_agent: ua)
+                         user_agent: ua,
+                         refer_link_id: refer_link_id)
       end
     else
       UserVisit.create(user_id: user_id,
@@ -138,35 +138,16 @@ class ApplicationController < ActionController::Base
                        browser: browser,
                        referer_host: referer_host,
                        referer_full: referer,
-                       user_agent: ua)
+                       user_agent: ua,
+                       refer_link_id: refer_link_id)
     end
-  end
 
-  def remote_ip
-    ret = !request.env['HTTP_X_FORWARDED_FOR'].nil? ? request.env['HTTP_X_FORWARDED_FOR'] : request.env['REMOTE_ADDR']
-    ret.split(',')[0]
-  end
-
-  def auth_app
-    return unless cookies['_vaskit_session'].nil? && !cookies['app_user'].blank?
-    crypt = ActiveSupport::MessageEncryptor.new('24136565f7bb1cdc129a4c6e8209abe831d43b858e9ce9ce70f27a914a0fb60c8098b3f417e16232c4575bd0dd9ee47ac8eac90eaef5894a7044cc6a892f5cb9')
-    app_user = crypt.decrypt_and_verify(cookies['app_user'])
-    resource = User.find_for_database_authentication(id: app_user)
-    return if resource.blank?
-    sign_in(:user, resource)
-    resource.remember_me!
-  end
-
-  def auth_app_create(user)
-    if user.nil?
-      cookies.delete :app_user
-    elsif user && user.sign_up_type != 'facebook'
-      crypt = ActiveSupport::MessageEncryptor.new('24136565f7bb1cdc129a4c6e8209abe831d43b858e9ce9ce70f27a914a0fb60c8098b3f417e16232c4575bd0dd9ee47ac8eac90eaef5894a7044cc6a892f5cb9')
-      app_user = crypt.encrypt_and_sign(user.id)
-      cookies['app_user'] = { value: app_user,
-                              expires: 3.months.from_now,
-                              path: '/' }
-    end
+    return if ref.nil?
+    return unless device == 'iPhone' || device == 'Android'
+    app_url = params[:app_url].blank? ? "#{CONFIG['host']}#{ref.url}" : params[:app_url]
+    app_js = params[:app_js].blank? ? ref.js : params[:app_js]
+    connect_to_store = ref.connect_to_store
+    redirect_to controller: :home, action: :open_app, browser: browser, device: device, app_url: app_url, app_js: app_js, connect_to_store: connect_to_store
   end
 
   def prepare_exception_notifier

@@ -348,19 +348,18 @@
       var hashtag_highlights = current_comment_container.find(".hashtag_highlights");
       var hashtag_backdrop = current_comment_container.find(".hashtag_backdrop");
       current_comment_input.off("keydown keyup input scroll focus blur")
-                           .on("keydown", function(e) {
+                           .on("keydown", _.throttle(function(e) {
                              keyPressed[e.keyCode] = true;
                              if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
                                e.preventDefault();
                                current_comment_input_submit.click();
                              }
-                           })
-                           .on("keyup", function(e) {
+                           }, 250))
+                           .on("keyup", _.throttle(function(e) {
                              keyPressed[e.keyCode] = false;
                              if ($(this).val().length === 0) { current_comment_input_submit.removeClass("ready"); } else { current_comment_input_submit.addClass("ready"); }
-                             keyPressed = [];
-                           })
-                           .on("input", function(e) {
+                           }, 250))
+                           .on("input", _.throttle(function(e) {
                              if (this.scrollHeight < $(window).height() / 2) {
                                $(this).css({height: "auto", overflowY: "hidden"}).height(this.scrollHeight);
                              } else {
@@ -376,7 +375,7 @@
                              } else {
                                current_comment_input_counter.removeClass("on");
                              }
-                           })
+                           }, 100))
                            .on("scroll", function(e) {
                              $(this).css({overflowY: "scroll"});
                              hashtagScroll($(this));

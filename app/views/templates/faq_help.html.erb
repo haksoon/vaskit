@@ -150,36 +150,54 @@
   }
 
   #faq_help div.question {
+    position: relative;
     line-height: 1.5;
     box-sizing: border-box;
     padding: 15px 30px 15px 10px;
-    background: url("/images/custom/arrow_off.png") no-repeat 100% 50%;
-    background-size: 24px;
-    background-color: #fff;
     cursor: pointer;
     transition: background .25s;
+    border-bottom: 1px solid #eee;
+  }
+
+  #faq_help div.question:after {
+    content: '\f107';
+    font-family: "FontAwesome";
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    text-align: center;
+    color: #999;
+    transition: transform .5s, color .25s;
   }
 
   #faq_help div.question.on {
-    background: url("/images/custom/arrow_on.png") no-repeat 100% 50%;
-    background-size: 24px;
-    background-color: #fff;
     border-bottom: 1px dashed #eee;
+  }
+
+  #faq_help div.question.on:after {
+    color: #ff7800;
+    transform: rotateZ(-180deg);
   }
 
   #faq_help div.answer {
     line-height: 2;
-    height: 1px;
-    box-sizing: border-box;
+    height: 0px;
     padding: 0px 15px;
+    box-sizing: border-box;
     background-color: #f4f4f4;
     border-bottom: 1px solid #eee;
     overflow: hidden;
-    transition: height .25s, padding .25s;
+    transform: rotateX(90deg);
+    transform-origin: top center;
+    transition: height .25s, padding .25s, transform .25s;
   }
 
   #faq_help div.answer.on {
     height: 100%;
     padding: 15px 15px;
+    transform: rotateX(0deg);
   }
 </style>
