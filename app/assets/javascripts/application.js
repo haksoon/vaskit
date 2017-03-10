@@ -614,8 +614,23 @@ function removeIOSRubberEffect(element) {
 }
 
 function fixViewportHeight() {
-  var event = new Event('resize');
-  window.dispatchEvent(event);
+  var event;
+
+  if (document.createEvent) {
+    event = document.createEvent("HTMLEvents");
+    event.initEvent("resize", true, true);
+  } else {
+    event = document.createEventObject();
+    event.eventType = "resize";
+  }
+
+  event.eventName = "resize";
+
+  if (document.createEvent) {
+    window.dispatchEvent(event);
+  } else {
+    window.fireEvent("on" + event.eventType, event);
+  }
 }
 
 // iOS web 키패드 이슈
