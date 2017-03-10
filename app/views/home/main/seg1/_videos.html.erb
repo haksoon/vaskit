@@ -28,7 +28,7 @@
 
 <script type="text/template" id="videoThumbnailTemplate">
   <div class="video_thumbnail">
-    <div class="clearfix video_header" href="/videos/{{= video.id }}" onclick="go_url('video_ask', {{= video.id }}); return false;">
+    <div class="clearfix video_header" href="/videos/{{= video.id }}" onclick="if (visitor_check() === undefined) { go_url('video_ask', {{= video.id }}); } return false;">
       <div class="video_title text_box_short"><i class="fa fa-tv"></i> {{= video.title }}</div>
       <span class="video_ribbon"></span>
       <div class="video_image">
@@ -126,28 +126,26 @@
   }
 
   function show_video_ask(video_id) {
-    visitor_check(function(){
-      var url = '/videos/' + video_id;
-      $.ajax({
-        url: url,
-        dataType: 'json',
-        type: 'GET',
-        error: function(){
-          return false;
-        },
-        success: function(data){
-          var html = videoAskShowTemplate({video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
-          create_wrapper(html, true);
-        },
-        beforeSend: function(){
-          loadingStart();
-        },
-        complete: function(){
-          loadingEnd();
-        }
-      });
-      return url;
+    var url = '/videos/' + video_id;
+    $.ajax({
+      url: url,
+      dataType: 'json',
+      type: 'GET',
+      error: function(){
+        return false;
+      },
+      success: function(data){
+        var html = videoAskShowTemplate({video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
+        create_wrapper(html, true);
+      },
+      beforeSend: function(){
+        loadingStart();
+      },
+      complete: function(){
+        loadingEnd();
+      }
     });
+    return url;
   }
 
   function hide_video_ask() {

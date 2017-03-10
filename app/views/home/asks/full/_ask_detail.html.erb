@@ -346,7 +346,7 @@
   }
 
   function like_ask(ask_id) {
-    visitor_check(function(){
+    if (visitor_check() === undefined) {
       var current_ask_divs = $("#main_view").find(".seg.on").find(".wrapper").last().find(".ask.ask_"+ask_id);
       var current_ask_like_icons = current_ask_divs.find(".ask_like_icon");
       var current_ask_like_texts = current_ask_divs.find(".ask_like_text");
@@ -386,7 +386,7 @@
                 all_ask_likes.html(askLikeTemplate({recent_user: data.recent_user, ask_like_count: data.ask_like_count}));
               }
       });
-    });
+    }
   }
 
   function toggle_vote_detail(target) {
@@ -404,7 +404,7 @@
       ask_container.animate({scrollTop: 0},250);
       vs_result_detail_btn.removeClass("is_opened");
     } else {
-      visitor_check(function(){
+      if (visitor_check() === undefined) {
         if (vs_result_detail_btn.hasClass("is_opened")) {
           vs_result_detail.removeClass("is_opened");
           vs_result_detail_btn.removeClass("is_opened");
@@ -454,7 +454,7 @@
                   }
           });
         }
-      });
+      }
     }
   }
 

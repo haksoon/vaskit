@@ -186,13 +186,13 @@
       notify("먼저 투표에 참여해주세요!");
       current_ask_container.scroll_to(0);
     } else {
-      visitor_check(function(){
+      if (visitor_check() === undefined) {
         scroll_init(comment_type, comment_id);
         bubble_init(comment_type, comment_id);
         toggle_init(comment_type, comment_id);
         send_init(comment_type, comment_id);
         input_init(comment_type, comment_id);
-      });
+      }
     }
 
     function scroll_init(comment_type, comment_id) {
@@ -292,48 +292,46 @@
         var all_ask_comment_divs = $("#main_view").find(".comment.ask_"+ask_id);
         var all_ask_comment_lists = is_left ? all_ask_comment_divs.find(".comment_list").not(".right") : all_ask_comment_divs.find(".comment_list").not(".left");
 
-        visitor_check(function(){
-          if (content === "" || content === null) {
-            notify('의견을 입력해주세요');
-          } else if (content.length > 250) {
-            notify('250자 이상은 입력이 불가능합니다');
-          } else {
-            $.ajax({
-              url: comment_type == "edit" ? "/comments/"+comment_id+".json" : "/comments.json",
-              dataType: "json",
-              type: comment_type == "edit" ? "PUT" : "POST",
-              data: {content: content, ask_id: ask_id, is_left: is_left, comment_id: comment_id},
-              // async: false,  // 코멘트 중복 전송을 방지
-              error: function() {
-                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
-              },
-              success: function(data) {
-                if (data.status == "success") {
-                  current_comment_input_init.attr("onclick", "new_comment();");
-                  current_comment_input.val("").blur();
-                  current_comment_input_submit.removeClass("ready").off("click");
-                  current_comment_input_submit_btn_text.html("전송");
-                  if (ask_comment_count === 0) all_ask_comment_lists.removeClass("blank");
-                  if (comment_type == "edit") {
-                    current_comment_lists.find(".comment_box."+comment_id).remove();
-                  } else {
-                    ask_comment_count += 1;
-                    all_ask_comment_count_spans.html(ask_comment_count);
-                  }
-                  is_writing_box.replaceWith(commentTemplate({ask: data.ask, comment: data.comment, already_like: false}));
-
-                  // 첨부 이미지 관련
+        if (content === "" || content === null) {
+          notify('의견을 입력해주세요');
+        } else if (content.length > 250) {
+          notify('250자 이상은 입력이 불가능합니다');
+        } else {
+          $.ajax({
+            url: comment_type == "edit" ? "/comments/"+comment_id+".json" : "/comments.json",
+            dataType: "json",
+            type: comment_type == "edit" ? "PUT" : "POST",
+            data: {content: content, ask_id: ask_id, is_left: is_left, comment_id: comment_id},
+            // async: false,  // 코멘트 중복 전송을 방지
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              if (data.status == "success") {
+                current_comment_input_init.attr("onclick", "new_comment();");
+                current_comment_input.val("").blur();
+                current_comment_input_submit.removeClass("ready").off("click");
+                current_comment_input_submit_btn_text.html("전송");
+                if (ask_comment_count === 0) all_ask_comment_lists.removeClass("blank");
+                if (comment_type == "edit") {
+                  current_comment_lists.find(".comment_box."+comment_id).remove();
+                } else {
+                  ask_comment_count += 1;
+                  all_ask_comment_count_spans.html(ask_comment_count);
                 }
-              },
-              beforeSend: function() {
-                loadingStart();
-              },
-              complete: function() {
-                loadingEnd();
+                is_writing_box.replaceWith(commentTemplate({ask: data.ask, comment: data.comment, already_like: false}));
+
+                // 첨부 이미지 관련
               }
-            });
-          }
-        });
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+          });
+        }
       }
     }
 
@@ -469,7 +467,7 @@
     var options;
     var is_deleted = Boolean(target.attr("is-deleted"));
 
-    visitor_check(function() {
+    if (visitor_check() === undefined) {
       if (is_deleted) {
         notify('삭제된 댓글입니다');
       } else {
@@ -518,7 +516,7 @@
         }
         go_url('menu', options);
       }
-    });
+    }
   }
 
   function like_comment(comment_id) {

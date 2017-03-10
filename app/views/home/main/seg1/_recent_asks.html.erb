@@ -39,7 +39,7 @@
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">새로운 질문들</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
-    <span class="header_btn right new_btn" onclick="visitor_check(function(){go_url('ask_form')}); return false;">&plus;</span>
+    <span class="header_btn right new_btn" onclick="if (visitor_check() === undefined) go_url('ask_form'); return false;">&plus;</span>
   </div>
   {{= asksListTemplate({asks: asks, url: url}) }}
 </script>

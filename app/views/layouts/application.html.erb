@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <%= render partial: "home/main/meta" %>
+    <%= render partial: 'home/main/meta' %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   	<%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= render partial: 'home/main/navigating' %>
   	<%= csrf_meta_tags %>
 
     <% if Rails.env == 'production' %>
@@ -126,7 +127,7 @@
       <div id="footer" class="layout footer" ontouchmove="return false;">
         <a href="/collections" class="tab seg1" onclick="go_seg(1); return false;"><i class="tab_icon vaskit_icon"></i></a>
         <a href="/search" class="tab seg2" onclick="go_seg(2); return false;"><i class="tab_icon vaskit_icon"></i></a>
-        <a href="/asks/new" class="tab seg3" onclick="visitor_check(function(){go_url('ask_form')}); return false;"><i class="tab_icon vaskit_icon"></i></a>
+        <a href="/asks/new" class="tab seg3" onclick="if (visitor_check() === undefined) go_url('ask_form'); return false;"><i class="tab_icon vaskit_icon"></i></a>
         <a id="my_tab" href="/users" class="tab seg4" onclick="go_seg(4); return false;"><i class="tab_icon vaskit_icon"></i><i id="my_badge" class="tab_badge animated swing"></i></a>
         <a id="login_tab" href="/landing" class="tab login" onclick="go_url('landing'); return false;"><i class="tab_icon vaskit_icon"></i></a>
       </div>
@@ -141,23 +142,23 @@
     <div class="layout loading_div hidden" onclick="return false;" ontouchmove="return false;"><div class="loading_bar">&nbsp;</div></div>
     <div class="layout tutorial_overlay hidden" ontouchmove="return false;"></div>
     <div class="template_scripts">
-      <%= render partial: "home/main/seg1" %>
-      <%= render partial: "home/main/seg2" %>
-      <%= render partial: "home/main/seg3" %>
-      <%= render partial: "home/main/seg4" %>
-      <%= render partial: "home/asks/partial/asks_thumbnail" %>
-      <%= render partial: "home/asks/full/ask_detail" %>
-      <%= render partial: "home/asks/partial/votes" %>
-      <%= render partial: "home/asks/partial/comments" %>
-      <%= render partial: "home/asks/partial/ask_image" %>
-      <%= render partial: "home/common/partial/endless_loading" %>
-      <%= render partial: "home/common/full/menu" %>
-      <%= render partial: "home/common/full/share" %>
-      <%= render partial: "home/common/full/tutorial" %>
-      <%= render partial: "home/common/full/image_cropping" %>
-      <%= render partial: "home/common/partial/app_banner" %>
-      <%= render partial: "home/common/partial/report" %>
-      <%= render partial: "home/full/landing" %>
+      <%= render partial: 'home/main/seg1' %>
+      <%= render partial: 'home/main/seg2' %>
+      <%= render partial: 'home/main/seg3' %>
+      <%= render partial: 'home/main/seg4' %>
+      <%= render partial: 'home/asks/partial/asks_thumbnail' %>
+      <%= render partial: 'home/asks/full/ask_detail' %>
+      <%= render partial: 'home/asks/partial/votes' %>
+      <%= render partial: 'home/asks/partial/comments' %>
+      <%= render partial: 'home/asks/partial/ask_image' %>
+      <%= render partial: 'home/common/partial/endless_loading' %>
+      <%= render partial: 'home/common/full/menu' %>
+      <%= render partial: 'home/common/full/share' %>
+      <%= render partial: 'home/common/full/tutorial' %>
+      <%= render partial: 'home/common/full/image_cropping' %>
+      <%= render partial: 'home/common/partial/app_banner' %>
+      <%= render partial: 'home/common/partial/report' %>
+      <%= render partial: 'home/full/landing' %>
       <%= yield %>
     </div>
   </body>

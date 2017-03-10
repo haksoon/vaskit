@@ -1,5 +1,5 @@
 <script>
   $(window).load(function(){
-    go_url('video_ask', <%= @video.id %>);
+    if (visitor_check() === undefined) go_url('video_ask', <%= @video.id %>);
   });
 </script>

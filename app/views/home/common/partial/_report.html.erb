@@ -21,11 +21,11 @@
                   }
                 ]
               };
-    visitor_check(function(){
+    if (visitor_check() === undefined) {
       setTimeout(function(){
         go_url('menu', options);
       }, 50);
-    });
+    }
   }
 
   function open_report(target, target_id) {
