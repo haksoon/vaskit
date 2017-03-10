@@ -48,7 +48,7 @@
       {{ } else { }}
         <%= f.hidden_field :birthday, value: "{{=data.birthday}}" %>
       {{ } }}
-      <div style="display:none;">
+      <div class="hidden">
         <%= f.hidden_field :facebook_id, value: "{{=data.facebook_id}}" %>
         <%= f.hidden_field :name, value: "{{=data.name}}" %>
         <%= f.hidden_field :gender, value: "{{=data.gender}}" %>
@@ -101,7 +101,7 @@
         <br>입력하신 생년월일 및 성별 정보는 투표의 통계분석을 위한 자료로서만 활용되며, 기타 여하한 이유로 악용되지 않습니다.
         <br>VASKIT은 고객님의 개인정보를 중요하게 여기고, 언제나 그 관리에 최선을 다하고 있습니다.
       </div>
-      <div style="display:none;">
+      <div class="hidden">
         <%= f.check_box :agree_access_term, { checked: false, required: true } %>
         <%= f.hidden_field :gender, required: true %>
       </div>
@@ -180,8 +180,11 @@
     go_back(length);
     close_full_view();
     open_app_banner();
-    if (userApp) getUserToken();
+    alarm_check();
+    user_profile_on();
+    user_alarms_on();
     if (userApp) setAppStatusBar();
+    if (userApp) getUserToken();
     try {
       if ($.cookie('visitor_votes') !== null) {
         var votes_array = $.cookie('visitor_votes').split(".");
@@ -235,7 +238,7 @@
       if (window.HybridApp) {
         HybridApp.facebookLogin(scope, fields);
       } else {
-        window.location = "vaskit://facebookLogin/////"+scope_for_ios+"/////"+fields;
+        window.location.href = "vaskit://facebookLogin/////"+scope_for_ios+"/////"+fields;
       }
     } else {
       if (typeof(FB) != 'undefined' && FB !== null) {
@@ -270,10 +273,7 @@
                 go_url('login_with_FB_edit', data);
               } else if (data.status === "success") {
                 notify(data.string_id + "님, 어서오세요!");
-                alarm_check();
                 login_success(1);
-                user_profile_on();
-                user_alarms_on();
               }
             },
             beforeSend: function() {
@@ -487,10 +487,7 @@
                 notify("생년월일을 입력해주세요");
               } else if (data.status === "success") {
                 notify(data.string_id + "님, 환영합니다 :)");
-                alarm_check();
                 login_success(2);
-                user_profile_on();
-                user_alarms_on();
               }
             },
             beforeSend: function() {
@@ -538,10 +535,7 @@
                 notify("이용약관에 동의해주세요");
               } else if (data.status === "success") {
                 notify(data.string_id + "님, 환영합니다 :)");
-                alarm_check();
                 login_success(2);
-                user_profile_on();
-                user_alarms_on();
               }
             },
             beforeSend: function() {
@@ -585,10 +579,7 @@
                 $("#reset_password_btn").css({"color":"#fff", "marginRight":"15px"});
               } else if (data.status === "success") {
                 notify(data.string_id + "님, 어서오세요!");
-                alarm_check();
                 login_success(2);
-                user_profile_on();
-                user_alarms_on();
               }
             },
             beforeSend: function() {

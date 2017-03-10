@@ -4,7 +4,7 @@
       <input class="input text_field left right search_input" type="text" placeholder="검색어를 입력하세요" disabled>
       <span class="input btn_field left search_icon"><i class="fa fa-search"></i></span>
       <span class="input btn_field right search_input_submit"><i class="fa fa-search"></i></span>
-      <span class="input btn_field text_btn right search_input_reset"><i class="fa fa-times-circle"></i></span>
+      <span class="input btn_field text_btn right search_input_reset hidden"><i class="fa fa-times-circle"></i></span>
     </form>
   </div>
   <div class="container main search_preview" ontouchstart="removeIOSRubberEffect($(this));" index="-1">
@@ -53,7 +53,11 @@
 </script>
 
 <script type="text/template" id="searchPreviewTemplate">
-  {{ if (type == "collection") { }}
+  {{ if (type == "blank") { }}
+    <div class="no_result"><div class="align_middle">검색어를 입력해주세요</div></div>
+  {{ } else if (type == "no_result") { }}
+    <div class="no_result"><div class="align_middle">일치하는 검색 결과가 없습니다</div></div>
+  {{ } else if (type == "collection") { }}
     <a href="{{= '/collections/' + id }}" class="search_preview_list" onclick="go_url('collection', {{= id }}); return false;">
       <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
       {{ if (time) { }}
@@ -84,84 +88,83 @@
 
     search_input_submit.off("click").on("click", function(){ search_by_key(); });
     search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
-    search_input.off("keydown keyup focus blur")
-                .on("keydown", function(e) {
-              		if (e.keyCode == '13') {
-              			e.preventDefault();
-                    $(this).blur();
-                    search_by_key();
-              		} else if (e.keyCode == '27') {
-              			e.preventDefault();
-              			search_keyword_reset();
-              		} else if (e.keyCode == '40') {
-              			e.preventDefault();
-              			if ($(this).val().length > 0) navigate_by_key(true);
-              		} else if (e.keyCode == '38') {
-              			e.preventDefault();
-              			if ($(this).val().length > 0) navigate_by_key(false);
-              		}
-              	}).on("keyup", function(e) {
-                  var keyword = $(this).val();
-                  if (keyword.length === 0) {
-                    search_input_reset.hide();
-                    search_input_submit.removeClass("ready");
-                    var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>검색어를 입력해주세요</span>";
-                    search_preview_container.html(empty_span);
-                  } else {
-                    search_input_reset.show();
-                    search_input_submit.addClass("ready");
-                    $.ajax({
-                      url: "/search/get_keyword",
-                      dataType: "json",
-                      type: "GET",
-                      data: {keyword: keyword},
-                      error: function(){
-                        return false;
-                      },
-                      success: function(data) {
-                        search_preview_container.attr("index", -1);
-                        search_preview_container.html("");
+    search_input
+      .off("keydown keyup focus blur")
+      .on("keydown", function(e) {
+      	if (e.keyCode == '13') {
+      		e.preventDefault();
+          $(this).blur();
+          search_by_key();
+      	} else if (e.keyCode == '27') {
+      		e.preventDefault();
+      		search_keyword_reset();
+      	} else if (e.keyCode == '40') {
+      		e.preventDefault();
+      		if ($(this).val().length > 0) navigate_by_key(true);
+      	} else if (e.keyCode == '38') {
+      		e.preventDefault();
+      		if ($(this).val().length > 0) navigate_by_key(false);
+      	}
+      })
+      .on("keyup", function(e) {
+        var keyword = $(this).val();
+        if (keyword.length === 0) {
+          search_input_reset.addClass("hidden");
+          search_input_submit.removeClass("ready");
+          search_preview_container.html(searchPreviewTemplate({type: 'blank'}));
+        } else {
+          search_input_reset.removeClass("hidden");
+          search_input_submit.addClass("ready");
+          var keys = [13, 27, 40, 39, 38, 37];
+          if ($.inArray(e.keyCode, keys) == -1) _.throttle(preview_search_list(keyword), 1000);
+        }
+      })
+      .on("focus", function(){
+        target.addClass("on");
+    	})
+      .on("blur", function(){
+        target.removeClass("on");
+        if ($(this).val().length === 0) search_preview_container.html(recentSearchTemplate());
+        $(this).attr('disabled', true);
+      })
+      .removeAttr('disabled').focus();
 
-                        if (data.is_empty_result) {
-                          if (keyword !== ""){
-                            var empty_span = "<span style='display:block; border-bottom:1px solid #f4f4f4; margin:0; padding:16px 0; text-align:center; color:#666; font-size:13px;'>일치하는 검색 결과가 없습니다</span>";
-                            search_preview_container.html(empty_span);
-                          }
-                        } else {
-                          $.each(data.collections, function(index, collection) {
-                            search_preview_container.append(searchPreviewTemplate({type: 'collection', keyword:collection.name, id: collection.id, time: null}));
-                          });
-                          $.each(data.hash_tags, function(index, hash_tag) {
-                            search_preview_container.append(searchPreviewTemplate({type: 'hash_tag', keyword:hash_tag.keyword, id: null, time: null}));
-                          });
-                          $.each(data.ask_deals, function(index, ask_deal) {
-                            search_preview_container.append(searchPreviewTemplate({type: 'ask_deal', keyword:ask_deal.title, id: null, time: null}));
-                          });
-                          $.each(data.brands, function(index, brand) {
-                            search_preview_container.append(searchPreviewTemplate({type: 'brand', keyword:brand.brand, id: null, time: null}));
-                          });
-                          $.each(data.users, function(index, user) {
-                            search_preview_container.append(searchPreviewTemplate({type: 'user', keyword:user.string_id, id: null, time: null}));
-                          });
-
-                          search_preview_container.highlight(keyword);
-
-                          navigate_by_mouse();
-                        }
-                      },
-                      beforeSend: function() {
-                        var keys = [13, 27, 40, 39, 38, 37];
-                        if ($.inArray(e.keyCode, keys) != -1) return false;
-                      }
-                    });
-                  }
-                }).on("focus", function(){
-                  target.addClass("on");
-              	}).on("blur", function(){
-                  target.removeClass("on");
-                  if ($(this).val().length === 0) search_preview_container.html(recentSearchTemplate());
-                  $(this).attr("disabled",true);
-                }).attr("disabled",false).focus();
+    function preview_search_list(keyword) {
+      $.ajax({
+        url: "/search/get_keyword",
+        dataType: "json",
+        type: "GET",
+        data: {keyword: keyword},
+        error: function(){
+          return false;
+        },
+        success: function(data) {
+          search_preview_container.attr("index", -1);
+          search_preview_container.html("");
+          if (data.is_empty_result) {
+            search_preview_container.html(searchPreviewTemplate({type: 'no_result'}));
+          } else {
+            $.each(data.collections, function(index, collection) {
+              search_preview_container.append(searchPreviewTemplate({type: 'collection', keyword:collection.name, id: collection.id, time: null}));
+            });
+            $.each(data.hash_tags, function(index, hash_tag) {
+              search_preview_container.append(searchPreviewTemplate({type: 'hash_tag', keyword:hash_tag.keyword, id: null, time: null}));
+            });
+            $.each(data.ask_deals, function(index, ask_deal) {
+              search_preview_container.append(searchPreviewTemplate({type: 'ask_deal', keyword:ask_deal.title, id: null, time: null}));
+            });
+            $.each(data.brands, function(index, brand) {
+              search_preview_container.append(searchPreviewTemplate({type: 'brand', keyword:brand.brand, id: null, time: null}));
+            });
+            $.each(data.users, function(index, user) {
+              search_preview_container.append(searchPreviewTemplate({type: 'user', keyword:user.string_id, id: null, time: null}));
+            });
+            search_preview_container.highlight(keyword);
+            navigate_by_mouse();
+          }
+        }
+      });
+    }
 
     function search_by_key() {
       var keyword = search_input.val();
@@ -179,7 +182,7 @@
 
     function search_keyword_reset() {
       search_preview_container.html("").attr("index", -1);
-      search_input_reset.hide();
+      search_input_reset.addClass("hidden");
   		search_input.val("");
       target.click();
   	}

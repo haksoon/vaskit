@@ -15,7 +15,7 @@
         <input class="input text_field left right card_search_input" type="text" placeholder="제품명을 검색해서 입력해보세요!" disabled>
         <span class="input btn_field left card_search_icon"><i class="fa fa-search"></i></span>
         <span class="input btn_field right card_search_input_submit"><i class="fa fa-search"></i></span>
-        <span class="input btn_field text_btn right card_search_input_reset"><i class="fa fa-times-circle"></i></a>
+        <span class="input btn_field text_btn right card_search_input_reset hidden"><i class="fa fa-times-circle"></i></a>
       </div>
       <div class="inner top card_search_result"></div>
       <div class="ask_form_progress" ontouchmove="return false;"><div class="ask_form_progress bar"></div></div>
@@ -105,31 +105,36 @@
     all_inners.find(".input.text_field").attr('disabled', true);
     card_search_input_submit.off("click").on("click", function(){ search_by_key(); });
     card_search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
-    card_search_input.off("keydown keyup")
-                      .on("keydown", function(e) {
-                   	    if (e.keyCode == '13') {
-                      	 	e.preventDefault();
-                          $(this).blur();
-                          search_by_key();
-                   	    } else if (e.keyCode == '27') {
-                    			e.preventDefault();
-                    			search_keyword_reset();
-                        }
-                   	  }).on("keyup", function(e) {
-                        var keyword = $(this).val();
-                        if (keyword.length === 0) {
-                          card_search_input_reset.hide();
-                          card_search_input_submit.addClass("blank");
-                        } else {
-                          card_search_input_reset.show();
-                          card_search_input_submit.removeClass("blank");
-                        }
-                      }).on("focus", function(e){
-                        target.addClass("on");
-                   	  }).on("blur", function(e) {
-                        target.removeClass("on");
-                        $(this).attr('disabled',true);
-                      }).attr('disabled',false).focus();
+    card_search_input
+      .off("keydown keyup")
+      .on("keydown", function(e) {
+     	  if (e.keyCode == '13') {
+        	e.preventDefault();
+          $(this).blur();
+          search_by_key();
+     	  } else if (e.keyCode == '27') {
+      		e.preventDefault();
+      		search_keyword_reset();
+        }
+     	})
+      .on("keyup", function(e) {
+        var keyword = $(this).val();
+        if (keyword.length === 0) {
+          card_search_input_reset.addClass("hidden");
+          card_search_input_submit.addClass("blank");
+        } else {
+          card_search_input_reset.removeClass("hidden");
+          card_search_input_submit.removeClass("blank");
+        }
+      })
+      .on("focus", function(e) {
+        target.addClass("on");
+     	})
+      .on("blur", function(e) {
+        target.removeClass("on");
+        $(this).attr('disabled', true);
+      })
+      .removeAttr('disabled').focus();
 
     function search_by_key() {
       var keyword = card_search_input.val();
@@ -142,7 +147,7 @@
     }
 
     function search_keyword_reset() {
-      card_search_input_reset.hide();
+      card_search_input_reset.addClass("hidden");
       card_search_input.val("");
       target.click();
     }
@@ -338,10 +343,10 @@
     </div>
   {{ } }}
   {{ var deal_direction = is_left ? "left_deal" : "right_deal" }}
-  <div class="input_container" style="{{= is_blank ? 'display: none;' : '' }}">
+  <div class="input_container {{= is_blank ? 'hidden' : '' }}">
     <div class="ask_image_seg" onclick="ask_form_card_image_upload_click($(this));">
       <img src="{{= get_image_url(ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-      <span class="ask_image_upload_btn {{= is_blank? '' : 'on' }}">이미지 업로드</span>
+      <span class="ask_image_upload_btn {{= is_blank? '' : 'hidden' }}">이미지 업로드</span>
       <span class="ask_image_crop_btn {{= is_left? 'left' : 'right' }} {{= ask_deal.deal_id ? 'on' : '' }}" onclick="go_url('image_edit', $(this));" img-id="" cropping-type="ask_form"><i class="fa fa-crop"></i></span>
     </div>
     <div class="input_div title" onclick="ask_form_card_input_init($(this));">
@@ -373,7 +378,7 @@
       <span class="input btn_field {{= is_left ? 'left' : 'right' }}"><i class="ask_table_icon vaskit_icon link"></i></span>
     </div>
   </div>
-  <div style="display: none;">
+  <div class="hidden">
     <input class="form_data image_file" type="file" name="{{= deal_direction }}[image]" value="{{= ask_deal.image }}" accept="image/*" onclick="ask_form_card_image_upload($(this));">
     <input class="form_data preview_img_id" type="hidden" name="{{= deal_direction }}[image_id]" value="" {{= ask_deal.deal_id ? '' : 'required' }}>
     <input class="form_data deal_id" type="hidden" name="{{= deal_direction }}[deal_id]" value="{{= ask_deal.deal_id }}">
@@ -389,7 +394,7 @@
     var input_container = current_inner.find(".input_container");
 
     ask_form_btns.addClass("closed");
-    input_container.show();
+    input_container.removeClass("hidden");
   }
 
   function ask_form_card_input_init(target) {
@@ -402,36 +407,39 @@
 
     all_inners.find(".input.text_field").attr('disabled', true);
     current_inner.find(".input.text_field").removeAttr('disabled');
-    ask_form_card_inputs.off("keyup focus blur")
-                        .on("keyup", function(){
-                          if ($(this).attr("pattern")) inputNumberWithCommas(this);
-                        }).on("focus", function(e){
-                          if (userDevice.isAndroid && $(this).attr("pattern")) $(this).attr("type", "tel");
-                          $(this).parent(".input_div").addClass("on");
-                          // 결과값 업데이트
-                          var input_information = $(this).attr("name").replace("]","").split("[");
-                          var input_direction = input_information[0].replace("_deal","");
-                          var input_type = input_information[1];
-                          var input_value = $(this).val();
-                          step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html("입력해주세요");
-                        }).on("blur", function(e) {
-                          $(this).parent(".input_div").removeClass("on");
-                          if ($(this).val().length > 0) $(this).parent(".input_div").removeClass("required");
-                          // 결과값 업데이트
-                          var input_information = $(this).attr("name").replace("]","").split("[");
-                          var input_direction = input_information[0].replace("_deal","");
-                          var input_type = input_information[1];
-                          var input_value = $(this).val();
-                          if (input_value.length !== 0) {
-                            if (input_type == "price") {
-                              input_value = numberWithCommas(input_value)+"원";
-                            } else if (input_type == "link") {
-                              input_value = fieldWithLink(input_value);
-                            }
-                            step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html(input_value);
-                          }
-                          // $(this).attr('disabled',true);
-                        }).attr('disabled',false);
+    ask_form_card_inputs
+      .off("keyup focus blur")
+      .on("keyup", function() {
+        if ($(this).attr("pattern")) inputNumberWithCommas(this);
+      }).on("focus", function(e) {
+        if (userDevice.isAndroid && $(this).attr("pattern")) $(this).attr("type", "tel");
+        $(this).parent(".input_div").addClass("on");
+        // 결과값 업데이트
+        var input_information = $(this).attr("name").replace("]","").split("[");
+        var input_direction = input_information[0].replace("_deal","");
+        var input_type = input_information[1];
+        var input_value = $(this).val();
+        step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html("입력해주세요");
+      })
+      .on("blur", function(e) {
+        $(this).parent(".input_div").removeClass("on");
+        if ($(this).val().length > 0) $(this).parent(".input_div").removeClass("required");
+        // 결과값 업데이트
+        var input_information = $(this).attr("name").replace("]","").split("[");
+        var input_direction = input_information[0].replace("_deal","");
+        var input_type = input_information[1];
+        var input_value = $(this).val();
+        if (input_value.length !== 0) {
+          if (input_type == "price") {
+            input_value = numberWithCommas(input_value)+"원";
+          } else if (input_type == "link") {
+            input_value = fieldWithLink(input_value);
+          }
+          step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html(input_value);
+        }
+        // $(this).attr('disabled',true);
+      })
+      .removeAttr('disabled');
     target.find(".input.text_field").focus();
   }
 
@@ -476,7 +484,7 @@
                     if (is_left) {
                       step_1_inner.find(".preview_img_id").val(data.preview_img_id);
                       step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-                      step_1_inner.find(".ask_image_upload_btn").addClass("on");
+                      step_1_inner.find(".ask_image_upload_btn").addClass("hidden");
                       step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
                       // 결과값 업데이트
                       step_1_inner.find(".ask_image_seg").removeClass("required");
@@ -484,7 +492,7 @@
         	        	} else {
                       step_2_inner.find(".preview_img_id").val(data.preview_img_id);
                       step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-                      step_2_inner.find(".ask_image_upload_btn").addClass("on");
+                      step_2_inner.find(".ask_image_upload_btn").addClass("hidden");
                       step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
                       // 결과값 업데이트
                       step_2_inner.find(".ask_image_seg").removeClass("required");
@@ -518,8 +526,8 @@
           {{= naverDealsTemplate({naver_deal_items: naver_deal_items}) }}
         </table>
         <div class="loading_icon"><i class="fa fa-spinner fa-spin"></i></div>
-        <div class="naver_info">
-          <b style="color:#18bf2d;">네이버 쇼핑</b> 검색 결과입니다
+        <div class="naver_info hidden">
+          <b>네이버 쇼핑</b> 검색 결과입니다
           <br>원하시는 결과가 없으면 검색어를 수정해보세요
         </div>
       {{ } else { }}
@@ -578,7 +586,7 @@
               var naver_deal_items = data.shop_result;
               ask_form_header_title.html(keyword + " 검색결과");
               ask_form_back_btn.html("닫기");
-              ask_form_submit_btn.hide();
+              ask_form_submit_btn.addClass("hidden");
               card_search_result_div.html(cardSearchResultTemplate({naver_deal_items: naver_deal_items})).removeClass("top");
               if (naver_deal_items !== null) is_more_load = naver_deal_items.length >= <%= Deal::NAVER_RESULT_PER %> ? true : false;
               if (is_more_load) {
@@ -587,15 +595,15 @@
                   if (loading && nearBottomOfContainer($(this))) load_more_naver_deals($(this));
                 });
               } else {
-                card_search_result_div.find(".loading_icon").hide();
-                card_search_result_div.find(".naver_info").show();
+                card_search_result_div.find(".loading_icon").addClass("hidden");
+                card_search_result_div.find(".naver_info").removeClass("hidden");
               }
             },
             beforeSend: function(){
               loadingStart();
               ask_form_header_title.html("검색중 <i class='fa fa-spinner fa-spin'></i>");
               ask_form_back_btn.html("");
-              ask_form_submit_btn.hide();
+              ask_form_submit_btn.addClass("hidden");
             },
             complete: function(){
               loadingEnd();
@@ -618,8 +626,8 @@
                 if (is_more_load) {
                   target.attr("loading", true);
                 } else {
-                  card_search_result_div.find(".loading_icon").hide();
-                  card_search_result_div.find(".naver_info").show();
+                  card_search_result_div.find(".loading_icon").addClass("hidden");
+                  card_search_result_div.find(".naver_info").removeClass("hidden");
                 }
               },
               beforeSend: function(){
@@ -645,7 +653,7 @@
     var card_search_input = ask_form.find(".card_search_input");
     ask_form_header_title.html("질문 작성하기");
     if (current_step == 1) { ask_form_back_btn.html("취소"); } else { ask_form_back_btn.html("<i class='fa fa-caret-left'></i> 이전"); }
-    ask_form_submit_btn.show();
+    ask_form_submit_btn.removeClass("hidden");
     card_search_result_div.addClass("top").transitionEmpty();
   }
 
@@ -767,19 +775,19 @@
   </div>
   <div class="input_container spec">
     <div class="clearfix">
-      <div class="input_div spec spec_1 {{= ask.spec1 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_1 {{= ask.spec1 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field left right center form_data" type="text"
                   name="ask[spec1]"
                   value="{{= ask.spec1 }}"
                   placeholder="추가입력1" disabled>
       </div>
-      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="left_deal[spec1]"
                   value="{{= ask.left_ask_deal.spec1 }}"
                   placeholder="추가입력" disabled>
       </div>
-      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="right_deal[spec1]"
                   value="{{= ask.right_ask_deal.spec1 }}"
@@ -788,19 +796,19 @@
       <i class="ask_table_icon vaskit_icon spec"></i>
     </div>
     <div class="clearfix">
-      <div class="input_div spec spec_2 {{= ask.spec2 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_2 {{= ask.spec2 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field left right center form_data" type="text"
                   name="ask[spec2]"
                   value="{{= ask.spec2 }}"
                   placeholder="추가입력2" disabled>
       </div>
-      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="left_deal[spec2]"
                   value="{{= ask.left_ask_deal.spec2 }}"
                   placeholder="추가입력" disabled>
       </div>
-      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="right_deal[spec2]"
                   value="{{= ask.right_ask_deal.spec2 }}"
@@ -809,19 +817,19 @@
       <i class="ask_table_icon vaskit_icon spec"></i>
     </div>
     <div class="clearfix">
-      <div class="input_div spec spec_3 {{= ask.spec3 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_3 {{= ask.spec3 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field left right center form_data" type="text"
                   name="ask[spec3]"
                   value="{{= ask.spec3 }}"
                   placeholder="추가입력3" disabled>
       </div>
-      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="left_deal[spec3]"
                   value="{{= ask.left_ask_deal.spec3 }}"
                   placeholder="추가입력" disabled>
       </div>
-      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? 'is_opened' : '' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="right_deal[spec3]"
                   value="{{= ask.right_ask_deal.spec3 }}"
@@ -855,8 +863,8 @@
   function add_more_spec(target) {
     var input_container = target.parentsUntil(this, ".input_container");
     var input_length_index = (input_container.find(".input_div.spec:visible").length) / 3 + 1;
-    input_container.find(".input_div.spec.spec_" + input_length_index).addClass("is_opened");
-    if (input_length_index == 3) target.hide();
+    input_container.find(".input_div.spec.spec_" + input_length_index).removeClass("hidden");
+    if (input_length_index == 3) target.addClass("hidden");
   }
 
   function ask_form_message_input_init(target) {
@@ -872,19 +880,24 @@
     all_inners.find(".input.text_field").attr('disabled', true);
     current_inner.find(".input.text_field").removeAttr('disabled');
 
-    ask_form_message_input.off("input scroll focus blur")
-                          .on("input", _.throttle(function(e){
-                            hashtagInput($(this));
-                          }, 100)).on("scroll", function(e){
-                            hashtagScroll($(this));
-                          }).on("focus", function(e){
-                            removeIOSKeyPadEffectOnFocus(e);
-                            current_inner.scroll_to(true);
-                            hashtag_container.addClass("on");
-                          }).on("blur", function(e) {
-                            removeIOSKeyPadEffectOnBlur(e);
-                            hashtag_container.removeClass("on");
-                          }).attr('disabled',false).focus();
+    ask_form_message_input
+      .off("input scroll focus blur")
+      .on("input", _.throttle(function(e) {
+        hashtagInput($(this));
+      }, 100))
+      .on("scroll", function(e) {
+        hashtagScroll($(this));
+      })
+      .on("focus", function(e) {
+        removeIOSKeyPadEffectOnFocus(e);
+        current_inner.scroll_to(true);
+        hashtag_container.addClass("on");
+      }).on("blur", function(e) {
+        removeIOSKeyPadEffectOnBlur(e);
+        hashtag_container.removeClass("on");
+        $(this).attr('disabled', true);
+      })
+      .removeAttr('disabled').focus();
 
     function hashtagInput(target) {
       var text = target.val();

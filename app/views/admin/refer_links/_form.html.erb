@@ -1,0 +1,115 @@
+<%= simple_form_for @refer_link,
+                    url: @refer_link.id.nil? ? admin_refer_links_path : admin_refer_link_path(@refer_link.id),
+                    html: { oninput: "form_check($(this));", onchange: "form_check($(this));" } do |f| %>
+  <% if @refer_link.id.nil? %>
+    <div class="jumbotron clearfix">
+      <h1>레퍼런스 링크 생성하기</h1>
+      <p>새로운 레퍼런스 링크를 생성합니다</p>
+      <%= link_to '목록으로', admin_refer_links_path, class: 'btn btn-default btn-lg' %>
+      <%= f.button :submit, '생성하기',
+                   class: 'btn btn-success btn-lg pull-right',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { confirm: '정말로 생성하시겠어요?', disable_with: '생성중...' } %>
+    </div>
+    <div class="panel panel-success">
+      <!-- Default panel contents -->
+      <div class="panel-heading">레퍼런스 링크 생성</div>
+  <% else %>
+    <div class="jumbotron clearfix">
+      <h1>레퍼런스 링크 수정하기</h1>
+      <p>레퍼런스 링크의 내용을 수정합니다</p>
+      <%= link_to '목록으로', admin_refer_links_path, class: 'btn btn-default btn-lg' %>
+      <%= f.button :submit, '수정하기',
+                   class: 'btn btn-warning btn-lg pull-right',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { confirm: '정말로 수정하시겠어요?', disable_with: '수정중...' } %>
+    </div>
+    <div class="panel panel-warning">
+      <!-- Default panel contents -->
+      <div class="panel-heading"><kbd><%= @refer_link.id %>번</kbd> 레퍼런스 링크 수정</div>
+  <% end %>
+      <div class="panel-body">
+        <div class="form-inputs">
+          <%= f.input :name,
+                      as: :string,
+                      error: '',
+                      label: '1. 이름 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '레퍼런스 링크 이름을 입력하세요'
+                                  } %>
+          <%= f.input :channel,
+                      as: :string,
+                      error: '',
+                      label: '2. 채널 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '레퍼런스 링크 채널을 입력하세요'
+                                  } %>
+          <%= f.input :commerce_type,
+                      as: :string,
+                      error: '',
+                      label: '3. 채널 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '광고 타입을 입력하세요'
+                                  } %>
+          <%= f.input :commerce_budget,
+                      as: :integer,
+                      error: '',
+                      label: '4. 광고 예산 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '광고 예산을 입력하세요'
+                                  } %>
+          <%= f.input :commerce_expense,
+                      as: :integer,
+                      error: '',
+                      label: '5. 광고 비용 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '광고 비용을 입력하세요'
+                                  } %>
+          <%= f.input :commerce_started_at,
+                      as: :datetime,
+                      error: '',
+                      label: '6. 광고 시작일 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '광고 시작일을 입력하세요'
+                                  } %>
+          <%= f.input :commerce_ended_at,
+                      as: :datetime,
+                      error: '',
+                      label: '7. 광고 종료일 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '광고 종료일을 입력하세요'
+                                  } %>
+          <%= f.input :url,
+                      as: :string,
+                      error: '',
+                      label: '8. 연결 링크 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '연결 링크를 입력하세요'
+                                  } %>
+          <%= f.input :js,
+                      as: :string,
+                      error: '',
+                      label: '9. 연결 자바스크립트 입력',
+                      input_html: {
+                                    class: 'required_form',
+                                    placeholder: '연결 자바스크립트를 입력하세요'
+                                  } %>
+          <%= f.input :connect_to_store,
+                      as: :boolean,
+                      error: '',
+                      hint: '스토어로 연결을 우선시하려면 체크하세요',
+                      label: '10. 스토어 연결 우선 여부' %>
+        </div>
+      </div>
+    </div>
+<% end %>

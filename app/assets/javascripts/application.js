@@ -139,25 +139,21 @@ function setUserApp() {
 function getUserToken() {
   setTimeout(function(){
     if (window.HybridApp) {
-      HybridApp.getUserToken("hello world");        // AOS
+      HybridApp.getUserToken("hello world");             // AOS
     } else {
-      window.location = "vaskit://getUserToken";    // iOS
+      window.location.href = "vaskit://getUserToken";    // iOS
     }
   }, 2000);
 }
 
-var userAppVer = false;                                                       // 임시 코드 (비교영상 iframe 버전 분기)
-var userAppVerLoading = true;                                                 // 임시 코드 (비교영상 iframe 버전 분기)
 function setUserToken(gcm_key, device_id, app_ver) {
   // App에서 호출
   $.ajax({
     url: "/user_gcm_keys.json",
     dataType: "json",
     type: "POST",
-    data: {gcm_key: gcm_key, device_id: device_id, app_ver: app_ver}
+    data: { gcm_key: gcm_key, device_id: device_id, app_ver: app_ver }
   });
-  if (device_id.match(/ios/) && Number(app_ver.split(".").join("") >= 213)) userAppVer = true;      // 임시 코드 (비교영상 iframe 버전 분기)
-  userAppVerLoading = false;                                                                        // 임시 코드 (비교영상 iframe 버전 분기)
 }
 
 function setAppStatusBar(type) {
@@ -176,6 +172,12 @@ function setAppStatusBar(type) {
     b = 0;
     a = 1;
     textColor = 0;
+  } else if (type == "white") {
+    r = 255;
+    g = 255;
+    b = 255;
+    a = 1;
+    textColor = 1;
   } else {
     r = 249;
     g = 249;
@@ -188,7 +190,7 @@ function setAppStatusBar(type) {
     if (window.HybridApp) {
       HybridApp.setAppStatusBar(r, g, b, a * 255, textColor);        // AOS
     } else {
-      window.location = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
+      window.location.href = "vaskit://setAppStatusBar/////"+r/255+"/////"+g/255+"/////"+b/255+"/////"+a+"/////"+textColor;    // iOS
     }
   }, 250);
 }
@@ -451,20 +453,14 @@ function show_seg(seg_id) {
   var url;
   if (seg_id === 1) {
     url = '/collections';
-    $(".seg.seg1").css("transform","translateX(0%)");
-    $(".seg.seg2").css("transform","translateX(100%)");
-    $(".seg.seg4").css("transform","translateX(200%)");
+    $("#main_view").removeClass("seg2 seg4").addClass("seg1");
     set_recent_asks();
   } else if (seg_id === 2) {
     url = '/search';
-    $(".seg.seg1").css("transform","translateX(-100%)");
-    $(".seg.seg2").css("transform","translateX(0%)");
-    $(".seg.seg4").css("transform","translateX(100%)");
+    $("#main_view").removeClass("seg1 seg4").addClass("seg2");
   } else if (seg_id === 4) {
     url = '/users';
-    $(".seg.seg1").css("transform","translateX(-200%)");
-    $(".seg.seg2").css("transform","translateX(-100%)");
-    $(".seg.seg4").css("transform","translateX(0%)");
+    $("#main_view").removeClass("seg1 seg2").addClass("seg4");
     user_profile_on();
   }
 
@@ -491,11 +487,11 @@ function show_seg(seg_id) {
 
     // 현재 열려있는 모든 컨테이너를 비활성화함
     $(".seg.on").removeClass("on");
-    $(".tab_icon.on").removeClass("on");
+    $(".tab.on").removeClass("on");
 
     // 사용자가 이동하기 원하는 탭을 활성화함
     $(".seg"+seg_id).removeClass("prev next").addClass("on");
-    $(".tab_icon.seg"+seg_id).addClass("on");
+    $(".tab.seg"+seg_id).addClass("on");
 
     return url;
   }
@@ -683,18 +679,18 @@ function load_template(title, callback) {
 function notify(msg, onclick){
   var notice_div = $(".notice_div");
   var notice_msg = $(".notice_msg");
-  notice_div.stop().animate({"top":"-50px"},50,function(){
+  notice_div.stop().animate({top: "-50px"},50,function(){
     notice_msg.html("").html(msg);
-    notice_div.show().attr("onclick",onclick).animate({"top":"0px"},250,function(){
-      notice_div.delay(3000).animate({"top":"-50px"},500,function(){
-        notice_div.hide().attr("onclick","return false;");
+    notice_div.attr("onclick",onclick).animate({top: "0px"},250,function(){
+      notice_div.delay(3000).animate({top: "-50px"},500,function(){
+        notice_div.attr("onclick","return false;");
         notice_msg.html("");
       });
     });
   });
   notice_div.unbind("touchmove click").bind("touchmove click", function(){
-    $(this).stop().animate({"top":"-50px"},250,function(){
-      $(this).css({"height":"50px"});
+    $(this).stop().animate({top: "-50px"},250,function(){
+      $(this).css({height: "50px"});
     });
     return false;
   });
@@ -703,10 +699,10 @@ function notify(msg, onclick){
 function loadingStart() {
   var loading_bar = $(".loading_bar");
   var loading_div = $(".loading_div");
-  loading_div.show();
-  loading_bar.clearQueue().show().animate({width:"90%"},1000,function(){
-    loading_bar.animate({width:"94%"},2000,function(){
-      loading_bar.animate({width:"98%"},8000);
+  loading_div.removeClass("hidden");
+  loading_bar.clearQueue().animate({width: "90%"},1000,function(){
+    loading_bar.animate({width: "94%"},2000,function(){
+      loading_bar.animate({width: "98%"},8000);
     });
   });
 }
@@ -714,10 +710,10 @@ function loadingStart() {
 function loadingEnd() {
   var loading_bar = $(".loading_bar");
   var loading_div = $(".loading_div");
-  loading_bar.stop().animate({width:"100%"},100,function(){
-    loading_bar.delay(300).animate({height:"0px"},100,function(){
-      loading_bar.css({width:"0%", height:"5px", display:"none"});
-      loading_div.hide();
+  loading_bar.stop().animate({width: "100%"},100,function(){
+    loading_bar.delay(300).animate({height: "0px"},100,function(){
+      loading_bar.css({width: "0%", height: "5px"});
+      loading_div.addClass("hidden");
     });
   });
 }
@@ -729,17 +725,17 @@ function loadingProgress() {
   xhr.upload.addEventListener("progress", function (e) {
       if (e.lengthComputable) {
           var percentComplete = e.loaded / e.total * 100 / 4 * 3;
-          loading_div.show();
-          loading_bar.clearQueue().show().animate({width: percentComplete+"%"}, 250);
+          loading_div.removeClass("hidden");
+          loading_bar.clearQueue().animate({width: percentComplete+"%"}, 250);
       }
   }, false);
   xhr.addEventListener("progress", function (e) {
       if (e.lengthComputable) {
           var percentComplete = e.loaded / e.total * 100 / 4 * 1 + 75;
-          loading_bar.clearQueue().show().animate({width: percentComplete+"%"}, 250, function(){
-            loading_bar.delay(300).animate({height:"0px"},100,function(){
-              loading_bar.css({width:"0%", height:"5px", display:"none"});
-              loading_div.hide();
+          loading_bar.clearQueue().animate({width: percentComplete+"%"}, 250, function(){
+            loading_bar.delay(300).animate({height: "0px"},100,function(){
+              loading_bar.css({width: "0%", height: "5px"});
+              loading_div.addClass("hidden");
             });
           });
       }
@@ -748,7 +744,6 @@ function loadingProgress() {
 }
 
 // Alarm Check
-var current_user = null;
 var alarm_check_counter;
 function alarm_check(last_alarm_count) {
   var alarm_count = last_alarm_count === undefined ? 0 : last_alarm_count;
@@ -763,11 +758,9 @@ function alarm_check(last_alarm_count) {
       current_user = data.current_user;
       alarm_count = data.alarm_count;
       if (current_user === null) {
-        $("#my_tab").hide();
-        $("#login_tab").show();
+        $("#login_tab").addClass("visitor");
       } else {
-        $("#my_tab").show();
-        $("#login_tab").hide();
+        $("#login_tab").removeClass("visitor");
       }
       if (alarm_count > 0) { $(".tab_badge").addClass("on").animateCss("wobble"); } else { $(".tab_badge").removeClass("on"); }
       if (last_alarm_count !== undefined && alarm_count > last_alarm_count) {
@@ -1015,10 +1008,11 @@ function get_past_time(time) {
 
 // animateCSS
 $.fn.extend({
-    animateCss: function (animationName) {
+    animateCss: function (animationName, callback) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         $(this).addClass('animated ' + animationName).one(animationEnd, function() {
             $(this).removeClass('animated ' + animationName);
+            if (typeof callback === "function") callback();
         });
     },
     animateCssColor: function (animationName, color) {
@@ -1028,10 +1022,18 @@ $.fn.extend({
             $(this).css("color",origin_color).removeClass('animated ' + animationName);
         });
     },
-    animateCssHide: function (animationName) {
+    animateCssHide: function (animationName, callback) {
         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
         $(this).addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).hide().removeClass('animated ' + animationName);
+            $(this).hide().off(animationEnd).removeClass('animated ' + animationName);
+            if (typeof callback === "function") callback();
+        });
+    },
+    animateCssEmpty: function (animationName, callback) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+            $(this).empty().off(animationEnd).removeClass('animated ' + animationName);
+            if (typeof callback === "function") callback();
         });
     },
     animateCssRemove: function (animationName, callback) {

@@ -12,7 +12,7 @@
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">VASKIT맨의 비교영상</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
-    <span class="header_btn right"><a href="https://facebook.com/vaskit.kr" target="_blank" style="color: #999; font-size: 20px;"><i class="fa fa-facebook-official"></i></a></span>
+    <span class="header_btn right facebook_btn"><a href="https://facebook.com/vaskit.kr" target="_blank"><i class="fa fa-facebook-official"></i></a></span>
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'videos');" url="/videos">
     <div class="clearfix">
@@ -51,35 +51,20 @@
   </div>
   <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
     <div class="video_detail">
-      {{ var app_ver_loading_tmp = userApp && userDevice.isIOS && (!userAppVer || userAppVerLoading) }}
-      {{ if (video.yt_id === null || (userApp && userDevice.isIOS)) { }}
-        {{ if (app_ver_loading_tmp) { }}
-          <a class="video_image" href="https://facebook.com/vaskit.kr/videos/{{= video.fb_id }}" target="_blank">
-            <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
-            <i class="fa fa-play"></i>
-          </a>
-        {{ } else { }}
-          <div class="video_player_div">
-            <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
-            <iframe class="video_player" onload="$(this).prevAll().remove();"
-                    src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F{{= video.fb_id }}%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>"
-                    width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
-          </div>
-        {{ } }}
+      {{ if (video.yt_id === null) { }}
+        <div class="video_player_div">
+          <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
+          <iframe class="video_player" onload="$(this).prevAll().remove();"
+                  src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F{{= video.fb_id }}%2F&width=500&height=280&show_text=false&appId=<%=Facebook::CONFIG['app_id']%>"
+                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+        </div>
       {{ } else { }}
-        {{ if (app_ver_loading_tmp) { }}
-          <a class="video_image" href="https://www.youtube.com/watch?v={{= video.yt_id }}" target="_blank">
-            <img src="{{= get_image_url(video, 'videos', 'original') }}" onerror="imgError(this);">
-            <i class="fa fa-play"></i>
-          </a>
-        {{ } else { }}
-          <div class="video_player_div">
-            <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
-            <iframe class="video_player" onload="$(this).prevAll().remove();"
-                    src="https://www.youtube.com/embed/{{= video.yt_id }}?autoplay=1&modestbranding=1&rel=0&showinfo=0"
-                    width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
-          </div>
-        {{ } }}
+        <div class="video_player_div">
+          <div class="no_result"><p class="align_middle">비디오 로드중 <i class="fa fa-spinner fa-spin"></i></p></div>
+          <iframe class="video_player" onload="$(this).prevAll().remove();"
+                  src="https://www.youtube.com/embed/{{= video.yt_id }}?autoplay=1&modestbranding=1&rel=0&showinfo=0"
+                  width="100%" scrolling="no" frameborder="0" allowTransparency allowfullscreen></iframe>
+        </div>
       {{ } }}
       <div class="video_description">
         {{= taggingKeywords(video.description) }}

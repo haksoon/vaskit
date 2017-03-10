@@ -186,7 +186,7 @@
     } else if (type == "collection") {
       link_input.val("<%= "#{collections_url}/#{Collection.last.id}" %>");
     } else if (type == "video") {
-      link_input.val("<%= "#{videos_url}/#{Video.last.id}" %>");
+      link_input.val("<%= "#{videos_url}/" %>");
     }
     push_filter_changed();
     push_link_preview();

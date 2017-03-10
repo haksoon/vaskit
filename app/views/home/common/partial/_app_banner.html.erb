@@ -1,7 +1,7 @@
 <script type="text/template" id="appBannerMobileTemplate">
-  <div class="container top" ontouchmove="return false;" style="border-bottom: none;">
-    <span class="header_title app_banner" onclick="open_in_app();">
-      <span class="vaskit_icon logo" style="filter: brightness(50%);"></span>
+  <div class="container top" ontouchmove="return false;" style="border-bottom: 0;">
+    <span class="header_title app_banner mobile" onclick="open_in_app();">
+      <span class="app_logo"></span>
       <span class="app_banner_btn">앱으로 보기</span>
     </span>
     <span class="header_btn right close_btn" onclick="close_app_banner();">&times;</div>
@@ -10,23 +10,34 @@
 
 <script type="text/template" id="appBannerPCTemplate">
   <div class="container top dark" ontouchmove="return false;">
-    <span class="header_title app_banner">
-      <span class="vaskit_icon logo"></span>
-      <a href="https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit" target="_blank" style="display: block; width: 180px; float: right; text-align: center; color: #fff;"><i class="fa fa-android"></i> 안드로이드 앱 다운로드</a>
-      <a href="http://itunes.apple.com/kr/app/id1188969345?mt=8" target="_blank" style="display: block; width: 180px; float: right; text-align: center; color: #fff;"><i class="fa fa-apple"></i> 애플 앱 다운로드</a>
+    <span class="header_title app_banner pc">
+      <span class="app_logo"></span>
+      <a class="app_banner_btn" href="https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit" target="_blank"><i class="fa fa-android"></i> 안드로이드 앱 다운로드</a>
+      <a class="app_banner_btn" href="http://itunes.apple.com/kr/app/id1188969345?mt=8" target="_blank"><i class="fa fa-apple"></i> 애플 앱 다운로드</a>
     </span>
     <span class="header_btn right close_btn" onclick="close_app_banner();">&times;</div>
+  </div>
+</script>
+
+<script type="text/template" id="appUpdateTemplate">
+  <div class="app_update_div" onclick="open_app_update();" ontouchmove="return false;">
+    <div class="app_update_msg"><div class="app_update_placeholder"></div></div>
+    <img src="/images/logo/logo.svg">
   </div>
 </script>
 
 <script>
   var appBannerMobileTemplate = _.template($("#appBannerMobileTemplate").html());
   var appBannerPCTemplate = _.template($("#appBannerPCTemplate").html());
+  var appUpdateTemplate = _.template($("#appUpdateTemplate").html());
 
   function open_app_banner() {
-    if (userDevice.isMobile && !userApp && ((userDevice.isIOS) || userDevice.isAndroid)) {
+    var ua = window.navigator.userAgent.toLowerCase();
+    if (userDevice.isMobile && !userApp && (userDevice.isIOS || userDevice.isAndroid)) {
       $("#main_view").addClass("onAppBanner");
       $("#app_banner").addClass("onAppBanner").html(appBannerMobileTemplate());
+    } else if (userDevice.isMobile && userApp && userDevice.isIOS && !!!ua.match(/VASKIT_IOS_APP\/2.1.6/i)) {
+      go_url('app_update');
     } else if (!userDevice.isMobile) {
       $("#main_view").addClass("onAppBanner");
       $("#app_banner").addClass("onAppBanner").html(appBannerPCTemplate());
@@ -40,14 +51,6 @@
     $("#app_banner").removeClass("onAppBanner").transitionEmpty();
   }
 
-  function open_in_app() {
-    var open_app_path = "<%= CONFIG['host'] %>/?ref=1";
-    var app_url = window.location.href;
-    var app_js = get_js_function();
-    if (app_js !== "") open_app_path += "&app_js=" + app_js + "&app_url=" + app_url;
-    window.open(open_app_path, "_blank");
-  }
-
   function get_js_function() {
     var app_js = "";
     if (segNextFunc[currentSeg].length > 0) {
@@ -57,5 +60,38 @@
       app_js = "go_url('" + app_function_name + "', " + app_function_args + ")";
     }
     return app_js;
+  }
+
+  function open_in_app() {
+    var open_app_path = "<%= CONFIG['host'] %>/?ref=1";
+    var app_url = window.location.href;
+    var app_js = get_js_function();
+    if (app_js !== "") open_app_path += "&app_js=" + app_js + "&app_url=" + app_url;
+    window.open(open_app_path, "_blank");
+  }
+
+  function open_app_update() {
+    $(".app_update_msg").addClass("thank_you");
+    if (window.HybridApp) {
+      window.open("https://play.google.com/store/apps/details?id=com.vaskit.msh.vaskit");
+    } else {
+      window.location.href = "http://itunes.apple.com/kr/app/id1188969345?mt=8";
+    }
+  }
+
+  function show_app_update() {
+    setAppStatusBar("white");
+    $("#app_banner").addClass("onAppUpdate").html(appUpdateTemplate()).animateCss("bounce");
+    $(".app_update_placeholder").unityping({
+       string: ['으아악', '살려주세', '섬바디헤업미!!!', 'from bob<br><br>안녕하세요<br>bob이에오<br>제가 물에 빠지고 있어오<br>살려주세오<br><br><small style="text-decoration: line-through; color: #ccc;">OMG 어머나 PLZ 헤업미</small><br>저를 살려주시기 위해<br>앱을 <span class="highlight">업데이트</span>해주시겠어요?'],
+       typingSpeed: 7500,
+       startDelay: 500,
+       backSpeed: 30,
+       backDelay: 100
+    });
+  }
+
+  function hide_app_update() {
+    history.go(1);
   }
 </script>

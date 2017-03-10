@@ -1,26 +1,21 @@
 <script type="text/template" id="commentsTemplate">
   {{ var show_comments = $.grep(comments, function(obj) { return obj.is_deleted === false }) }}
-  {{ if (show_comments.length == 0) { }}
-    <li class="comment_blank" onclick="comment_input_activate('new');">첫 댓글을 달아주세요!</li>
-  {{ } else { }}
-    <li class="comment_blank" onclick="comment_input_activate('new');" style="display: none;">첫 댓글을 달아주세요!</li>
-    {{ var original_comments = $.grep(comments, function(obj) { return obj.comment_id === null }) }}
-    {{ var end_line_check = true }}
-    {{ for (var i=0; i < original_comments.length; i++) { }}
-      {{ var original_comment = original_comments[i] }}
-      {{ if (end_line_check && ask.be_completed && original_comment.created_at > ask.ask_complete.created_at) { }}
-        <li class="comment_box end_line"><i class="fa fa-caret-down"></i>여기서부터는 투표를 종료하신 이후에 작성된 댓글입니다</li>
-        {{ end_line_check = false }}
-      {{ } }}
-      {{ var reply_comments = $.grep(comments, function(obj) { return (obj.comment_id === original_comment.id && obj.is_deleted === false) }) }}
-      {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === original_comment.id}).length === 0 ? false : true }}
-      {{ if (original_comment.is_deleted == false || (original_comment.is_deleted && reply_comments.length > 0)) { }}
-        {{= commentTemplate({ask: ask, comment: original_comment, already_like: already_like}) }}
-        {{ for (var j=0; j < reply_comments.length; j++) { }}
-          {{ var reply_comment = reply_comments[j] }}
-          {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === reply_comment.id}).length === 0 ? false : true }}
-          {{= commentTemplate({ask: ask, comment: reply_comment, already_like: already_like}) }}
-        {{ } }}
+  {{ var original_comments = $.grep(comments, function(obj) { return obj.comment_id === null }) }}
+  {{ var end_line_check = true }}
+  {{ for (var i=0; i < original_comments.length; i++) { }}
+    {{ var original_comment = original_comments[i] }}
+    {{ if (end_line_check && ask.be_completed && original_comment.created_at > ask.ask_complete.created_at) { }}
+      <li class="comment_box end_line"><i class="fa fa-caret-down"></i>여기서부터는 투표를 종료하신 이후에 작성된 댓글입니다</li>
+      {{ end_line_check = false }}
+    {{ } }}
+    {{ var reply_comments = $.grep(comments, function(obj) { return (obj.comment_id === original_comment.id && obj.is_deleted === false) }) }}
+    {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === original_comment.id}).length === 0 ? false : true }}
+    {{ if (original_comment.is_deleted == false || (original_comment.is_deleted && reply_comments.length > 0)) { }}
+      {{= commentTemplate({ask: ask, comment: original_comment, already_like: already_like}) }}
+      {{ for (var j=0; j < reply_comments.length; j++) { }}
+        {{ var reply_comment = reply_comments[j] }}
+        {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === reply_comment.id}).length === 0 ? false : true }}
+        {{= commentTemplate({ask: ask, comment: reply_comment, already_like: already_like}) }}
       {{ } }}
     {{ } }}
   {{ } }}
@@ -97,7 +92,7 @@
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}
     <div class="comment_writing_sign">
-      <span class="comment_writing_pic" style="background-image: url('{{= get_avatar(current_user) }}');"></span>
+      <img class="comment_writing_pic" src="{{= get_avatar(current_user) }}">
       <span class="comment_writing_arrow"></span>
       <span class="comment_writing_user_id">{{= current_user ? current_user.string_id : '' }}</span>
       <span class="comment_writing_label">{{= label }}</span>
@@ -159,7 +154,7 @@
     var current_comment_input_submit = current_comment_container.find(".comment_input_submit");
     var current_comment_input_submit_btn_text = current_comment_input_submit.find(".submit_btn_text");
 
-    current_comment_lists.find(".comment_box:hidden").show();
+    current_comment_lists.find(".comment_box.hidden").removeClass("hidden");
     is_writing_box.remove();
     hashtag_highlights.html("");
     current_comment_input.val("").removeClass("filled");
@@ -238,7 +233,7 @@
 
     function bubble_init(comment_type, comment_id) {
       var target_comment_lists, target_comment_boxes, is_left, is_reply;
-      current_comment_lists.find(".comment_box:hidden").show();
+      current_comment_lists.find(".comment_box.hidden").removeClass("hidden");
       is_writing_box.remove();
       if (comment_type == "new") {
         is_left = Boolean(current_comment_input_menu.attr("left"));
@@ -248,7 +243,7 @@
         target_comment_boxes = current_comment_lists.find(".comment_box."+comment_id);
         is_left = target_comment_boxes.hasClass("left");
         is_reply = target_comment_boxes.hasClass("reply");
-        target_comment_boxes.hide();
+        target_comment_boxes.addClass("hidden");
         target_comment_boxes.after(commentWritingSignTemplate({label: "수정중", is_left: is_left, is_reply: is_reply}));
       } else if (comment_type == "reply") {
         target_comment_boxes = current_comment_lists.find(".comment_box."+comment_id);
@@ -318,7 +313,7 @@
                   current_comment_input.val("").blur();
                   current_comment_input_submit.removeClass("ready").off("click");
                   current_comment_input_submit_btn_text.html("전송");
-                  if (ask_comment_count === 0) all_ask_comment_lists.find(".comment_blank").animateCssHide("fadeOut");
+                  if (ask_comment_count === 0) all_ask_comment_lists.removeClass("blank");
                   if (comment_type == "edit") {
                     current_comment_lists.find(".comment_box."+comment_id).remove();
                   } else {
@@ -402,8 +397,8 @@
                              } else {
                                $(this).addClass("filled");
                              }
-                             $(this).attr("disabled",true);
-                           }).attr("disabled",false).focus();
+                             $(this).attr("disabled", true);
+                           }).removeAttr("disabled").focus();
 
       function hashtagInput(target) {
         var text = target.val();
@@ -596,13 +591,13 @@
                 all_comment_boxes.animateCssRemove("bounceOutDown");
                 ask_comment_count -= 1;
                 all_ask_comment_count_spans.html(ask_comment_count);
-                if (ask_comment_count === 0) all_ask_comment_lists.find(".comment_blank").show().animateCss("fadeIn");
+                if (ask_comment_count === 0) all_ask_comment_lists.addClass("blank");
               } else if (data.status == "reply_exist") {
                 all_comment_boxes.addClass("deleted").attr("is-deleted", true);
                 all_comment_boxes.find(".comment_content").html("삭제된 댓글입니다");
                 ask_comment_count -= 1;
                 all_ask_comment_count_spans.html(ask_comment_count);
-                if (ask_comment_count === 0) all_ask_comment_lists.find(".comment_blank").show().animateCss("fadeIn");
+                if (ask_comment_count === 0) all_ask_comment_lists.addClass("blank");
               } else if (data.status == "not_authorized") {
                 notify('권한이 없습니다');
               }

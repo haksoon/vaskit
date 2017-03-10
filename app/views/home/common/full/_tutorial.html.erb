@@ -25,8 +25,8 @@
     <div class="tutorial_msg" id="ask_tutorial">
       <div class="tutorial_title"><i class="fa fa-question-circle-o"></i> 질문을 좀 더 쉽게 작성하려면?</div>
       <div class="tutorial_preview">
-        <div class="search_input_box" style="overflow: hidden;">
-          <div action="" class="search_input_init">
+        <div class="search_input_box">
+          <div class="search_input_init">
             <div class="input text_field left right search_input">
               <span class="placeholder"></span>
             </div>
@@ -40,7 +40,7 @@
         <br>질문 작성은 <span class="highlight">총 3단계</span>로 이루어져있어요
         <br><br>입력할 내용이 너무 많은데...
         <br>좀 쉽게 입력할 수는 없냐구요?
-        <br>상단 <span class="highlight"><i class="fa fa-search" style="font-size: 12px;"></i>검색창</span>에 제품명을 입력해보세요!
+        <br>상단 <span class="highlight"><i class="fa fa-search"></i>검색창</span>에 제품명을 입력해보세요!
       </div>
       <div class="tutorial_btn" onclick="back_button();">가릿!</div>
     </div>
@@ -73,15 +73,18 @@
   var cropTutorialTemplate = _.template($("#cropTutorialTemplate").html());
 
   function show_tutorial_vote() {
-    $(".tutorial_overlay").html(voteTutorialTemplate()).fadeIn();
+    $(".tutorial_overlay").html(voteTutorialTemplate()).removeClass("hidden");
   }
   function hide_tutorial_vote() {
     if (localStorage.tutorial === undefined) { localStorage.tutorial = "vote,"; } else { localStorage.tutorial += "vote,"; }
-    $(".tutorial_overlay").fadeOut();
+    $(".tutorial_div").animateCssRemove('fadeOutDownBig');
+    $(".tutorial_overlay").animateCssEmpty('fadeOut', function(){
+      $(".tutorial_overlay").addClass("hidden");
+    });
   }
 
   function show_tutorial_ask() {
-    $(".tutorial_overlay").html(askTutorialTemplate()).fadeIn();
+    $(".tutorial_overlay").html(askTutorialTemplate()).removeClass("hidden");
     $("#ask_tutorial .placeholder").unityping({
                   string: ['뭐 사지?', '어퓨 텐션팩트', '입생로랑 틴트', '로레알 헤어에센스', '제품명을 검색해서 입력해보세요!'],
                   typingSpeed: 750, // CPM; Characters per Minute
@@ -95,14 +98,20 @@
   }
   function hide_tutorial_ask() {
     if (localStorage.tutorial === undefined) { localStorage.tutorial = "ask,"; } else { localStorage.tutorial += "ask,"; }
-    $(".tutorial_overlay").fadeOut();
+    $(".tutorial_div").animateCssRemove('fadeOutDownBig');
+    $(".tutorial_overlay").animateCssEmpty('fadeOut', function(){
+      $(".tutorial_overlay").addClass("hidden");
+    });
   }
 
   function show_tutorial_crop() {
-    $(".tutorial_overlay").html(cropTutorialTemplate()).fadeIn();
+    $(".tutorial_overlay").html(cropTutorialTemplate()).removeClass("hidden");
   }
   function hide_tutorial_crop() {
     if (localStorage.tutorial === undefined) { localStorage.tutorial = "crop,"; } else { localStorage.tutorial += "crop,"; }
-    $(".tutorial_overlay").fadeOut();
+    $(".tutorial_div").animateCssRemove('fadeOutDownBig');
+    $(".tutorial_overlay").animateCssEmpty('fadeOut', function(){
+      $(".tutorial_overlay").addClass("hidden");
+    });
   }
 </script>

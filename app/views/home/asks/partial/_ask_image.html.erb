@@ -3,7 +3,7 @@
     <div class="inner left" onclick="back_button();">
       <img class="ask_deal_image" src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" ontouchmove="return false;">
       <div class="ask_deal_info" ontouchstart="removeIOSRubberEffect($(this));">
-        <div class="blank"><i class="fa left">&times;</i><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-up"></i></div>
+        <div class="blank_div"><i class="fa left">&times;</i><i class="fa fa-angle-double-right"></i><i class="fa fa-angle-double-up"></i></div>
         <div class="ask ask_detail">
           {{ if (ask.left_ask_deal.title != "" && ask.left_ask_deal.title != null) { }}
             <div class="ask_table_row title">
@@ -33,9 +33,8 @@
           {{ } }}
         </div>
         <div class="comment">
-          <ul class="comment_list left">
-            <li class="comment_list_background left"></li>
-            {{ var left_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.left_ask_deal.id}) }}
+          {{ var left_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.left_ask_deal.id && obj.is_deleted === false }) }}
+          <ul class="comment_list left {{= left_comments.length == 0 ? 'blank' : '' }}">
             {{= commentsTemplate({ask: ask, comments: left_comments, like_comments: like_comments}) }}
           </ul>
         </div>
@@ -44,7 +43,7 @@
     <div class="inner right next" onclick="back_button();">
       <img class="ask_deal_image" src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" ontouchmove="return false;">
       <div class="ask_deal_info" ontouchstart="removeIOSRubberEffect($(this));">
-        <div class="blank"><i class="fa right">&times;</i><i class="fa fa-angle-double-left"></i><i class="fa fa-angle-double-up"></i></div>
+        <div class="blank_div"><i class="fa right">&times;</i><i class="fa fa-angle-double-left"></i><i class="fa fa-angle-double-up"></i></div>
         <div class="ask ask_detail">
           {{ if (ask.right_ask_deal.title != "" && ask.right_ask_deal.title != null) { }}
             <div class="ask_table_row title">
@@ -74,9 +73,8 @@
           {{ } }}
         </div>
         <div class="comment">
-          <ul class="comment_list right">
-            <li class="comment_list_background right"></li>
-            {{ var right_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.right_ask_deal.id}) }}
+          {{ var right_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.right_ask_deal.id && obj.is_deleted === false }) }}
+          <ul class="comment_list right {{= right_comments.length == 0 ? 'blank' : '' }}">
             {{= commentsTemplate({ask: ask, comments: right_comments, like_comments: like_comments}) }}
           </ul>
         </div>
@@ -132,7 +130,7 @@
     var img_layer = ask_wrapper.find(".img_layer");
     var inner_left = img_layer.find(".inner.left");
     var inner_right = img_layer.find(".inner.right");
-    var ask_deal_images = img_layer.find(".blank");
+    var ask_deal_images = img_layer.find(".blank_div");
     var ask_deal_info = img_layer.find(".ask_deal_info");
     var close_btn = img_layer.find(".close_btn");
 

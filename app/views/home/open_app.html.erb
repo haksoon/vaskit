@@ -1,10 +1,10 @@
 <script>
   window.onload = function(){
     var loadedAt = +new Date();
-    window.location.assign("<%= raw @link_1 %>");
+    window.location.href = "<%= raw @link_1 %>";
     setTimeout(function() {
       if (+new Date() - loadedAt < 2000) {
-        window.location.assign("<%= raw @link_2 %>");
+        window.location.href = "<%= raw @link_2 %>";
       }
     }, 25);
   };

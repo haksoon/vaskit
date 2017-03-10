@@ -25,9 +25,6 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0', group: :doc
 
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
 gem 'devise'
 gem 'koala', '~> 2.0'
 
@@ -40,10 +37,11 @@ gem 'nokogiri'
 # Use Unicorn as the app server
 gem 'unicorn'
 
+# redis-rails provides a full set of stores (*Cache*, Session, HTTP Cache) for Ruby on Rails
 gem 'redis-rails'
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
+# Autoprefixer is a tool to parse CSS and add vendor prefixes to CSS rules using values from the Can I Use
+gem 'autoprefixer-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -62,10 +60,10 @@ end
 
 gem 'gcm'
 gem 'fcm'
+
 gem 'delayed_job_active_record'
 gem 'daemons'
-
-gem 'slack-notifier'
 gem 'exception_notification'
+gem 'slack-notifier'
 
 gem 'sitemap_generator'

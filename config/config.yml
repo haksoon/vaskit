@@ -1,6 +1,6 @@
 development:
   image_host: ''
-  host: 'http://120.142.32.13:5000'
+  host: 'http://120.142.32.13:3000'
 production:
   image_host: 'http://vaskit.kr'
   host: 'http://vaskit.kr'

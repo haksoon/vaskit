@@ -110,6 +110,7 @@ Rails.application.routes.draw do
     resources :notices, only: [:index, :new, :create] do
       get '/test', to: 'notices#test', on: :collection
     end
+    resources :refer_links, except: [:delete]
     resources :tables, only: [:index] do
       get ':table_name', to: 'tables#index', on: :collection
     end

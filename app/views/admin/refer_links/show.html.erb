@@ -1,0 +1,86 @@
+<div class="jumbotron clearfix">
+  <h1><kbd><%= @refer_link.id %>번</kbd> 레퍼런스 링크</h1>
+  <p>레퍼런스 링크를 게시하거나 수정할 수 있습니다</p>
+  <%= link_to '목록으로',
+              admin_refer_links_path,
+              { class: 'btn btn-default btn-lg' } %>
+  <div class="pull-right">
+    <%= link_to '수정하기',
+                edit_admin_refer_link_path(@refer_link.id),
+                { class: 'btn btn-warning btn-lg' } %>
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">레퍼런스 링크 내용</div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th style="width: 100px;">이름</th>
+        <td><%= @refer_link.name %></td>
+      </tr>
+      <tr>
+        <th>채널</th>
+        <td><%= @refer_link.channel %></td>
+      </tr>
+      <tr>
+        <th>분류</th>
+        <td><%= @refer_link.commerce_type %></td>
+      </tr>
+      <tr>
+        <th>비용</th>
+        <td><%= "#{number_with_precision(@refer_link.commerce_expense, delimiter: ',', precision: 0)}원" %></td>
+      </tr>
+      <tr>
+        <th>예산</th>
+        <td><%= "#{number_with_precision(@refer_link.commerce_budget, delimiter: ',', precision: 0)}원" %></td>
+      </tr>
+      <tr>
+        <th>광고기간</th>
+        <td><%= @refer_link.commerce_started_at.nil? ? '-' : "#{format_datetime(@refer_link.commerce_started_at, :date)} ~ #{format_datetime(@refer_link.commerce_ended_at, :date)}" %></td>
+      </tr>
+      <tr>
+        <th>연결링크</th>
+        <td><%= "#{CONFIG['host']}#{@refer_link.url}?ref=#{@refer_link.id}" %></td>
+      </tr>
+      <tr>
+        <th>스토어 연결여부</th>
+        <td><%= @refer_link.connect_to_store ? 'Y' : 'N' %></td>
+      </tr>
+      <tr>
+        <th>생성일</th>
+        <td><%= format_datetime(@refer_link.created_at, :date) %></td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">레퍼런스 링크 방문자 상세</div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>유저ID</th>
+          <th>디바이스</th>
+          <th>브라우저</th>
+          <th>시점</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @refer_link.user_visits.reverse_each do |user_visit| %>
+          <tr>
+            <td><%= user_visit.user_id.nil? ? '비회원' : user_visit.user.string_id %></td>
+            <td><%= user_visit.device %></td>
+            <td><%= user_visit.browser %></td>
+            <td><%= format_datetime(user_visit.updated_at, 'past') %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

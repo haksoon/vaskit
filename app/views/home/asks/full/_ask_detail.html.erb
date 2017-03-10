@@ -141,7 +141,7 @@
         {{ if (ask.be_completed) { }}
           종료한 투표입니다
         {{ } else { }}
-          <i class="fa fa-navicon" style="transition: transform .25s;" onclick="$(this).addClass('fa-rotate-90'); $(this).next().addClass('on');"></i>
+          <i class="fa fa-navicon" onclick="$(this).addClass('fa-rotate-90'); $(this).next().addClass('on');"></i>
           <div class="ask_menu_btn" onclick="$(this).prev().removeClass('fa-rotate-90'); $(this).removeClass('on');">
             <span onclick="go_url('ask_form', {{= ask.id }});">질문 수정</span>
             &middot;
@@ -149,7 +149,7 @@
           </div>
         {{ } }}
       {{ } else { }}
-          <i class="fa fa-navicon" style="transition: transform .25s;" onclick="$(this).addClass('fa-rotate-90'); $(this).next().addClass('on');"></i>
+          <i class="fa fa-navicon" onclick="$(this).addClass('fa-rotate-90'); $(this).next().addClass('on');"></i>
           <div class="ask_menu_btn" onclick="$(this).prev().removeClass('fa-rotate-90'); $(this).removeClass('on');">
             <span class="ask_like_btn" onclick="like_ask({{= ask.id }});">공감해요</span>
             &middot;
@@ -253,8 +253,8 @@
         <img class="comment_title_img right" src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
       </div>
     </div>
-    <ul class="comment_list">
-      <li class="comment_list_background"></li>
+    {{ var show_comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false }) }}
+    <ul class="comment_list {{= show_comments.length === 0 ? 'blank' : '' }}">
       {{= commentsTemplate({ask: ask, comments: ask.comments, like_comments: like_comments}) }}
     </ul>
   </div>

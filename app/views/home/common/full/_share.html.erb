@@ -117,7 +117,7 @@
         if (window.HybridApp) {
           HybridApp.shareFacebook(share_url);
         } else {
-          window.location = "vaskit://shareFacebook/////" + share_url;
+          window.location.href = "vaskit://shareFacebook/////" + share_url;
         }
       } else {
         if (typeof(FB) != 'undefined' && FB !== null) {
