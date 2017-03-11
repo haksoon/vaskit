@@ -234,6 +234,7 @@
     var fields = "name,gender,picture.width(200).height(200).type(square),email,birthday";
     // 기본 인자들을 WEB에서 APP으로 전달
     target.html("로그인중입니다 <i class='fa fa-spinner fa-spin'></i>");
+    loadingStart();
     if (userApp) {
       if (window.HybridApp) {
         HybridApp.facebookLogin(scope, fields);
@@ -275,9 +276,6 @@
                 notify(data.string_id + "님, 어서오세요!");
                 login_success(1);
               }
-            },
-            beforeSend: function() {
-              loadingStart();
             },
             complete: function() {
               loadingEnd();

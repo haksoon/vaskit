@@ -147,9 +147,7 @@
       }
     }
 
-    <% if Rails.env == 'production' %>
     if (url) ga('send', 'pageview', url);
-    <% end %>
     fixViewportHeight();
   }
 
@@ -184,9 +182,7 @@
     history.pushState({pageHistory:currentHistory+1}, null, url);
     currentHistory = history.state.pageHistory;
 
-    <% if Rails.env == 'production' %>
     if (url) ga('send', 'pageview', url);
-    <% end %>
     // console.log("url, 히스토리 변경... show_"+func_name+" 실행하여 "+currentHistory+"로 진행");
     fixViewportHeight();
   }

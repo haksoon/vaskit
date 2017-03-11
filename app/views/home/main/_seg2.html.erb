@@ -19,21 +19,21 @@
       인기 검색어
     </div>
     <ul class="recent_search_list">
-      {{= searchPreviewTemplate({type: "ask_deal", keyword: "쿠션", id: null, time: null}) }}
-      {{= searchPreviewTemplate({type: "hash_tag", keyword: "겨울", id: null, time: null}) }}
-      {{= searchPreviewTemplate({type: "hash_tag", keyword: "촉촉", id: null, time: null}) }}
-      {{= searchPreviewTemplate({type: "hash_tag", keyword: "여행", id: null, time: null}) }}
-      {{= searchPreviewTemplate({type: "hash_tag", keyword: "남친선물", id: null, time: null}) }}
+      <li>{{= searchPreviewTemplate({type: "ask_deal", keyword: "쿠션", id: null, time: null}) }}</li>
+      <li>{{= searchPreviewTemplate({type: "hash_tag", keyword: "겨울", id: null, time: null}) }}</li>
+      <li>{{= searchPreviewTemplate({type: "hash_tag", keyword: "촉촉", id: null, time: null}) }}</li>
+      <li>{{= searchPreviewTemplate({type: "hash_tag", keyword: "여행", id: null, time: null}) }}</li>
+      <li>{{= searchPreviewTemplate({type: "hash_tag", keyword: "남친선물", id: null, time: null}) }}</li>
     </ul>
   </div>
   <div class="recent_search">
     {{ var recent_search_list = $.cookie('recent_search_list') }}
-    {{ if (recent_search_list != null) { }}
-      {{ localStorage.recent_search_list = recent_search_list }}
+    {{ if (recent_search_list !== null) { }}
+      {{ localStorage.setItem('recent_search_list', recent_search_list) }}
       {{ $.cookie('recent_search_list', null) }}
     {{ } }}
-    {{ recent_search_list = localStorage.recent_search_list }}
-    {{ if (recent_search_list !== undefined) { }}
+    {{ recent_search_list = localStorage.getItem('recent_search_list') }}
+    {{ if (recent_search_list !== null) { }}
       <div class="recent_search_title">
         <i class="fa fa-caret-right"></i> 최근 검색어
         <span class="recent_search_reset" onclick="reset_recent_search();">&times; 삭제</span>
@@ -45,7 +45,7 @@
           {{ var keyword = search.keyword.replace(new RegExp(/[_][d][o][t][_]/g), ".") }}
           {{ var type = search.type }}
           {{ var time = search.time }}
-          {{= searchPreviewTemplate({type: type, keyword: keyword, id: null, time: time}) }}
+          <li>{{= searchPreviewTemplate({type: type, keyword: keyword, id: null, time: time}) }}</li>
         {{ } }}
       </ul>
     {{ } }}
@@ -291,8 +291,8 @@
   }
 
   function save_recent_search(type, keyword) {
-    var recent_search_list = localStorage.recent_search_list;
-    var search_array = recent_search_list === undefined ? [] : recent_search_list.split(".");
+    var recent_search_list = localStorage.getItem('recent_search_list');
+    var search_array = recent_search_list === null ? [] : recent_search_list.split(".");
     keyword = keyword.replace(new RegExp(/[.]/g), "_dot_");
     if (search_array.length >= 10) search_array = search_array.splice(search_array.length-9, search_array.length);
     for (var i=0; i<search_array.length; i++) {
@@ -307,7 +307,7 @@
     });
     search_array.push(this_search);
     recent_search_list = search_array.join(".");
-    localStorage.recent_search_list = recent_search_list;
+    localStorage.setItem('recent_search_list', recent_search_list);
   }
 
   function reset_recent_search() {
