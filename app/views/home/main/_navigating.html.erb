@@ -77,6 +77,8 @@
       }
 
     }
+
+    if (url) ga('send', 'pageview', url);
     fixViewportHeight();
   }
 
@@ -182,8 +184,8 @@
     history.pushState({pageHistory:currentHistory+1}, null, url);
     currentHistory = history.state.pageHistory;
 
-    if (url) ga('send', 'pageview', url);
     // console.log("url, 히스토리 변경... show_"+func_name+" 실행하여 "+currentHistory+"로 진행");
+    if (url) ga('send', 'pageview', url);
     fixViewportHeight();
   }
 
@@ -218,6 +220,7 @@
     }, 100);
 
     // console.log("히스토리 삭제 ("+ length +"개)");
+    if (url) ga('send', 'pageview', url);
     fixViewportHeight();
   }
 
