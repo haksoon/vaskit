@@ -8,7 +8,7 @@
       {{ if (asks == null) { }}
         <div class="no_result"><p class="align_middle">새로운 질문 탐색중 <i class="fa fa-spinner fa-spin"></i></p></div>
       {{ } else { }}
-        {{= recentAskSegTemplate({asks: asks}) }}
+        {{= recentAskSegTemplate({ asks: asks }) }}
       {{ } }}
     </div>
   </a>
@@ -21,12 +21,12 @@
     <div class="recent_asks_image_seg">
       <div class="recent_asks_image_square right">
         <div class="recent_asks_image">
-          <img src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+          <img src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
         </div>
       </div>
       <div class="recent_asks_image_square left">
         <div class="recent_asks_image">
-          <img src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+          <img src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
         </div>
       </div>
     </div>
@@ -39,54 +39,56 @@
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">새로운 질문들</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
-    <span class="header_btn right new_btn" onclick="if (visitor_check() === undefined) go_url('ask_form'); return false;">&plus;</span>
+    <span class="header_btn right new_btn" onclick="if (visitor_check()) { ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 질문작성탭 진입', 1); } else { go_url('ask_form'); } return false;">&plus;</span>
   </div>
-  {{= asksListTemplate({asks: asks, url: url}) }}
+  {{= asksListTemplate({ asks: asks, url: url }) }}
 </script>
 
 <script>
-  var recentAsksTemplate = _.template($("#recentAsksTemplate").html());
-  var recentAskSegTemplate = _.template($("#recentAskSegTemplate").html());
-  var recentAsksShowTemplate = _.template($("#recentAsksShowTemplate").html());
+  var recentAsksTemplate = _.template($('#recentAsksTemplate').html());
+  var recentAskSegTemplate = _.template($('#recentAskSegTemplate').html());
+  var recentAsksShowTemplate = _.template($('#recentAsksShowTemplate').html());
 
   function set_recent_asks() {
-    var recent_asks_seg = $("#recent_asks_seg");
+    var recent_asks_seg = $('#recent_asks_seg');
     $.ajax({
-      url: "/asks",
-      dataType: "json",
-      type: "GET",
-      error: function(){
-        return false;
+      url: '/asks',
+      dataType: 'json',
+      type: 'GET',
+      error: function() {
+        notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
-      success: function(data){
+      success: function(data) {
         var asks = data.asks;
-        recent_asks_seg.find(".recent_asks_image_box").html(recentAskSegTemplate({asks: asks}));
+        recent_asks_seg.find('.recent_asks_image_box').html(recentAskSegTemplate({ asks: asks }));
       },
-      beforeSend: function(){
-        recent_asks_seg.html(recentAsksTemplate({asks: null}));
+      beforeSend: function() {
+        recent_asks_seg.html(recentAsksTemplate({ asks: null }));
       },
-      complete: function(){
+      complete: function() {
       }
     });
   }
 
   function show_recent_asks() {
-    var url = "/asks";
+    var url = '/asks';
     $.ajax({
             url: url,
-            dataType: "json",
-            type: "GET",
-            error: function(){
-              return false;
+            dataType: 'json',
+            data: { page: 1 },
+            type: 'GET',
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
-              var html = recentAsksShowTemplate({asks: data.asks, url: url});
+            success: function(data) {
+              var html = recentAsksShowTemplate({ asks: data.asks, url: url });
               create_wrapper(html);
+              if (currentSeg === 1 && segHistory[currentSeg] === 1) ga('send', 'event', '컬렉션탭', '새로운 질문들', 1);
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
             }
     });

@@ -2,6 +2,7 @@
   $(window).ready(function(){
     <% unless current_user %>
       go_url('landing');
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 로그인탭 클릭', 1);
     <% end %>
   });
 </script>

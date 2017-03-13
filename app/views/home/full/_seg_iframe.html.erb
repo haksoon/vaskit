@@ -4,15 +4,15 @@
       <span class="header_title" onclick="$(this).scroll_to();">ABOUT US</span>
       <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
     </div>
-    <iframe class="container main" src="{{=src}}" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
+    <iframe class="container main" src="{{= src }}" frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>
   </div>
 </script>
 
 <script>
-  var iframeTemplate = _.template($("#iframeTemplate").html());
+  var iframeTemplate = _.template($('#iframeTemplate').html());
 
   function show_iframe(src) {
-    open_full_view(iframeTemplate({src: src}));
+    open_full_view(iframeTemplate({ src: src }));
   }
 
   function hide_iframe() {

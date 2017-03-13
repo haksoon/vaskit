@@ -1,6 +1,6 @@
 <script type="text/template" id="askFormTemplate">
-  {{ if (localStorage.tutorial === undefined || localStorage.tutorial.match("ask") === null) go_url('tutorial_ask') }}
-  <%= form_for(:ask, remote: true, html: {id: "ask_form", class: "ask_form", style: "height: 100%;", onkeyup: "ask_progress_check();", onchange: "ask_progress_check();"}) do |f| %>
+  {{ if (check_tutorial('ask')) go_url('tutorial_ask') }}
+  <%= form_for(:ask, remote: true, html: {id: 'ask_form', class: 'ask_form', style: 'height: 100%;', onkeyup: 'ask_progress_check();', onchange: 'ask_progress_check();'}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
       <span class="header_title" onclick="$(this).scroll_to();">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
       <span class="ask_form_step">1 / 3 STEP</span>
@@ -8,9 +8,9 @@
       <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음 <i class='fa fa-caret-right'></i></span>
     </div>
     <div class="container main">
-      <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.left_ask_deal, is_left: true, is_blank: ask.id == null ? true : false}) }}</div>
-      <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ask_deal: ask.right_ask_deal, is_left: false, is_blank: ask.id == null ? true : false}) }}</div>
-      <div class="inner step_3 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardResultTemplate({ask: ask}) }}</div>
+      <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.left_ask_deal, is_left: true, is_blank: ask.id == null ? true : false }) }}</div>
+      <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.right_ask_deal, is_left: false, is_blank: ask.id == null ? true : false }) }}</div>
+      <div class="inner step_3 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardResultTemplate({ ask: ask }) }}</div>
       <div class="card_search_input_init" onclick="card_search_input_init($(this));" is-left="true" ontouchmove="return false;">
         <input class="input text_field left right card_search_input" type="text" placeholder="제품명을 검색해서 입력해보세요!" disabled>
         <span class="input btn_field left card_search_icon"><i class="fa fa-search"></i></span>
@@ -28,38 +28,39 @@
 
   function show_ask_form(ask_id) {
     var url = '/asks/';
-    if ($("#ask_form").length === 0) {
-      url += ask_id === undefined ? 'new' : ask_id+'/edit';
+    if ($('#ask_form').length === 0) {
+      url += ask_id === undefined ? 'new' : ask_id + '/edit';
       $.ajax({
         url: url,
-        dataType: "json",
-        type: "GET",
-        error: function(){
+        dataType: 'json',
+        type: 'GET',
+        error: function() {
           return false;
         },
-        success: function(data){
-          if (data.status == "already_completed") {
+        success: function(data) {
+          if (data.status == 'already_completed') {
             notify('이미 종료하신 질문입니다');
             go_back(1);
-          } else if (data.status == "not_authorized") {
+          } else if (data.status == 'not_authorized') {
             notify('권한이 없습니다');
             go_back(1);
-          } else if (data.status == "success") {
-            open_full_view(askFormTemplate({ask: data.ask}));
+          } else if (data.status == 'success') {
+            open_full_view(askFormTemplate({ ask: data.ask }));
             window.onbeforeunload = function(e) {
               var string = '변경사항이 저장되지 않을 수 있습니다';
               e = e || window.event;
               if (e) e.returnValue = string;      // For IE<8 and Firefox prior to version 4
               return string;                      // For Chrome, Safari, IE8+ and Opera 12+
             };
-            if (userApp) setAppStatusBar("dark");
+            if (userApp) setAppStatusBar('dark');
+            if (ask_id === undefined) ga('send', 'event', '질문작성탭', '질문작성탭 진입', 1);
           }
         },
-        beforeSend: function(){
-          if (ask_id !== null) loadingStart();
+        beforeSend: function() {
+          if (ask_id !== undefined) loadingStart();
         },
-        complete: function(){
-          if (ask_id !== null) loadingEnd();
+        complete: function() {
+          if (ask_id !== undefined) loadingEnd();
         }
       });
     }
@@ -70,12 +71,12 @@
   function hide_ask_form() {
     history.go(1);
     var options = {
-                description: "작성중인 내용이 삭제됩니다. 종료하시겠어요?",
+                description: '작성중인 내용이 삭제됩니다. 종료하시겠어요?',
                 menus: [
                   {
-                    name: "질문 작성 종료",
-                    func: "close_ask_form();",
-                    class: "confirmation"
+                    name: '질문 작성 종료',
+                    func: 'close_ask_form();',
+                    class: 'confirmation'
                   }
                 ]
               };
@@ -93,21 +94,27 @@
   }
 
   function card_search_input_init(target) {
-    var ask_form = $("#ask_form");
-    var all_inners = ask_form.find(".inner");
-    var card_search_input_submit = target.find(".card_search_input_submit");
-    var card_search_input_reset = target.find(".card_search_input_reset");
-    var card_search_input = target.find(".card_search_input");
-    var is_left = Boolean(target.attr("is-left"));
-    var card_search_result_div = ask_form.find(".card_search_result");
+    var ask_form = $('#ask_form');
+    var all_inners = ask_form.find('.inner');
+    var card_search_input_submit = target.find('.card_search_input_submit');
+    var card_search_input_reset = target.find('.card_search_input_reset');
+    var card_search_input = target.find('.card_search_input');
+    var is_left = Boolean(target.attr('is-left'));
+    var card_search_result_div = ask_form.find('.card_search_result');
 
-    if (!!!card_search_result_div.hasClass("top")) history.back();
-    all_inners.find(".input.text_field").attr('disabled', true);
-    card_search_input_submit.off("click").on("click", function(){ search_by_key(); });
-    card_search_input_reset.off("click").on("click", function(){ search_keyword_reset(); });
+    if (is_left) {
+      ga('send', 'event', '질문작성탭', 'A 검색입력 버튼', 1);
+    } else {
+      ga('send', 'event', '질문작성탭', 'B 검색입력 버튼', 1);
+    }
+
+    if (!!!card_search_result_div.hasClass('top')) history.back();
+    all_inners.find('.input.text_field').attr('disabled', true);
+    card_search_input_submit.off('click').on('click', function(){ search_by_key(); });
+    card_search_input_reset.off('click').on('click', function(){ search_keyword_reset(); });
     card_search_input
-      .off("keydown keyup")
-      .on("keydown", function(e) {
+      .off('keydown keyup')
+      .on('keydown', function(e) {
      	  if (e.keyCode == '13') {
         	e.preventDefault();
           $(this).blur();
@@ -117,29 +124,29 @@
       		search_keyword_reset();
         }
      	})
-      .on("keyup", function(e) {
+      .on('keyup', function(e) {
         var keyword = $(this).val();
         if (keyword.length === 0) {
-          card_search_input_reset.addClass("hidden");
-          card_search_input_submit.addClass("blank");
+          card_search_input_reset.addClass('hidden');
+          card_search_input_submit.addClass('blank');
         } else {
-          card_search_input_reset.removeClass("hidden");
-          card_search_input_submit.removeClass("blank");
+          card_search_input_reset.removeClass('hidden');
+          card_search_input_submit.removeClass('blank');
         }
       })
-      .on("focus", function(e) {
-        target.addClass("on");
+      .on('focus', function(e) {
+        target.addClass('on');
      	})
-      .on("blur", function(e) {
-        target.removeClass("on");
+      .on('blur', function(e) {
+        target.removeClass('on');
         $(this).attr('disabled', true);
       })
       .removeAttr('disabled').focus();
 
     function search_by_key() {
       var keyword = card_search_input.val();
-      if (keyword === "" || keyword === undefined) {
-        notify("검색어를 입력해주세요");
+      if (keyword === '' || keyword === undefined) {
+        notify('검색어를 입력해주세요');
         target.click();
       } else {
         go_url('card_search_result', { is_left: is_left, keyword: keyword });
@@ -147,121 +154,123 @@
     }
 
     function search_keyword_reset() {
-      card_search_input_reset.addClass("hidden");
-      card_search_input.val("");
+      card_search_input_reset.addClass('hidden');
+      card_search_input.val('');
       target.click();
     }
   }
 
   function ask_progress_check() {
-    var ask_form = $("#ask_form");
-    var inners = ask_form.find(".inner");
-    var ask_form_progress_bar = ask_form.find(".ask_form_progress.bar");
-    var ask_form_submit_btn = ask_form.find(".submit_btn");
+    var ask_form = $('#ask_form');
+    var inners = ask_form.find('.inner');
+    var ask_form_progress_bar = ask_form.find('.ask_form_progress.bar');
+    var ask_form_submit_btn = ask_form.find('.submit_btn');
 
     var progress = [];
-    var required_fields = $.map($(inners).find("[required]"), function(value, index) { return [value]; });
+    var required_fields = $.map($(inners).find('[required]'), function(value, index) { return [value]; });
     $.each(required_fields, function(index, field){
       var value = field.value.replace(/^\s*/g, '').replace(/\s*$/g, '');
-      if (value !== "") progress.push(index);
+      if (value !== '') progress.push(index);
     });
 
     var percent = progress.length / required_fields.length * 100;
-    ask_form_progress_bar.css({width: percent+"%"});
-    if (percent < 100) { ask_form_submit_btn.removeClass("ready"); } else { ask_form_submit_btn.addClass("ready"); }
-    if (percent < 100) { ask_form_progress_bar.removeClass("ready"); } else { ask_form_progress_bar.addClass("ready"); }
+    ask_form_progress_bar.css({ width: percent + '%' });
+    if (percent < 100) { ask_form_submit_btn.removeClass('ready'); } else { ask_form_submit_btn.addClass('ready'); }
+    if (percent < 100) { ask_form_progress_bar.removeClass('ready'); } else { ask_form_progress_bar.addClass('ready'); }
   }
 
-
   function show_next_ask_form() {
-    var ask_form = $("#ask_form");
-    var submit_btn = ask_form.find(".submit_btn");
-    var ask_id = Number(submit_btn.attr("ask-id"));
-    var back_btn = ask_form.find(".header_btn.left");
-    var current_step = Number(submit_btn.attr("step"));
-    var ask_form_step = ask_form.find(".ask_form_step");
-    var step_1_inner = ask_form.find(".inner.step_1");
-    var step_2_inner = ask_form.find(".inner.step_2");
-    var step_3_inner = ask_form.find(".inner.step_3");
-    var card_search_input_init = ask_form.find(".card_search_input_init");
-    var hashtag_backdrop = ask_form.find(".hashtag_backdrop");
+    var ask_form = $('#ask_form');
+    var submit_btn = ask_form.find('.submit_btn');
+    var ask_id = Number(submit_btn.attr('ask-id'));
+    var back_btn = ask_form.find('.header_btn.left');
+    var current_step = Number(submit_btn.attr('step'));
+    var ask_form_step = ask_form.find('.ask_form_step');
+    var step_1_inner = ask_form.find('.inner.step_1');
+    var step_2_inner = ask_form.find('.inner.step_2');
+    var step_3_inner = ask_form.find('.inner.step_3');
+    var card_search_input_init = ask_form.find('.card_search_input_init');
+    var hashtag_backdrop = ask_form.find('.hashtag_backdrop');
 
     if (current_step == 1) {
       // 2번 스텝으로 진행
-      step_1_inner.addClass("prev");
-      step_2_inner.removeClass("next").scrollTop(0);
-      submit_btn.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
-      back_btn.html("<i class='fa fa-caret-left'></i> 이전");
-      ask_form_step.html("2 / 3 STEP");
-      card_search_input_init.removeAttr("is-left");
+      step_1_inner.addClass('prev');
+      step_2_inner.removeClass('next').scrollTop(0);
+      submit_btn.html('다음 <i class="fa fa-caret-right"></i>').attr('step', 2);
+      back_btn.html('<i class="fa fa-caret-left"></i> 이전');
+      ask_form_step.html('2 / 3 STEP');
+      card_search_input_init.removeAttr('is-left');
+      ga('send', 'event', '질문작성탭', 'A to B 이동', 1);
     } else if (current_step == 2) {
       // 3번 스텝으로 진행
-      step_2_inner.addClass("prev");
-      step_3_inner.removeClass("next").scrollTop(0);
-      submit_btn.html("완료").attr("step", 3);
-      back_btn.html("<i class='fa fa-caret-left'></i> 이전");
-      ask_form_step.html("3 / 3 STEP");
-      card_search_input_init.addClass("hide");
+      step_2_inner.addClass('prev');
+      step_3_inner.removeClass('next').scrollTop(0);
+      submit_btn.html('완료').attr('step', 3);
+      back_btn.html('<i class="fa fa-caret-left"></i> 이전');
+      ask_form_step.html('3 / 3 STEP');
+      card_search_input_init.addClass('hide');
       ask_progress_check();
+      ga('send', 'event', '질문작성탭', 'B to C 이동', 1);
     } else if (current_step == 3) {
-      ask_form.find(".form_data").removeAttr('disabled');
+      ask_form.find('.form_data').removeAttr('disabled');
       var data = ask_form.serializeArray();
-      data = $.grep(data, function(obj){ return obj.value !== ""; });
+      data = $.grep(data, function(obj){ return obj.value !== ''; });
       data = data.reduce(function(obj, item) {
   	    obj[item.name] = item.value;
   	    return obj;
 	    }, {});
       ask_form_submit(data, ask_id);
+      ga('send', 'event', '질문작성탭', 'C 질문 제출 시도', 1);
     }
 
 
     function ask_form_submit(data, ask_id) {
       var required_field;
       $.ajax({
-  	        url: ask_id === 0 ? "/asks.json" : "/asks/" + ask_id + ".json",
-            dataType: "json",
-  	        type: ask_id === 0 ? "POST" : "PUT",
+  	        url: ask_id === 0 ? '/asks.json' : '/asks/' + ask_id + '.json',
+            dataType: 'json',
+  	        type: ask_id === 0 ? 'POST' : 'PUT',
   	        data: data,
   	        error: function(){
   	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
   	        },
   	        success: function(data){
-              if (data.status == "no_left_image") {
+              if (data.status == 'no_left_image') {
                 go_back(1);
                 notify('A제품 이미지를 추가해주세요');
-                step_1_inner.find(".ask_image_seg").addClass("required");
-                required_field = step_3_inner.find(".ask_image.left");
-                required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
-              } else if(data.status == "no_left_title") {
+                step_1_inner.find('.ask_image_seg').addClass('required');
+                required_field = step_3_inner.find('.ask_image.left');
+                required_field.addClass('required');
+                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+              } else if(data.status == 'no_left_title') {
                 go_back(1);
                 notify('A제품 제품명을 입력해주세요');
-                step_1_inner.find(".form_data").parent(".title").addClass("required");
-                required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.left");
-                required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
-              } else if(data.status == "no_right_image") {
+                step_1_inner.find('.form_data').parent('.title').addClass('required');
+                required_field = step_3_inner.find('.ask_table_row.title .ask_table_cell.left');
+                required_field.addClass('required');
+                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+              } else if(data.status == 'no_right_image') {
                 go_back(1);
                 notify('B제품 이미지를 추가해주세요');
-                step_2_inner.find(".ask_image_seg").addClass("required");
-                required_field = step_3_inner.find(".ask_image.right");
-                required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
-              } else if(data.status == "no_right_title") {
+                step_2_inner.find('.ask_image_seg').addClass('required');
+                required_field = step_3_inner.find('.ask_image.right');
+                required_field.addClass('required');
+                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+              } else if(data.status == 'no_right_title') {
                 go_back(1);
                 notify('B제품 제품명을 입력해주세요');
-                step_2_inner.find(".form_data").parent(".title").addClass("required");
-                required_field = step_3_inner.find(".ask_table_row.title .ask_table_cell.right");
-                required_field.addClass("required");
-                setTimeout(function(){ required_field.removeClass("required"); }, 1000);
-              } else if(data.status == "no_ask_message") {
+                step_2_inner.find('.form_data').parent('.title').addClass('required');
+                required_field = step_3_inner.find('.ask_table_row.title .ask_table_cell.right');
+                required_field.addClass('required');
+                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+              } else if(data.status == 'no_ask_message') {
                 go_back(1);
                 notify('메세지를 입력해주세요');
-                step_3_inner.animate({scrollTop: step_3_inner.prop("scrollHeight")}, 250);
-                required_field = step_3_inner.find(".ask_message_input");
-                required_field.parentsUntil(this, ".hashtag_container").animateCss("bounce");
-                required_field.parentsUntil(this, ".input_container").click();
-              } else if(data.status == "success") {
+                step_3_inner.animate({ scrollTop: step_3_inner.prop('scrollHeight') }, 250);
+                required_field = step_3_inner.find('.ask_message_input');
+                required_field.parentsUntil(this, '.hashtag_container').animateCss('bounce');
+                required_field.parentsUntil(this, '.input_container').click();
+              } else if(data.status == 'success') {
                 go_back(4);
                 setTimeout(function(){
                   close_full_view();
@@ -269,6 +278,7 @@
                   if (ask_id === 0) { notify('게시글 작성 완료! 친구들에게 공유해보세요 :)'); } else { notify('게시글 수정 완료! 친구들에게 공유해보세요 :)'); }
                   go_url('ask', data.ask.id);
                 }, 500);
+                ga('send', 'event', '질문작성탭', 'C 질문 제출 성공', 1);
               }
   					},
   					beforeSend: function(){
@@ -282,31 +292,31 @@
   }
 
   function hide_next_ask_form() {
-    var ask_form = $("#ask_form");
-    var submit_btn = ask_form.find(".submit_btn");
-    var back_btn = ask_form.find(".header_btn.left");
-    var current_step = Number(submit_btn.attr("step"));
-    var ask_form_step = ask_form.find(".ask_form_step");
-    var step_1_inner = ask_form.find(".inner.step_1");
-    var step_2_inner = ask_form.find(".inner.step_2");
-    var step_3_inner = ask_form.find(".inner.step_3");
-    var card_search_input_init = ask_form.find(".card_search_input_init");
+    var ask_form = $('#ask_form');
+    var submit_btn = ask_form.find('.submit_btn');
+    var back_btn = ask_form.find('.header_btn.left');
+    var current_step = Number(submit_btn.attr('step'));
+    var ask_form_step = ask_form.find('.ask_form_step');
+    var step_1_inner = ask_form.find('.inner.step_1');
+    var step_2_inner = ask_form.find('.inner.step_2');
+    var step_3_inner = ask_form.find('.inner.step_3');
+    var card_search_input_init = ask_form.find('.card_search_input_init');
 
-    submit_btn.removeClass("ready");
+    submit_btn.removeClass('ready');
     if (current_step == 3) {
-      step_3_inner.addClass("next");
-      step_2_inner.removeClass("prev").scrollTop(0);
-      submit_btn.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 2);
-      back_btn.html("<i class='fa fa-caret-left'></i> 이전");
-      ask_form_step.html("2 / 3 STEP");
-      card_search_input_init.removeAttr("is-left").removeClass("hide");
+      step_3_inner.addClass('next');
+      step_2_inner.removeClass('prev').scrollTop(0);
+      submit_btn.html('다음 <i class="fa fa-caret-right"></i>').attr('step', 2);
+      back_btn.html('<i class="fa fa-caret-left"></i> 이전');
+      ask_form_step.html('2 / 3 STEP');
+      card_search_input_init.removeAttr('is-left').removeClass('hide');
     } else if (current_step == 2) {
-      step_2_inner.addClass("next");
-      step_1_inner.removeClass("prev").scrollTop(0);
-      submit_btn.html("다음 <i class='fa fa-caret-right'></i>").attr("step", 1);
-      back_btn.html("취소");
-      ask_form_step.html("1 / 3 STEP");
-      card_search_input_init.attr("is-left", true).removeClass("hide");
+      step_2_inner.addClass('next');
+      step_1_inner.removeClass('prev').scrollTop(0);
+      submit_btn.html('다음 <i class="fa fa-caret-right"></i>').attr('step', 1);
+      back_btn.html('취소');
+      ask_form_step.html('1 / 3 STEP');
+      card_search_input_init.attr('is-left', true).removeClass('hide');
     }
   }
 </script>
@@ -329,20 +339,20 @@
     <div class="ask_form_btn_div">
       <div class="ask_form_btn" onclick="$('.card_search_input_init').click();">
         <div class="ask_form_btn_text">
-          <div>{{= is_left ? "A제품" : "B제품" }}</div>
+          <div>{{= is_left ? 'A제품' : 'B제품' }}</div>
           <b class="highlight">검색</b>하여 입력하기<span></span>
         </div>
       </div>
     </div>
     <div class="ask_form_btn_div">
-      <div class="ask_form_btn" onclick="activate_ask_form_btn($(this));">
+      <div class="ask_form_btn" onclick="activate_ask_form_btn();">
         <div class="ask_form_btn_text">
           <i class="fa fa-caret-down"></i> 직접 입력하기
         </div>
       </div>
     </div>
   {{ } }}
-  {{ var deal_direction = is_left ? "left_deal" : "right_deal" }}
+  {{ var deal_direction = is_left ? 'left_deal' : 'right_deal' }}
   <div class="input_container {{= is_blank ? 'hidden' : '' }}">
     <div class="ask_image_seg" onclick="ask_form_card_image_upload_click($(this));">
       <img src="{{= get_image_url(ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
@@ -388,92 +398,100 @@
 <script>
   var askFormCardTemplate = _.template($('#askFormCardTemplate').html());
 
-  function activate_ask_form_btn(target) {
-    var current_inner = target.parentsUntil(this, ".inner");
-    var ask_form_btns = current_inner.find(".ask_form_btn_div");
-    var input_container = current_inner.find(".input_container");
+  function activate_ask_form_btn() {
+    var ask_form = $('#ask_form');
+    var current_step = Number(ask_form.find('.submit_btn').attr('step'));
+    var current_inner = ask_form.find('.inner.step_' + current_step);
+    var ask_form_btns = current_inner.find('.ask_form_btn_div');
+    var input_container = current_inner.find('.input_container');
 
-    ask_form_btns.addClass("closed");
-    input_container.removeClass("hidden");
+    ask_form_btns.addClass('closed');
+    input_container.removeClass('hidden');
+
+    if (current_step === 1) {
+      ga('send', 'event', '질문작성탭', 'A 직접입력 버튼', 1);
+    } else {
+      ga('send', 'event', '질문작성탭', 'B 직접입력 버튼', 1);
+    }
   }
 
   function ask_form_card_input_init(target) {
-    var ask_form = $("#ask_form");
-    var all_inners = ask_form.find(".inner");
-    var current_step = Number(ask_form.find(".submit_btn").attr("step"));
-    var current_inner = ask_form.find(".inner.step_"+current_step);
-    var step_3_inner = ask_form.find(".inner.step_3");
-    var ask_form_card_inputs = target.parent(".input_container").find(".input.text_field");
+    var ask_form = $('#ask_form');
+    var all_inners = ask_form.find('.inner');
+    var current_step = Number(ask_form.find('.submit_btn').attr('step'));
+    var current_inner = ask_form.find('.inner.step_' + current_step);
+    var step_3_inner = ask_form.find('.inner.step_3');
+    var ask_form_card_inputs = target.parent('.input_container').find('.input.text_field');
 
-    all_inners.find(".input.text_field").attr('disabled', true);
-    current_inner.find(".input.text_field").removeAttr('disabled');
+    all_inners.find('.input.text_field').attr('disabled', true);
+    current_inner.find('.input.text_field').removeAttr('disabled');
     ask_form_card_inputs
-      .off("keyup focus blur")
-      .on("keyup", function() {
-        if ($(this).attr("pattern")) inputNumberWithCommas(this);
-      }).on("focus", function(e) {
-        if (userDevice.isAndroid && $(this).attr("pattern")) $(this).attr("type", "tel");
-        $(this).parent(".input_div").addClass("on");
+      .off('keyup focus blur')
+      .on('keyup', function() {
+        if ($(this).attr('pattern')) inputNumberWithCommas(this);
+      }).on('focus', function(e) {
+        if (userDevice.isAndroid && $(this).attr('pattern')) $(this).attr('type', 'tel');
+        $(this).parent('.input_div').addClass('on');
         // 결과값 업데이트
-        var input_information = $(this).attr("name").replace("]","").split("[");
-        var input_direction = input_information[0].replace("_deal","");
+        var input_information = $(this).attr('name').replace(']','').split('[');
+        var input_direction = input_information[0].replace('_deal','');
         var input_type = input_information[1];
         var input_value = $(this).val();
-        step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html("입력해주세요");
+        step_3_inner.find('.ask_table_row.' + input_type).find('.ask_table_cell.' + input_direction).html('입력해주세요');
       })
-      .on("blur", function(e) {
-        $(this).parent(".input_div").removeClass("on");
-        if ($(this).val().length > 0) $(this).parent(".input_div").removeClass("required");
+      .on('blur', function(e) {
+        $(this).parent('.input_div').removeClass('on');
+        if ($(this).val().length > 0) $(this).parent('.input_div').removeClass('required');
         // 결과값 업데이트
-        var input_information = $(this).attr("name").replace("]","").split("[");
-        var input_direction = input_information[0].replace("_deal","");
+        var input_information = $(this).attr('name').replace(']','').split('[');
+        var input_direction = input_information[0].replace('_deal','');
         var input_type = input_information[1];
         var input_value = $(this).val();
         if (input_value.length !== 0) {
-          if (input_type == "price") {
-            input_value = numberWithCommas(input_value)+"원";
-          } else if (input_type == "link") {
+          if (input_type == 'price') {
+            input_value = numberWithCommas(input_value) + '원';
+          } else if (input_type == 'link') {
             input_value = fieldWithLink(input_value);
           }
-          step_3_inner.find(".ask_table_row."+input_type).find(".ask_table_cell."+input_direction).html(input_value);
+          step_3_inner.find('.ask_table_row.' + input_type).find('.ask_table_cell.' + input_direction).html(input_value);
         }
         // $(this).attr('disabled',true);
       })
       .removeAttr('disabled');
-    target.find(".input.text_field").focus();
+    target.find('.input.text_field').focus();
   }
 
   function ask_form_card_image_upload_click(target) {
-    var current_inner = target.parentsUntil(this, ".inner");
-    var image_file = current_inner.find(".image_file");
-    var ask_image_upload_btn = current_inner.find(".ask_image_upload_btn");
-    target.addClass("is_uploading");
-    ask_image_upload_btn.html("파일을 선택해주세요");
+    var current_inner = target.parentsUntil(this, '.inner');
+    var image_file = current_inner.find('.image_file');
+    var ask_image_upload_btn = current_inner.find('.ask_image_upload_btn');
+    target.addClass('is_uploading');
+    ask_image_upload_btn.html('파일을 선택해주세요');
     image_file.click();
     setTimeout(function(){
-      target.removeClass("is_uploading");
-      ask_image_upload_btn.html("이미지 업로드");
+      target.removeClass('is_uploading');
+      ask_image_upload_btn.html('이미지 업로드');
     }, 1000);
   }
 
   function ask_form_card_image_upload(target) {
-    var ask_form = $("#ask_form");
-    var card_search_input_init = ask_form.find(".card_search_input_init");
-    var is_left = Boolean(card_search_input_init.attr("is-left"));
-    var step_1_inner = ask_form.find(".inner.step_1");
-    var step_2_inner = ask_form.find(".inner.step_2");
-    var step_3_inner = ask_form.find(".inner.step_3");
+    var ask_form = $('#ask_form');
+    var card_search_input_init = ask_form.find('.card_search_input_init');
+    var is_left = Boolean(card_search_input_init.attr('is-left'));
+    var step_1_inner = ask_form.find('.inner.step_1');
+    var step_2_inner = ask_form.find('.inner.step_2');
+    var step_3_inner = ask_form.find('.inner.step_3');
 
-    target.off("change")
-          .on("change", function() {
+    target.off('change')
+          .on('change', function() {
               var fileObj = $(this);
               $.each($(this)[0].files, function(i, file) {
                 var formData = new FormData();
                 formData.append('File', file);
                 $.ajax({
-                  url: "/preview_images.json",
-                  dataType: "json",
-                  type: "POST",
+                  url: '/preview_images.json',
+                  dataType: 'json',
+                  type: 'POST',
                   data: formData,
                   contentType: false,
                   processData: false,
@@ -482,21 +500,21 @@
                   },
                   success: function (data){
                     if (is_left) {
-                      step_1_inner.find(".preview_img_id").val(data.preview_img_id);
-                      step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-                      step_1_inner.find(".ask_image_upload_btn").addClass("hidden");
-                      step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+                      step_1_inner.find('.preview_img_id').val(data.preview_img_id);
+                      step_1_inner.find('img').attr('src', data.image_url).animateCss('pulse');
+                      step_1_inner.find('.ask_image_upload_btn').addClass('hidden');
+                      step_1_inner.find('.ask_image_crop_btn').addClass('on').attr('img-id', data.preview_img_id);
                       // 결과값 업데이트
-                      step_1_inner.find(".ask_image_seg").removeClass("required");
-                      step_3_inner.find(".ask_image.left").attr("src", data.image_url);
+                      step_1_inner.find('.ask_image_seg').removeClass('required');
+                      step_3_inner.find('.ask_image.left').attr('src', data.image_url);
         	        	} else {
-                      step_2_inner.find(".preview_img_id").val(data.preview_img_id);
-                      step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-                      step_2_inner.find(".ask_image_upload_btn").addClass("hidden");
-                      step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+                      step_2_inner.find('.preview_img_id').val(data.preview_img_id);
+                      step_2_inner.find('img').attr('src', data.image_url).animateCss('pulse');
+                      step_2_inner.find('.ask_image_upload_btn').addClass('hidden');
+                      step_2_inner.find('.ask_image_crop_btn').addClass('on').attr('img-id', data.preview_img_id);
                       // 결과값 업데이트
-                      step_2_inner.find(".ask_image_seg").removeClass("required");
-                      step_3_inner.find(".ask_image.right").attr("src", data.image_url);
+                      step_2_inner.find('.ask_image_seg').removeClass('required');
+                      step_3_inner.find('.ask_image.right').attr('src', data.image_url);
         	        	}
                     ask_progress_check();
                   },
@@ -505,7 +523,7 @@
                   },
                   complete: function(){
                     loadingEnd();
-                    if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
+                    if (check_tutorial('crop')) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
                     fileObj.replaceWith(fileObj.clone(true));
                   }
                 }).fail(function (data) {}).done(function () {});
@@ -523,7 +541,7 @@
     <div class="naver_product">
       {{ if (naver_deal_items !== null) { }}
         <table id="naver_deals_table" cellspacing="0" cellpadding="0">
-          {{= naverDealsTemplate({naver_deal_items: naver_deal_items}) }}
+          {{= naverDealsTemplate({ naver_deal_items: naver_deal_items }) }}
         </table>
         <div class="loading_icon"><i class="fa fa-spinner fa-spin"></i></div>
         <div class="naver_info hidden">
@@ -549,7 +567,7 @@
         item-image="{{= item.image }}"
         item-productId="{{= item.productId }}" >
       <td class="naver_product_image_seg">
-        <img src="{{=item.image}}">
+        <img src="{{= item.image }}">
       </td>
       <td class="naver_product_info_seg">
         <p class="mall">{{= item.mallName }}</p>
@@ -569,41 +587,41 @@
     var is_more_load = false;
     var is_left = options.is_left;
     var keyword = options.keyword;
-    var ask_form = $("#ask_form");
-    var ask_form_header_title = ask_form.find(".header_title");
-    var ask_form_back_btn = ask_form.find(".header_btn.left");
-    var ask_form_submit_btn = ask_form.find(".submit_btn");
-    var card_search_result_div = ask_form.find(".card_search_result");
+    var ask_form = $('#ask_form');
+    var ask_form_header_title = ask_form.find('.header_title');
+    var ask_form_back_btn = ask_form.find('.header_btn.left');
+    var ask_form_submit_btn = ask_form.find('.submit_btn');
+    var card_search_result_div = ask_form.find('.card_search_result');
 
     $.ajax({
-            url: '/deals/get_naver_deals/?page='+page+'&keyword='+encodeURIComponent(keyword),
-            dataType: "json",
-            type: "GET",
+            url: '/deals/get_naver_deals/?page=' + page + '&keyword=' + encodeURIComponent(keyword),
+            dataType: 'json',
+            type: 'GET',
             error: function(){
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data){
               var naver_deal_items = data.shop_result;
-              ask_form_header_title.html(keyword + " 검색결과");
-              ask_form_back_btn.html("닫기");
-              ask_form_submit_btn.addClass("hidden");
-              card_search_result_div.html(cardSearchResultTemplate({naver_deal_items: naver_deal_items})).removeClass("top");
+              ask_form_header_title.html(keyword + ' 검색결과');
+              ask_form_back_btn.html('닫기');
+              ask_form_submit_btn.addClass('hidden');
+              card_search_result_div.html(cardSearchResultTemplate({ naver_deal_items: naver_deal_items })).removeClass('top');
               if (naver_deal_items !== null) is_more_load = naver_deal_items.length >= <%= Deal::NAVER_RESULT_PER %> ? true : false;
               if (is_more_load) {
-                $("#card_search_result_list").on("scroll", function(){
-                  var loading = Boolean($(this).attr("loading"));
+                $('#card_search_result_list').on('scroll', function(){
+                  var loading = Boolean($(this).attr('loading'));
                   if (loading && nearBottomOfContainer($(this))) load_more_naver_deals($(this));
                 });
               } else {
-                card_search_result_div.find(".loading_icon").addClass("hidden");
-                card_search_result_div.find(".naver_info").removeClass("hidden");
+                card_search_result_div.find('.loading_icon').addClass('hidden');
+                card_search_result_div.find('.naver_info').removeClass('hidden');
               }
             },
             beforeSend: function(){
               loadingStart();
-              ask_form_header_title.html("검색중 <i class='fa fa-spinner fa-spin'></i>");
-              ask_form_back_btn.html("");
-              ask_form_submit_btn.addClass("hidden");
+              ask_form_header_title.html('검색중 <i class="fa fa-spinner fa-spin"></i>');
+              ask_form_back_btn.html('');
+              ask_form_submit_btn.addClass('hidden');
             },
             complete: function(){
               loadingEnd();
@@ -613,26 +631,26 @@
 
     function load_more_naver_deals(target) {
       $.ajax({
-              url: '/deals/get_naver_deals/?page='+page+'&keyword='+encodeURIComponent(keyword),
-              dataType: "json",
-              type: "GET",
+              url: '/deals/get_naver_deals/?page=' + page + '&keyword=' + encodeURIComponent(keyword),
+              dataType: 'json',
+              type: 'GET',
               error: function(){
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function(data){
                 var naver_deal_items = data.shop_result;
-                $("#naver_deals_table").append(naverDealsTemplate({naver_deal_items: naver_deal_items}));
+                $('#naver_deals_table').append(naverDealsTemplate({ naver_deal_items: naver_deal_items }));
                 is_more_load = (naver_deal_items !== null && naver_deal_items.length >= <%= Deal::NAVER_RESULT_PER %>) ? true : false;
                 if (is_more_load) {
-                  target.attr("loading", true);
+                  target.attr('loading', true);
                 } else {
-                  card_search_result_div.find(".loading_icon").addClass("hidden");
-                  card_search_result_div.find(".naver_info").removeClass("hidden");
+                  card_search_result_div.find('.loading_icon').addClass('hidden');
+                  card_search_result_div.find('.naver_info').removeClass('hidden');
                 }
               },
               beforeSend: function(){
                 loadingStart();
-                target.removeAttr("loading");
+                target.removeAttr('loading');
               },
               complete: function(){
                 loadingEnd();
@@ -643,84 +661,86 @@
   }
 
   function hide_card_search_result() {
-    var ask_form = $("#ask_form");
-    var ask_form_header_title = ask_form.find(".header_title");
-    var ask_form_back_btn = ask_form.find(".header_btn.left");
-    var ask_form_submit_btn = ask_form.find(".submit_btn");
-    var current_step = Number(ask_form_submit_btn.attr("step"));
-    var card_search_result_div = ask_form.find(".card_search_result");
-    var card_search_input_reset = ask_form.find(".card_search_input_reset");
-    var card_search_input = ask_form.find(".card_search_input");
-    ask_form_header_title.html("질문 작성하기");
-    if (current_step == 1) { ask_form_back_btn.html("취소"); } else { ask_form_back_btn.html("<i class='fa fa-caret-left'></i> 이전"); }
-    ask_form_submit_btn.removeClass("hidden");
-    card_search_result_div.addClass("top").transitionEmpty();
+    var ask_form = $('#ask_form');
+    var ask_form_header_title = ask_form.find('.header_title');
+    var ask_form_back_btn = ask_form.find('.header_btn.left');
+    var ask_form_submit_btn = ask_form.find('.submit_btn');
+    var current_step = Number(ask_form_submit_btn.attr('step'));
+    var card_search_result_div = ask_form.find('.card_search_result');
+    var card_search_input_reset = ask_form.find('.card_search_input_reset');
+    var card_search_input = ask_form.find('.card_search_input');
+    ask_form_header_title.html('질문 작성하기');
+    if (current_step == 1) { ask_form_back_btn.html('취소'); } else { ask_form_back_btn.html('<i class="fa fa-caret-left"></i> 이전'); }
+    ask_form_submit_btn.removeClass('hidden');
+    card_search_result_div.addClass('top').transitionEmpty();
   }
 
   function select_naver_product(target) {
-    var ask_form = $("#ask_form");
-    var card_search_input_init = ask_form.find(".card_search_input_init");
-    var is_left = Boolean(card_search_input_init.attr("is-left"));
-    var step_1_inner = ask_form.find(".inner.step_1");
-    var step_2_inner = ask_form.find(".inner.step_2");
-    var step_3_inner = ask_form.find(".inner.step_3");
-    var ask_form_header_title = ask_form.find(".header_title");
-    var ask_form_back_btn = ask_form.find(".header_btn.left");
+    var ask_form = $('#ask_form');
+    var card_search_input_init = ask_form.find('.card_search_input_init');
+    var is_left = Boolean(card_search_input_init.attr('is-left'));
+    var step_1_inner = ask_form.find('.inner.step_1');
+    var step_2_inner = ask_form.find('.inner.step_2');
+    var step_3_inner = ask_form.find('.inner.step_3');
+    var ask_form_header_title = ask_form.find('.header_title');
+    var ask_form_back_btn = ask_form.find('.header_btn.left');
 
     var item = {
-      'title':     target.attr("item-title"),
-      'productId': target.attr("item-productId"),
-      'lprice':    target.attr("item-lprice"),
-      'mallName':  target.attr("item-mallName"),
-      'image':     target.attr("item-image"),
-      'link':      target.attr("item-link")
+      'title':     target.attr('item-title'),
+      'productId': target.attr('item-productId'),
+      'lprice':    target.attr('item-lprice'),
+      'mallName':  target.attr('item-mallName'),
+      'image':     target.attr('item-image'),
+      'link':      target.attr('item-link')
     };
 
 		$.ajax({
-	        url: "/deals/create_by_naver.json",
-	        type: "POST",
-	        data: {item: item},
+	        url: '/deals/create_by_naver.json',
+	        type: 'POST',
+	        data: { item: item },
 	        error: function(){
 	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 	        },
 	        success: function(data){
 	        	if (is_left) {
-              step_1_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left, is_blank: false}));
-              step_1_inner.find(".deal_id").val(data.deal.id);
-              step_1_inner.find(".preview_img_id").val(data.preview_img_id);
-              step_1_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-              step_1_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+              step_1_inner.html(askFormCardTemplate({ ask_deal: data.deal, is_left: is_left, is_blank: false }));
+              step_1_inner.find('.deal_id').val(data.deal.id);
+              step_1_inner.find('.preview_img_id').val(data.preview_img_id);
+              step_1_inner.find('img').attr('src', data.image_url).animateCss('pulse');
+              step_1_inner.find('.ask_image_crop_btn').addClass('on').attr('img-id', data.preview_img_id);
               // 결과값 업데이트
-              step_3_inner.find(".ask_image.left").attr("src", data.image_url);
-              step_3_inner.find(".ask_table_row.title").find(".ask_table_cell.left").html(data.deal.title);
-              step_3_inner.find(".ask_table_row.brand").find(".ask_table_cell.left").html(data.deal.brand);
-              step_3_inner.find(".ask_table_row.price").find(".ask_table_cell.left").html(numberWithCommas(data.deal.price)+"원");
-              step_3_inner.find(".ask_table_row.link").find(".ask_table_cell.left").html(fieldWithLink(data.deal.link));
+              step_3_inner.find('.ask_image.left').attr('src', data.image_url);
+              step_3_inner.find('.ask_table_row.title').find('.ask_table_cell.left').html(data.deal.title);
+              step_3_inner.find('.ask_table_row.brand').find('.ask_table_cell.left').html(data.deal.brand);
+              step_3_inner.find('.ask_table_row.price').find('.ask_table_cell.left').html(numberWithCommas(data.deal.price) + '원');
+              step_3_inner.find('.ask_table_row.link').find('.ask_table_cell.left').html(fieldWithLink(data.deal.link));
+              ga('send', 'event', '질문작성탭', 'A 상품선택 완료', 1);
 	        	} else {
-              step_2_inner.html(askFormCardTemplate({ask_deal: data.deal, is_left: is_left, is_blank: false}));
-              step_2_inner.find(".deal_id").val(data.deal.id);
-              step_2_inner.find(".preview_img_id").val(data.preview_img_id);
-              step_2_inner.find("img").attr("src", data.image_url).animateCss("pulse");
-              step_2_inner.find(".ask_image_crop_btn").addClass("on").attr("img-id", data.preview_img_id);
+              step_2_inner.html(askFormCardTemplate({ ask_deal: data.deal, is_left: is_left, is_blank: false }));
+              step_2_inner.find('.deal_id').val(data.deal.id);
+              step_2_inner.find('.preview_img_id').val(data.preview_img_id);
+              step_2_inner.find('img').attr('src', data.image_url).animateCss('pulse');
+              step_2_inner.find('.ask_image_crop_btn').addClass('on').attr('img-id', data.preview_img_id);
               // 결과값 업데이트
-              step_3_inner.find(".ask_image.right").attr("src", data.image_url);
-              step_3_inner.find(".ask_table_row.title").find(".ask_table_cell.right").html(data.deal.title);
-              step_3_inner.find(".ask_table_row.brand").find(".ask_table_cell.right").html(data.deal.brand);
-              step_3_inner.find(".ask_table_row.price").find(".ask_table_cell.right").html(numberWithCommas(data.deal.price)+"원");
-              step_3_inner.find(".ask_table_row.link").find(".ask_table_cell.right").html(fieldWithLink(data.deal.link));
+              step_3_inner.find('.ask_image.right').attr('src', data.image_url);
+              step_3_inner.find('.ask_table_row.title').find('.ask_table_cell.right').html(data.deal.title);
+              step_3_inner.find('.ask_table_row.brand').find('.ask_table_cell.right').html(data.deal.brand);
+              step_3_inner.find('.ask_table_row.price').find('.ask_table_cell.right').html(numberWithCommas(data.deal.price) + '원');
+              step_3_inner.find('.ask_table_row.link').find('.ask_table_cell.right').html(fieldWithLink(data.deal.link));
+              ga('send', 'event', '질문작성탭', 'B 상품선택 완료', 1);
 	        	}
             ask_progress_check();
 					},
 					beforeSend: function(){
 						loadingStart();
-            ask_form_header_title.html("제품정보 업로드중 <i class='fa fa-spinner fa-spin'></i>");
-            ask_form_back_btn.html("");
-            target.addClass("selected");
+            ask_form_header_title.html('제품정보 업로드중 <i class="fa fa-spinner fa-spin"></i>');
+            ask_form_back_btn.html('');
+            target.addClass('selected');
 					},
 					complete: function(){
             loadingEnd();
             history.back();
-            if (localStorage.tutorial === undefined || localStorage.tutorial.match("crop") === null) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
+            if (check_tutorial('crop')) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
 					}
 		});
   }
@@ -734,8 +754,8 @@
   <div class="ask ask_detail">
     <div class="clearfix">
       <div class="ask_image_box clearfix is_voting">
-        <img class="ask_image left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
-        <img class="ask_image right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+        <img class="ask_image left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
+        <img class="ask_image right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
       </div>
     </div>
     <div class="clearfix">
@@ -750,24 +770,24 @@
         <i class="ask_table_icon vaskit_icon brand"></i>
       </div>
       <div class="ask_table_row price">
-        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.price != "" && ask.left_ask_deal.price != null) ? numberWithCommas(ask.left_ask_deal.price)+"원" : '입력해주세요' }}</span>
-        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.price != "" && ask.right_ask_deal.price != null) ? numberWithCommas(ask.right_ask_deal.price)+"원" : '입력해주세요' }}</span>
+        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.price != "" && ask.left_ask_deal.price != null) ? numberWithCommas(ask.left_ask_deal.price) + '원' : '입력해주세요' }}</span>
+        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.price != "" && ask.right_ask_deal.price != null) ? numberWithCommas(ask.right_ask_deal.price) + '원' : '입력해주세요' }}</span>
         <i class="ask_table_icon vaskit_icon price"></i>
       </div>
       <div class="ask_table_row link">
-        {{ var aLink = document.createElement("a") }}
-        {{ if (ask.left_ask_deal.link != "" && ask.left_ask_deal.link != null) { }}
+        {{ var aLink = document.createElement('a') }}
+        {{ if (ask.left_ask_deal.link != '' && ask.left_ask_deal.link != null) { }}
           {{ aLink.href = ask.left_ask_deal.link }}
           <span class="ask_table_cell left text_box_short"><a href="{{= aLink.href }}" target="_blank">{{= fieldWithBlank(aLink.host) }}</a></span>
         {{ } else { }}
-          <span class="ask_table_cell left text_box_short">{{= "입력해주세요" }}</span>
+          <span class="ask_table_cell left text_box_short">{{= '입력해주세요' }}</span>
         {{ } }}
-        {{ var bLink = document.createElement("a") }}
-        {{ if (ask.right_ask_deal.link != "" && ask.right_ask_deal.link != null) { }}
+        {{ var bLink = document.createElement('a') }}
+        {{ if (ask.right_ask_deal.link != '' && ask.right_ask_deal.link != null) { }}
           {{ bLink.href = ask.right_ask_deal.link }}
           <span class="ask_table_cell left text_box_short"><a href="{{= bLink.href }}" target="_blank">{{= fieldWithBlank(bLink.host) }}</a></span>
         {{ } else { }}
-          <span class="ask_table_cell right text_box_short">{{= "입력해주세요" }}</span>
+          <span class="ask_table_cell right text_box_short">{{= '입력해주세요' }}</span>
         {{ } }}
         <i class="ask_table_icon vaskit_icon link"></i>
       </div>
@@ -861,40 +881,41 @@
   var askFormCardResultTemplate = _.template($('#askFormCardResultTemplate').html());
 
   function add_more_spec(target) {
-    var input_container = target.parentsUntil(this, ".input_container");
-    var input_length_index = (input_container.find(".input_div.spec:visible").length) / 3 + 1;
-    input_container.find(".input_div.spec.spec_" + input_length_index).removeClass("hidden");
-    if (input_length_index == 3) target.addClass("hidden");
+    var input_container = target.parentsUntil(this, '.input_container');
+    var input_length_index = (input_container.find('.input_div.spec:visible').length) / 3 + 1;
+    input_container.find('.input_div.spec.spec_' + input_length_index).removeClass('hidden');
+    if (input_length_index == 3) target.addClass('hidden');
+    ga('send', 'event', '질문작성탭', 'C 추가정보 입력 활성화', 1);
   }
 
   function ask_form_message_input_init(target) {
-    var ask_form_message_input = target.find(".ask_message_input");
-    var hashtag_container = target.find(".hashtag_container");
-    var hashtag_highlights = target.find(".hashtag_highlights");
-    var hashtag_backdrop = target.find(".hashtag_backdrop");
+    var ask_form_message_input = target.find('.ask_message_input');
+    var hashtag_container = target.find('.hashtag_container');
+    var hashtag_highlights = target.find('.hashtag_highlights');
+    var hashtag_backdrop = target.find('.hashtag_backdrop');
 
-    var ask_form = $("#ask_form");
-    var all_inners = ask_form.find(".inner");
-    var current_step = Number(ask_form.find(".submit_btn").attr("step"));
-    var current_inner = ask_form.find(".inner.step_"+current_step);
-    all_inners.find(".input.text_field").attr('disabled', true);
-    current_inner.find(".input.text_field").removeAttr('disabled');
+    var ask_form = $('#ask_form');
+    var all_inners = ask_form.find('.inner');
+    var current_step = Number(ask_form.find('.submit_btn').attr('step'));
+    var current_inner = ask_form.find('.inner.step_' + current_step);
+    all_inners.find('.input.text_field').attr('disabled', true);
+    current_inner.find('.input.text_field').removeAttr('disabled');
 
     ask_form_message_input
-      .off("input scroll focus blur")
-      .on("input", _.throttle(function(e) {
+      .off('input scroll focus blur')
+      .on('input', _.throttle(function(e) {
         hashtagInput($(this));
       }, 100))
-      .on("scroll", function(e) {
+      .on('scroll', function(e) {
         hashtagScroll($(this));
       })
-      .on("focus", function(e) {
+      .on('focus', function(e) {
         removeIOSKeyPadEffectOnFocus(e);
         current_inner.scroll_to(true);
-        hashtag_container.addClass("on");
-      }).on("blur", function(e) {
+        hashtag_container.addClass('on');
+      }).on('blur', function(e) {
         removeIOSKeyPadEffectOnBlur(e);
-        hashtag_container.removeClass("on");
+        hashtag_container.removeClass('on');
         $(this).attr('disabled', true);
       })
       .removeAttr('disabled').focus();

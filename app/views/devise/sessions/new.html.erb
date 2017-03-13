@@ -1,6 +1,7 @@
 <script>
   $(window).ready(function(){
     go_url('landing');
+    ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 로그인탭 클릭', 1);
   }).load(function(){
     go_url('sign_in');
   });

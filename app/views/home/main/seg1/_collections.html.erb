@@ -1,15 +1,15 @@
 <script type="text/template" id="collectionTemplate">
-  <a href="/collections/{{=collection.id}}" class="clearfix collection_thumbnail contents_box" onclick="go_url('collection', {{=collection.id}}); return false;">
+  <a href="/collections/{{= collection.id }}" class="clearfix collection_thumbnail contents_box" onclick="go_url('collection', {{= collection.id }}); return false;">
     <div class="collection_title">
       <p class="collection_description">{{= collection.description }}</p>
       <p class="collection_name">{{= collection.name }}</p>
     </div>
-    <img class="collection_image" src="{{=get_image_url(collection, 'collections', 'original')}}" alt="" onerror="imgError(this);">
+    <img class="collection_image" src="{{= get_image_url(collection, 'collections', 'original') }}" alt="" onerror="imgError(this);">
   </a>
 </script>
 
 <script type="text/template" id="collectionShowTemplate">
-  <div class="collection_detail" style="background-image: url('{{=get_image_url(collection, 'collections', 'original')}}');">
+  <div class="collection_detail" style="background-image: url('{{= get_image_url(collection, 'collections', 'original') }}');">
     <div class="collection_title">
       <p class="collection_description">{{= collection.description }}</p><br>
       <p class="collection_name">{{= collection.name }}</p>
@@ -25,7 +25,7 @@
     <div class="clearfix">
       {{ for (var i=0; i < asks.length; i++) { }}
         {{ var ask = asks[i] }}
-        {{= askThumbnailTemplate({ask:ask}) }}
+        {{= askThumbnailTemplate({ ask: ask }) }}
       {{ } }}
     </div>
     {{ if (related_collections.length > 0) { }}
@@ -34,61 +34,63 @@
         <div class="clearfix contents_box bxslider">
           {{ for (var j=0; j < related_collections.length; j++) { }}
             {{ var related_collection = related_collections[j] }}
-            {{= collectionTemplate({collection: related_collection}) }}
+            {{= collectionTemplate({ collection: related_collection }) }}
           {{ } }}
         </div>
       </div>
     {{ } else { }}
-      {{= recentAsksTemplate({asks: recent_asks}) }}
+      {{= recentAsksTemplate({ asks: recent_asks }) }}
     {{ } }}
   </div>
 </script>
 
 <script>
-  var collectionTemplate = _.template($("#collectionTemplate").html());
-  var collectionShowTemplate = _.template($("#collectionShowTemplate").html());
+  var collectionTemplate = _.template($('#collectionTemplate').html());
+  var collectionShowTemplate = _.template($('#collectionShowTemplate').html());
 
   function set_collections() {
     $.ajax({
-            url: "/collections",
-            dataType: "json",
-            type: "GET",
-            error: function(){
-              return false;
+            url: '/collections',
+            dataType: 'json',
+            type: 'GET',
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
+            success: function(data) {
               var collections = data.collections;
               for (var i=0; i < collections.length; i++) {
                 var collection = collections[i];
-                $("#collections_seg").find(".loading_icon").before(collectionTemplate({collection: collection}));
+                $('#collections_seg').find('.loading_icon').before(collectionTemplate({ collection: collection }));
               }
             },
-            beforeSend: function(){
+            beforeSend: function() {
             },
-            complete: function(){
+            complete: function() {
             }
     });
   }
 
   function show_collection(collection_id) {
-    var url = "/collections/"+collection_id;
+    var url = '/collections/' + collection_id;
     $.ajax({
             url: url,
-            dataType: "json",
-            type: "GET",
-            data: {id: collection_id},
-            error: function(){
-              return false;
+            dataType: 'json',
+            type: 'GET',
+            data: { id: collection_id },
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
+            success: function(data) {
               var collection = data.collection;
               var asks = data.asks;
               var related_collections = data.related_collections;
               var recent_asks = data.recent_asks;
-              var html = collectionShowTemplate({collection: collection, asks: asks, related_collections: related_collections, recent_asks: recent_asks});
+              var html = collectionShowTemplate({ collection: collection, asks: asks, related_collections: related_collections, recent_asks: recent_asks });
               create_wrapper(html);
-              var current_wrapper = $("#main_view").find(".seg.on").find(".wrapper").last();
-              current_wrapper.find(".bxslider").bxSlider({
+              if (currentSeg === 1 && segHistory[currentSeg] === 1) ga('send', 'event', '컬렉션탭', '컬렉션', 1);
+              ga('send', 'event', '컨텐츠', '컬렉션', collection_id, 1);
+              var current_wrapper = $('#main_view').find('.seg.on').find('.wrapper').last();
+              current_wrapper.find('.bxslider').bxSlider({
                 controls: false
               });
             },
@@ -107,17 +109,17 @@
   }
 
   function animate_collection_image(target) {
-    var current_wrapper = target.parentsUntil(this, ".wrapper");
-    var img = current_wrapper.find(".collection_detail");
+    var current_wrapper = target.parentsUntil(this, '.wrapper');
+    var img = current_wrapper.find('.collection_detail');
     var st = target.scrollTop();
     var vh = target.innerHeight();
     var scale = 1;
     if (st < 0) {
       scale = -(st / vh) * 2 + 1;
-      img.clearQueue().css({transformOrigin: "top center", transform: "scale(" + scale + ")"});
+      img.clearQueue().css({ transformOrigin: 'top center', transform: 'scale(' + scale + ')' });
     } else {
       scale = (st / vh) * 1.2 + 1;
-      img.clearQueue().css({transformOrigin: "bottom center", transform: "scale(" + scale + ")"});
+      img.clearQueue().css({ transformOrigin: 'bottom center', transform: 'scale(' + scale + ')' });
     }
   }
 </script>

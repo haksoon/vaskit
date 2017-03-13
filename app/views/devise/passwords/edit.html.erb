@@ -1,17 +1,17 @@
 <script type="text/template" id="password_reset_template">
-  <%= form_for(:user, url: password_path(:user), remote: true, :html => { :id => "password_reset_form", method: :put, style: "height: 100%;", :onkeyup => "form_check($(this));", :onchange => "form_check($(this));" }) do |f| %>
+  <%= form_for(:user, url: password_path(:user), remote: true, :html => { :id => 'password_reset_form', method: :put, style: 'height: 100%;', :onkeyup => 'form_check($(this));', :onchange => 'form_check($(this));' }) do |f| %>
     <div class="container top">
       <span class="header_title">비밀번호 재설정</span>
       <span class="header_btn left back_btn" onclick="login_back();"><i class="fa fa-angle-left"></i></span>
       <span class="header_btn right submit_btn" onclick="password_reset();">완료</span>
     </div>
     <div class="container main">
-      <div style="position:relative; height:50px; margin-bottom:10px;">
-        <%= f.password_field :password, :autocomplete => "off", :placeholder => "새로운 비밀번호 설정 (8자리 이상)", :class => "input text_field right landing", :required => true, :onkeyup => "password_check($(this));", :onblur => "password_check($(this));" %>
+      <div class="input_div">
+        <%= f.password_field :password, :autocomplete => 'off', :placeholder => '새로운 비밀번호 설정 (8자리 이상)', :class => 'input text_field right landing', :required => true, :onkeyup => 'password_check($(this));', :onblur => 'password_check($(this));' %>
         <span class="input btn_field right checker"><i class="fa fa-unlock-alt"></i></span>
       </div>
-      <div style="position:relative; height:50px; margin-bottom:10px;">
-        <%= f.password_field :password_confirmation, :autocomplete => "off", :placeholder => "비밀번호 확인", :class => "input text_field right landing", :required => true, :onkeyup => "password_confirm_check($(this));", :onblur => "password_confirm_check($(this));" %>
+      <div class="input_div">
+        <%= f.password_field :password_confirmation, :autocomplete => 'off', :placeholder => '비밀번호 확인', :class => 'input text_field right landing', :required => true, :onkeyup => 'password_confirm_check($(this));', :onblur => 'password_confirm_check($(this));' %>
         <span class="input btn_field right checker"><i class="fa fa-keyboard-o"></i></span>
       </div>
     </div>
@@ -21,20 +21,21 @@
 
 <script>
   var passwordResetTemplate = _.template($('#password_reset_template').html());
-  var reset_password_token = document.location.search.replace("?reset_password_token=","");
+  var reset_password_token = document.location.search.replace('?reset_password_token=', '');
 
   $(window).ready(function(){
     go_url('landing');
+    ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '패스워드 재설정', 1);
   }).load(function(){
     go_url('sign_in');
     go_url('reset_password', reset_password_token);
   });
 
   function show_reset_password(reset_password_token) {
-    $("#login_page").addClass("prev");
-    $("#login_page_sub").html(passwordResetTemplate()).removeClass("next");
-    $("#user_reset_password_token").val(reset_password_token);
-    $("#password_reset_form input").keypress(function(e) {
+    $('#login_page').addClass('prev');
+    $('#login_page_sub').html(passwordResetTemplate()).removeClass('next');
+    $('#user_reset_password_token').val(reset_password_token);
+    $('#password_reset_form input').keypress(function(e) {
       if (e.keyCode == '13') {
         e.preventDefault();
         $(this).blur();
@@ -50,23 +51,23 @@
   }
 
   function password_reset() {
-    var user = $("#password_reset_form").serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    var user = $('#password_reset_form').serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
     $.ajax({
             url: '/users/password.json',
             type: 'PUT',
-            data: {data: user},
+            data: { data: user },
             error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
-              if (data.status === "not_enough_password") {
-                notify("비밀번호는 8자 이상 입력해주세요");
-                $("#password_reset_form #user_password").val("").focus();
-              } else if (data.status === "password_confirm_error") {
-                notify("비밀번호를 다시 확인해주세요");
-                $("#password_reset_form #user_password_confirmation").val("").focus();
-              } else if (data.status === "success") {
-                notify(data.string_id + "님, 어서오세요!");
+              if (data.status === 'not_enough_password') {
+                notify('비밀번호는 8자 이상 입력해주세요');
+                $('#password_reset_form #user_password').val('').focus();
+              } else if (data.status === 'password_confirm_error') {
+                notify('비밀번호를 다시 확인해주세요');
+                $('#password_reset_form #user_password_confirmation').val('').focus();
+              } else if (data.status === 'success') {
+                notify(data.string_id + '님, 어서오세요!');
                 alarm_check();
                 login_success(3);
                 user_profile_on();

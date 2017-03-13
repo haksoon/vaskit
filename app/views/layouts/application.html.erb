@@ -27,7 +27,7 @@
       t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
       document,'script','https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '521318198062554');
-      fbq('track', "PageView");
+      fbq('track', 'PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=521318198062554&ev=PageView&noscript=1"/></noscript>
     <!-- End of Facebook Pixel Code -->
@@ -35,7 +35,7 @@
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-7943066969350292",
+        google_ad_client: 'ca-pub-7943066969350292',
         enable_page_level_ads: true
       });
     </script>
@@ -63,8 +63,8 @@
         href = window.location.href;
         obj = obj === null ? 'obj is null' : obj.stack;
         $.ajax({
-              url: "/log_errors.json",
-              type: "POST",
+              url: '/log_errors.json',
+              type: 'POST',
               data: { msg: msg, url: url, line: line, col: col, href: href, obj: obj }
         });
         return false;
@@ -72,7 +72,7 @@
 
       window.addEventListener('resize', _.debounce(function(){
         var th = window.innerHeight;
-        $("html, body").css({height: th});
+        $('html, body').css({ height: th });
         window.scrollTo(0,0);
       }, 50));
 
@@ -82,12 +82,12 @@
         loadingStart();
         setUserDevice();
         alarm_check();
-        history.replaceState({pageHistory:currentHistory}, null, null);
-        $(window).unbind("popstate").bind("popstate", go_popstate);
+        history.replaceState({ pageHistory:currentHistory }, null, null);
+        $(window).unbind('popstate').bind('popstate', go_popstate);
 
-        $("#collections").html(collectionsTemplate()); // seg1 초기화
-        $("#search").html(searchTemplate()); // seg2 초기화
-        $("#my_page").html(myPageTemplate()); // seg4 초기화
+        $('#collections').html(collectionsTemplate()); // seg1 초기화
+        $('#search').html(searchTemplate()); // seg2 초기화
+        $('#my_page').html(myPageTemplate()); // seg4 초기화
         go_seg(1); // 기본화면 초기화
       }).load(function(){
         set_collections();
@@ -97,11 +97,11 @@
         loadingEnd();
         setTimeout(function(){
           fixViewportHeight();
-          $("#loading_spinner").animateCssRemove("fadeOut");
-          $("#loading_welcome").animateCssRemove("slideOutLeft", function(){
+          $('#loading_spinner').animateCssRemove('fadeOut');
+          $('#loading_welcome').animateCssRemove('slideOutLeft', function(){
             setTimeout(function(){
-              $("#loading_init").animateCssRemove("fadeOutDownBig", function(){
-                $(".loading_div").removeAttr("ontouchmove");
+              $('#loading_init').animateCssRemove('fadeOutDownBig', function(){
+                $('.loading_div').removeAttr('ontouchmove');
                 open_app_banner();
               });
             }, 50);
@@ -127,9 +127,9 @@
       <div id="footer" class="layout footer" ontouchmove="return false;">
         <a href="/collections" class="tab seg1" onclick="go_seg(1); return false;"><i class="tab_icon vaskit_icon"></i></a>
         <a href="/search" class="tab seg2" onclick="go_seg(2); return false;"><i class="tab_icon vaskit_icon"></i></a>
-        <a href="/asks/new" class="tab seg3" onclick="if (visitor_check() === undefined) go_url('ask_form'); return false;"><i class="tab_icon vaskit_icon"></i></a>
+        <a href="/asks/new" class="tab seg3" onclick="if (visitor_check()) { ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 질문작성탭 진입', 1); } else { go_url('ask_form'); } return false;"><i class="tab_icon vaskit_icon"></i></a>
         <a id="my_tab" href="/users" class="tab seg4" onclick="go_seg(4); return false;"><i class="tab_icon vaskit_icon"></i><i id="my_badge" class="tab_badge animated swing"></i></a>
-        <a id="login_tab" href="/landing" class="tab login" onclick="go_url('landing'); return false;"><i class="tab_icon vaskit_icon"></i></a>
+        <a id="login_tab" href="/landing" class="tab login" onclick="ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 로그인탭 클릭', 1); go_url('landing'); return false;"><i class="tab_icon vaskit_icon"></i></a>
       </div>
       <div id="loading_init" class="viewer full">
         <div class="align_middle">

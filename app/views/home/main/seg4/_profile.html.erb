@@ -1,17 +1,17 @@
 <script type="text/template" id="userProfileTemplate">
   <div class="profile_div">
-    <a class="profile_edit_btn {{= get_avatar(user) == '/images/custom/user_profile_preview.png' ? 'on' : '' }}" href="/users/settings/edit_profile" onclick="go_url('edit_profile'); return false;"><i class="fa fa-camera"></i></a>
+    <a class="profile_edit_btn {{= get_avatar(user) == '/images/custom/user_profile_preview.png' ? 'on' : '' }}" href="/users/settings/edit_profile" onclick="ga('send', 'event', '마이탭', '프로필 이미지', '{{= current_user.string_id }}', 1); go_url('edit_profile'); return false;"><i class="fa fa-camera"></i></a>
     <img id="user_profile_pic" class="profile_pic" src="{{= get_avatar(user) }}">
   </div>
   <div class="profile_title">
     <i class="vaskit_icon user_icon"></i>
-    <span class="user_id">{{=user.string_id}}</span>'s profile
-    <a class="setting_btn" href="/users/settings" onclick="go_url('settings'); return false;"><i class="vaskit_icon setting_icon"></i> 설정</a>
+    <span class="user_id">{{= user.string_id }}</span>'s profile
+    <a class="setting_btn" href="/users/settings" onclick="ga('send', 'event', '마이탭', '설정화면 오픈', '{{= current_user.string_id }}', 1); go_url('settings'); return false;"><i class="vaskit_icon setting_icon"></i> 설정</a>
   </div>
   <div class="my_history_div clearfix">
     <a class="my_history_btn my_asks_in_progress" href="/users/history?type=my_asks_in_progress" onclick="go_url('user_history', 'my_asks_in_progress'); return false;">
       <span class="my_history_type"><i class="fa fa-caret-right"></i> 진행중인 질문</span>
-      <span class="my_history_count"><small>전체보기</small> {{=my_asks_in_progress_count}} 개</span>
+      <span class="my_history_count"><small>전체보기</small> {{= my_asks_in_progress_count }} 개</span>
     </a>
     <div id="my_asks_in_progress">
       <div class="no_result"><p class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></p></div>
@@ -20,40 +20,40 @@
   <div class="my_history_div clearfix">
     <a class="my_history_btn my_completed_asks" href="/users/history?type=my_completed_asks" onclick="go_url('user_history', 'my_completed_asks'); return false;">
       <span class="my_history_type"><i class="fa fa-caret-right"></i> 종료한 질문</span>
-      <span class="my_history_count">{{=my_completed_asks_count}} 개</span>
+      <span class="my_history_count">{{= my_completed_asks_count }} 개</span>
     </a>
     <a class="my_history_btn my_likes" href="/users/history?type=my_likes" onclick="go_url('user_history', 'my_likes'); return false;">
       <span class="my_history_type"><i class="fa fa-caret-right"></i> 공감한 질문</span>
-      <span class="my_history_count">{{=my_likes_count}} 개</span>
+      <span class="my_history_count">{{= my_likes_count }} 개</span>
     </a>
     <a class="my_history_btn my_votes" href="/users/history?type=my_votes" onclick="go_url('user_history', 'my_votes'); return false;">
       <span class="my_history_type"><i class="fa fa-caret-right"></i> 참여한 투표</span>
-      <span class="my_history_count">{{=my_votes_count}} 개</span>
+      <span class="my_history_count">{{= my_votes_count }} 개</span>
     </a>
     <a class="my_history_btn my_comments" href="/users/history?type=my_comments" onclick="go_url('user_history', 'my_comments'); return false;">
       <span class="my_history_type"><i class="fa fa-caret-right"></i> 제시한 의견</span>
-      <span class="my_history_count">{{=my_comments_count}} 개</span>
+      <span class="my_history_count">{{= my_comments_count }} 개</span>
     </a>
   </div>
 </script>
 
 <script>
-  var userProfileTemplate = _.template($("#userProfileTemplate").html());
+  var userProfileTemplate = _.template($('#userProfileTemplate').html());
 
   function user_profile_on() {
     $.ajax({
-        url: "/users/get_user_profile.json",
+        url: '/users/get_user_profile.json',
         dataType: 'json',
-        type: "GET",
+        type: 'GET',
         error: function(){
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
         success: function(data){
           current_user = data.current_user;
           if (current_user === null) {
-            $("#user_profile").html("");
+            $('#user_profile').html('');
           } else {
-            $("#user_profile").html(userProfileTemplate({
+            $('#user_profile').html(userProfileTemplate({
               user: current_user,
               my_asks_in_progress_count: data.my_asks_in_progress_count,
               my_completed_asks_count: data.my_completed_asks_count,
@@ -69,9 +69,9 @@
 
   function get_my_recent_ask() {
     $.ajax({
-        url: "/users/get_my_recent_ask.json",
+        url: '/users/get_my_recent_ask.json',
         dataType: 'json',
-        type: "GET",
+        type: 'GET',
         error: function(){
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
@@ -81,16 +81,19 @@
             my_ask.ask_likes = [];
             my_ask.votes = [];
             my_ask.user = current_user;
-            $("#my_asks_in_progress").html(askThumbnailTemplate({ask: my_ask}));
+            $('#my_asks_in_progress').html(askThumbnailTemplate({ ask: my_ask })).children().on("click", function(){
+              ga('send', 'event', '마이탭', '나의 최근 질문', current_user.string_id, 1);
+            });
           } else {
-            var empty_html = "<div class='no_result'><p class='align_middle'><i class='fa fa-search'></i> 현재 진행중인 질문 목록이 없습니다 <a id='new_ask_btn' class='new_ask_btn' href='/asks/new'>질문 작성하러 가기 <i class='fa fa-forward'></i></a></p></div>";
-            $("#my_asks_in_progress").html(empty_html);
-            $("#new_ask_btn").on("click", function(){ go_url('ask_form'); return false; });
+            var empty_html = '<div class="no_result"><p class="align_middle"><i class="fa fa-search"></i> 현재 진행중인 질문 목록이 없습니다<a class="new_ask_btn" href="/asks/new">질문 작성하러 가기 <i class="fa fa-forward"></i></a></p></div>';
+            $('#my_asks_in_progress').html(empty_html).children().on('click', function(){
+              go_url('ask_form'); return false;
+            });
           }
         },
         beforeSend: function(){
-          var loading_html = "<div class='no_result'><p class='align_middle'>불러오는 중 <i class='fa fa-spinner fa-spin'></i></p></div>";
-          $("#my_asks_in_progress").html(loading_html);
+          var loading_html = '<div class="no_result"><p class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></p></div>';
+          $('#my_asks_in_progress').html(loading_html);
         }
     });
   }
@@ -99,38 +102,40 @@
 <script type="text/template" id="userHistoryTemplate">
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">
-      {{ if (type == "my_asks_in_progress") { }}
-        진행중인 질문
-  		{{ } else if (type == "my_completed_asks") { }}
-        종료한 질문
-  	  {{ } else if (type == "my_likes") { }}
-        공감한 질문
-  		{{ } else if (type == "my_votes") { }}
-        참여한 투표
-      {{ } else if (type == "my_comments") { }}
-        제시한 의견
+      {{ if (type == 'my_asks_in_progress') { }}
+        {{ type = '진행중인 질문' }}
+  		{{ } else if (type == 'my_completed_asks') { }}
+        {{ type = '종료한 질문' }}
+  	  {{ } else if (type == 'my_likes') { }}
+        {{ type = '공감한 질문' }}
+  		{{ } else if (type == 'my_votes') { }}
+        {{ type = '참여한 투표' }}
+      {{ } else if (type == 'my_comments') { }}
+        {{ type = '제시한 의견' }}
   		{{ } }}
+      {{= type }}
+      {{ ga('send', 'event', '마이탭', type, current_user.string_id, 1) }}
     </span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
   </div>
-  {{= asksListTemplate({asks: asks, url: url}) }}
+  {{= asksListTemplate({ asks: asks, url: url }) }}
 </script>
 
 <script>
-  var userHistoryTemplate = _.template($("#userHistoryTemplate").html());
+  var userHistoryTemplate = _.template($('#userHistoryTemplate').html());
 
   function show_user_history(type) {
     var url = '/users/history';
     $.ajax({
             url: url,
-            dataType: "json",
-            type: "GET",
-            data: {type: type},
+            dataType: 'json',
+            type: 'GET',
+            data: { type: type },
             error: function(){
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data){
-              var html = userHistoryTemplate({type:type, asks:data.asks, url:url});
+              var html = userHistoryTemplate({ type: type, asks: data.asks, url: url });
               create_wrapper(html);
             },
             beforeSend: function(){
@@ -140,7 +145,7 @@
               loadingEnd();
             }
     });
-    url = url + '?type='+encodeURIComponent(type);
+    url = url + '?type=' + encodeURIComponent(type);
     return url;
   }
 

@@ -11,39 +11,41 @@
 </script>
 
 <script>
-  var myPageTemplate = _.template($("#myPageTemplate").html());
+  var myPageTemplate = _.template($('#myPageTemplate').html());
 
   function open_user_profile() {
-    if ($("#user_tab_profile").hasClass("on")) {
-      $("#user_profile").css("-webkit-overflow-scrolling", "initial").animate({scrollTop:0}, 250, function(){
-        $(this).css("-webkit-overflow-scrolling", "touch");
+    if ($('#user_tab_profile').hasClass('on')) {
+      $('#user_profile').css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: 0 }, 250, function(){
+        $(this).css('-webkit-overflow-scrolling', 'touch');
         user_profile_on();
       });
     } else {
-      $("#user_profile").removeClass("prev");
-      $("#user_alarm").addClass("next");
-      $("#user_tab_profile").addClass("on");
-      $("#user_tab_alarm").removeClass("on");
-      $("#user_tab_active").removeClass("right");
+      $('#user_profile').removeClass('prev');
+      $('#user_alarm').addClass('next');
+      $('#user_tab_profile').addClass('on');
+      $('#user_tab_alarm').removeClass('on');
+      $('#user_tab_active').removeClass('right');
+      ga('send', 'event', '마이탭', '내 정보 탭 오픈', current_user.string_id, 1);
     }
   }
 
   function open_user_alarms() {
-    if ($("#user_tab_alarm").hasClass("on")) {
-      $("#alarm_list").css("-webkit-overflow-scrolling", "initial").animate({scrollTop:0}, 250, function(){
-        $(this).css("-webkit-overflow-scrolling", "touch");
+    if ($('#user_tab_alarm').hasClass('on')) {
+      $('#alarm_list').css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: 0 }, 250, function(){
+        $(this).css('-webkit-overflow-scrolling', 'touch');
         user_alarms_on();
       });
     } else {
-      $("#user_profile").addClass("prev");
-      $("#user_alarm").removeClass("next");
-      $("#user_tab_profile").removeClass("on");
-      $("#user_tab_alarm").addClass("on");
-      $("#user_tab_active").addClass("right");
+      $('#user_profile').addClass('prev');
+      $('#user_alarm').removeClass('next');
+      $('#user_tab_profile').removeClass('on');
+      $('#user_tab_alarm').addClass('on');
+      $('#user_tab_active').addClass('right');
+      ga('send', 'event', '마이탭', '내 소식 탭 오픈', current_user.string_id, 1);
     }
   }
 </script>
 
-<%= render partial: "home/main/seg4/profile" %>
-<%= render partial: "home/main/seg4/alarm" %>
-<%= render partial: "home/main/seg4/settings" %>
+<%= render partial: 'home/main/seg4/profile' %>
+<%= render partial: 'home/main/seg4/alarm' %>
+<%= render partial: 'home/main/seg4/settings' %>

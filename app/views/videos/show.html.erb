@@ -1,5 +1,9 @@
 <script>
   $(window).load(function(){
-    if (visitor_check() === undefined) go_url('video_ask', <%= @video.id %>);
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 비교영상 진입', 1);
+    } else {
+      go_url('video_ask', <%= @video.id %>);
+    }
   });
 </script>

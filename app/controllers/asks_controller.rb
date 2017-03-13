@@ -7,8 +7,7 @@ class AsksController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        asks = Ask.where(be_completed: false)
-                  .where.not(id: 1959) # 이벤트
+        asks = Ask.where.not(id: 1959) # 이벤트
                   .page(params[:page])
                   .per(Ask::ASK_PER)
                   .order(id: :desc)

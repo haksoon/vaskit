@@ -8,15 +8,15 @@
         <span class="header_btn right ask_edit_btn" onclick="go_url('ask_form', {{= ask.id }});"><i class="fa fa-edit"></i></span>
       {{ } }}
     {{ } else { }}
-      <span class="header_btn right ask_like_btn" onclick="like_ask({{= ask.id }});"><i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i></span>
+      <span class="header_btn right ask_like_btn" onclick="like_ask({{= ask.id }});"><i class="vaskit_icon {{= already_like ? 'is_liked' : '' }} ask_like_icon"></i></span>
     {{ } }}
   </div>
   <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
-    {{= askDetailBodyTemplate({ask: ask, already_like: already_like}) }}
-    {{= commentListTemplate({ask: ask, like_comments: like_comments}) }}
+    {{= askDetailBodyTemplate({ ask: ask, already_like: already_like }) }}
+    {{= commentListTemplate({ ask: ask, like_comments: like_comments }) }}
   </div>
-  {{= commentInputTemplate({ask: ask}) }}
-  {{= askImgViewTemplate({ask: ask, like_comments: like_comments}) }}
+  {{= commentInputTemplate({ ask: ask }) }}
+  {{= askImgViewTemplate({ ask: ask, like_comments: like_comments }) }}
 </script>
 
 <script type="text/template" id="askDetailBodyTemplate">
@@ -38,7 +38,7 @@
   {{ } else { }}
     {{ var my_votes = [] }}
     {{ var votes = $.cookie('visitor_votes') }}
-    {{ var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".") }}
+    {{ var votes_array = (votes == null || votes == '') ? new Array() : votes.split('.') }}
     {{ for (var i=0; i < votes_array.length; i++) { }}
       {{ var vote = votes_array[i] }}
       {{ vote = JSON.parse(vote) }}
@@ -60,8 +60,8 @@
         <i class="fa fa-angle-left ask_image_background"></i>
         <span class="ask_image_background cancel">&times;</span>
         <i class="fa fa-angle-right ask_image_background"></i>
-        <img class="ask_image left" src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" onclick="go_url('ask_image', $(this));">
-        <img class="ask_image right" src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);" onclick="go_url('ask_image', $(this));">
+        <img class="ask_image left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);" onclick="go_url('ask_image', $(this));">
+        <img class="ask_image right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);" onclick="go_url('ask_image', $(this));">
         {{ if (current_user && current_user.id == ask.user_id) { }}
           {{ var left_ratio = total_count == 0 ? '0' : (left_count / ( left_count + right_count ) * 100).toFixed() }}
           {{ var right_ratio = total_count == 0 ? '0' : (right_count / ( left_count + right_count ) * 100).toFixed() }}
@@ -75,15 +75,15 @@
             {{ total_count = left_count + right_count }}
             {{ left_ratio = total_count == 0 ? '0' : (left_count / ( left_count + right_count ) * 100).toFixed() }}
             {{ right_ratio = total_count == 0 ? '0' : (right_count / ( left_count + right_count ) * 100).toFixed() }}
-            {{ var star_point = "" }}
+            {{ var star_point = '' }}
             {{ if (ask.ask_complete.star_point === null) { }}
-              {{ star_point = "-" }}
+              {{ star_point = '-' }}
             {{ } else { }}
               {{ for (var i=0; i < ask.ask_complete.star_point; i++) { }}
-                {{ star_point += "&#xf005;" }}
+                {{ star_point += '&#xf005;' }}
               {{ } }}
               {{ for (var j=0; j < 5-ask.ask_complete.star_point; j++) { }}
-                {{ star_point += "&#xf006;" }}
+                {{ star_point += '&#xf006;' }}
               {{ } }}
             {{ } }}
             <span class="my_ask_vote_count left {{= is_select_left ? 'on' : '' }}" star="{{= star_point }}">{{= left_ratio }}<small>%</small></span>
@@ -100,10 +100,10 @@
       {{ } }}
     </div>
     <div class="clearfix">
-      {{= askDealsTableTemplate({ask: ask, left_ask_deal: ask.left_ask_deal, right_ask_deal: ask.right_ask_deal}) }}
+      {{= askDealsTableTemplate({ ask: ask, left_ask_deal: ask.left_ask_deal, right_ask_deal: ask.right_ask_deal }) }}
     </div>
     <div class="vs_result">
-      {{= askResultTemplate({type: "전체", left_count: left_count, right_count: right_count, total_count: total_count }) }}
+      {{= askResultTemplate({ type: "전체", left_count: left_count, right_count: right_count, total_count: total_count }) }}
     </div>
     <div class="vs_result_detail">
     </div>
@@ -118,21 +118,21 @@
       {{ if (ask.user.id == 1) { }}
         <span class="ask_user_id vaskit">VASKIT</span>
       {{ } else if (current_user && ask.user.id == current_user.id) { }}
-        <span class="ask_user_id">{{=ask.user.string_id}}</span>
+        <span class="ask_user_id">{{= ask.user.string_id }}</span>
         <span class="ask_user_profile label me">ME</span>
       {{ } else { }}
-        <span class="ask_user_id">{{=ask.user.string_id}}</span>
-        <span class="ask_user_profile {{= gender }}">{{=get_user_ages(ask.user.birthday)}}</span>
+        <span class="ask_user_id">{{= ask.user.string_id }}</span>
+        <span class="ask_user_profile {{= gender }}">{{= get_user_ages(ask.user.birthday) }}</span>
       {{ } }}
       <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
-      <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : ''}} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
+      <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : '' }} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
     </div>
     <div class="ask_message">
       {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
     </div>
     <div class="ask_likes">
       {{ if (ask.ask_likes && ask.ask_likes.length > 0) { }}
-        {{= askLikeTemplate({recent_user: ask.ask_likes[ask.ask_likes.length-1].user.string_id, ask_like_count: ask.ask_likes.length}) }}
+        {{= askLikeTemplate({ recent_user: ask.ask_likes[ask.ask_likes.length-1].user.string_id, ask_like_count: ask.ask_likes.length }) }}
       {{ } }}
     </div>
     <div class="ask_message_menu">
@@ -161,14 +161,14 @@
 </script>
 
 <script type="text/template" id="askDealsTableTemplate">
-  {{ if ((left_ask_deal.title != "" && left_ask_deal.title != null) || (right_ask_deal.title != "" && right_ask_deal.title != null)) { }}
+  {{ if ((left_ask_deal.title != '' && left_ask_deal.title != null) || (right_ask_deal.title != '' && right_ask_deal.title != null)) { }}
   <div class="ask_table_row title">
     <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(left_ask_deal.title) }}</span>
     <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(right_ask_deal.title) }}</span>
     <i class="ask_table_icon vaskit_icon title"></i>
   </div>
   {{ } }}
-  {{ if ((left_ask_deal.brand != "" && left_ask_deal.brand != null) || (right_ask_deal.brand != "" && right_ask_deal.brand != null)) { }}
+  {{ if ((left_ask_deal.brand != '' && left_ask_deal.brand != null) || (right_ask_deal.brand != '' && right_ask_deal.brand != null)) { }}
   <div class="ask_table_row brand">
     <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(left_ask_deal.brand) }}</span>
     <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(right_ask_deal.brand) }}</span>
@@ -182,17 +182,17 @@
     <i class="ask_table_icon vaskit_icon price"></i>
   </div>
   {{ } }}
-  {{ if ((left_ask_deal.link != "" && left_ask_deal.link != null) || (right_ask_deal.link != "" && right_ask_deal.link != null)) { }}
+  {{ if ((left_ask_deal.link != '' && left_ask_deal.link != null) || (right_ask_deal.link != '' && right_ask_deal.link != null)) { }}
   <div class="ask_table_row link">
-    {{ var aLink = document.createElement("a") }}
-    {{ if (left_ask_deal.link != "" && left_ask_deal.link != null) { }}
+    {{ var aLink = document.createElement('a') }}
+    {{ if (left_ask_deal.link != '' && left_ask_deal.link != null) { }}
       {{ aLink.href = left_ask_deal.link }}
       <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));"><a href="{{= aLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(aLink.host) }}</a></span>
     {{ } else { }}
       <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(aLink.host) }}</span>
     {{ } }}
-    {{ var bLink = document.createElement("a") }}
-    {{ if (right_ask_deal.link != "" && right_ask_deal.link != null) { }}
+    {{ var bLink = document.createElement('a') }}
+    {{ if (right_ask_deal.link != '' && right_ask_deal.link != null) { }}
       {{ bLink.href = right_ask_deal.link }}
       <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));"><a href="{{= bLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(bLink.host) }}</a></span>
     {{ } else { }}
@@ -202,7 +202,7 @@
   </div>
   {{ } }}
   {{ if (ask !== null) { }}
-    {{ if (ask.spec1 != null && ask.spec1 != "") { }}
+    {{ if (ask.spec1 != null && ask.spec1 != '') { }}
     <div class="ask_table_row spec">
       <span class="ask_table_cell center text_box_short">{{= fieldWithBlank(ask.spec1) }}</span>
       <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(left_ask_deal.spec1) }}</span>
@@ -210,7 +210,7 @@
       <i class="ask_table_icon vaskit_icon spec"></i>
     </div>
     {{ } }}
-    {{ if (ask.spec2 != null && ask.spec2 != "") { }}
+    {{ if (ask.spec2 != null && ask.spec2 != '') { }}
     <div class="ask_table_row spec">
       <span class="ask_table_cell center text_box_short">{{= fieldWithBlank(ask.spec2) }}</span>
       <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(left_ask_deal.spec2) }}</span>
@@ -218,7 +218,7 @@
       <i class="ask_table_icon vaskit_icon spec"></i>
     </div>
     {{ } }}
-    {{ if (ask.spec3 != null && ask.spec3 != "") { }}
+    {{ if (ask.spec3 != null && ask.spec3 != '') { }}
     <div class="ask_table_row spec">
       <span class="ask_table_cell center text_box_short">{{= fieldWithBlank(ask.spec3) }}</span>
       <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(left_ask_deal.spec3) }}</span>
@@ -245,17 +245,17 @@
   <div class="comment ask_{{= ask.id }}">
     <div class="comment_title">
       <div class="comment_title_left">
-        <img class="comment_title_img left" src="{{=get_image_url(ask.left_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+        <img class="comment_title_img left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
         A제품
       </div>
       <div class="comment_title_right">
         B제품
-        <img class="comment_title_img right" src="{{=get_image_url(ask.right_ask_deal, 'ask_deals', 'normal')}}" onerror="imgError(this);">
+        <img class="comment_title_img right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
       </div>
     </div>
     {{ var show_comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false }) }}
     <ul class="comment_list {{= show_comments.length === 0 ? 'blank' : '' }}">
-      {{= commentsTemplate({ask: ask, comments: ask.comments, like_comments: like_comments}) }}
+      {{= commentsTemplate({ ask: ask, comments: ask.comments, like_comments: like_comments }) }}
     </ul>
   </div>
 </script>
@@ -272,7 +272,7 @@
   {{ } else { }}
     {{ var my_votes = [] }}
     {{ var votes = $.cookie('visitor_votes') }}
-    {{ var votes_array = (votes == null || votes == "") ? new Array() : votes.split(".") }}
+    {{ var votes_array = (votes == null || votes == '') ? new Array() : votes.split('.') }}
     {{ for (var i=0; i < votes_array.length; i++) { }}
       {{ var vote = votes_array[i] }}
       {{ vote = JSON.parse(vote) }}
@@ -311,25 +311,26 @@
 </script>
 
 <script>
-  var askDetailTemplate = _.template($("#askDetailTemplate").html());
-  var askDetailBodyTemplate = _.template($("#askDetailBodyTemplate").html());
-  var askDealsTableTemplate = _.template($("#askDealsTableTemplate").html());
-  var askLikeTemplate = _.template($("#askLikeTemplate").html());
-  var commentListTemplate = _.template($("#commentListTemplate").html());
-  var commentInputTemplate = _.template($("#commentInputTemplate").html());
+  var askDetailTemplate = _.template($('#askDetailTemplate').html());
+  var askDetailBodyTemplate = _.template($('#askDetailBodyTemplate').html());
+  var askDealsTableTemplate = _.template($('#askDealsTableTemplate').html());
+  var askLikeTemplate = _.template($('#askLikeTemplate').html());
+  var commentListTemplate = _.template($('#commentListTemplate').html());
+  var commentInputTemplate = _.template($('#commentInputTemplate').html());
 
   function show_ask(ask_id) {
-    var url = '/asks/'+ask_id;
+    var url = '/asks/' + ask_id;
     $.ajax({
       url: url,
       dataType: 'json',
       type: 'GET',
       error: function(){
-        return false;
+        notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
       success: function(data){
-        var html = askDetailTemplate({ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
+        var html = askDetailTemplate({ ask: data.ask, already_like: data.already_like, like_comments: data.like_comments });
         create_wrapper(html, true);
+        ga('send', 'event', '컨텐츠', '질문', ask_id, 1);
       },
       beforeSend: function(){
         loadingStart();
@@ -346,22 +347,24 @@
   }
 
   function like_ask(ask_id) {
-    if (visitor_check() === undefined) {
-      var current_ask_divs = $("#main_view").find(".seg.on").find(".wrapper").last().find(".ask.ask_"+ask_id);
-      var current_ask_like_icons = current_ask_divs.find(".ask_like_icon");
-      var current_ask_like_texts = current_ask_divs.find(".ask_like_text");
-      var current_ask_like_counts = current_ask_divs.find(".ask_like_count");
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 공감해요 시도', 1);
+    } else {
+      var current_ask_divs = $('#main_view').find('.seg.on').find('.wrapper').last().find('.ask.ask_' + ask_id);
+      var current_ask_like_icons = current_ask_divs.find('.ask_like_icon');
+      var current_ask_like_texts = current_ask_divs.find('.ask_like_text');
+      var current_ask_like_counts = current_ask_divs.find('.ask_like_count');
 
-      var all_ask_divs = $("#main_view").find(".ask.ask_"+ask_id).not(current_ask_divs);
-      var all_ask_like_icons = all_ask_divs.find(".ask_like_icon").not(current_ask_like_icons);
-      var all_ask_like_texts = all_ask_divs.find(".ask_like_text").not(current_ask_like_texts);
-      var all_ask_like_counts = all_ask_divs.find(".ask_like_count").not(current_ask_like_counts);
+      var all_ask_divs = $('#main_view').find('.ask.ask_' + ask_id).not(current_ask_divs);
+      var all_ask_like_icons = all_ask_divs.find('.ask_like_icon').not(current_ask_like_icons);
+      var all_ask_like_texts = all_ask_divs.find('.ask_like_text').not(current_ask_like_texts);
+      var all_ask_like_counts = all_ask_divs.find('.ask_like_count').not(current_ask_like_counts);
 
-      var current_ask_likes = current_ask_divs.find(".ask_likes");
-      var all_ask_likes = all_ask_divs.find(".ask_likes").not(current_ask_likes);
+      var current_ask_likes = current_ask_divs.find('.ask_likes');
+      var all_ask_likes = all_ask_divs.find('.ask_likes').not(current_ask_likes);
 
       $.ajax({
-              url: "/asks/"+ask_id+"/like.json",
+              url: '/asks/' + ask_id + '/like.json',
               type: 'POST',
               dataType: 'json',
               async: false,
@@ -370,55 +373,57 @@
               },
               success: function(data) {
                 if (data.already_like) {
-                  current_ask_like_icons.removeClass("is_liked").animateCss("rubberBand");
-                  current_ask_like_texts.removeClass("is_liked");
-                  all_ask_like_icons.removeClass("is_liked");
-                  all_ask_like_texts.removeClass("is_liked");
+                  current_ask_like_icons.removeClass('is_liked').animateCss('rubberBand');
+                  current_ask_like_texts.removeClass('is_liked');
+                  all_ask_like_icons.removeClass('is_liked');
+                  all_ask_like_texts.removeClass('is_liked');
                 } else {
-                  current_ask_like_icons.addClass("is_liked").animateCss("tada");
-                  current_ask_like_texts.addClass("is_liked");
-                  all_ask_like_icons.addClass("is_liked");
-                  all_ask_like_texts.addClass("is_liked");
+                  current_ask_like_icons.addClass('is_liked').animateCss('tada');
+                  current_ask_like_texts.addClass('is_liked');
+                  all_ask_like_icons.addClass('is_liked');
+                  all_ask_like_texts.addClass('is_liked');
                 }
                 current_ask_like_counts.html(data.ask_like_count);
                 all_ask_like_counts.html(data.ask_like_count);
-                current_ask_likes.html(askLikeTemplate({recent_user: data.recent_user, ask_like_count: data.ask_like_count}));
-                all_ask_likes.html(askLikeTemplate({recent_user: data.recent_user, ask_like_count: data.ask_like_count}));
+                current_ask_likes.html(askLikeTemplate({ recent_user: data.recent_user, ask_like_count: data.ask_like_count }));
+                all_ask_likes.html(askLikeTemplate({ recent_user: data.recent_user, ask_like_count: data.ask_like_count }));
               }
       });
     }
   }
 
   function toggle_vote_detail(target) {
-    var ask_container = target.parentsUntil(this, ".container.main");
-    var vs_result_detail = ask_container.find(".vs_result_detail");
-    var vs_result_detail_btn = ask_container.find(".vs_result_detail_btn");
+    var ask_container = target.parentsUntil(this, '.container.main');
+    var vs_result_detail = ask_container.find('.vs_result_detail');
+    var vs_result_detail_btn = ask_container.find('.vs_result_detail_btn');
 
-    var ask_box = ask_container.find(".ask");
-    var ask_id = ask_box.attr("ask-id");
-    var is_vote = ask_box.hasClass("is_voted");
+    var ask_box = ask_container.find('.ask');
+    var ask_id = ask_box.attr('ask-id');
+    var is_vote = ask_box.hasClass('is_voted');
     var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
 
     if (!is_vote) {
-      notify("먼저 투표에 참여해주세요!");
-      ask_container.animate({scrollTop: 0},250);
-      vs_result_detail_btn.removeClass("is_opened");
+      notify('먼저 투표에 참여해주세요!');
+      ask_container.animate({ scrollTop: 0 },250);
+      vs_result_detail_btn.removeClass('is_opened');
     } else {
-      if (visitor_check() === undefined) {
-        if (vs_result_detail_btn.hasClass("is_opened")) {
-          vs_result_detail.removeClass("is_opened");
-          vs_result_detail_btn.removeClass("is_opened");
+      if (visitor_check()) {
+        ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 상세보기 시도', 1);
+      } else {
+        if (vs_result_detail_btn.hasClass('is_opened')) {
+          vs_result_detail.removeClass('is_opened');
+          vs_result_detail_btn.removeClass('is_opened');
         } else {
           $.ajax({
-                  url: "/asks/"+ask_id+"/show_detail.json",
-                  dataType: "json",
-                  type: "GET",
+                  url: '/asks/' + ask_id + '/show_detail.json',
+                  dataType: 'json',
+                  type: 'GET',
                   error: function(){
                     notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
                   },
                   success: function(data) {
                     var detail_vote_count = data.detail_vote_count;
-                    var html = "";
+                    var html = '';
                     var gender_total_count = detail_vote_count.left.male_count + detail_vote_count.right.male_count;
                         gender_total_count += detail_vote_count.left.female_count + detail_vote_count.right.female_count;
                     var age_total_count = detail_vote_count.left.age_20_1_count + detail_vote_count.right.age_20_1_count;
@@ -429,25 +434,25 @@
                         age_total_count += detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count;
                         age_total_count += detail_vote_count.left.etc_count + detail_vote_count.right.etc_count;
 
-                    html += "<div style='border-top: 1px solid #dbdbdb;'>" + askResultTemplate({type: "남성", left_count: detail_vote_count.left.male_count, right_count: detail_vote_count.right.male_count, total_count: gender_total_count }) + "</div>";
-                    html += "<div>" + askResultTemplate({type: "여성", left_count: detail_vote_count.left.female_count, right_count: detail_vote_count.right.female_count, total_count: gender_total_count }) + "</div>";
-                    html += "<div style='border-top: 1px solid #dbdbdb;'>" + askResultTemplate({type: "20초", left_count: detail_vote_count.left.age_20_1_count, right_count: detail_vote_count.right.age_20_1_count, total_count: age_total_count }) + "</div>";
-                    html += "<div>" + askResultTemplate({type: "20중", left_count: detail_vote_count.left.age_20_2_count, right_count: detail_vote_count.right.age_20_2_count, total_count: age_total_count }) + "</div>";
-                    html += "<div>" + askResultTemplate({type: "20후", left_count: detail_vote_count.left.age_20_3_count, right_count: detail_vote_count.right.age_20_3_count, total_count: age_total_count }) + "</div>";
-                    html += "<div>" + askResultTemplate({type: "30초", left_count: detail_vote_count.left.age_30_1_count, right_count: detail_vote_count.right.age_30_1_count, total_count: age_total_count }) + "</div>";
-                    html += "<div>" + askResultTemplate({type: "30중", left_count: detail_vote_count.left.age_30_2_count, right_count: detail_vote_count.right.age_30_2_count, total_count: age_total_count }) + "</div>";
-                    html += "<div>" + askResultTemplate({type: "30후", left_count: detail_vote_count.left.age_30_3_count, right_count: detail_vote_count.right.age_30_3_count, total_count: age_total_count }) + "</div>";
-                    html += "<div>" + askResultTemplate({type: "기타", left_count: detail_vote_count.left.etc_count, right_count: detail_vote_count.right.etc_count, total_count: age_total_count }) + "</div>";
-                    html += "<div style='height: 27px; line-height: 28px; border-top: 1px solid #dbdbdb;'><i class='fa fa-id-badge'></i> 비회원 투표 결과는 제외한 수치입니다</div>";
+                    html += '<div style="border-top: 1px solid #dbdbdb;">' + askResultTemplate({ type: '남성', left_count: detail_vote_count.left.male_count, right_count: detail_vote_count.right.male_count, total_count: gender_total_count }) + '</div>';
+                    html += '<div>' + askResultTemplate({ type: '여성', left_count: detail_vote_count.left.female_count, right_count: detail_vote_count.right.female_count, total_count: gender_total_count }) + '</div>';
+                    html += '<div style="border-top: 1px solid #dbdbdb;">' + askResultTemplate({ type: '20초', left_count: detail_vote_count.left.age_20_1_count, right_count: detail_vote_count.right.age_20_1_count, total_count: age_total_count }) + '</div>';
+                    html += '<div>' + askResultTemplate({ type: '20중', left_count: detail_vote_count.left.age_20_2_count, right_count: detail_vote_count.right.age_20_2_count, total_count: age_total_count }) + '</div>';
+                    html += '<div>' + askResultTemplate({ type: '20후', left_count: detail_vote_count.left.age_20_3_count, right_count: detail_vote_count.right.age_20_3_count, total_count: age_total_count }) + '</div>';
+                    html += '<div>' + askResultTemplate({ type: '30초', left_count: detail_vote_count.left.age_30_1_count, right_count: detail_vote_count.right.age_30_1_count, total_count: age_total_count }) + '</div>';
+                    html += '<div>' + askResultTemplate({ type: '30중', left_count: detail_vote_count.left.age_30_2_count, right_count: detail_vote_count.right.age_30_2_count, total_count: age_total_count }) + '</div>';
+                    html += '<div>' + askResultTemplate({ type: '30후', left_count: detail_vote_count.left.age_30_3_count, right_count: detail_vote_count.right.age_30_3_count, total_count: age_total_count }) + '</div>';
+                    html += '<div>' + askResultTemplate({ type: '기타', left_count: detail_vote_count.left.etc_count, right_count: detail_vote_count.right.etc_count, total_count: age_total_count }) + '</div>';
+                    html += '<div style="height: 27px; line-height: 28px; border-top: 1px solid #dbdbdb;"><i class="fa fa-id-badge"></i> 비회원 투표 결과는 제외한 수치입니다</div>';
 
-                    vs_result_detail.html(html).addClass("is_loading").one(transitionEnd, function() {
-                        vs_result_detail.addClass("is_opened").removeClass("is_loading");
+                    vs_result_detail.html(html).addClass('is_loading').one(transitionEnd, function() {
+                        vs_result_detail.addClass('is_opened').removeClass('is_loading');
                     });
-                    vs_result_detail_btn.removeClass("is_loading").addClass("is_opened");
+                    vs_result_detail_btn.removeClass('is_loading').addClass('is_opened');
                   },
                   beforeSend: function(){
                     loadingStart();
-                    vs_result_detail_btn.addClass("is_loading");
+                    vs_result_detail_btn.addClass('is_loading');
                   },
                   complete: function(){
                     loadingEnd();
@@ -463,38 +468,38 @@
     var options = {
                 menus: [
                   {
-                    description: "어떤 제품을 선택하셨나요?",
-                    name: "<div><img src=" + get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') + " ask-deal-id='" + ask.left_ask_deal_id + "' direction='true'></div>" +
-                          "<div><img src=" + get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') + " ask-deal-id='" + ask.right_ask_deal_id + "'></div>" +
-                          "<span></span>",
-                    id: "ask_complete_ask_deal_select"
+                    description: '어떤 제품을 선택하셨나요?',
+                    name: '<div><img src="' + get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') + '" ask-deal-id="' + ask.left_ask_deal_id + '" direction="true"></div>' +
+                          '<div><img src="' + get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') + '" ask-deal-id="' + ask.right_ask_deal_id + '"></div>' +
+                          '<span></span>',
+                    id: 'ask_complete_ask_deal_select'
                   },
                   {
-                    description: "이 질문이 당신의 선택에 얼마나 도움이 되었나요?",
-                    name: "<ul>" +
-                          "<li data-value='1'><i class='fa fa-star-o'></i></li>" +
-                          "<li data-value='2'><i class='fa fa-star-o'></i></li>" +
-                          "<li data-value='3'><i class='fa fa-star-o'></i></li>" +
-                          "<li data-value='4'><i class='fa fa-star-o'></i></li>" +
-                          "<li data-value='5'><i class='fa fa-star-o'></i></li>" +
-                          "</ul>",
-                    id: "star_rating_wrap"
+                    description: '이 질문이 당신의 선택에 얼마나 도움이 되었나요?',
+                    name: '<ul>' +
+                          '<li data-value="1"><i class="fa fa-star-o"></i></li>' +
+                          '<li data-value="2"><i class="fa fa-star-o"></i></li>' +
+                          '<li data-value="3"><i class="fa fa-star-o"></i></li>' +
+                          '<li data-value="4"><i class="fa fa-star-o"></i></li>' +
+                          '<li data-value="5"><i class="fa fa-star-o"></i></li>' +
+                          '</ul>',
+                    id: 'star_rating_wrap'
                   }
                 ],
                 bottoms: [
                   {
-                    name: "질문 종료하기",
-                    func: "submit_ask_complete(" + ask.id + ");",
-                    id: "submit_ask_complete",
-                    class: "confirmation not_ready"
+                    name: '질문 종료하기',
+                    func: 'submit_ask_complete(' + ask.id + ');',
+                    id: 'submit_ask_complete',
+                    class: 'confirmation not_ready'
                   },
                   {
-                    name: "<input type='text' id='ask_complete_ask_deal_id'>",
-                    class: "hidden"
+                    name: '<input type="text" id="ask_complete_ask_deal_id">',
+                    class: 'hidden'
                   },
                   {
-                    name: "<input type='text' id='ask_complete_star_point'>",
-                    class: "hidden"
+                    name: '<input type="text" id="ask_complete_star_point">',
+                    class: 'hidden'
                   }
                 ]
               };
@@ -502,31 +507,31 @@
 
     $(function(){
   		// bind events
-      $("#ask_complete_ask_deal_select img").each(function(){
-        $(this).bind("click", select_ask_deal);
+      $('#ask_complete_ask_deal_select img').each(function(){
+        $(this).bind('click', select_ask_deal);
       });
-  		$("#star_rating_wrap").each(function(){
-  			$(this).bind("mousedown", starMouseDownListener);
-  			$(this).bind("touchstart", starTouchStartListener);
-  			$(this).bind("touchmove", starTouchMoveListener);
-  			$(this).bind("touchend", starTouchEndListener);
+  		$('#star_rating_wrap').each(function(){
+  			$(this).bind('mousedown', starMouseDownListener);
+  			$(this).bind('touchstart', starTouchStartListener);
+  			$(this).bind('touchmove', starTouchMoveListener);
+  			$(this).bind('touchend', starTouchEndListener);
   		});
   	});
 
     function select_ask_deal(){
-      var ask_deal_id = $(this).attr("ask-deal-id");
-      var direction = Boolean($(this).attr("direction"));
-      var imgs = $("#ask_complete_ask_deal_select").find("img");
-      var span = $("#ask_complete_ask_deal_select").find("span");
+      var ask_deal_id = $(this).attr('ask-deal-id');
+      var direction = Boolean($(this).attr('direction'));
+      var imgs = $('#ask_complete_ask_deal_select').find('img');
+      var span = $('#ask_complete_ask_deal_select').find('span');
       if (direction) {
-        span.removeClass("right").addClass("left");
+        span.removeClass('right').addClass('left');
       } else {
-        span.removeClass("left").addClass("right");
+        span.removeClass('left').addClass('right');
       }
-      imgs.removeClass("selected unselected");
-      imgs.not($(this)).addClass("unselected");
-      $(this).addClass("selected");
-      $("#ask_complete_ask_deal_id").val(ask_deal_id);
+      imgs.removeClass('selected unselected');
+      imgs.not($(this)).addClass('unselected');
+      $(this).addClass('selected');
+      $('#ask_complete_ask_deal_id').val(ask_deal_id);
       check_to_submit();
     }
 
@@ -537,14 +542,14 @@
   		calculateStarRating(e.pageX);
 
   		// unbind and bind mouse events to prevent repeated binding
-  		$(document).unbind("mousemove", starMouseMoveListener);
-  		$(document).unbind("mouseup", starMouseUpListener);
-  		$(document).bind("mousemove", starMouseMoveListener);
-  		$(document).bind("mouseup", starMouseUpListener);
+  		$(document).unbind('mousemove', starMouseMoveListener);
+  		$(document).unbind('mouseup', starMouseUpListener);
+  		$(document).bind('mousemove', starMouseMoveListener);
+  		$(document).bind('mouseup', starMouseUpListener);
   		// unbind touch events
-  		starMouseTarget.unbind("touchstart", starTouchStartListener);
-  		starMouseTarget.unbind("touchmove", starTouchMoveListener);
-  		starMouseTarget.unbind("touchend", starTouchEndListener);
+  		starMouseTarget.unbind('touchstart', starTouchStartListener);
+  		starMouseTarget.unbind('touchmove', starTouchMoveListener);
+  		starMouseTarget.unbind('touchend', starTouchEndListener);
   	}
 
   	function starMouseMoveListener(e){
@@ -560,8 +565,8 @@
   		updateStarPoint();
 
   		// unbind mouse events
-  		$(document).unbind("mousemove", starMouseMoveListener);
-  		$(document).unbind("mouseup", starMouseUpListener);
+  		$(document).unbind('mousemove', starMouseMoveListener);
+  		$(document).unbind('mouseup', starMouseUpListener);
   	}
 
   	function starTouchStartListener(e){
@@ -570,7 +575,7 @@
   		starMouseTarget = $(e.currentTarget);
   		calculateStarRating(e.originalEvent.touches[0].clientX);
 
-  		starMouseTarget.unbind("mousedown", starMouseDownListener);
+  		starMouseTarget.unbind('mousedown', starMouseDownListener);
   	}
 
   	function starTouchMoveListener(e){
@@ -586,59 +591,59 @@
   	function calculateStarRating(x){
   		var li;
   		var n = 0;
-  		starMouseTarget.find("li").each(function(index){
+  		starMouseTarget.find('li').each(function(index){
   			li = $(this);
   			if( li.offset().left > x ){
-  				li.removeClass("on");// not selected
-  				li.find("i").removeClass("fa-star").addClass("fa-star-o");
+  				li.removeClass('on');// not selected
+  				li.find('i').removeClass('fa-star').addClass('fa-star-o');
   			}else{
-  				li.addClass("on");// selected
-  				li.find("i").removeClass("fa-star-o").addClass("fa-star");
+  				li.addClass('on');// selected
+  				li.find('i').removeClass('fa-star-o').addClass('fa-star');
   				n = index + 1;
   			}
   		});
-  		starMouseTarget.find("li").data("value", n);
+  		starMouseTarget.find('li').data('value', n);
   	}
 
   	function updateStarPoint(){
-  		var star_point = $("#star_rating_wrap > ul > li").data("value");
-      $("#ask_complete_star_point").val(star_point);
+  		var star_point = $('#star_rating_wrap > ul > li').data('value');
+      $('#ask_complete_star_point').val(star_point);
       check_to_submit();
   	}
 
     function check_to_submit() {
-      var star_point = $("#ask_complete_star_point").val();
-      var ask_deal_id = $("#ask_complete_ask_deal_id").val();
-      if (ask_deal_id !== "" && star_point !== "" && star_point !== "0") {
-        $("#submit_ask_complete").removeClass("not_ready");
+      var star_point = $('#ask_complete_star_point').val();
+      var ask_deal_id = $('#ask_complete_ask_deal_id').val();
+      if (ask_deal_id !== '' && star_point !== '' && star_point !== '0') {
+        $('#submit_ask_complete').removeClass('not_ready');
       } else {
-        $("#submit_ask_complete").addClass("not_ready");
+        $('#submit_ask_complete').addClass('not_ready');
       }
     }
   }
 
   function submit_ask_complete(ask_id) {
-    var ask_deal_id = $("#ask_complete_ask_deal_id").val();
-    var star_point = $("#ask_complete_star_point").val();
-    if (ask_deal_id === "") {
+    var ask_deal_id = $('#ask_complete_ask_deal_id').val();
+    var star_point = $('#ask_complete_star_point').val();
+    if (ask_deal_id === '') {
       notify('선택하신 제품을 알려주세요');
-    } else if (star_point === "" || star_point === "0") {
+    } else if (star_point === '' || star_point === '0') {
       notify('투표의 만족도를 알려주세요');
     } else {
       $.ajax({
-            url: "/asks/" + ask_id,
-            dataType: "json",
-            type: "DELETE",
-            data: {ask_deal_id: ask_deal_id, star_point: star_point},
+            url: '/asks/' + ask_id,
+            dataType: 'json',
+            type: 'DELETE',
+            data: { ask_deal_id: ask_deal_id, star_point: star_point },
             error: function(){
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
               notify('질문이 종료되었습니다');
-              var all_ask_thumbnails = $("#main_view").find(".ask.ask_thumbnail.ask_"+ask_id);
-              var all_ask_details = $("#main_view").find(".ask.ask_detail.ask_"+ask_id);
-              all_ask_thumbnails.replaceWith(askThumbnailTemplate({ask: data.ask}));
-              all_ask_details.replaceWith(askDetailTemplate({ask: data.ask, already_like: data.already_like, like_comments: data.like_comments}));
+              var all_ask_thumbnails = $('#main_view').find('.ask.ask_thumbnail.ask_' + ask_id);
+              var all_ask_details = $('#main_view').find('.ask.ask_detail.ask_' + ask_id);
+              all_ask_thumbnails.replaceWith(askThumbnailTemplate({ ask: data.ask }));
+              all_ask_details.replaceWith(askDetailTemplate({ ask: data.ask, already_like: data.already_like, like_comments: data.like_comments }));
               history.back();
             },
             beforeSend: function(){

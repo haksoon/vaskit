@@ -1,11 +1,11 @@
 <script type="text/template" id="shareTemplate">
-  {{ var share_title = "" }}
-  {{ if (share_type == "ask") { }}
-    {{ share_title = "질문" }}
-  {{ } else if (share_type == "collection") { }}
-    {{ share_title = "컬렉션" }}
-  {{ } else if (share_type == "video") { }}
-    {{ share_title = "비교영상" }}
+  {{ var share_title = '' }}
+  {{ if (share_type == 'ask') { }}
+    {{ share_title = '질문' }}
+  {{ } else if (share_type == 'collection') { }}
+    {{ share_title = '컬렉션' }}
+  {{ } else if (share_type == 'video') { }}
+    {{ share_title = '비교영상' }}
   {{ } }}
   <div class="wrapper full" id="share_screen">
     <div class="container top dark" ontouchmove="return false;">
@@ -14,12 +14,12 @@
     </div>
     <div class="container main">
       <div class="clearfix share_image_area animated fadeIn" ontouchstart="removeIOSRubberEffect($(this));">
-        {{ if (share_type == "ask") { }}
-          {{= shareAskTemplate({ask: share_data}) }}
-        {{ } else if (share_type == "collection") { }}
-          {{= shareCollectionTemplate({collection: share_data}) }}
-        {{ } else if (share_type == "video") { }}
-          {{= shareVideoTemplate({video: share_data}) }}
+        {{ if (share_type == 'ask') { }}
+          {{= shareAskTemplate({ ask: share_data }) }}
+        {{ } else if (share_type == 'collection') { }}
+          {{= shareCollectionTemplate({ collection: share_data }) }}
+        {{ } else if (share_type == 'video') { }}
+          {{= shareVideoTemplate({ video: share_data }) }}
         {{ } }}
       </div>
       <div class="clearfix scroll_box x-axis share_btn_area animated slideInUp" ontouchmove="return false;">
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="clearfix">
-      {{= askDealsTableTemplate({ask: ask, left_ask_deal: ask.left_ask_deal, right_ask_deal: ask.right_ask_deal}) }}
+      {{= askDealsTableTemplate({ ask: ask, left_ask_deal: ask.left_ask_deal, right_ask_deal: ask.right_ask_deal }) }}
     </div>
   </div>
 </script>
@@ -57,7 +57,7 @@
       <p class="collection_description">{{= collection.description }}</p>
       <p class="collection_name">{{= collection.name }}</p>
     </div>
-    <img class="collection_image" src="{{=get_image_url(collection, 'collections', 'original')}}" alt="">
+    <img class="collection_image" src="{{= get_image_url(collection, 'collections', 'original') }}" alt="">
   </div>
 </script>
 
@@ -78,29 +78,29 @@
 </script>
 
 <script>
-  var shareTemplate = _.template($("#shareTemplate").html());
-  var shareAskTemplate = _.template($("#shareAskTemplate").html());
-  var shareCollectionTemplate = _.template($("#shareCollectionTemplate").html());
-  var shareVideoTemplate = _.template($("#shareVideoTemplate").html());
+  var shareTemplate = _.template($('#shareTemplate').html());
+  var shareAskTemplate = _.template($('#shareAskTemplate').html());
+  var shareCollectionTemplate = _.template($('#shareCollectionTemplate').html());
+  var shareVideoTemplate = _.template($('#shareVideoTemplate').html());
 
   function show_share(share_type, target_id) {
-    var share_url = "<%= CONFIG['host'] %>" + "/" + share_type + "s/" + target_id;
-    if ($("#share_screen").length === 0) {
+    var share_url = "<%= CONFIG['host'] %>" + '/' + share_type + 's/' + target_id;
+    if ($('#share_screen').length === 0) {
       $.ajax({
-            url: "/shares/new.json",
-            dataType: "json",
-            type: "GET",
-            data: {share_type: share_type, target_id: target_id},
+            url: '/shares/new.json',
+            dataType: 'json',
+            type: 'GET',
+            data: { share_type: share_type, target_id: target_id },
             error: function(){
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data){
-              open_full_view(shareTemplate({share_type: share_type, target_id: target_id, share_data: data.share_data}));
-              $("#share_facebook_btn").on("click", function(){ share_facebook(); });
-              $("#share_kakao_btn").on("click", function(){ share_katalk(data.share_data); });
-              $("#share_url_btn").on("click", function(){ copy_url(); });
-              $("#share_url").val(share_url);
-              if (userApp) setAppStatusBar("dark");
+              open_full_view(shareTemplate({ share_type: share_type, target_id: target_id, share_data: data.share_data }));
+              $('#share_facebook_btn').on('click', function(){ share_facebook(); });
+              $('#share_kakao_btn').on('click', function(){ share_katalk(data.share_data); });
+              $('#share_url_btn').on('click', function(){ copy_url(); });
+              $('#share_url').val(share_url);
+              if (userApp) setAppStatusBar('dark');
             },
             beforeSend: function() {
               loadingStart();
@@ -117,7 +117,7 @@
         if (window.HybridApp) {
           HybridApp.shareFacebook(share_url);
         } else {
-          window.location.href = "vaskit://shareFacebook/////" + share_url;
+          window.location.href = 'vaskit://shareFacebook/////' + share_url;
         }
       } else {
         if (typeof(FB) != 'undefined' && FB !== null) {
@@ -134,44 +134,44 @@
         }, function(response){});
       }
 
-      share_log("facebook");
+      share_log('facebook');
     }
 
     function share_katalk(share_data) {
       var captured_img;
-      var image_url = "http://vaskit.kr/images/logo/logo_share_800_420.png";
-      var image_width = "800";
-      var image_height = "420";
-      var label = "꼼꼼한 소비자들의 깐깐한 선택,\n#둘중에뭐사지?\n#혼자고민고민하지마\n\nVASKIT에서 당신의 고민거리를 이야기해보세요!\n\n" + share_url;
+      var image_url = 'http://vaskit.kr/images/logo/logo_share_800_420.png';
+      var image_width = '800';
+      var image_height = '420';
+      var label = '꼼꼼한 소비자들의 깐깐한 선택,\n#둘중에뭐사지?\n#혼자고민고민하지마\n\nVASKIT에서 당신의 고민거리를 이야기해보세요!\n\n' + share_url;
       var share_js = "go_url('" + share_type + "', " + target_id + ")";
 
-      if (share_type == "ask") {
-        label = "둘중에뭐사지? 골라주세요!\n\n" + share_data.left_ask_deal.title + "\n vs \n" + share_data.right_ask_deal.title + ",\n당신의 선택은?\n\n" + share_url;
+      if (share_type == 'ask') {
+        label = '둘중에뭐사지? 골라주세요!\n\n' + share_data.left_ask_deal.title + '\n vs \n' + share_data.right_ask_deal.title + ',\n당신의 선택은?\n\n' + share_url;
         img_capture_send_kakao();
-      } else if (share_type == "collection") {
+      } else if (share_type == 'collection') {
         label = "[ VASKIT's pick,\n깐슈머들의 위시리스트! ]\n\n" + share_url;
-        image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, "collections", "original");
-        image_width = "900";
-        image_height = "600";
+        image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, 'collections', 'original');
+        image_width = '900';
+        image_height = '600';
         send_kakao();
-      } else if (share_type == "video") {
-        label = "[ VASKIT맨의 비교영상 ]\n\n" + share_data.title + "\n\n" + share_data.description + "\n\n" + share_url;
-        image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, "videos", "original");
-        image_width = "800";
-        image_height = "450";
+      } else if (share_type == 'video') {
+        label = '[ VASKIT맨의 비교영상 ]\n\n' + share_data.title + '\n\n' + share_data.description + '\n\n' + share_url;
+        image_url = "<%= CONFIG['host'] %>" + get_image_url(share_data, 'videos', 'original');
+        image_width = '800';
+        image_height = '450';
         send_kakao();
       }
 
       function img_capture_send_kakao() {
-        html2canvas(document.getElementById("share_image"), {
+        html2canvas(document.getElementById('share_image'), {
           allowTaint: true,
           onrendered: function(canvas) {
             try {
-              var captured_img = canvas.toDataURL("image/png");
+              var captured_img = canvas.toDataURL('image/png');
               $.ajax({
-                    url: "/shares.json",
-                    dataType: "json",
-                    type: "POST",
+                    url: '/shares.json',
+                    dataType: 'json',
+                    type: 'POST',
                     data: { File: captured_img },
                     error: function(){
                       notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
@@ -198,7 +198,7 @@
 
       function send_kakao() {
         Kakao.cleanup();
-        Kakao.init("91c2c2e69d89a8617cfedd3e61b041ca");
+        Kakao.init('91c2c2e69d89a8617cfedd3e61b041ca');
         Kakao.Link.cleanup();
         Kakao.Link.sendTalkLink({
           label: label,
@@ -224,27 +224,27 @@
         });
       }
 
-      share_log("katalk");
+      share_log('katalk');
     }
 
     function copy_url() {
-      if (copyfieldvalue(event, "share_url")) {
+      if (copyfieldvalue(event, 'share_url')) {
         notify('주소가 복사되었습니다!');
       } else {
         prompt('아래의 주소를 복사해주세요!', share_url);
       }
-      share_log("url");
+      share_log('url');
     }
 
     function share_log(channel) {
-      var ask_id = share_type == "ask" ? target_id : null;
-      var collection_id = share_type == "collection" ? target_id : null;
-      var video_id = share_type == "video" ? target_id : null;
+      var ask_id = share_type == 'ask' ? target_id : null;
+      var collection_id = share_type == 'collection' ? target_id : null;
+      var video_id = share_type == 'video' ? target_id : null;
       $.ajax({
-        url: "/share_logs.json",
-        dataType: "json",
-        type: "POST",
-        data: {channel: channel, ask_id: ask_id, collection_id: collection_id, video_id: video_id}
+        url: '/share_logs.json',
+        dataType: 'json',
+        type: 'POST',
+        data: { channel: channel, ask_id: ask_id, collection_id: collection_id, video_id: video_id }
       });
     }
   }

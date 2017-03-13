@@ -8,13 +8,23 @@
   var segNextFunc = {1: [], 2: [], 4: []};
   var segURL = {1: [], 2: [], 4: []};
 
+  function show_history(seg_id) {
+    console.log(currentHistory);
+    console.log('뒤로가기 함수');
+    console.log(segPrevFunc[seg_id]);
+    console.log('앞으로가기 함수');
+    console.log(segNextFunc[seg_id]);
+    console.log(segURL[seg_id]);
+    console.log(segHistory[seg_id]);
+  }
+
   function go_popstate(e) {
     var url;
     var func;
     var state = e.originalEvent.state;
     if (state === null) return false;
     if (state.pageHistory < currentHistory) {
-      // console.log(currentHistory+" -> "+state.pageHistory+'...뒤로 갑니다'); // 뒤로 가는 경우
+      // console.log(currentHistory + ' -> ' + state.pageHistory + '...뒤로 갑니다'); // 뒤로 가는 경우
 
       func = segPrevFunc[currentSeg][segHistory[currentSeg]];
       if (segHistory[currentSeg] === 0) {
@@ -22,30 +32,32 @@
           // console.log('segOrder 순서 제거, 이전 탭으로 이동');
           currentSeg = segOrder[segOrder.length -1];
           url = segURL[currentSeg][segHistory[currentSeg]];
+          if (segHistory[currentSeg] === 0) seg_init(currentSeg);
         } else {
           // console.log('뒤로가기의 마지막입니다...');
         }
       } else {
         segHistory[currentSeg] -= 1;
         url = segURL[currentSeg][segHistory[currentSeg]];
+        if (segHistory[currentSeg] === 0) seg_init(currentSeg);
       }
 
       if (func) {
-        if (typeof func.arguments == "string") {  // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
-          window[func.callback].apply(null, func.arguments.split(", "));
+        if (typeof func.arguments == 'string') {  // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+          window[func.callback].apply(null, func.arguments.split(', '));
         } else {
           window[func.callback](func.arguments);
         }
         history.replaceState(history.state, null, url);
         currentHistory = history.state.pageHistory;
-        // console.log(func.callback+"("+func.arguments+") 실행");
+        // console.log(func.callback + '(' + func.arguments + ') 실행');
       } else {
         history.forward();
-        // console.log("더이상 실행할 뒤로가기 없음");
+        // console.log('더이상 실행할 뒤로가기 없음');
       }
 
     } else if (state.pageHistory > currentHistory) {
-      // console.log(currentHistory+" -> "+state.pageHistory+'...앞으로 갑니다'); // 앞으로 가는 경우
+      // console.log(currentHistory + ' -> ' + state.pageHistory + '...앞으로 갑니다'); // 앞으로 가는 경우
 
       func = segNextFunc[currentSeg][segHistory[currentSeg]];
       if (segHistory[currentSeg] == segURL[currentSeg].length - 1) {
@@ -54,26 +66,28 @@
           segOrder.push(segNextFunc[currentSeg][segHistory[currentSeg]].arguments);
           currentSeg = segOrder[segOrder.length -1];
           url = segURL[currentSeg][segHistory[currentSeg]];
+          if (segHistory[currentSeg] === 0) seg_init(currentSeg);
         } else {
           // console.log('앞으로가기의 마지막입니다...');
         }
       } else {
         segHistory[currentSeg] += 1;
         url = segURL[currentSeg][segHistory[currentSeg]];
+        if (segHistory[currentSeg] === 0) seg_init(currentSeg);
       }
 
       if (func) {
-        if (typeof func.arguments == "string") { // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
-          window[func.callback].apply(null, func.arguments.split(", "));
+        if (typeof func.arguments == 'string') { // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+          window[func.callback].apply(null, func.arguments.split(', '));
         } else {
           window[func.callback](func.arguments);
         }
         history.replaceState(history.state, null, url);
         currentHistory = history.state.pageHistory;
-        // console.log(func.callback+"("+func.arguments+") 실행");
+        // console.log(func.callback + '(' + func.arguments + ') 실행');
       } else {
         history.back();
-        // console.log("더이상 실행할 앞으로가기 없음");
+        // console.log('더이상 실행할 앞으로가기 없음');
       }
 
     }
@@ -87,9 +101,10 @@
     if (currentSeg == seg_id) {
       if (segHistory[currentSeg] > 0) {
         go_back(segHistory[currentSeg]);
-        // console.log("동일 탭으로 이동 & 기록 삭제");
+        seg_init(currentSeg);
+        // console.log('동일 탭으로 이동 & 기록 삭제');
       } else {
-        // console.log("동일 탭으로 이동 But 기록 없음");
+        // console.log('동일 탭으로 이동 But 기록 없음');
       }
     } else {
       var lastSeg = currentSeg;
@@ -101,26 +116,27 @@
 
         if (lastSeg === 0) {
           segPrevFunc[currentSeg].splice(0,1,{
-            callback : "go_exit",
+            callback : 'go_exit',
             arguments : null
           });
         } else {
           segNextFunc[lastSeg].splice(segHistory[lastSeg],1,{
-            callback : "show_seg",
+            callback : 'show_seg',
             arguments : currentSeg
           });
           segPrevFunc[currentSeg].splice(0,1,{
-            callback : "show_seg",
+            callback : 'show_seg',
             arguments : lastSeg
           });
           segNextFunc[currentSeg].splice(segHistory[lastSeg],1);
         }
         segURL[currentSeg].splice(segHistory[currentSeg],1,url);
 
-        history.pushState({pageHistory:currentHistory+1}, null, url);
+        history.pushState({ pageHistory: currentHistory + 1 }, null, url);
         currentHistory = history.state.pageHistory;
 
-        // console.log(currentHistory+"로 진행, 신규 탭 추가, 현재 탭 히스토리 : "+segOrder);
+        // console.log(currentHistory + '로 진행, 신규 탭 추가, 현재 탭 히스토리 : ' + segOrder);
+        seg_init(currentSeg);
       } else {
         // console.log('이미 기존에 진행한 탭 히스토리가 있을 경우'); // 이미 기존에 진행한 탭 히스토리가 있을 경우
 
@@ -128,24 +144,25 @@
         segOrder.push(currentSeg);
 
         segNextFunc[lastSeg].splice(segHistory[lastSeg],1,{
-          callback : "show_seg",
+          callback : 'show_seg',
           arguments : currentSeg
         });
         segPrevFunc[currentSeg].splice(0,1,{
-          callback : "show_seg",
+          callback : 'show_seg',
           arguments : lastSeg
         });
         segNextFunc[currentSeg].splice(segHistory[lastSeg],1);
         segPrevFunc[segOrder[0]].splice(0,1,{
-          callback : "go_exit",
+          callback : 'go_exit',
           arguments : null
         });
         url = segURL[currentSeg][segHistory[currentSeg]];
 
-        history.pushState({pageHistory:currentHistory+1}, null, url);
+        history.pushState({ pageHistory: currentHistory + 1 }, null, url);
         currentHistory = history.state.pageHistory;
 
-        // console.log(currentHistory+"로 진행, 기존 탭 진행, 현재 탭 히스토리 : "+segOrder);
+        // console.log(currentHistory + '로 진행, 기존 탭 진행, 현재 탭 히스토리 : ' + segOrder);
+        if (segHistory[currentSeg] === 0) seg_init(currentSeg);
       }
     }
 
@@ -153,38 +170,28 @@
     fixViewportHeight();
   }
 
-  function show_history(seg_id) {
-    console.log(currentHistory);
-    console.log("뒤로가기 함수");
-    console.log(segPrevFunc[seg_id]);
-    console.log("앞으로가기 함수");
-    console.log(segNextFunc[seg_id]);
-    console.log(segURL[seg_id]);
-    console.log(segHistory[seg_id]);
-  }
-
   function go_url(func_name, func_args) {
     if (window.event) window.event.cancelBubble = true;
-    var url = typeof func_args == "string" ? window["show_"+func_name].apply(null, func_args.split(", ")) : window["show_"+func_name](func_args); // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
+    var url = typeof func_args == 'string' ? window['show_' + func_name].apply(null, func_args.split(', ')) : window['show_' + func_name](func_args); // arguments 여러개일 경우 string 타입을 array 타입으로 변경하여 apply함수 적용
 
-    segPrevFunc[currentSeg] = segPrevFunc[currentSeg].slice(0, segHistory[currentSeg]+1);
+    segPrevFunc[currentSeg] = segPrevFunc[currentSeg].slice(0, segHistory[currentSeg] + 1);
     segPrevFunc[currentSeg].push({
-      callback : "hide_"+func_name,
+      callback : 'hide_' + func_name,
       arguments : func_args
     });
     segNextFunc[currentSeg] = segNextFunc[currentSeg].slice(0, segHistory[currentSeg]);
     segNextFunc[currentSeg].push({
-      callback : "show_"+func_name,
+      callback : 'show_' + func_name,
       arguments : func_args
     });
-    segURL[currentSeg] = segURL[currentSeg].slice(0, segHistory[currentSeg]+1);
+    segURL[currentSeg] = segURL[currentSeg].slice(0, segHistory[currentSeg] + 1);
     segURL[currentSeg].push(url);
     segHistory[currentSeg] += 1;
 
-    history.pushState({pageHistory:currentHistory+1}, null, url);
+    history.pushState({ pageHistory: currentHistory + 1 }, null, url);
     currentHistory = history.state.pageHistory;
 
-    // console.log("url, 히스토리 변경... show_"+func_name+" 실행하여 "+currentHistory+"로 진행");
+    // console.log('url, 히스토리 변경... show_' + func_name + ' 실행하여 ' + currentHistory + '로 진행');
     if (url) ga('send', 'pageview', url);
     fixViewportHeight();
   }
@@ -203,7 +210,8 @@
   }
 
   function go_back(length) {
-    $(window).unbind("popstate");
+    // console.log(length + '회 한번에 뒤로 가기');
+    $(window).unbind('popstate');
 
     segPrevFunc[currentSeg].splice(segPrevFunc[currentSeg].length-length, length);
     segNextFunc[currentSeg].splice(segNextFunc[currentSeg].length-length, length);
@@ -216,10 +224,10 @@
 
     setTimeout(function(){
       history.replaceState(history.state, null, url);
-      $(window).bind("popstate", go_popstate);
+      $(window).bind('popstate', go_popstate);
     }, 100);
 
-    // console.log("히스토리 삭제 ("+ length +"개)");
+    // console.log('히스토리 삭제 ('+ length +'개)');
     if (url) ga('send', 'pageview', url);
     fixViewportHeight();
   }
@@ -229,9 +237,9 @@
     if (userApp) {
       if (currentHistory === 0) history.go(1);
     } else {
-      $("#main_view").addClass("off").transitionHide(function(){
-        $("body").animateCss("fadeOut");
-        setTimeout(function() { go_back(currentHistory+1); }, 250);
+      $('#main_view').addClass('off').transitionHide(function(){
+        $('body').animateCss('fadeOut');
+        setTimeout(function() { go_back(currentHistory + 1); }, 250);
       });
     }
   }

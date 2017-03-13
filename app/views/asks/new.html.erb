@@ -1,9 +1,9 @@
 <script>
   $(window).load(function() {
-    <% if current_user %>
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 질문작성탭 진입', 1);
+    } else {
       go_url('ask_form');
-		<% else %>
-			go_url('landing');
-		<% end %>
+    }
   });
 </script>

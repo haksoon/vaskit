@@ -24,8 +24,7 @@ class CollectionsController < ApplicationController
       format.json do
         @related_collections = @collection.find_related_collections.limit(5)
         if @related_collections.blank?
-          @recent_asks = Ask.where(be_completed: false)
-                            .page(params[:page])
+          @recent_asks = Ask.page(params[:page])
                             .per(Ask::ASK_PER)
                             .order(id: :desc)
 

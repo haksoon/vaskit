@@ -19,7 +19,7 @@
       {{ var l = videos.length }}
       {{ for (var i=0; i < l; i++) { }}
         {{ var video = videos[i] }}
-        {{= videoThumbnailTemplate({video:video}) }}
+        {{= videoThumbnailTemplate({ video: video }) }}
       {{ } }}
       <div class="loading_icon" page="2" loading="true"><i class="fa fa-spinner fa-spin"></i></div>
     </div>
@@ -28,7 +28,7 @@
 
 <script type="text/template" id="videoThumbnailTemplate">
   <div class="video_thumbnail">
-    <div class="clearfix video_header" href="/videos/{{= video.id }}" onclick="if (visitor_check() === undefined) { go_url('video_ask', {{= video.id }}); } return false;">
+    <div class="clearfix video_header" href="/videos/{{= video.id }}" onclick="if (visitor_check()) { ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 비교영상 진입', 1); } else { go_url('video_ask', {{= video.id }}); } return false;">
       <div class="video_title text_box_short"><i class="fa fa-tv"></i> {{= video.title }}</div>
       <span class="video_ribbon"></span>
       <div class="video_image">
@@ -70,51 +70,53 @@
         {{= taggingKeywords(video.description) }}
       </div>
     </div>
-    {{= askDetailBodyTemplate({ask: ask, already_like: already_like}) }}
-    {{= commentListTemplate({ask: ask, like_comments: like_comments}) }}
+    {{= askDetailBodyTemplate({ ask: ask, already_like: already_like }) }}
+    {{= commentListTemplate({ ask: ask, like_comments: like_comments }) }}
   </div>
-  {{= commentInputTemplate({ask: ask}) }}
+  {{= commentInputTemplate({ ask: ask }) }}
 </script>
 
 <script>
-  var videoAsksTemplate = _.template($("#videoAsksTemplate").html());
-  var videoAsksShowTemplate = _.template($("#videoAsksShowTemplate").html());
-  var videoThumbnailTemplate = _.template($("#videoThumbnailTemplate").html());
-  var videoAskShowTemplate = _.template($("#videoAskShowTemplate").html());
+  var videoAsksTemplate = _.template($('#videoAsksTemplate').html());
+  var videoAsksShowTemplate = _.template($('#videoAsksShowTemplate').html());
+  var videoThumbnailTemplate = _.template($('#videoThumbnailTemplate').html());
+  var videoAskShowTemplate = _.template($('#videoAskShowTemplate').html());
 
   function set_video_asks() {
-    var video_asks_seg = $("#video_asks_seg");
+    var video_asks_seg = $('#video_asks_seg');
     $.ajax({
-      url: "/videos",
-      dataType: "json",
-      type: "GET",
-      error: function(){
-        return false;
+      url: '/videos',
+      dataType: 'json',
+      type: 'GET',
+      error: function() {
+        notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
-      success: function(data){
+      success: function(data) {
         var videos = data.videos;
-        video_asks_seg.html(videoAsksTemplate({videos: videos}));
+        video_asks_seg.html(videoAsksTemplate({ videos: videos }));
       }
     });
   }
 
   function show_video_asks() {
-    var url = "/videos";
+    var url = '/videos';
     $.ajax({
       url: url,
-      dataType: "json",
-      type: "GET",
-      error: function(){
-        return false;
+      dataType: 'json',
+      data: { page: 1 },
+      type: 'GET',
+      error: function() {
+        notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
-      success: function(data){
-        var html = videoAsksShowTemplate({videos: data.videos, url: url});
+      success: function(data) {
+        var html = videoAsksShowTemplate({ videos: data.videos, url: url });
         create_wrapper(html);
+        if (currentSeg === 1 && segHistory[currentSeg] === 1) ga('send', 'event', '컬렉션탭', '비교영상', 1);
       },
-      beforeSend: function(){
+      beforeSend: function() {
         loadingStart();
       },
-      complete: function(){
+      complete: function() {
         loadingEnd();
       }
     });
@@ -131,17 +133,18 @@
       url: url,
       dataType: 'json',
       type: 'GET',
-      error: function(){
-        return false;
+      error: function() {
+        notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
-      success: function(data){
-        var html = videoAskShowTemplate({video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments});
+      success: function(data) {
+        var html = videoAskShowTemplate({ video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments });
         create_wrapper(html, true);
+        ga('send', 'event', '컨텐츠', '비교영상', video_id, 1);
       },
-      beforeSend: function(){
+      beforeSend: function() {
         loadingStart();
       },
-      complete: function(){
+      complete: function() {
         loadingEnd();
       }
     });

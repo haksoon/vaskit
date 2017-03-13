@@ -68,50 +68,54 @@
 </script>
 
 <script>
-  var voteTutorialTemplate = _.template($("#voteTutorialTemplate").html());
-  var askTutorialTemplate = _.template($("#askTutorialTemplate").html());
-  var cropTutorialTemplate = _.template($("#cropTutorialTemplate").html());
+  var voteTutorialTemplate = _.template($('#voteTutorialTemplate').html());
+  var askTutorialTemplate = _.template($('#askTutorialTemplate').html());
+  var cropTutorialTemplate = _.template($('#cropTutorialTemplate').html());
+
+  function check_tutorial(type) {
+    if (localStorage.getItem('tutorial') === null || localStorage.getItem('tutorial').match(type) === null) return true;
+  }
 
   function show_tutorial_vote() {
-    $(".tutorial_overlay").html(voteTutorialTemplate()).removeClass("hidden");
+    $('.tutorial_overlay').html(voteTutorialTemplate()).removeClass('hidden');
   }
   function hide_tutorial_vote() {
-    if (localStorage.tutorial === undefined) { localStorage.tutorial = "vote,"; } else { localStorage.tutorial += "vote,"; }
-    $(".tutorial_div").animateCssRemove('fadeOutDownBig');
-    $(".tutorial_overlay").animateCssEmpty('fadeOut', function(){
-      $(".tutorial_overlay").addClass("hidden");
+    if (localStorage.tutorial === undefined) { localStorage.tutorial = 'vote,'; } else { localStorage.tutorial += 'vote,'; }
+    $('.tutorial_div').animateCssRemove('fadeOutDownBig');
+    $('.tutorial_overlay').animateCssEmpty('fadeOut', function(){
+      $('.tutorial_overlay').addClass('hidden');
     });
   }
 
   function show_tutorial_ask() {
-    $(".tutorial_overlay").html(askTutorialTemplate()).removeClass("hidden");
-    $("#ask_tutorial .placeholder").unityping({
+    $('.tutorial_overlay').html(askTutorialTemplate()).removeClass('hidden');
+    $('#ask_tutorial .placeholder').unityping({
                   string: ['뭐 사지?', '어퓨 텐션팩트', '입생로랑 틴트', '로레알 헤어에센스', '제품명을 검색해서 입력해보세요!'],
                   typingSpeed: 750, // CPM; Characters per Minute
                   backSpeed: 75, // ms
                   startDelay: 1500, // ms
                   backDelay: 250 // ms
               });
-    $("#ask_tutorial .search_input").delay(1000).animate({paddingLeft: "15px"}, 250);
-    $("#ask_tutorial .search_icon").delay(1000).animate({left: "-50px"}, 250);
-    $("#ask_tutorial .search_input_submit").delay(1000).animate({right: "0px"}, 250);
+    $('#ask_tutorial .search_input').delay(1000).animate({ paddingLeft: '15px' }, 250);
+    $('#ask_tutorial .search_icon').delay(1000).animate({ left: '-50px' }, 250);
+    $('#ask_tutorial .search_input_submit').delay(1000).animate({ right: '0px' }, 250);
   }
   function hide_tutorial_ask() {
-    if (localStorage.tutorial === undefined) { localStorage.tutorial = "ask,"; } else { localStorage.tutorial += "ask,"; }
-    $(".tutorial_div").animateCssRemove('fadeOutDownBig');
-    $(".tutorial_overlay").animateCssEmpty('fadeOut', function(){
-      $(".tutorial_overlay").addClass("hidden");
+    if (localStorage.tutorial === undefined) { localStorage.tutorial = 'ask,'; } else { localStorage.tutorial += 'ask,'; }
+    $('.tutorial_div').animateCssRemove('fadeOutDownBig');
+    $('.tutorial_overlay').animateCssEmpty('fadeOut', function(){
+      $('.tutorial_overlay').addClass('hidden');
     });
   }
 
   function show_tutorial_crop() {
-    $(".tutorial_overlay").html(cropTutorialTemplate()).removeClass("hidden");
+    $('.tutorial_overlay').html(cropTutorialTemplate()).removeClass('hidden');
   }
   function hide_tutorial_crop() {
-    if (localStorage.tutorial === undefined) { localStorage.tutorial = "crop,"; } else { localStorage.tutorial += "crop,"; }
-    $(".tutorial_div").animateCssRemove('fadeOutDownBig');
-    $(".tutorial_overlay").animateCssEmpty('fadeOut', function(){
-      $(".tutorial_overlay").addClass("hidden");
+    if (localStorage.tutorial === undefined) { localStorage.tutorial = 'crop,'; } else { localStorage.tutorial += 'crop,'; }
+    $('.tutorial_div').animateCssRemove('fadeOutDownBig');
+    $('.tutorial_overlay').animateCssEmpty('fadeOut', function(){
+      $('.tutorial_overlay').addClass('hidden');
     });
   }
 </script>

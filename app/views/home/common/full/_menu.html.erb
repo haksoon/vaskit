@@ -4,15 +4,15 @@
     <div class="menu_box ready">
       <ul class="menu_lists clearfix">
         {{ if (options.description) { }}
-          <li class="menu_description">{{=options.description}}</li>
+          <li class="menu_description">{{= options.description }}</li>
         {{ } }}
         {{ if (options.menus) { }}
           {{ for (var i = 0; i < options.menus.length; i++) { }}
             {{ var menu = options.menus[i] }}
             {{ if (menu.description) { }}
-              <li class="menu_description">{{=menu.description}}</li>
+              <li class="menu_description">{{= menu.description }}</li>
             {{ } }}
-            <li id="{{= menu.id }}" class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{=menu.name}}</li>
+            <li id="{{= menu.id }}" class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{= menu.name }}</li>
           {{ } }}
         {{ } }}
       </ul>
@@ -20,7 +20,7 @@
         {{ if (options.bottoms) { }}
           {{ for (var i = 0; i < options.bottoms.length; i++) { }}
             {{ var menu = options.bottoms[i] }}
-            <li id="{{= menu.id }}" class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{=menu.name}}</li>
+            <li id="{{= menu.id }}" class="menu_list {{= menu.class }}" onclick="{{= menu.func }}">{{= menu.name }}</li>
           {{ } }}
         {{ } }}
         <li class="menu_list" onclick="back_button();">취소</li>
@@ -30,32 +30,32 @@
 </script>
 
 <script>
-  var menuTemplate = _.template($("#menuTemplate").html());
+  var menuTemplate = _.template($('#menuTemplate').html());
 
   function show_menu(options) {
-    $("#main_view").append(menuTemplate({options: options}));
-    var menu = $(".viewer.menu").last();
-    var menu_box = menu.find(".menu_box");
+    $('#main_view').append(menuTemplate({ options: options }));
+    var menu = $('.viewer.menu').last();
+    var menu_box = menu.find('.menu_box');
     setTimeout(function(){
-      menu.removeClass("ready");
-      menu_box.removeClass("ready");
+      menu.removeClass('ready');
+      menu_box.removeClass('ready');
     }, 100);
-    $(document).on("keydown", menu_keybinding);
+    $(document).on('keydown', menu_keybinding);
   }
 
   function hide_menu() {
-    var menu = $(".viewer.menu").first();
-    var menu_box = menu.find(".menu_box");
-    menu.addClass("ready");
-    menu_box.addClass("ready").transitionRemove(function(){
+    var menu = $('.viewer.menu').first();
+    var menu_box = menu.find('.menu_box');
+    menu.addClass('ready');
+    menu_box.addClass('ready').transitionRemove(function(){
       menu.remove();
     });
-    $(document).off("keydown", menu_keybinding);
+    $(document).off('keydown', menu_keybinding);
   }
 
   function menu_keybinding(e) {
-    var menu = $(".viewer.menu").last();
-    var menu_box = menu.find(".menu_box");
+    var menu = $('.viewer.menu').last();
+    var menu_box = menu.find('.menu_box');
     if (e.keyCode == '13') {
       menu_box.find('.confirmation').click();
     } else if (e.keyCode == '27') {

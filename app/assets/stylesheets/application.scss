@@ -397,6 +397,7 @@ body {
   }
 }
 
+.input_div { position: relative; height: 50px; margin-bottom: 10px; }
 .input {
   &.text_field {
     display: block;
@@ -430,7 +431,12 @@ body {
       font-size: 14px;
       &.ready { color: #ff7200; }
     }
-    &.checker { font-size: 12px; color: #999; }
+    &.checker { font-size: 12px; color: #999;
+      .fa-spinner { color: lightgray; }
+      .fa-check, .fa-lock { color: lightgreen; }
+      .fa-exclamation-triangle { color: orange; }
+      .fa-remove { color: red; }
+    }
     &.gender_btn { width: 50%; background-color: #f0f0f0; color: #ccc; -webkit-tap-highlight-color: transparent;
       &:active { background-color: #ddd; }
       &.on { color: #333; background-color: #ddd; font-size: 20px; }
@@ -588,7 +594,7 @@ body {
 }
 .related_collections_list { background-color: #f9f9f9; padding: 16px 16px 30px; border-top: 1px solid #dfdfdf;
   .collection_thumbnail { padding: 16px 0 0; margin-bottom: 0;
-    .collection_description { padding:0 10px; @include ellipsis; }
+    .collection_description { padding: 0 10px; @include ellipsis; }
     .collection_name { padding: 5px 10px 7px; @include ellipsis; }
   }
   .bx-viewport { border: 0; left: 0; border-radius: 3px; }
@@ -708,7 +714,7 @@ body {
       .ask_user_pic { top: 10px; left: 10px; width: 20px; height: 20px; }
     }
     .ask_message { padding: 0 30px 0 10px; height: 30px; line-height: 30px; }
-    .ask_message_more { position: absolute; bottom: 0; right: 0; display: block; width: 40px; height: 30px; line-height: 30px; text-align:center; font-size: 12px; color: #999; background-color: #fff; }
+    .ask_message_more { position: absolute; bottom: 0; right: 0; display: block; width: 40px; height: 30px; line-height: 30px; text-align: center; font-size: 12px; color: #999; background-color: #fff; }
   }
 
   &.ask_detail {
@@ -1075,25 +1081,26 @@ body {
 }
 
 .search_preview {
-  .recent_search { margin: 0 0 20px;
-    .recent_search_title { width: 100%; height: 40px; line-height: 40px; padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid #eee; background-color: #f2f0f0;
+  .search_preview_div { margin: 0 0 20px;
+    .search_preview_title { width: 100%; height: 40px; line-height: 40px; padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid #eee; background-color: #f2f0f0;
       .recent_search_reset { float: right; font-size: 12px; color: #999; }
     }
-    .recent_search_list { margin: 0; padding: 0; list-style: none;
-      .recent_search_item { height: 40px; line-height: 40px; }
+    .search_preview_list { margin: 0; padding: 0; list-style: none;
+      .search_preview_item { background-color: #fff; overflow: hidden; transition: background-color .1s; cursor: pointer;
+        .search_preveiw_link { position: relative; display: block; padding: 0 50px 0 40px; height: 50px; line-height: 50px; border-bottom: 1px solid #eee; box-sizing: border-box; color: #666; @include ellipsis;
+          .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; margin: 17px 7px; background-position-y: -56px;
+            &.collection_icon { background-position-x: 0; }
+            &.hash_tag_icon { background-position-x: -16px; }
+            &.ask_deal_icon { background-position-x: -32px; }
+            &.brand_icon { background-position-x: -48px; }
+            &.user_icon { background-position-x: -64px; }
+            &.none_icon { background-position-x: -80px; }
+          }
+          .search_date { position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
+          &.search_focus { background-color: #ffe4a9; }
+        }
+      }
     }
-  }
-  .search_preview_list { position: relative; display: block; height: 50px; line-height: 50px; padding: 0 40px; box-sizing: border-box; color: #666; background-color: #fff; border-bottom: 1px solid #eee; overflow: hidden; transition: background-color .1s; @include ellipsis;
-    .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; margin: 17px 7px; background-position-y: -56px;
-      &.collection_icon { background-position-x: 0; }
-      &.hash_tag_icon { background-position-x: -16px; }
-      &.ask_deal_icon { background-position-x: -32px; }
-      &.brand_icon { background-position-x: -48px; }
-      &.user_icon { background-position-x: -64px; }
-      &.none_icon { background-position-x: -80px; }
-    }
-    .search_date { position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
-    &.search_focus { background-color: #ffe4a9; }
   }
 }
 
@@ -1175,7 +1182,7 @@ body {
               .naver_product_image_seg { width: 50%; height: auto; padding: 10px; border-bottom: 1px solid #dbdbdb; cursor: pointer;
                 img { display: block; width: 100%; height: auto; transition: transform 2s cubic-bezier(0.52, 1.14, 0.58, 1); }
               }
-              .naver_product_info_seg { width: 50%; height: auto; padding: 10px; padding-right: 20px; text-align: left; border-bottom: 1px solid #dbdbdb; cursor:pointer;
+              .naver_product_info_seg { width: 50%; height: auto; padding: 10px; padding-right: 20px; text-align: left; border-bottom: 1px solid #dbdbdb; cursor: pointer;
                 .mall { font-size: 12px; margin: 0; padding-bottom: 5px; color: #9d9ea1; }
                 .title { font-size: 15px; margin: 0; color: #383838; @include font-bold; }
                 .price { font-size: 12px; margin: 0; padding-top: 5px; color: #ee6e01; @include font-number; text-align: right; }
@@ -1203,7 +1210,7 @@ body {
         &.on { transform: translateY(0%); }
       }
     }
-    .input_div { position: relative; height: 50px; margin-top: 10px; border: 1px solid #ccc; border-bottom-width: 2px; outline: 0 solid #fff; transition: border .5s, outline .5s;
+    .input_div { margin: 10px 0 0; border: 1px solid #ccc; border-bottom-width: 2px; outline: 0 solid #fff; transition: border .5s, outline .5s;
       &.required { border-bottom: none; outline: 3px solid #ff7200; }
       &.on { border-bottom: 2px solid #ff7200; }
       .btn_field { color: #ccc; }
@@ -1217,7 +1224,7 @@ body {
     input[type='file'] { display: inline; width: 1px; visibility: hidden; }
 
     &.spec { padding: 0; overflow: hidden;
-      .input_div.spec { display: block; padding: 0; margin: 0; height: 40px; line-height: 40px; border: 0; z-index: 1;
+      .input_div.spec { padding: 0; margin: 0; height: 40px; line-height: 40px; border: 0; z-index: 1;
         .input.text_field { height: 40px; min-height: 40px; max-height: 40px; padding: 6px 50px; margin-bottom: 0; font-size: 13px; }
         &.sub { width: 50%; float: left; border-top: 1px solid #eee; border-bottom: 1px solid #bdbdbd;
           .input.text_field { padding: 6px; }
@@ -1460,7 +1467,7 @@ body {
     .landing_background { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 120px); background: url('/images/logo/logo_landing.png') no-repeat center center; background-size: 200px;
       .landing_description { position: absolute; bottom: calc(50% - 60px); width: 100%; text-align: center; overflow: hidden; }
     }
-    .login_btn_area { position: absolute; bottom: 40px; left: 0; width: 100%; height: 110px; overflow: hidden; padding: 0 10px; box-sizing: border-box; z-index: 10;
+    .login_btn_area { position: absolute; bottom: 0px; left: 0; width: 100%; height: 150px; overflow: hidden; padding: 0 10px; box-sizing: border-box; z-index: 10;
       .login_btn { display: block; height: 50px; line-height: 50px; text-align: center; border-radius: 2px; border: 1px solid #fff; box-sizing: border-box;
                     transition: background-color .1s, color .1s; -webkit-tap-highlight-color: transparent;
         &.facebook { width: 100%; margin-bottom: 10px; background-color: #fff; color: #ff7200;
@@ -1473,10 +1480,14 @@ body {
           &:active { background-color: #fff; color: #ff7200; }
         }
       }
+      .login_info { position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; line-height: 40px; padding-right: 15px; box-sizing: border-box; font-size: 13px; text-align: right;
+        a { color: #fff; border-bottom: 1px solid #fff; }
+      }
     }
   }
 }
 #login_page, #login_page_sub { height: 100%; }
+#reset_password_btn { display: block; height: 40px; line-height: 40px; color: #999; font-size: 13px; text-align: center; }
 #gender_bar {
   position: absolute; bottom: 0; left: 25%; width: 50%; height: 0; background-color: #ccc; transition: height .25s, left .25s;
   &.on { height: 3px; }

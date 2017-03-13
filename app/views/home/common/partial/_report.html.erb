@@ -21,7 +21,9 @@
                   }
                 ]
               };
-    if (visitor_check() === undefined) {
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 신고하기 시도', 1);
+    } else {
       setTimeout(function(){
         go_url('menu', options);
       }, 50);
@@ -53,7 +55,7 @@
 	        url: "/log_reports.json",
           dataType: "json",
 	        type: "POST",
-	        data: {target: target, target_id: target_id, report_type: report_type, message: message},
+	        data: { target: target, target_id: target_id, report_type: report_type, message: message },
 					error: function(){
 	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 	        },
