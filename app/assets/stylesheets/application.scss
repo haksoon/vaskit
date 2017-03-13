@@ -677,6 +677,17 @@ body {
     .vote_graph { display: inline-block; margin: 0; padding: 0; list-style: none; width: calc(50% - 60px);
       .circle {
         display: inline-block; width: calc(10% - 1px); height: 6px; background-color: #ddd; transition: background-color .25s;
+        &.on { animation: zoomIn 2s; }
+        &:nth-of-type(0n+1) { animation-delay: .1s; }
+        &:nth-of-type(0n+2) { animation-delay: .2s; }
+        &:nth-of-type(0n+3) { animation-delay: .3s; }
+        &:nth-of-type(0n+4) { animation-delay: .4s; }
+        &:nth-of-type(0n+5) { animation-delay: .5s; }
+        &:nth-of-type(0n+6) { animation-delay: .6s; }
+        &:nth-of-type(0n+7) { animation-delay: .7s; }
+        &:nth-of-type(0n+8) { animation-delay: .8s; }
+        &:nth-of-type(0n+9) { animation-delay: .9s; }
+        &:nth-of-type(0n+10) { animation-delay: 1s; }
         &.left { margin-left: 1px; float: right;
           &:first-of-type { border-radius: 0 3px 3px 0; }
           &:last-of-type { margin-left: 0; border-radius: 3px 0 0 3px; }
@@ -760,7 +771,7 @@ body {
     }
     .vs_result_detail { display: block; height: 0; line-height: 30px; transition: height .5s;
       &.is_loading { height: 300px; }
-      &.is_opened { height: 300px;
+      &.is_opened { height: 272px;
         .left_vote_count { transform: translateX(0%); }
         .right_vote_count { transform: translateX(0%); }
         .vote_graph .circle.on { background-color: #ff7200; }
@@ -853,6 +864,7 @@ body {
     &.blank { &::before { top: 0; } }
 
     .comment_box { margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s;
+      &.new_alarm::before { content: ''; position: absolute; top: 0; width: 2px; height: 100%; background-color: #ff7200; }
       .comment_reply_icon { position: absolute; top: 10px; color: #dbdbdb; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
       .comment_user { position: relative; height: 14px; margin: 4px 5px 2px; font-size: 11px; color: #999; @include font-number;
@@ -880,6 +892,7 @@ body {
       &.reply { margin-top: -5px; }
       // &:last-of-type { margin-bottom: 150px; }
       &.left { text-align: left; margin-right: 45px;
+        &.new_alarm::before { left: -5px; }
         &.reply { margin-left: 35px; margin-right: 45px; }
         .comment_reply_icon { left: -10px; transform: rotate(180deg); }
         .comment_user_pic { float: left; }
@@ -898,6 +911,7 @@ body {
         .comment_likes { padding-right: 10px; margin-left: 45px; text-align: right; }
       }
       &.right { text-align: right; margin-left: 45px;
+        &.new_alarm::before { right: -5px; }
         &.reply { margin-left: 45px; margin-right: 35px; }
         .comment_reply_icon { right: -10px; transform: scale(1, -1); }
         .comment_user_pic { float: right; }

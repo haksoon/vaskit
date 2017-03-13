@@ -92,8 +92,7 @@
         notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
       success: function(data) {
-        var videos = data.videos;
-        video_asks_seg.html(videoAsksTemplate({ videos: videos }));
+        video_asks_seg.html(videoAsksTemplate({ videos: data.videos }));
       }
     });
   }

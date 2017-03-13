@@ -55,12 +55,12 @@ class AsksController < ApplicationController
         ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, { ask_likes: { include: :user } }, :ask_complete, { comments: { include: [:user, { comment_likes: { include: :user } }] } }])
 
         if current_user
-          all_alarms = Alarm.where(ask_id: params[:id],
+          new_alarms = Alarm.where(ask_id: params[:id],
                                    user_id: current_user.id,
                                    is_read: false)
-          unless all_alarms.blank?
-            last_alarm = all_alarms.last
-            all_alarms.update_all(is_read: true)
+          unless new_alarms.blank?
+            last_alarm = new_alarms.last
+            new_alarms.update_all(is_read: true)
             last_alarm.record_timestamps = false
             last_alarm.update(is_read: true)
             last_alarm.record_timestamps = true

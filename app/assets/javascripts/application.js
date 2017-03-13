@@ -275,6 +275,7 @@ function open_full_view(html) {
   setTimeout(function(){
     new_viewer.removeClass('off');
   }, 50);
+  return new_viewer;
 }
 
 function close_full_view() {
@@ -294,6 +295,7 @@ function create_wrapper(html, is_full) {
     prev_wrappers.addClass('prev');
     new_wrapper.removeClass('next');
   }, 50);
+  return new_wrapper;
 }
 
 function remove_wrapper() {
@@ -333,15 +335,17 @@ $.fn.scroll_to = function(destination) {
   if (destination === null || destination === undefined) {
     destination = st_now > 0 ? top : bottom;
   } else if (destination === true) {
+    destination = top;
+  } else if (destination === false) {
     destination = bottom;
   }
 
   if (current_inner.length > 0) {
-    current_inner.css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function(){
+    current_inner.clearQueue().css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function(){
       current_inner.css('-webkit-overflow-scrolling', 'touch');
     });
   } else {
-    current_container.css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function(){
+    current_container.clearQueue().css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function(){
       current_container.css('-webkit-overflow-scrolling', 'touch');
     });
   }

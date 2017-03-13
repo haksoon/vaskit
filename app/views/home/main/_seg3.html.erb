@@ -785,7 +785,7 @@
         {{ var bLink = document.createElement('a') }}
         {{ if (ask.right_ask_deal.link != '' && ask.right_ask_deal.link != null) { }}
           {{ bLink.href = ask.right_ask_deal.link }}
-          <span class="ask_table_cell left text_box_short"><a href="{{= bLink.href }}" target="_blank">{{= fieldWithBlank(bLink.host) }}</a></span>
+          <span class="ask_table_cell right text_box_short"><a href="{{= bLink.href }}" target="_blank">{{= fieldWithBlank(bLink.host) }}</a></span>
         {{ } else { }}
           <span class="ask_table_cell right text_box_short">{{= '입력해주세요' }}</span>
         {{ } }}
@@ -911,7 +911,7 @@
       })
       .on('focus', function(e) {
         removeIOSKeyPadEffectOnFocus(e);
-        current_inner.scroll_to(true);
+        current_inner.scroll_to(false);
         hashtag_container.addClass('on');
       }).on('blur', function(e) {
         removeIOSKeyPadEffectOnBlur(e);

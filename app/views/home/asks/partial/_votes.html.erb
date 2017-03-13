@@ -2,13 +2,13 @@
   <span class="left_vote_count">{{= left_count }}</span>
   <div class="vote_graph left">
     {{ for(var i=0; i < 10; i++) { }}
-      <span class="circle left {{= i < (left_count / total_count) * 10 ? 'on' : '' }}" style="animation-delay: {{= i * 0.1 }}s;"></span>
+      <span class="circle left {{= i < (left_count / total_count) * 10 ? 'on' : '' }}"></span>
     {{ } }}
   </div>
   <span class="vote_type">{{= type }}</span>
   <div class="vote_graph right">
     {{ for(var i=0; i < 10; i++) { }}
-      <span class="circle right {{= i < (right_count / total_count) * 10 ? 'on' : '' }}" style="animation-delay: {{= i * 0.1 }}s;"></span>
+      <span class="circle right {{= i < (right_count / total_count) * 10 ? 'on' : '' }}"></span>
     {{ } }}
   </div>
   <span class="right_vote_count">{{= right_count }}</span>
@@ -219,7 +219,7 @@
                 var right_vote_count = data.ask.right_ask_deal.vote_count;
                 if (is_left) {
                   all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
-                                 .find('.vote_graph.left').find('.on').animateCss('flash');
+                                 .find('.vote_graph.left').find('.on');
                   all_vs_btns.attr('vote-id', data.vote.id)
                               .attr('vote-direction', 'left')
                               .removeClass('right').addClass('left').clearQueue().stop().css({
@@ -229,7 +229,7 @@
                   all_comment_toggles.attr('left', true).removeClass('right').addClass('left');
                 } else {
                   all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
-                                 .find('.vote_graph.right').find('.on').animateCss('flash');
+                                 .find('.vote_graph.right').find('.on');
                   all_vs_btns.attr('vote-id', data.vote.id)
                               .attr('vote-direction', 'right')
                               .removeClass('left').addClass('right').clearQueue().stop().css({

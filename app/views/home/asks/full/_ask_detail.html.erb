@@ -194,9 +194,9 @@
     {{ var bLink = document.createElement('a') }}
     {{ if (right_ask_deal.link != '' && right_ask_deal.link != null) { }}
       {{ bLink.href = right_ask_deal.link }}
-      <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));"><a href="{{= bLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(bLink.host) }}</a></span>
+      <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));"><a href="{{= bLink.href }}" target="_blank" onclick="window.event.cancelBubble = true;">{{= fieldWithBlank(bLink.host) }}</a></span>
     {{ } else { }}
-      <span class="ask_table_cell left text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(bLink.host) }}</span>
+      <span class="ask_table_cell right text_box_short" onclick="go_url('ask_image', $(this));">{{= fieldWithBlank(bLink.host) }}</span>
     {{ } }}
     <i class="ask_table_icon vaskit_icon link"></i>
   </div>
@@ -434,16 +434,19 @@
                         age_total_count += detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count;
                         age_total_count += detail_vote_count.left.etc_count + detail_vote_count.right.etc_count;
 
-                    html += '<div style="border-top: 1px solid #dbdbdb;">' + askResultTemplate({ type: '남성', left_count: detail_vote_count.left.male_count, right_count: detail_vote_count.right.male_count, total_count: gender_total_count }) + '</div>';
+                    html += '<div style="border-top: 1px dashed #eee;">';
+                    html += '<div>' + askResultTemplate({ type: '남성', left_count: detail_vote_count.left.male_count, right_count: detail_vote_count.right.male_count, total_count: gender_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '여성', left_count: detail_vote_count.left.female_count, right_count: detail_vote_count.right.female_count, total_count: gender_total_count }) + '</div>';
-                    html += '<div style="border-top: 1px solid #dbdbdb;">' + askResultTemplate({ type: '20초', left_count: detail_vote_count.left.age_20_1_count, right_count: detail_vote_count.right.age_20_1_count, total_count: age_total_count }) + '</div>';
+                    html += '</div>';
+                    html += '<div style="border-top: 1px dashed #eee;">';
+                    html += '<div>' + askResultTemplate({ type: '20초', left_count: detail_vote_count.left.age_20_1_count, right_count: detail_vote_count.right.age_20_1_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '20중', left_count: detail_vote_count.left.age_20_2_count, right_count: detail_vote_count.right.age_20_2_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '20후', left_count: detail_vote_count.left.age_20_3_count, right_count: detail_vote_count.right.age_20_3_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '30초', left_count: detail_vote_count.left.age_30_1_count, right_count: detail_vote_count.right.age_30_1_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '30중', left_count: detail_vote_count.left.age_30_2_count, right_count: detail_vote_count.right.age_30_2_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '30후', left_count: detail_vote_count.left.age_30_3_count, right_count: detail_vote_count.right.age_30_3_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '기타', left_count: detail_vote_count.left.etc_count, right_count: detail_vote_count.right.etc_count, total_count: age_total_count }) + '</div>';
-                    html += '<div style="height: 27px; line-height: 28px; border-top: 1px solid #dbdbdb;"><i class="fa fa-id-badge"></i> 비회원 투표 결과는 제외한 수치입니다</div>';
+                    html += '</div>';
 
                     vs_result_detail.html(html).addClass('is_loading').one(transitionEnd, function() {
                         vs_result_detail.addClass('is_opened').removeClass('is_loading');

@@ -4,6 +4,7 @@
       go_seg(4);
       go_url('user_history', '<%= @type %>');
     <% else %>
+      go_seg(1);
       go_url('landing');
       ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '유저 메뉴 접근 시도', 1);
     <% end %>

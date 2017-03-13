@@ -24,6 +24,7 @@
   var reset_password_token = document.location.search.replace('?reset_password_token=', '');
 
   $(window).ready(function(){
+    go_seg(1);
     go_url('landing');
     ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '패스워드 재설정', 1);
   }).load(function(){

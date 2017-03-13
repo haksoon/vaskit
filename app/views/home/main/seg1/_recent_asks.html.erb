@@ -59,8 +59,7 @@
         notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
       success: function(data) {
-        var asks = data.asks;
-        recent_asks_seg.find('.recent_asks_image_box').html(recentAskSegTemplate({ asks: asks }));
+        recent_asks_seg.find('.recent_asks_image_box').html(recentAskSegTemplate({ asks: data.asks }));
       },
       beforeSend: function() {
         recent_asks_seg.html(recentAsksTemplate({ asks: null }));

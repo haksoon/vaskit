@@ -96,11 +96,6 @@
         <a href="/etc/access_term" onclick="go_url('access_term'); return false;" style="color: #999; border-bottom: 1px solid #999;">이용약관</a> 및
         <a href="/etc/privacy_policy" onclick="go_url('privacy_policy'); return false;" style="color: #999; border-bottom: 1px solid #999;">개인정보취급정책</a>에 동의합니다
       </div>
-      <div style="position: relative; width: 100%; padding: 10px; box-sizing: border-box; line-height: 16px; font-size: 12px; background-color: #eee; color: #666;">
-        <i class="fa fa-info-circle" style="font-size: 14px; line-height: 20px; font-weight: bold;">&nbsp;걱정마세요!</i>
-        <br>입력하신 생년월일 및 성별 정보는 투표의 통계분석을 위한 자료로서만 활용되며, 기타 여하한 이유로 악용되지 않습니다.
-        <br>VASKIT은 고객님의 개인정보를 중요하게 여기고, 언제나 그 관리에 최선을 다하고 있습니다.
-      </div>
       <div class="hidden">
         <%= f.check_box :agree_access_term, { checked: false, required: true } %>
         <%= f.hidden_field :gender, required: true %>
