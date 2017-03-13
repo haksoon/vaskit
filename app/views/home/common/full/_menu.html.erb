@@ -36,7 +36,7 @@
     $('#main_view').append(menuTemplate({ options: options }));
     var menu = $('.viewer.menu').last();
     var menu_box = menu.find('.menu_box');
-    setTimeout(function(){
+    setTimeout(function() {
       menu.removeClass('ready');
       menu_box.removeClass('ready');
     }, 100);
@@ -47,7 +47,7 @@
     var menu = $('.viewer.menu').first();
     var menu_box = menu.find('.menu_box');
     menu.addClass('ready');
-    menu_box.addClass('ready').transitionRemove(function(){
+    menu_box.addClass('ready').transitionRemove(function() {
       menu.remove();
     });
     $(document).off('keydown', menu_keybinding);

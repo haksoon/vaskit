@@ -25,7 +25,7 @@ _.templateSettings = {
 $.ajaxSetup({ cache: false });
 
  // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용 // 구버전 앱 실행 방지용
- $(window).load(function(){
+ $(window).load(function() {
   if (window.HybridApp) {
     try {
       HybridApp.getGCM('hello world');
@@ -137,7 +137,7 @@ function setUserApp() {
 }
 
 function getUserToken() {
-  setTimeout(function(){
+  setTimeout(function() {
     if (window.HybridApp) {
       HybridApp.getUserToken('hello world');             // AOS
     } else {
@@ -186,7 +186,7 @@ function setAppStatusBar(type) {
     textColor = 1;
   }
 
-  setTimeout(function(){
+  setTimeout(function() {
     if (window.HybridApp) {
       HybridApp.setAppStatusBar(r, g, b, a * 255, textColor);        // AOS
     } else {
@@ -218,11 +218,11 @@ function show_seg(seg_id) {
     } else {
       // 메인 컨테이너가 열려있는 경우 상단으로 돌아감
       if (seg_id === 1 || seg_id ===2) {
-        $('#seg_'+seg_id+' .wrapper.main .container.main').css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: 0 }, 250, function(){
+        $('#seg_'+seg_id+' .wrapper.main .container.main').css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: 0 }, 250, function() {
           $(this).css('-webkit-overflow-scrolling', 'touch');
         });
       } else if (seg_id === 4) {
-        $('#seg_'+seg_id+' .wrapper.main .inner').not('.prev').not('.next').css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: 0 }, 250, function(){
+        $('#seg_'+seg_id+' .wrapper.main .inner').not('.prev').not('.next').css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: 0 }, 250, function() {
           $(this).css('-webkit-overflow-scrolling', 'touch');
         });
       }
@@ -272,7 +272,7 @@ function open_full_view(html) {
   $('#main_view').append(new_viewer);
   new_viewer = $('#main_view').find('.viewer.new');
   new_viewer.html(html).removeClass('new');
-  setTimeout(function(){
+  setTimeout(function() {
     new_viewer.removeClass('off');
   }, 50);
   return new_viewer;
@@ -290,7 +290,7 @@ function create_wrapper(html, is_full) {
   target_seg.append(new_wrapper);
   new_wrapper = target_seg.find('.wrapper.new');
   new_wrapper.html(html).removeClass('new');
-  setTimeout(function(){
+  setTimeout(function() {
     if (is_full) { $('#footer').addClass('hide'); } else { $('#footer').removeClass('hide'); }
     prev_wrappers.addClass('prev');
     new_wrapper.removeClass('next');
@@ -341,11 +341,11 @@ $.fn.scroll_to = function(destination) {
   }
 
   if (current_inner.length > 0) {
-    current_inner.clearQueue().css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function(){
+    current_inner.clearQueue().css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function() {
       current_inner.css('-webkit-overflow-scrolling', 'touch');
     });
   } else {
-    current_container.clearQueue().css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function(){
+    current_container.clearQueue().css('-webkit-overflow-scrolling', 'initial').animate({ scrollTop: destination }, 250, function() {
       current_container.css('-webkit-overflow-scrolling', 'touch');
     });
   }
@@ -364,7 +364,7 @@ function removeIOSRubberEffect(element) {
         vp_top = element.scrollTop(),
         vp_bottom = vp_top + vp_height;
     if (vp_height == vp_scroll) {
-      element.on('touchmove',function(){
+      element.on('touchmove', function() {
         return false;
       });
     } else {
@@ -405,16 +405,16 @@ function removeIOSKeyPadEffectOnFocus(e) {
     var wh = window.innerHeight;
     var st = 0;
     var th = wh;
-    iOSKeypadCheck = setInterval(function(){
+    iOSKeypadCheck = setInterval(function() {
       st = document.body.scrollTop;     // 키패드 높이
       if (st > 0) {
         th = wh - st;
         if (!userApp) th += 10;
         $('html, body').css({ height: th });
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
       }
     }, 1);
-    setTimeout(function(){
+    setTimeout(function() {
       clearInterval(iOSKeypadCheck);
     }, 500);
   }
@@ -423,10 +423,10 @@ function removeIOSKeyPadEffectOnFocus(e) {
 function removeIOSKeyPadEffectOnBlur(e) {
   if (userDevice.isIOS) {
     clearInterval(iOSKeypadCheck);
-    setTimeout(function(){
+    setTimeout(function() {
       var th = window.innerHeight;
       $('html, body').css({ height: th });
-      window.scrollTo(0,0);
+      window.scrollTo(0, 0);
     }, 50);
   }
 }
@@ -443,10 +443,10 @@ function load_template(title, callback) {
         $('.template_scripts').append(data);
         if (typeof callback === 'function') callback();
       },
-      beforeSend: function(){
+      beforeSend: function() {
         loadingStart();
       },
-      complete: function(){
+      complete: function() {
         loadingEnd();
       }
     });
@@ -459,17 +459,17 @@ function load_template(title, callback) {
 function notify(msg, onclick){
   var notice_div = $('.notice_div');
   var notice_msg = $('.notice_msg');
-  notice_div.stop().animate({ top: '-50px' },50,function(){
+  notice_div.stop().animate({ top: '-50px' }, 50, function() {
     notice_msg.html('').html(msg);
-    notice_div.attr('onclick',onclick).animate({ top: '0px' },250,function(){
-      notice_div.delay(3000).animate({ top: '-50px' },500,function(){
-        notice_div.attr('onclick','return false;');
+    notice_div.attr('onclick', onclick).animate({ top: '0px' }, 250, function() {
+      notice_div.delay(3000).animate({ top: '-50px' }, 500, function() {
+        notice_div.attr('onclick', 'return false;');
         notice_msg.html('');
       });
     });
   });
-  notice_div.unbind('touchmove click').bind('touchmove click', function(){
-    $(this).stop().animate({ top: '-50px' }, 250, function(){
+  notice_div.unbind('touchmove click').bind('touchmove click', function() {
+    $(this).stop().animate({ top: '-50px' }, 250, function() {
       $(this).css({ height: '50px' });
     });
     return false;
@@ -480,8 +480,8 @@ function loadingStart() {
   var loading_bar = $('.loading_bar');
   var loading_div = $('.loading_div');
   loading_div.removeClass('hidden');
-  loading_bar.clearQueue().animate({ width: '90%' }, 1000, function(){
-    loading_bar.animate({ width: '94%' }, 2000, function(){
+  loading_bar.clearQueue().animate({ width: '90%' }, 1000, function() {
+    loading_bar.animate({ width: '94%' }, 2000, function() {
       loading_bar.animate({ width: '98%' }, 8000);
     });
   });
@@ -490,8 +490,8 @@ function loadingStart() {
 function loadingEnd() {
   var loading_bar = $('.loading_bar');
   var loading_div = $('.loading_div');
-  loading_bar.stop().animate({ width: '100%' }, 100, function(){
-    loading_bar.delay(300).animate({ height: '0px' }, 100, function(){
+  loading_bar.stop().animate({ width: '100%' }, 100, function() {
+    loading_bar.delay(300).animate({ height: '0px' }, 100, function() {
       loading_bar.css({ width: '0%', height: '5px' });
       loading_div.addClass('hidden');
     });
@@ -512,8 +512,8 @@ function loadingProgress() {
   xhr.addEventListener('progress', function (e) {
       if (e.lengthComputable) {
           var percentComplete = e.loaded / e.total * 100 / 4 * 1 + 75;
-          loading_bar.clearQueue().animate({ width: percentComplete + '%' }, 250, function(){
-            loading_bar.delay(300).animate({ height: '0px' }, 100, function(){
+          loading_bar.clearQueue().animate({ width: percentComplete + '%' }, 250, function() {
+            loading_bar.delay(300).animate({ height: '0px' }, 100, function() {
               loading_bar.css({ width: '0%', height: '5px' });
               loading_div.addClass('hidden');
             });
@@ -603,7 +603,7 @@ function taggingKeywords(origin_string, img_hidden) {
 
   var hash_tags = origin_string.match(/#([0-9a-zA-Zㄱ-ㅎㅏ-ㅣ가-힣_]+)/g);
   if (hash_tags !== null) {
-    hash_tags.sort(function(a,b){ return b.length - a.length; });
+    hash_tags.sort(function(a, b) { return b.length - a.length; });
     $.each(hash_tags, function(index, hash_tag) {
       hash_tag = hash_tag.replace(',', '');
       var keyword = hash_tag.replace('#', '').replace('?', '');
@@ -621,7 +621,7 @@ function taggingKeywords(origin_string, img_hidden) {
   }
   var links = origin_string.match(/((http(s)?:\/\/)|(www))([\S]*)/g);
   if (links !== null) {
-    links.sort(function(a,b){ return b.length - a.length; });
+    links.sort(function(a, b) { return b.length - a.length; });
     var link_tags = [];
     var img_tags = [];
     var img_reg = /\.(jpg|jpeg|gif|bmp|png)/;
@@ -691,7 +691,7 @@ function form_check(form) {
 function truncate(string, range) {
   if (range === undefined) range = 30;
   if (string.length > range)
-    return string.substring(0,range)+'&middot;&middot;&middot;';
+    return string.substring(0, range)+'&middot;&middot;&middot;';
   else
     return string;
 }

@@ -10,7 +10,7 @@
               dataType: 'json',
               type: 'GET',
               data: { page: page },
-              error: function(){
+              error: function() {
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function(data) {
@@ -50,11 +50,11 @@
                   loading_icon.html('- End of Contents -').animateCss('flipInY');
                 }
               },
-              beforeSend: function(){
+              beforeSend: function() {
                 loadingStart();
                 loading_icon.removeAttr('loading');
               },
-              complete: function(){
+              complete: function() {
                 loadingEnd();
               }
       });

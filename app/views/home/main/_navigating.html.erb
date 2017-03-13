@@ -115,22 +115,22 @@
         segOrder.push(currentSeg);
 
         if (lastSeg === 0) {
-          segPrevFunc[currentSeg].splice(0,1,{
+          segPrevFunc[currentSeg].splice(0, 1, {
             callback : 'go_exit',
             arguments : null
           });
         } else {
-          segNextFunc[lastSeg].splice(segHistory[lastSeg],1,{
+          segNextFunc[lastSeg].splice(segHistory[lastSeg], 1, {
             callback : 'show_seg',
             arguments : currentSeg
           });
-          segPrevFunc[currentSeg].splice(0,1,{
+          segPrevFunc[currentSeg].splice(0, 1, {
             callback : 'show_seg',
             arguments : lastSeg
           });
-          segNextFunc[currentSeg].splice(segHistory[lastSeg],1);
+          segNextFunc[currentSeg].splice(segHistory[lastSeg], 1);
         }
-        segURL[currentSeg].splice(segHistory[currentSeg],1,url);
+        segURL[currentSeg].splice(segHistory[currentSeg], 1, url);
 
         history.pushState({ pageHistory: currentHistory + 1 }, null, url);
         currentHistory = history.state.pageHistory;
@@ -140,19 +140,19 @@
       } else {
         // console.log('이미 기존에 진행한 탭 히스토리가 있을 경우'); // 이미 기존에 진행한 탭 히스토리가 있을 경우
 
-        segOrder.splice(segOrder.indexOf(currentSeg),1);
+        segOrder.splice(segOrder.indexOf(currentSeg), 1);
         segOrder.push(currentSeg);
 
-        segNextFunc[lastSeg].splice(segHistory[lastSeg],1,{
+        segNextFunc[lastSeg].splice(segHistory[lastSeg], 1, {
           callback : 'show_seg',
           arguments : currentSeg
         });
-        segPrevFunc[currentSeg].splice(0,1,{
+        segPrevFunc[currentSeg].splice(0, 1, {
           callback : 'show_seg',
           arguments : lastSeg
         });
-        segNextFunc[currentSeg].splice(segHistory[lastSeg],1);
-        segPrevFunc[segOrder[0]].splice(0,1,{
+        segNextFunc[currentSeg].splice(segHistory[lastSeg], 1);
+        segPrevFunc[segOrder[0]].splice(0, 1, {
           callback : 'go_exit',
           arguments : null
         });
@@ -201,7 +201,7 @@
     if (!back_button_clicked) {
       history.back();
       back_button_clicked = true;
-      setTimeout(function(){
+      setTimeout(function() {
         back_button_clicked = false;
       }, 200);
     } else {
@@ -222,7 +222,7 @@
 
     history.go(-length);
 
-    setTimeout(function(){
+    setTimeout(function() {
       history.replaceState(history.state, null, url);
       $(window).bind('popstate', go_popstate);
     }, 100);
@@ -237,7 +237,7 @@
     if (userApp) {
       if (currentHistory === 0) history.go(1);
     } else {
-      $('#main_view').addClass('off').transitionHide(function(){
+      $('#main_view').addClass('off').transitionHide(function() {
         $('body').animateCss('fadeOut');
         setTimeout(function() { go_back(currentHistory + 1); }, 250);
       });

@@ -20,8 +20,11 @@
   </div>
 </script>
 
+<script>
+  var abc;
+</script>
+
 <script type="text/template" id="askThumbnailTemplate">
-  {{ var my_vote = [] }}
   {{ var is_voted = false }}
   {{ var vote_id = '' }}
   {{ var vote_direction = '' }}
@@ -30,26 +33,26 @@
     {{ vote_id = '' }}
     {{ vote_direction = '' }}
   {{ } else if (current_user) { }}
-    {{ my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) }) }}
-    {{ if (my_vote.length > 0) { }}
-      {{ vote_id = my_vote[0].id }}
+    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_id = my_vote.id }}
       {{ is_voted = true }}
-      {{ vote_direction = ask.left_ask_deal_id == my_vote[0].ask_deal_id ? 'left' : 'right' }}
+      {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
     {{ } }}
   {{ } else { }}
     {{ var my_votes = [] }}
-    {{ var votes = $.cookie('visitor_votes') }}
-    {{ var votes_array = (votes == null || votes == '') ? new Array() : votes.split('.') }}
+    {{ var visitor_votes = $.cookie('visitor_votes') }}
+    {{ var votes_array = (visitor_votes == null || visitor_votes == '') ? [] : visitor_votes.split('.') }}
     {{ for (var i=0; i < votes_array.length; i++) { }}
       {{ var vote = votes_array[i] }}
       {{ vote = JSON.parse(vote) }}
       {{ my_votes.push(vote) }}
     {{ } }}
-    {{ my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) }) }}
-    {{ if (my_vote.length > 0) { }}
-      {{ vote_id = my_vote[0].id }}
+    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_id = my_vote.id }}
       {{ is_voted = true }}
-      {{ vote_direction = my_vote[0].is_left ? 'left' : 'right' }}
+      {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
     {{ } }}
   {{ } }}
   {{ var left_count = ask.left_ask_deal.vote_count }}

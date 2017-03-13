@@ -91,14 +91,14 @@
             dataType: 'json',
             type: 'GET',
             data: { share_type: share_type, target_id: target_id },
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
+            success: function(data) {
               open_full_view(shareTemplate({ share_type: share_type, target_id: target_id, share_data: data.share_data }));
-              $('#share_facebook_btn').on('click', function(){ share_facebook(); });
-              $('#share_kakao_btn').on('click', function(){ share_katalk(data.share_data); });
-              $('#share_url_btn').on('click', function(){ copy_url(); });
+              $('#share_facebook_btn').on('click', function() { share_facebook(); });
+              $('#share_kakao_btn').on('click', function() { share_katalk(data.share_data); });
+              $('#share_url_btn').on('click', function() { copy_url(); });
               $('#share_url').val(share_url);
               if (userApp) setAppStatusBar('dark');
             },
@@ -173,19 +173,19 @@
                     dataType: 'json',
                     type: 'POST',
                     data: { File: captured_img },
-                    error: function(){
+                    error: function() {
                       notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
                     },
-                    success: function(data){
+                    success: function(data) {
                       image_url = "<%= CONFIG['host'] %>" + data.image_url;
                       image_width = canvas.width;
                       image_height = canvas.height;
                       send_kakao();
                     },
-                    beforeSend: function(){
+                    beforeSend: function() {
                       loadingStart();
                     },
-                    complete: function(){
+                    complete: function() {
                       loadingEnd();
                     }
               });

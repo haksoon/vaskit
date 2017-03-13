@@ -45,10 +45,10 @@
         url: '/users/get_user_profile.json',
         dataType: 'json',
         type: 'GET',
-        error: function(){
+        error: function() {
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
-        success: function(data){
+        success: function(data) {
           current_user = data.current_user;
           if (current_user === null) {
             $('#user_profile').html('');
@@ -72,26 +72,26 @@
         url: '/users/get_my_recent_ask.json',
         dataType: 'json',
         type: 'GET',
-        error: function(){
+        error: function() {
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
-        success: function(data){
+        success: function(data) {
           var my_ask = data.my_ask[0];
           if (my_ask !== null && my_ask !== undefined) {
             my_ask.ask_likes = [];
             my_ask.votes = [];
             my_ask.user = current_user;
-            $('#my_asks_in_progress').html(askThumbnailTemplate({ ask: my_ask })).children().on("click", function(){
+            $('#my_asks_in_progress').html(askThumbnailTemplate({ ask: my_ask })).children().on("click", function() {
               ga('send', 'event', '마이탭', '나의 최근 질문', current_user.string_id, 1);
             });
           } else {
             var empty_html = '<div class="no_result"><p class="align_middle"><i class="fa fa-search"></i> 현재 진행중인 질문 목록이 없습니다<a class="new_ask_btn" href="/asks/new">질문 작성하러 가기 <i class="fa fa-forward"></i></a></p></div>';
-            $('#my_asks_in_progress').html(empty_html).children().on('click', function(){
+            $('#my_asks_in_progress').html(empty_html).children().on('click', function() {
               go_url('ask_form'); return false;
             });
           }
         },
-        beforeSend: function(){
+        beforeSend: function() {
           var loading_html = '<div class="no_result"><p class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></p></div>';
           $('#my_asks_in_progress').html(loading_html);
         }
@@ -131,17 +131,17 @@
             dataType: 'json',
             type: 'GET',
             data: { type: type },
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
+            success: function(data) {
               var html = userHistoryTemplate({ type: type, asks: data.asks, url: url });
               create_wrapper(html);
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
             }
     });

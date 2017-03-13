@@ -24,7 +24,7 @@
     if (visitor_check()) {
       ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 신고하기 시도', 1);
     } else {
-      setTimeout(function(){
+      setTimeout(function() {
         go_url('menu', options);
       }, 50);
     }
@@ -44,7 +44,7 @@
                   }
                 ]
               };
-    setTimeout(function(){
+    setTimeout(function() {
       go_url('menu', options);
     }, 50);
   }
@@ -56,10 +56,10 @@
           dataType: "json",
 	        type: "POST",
 	        data: { target: target, target_id: target_id, report_type: report_type, message: message },
-					error: function(){
+					error: function() {
 	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 	        },
-	        success: function(data){
+	        success: function(data) {
 	        	if (data.already_report) {
 	        		notify("이미 신고하신 항목입니다");
 	        	} else {
@@ -67,10 +67,10 @@
 	        	}
             history.back();
 	        },
-	        beforeSend: function(){
+	        beforeSend: function() {
 						loadingStart();
 	        },
-	        complete: function(){
+	        complete: function() {
 						loadingEnd();
 	        }
 		});

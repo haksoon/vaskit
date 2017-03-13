@@ -26,17 +26,17 @@
               url: '/preview_images/' + preview_img_id + '.json',
               dataType: 'json',
               type: 'GET',
-              error: function(){
+              error: function() {
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function (data){
                 open_full_view(imageCropTemplate({ preview_image_url: data.preview_image_url }));
                 init_image_cropper();
               },
-              beforeSend: function(){
+              beforeSend: function() {
                 loadingStart();
               },
-              complete: function(){
+              complete: function() {
                 loadingEnd();
               }
       });
@@ -91,7 +91,7 @@
       cropper = new Cropper(preview_image, crop_option);
 
       var image_save_btn = $('#image_save_btn');
-      image_save_btn.off('click').on('click', function(){
+      image_save_btn.off('click').on('click', function() {
         submit_image_cropper($(this));
       });
 
@@ -113,7 +113,7 @@
               dataType: 'json',
               type: 'PUT',
               data: { crop_x: crop_x, crop_y: crop_y, crop_w: crop_w, crop_h: crop_h, cropping_type: cropping_type },
-              error: function(){
+              error: function() {
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function (data){
@@ -130,10 +130,10 @@
                   $('#user_profile_pic').attr('src', data.image_url);
                 }
               },
-              beforeSend: function(){
+              beforeSend: function() {
                 loadingStart();
               },
-              complete: function(){
+              complete: function() {
                 loadingEnd();
               }
       });
@@ -152,7 +152,7 @@
                   }
                 ]
               };
-    setTimeout(function(){
+    setTimeout(function() {
       go_url('menu', options);
     }, 50);
   }

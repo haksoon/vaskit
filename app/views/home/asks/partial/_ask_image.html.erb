@@ -120,7 +120,7 @@
     var img_layer = ask_wrapper.find('.img_layer');
     var html = img_layer.html();
 
-    img_layer.clearQueue().css({ transform: 'translateY(100%)' }).transitionEmpty(function(){
+    img_layer.clearQueue().css({ transform: 'translateY(100%)' }).transitionEmpty(function() {
       img_layer.html(html);
     });
   }
@@ -135,7 +135,7 @@
     var close_btn = img_layer.find('.close_btn');
 
     var comment_boxs = img_layer.find('.comment_box');
-    comment_boxs.each(function(){ $(this).attr('onclick', null); });
+    comment_boxs.each(function() { $(this).attr('onclick', null); });
 
     var mouseTarget, mouseStartX, mouseStartY, mouseEndX, mouseEndY; // Mouse/Touch event target
     var screenTop, screenLeft, screenWidth, screenHeight;
@@ -198,7 +198,7 @@
             img_layer.stop().animate({ top: '0%', left: '0%' }, 250);
           }
         } else {
-          img_layer.stop().animate({ top: '0%', left: (screenLeft / screenWidth) * 100 + '%' },250);
+          img_layer.stop().animate({ top: '0%', left: (screenLeft / screenWidth) * 100 + '%' }, 250);
         }
       }
     }

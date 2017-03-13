@@ -35,7 +35,7 @@
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
       (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: 'ca-pub-7943066969350292',
+        google_ad_client: "ca-pub-7382841416103725",
         enable_page_level_ads: true
       });
     </script>
@@ -70,15 +70,15 @@
         return false;
       };
 
-      window.addEventListener('resize', _.debounce(function(){
+      window.addEventListener('resize', _.debounce(function() {
         var th = window.innerHeight;
         $('html, body').css({ height: th });
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
       }, 50));
 
       // init VASKIT Frame
       var current_user = '<%= current_user ? current_user.to_json : nil %>';
-      $(window).ready(function(){
+      $(window).ready(function() {
         loadingStart();
         setUserDevice();
         alarm_check();
@@ -88,18 +88,18 @@
         $('#collections').html(collectionsTemplate()); // seg1 초기화
         $('#search').html(searchTemplate()); // seg2 초기화
         $('#my_page').html(myPageTemplate()); // seg4 초기화
-      }).load(function(){
+      }).load(function() {
         set_collections();
         set_video_asks();
         user_profile_on();
         user_alarms_on();
         loadingEnd();
-        setTimeout(function(){
+        setTimeout(function() {
           fixViewportHeight();
           $('#loading_spinner').animateCssRemove('fadeOut');
-          $('#loading_welcome').animateCssRemove('slideOutLeft', function(){
-            setTimeout(function(){
-              $('#loading_init').animateCssRemove('fadeOutDownBig', function(){
+          $('#loading_welcome').animateCssRemove('slideOutLeft', function() {
+            setTimeout(function() {
+              $('#loading_init').animateCssRemove('fadeOutDownBig', function() {
                 $('.loading_div').removeAttr('ontouchmove');
                 open_app_banner();
               });

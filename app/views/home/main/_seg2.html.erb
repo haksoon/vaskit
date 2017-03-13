@@ -122,8 +122,8 @@
     var search_input_reset = target.find('.search_input_reset');
 
     ga('send', 'event', '검색탭', '검색창 활성화', 1);
-    search_input_submit.off('click').on('click', function(){ search_by_key(); });
-    search_input_reset.off('click').on('click', function(){ search_keyword_reset(); });
+    search_input_submit.off('click').on('click', function() { search_by_key(); });
+    search_input_reset.off('click').on('click', function() { search_keyword_reset(); });
     search_input
       .off('keydown keyup focus blur')
       .on('keydown', function(e) {
@@ -155,10 +155,10 @@
           if ($.inArray(e.keyCode, keys) == -1) _.throttle(preview_search_list(keyword), 1000);
         }
       })
-      .on('focus', function(){
+      .on('focus', function() {
         target.addClass('on');
     	})
-      .on('blur', function(){
+      .on('blur', function() {
         target.removeClass('on');
         if ($(this).val().length === 0) search_preview_container.html(searchPreviewListTemplate({ result: 'recent_list' }));
         $(this).attr('disabled', true);
@@ -171,7 +171,7 @@
         dataType: 'json',
         type: 'GET',
         data: { keyword: keyword },
-        error: function(){
+        error: function() {
           return false;
         },
         success: function(data) {
@@ -258,7 +258,7 @@
     function navigate_by_mouse() {
       var search_results = search_preview_container.find('.search_preview_item');
       search_results.off('mouseover')
-                    .on('mouseover', function(e) {
+                    .on('mouseover', function() {
                       search_results.removeClass('search_focus');
                       $(this).addClass('search_focus');
                       search_preview_container.attr('index', $(this).index());
@@ -290,20 +290,20 @@
             dataType: 'json',
             type: 'GET',
             data: { type: type, keyword: keyword },
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
+            success: function(data) {
               var html = searchResultTemplate({ type: type, keyword: keyword, asks: data.asks, url: url });
               create_wrapper(html);
               save_recent_search(type, keyword);
               $('.search_preview').html(searchPreviewListTemplate({ result: 'recent_list' }));
               ga('send', 'event', '검색탭', '검색 실행', type + '/' + keyword, 1);
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
             }
     });
@@ -325,7 +325,7 @@
     for (var i=0; i<search_array.length; i++) {
       var search = search_array[i];
       search = JSON.parse(search);
-      if (search.type == type && search.keyword == keyword) search_array.splice(i,1);
+      if (search.type == type && search.keyword == keyword) search_array.splice(i, 1);
     }
     var this_search = JSON.stringify({
       type: type,

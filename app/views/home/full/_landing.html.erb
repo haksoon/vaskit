@@ -378,7 +378,7 @@
         type: 'POST',
         data: { email: email },
         dataType: 'json',
-        error: function(){
+        error: function() {
           return false;
         },
         success: function(data) {
@@ -459,7 +459,7 @@
 
 
   function sign_up_FB() {
-    var user = $('#facebook_form').serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    var user = $('#facebook_form').serializeArray().reduce(function(m, o) { m[o.name] = o.value; return m; }, {});
     $.ajax({
             url: '/users/sign_up.json',
             type: 'POST',
@@ -495,7 +495,7 @@
   }
 
   function sign_up() {
-    var user = $('#sign_up_form').serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    var user = $('#sign_up_form').serializeArray().reduce(function(m, o) { m[o.name] = o.value; return m; }, {});
     $.ajax({
             url: '/users/sign_up.json',
             type: 'POST',
@@ -544,7 +544,7 @@
   }
 
   function sign_in() {
-    var user = $('#sign_in_form').serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    var user = $('#sign_in_form').serializeArray().reduce(function(m, o) { m[o.name] = o.value; return m; }, {});
     $.ajax({
             url: '/users/sign_in.json',
             type: 'POST',
@@ -589,7 +589,7 @@
   }
 
   function forgot_password() {
-    var user = $('#forgot_password_form').serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    var user = $('#forgot_password_form').serializeArray().reduce(function(m, o) { m[o.name] = o.value; return m; }, {});
     $.ajax({
             url: '/users/password.json',
             type: 'POST',

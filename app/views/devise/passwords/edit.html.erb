@@ -23,11 +23,11 @@
   var passwordResetTemplate = _.template($('#password_reset_template').html());
   var reset_password_token = document.location.search.replace('?reset_password_token=', '');
 
-  $(window).ready(function(){
+  $(window).ready(function() {
     go_seg(1);
     go_url('landing');
     ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '패스워드 재설정', 1);
-  }).load(function(){
+  }).load(function() {
     go_url('sign_in');
     go_url('reset_password', reset_password_token);
   });
@@ -52,7 +52,7 @@
   }
 
   function password_reset() {
-    var user = $('#password_reset_form').serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    var user = $('#password_reset_form').serializeArray().reduce(function(m, o) { m[o.name] = o.value; return m; }, {});
     $.ajax({
             url: '/users/password.json',
             type: 'PUT',

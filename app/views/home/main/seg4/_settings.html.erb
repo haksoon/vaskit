@@ -98,7 +98,7 @@
   }
 
   function show_faq_help() {
-    load_template('faq_help', function(){
+    load_template('faq_help', function() {
       var faqHelpTemplate = _.template($('#faq_help_template').html());
       open_full_view(faqHelpTemplate());
     });
@@ -110,7 +110,7 @@
   }
 
   function show_access_term() {
-    load_template('access_term', function(){
+    load_template('access_term', function() {
       var accessTermTemplate = _.template($('#access_term_template').html());
       open_full_view(accessTermTemplate());
     });
@@ -122,7 +122,7 @@
   }
 
   function show_privacy_policy() {
-    load_template('privacy_policy', function(){
+    load_template('privacy_policy', function() {
       var privacyPolicyTemplate = _.template($('#privacy_policy_template').html());
       open_full_view(privacyPolicyTemplate());
     });
@@ -214,18 +214,18 @@
           change_nickname();
         }
       })
-      .on('keyup', function(e){
+      .on('keyup', function() {
         if ($(this).val().length === 0) {
           $('#change_nickname_submit').removeClass('ready');
         } else {
           $('#change_nickname_submit').addClass('ready');
         }
       })
-      .on('focus', function(){
+      .on('focus', function() {
         $(this).attr('placeholder', '변경할 닉네임을 입력해주세요');
       })
-      .on('blur', function(){
-        $(this).attr('disabled',true);
+      .on('blur', function() {
+        $(this).attr('disabled', true);
       })
       .removeAttr('disabled').focus();
   }
@@ -241,7 +241,7 @@
     		      data: formData,
     		      contentType: false,
     		      processData: false,
-              error: function(){
+              error: function() {
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function(data) {
@@ -376,13 +376,13 @@
   var editPasswordTemplate = _.template($('#editPasswordTemplate').html());
 
   function edit_password() {
-    var user = $('#edit_password_form').serializeArray().reduce(function(m,o){ m[o.name] = o.value; return m;}, {});
+    var user = $('#edit_password_form').serializeArray().reduce(function(m, o) { m[o.name] = o.value; return m; }, {});
     $.ajax({
             url: '/users/change_password.json',
             dataType: 'json',
             type: 'PUT',
             data: { data: user },
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
@@ -409,10 +409,10 @@
                 $('#edit_password_form #user_new_password_confirmation').val('').blur();
               }
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
             }
     });
@@ -479,10 +479,10 @@
             url: '/users/toggle_alarm_option.json',
             data: { alarm_option: alarm_option },
             type: 'PUT',
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
+            success: function(data) {
               if (data.message == 'on'){
                 notify('알람 수신 동의 처리되었습니다');
               } else {
@@ -490,10 +490,10 @@
               }
               current_user = data.current_user;
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
             }
     });

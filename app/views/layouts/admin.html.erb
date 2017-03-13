@@ -122,7 +122,7 @@
       <%= yield %>
     </div>
     <script>
-      $(window).ready(function(){
+      $(window).ready(function() {
         if ($(document).find(".required_form").length > 0) {
           window.onbeforeunload = function(e) {
             var string = '변경사항이 저장되지 않을 수 있습니다';

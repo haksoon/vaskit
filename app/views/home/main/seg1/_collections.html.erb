@@ -85,10 +85,10 @@
               if (currentSeg === 1 && segHistory[currentSeg] === 1) ga('send', 'event', '컬렉션탭', '컬렉션', 1);
               ga('send', 'event', '컨텐츠', '컬렉션', collection_id, 1);
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
             }
     });

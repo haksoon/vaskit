@@ -16,7 +16,7 @@
 					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
 				</a>
 			{{ } else if (alarm.alarm_type.match('like_ask_')) { }}
-				{{ var ask_like_count = alarm.alarm_type.replace('like_ask_','') }}
+				{{ var ask_like_count = alarm.alarm_type.replace('like_ask_', '') }}
 				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id }}">
           <img class="alarm_user_pic" src="{{= get_avatar(alarm.send_user) }}" alt="">
 					{{ if (ask_like_count == 1) { }}
@@ -31,7 +31,7 @@
 					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
 				</a>
 			{{ } else if (alarm.alarm_type.match('like_comment_')) { }}
-				{{ var comment_like_count = alarm.alarm_type.replace('like_comment_','') }}
+				{{ var comment_like_count = alarm.alarm_type.replace('like_comment_', '') }}
 				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id }}">
           <img class="alarm_user_pic" src="{{= get_avatar(alarm.send_user) }}" alt="">
 					{{ if (comment_like_count == 1) { }}
@@ -46,7 +46,7 @@
 					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
 				</a>
 			{{ } else if (alarm.alarm_type.match('reply_comment_')) { }}
-				{{ var reply_comment_count = alarm.alarm_type.replace('reply_comment_','') }}
+				{{ var reply_comment_count = alarm.alarm_type.replace('reply_comment_', '') }}
 				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id }}">
           <img class="alarm_user_pic" src="{{= get_avatar(alarm.send_user) }}" alt="">
 					{{ if (reply_comment_count == 1) { }}
@@ -61,7 +61,7 @@
 					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
 				</a>
 			{{ } else if (alarm.alarm_type.match('reply_sub_comment_')) { }}
-			  {{ var reply_sub_comment_count = alarm.alarm_type.replace('reply_sub_comment_','') }}
+			  {{ var reply_sub_comment_count = alarm.alarm_type.replace('reply_sub_comment_', '') }}
 			  <a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id }}">
           <img class="alarm_user_pic" src="{{= get_avatar(alarm.send_user) }}" alt="">
 				  {{ if (reply_sub_comment_count == 1) { }}
@@ -76,7 +76,7 @@
 					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
 			  </a>
 			{{ } else if (alarm.alarm_type.match('sub_comment_')) { }}
-				{{ var sub_comment_count = alarm.alarm_type.replace('sub_comment_','') }}
+				{{ var sub_comment_count = alarm.alarm_type.replace('sub_comment_', '') }}
 				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id }}">
           <img class="alarm_user_pic" src="{{= get_avatar(alarm.send_user) }}" alt="">
 					{{ if (sub_comment_count == 1) { }}
@@ -90,8 +90,8 @@
 					</div>
 					<span class="alarm_past_time">{{= get_past_time(alarm.updated_at) }}</span>
 				</a>
-			{{ } else if (alarm.alarm_type.match("comment_")) { }}
-				{{ var comment_count = alarm.alarm_type.replace("comment_","") }}
+			{{ } else if (alarm.alarm_type.match('comment_')) { }}
+				{{ var comment_count = alarm.alarm_type.replace('comment_', '') }}
 				<a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new' }} alarm_ask_{{= alarm.ask_id }}">
           <img class="alarm_user_pic" src="{{= get_avatar(alarm.send_user) }}" alt="">
 					{{ if (comment_count == 1) { }}
@@ -126,10 +126,10 @@
 		    url: '/users/get_user_alarms.json',
         dataType: 'json',
         type: 'GET',
-        error: function(){
+        error: function() {
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
-		    success: function(data){
+		    success: function(data) {
           if (data.alarms === null) {
             $('#user_alarm').html('');
           } else {
@@ -163,10 +163,10 @@
             url: '/alarms.json',
             dataType: 'json',
             type: 'GET',
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-    		    success: function(data){
+    		    success: function(data) {
               if (data.status == 'success') {
                 $('#alarm_list').find('.alarm_item').removeClass('new');
                 $('#my_badge').removeClass('on');

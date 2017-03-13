@@ -20,35 +20,34 @@
 </script>
 
 <script type="text/template" id="askDetailBodyTemplate">
-  {{ var my_vote = [] }}
   {{ var is_voted = false }}
   {{ var vote_id = '' }}
   {{ var vote_direction = '' }}
   {{ if (current_user && current_user.id == ask.user_id) { }}
     {{ is_voted = true }}
     {{ vote_id = '' }}
-    {{ vote_direction = 'left' }}
+    {{ vote_direction = '' }}
   {{ } else if (current_user) { }}
-    {{ my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) }) }}
-    {{ if (my_vote.length > 0) { }}
-      {{ vote_id = my_vote[0].id }}
+    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_id = my_vote.id }}
       {{ is_voted = true }}
-      {{ vote_direction = ask.left_ask_deal_id == my_vote[0].ask_deal_id ? 'left' : 'right' }}
+      {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
     {{ } }}
   {{ } else { }}
     {{ var my_votes = [] }}
-    {{ var votes = $.cookie('visitor_votes') }}
-    {{ var votes_array = (votes == null || votes == '') ? new Array() : votes.split('.') }}
+    {{ var visitor_votes = $.cookie('visitor_votes') }}
+    {{ var votes_array = (visitor_votes == null || visitor_votes == '') ? [] : visitor_votes.split('.') }}
     {{ for (var i=0; i < votes_array.length; i++) { }}
       {{ var vote = votes_array[i] }}
       {{ vote = JSON.parse(vote) }}
       {{ my_votes.push(vote) }}
     {{ } }}
-    {{ my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) }) }}
-    {{ if (my_vote.length > 0) { }}
-      {{ vote_id = my_vote[0].id }}
+    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_id = my_vote.id }}
       {{ is_voted = true }}
-      {{ vote_direction = my_vote[0].is_left ? 'left' : 'right' }}
+      {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
     {{ } }}
   {{ } }}
   {{ var left_count = ask.left_ask_deal.vote_count }}
@@ -261,26 +260,25 @@
 </script>
 
 <script type="text/template" id="commentInputTemplate">
-  {{ var my_votes = [] }}
   {{ var vote_direction = 'left' }}
   {{ if (current_user && current_user.id == ask.user_id) { }}
   {{ } else if (current_user) { }}
-    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) }) }}
-    {{ if (my_vote.length > 0) { }}
-      {{ vote_direction = ask.left_ask_deal_id == my_vote[0].ask_deal_id ? 'left' : 'right' }}
+    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
     {{ } }}
   {{ } else { }}
     {{ var my_votes = [] }}
-    {{ var votes = $.cookie('visitor_votes') }}
-    {{ var votes_array = (votes == null || votes == '') ? new Array() : votes.split('.') }}
+    {{ var visitor_votes = $.cookie('visitor_votes') }}
+    {{ var votes_array = (visitor_votes == null || visitor_votes == '') ? [] : visitor_votes.split('.') }}
     {{ for (var i=0; i < votes_array.length; i++) { }}
       {{ var vote = votes_array[i] }}
       {{ vote = JSON.parse(vote) }}
       {{ my_votes.push(vote) }}
     {{ } }}
-    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) }) }}
-    {{ if (my_vote.length > 0) { }}
-      {{ vote_direction = my_vote[0].is_left ? 'left' : 'right' }}
+    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
     {{ } }}
   {{ } }}
   <div class="container bottom comment_input_box ask ask_{{= ask.id }}" ontouchmove="return false;">
@@ -324,18 +322,18 @@
       url: url,
       dataType: 'json',
       type: 'GET',
-      error: function(){
+      error: function() {
         notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
-      success: function(data){
+      success: function(data) {
         var html = askDetailTemplate({ ask: data.ask, already_like: data.already_like, like_comments: data.like_comments });
         create_wrapper(html, true);
         ga('send', 'event', '컨텐츠', '질문', ask_id, 1);
       },
-      beforeSend: function(){
+      beforeSend: function() {
         loadingStart();
       },
-      complete: function(){
+      complete: function() {
         loadingEnd();
       }
     });
@@ -404,7 +402,7 @@
 
     if (!is_vote) {
       notify('먼저 투표에 참여해주세요!');
-      ask_container.animate({ scrollTop: 0 },250);
+      ask_container.animate({ scrollTop: 0 }, 250);
       vs_result_detail_btn.removeClass('is_opened');
     } else {
       if (visitor_check()) {
@@ -418,7 +416,7 @@
                   url: '/asks/' + ask_id + '/show_detail.json',
                   dataType: 'json',
                   type: 'GET',
-                  error: function(){
+                  error: function() {
                     notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
                   },
                   success: function(data) {
@@ -453,11 +451,11 @@
                     });
                     vs_result_detail_btn.removeClass('is_loading').addClass('is_opened');
                   },
-                  beforeSend: function(){
+                  beforeSend: function() {
                     loadingStart();
                     vs_result_detail_btn.addClass('is_loading');
                   },
-                  complete: function(){
+                  complete: function() {
                     loadingEnd();
                   }
           });
@@ -508,12 +506,12 @@
               };
     go_url('menu', options);
 
-    $(function(){
+    $(function() {
   		// bind events
-      $('#ask_complete_ask_deal_select img').each(function(){
+      $('#ask_complete_ask_deal_select img').each(function() {
         $(this).bind('click', select_ask_deal);
       });
-  		$('#star_rating_wrap').each(function(){
+  		$('#star_rating_wrap').each(function() {
   			$(this).bind('mousedown', starMouseDownListener);
   			$(this).bind('touchstart', starTouchStartListener);
   			$(this).bind('touchmove', starTouchMoveListener);
@@ -594,7 +592,7 @@
   	function calculateStarRating(x){
   		var li;
   		var n = 0;
-  		starMouseTarget.find('li').each(function(index){
+  		starMouseTarget.find('li').each(function(index) {
   			li = $(this);
   			if( li.offset().left > x ){
   				li.removeClass('on');// not selected
@@ -638,7 +636,7 @@
             dataType: 'json',
             type: 'DELETE',
             data: { ask_deal_id: ask_deal_id, star_point: star_point },
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
@@ -649,11 +647,11 @@
               all_ask_details.replaceWith(askDetailTemplate({ ask: data.ask, already_like: data.already_like, like_comments: data.like_comments }));
               history.back();
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
               history.back();
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
             }
       });

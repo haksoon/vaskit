@@ -114,7 +114,7 @@
     var current_comment_input = current_comment_container.find('.comment_input');
 
     current_comment_input.val('');
-    current_comment_input_init.removeAttr('onclick').off('click').on('click', function(){ comment_input_activate('new'); }).click();
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('new'); }).click();
   }
 
   function reply_comment(comment_id) {
@@ -125,7 +125,7 @@
 
     history.back();
     current_comment_input.val('');
-    current_comment_input_init.removeAttr('onclick').off('click').on('click', function(){ comment_input_activate('reply', comment_id); }).click();
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('reply', comment_id); }).click();
   }
 
   function edit_comment(comment_id) {
@@ -140,7 +140,7 @@
 
     history.back();
     current_comment_input.val(current_comment_content);
-    current_comment_input_init.removeAttr('onclick').off('click').on('click', function(){ comment_input_activate('edit', comment_id); }).click();
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('edit', comment_id); }).click();
   }
 
   function cancle_comment_writing() {
@@ -158,7 +158,7 @@
     is_writing_box.remove();
     hashtag_highlights.html('');
     current_comment_input.val('').removeClass('filled');
-    current_comment_input_init.removeAttr('onclick').off('click').on('click', function(){ comment_input_activate('new'); });
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('new'); });
     current_comment_input_submit.removeClass('ready').off('click');
     current_comment_input_submit_btn_text.html('전송');
   }
@@ -198,7 +198,7 @@
     }
 
     function scroll_init(comment_type, comment_id) {
-      setTimeout(function(){
+      setTimeout(function() {
         var st_now, target_comment_box, target_comment_box_top, target_comment_box_height, st_destination;
         if (comment_type == 'new') {
           st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
@@ -278,7 +278,7 @@
         current_comment_input_submit_btn_text.html('답글');
       }
       current_comment_input_submit.off('click')
-                                  .on('click', function(){
+                                  .on('click', function() {
                                     send_comment(comment_type, comment_id);
                                   });
 
@@ -353,7 +353,7 @@
                              keyPressed[e.keyCode] = false;
                              if ($(this).val().length === 0) { current_comment_input_submit.removeClass('ready'); } else { current_comment_input_submit.addClass('ready'); }
                            }, 250))
-                           .on('input', _.throttle(function(e) {
+                           .on('input', _.throttle(function() {
                              if (this.scrollHeight < $(window).height() / 2) {
                                $(this).css({ height: 'auto', overflowY: 'hidden' }).height(this.scrollHeight);
                              } else {
@@ -370,7 +370,7 @@
                                current_comment_input_counter.removeClass('on');
                              }
                            }, 100))
-                           .on('scroll', function(e) {
+                           .on('scroll', function() {
                              $(this).css({ overflowY: 'scroll' });
                              hashtagScroll($(this));
                            })
@@ -544,10 +544,10 @@
               if (data.comment_like_count === 0) { all_comment_like_counts.html(''); } else { all_comment_like_counts.html('1'); }
               all_comment_likes.html(commentLikeTemplate({ recent_user: data.recent_user, comment_like_count: data.comment_like_count }));
 		        },
-		        beforeSend: function(){
+		        beforeSend: function() {
               history.back();
 		        },
-		        complete: function(){
+		        complete: function() {
 		        }
 			});
   }
@@ -564,7 +564,7 @@
                   }
                 ]
               };
-    setTimeout(function(){
+    setTimeout(function() {
       go_url('menu', options);
     }, 50);
   }
@@ -603,7 +603,7 @@
                 notify('권한이 없습니다');
               }
             },
-            beforeSend: function(){
+            beforeSend: function() {
               history.back();
 		        }
     });

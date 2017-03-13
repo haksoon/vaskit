@@ -33,7 +33,7 @@
         vs_delta = 10;
 
 
-    target.removeAttr('onanimationstart onmouseover').each(function(){
+    target.removeAttr('onanimationstart onmouseover').each(function() {
       $(this).off('click', clickListener).on('click', clickListener);
       $(this).off('mousedown', mouseDownListener).on('mousedown', mouseDownListener);
       $(this).off('touchstart', touchStartListener).on('touchstart', touchStartListener);
@@ -252,7 +252,7 @@
       for (var i=0; i<votes_array.length; i++) {
         var vote = votes_array[i];
         vote = JSON.parse(vote);
-        if (vote.ask_id == ask_id) votes_array.splice(i,1);
+        if (vote.ask_id == ask_id) votes_array.splice(i, 1);
       }
       var this_vote = JSON.stringify({
         id: vote_id,
@@ -321,7 +321,7 @@
       for (var i=0; i<votes_array.length; i++) {
         var vote = votes_array[i];
         vote = JSON.parse(vote);
-        if (vote.id == vote_id) votes_array.splice(i,1);
+        if (vote.id == vote_id) votes_array.splice(i, 1);
       }
 
       votes = votes_array.join('.');

@@ -82,7 +82,7 @@
   function hide_tutorial_vote() {
     if (localStorage.tutorial === undefined) { localStorage.tutorial = 'vote,'; } else { localStorage.tutorial += 'vote,'; }
     $('.tutorial_div').animateCssRemove('fadeOutDownBig');
-    $('.tutorial_overlay').animateCssEmpty('fadeOut', function(){
+    $('.tutorial_overlay').animateCssEmpty('fadeOut', function() {
       $('.tutorial_overlay').addClass('hidden');
     });
   }
@@ -103,7 +103,7 @@
   function hide_tutorial_ask() {
     if (localStorage.tutorial === undefined) { localStorage.tutorial = 'ask,'; } else { localStorage.tutorial += 'ask,'; }
     $('.tutorial_div').animateCssRemove('fadeOutDownBig');
-    $('.tutorial_overlay').animateCssEmpty('fadeOut', function(){
+    $('.tutorial_overlay').animateCssEmpty('fadeOut', function() {
       $('.tutorial_overlay').addClass('hidden');
     });
   }
@@ -114,7 +114,7 @@
   function hide_tutorial_crop() {
     if (localStorage.tutorial === undefined) { localStorage.tutorial = 'crop,'; } else { localStorage.tutorial += 'crop,'; }
     $('.tutorial_div').animateCssRemove('fadeOutDownBig');
-    $('.tutorial_overlay').animateCssEmpty('fadeOut', function(){
+    $('.tutorial_overlay').animateCssEmpty('fadeOut', function() {
       $('.tutorial_overlay').addClass('hidden');
     });
   }

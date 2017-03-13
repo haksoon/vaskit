@@ -80,7 +80,7 @@
                   }
                 ]
               };
-    setTimeout(function(){
+    setTimeout(function() {
       go_url('menu', options);
     }, 50);
   }
@@ -110,8 +110,8 @@
 
     if (!!!card_search_result_div.hasClass('top')) history.back();
     all_inners.find('.input.text_field').attr('disabled', true);
-    card_search_input_submit.off('click').on('click', function(){ search_by_key(); });
-    card_search_input_reset.off('click').on('click', function(){ search_keyword_reset(); });
+    card_search_input_submit.off('click').on('click', function() { search_by_key(); });
+    card_search_input_reset.off('click').on('click', function() { search_keyword_reset(); });
     card_search_input
       .off('keydown keyup')
       .on('keydown', function(e) {
@@ -124,7 +124,7 @@
       		search_keyword_reset();
         }
      	})
-      .on('keyup', function(e) {
+      .on('keyup', function() {
         var keyword = $(this).val();
         if (keyword.length === 0) {
           card_search_input_reset.addClass('hidden');
@@ -134,10 +134,10 @@
           card_search_input_submit.removeClass('blank');
         }
       })
-      .on('focus', function(e) {
+      .on('focus', function() {
         target.addClass('on');
      	})
-      .on('blur', function(e) {
+      .on('blur', function() {
         target.removeClass('on');
         $(this).attr('disabled', true);
       })
@@ -214,7 +214,7 @@
     } else if (current_step == 3) {
       ask_form.find('.form_data').removeAttr('disabled');
       var data = ask_form.serializeArray();
-      data = $.grep(data, function(obj){ return obj.value !== ''; });
+      data = $.grep(data, function(obj) { return obj.value !== ''; });
       data = data.reduce(function(obj, item) {
   	    obj[item.name] = item.value;
   	    return obj;
@@ -231,38 +231,38 @@
             dataType: 'json',
   	        type: ask_id === 0 ? 'POST' : 'PUT',
   	        data: data,
-  	        error: function(){
+  	        error: function() {
   	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
   	        },
-  	        success: function(data){
+  	        success: function(data) {
               if (data.status == 'no_left_image') {
                 go_back(1);
                 notify('A제품 이미지를 추가해주세요');
                 step_1_inner.find('.ask_image_seg').addClass('required');
                 required_field = step_3_inner.find('.ask_image.left');
                 required_field.addClass('required');
-                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+                setTimeout(function() { required_field.removeClass('required'); }, 1000);
               } else if(data.status == 'no_left_title') {
                 go_back(1);
                 notify('A제품 제품명을 입력해주세요');
                 step_1_inner.find('.form_data').parent('.title').addClass('required');
                 required_field = step_3_inner.find('.ask_table_row.title .ask_table_cell.left');
                 required_field.addClass('required');
-                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+                setTimeout(function() { required_field.removeClass('required'); }, 1000);
               } else if(data.status == 'no_right_image') {
                 go_back(1);
                 notify('B제품 이미지를 추가해주세요');
                 step_2_inner.find('.ask_image_seg').addClass('required');
                 required_field = step_3_inner.find('.ask_image.right');
                 required_field.addClass('required');
-                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+                setTimeout(function() { required_field.removeClass('required'); }, 1000);
               } else if(data.status == 'no_right_title') {
                 go_back(1);
                 notify('B제품 제품명을 입력해주세요');
                 step_2_inner.find('.form_data').parent('.title').addClass('required');
                 required_field = step_3_inner.find('.ask_table_row.title .ask_table_cell.right');
                 required_field.addClass('required');
-                setTimeout(function(){ required_field.removeClass('required'); }, 1000);
+                setTimeout(function() { required_field.removeClass('required'); }, 1000);
               } else if(data.status == 'no_ask_message') {
                 go_back(1);
                 notify('메세지를 입력해주세요');
@@ -272,7 +272,7 @@
                 required_field.parentsUntil(this, '.input_container').click();
               } else if(data.status == 'success') {
                 go_back(4);
-                setTimeout(function(){
+                setTimeout(function() {
                   close_full_view();
                   if (userApp) setAppStatusBar();
                   if (ask_id === 0) { notify('게시글 작성 완료! 친구들에게 공유해보세요 :)'); } else { notify('게시글 수정 완료! 친구들에게 공유해보세요 :)'); }
@@ -281,10 +281,10 @@
                 ga('send', 'event', '질문작성탭', 'C 질문 제출 성공', 1);
               }
   					},
-  					beforeSend: function(){
+  					beforeSend: function() {
   						loadingStart();
   					},
-  					complete: function(){
+  					complete: function() {
               loadingEnd();
   					}
   		});
@@ -429,22 +429,22 @@
       .off('keyup focus blur')
       .on('keyup', function() {
         if ($(this).attr('pattern')) inputNumberWithCommas(this);
-      }).on('focus', function(e) {
+      }).on('focus', function() {
         if (userDevice.isAndroid && $(this).attr('pattern')) $(this).attr('type', 'tel');
         $(this).parent('.input_div').addClass('on');
         // 결과값 업데이트
-        var input_information = $(this).attr('name').replace(']','').split('[');
-        var input_direction = input_information[0].replace('_deal','');
+        var input_information = $(this).attr('name').replace(']', '').split('[');
+        var input_direction = input_information[0].replace('_deal', '');
         var input_type = input_information[1];
         var input_value = $(this).val();
         step_3_inner.find('.ask_table_row.' + input_type).find('.ask_table_cell.' + input_direction).html('입력해주세요');
       })
-      .on('blur', function(e) {
+      .on('blur', function() {
         $(this).parent('.input_div').removeClass('on');
         if ($(this).val().length > 0) $(this).parent('.input_div').removeClass('required');
         // 결과값 업데이트
-        var input_information = $(this).attr('name').replace(']','').split('[');
-        var input_direction = input_information[0].replace('_deal','');
+        var input_information = $(this).attr('name').replace(']', '').split('[');
+        var input_direction = input_information[0].replace('_deal', '');
         var input_type = input_information[1];
         var input_value = $(this).val();
         if (input_value.length !== 0) {
@@ -455,7 +455,6 @@
           }
           step_3_inner.find('.ask_table_row.' + input_type).find('.ask_table_cell.' + input_direction).html(input_value);
         }
-        // $(this).attr('disabled',true);
       })
       .removeAttr('disabled');
     target.find('.input.text_field').focus();
@@ -468,7 +467,7 @@
     target.addClass('is_uploading');
     ask_image_upload_btn.html('파일을 선택해주세요');
     image_file.click();
-    setTimeout(function(){
+    setTimeout(function() {
       target.removeClass('is_uploading');
       ask_image_upload_btn.html('이미지 업로드');
     }, 1000);
@@ -495,7 +494,7 @@
                   data: formData,
                   contentType: false,
                   processData: false,
-                  error: function(){
+                  error: function() {
                     notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
                   },
                   success: function (data){
@@ -518,10 +517,10 @@
         	        	}
                     ask_progress_check();
                   },
-                  beforeSend: function(){
+                  beforeSend: function() {
                     loadingStart();
                   },
-                  complete: function(){
+                  complete: function() {
                     loadingEnd();
                     if (check_tutorial('crop')) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
                     fileObj.replaceWith(fileObj.clone(true));
@@ -597,10 +596,10 @@
             url: '/deals/get_naver_deals/?page=' + page + '&keyword=' + encodeURIComponent(keyword),
             dataType: 'json',
             type: 'GET',
-            error: function(){
+            error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
-            success: function(data){
+            success: function(data) {
               var naver_deal_items = data.shop_result;
               ask_form_header_title.html(keyword + ' 검색결과');
               ask_form_back_btn.html('닫기');
@@ -608,7 +607,7 @@
               card_search_result_div.html(cardSearchResultTemplate({ naver_deal_items: naver_deal_items })).removeClass('top');
               if (naver_deal_items !== null) is_more_load = naver_deal_items.length >= <%= Deal::NAVER_RESULT_PER %> ? true : false;
               if (is_more_load) {
-                $('#card_search_result_list').on('scroll', function(){
+                $('#card_search_result_list').on('scroll', function() {
                   var loading = Boolean($(this).attr('loading'));
                   if (loading && nearBottomOfContainer($(this))) load_more_naver_deals($(this));
                 });
@@ -617,13 +616,13 @@
                 card_search_result_div.find('.naver_info').removeClass('hidden');
               }
             },
-            beforeSend: function(){
+            beforeSend: function() {
               loadingStart();
               ask_form_header_title.html('검색중 <i class="fa fa-spinner fa-spin"></i>');
               ask_form_back_btn.html('');
               ask_form_submit_btn.addClass('hidden');
             },
-            complete: function(){
+            complete: function() {
               loadingEnd();
               page += 1;
             }
@@ -634,10 +633,10 @@
               url: '/deals/get_naver_deals/?page=' + page + '&keyword=' + encodeURIComponent(keyword),
               dataType: 'json',
               type: 'GET',
-              error: function(){
+              error: function() {
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
-              success: function(data){
+              success: function(data) {
                 var naver_deal_items = data.shop_result;
                 $('#naver_deals_table').append(naverDealsTemplate({ naver_deal_items: naver_deal_items }));
                 is_more_load = (naver_deal_items !== null && naver_deal_items.length >= <%= Deal::NAVER_RESULT_PER %>) ? true : false;
@@ -648,11 +647,11 @@
                   card_search_result_div.find('.naver_info').removeClass('hidden');
                 }
               },
-              beforeSend: function(){
+              beforeSend: function() {
                 loadingStart();
                 target.removeAttr('loading');
               },
-              complete: function(){
+              complete: function() {
                 loadingEnd();
                 page += 1;
               }
@@ -698,10 +697,10 @@
 	        url: '/deals/create_by_naver.json',
 	        type: 'POST',
 	        data: { item: item },
-	        error: function(){
+	        error: function() {
 	          notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
 	        },
-	        success: function(data){
+	        success: function(data) {
 	        	if (is_left) {
               step_1_inner.html(askFormCardTemplate({ ask_deal: data.deal, is_left: is_left, is_blank: false }));
               step_1_inner.find('.deal_id').val(data.deal.id);
@@ -731,13 +730,13 @@
 	        	}
             ask_progress_check();
 					},
-					beforeSend: function(){
+					beforeSend: function() {
 						loadingStart();
             ask_form_header_title.html('제품정보 업로드중 <i class="fa fa-spinner fa-spin"></i>');
             ask_form_back_btn.html('');
             target.addClass('selected');
 					},
-					complete: function(){
+					complete: function() {
             loadingEnd();
             history.back();
             if (check_tutorial('crop')) setTimeout(function() { go_url('tutorial_crop'); }, 1000);
@@ -903,10 +902,10 @@
 
     ask_form_message_input
       .off('input scroll focus blur')
-      .on('input', _.throttle(function(e) {
+      .on('input', _.throttle(function() {
         hashtagInput($(this));
       }, 100))
-      .on('scroll', function(e) {
+      .on('scroll', function() {
         hashtagScroll($(this));
       })
       .on('focus', function(e) {
