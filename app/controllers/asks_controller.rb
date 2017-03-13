@@ -18,7 +18,7 @@ class AsksController < ApplicationController
           asks = asks.where.not(id: my_votes) unless my_votes.empty?
         end
 
-        if params[:page].nil? # 이벤트
+        if params[:page].nil? || params[:page] == '1' # 이벤트
           event = Ask.find(1959)
           asks.unshift(event)
         end

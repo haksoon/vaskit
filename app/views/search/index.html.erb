@@ -1,6 +1,7 @@
 <script>
-  $(window).load(function(){
+  $(window).ready(function(){
     go_seg(2);
+  }).load(function(){
     <% if @type %>
       var type = "<%= @type %>";
       var keyword = "<%= raw @keyword %>";
