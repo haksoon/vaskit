@@ -95,8 +95,8 @@
                   group_method: :last,
                   value_method: :id,
                   label_method: :string_id,
-                  error: '',
                   label: '1. 작성 ID 선택',
+                  error: '',
                   prompt: '댓글을 작성할 ID를 선택해주세요',
                   input_html: {
                                 class: 'form-control required_form',
@@ -113,19 +113,20 @@
       <%= f.input :ask_deal_id,
                   as: :select,
                   collection: [ ['왼쪽', @ask.left_ask_deal_id], ['오른쪽', @ask.right_ask_deal_id] ],
-                  error: '',
                   label: '3. 댓글 방향 선택',
+                  error: '',
                   prompt: '댓글 방향을 선택해주세요',
                   input_html: {
                                 class: 'form-control required_form'
                               } %>
       <%= f.input :image,
-                  error: '',
-                  label: '(옵션) 댓글 사진 입력' do %>
+                  label: '(옵션) 댓글 사진 입력',
+                  error: '' do %>
         <%= f.input_field :image,
                           as: :file,
                           class: 'hidden',
                           onchange: 'preview_thumbnail(this);' %>
+        <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요</p>
         <div class="well">
           <%= image_tag @comment.image.url(:original),
                        { id: 'thumbnail_image',

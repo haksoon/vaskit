@@ -32,6 +32,8 @@ body { padding: 80px 0; }
 .table-responsive { -webkit-overflow-scrolling: touch; }
 
 .help-block::before {
-  content: '💬';
-  margin-right: 5px;
+  content: '\f101';
+  font-family: 'FontAwesome';
+  color: deeppink;
+  margin: 0 5px;
 }

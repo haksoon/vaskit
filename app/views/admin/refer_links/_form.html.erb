@@ -34,81 +34,88 @@
         <div class="form-inputs">
           <%= f.input :name,
                       as: :string,
-                      error: '',
                       label: '1. 이름 입력',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '레퍼런스 링크 이름을 입력하세요'
                                   } %>
           <%= f.input :channel,
                       as: :string,
-                      error: '',
                       label: '2. 채널 입력',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '레퍼런스 링크 채널을 입력하세요'
                                   } %>
           <%= f.input :commerce_type,
                       as: :string,
+                      label: '3. 광고 타입 입력',
                       error: '',
-                      label: '3. 채널 입력',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '광고 타입을 입력하세요'
                                   } %>
           <%= f.input :commerce_budget,
                       as: :integer,
-                      error: '',
                       label: '4. 광고 예산 입력',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
+                                    step: '10000',
+                                    pattern: '[0-9]*',
                                     placeholder: '광고 예산을 입력하세요'
                                   } %>
           <%= f.input :commerce_expense,
                       as: :integer,
-                      error: '',
                       label: '5. 광고 비용 입력',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
+                                    step: '10000',
+                                    pattern: '[0-9]*',
                                     placeholder: '광고 비용을 입력하세요'
                                   } %>
           <%= f.input :commerce_started_at,
-                      as: :datetime,
+                      as: :date,
+                      label: '6. 광고 시작일자 입력',
                       error: '',
-                      label: '6. 광고 시작일 입력',
                       input_html: {
                                     class: 'required_form',
-                                    placeholder: '광고 시작일을 입력하세요'
+                                    placeholder: '광고 시작일자를 입력하세요'
                                   } %>
           <%= f.input :commerce_ended_at,
-                      as: :datetime,
+                      as: :date,
+                      label: '7. 광고 종료일자 입력',
+                      hint: '종료일자는 종료 예정 해당일자의 다음날을 입력하세요 (매일 자정 기준)',
                       error: '',
-                      label: '7. 광고 종료일 입력',
                       input_html: {
                                     class: 'required_form',
-                                    placeholder: '광고 종료일을 입력하세요'
+                                    placeholder: '광고 종료일자를 입력하세요'
                                   } %>
           <%= f.input :url,
                       as: :string,
-                      error: '',
                       label: '8. 연결 링크 입력',
+                      hint: '연결 링크를 입력한 뒤 tab 키를 누르세요',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '연결 링크를 입력하세요'
                                   } %>
           <%= f.input :js,
                       as: :string,
-                      error: '',
                       label: '9. 연결 자바스크립트 입력',
+                      hint: '위 주소에서 콘솔창을 열고 "get_js_function();"을 명령했을때의 반환값을 입력해주세요',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '연결 자바스크립트를 입력하세요'
                                   } %>
           <%= f.input :connect_to_store,
                       as: :boolean,
-                      error: '',
+                      label: '10. 스토어 연결 우선 여부',
                       hint: '스토어로 연결을 우선시하려면 체크하세요',
-                      label: '10. 스토어 연결 우선 여부' %>
+                      error: '' %>
         </div>
       </div>
     </div>

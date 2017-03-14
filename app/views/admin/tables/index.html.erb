@@ -1,4 +1,7 @@
 <div class="jumbotron clearfix">
+  <%= link_to '처음으로',
+      admin_tables_path,
+      { class: 'btn btn-default btn-lg' } %>
   <h1>DB 조회하기</h1>
   <p>DB의 내용을 조회할 수 있습니다</p>
 	<select id="table_select" class="form-control">
@@ -13,24 +16,28 @@
   <div class="panel panel-primary">
     <div class="panel-heading">DB를 선택해주세요</div>
 <% else %>
-  <form class="form-inline">
-    <div class="form-group">
-      <select id="column_select" class="form-control">
-    		<option value="" disabled="true" selected="selected">검색할 column을 선택하세요</option>
-        <% @record_names.each do |name| %>
-          <option value="<%= name %>"><%= name %></option>
-        <% end %>
-      </select>
-    </div>
-    <div class="form-group">
-      <input type="text" class="form-control" id="search_keyword" placeholder="검색 키워드를 입력하세요">
-    </div>
-    <button type="button" class="btn btn-primary" onclick="search()">검색</button>
-  </form>
-
   <div class="panel panel-info">
 		<!-- Default panel contents -->
 		<div class="panel-heading"><%= @tableModel.name %></div>
+
+    <div class="panel-body">
+      <div class="input-group">
+        <div class="input-group-btn">
+          <button id="column_select" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">선택 <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+            <li><a href="#" onclick="column_select(); return false;">검색할 column을 선택하세요</a></li>
+            <li role="separator" class="divider"></li>
+            <% @record_names.each do |name| %>
+              <li><a href="#" onclick="column_select('<%= name %>'); return false;"><%= name %></a></li>
+            <% end %>
+          </ul>
+        </div>
+        <input id="search_keyword" type="text" class="form-control" placeholder="검색 키워드를 입력하세요">
+        <span class="input-group-btn">
+          <button class="btn btn-primary" type="button" onclick="search();">검색하기</button>
+        </span>
+      </div><!-- /input-group -->
+    </div>
 
 		<!-- Table -->
     <div class="table-responsive">
@@ -38,14 +45,10 @@
   			<thead>
   				<tr>
   					<% @record_names.each do |name| %>
-  						<th onclick="order_by('<%=name%>')">
-                <%=name%>
-                <% if name == @url[3]%>
-                  <% if @url[4] == "DESC"%>
-                    <i class="fa fa-sort-desc" aria-hidden="true"></i>
-                  <% else %>
-                    <i class="fa fa-sort-asc" aria-hidden="true"></i>
-                  <% end%>
+  						<th onclick="order_by('<%= name %>')">
+                <%= name %>
+                <% if name == @url[3] %>
+                  <%= @url[4] == 'DESC' ? '<i class="fa fa-sort-desc"></i>'.html_safe : '<i class="fa fa-sort-asc"></i>'.html_safe %>
                 <% end%>
               </th>
   					<% end %>
@@ -75,42 +78,52 @@
 </div>
 
 <script>
-	$("#table_select").on("change", function(){
-		document.location.assign("/admin/tables/" + $(this).val() + "/?page=1");
+	$('#table_select').val(window.location.pathname.replace('/admin/tables', '').replace(/\//g, '')).on('change', function(){
+		document.location.assign('/admin/tables/' + $(this).val() + '/?page=1');
 	});
-  $("#search_keyword").keypress(function(e) {
-    if (e.keyCode == 13){
+
+  $('#search_keyword').on('keypress', function(e) {
+    if (e.keyCode == 13) {
       search();
       return false;
     }
   });
 
   function order_by(target) {
-    var url = "/admin/tables/<%= @url[0]%>/?page=1"
-    if ("<%= @url[3]%>" != "" && "<%= @url[3]%>" == target) {
-      if("<%= @url[4]%>" == "ASC") {
-        url = url+"&order="+target+"&power=DESC";
-      } else if("<%= @url[4]%>" == "")  {
-        url = url+"&order="+target+"&power=ASC";
+    var url = '/admin/tables/<%= @url[0] %>/?page=1';
+    if ('<%= @url[3] %>' !== '' && '<%= @url[3] %>' == target) {
+      if ('<%= @url[4] %>' == 'ASC') {
+        url = url + '&order=' + target + '&power=DESC' ;
+      } else if ('<%= @url[4] %>' === '')  {
+        url = url + '&order=' + target+'&power=ASC';
       }
     } else {
-      url = url+"&order="+target+"&power=ASC";
+      url = url + '&order=' + target + '&power=ASC';
     }
-    if ("<%= @url[1]%>" != "" && "<%= @url[2]%>" != "") {
-      url = url + "&search_in=<%= @url[1]%>&keyword=<%= @url[2]%>"
+    if ('<%= @url[1] %>' !== '' && '<%= @url[2] %>' !== '') {
+      url = url + '&search_in=<%= @url[1] %>&keyword=<%= @url[2] %>';
     }
     document.location.assign(url);
   }
-  function search() {
-    console.log("!!!!");
-    var search_in = $("#column_select  option:selected").val();
-    var keyword = $("#search_keyword").val();
-    if (search_in == "") {
-      alert("검색할 column을 선택해주세요!");
-    } else if (keyword == "") {
-      alert("검색 키워드를 입력해주세요!");
+
+  function column_select(name) {
+    if (name === undefined) {
+      $('#column_select').html('선택 <span class="caret"></span>').removeClass('btn-info').addClass('btn-default');
     } else {
-      document.location.assign("/admin/tables/<%= @url[0]%>/?search_in="+search_in+"&keyword="+keyword);
+      $('#column_select').html(name).removeClass('btn-default').addClass('btn-info');
+      $('#search_keyword').focus();
+    }
+  }
+
+  function search() {
+    var search_in = $('#column_select').html();
+    var keyword = $('#search_keyword').val();
+    if (search_in === '') {
+      alert('검색할 column을 선택해주세요!');
+    } else if (keyword === '') {
+      alert('검색 키워드를 입력해주세요!');
+    } else {
+      document.location.assign('/admin/tables/<%= @url[0] %>/?search_in=' + search_in + '&keyword=' + keyword);
     }
   }
 </script>

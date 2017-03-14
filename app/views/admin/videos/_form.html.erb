@@ -34,31 +34,33 @@
         <div class="form-inputs">
           <%= f.input :title,
                       as: :string,
-                      error: '',
                       label: '1. 제목 입력',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '비교영상 제목을 입력하세요'
                                   } %>
           <%= f.input :description,
                       as: :text,
-                      error: '',
                       label: '2. 설명 입력',
+                      error: '',
                       input_html: {
                                     rows: 5,
                                     class: 'required_form',
                                     placeholder: '비교영상 설명을 입력하세요'
                                   } %>
           <%= f.input :image,
-                      error: '',
-                      label: '3. 썸네일 입력' do %>
+                      label: '3. 썸네일 입력',
+                      error: '' do %>
             <%= f.input_field :image,
                               as: :file,
                               class: 'hidden',
                               onclick: 'this.nextElementSibling.checked = true;',
                               onchange: 'preview_thumbnail(this);' %>
             <%= check_box_tag 'image_attached', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
-            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요<br>권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
+            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요</p>
+            <p class="help-block">권장해상도는 900*600 픽셀입니다</p>
+            <p class="help-block">업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
             <div class="well">
               <%= image_tag @video.image.url(:original),
                            { id: 'thumbnail_image',
@@ -72,8 +74,9 @@
                       as: :select,
                       collection: @facebook_video_list.collect { |video| [video['description'].truncate(100), video['id']] },
                       include_blank: '페이스북 영상을 선택해주세요',
-                      error: '',
                       label: '4. 페이스북 영상 입력',
+                      hint: '페이스북 영상을 선택해주세요',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     onchange: 'fb_link_preview();'
@@ -86,6 +89,7 @@
           <%= f.input :yt_id,
                       as: :string,
                       error: '',
+                      hint: '유튜브 영상 ID를 입력한 뒤 tab 키를 누르세요',
                       label: '5. 유튜브 영상 입력',
                       input_html: {
                                     class: 'required_form',
@@ -98,8 +102,10 @@
             </div>
           </div>
           <%= f.input :ask_id,
-                      error: '',
+                      as: :integer,
                       label: '6. 질문 입력',
+                      hint: '질문 컨텐츠 ID를 입력한 뒤 tab 키를 누르세요',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '질문 ID를 입력해주세요',

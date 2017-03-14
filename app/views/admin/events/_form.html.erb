@@ -40,16 +40,16 @@
         <div class="form-inputs">
           <%= f.input :title,
                       as: :string,
-                      error: '',
                       label: '1. 제목 입력',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '이벤트 제목을 입력하세요'
                                   } %>
           <%= f.input :description,
                       as: :text,
-                      error: '',
                       label: '2. 설명 입력',
+                      error: '',
                       input_html: {
                                     rows: 5,
                                     class: 'required_form',
@@ -57,32 +57,34 @@
                                   } %>
           <%= f.input :started_at,
                       as: :date,
-                      error: '',
-                      hint: '시작일자를 현재일자 이후로 등록하면 예약 이벤트 생성이 가능합니다',
                       label: '3. 이벤트 시작일자 입력',
+                      hint: '시작일자를 현재일자 이후로 등록하면 예약 이벤트 생성이 가능합니다',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '이벤트 시작일을 입력하세요'
                                   } %>
           <%= f.input :ended_at,
                       as: :date,
-                      error: '',
-                      hint: '종료일자는 종료를 원하는 해당일자의 다음날을 입력하세요 종료일자가 지나면 자동으로 상단 고정이 해제됩니다',
                       label: '4. 이벤트 종료일자 입력',
+                      hint: '종료일자는 종료를 원하는 해당일자의 다음날을 입력하세요 (매일 자정 기준) 종료일자가 지나면 자동으로 상단 고정이 해제됩니다',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '이벤트 종료일을 입력하세요'
                                   } %>
           <%= f.input :image,
-                      error: '',
-                      label: '5. 썸네일 입력' do %>
+                      label: '5. 썸네일 입력',
+                      error: '' do %>
             <%= f.input_field :image,
                               as: :file,
                               class: 'hidden',
                               onclick: 'this.nextElementSibling.checked = true;',
                               onchange: 'preview_thumbnail(this);' %>
             <%= check_box_tag 'image_attached', '', @event.id.nil? ? false : true, class: 'hidden required_form' %>
-            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요<br>권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
+            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요</p>
+            <p class="help-block">권장해상도는 900*600 픽셀입니다</p>
+            <p class="help-block">업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
             <div class="well">
               <%= image_tag @event.image.url(:original),
                            { id: 'thumbnail_image',
@@ -93,8 +95,10 @@
             </div>
           <% end %>
           <%= f.input :ask_id,
-                      error: '',
+                      as: :integer,
                       label: '6. 질문 입력',
+                      hint: '질문 컨텐츠 ID를 입력한 뒤 tab 키를 누르세요',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '질문 ID를 입력해주세요',

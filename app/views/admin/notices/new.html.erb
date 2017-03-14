@@ -31,10 +31,14 @@
           <%= select_tag :type,
                          '
                           <option value="" disabled selected>푸쉬 종류를 선택해주세요</option>
-                          <option value="collection">컬렉션 발행</option>
-                          <option value="video">비교영상 발행</option>
-                          <option value="event">이벤트 생성</option>
-                          <option value="notice">공지사항</option>
+                          <optgroup label="컨텐츠 생성">
+                            <option value="collection">컬렉션 발행</option>
+                            <option value="video">비교영상 발행</option>
+                            <option value="event">이벤트 생성</option>
+                          </optgroup>
+                          <optgroup label="일반">
+                            <option value="notice">공지사항</option>
+                          </optgroup>
                          '.html_safe,
                          {
                            class: 'form-control required_form',
@@ -57,7 +61,7 @@
             <%= select_tag :filter,
                            '
                             <option value="" disabled selected>대상을 선택해주세요</option>
-                            <option value="all">전체</option>
+                            <option value="all">전체 유저</option>
                             <option value="filter">필터 적용</option>
                             <option value="specific">특정 유저</option>
                            '.html_safe,
@@ -70,6 +74,7 @@
         </div>
         <div class="form-group">
           <label for="link">4. 푸쉬알림 연결 링크 입력</label>
+          <p class="help-block">연결할 링크를 입력한 뒤 tab 키를 누르세요</p>
           <%= text_field_tag :link,
                              '',
                              {

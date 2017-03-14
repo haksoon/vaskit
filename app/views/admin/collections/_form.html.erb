@@ -40,31 +40,33 @@
         <div class="form-inputs">
           <%= f.input :name,
                       as: :string,
-                      error: '',
                       label: '1. 제목 입력',
+                      error: '',
                       input_html: {
                                     class: 'required_form',
                                     placeholder: '컬렉션 제목을 입력하세요'
                                   } %>
           <%= f.input :description,
                       as: :text,
-                      error: '',
                       label: '2. 설명 입력',
+                      error: '',
                       input_html: {
                                     rows: 5,
                                     class: 'required_form',
                                     placeholder: '컬렉션 설명을 입력하세요'
                                   } %>
           <%= f.input :image,
-                      error: '',
-                      label: '3. 썸네일 입력' do %>
+                      label: '3. 썸네일 입력',
+                      error: '' do %>
             <%= f.input_field :image,
                               as: :file,
                               class: 'hidden',
                               onclick: 'this.nextElementSibling.checked = true;',
                               onchange: 'preview_thumbnail(this);' %>
             <%= check_box_tag 'image_attached', '', @collection.id.nil? ? false : true, class: 'hidden required_form' %>
-            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요<br>권장해상도는 900*600 픽셀입니다<br>업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
+            <p class="help-block">아래 이미지를 클릭하거나, 파일을 드래그&드롭하세요</p>
+            <p class="help-block">권장해상도는 900*600 픽셀입니다</p>
+            <p class="help-block">업로드 전 <a href="https://tinypng.com/" target="_blank">tinypng.com</a>에서 이미지 용량을 꼭 줄여주세요</p>
             <div class="well">
               <%= image_tag @collection.image.url(:original),
                            { id: 'thumbnail_image',
@@ -76,8 +78,8 @@
           <% end %>
           <%= f.input :collection_keywords,
                       as: :string,
-                      error: '',
                       label: '추가된 키워드 리스트',
+                      error: '',
                       input_html: {
                                     value: @collection.collection_keywords.map(&:id),
                                     readonly: true,
@@ -87,8 +89,8 @@
                                   }  %>
           <%= f.input :asks,
                       as: :string,
-                      error: '',
                       label: '추가된 컨텐츠 리스트',
+                      error: '',
                       input_html: {
                                     value: @collection.asks.map(&:id),
                                     readonly: true,
