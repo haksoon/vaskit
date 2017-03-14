@@ -261,7 +261,7 @@ function seg_init(seg_id) {
     ga('send', 'event', '검색탭', '검색탭 진입', 1);
   } else if (seg_id === 4) {
     user_profile_on();
-    ga('send', 'event', '마이페이지', '마이페이지 진입', current_user.string_id, 1);
+    ga('send', 'event', '마이탭', '마이탭 진입', current_user.string_id, 1);
   }
 }
 
