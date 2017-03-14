@@ -1,5 +1,5 @@
 <%= form_tag({ controller: :notices, action: :create },
-            oninput: "form_check($(this));", onchange: "form_check($(this));") do %>
+            oninput: 'form_check($(this));', onchange: 'form_check($(this));') do %>
   <div class="jumbotron clearfix">
     <h1>푸쉬알림 전송하기</h1>
     <p>푸쉬알림을 전송할 수 있습니다</p>
@@ -31,9 +31,10 @@
           <%= select_tag :type,
                          '
                           <option value="" disabled selected>푸쉬 종류를 선택해주세요</option>
-                          <option value="notice">공지사항</option>
                           <option value="collection">컬렉션 발행</option>
                           <option value="video">비교영상 발행</option>
+                          <option value="event">이벤트 생성</option>
+                          <option value="notice">공지사항</option>
                          '.html_safe,
                          {
                            class: 'form-control required_form',
@@ -164,43 +165,45 @@
 </script>
 
 <script>
-  var pushTypeAllTemplate = _.template($("#pushTypeAllTemplate").html());
-  var pushTypeFilterTemplate = _.template($("#pushTypeFilterTemplate").html());
-  var pushTypeSpecificTemplate = _.template($("#pushTypeSpecificTemplate").html());
+  var pushTypeAllTemplate = _.template($('#pushTypeAllTemplate').html());
+  var pushTypeFilterTemplate = _.template($('#pushTypeFilterTemplate').html());
+  var pushTypeSpecificTemplate = _.template($('#pushTypeSpecificTemplate').html());
 
   function push_test_send() {
-    var msg = encodeURIComponent($("#msg").val());
-    var link = encodeURIComponent($("#link").val());
-    var js = encodeURIComponent($("#js").val());
-    $("#push_test_btn").attr("href", "<%= test_admin_notices_path %>?msg=" + msg + "&link=" + link + "&js=" + js);
+    var msg = encodeURIComponent($('#msg').val());
+    var link = encodeURIComponent($('#link').val());
+    var js = encodeURIComponent($('#js').val());
+    $('#push_test_btn').attr('href', '<%= test_admin_notices_path %>?msg=' + msg + '&link=' + link + '&js=' + js);
   }
 
   function push_type_changed() {
-    var type_input = $("#type");
+    var type_input = $('#type');
     var type = type_input.val();
-    var filter_input = $("#filter");
-    var link_input = $("#link");
-    filter_input.val("all");
-    if (type == "notice") {
-      link_input.val("<%= "#{root_url}" %>");
-    } else if (type == "collection") {
-      link_input.val("<%= "#{collections_url}/#{Collection.last.id}" %>");
-    } else if (type == "video") {
-      link_input.val("<%= "#{videos_url}/" %>");
+    var filter_input = $('#filter');
+    var link_input = $('#link');
+    filter_input.val('all');
+    if (type == 'collection') {
+      link_input.val('<%= "#{collections_url}/#{Collection.last.id}" %>');
+    } else if (type == 'video') {
+      link_input.val('<%= "#{videos_url}/" %>');
+    } else if (type == 'event') {
+      link_input.val('<%= "#{asks_url}/#{Event.last.ask_id}" %>');
+    } else if (type == 'notice') {
+      link_input.val('<%= "#{root_url}" %>');
     }
     push_filter_changed();
     push_link_preview();
   }
 
   function push_filter_changed() {
-    var filter_input = $("#filter");
+    var filter_input = $('#filter');
     var filter = filter_input.val();
-    var preview = $("#push_filter_preview");
-    if (filter == "all") {
+    var preview = $('#push_filter_preview');
+    if (filter == 'all') {
       preview.html(pushTypeAllTemplate());
-    } else if (filter == "filter") {
+    } else if (filter == 'filter') {
       preview.html(pushTypeFilterTemplate());
-    } else if (filter == "specific") {
+    } else if (filter == 'specific') {
       preview.html(pushTypeSpecificTemplate());
     } else {
       preview.empty();
@@ -208,30 +211,30 @@
   }
 
   function push_link_preview() {
-    var link_input = $("#link");
+    var link_input = $('#link');
     var link = link_input.val();
-    var js_input = $("#js");
-    var preview = $("#push_link_preview");
-    var preview_frame = preview.find("iframe");
+    var js_input = $('#js');
+    var preview = $('#push_link_preview');
+    var preview_frame = preview.find('iframe');
 
     if (link === "<%= CONFIG['host'] %>/" || link.match("<%= CONFIG['host'] %>") !== null) {
       if (link !== "<%= CONFIG['host'] %>/") {
-        link_input.attr("readonly", true);
+        link_input.attr('readonly', true);
       } else {
-        link_input.removeAttr("readonly");
+        link_input.removeAttr('readonly');
       }
-      preview.removeClass("hidden");
-      js_input.removeClass("hidden").val("로딩중...");
-      preview_frame.attr("src", link).load(function(){
+      preview.removeClass('hidden');
+      js_input.removeClass('hidden').val('로딩중...');
+      preview_frame.attr('src', link).load(function(){
         var odjDoc = this.contentWindow || this.contentDocument;
-        js_input.val("로딩완료!");
+        js_input.val('로딩완료!');
         setTimeout(function(){
           js_input.val(odjDoc.get_js_function());
         }, 1000);
       });
     } else {
       link_input.val("<%= CONFIG['host'] %>/").focus();
-      alert("내부 링크를 입력해주세요");
+      alert('내부 링크를 입력해주세요');
     }
   }
 </script>

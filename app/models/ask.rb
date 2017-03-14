@@ -7,13 +7,14 @@ class Ask < ActiveRecord::Base
   belongs_to :left_ask_deal, class_name: 'AskDeal', foreign_key: 'left_ask_deal_id'
   belongs_to :right_ask_deal, class_name: 'AskDeal', foreign_key: 'right_ask_deal_id'
   belongs_to :category
+  belongs_to :event
+  has_one :ask_complete
   has_many :votes
   has_many :ask_likes
   has_many :hash_tags
   has_many :comments
   has_many :share_logs
   has_many :alarms
-  has_one :ask_complete
   has_many :collection_to_asks
   has_many :collections, through: :collection_to_asks
 

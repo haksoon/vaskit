@@ -19,7 +19,6 @@ class Admin::CollectionsController < Admin::HomeController
   # POST /admin/collections
   def create
     @collection = Collection.new(collection_params)
-
     if @collection.save
       generate_collection_asks(params[:collection][:asks])
       generate_collection_keywords(params[:collection][:collection_keywords])

@@ -46,14 +46,14 @@ class SearchController < ApplicationController
         @asks = @asks.page(params[:page])
                      .per(Ask::ASK_PER)
                      .order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete])
+                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
         render json: { asks: @asks }
       end
     end
   end
 
-  # GET /search/get_keyword.json?keyword=___
-  def get_keyword
+  # GET /search/keyword.json?keyword=___
+  def keyword
     keyword = params[:keyword]
     hash_tags = []
     ask_deals = []

@@ -7,23 +7,29 @@ class AsksController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        asks = Ask.where.not(id: 1959) # 이벤트
-                  .page(params[:page])
+        asks = Ask.page(params[:page])
                   .per(Ask::ASK_PER)
                   .order(id: :desc)
 
         if current_user
-          my_votes = Vote.where(user_id: current_user.id).map(&:ask_id)
+          my_votes = Vote.where(user_id: current_user.id)
+          my_votes = my_votes.where('updated_at < ?', params[:date].to_datetime) unless params[:date].nil?
+          my_votes = my_votes.map(&:ask_id)
           asks = asks.where.not(user_id: current_user.id)
           asks = asks.where.not(id: my_votes) unless my_votes.empty?
         end
 
-        if params[:page].nil? || params[:page] == '1' # 이벤트
-          event = Ask.find(1959)
-          asks.unshift(event)
+        # Event Ask
+        events = Event.where('started_at <= ? AND ended_at >= ?', Time.now, Time.now).order(ended_at: :desc)
+        asks = asks.where.not(id: events.map(&:ask_id))
+        if params[:page].nil? || params[:page] == '1'
+          events.each do |event|
+            event_ask = event.ask
+            asks.unshift(event_ask)
+          end
         end
 
-        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete])
+        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
         render json: { asks: asks }
       end
     end

@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
   resources :search, only: [:index] do
     collection do
-      get 'get_keyword'
+      get 'keyword'
     end
   end
 
@@ -102,6 +102,7 @@ Rails.application.routes.draw do
     post '/sign_in', to: 'home#create'
     delete '/sign_out', to: 'home#destroy'
     resources :asks, only: [:index, :show, :update]
+    resources :events
     resources :collections
     resources :collection_keywords, only: [:index, :create]
     resources :collection_to_collection_keywords, only: [:index]

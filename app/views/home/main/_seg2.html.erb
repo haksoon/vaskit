@@ -167,7 +167,7 @@
 
     function preview_search_list(keyword) {
       $.ajax({
-        url: '/search/get_keyword',
+        url: '/search/keyword',
         dataType: 'json',
         type: 'GET',
         data: { keyword: keyword },

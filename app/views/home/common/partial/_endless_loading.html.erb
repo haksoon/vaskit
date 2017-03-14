@@ -5,11 +5,12 @@
     if (loading && nearBottomOfContainer(target)) {
       var url = target.attr('url');
       var page = Number(loading_icon.attr('page'));
+      var date = Date(loading_icon.attr('date'));
       $.ajax({
               url: url,
               dataType: 'json',
               type: 'GET',
-              data: { page: page },
+              data: { page: page, date: date },
               error: function() {
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },

@@ -144,7 +144,7 @@ class Users::SessionsController < Devise::SessionsController
                  .order("FIELD(id,#{my_comments.join(',')})") unless my_comments.blank?
             end
           unless @asks.nil?
-            @asks = @asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete])
+            @asks = @asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
           end
         end
         render json: { asks: @asks }

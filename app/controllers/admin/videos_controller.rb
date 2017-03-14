@@ -19,7 +19,6 @@ class Admin::VideosController < Admin::HomeController
   # POST /admin/videos
   def create
     @video = Video.new(video_params)
-
     if @video.save
       flash['success'] = "#{@video.id}번 비교영상을 성공적으로 생성하였습니다"
       redirect_to admin_videos_path

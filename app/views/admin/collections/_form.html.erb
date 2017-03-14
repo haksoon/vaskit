@@ -1,6 +1,6 @@
 <%= simple_form_for @collection,
                     url: @collection.id.nil? ? admin_collections_path : admin_collection_path(@collection.id),
-                    html: { id: 'collection_form', oninput: "form_check($(this));", onchange: "form_check($(this));" } do |f| %>
+                    html: { id: 'collection_form', oninput: 'form_check($(this));', onchange: 'form_check($(this));' } do |f| %>
   <% if @collection.id.nil? %>
     <div class="jumbotron clearfix">
       <h1>컬렉션 생성하기</h1>
@@ -70,17 +70,10 @@
                            { id: 'thumbnail_image',
                              class: 'img-thumbnail center-block',
                              style: 'cursor: pointer;',
-                             onclick: '$("#video_image").click();',
+                             onclick: '$("#collection_image").click();',
                              onload: 'drag_n_drop_img(this);' } %>
             </div>
           <% end %>
-          <div class="well">
-            <%= image_tag @collection.image.url(:original),
-                         { id: 'thumbnail_image',
-                           class: 'img-thumbnail center-block',
-                           style: 'cursor: pointer;',
-                           onclick: '$("#collection_image").click();' } %>
-          </div>
           <%= f.input :collection_keywords,
                       as: :string,
                       error: '',

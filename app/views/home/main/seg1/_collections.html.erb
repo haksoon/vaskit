@@ -9,7 +9,7 @@
 </script>
 
 <script type="text/template" id="collectionShowTemplate">
-  <div class="collection_detail" style="background-image: url('{{= get_image_url(collection, 'collections', 'original') }}');">
+  <div class="collection_background" style="background-image: url('{{= get_image_url(collection, 'collections', 'original') }}');">
     <div class="collection_title">
       <p class="collection_description">{{= collection.description }}</p><br>
       <p class="collection_name">{{= collection.name }}</p>
@@ -21,8 +21,7 @@
     <span class="header_btn right" onclick="go_url('share', 'collection, {{= collection.id }}');"><i class="vaskit_icon share_icon"></i></span>
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="animate_collection_image($(this));">
-    <div class="collection_blank"></div>
-    <div class="clearfix">
+    <div class="collection_detail">
       {{ for (var i=0; i < asks.length; i++) { }}
         {{ var ask = asks[i] }}
         {{= askThumbnailTemplate({ ask: ask }) }}
@@ -101,16 +100,20 @@
 
   function animate_collection_image(target) {
     var current_wrapper = target.parentsUntil(this, '.wrapper');
-    var img = current_wrapper.find('.collection_detail');
+    var img = current_wrapper.find('.collection_background');
+
     var st = target.scrollTop();
     var vh = target.innerHeight();
-    var scale = 1;
-    if (st < 0) {
-      scale = -(st / vh) * 2 + 1;
+    var img_height = img.height();
+    if (st === 0) {
+      img.clearQueue().css({ transformOrigin: 'center center', transform: 'translateY(0)' });
+    } else if (st > vh) {
+      img.clearQueue().css({ transformOrigin: 'center center', transform: 'translateY(-' + img_height + 'px)' });
+    } else if (st > 0 && st < vh) {
+      img.clearQueue().css({ transformOrigin: 'center center', transform: 'translateY(-' + (st / 2) + 'px)' });
+    } else if (st < 0) {
+      var scale = -(st / vh) * 2 + 1;
       img.clearQueue().css({ transformOrigin: 'top center', transform: 'scale(' + scale + ')' });
-    } else {
-      scale = (st / vh) * 1.2 + 1;
-      img.clearQueue().css({ transformOrigin: 'bottom center', transform: 'scale(' + scale + ')' });
     }
   }
 </script>

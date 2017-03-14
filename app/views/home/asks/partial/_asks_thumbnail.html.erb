@@ -11,7 +11,7 @@
           {{= askThumbnailTemplate({ ask: ask }) }}
         {{ } }}
         {{ if (l >= <%= Ask::ASK_PER %>) { }}
-          <div class="loading_icon" page="2" loading="true"><i class="fa fa-spinner fa-spin"></i></div>
+          <div class="loading_icon" page="2" loading="true" date="{{= new Date() }}"><i class="fa fa-spinner fa-spin"></i></div>
         {{ } else { }}
           <div class="loading_icon" page="2">- End of Contents -</i></div>
         {{ } }}
@@ -58,13 +58,22 @@
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
-  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail {{= ask.id == 1959 ? 'event_ask' : '' }} contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
-    {{ if (ask.id == 1959) { }}
+  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail {{= ask.event ? 'event_ask' : '' }} contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+    {{ if (ask.event) { }}
       <div class="event_info">
-        <span class="event_title">📍 프로-리뷰왕 이벤트 진행중!</span>
-        {{ var remain_days = Math.floor((new Date('March 14, 2017').getDate() - new Date().getDate())) }}
-        {{ remain_days = remain_days > 0 ? remain_days + '일 남음' : '오늘 종료됩니다!' }}
-        <span class="event_d_day"><i class="fa fa-clock-o"></i> {{= remain_days }}</span>
+        <span class="event_title">{{= ask.event.title }}</span>
+        <span class="event_d_day"><i class="fa fa-clock-o"></i>
+          {{ var remain_times = new Date(ask.event.ended_at).getTime() - new Date().getTime() }}
+          {{ var remain_days = Math.floor(remain_times / 60 / 60 / 24 / 1000) }}
+          {{ var remain_hours = Math.ceil(remain_times / 60 / 60 / 1000) }}
+          {{ if (remain_days > 0) { }}
+            {{= remain_days + '일 남음' }}
+          {{ } else if (remain_hours > 0) { }}
+            {{= remain_hours + '시간 남음' }}
+          {{ } else { }}
+            {{= '종료된 이벤트입니다' }}
+          {{ } }}
+        </span>
       </div>
     {{ } }}
     <div class="clearfix">

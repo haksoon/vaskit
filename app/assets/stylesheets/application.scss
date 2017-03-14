@@ -74,7 +74,7 @@
 @mixin font-extra-bold { font-family: 'NanumSquareEB', 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif; }
 @mixin font-number { font-family: 'Montserrat', 'NanumSquareR', 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif; }
 @mixin font-small { font-size: 11px; }
-@mixin font-regular { font-size: 14px; }
+@mixin font-normal { font-size: 14px; }
 @mixin font-large { font-size: 16px; }
 @mixin font-extra-large { font-size: 19px; }
 
@@ -107,9 +107,8 @@ html {
 body {
   height: 100%;
   margin: 0;
-  // font-family: 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif;
-  font-family: 'NanumSquareR', 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif;
   @include font-regular;
+  @include font-normal;
   color: #666;
 }
 
@@ -405,7 +404,7 @@ body {
     height: 100%; min-height: 100%; max-height: 100%;
     padding: 16px; box-sizing: border-box;
     @include font-regular;
-    font-size: 14px;
+    @include font-normal;
     color: #333; background-color: #fff;
     transition: background-color .1s;
     &.left { padding-left: 50px; }
@@ -579,7 +578,7 @@ body {
   .collection_image { width: 100%; height: auto; margin: 0; border-radius: 3px; animation: zoomIn 1s 1; }
 }
 
-.collection_detail {
+.collection_background {
   position: absolute; top: 50px; left: 0; display: table; width: 100vw; height: 75vw; max-width: $layout-width; max-height: #{$layout-width / 4 * 3};
   background-size: cover; background-position: center center; transform-origin: bottom center;
   .collection_title { display: table-cell; text-align: center; vertical-align: middle;
@@ -587,7 +586,10 @@ body {
     .collection_name { display: inline-block; margin: 5px 0 0; padding: 5px 10px; color: #555; background-color: rgba(255, 255, 255, .75); @include font-extra-bold; font-size: 20px; }
   }
 }
-.collection_blank { width: 100vw; height: 75vw; max-width: $layout-width; max-height: #{$layout-width / 4 * 3}; border-bottom: 1px solid #bdbdbd; box-sizing: border-box; }
+.collection_detail::before {
+  content: ''; position: relative; display: block;
+  width: 100vw; height: 75vw; max-width: $layout-width; max-height: #{$layout-width / 4 * 3}; border-bottom: 1px solid #bdbdbd; box-sizing: border-box;
+}
 .related_collections_title { width: 100%; height: 50px; line-height: 60px; text-align: center; background: #fff;
   .title { font-size: 16px; @include font-bold; color: #666; }
   .description { font-size: 13px; @include font-light; color: #999; }
@@ -840,11 +842,15 @@ body {
   }
 
   &.ask_thumbnail.event_ask { border: 2px solid #ff7200; padding-bottom: 40px; margin-bottom: 10px;
-    .event_info { display: block; width: 100%; height: 30px; line-height: 30px; box-sizing: border-box;
-                  font-size: 12px; background-color: #ff7200; color: #fff; }
-    .event_title { display: inline-block; height: 30px; padding: 0 8px 0 5px; border-bottom: 1px dashed #ff7200; box-sizing: border-box;
-                   background-color: #fff; color: #ff7200; border-radius: 5px 5px 0 0; @include font-bold; }
-    .event_d_day { float: right; margin-right: 6px; font-size: 10px; }
+    .event_info {
+      display: block; width: 100%; height: 30px; line-height: 30px; box-sizing: border-box;
+      font-size: 12px; background-color: #ff7200; color: #fff; }
+    .event_title {
+      display: inline-block; height: 29px; margin-top: 1px; padding: 0 8px 0 5px; border-bottom: 1px dashed #ff7200; box-sizing: border-box;
+      background-color: #fff; color: #ff7200; border-radius: 5px 5px 0 0; @include font-bold;
+      &::after { content: '이벤트!'; margin-left: 5px; font-size: 11px; color: #ffcc5a; @include font-regular; }
+    }
+    .event_d_day { height: 30px; line-height: 35px; float: right; margin-right: 10px; font-size: 10px; }
   }
 }
 
@@ -981,7 +987,7 @@ body {
   .comment_input_init { width: calc(100% - 100px); height: 100%; min-height: 50px; padding: 9px 0; margin: 0 50px; box-sizing: border-box;
     .comment_input_bubble { background-color: #f2f0f0; padding: 7px 10px; border-radius: 5px 0 0 5px; box-shadow: 1px 1px 1px lightgrey;
       .hashtag_container { position: relative; width: 100%;
-        .comment_input, .hashtag_highlights { font-size: 14px; line-height: 18px; @include font-regular; }
+        .comment_input, .hashtag_highlights { line-height: 18px; @include font-regular; @include font-normal; }
         .comment_input, .hashtag_backdrop { display: block; width: 100%; max-height: 168px; height: 18px; background-color: #f2f0f0; color: #666;
           &.filled { -webkit-text-fill-color: #666 !important; }
         }
@@ -1265,7 +1271,7 @@ body {
       min-width: calc(100% - 20px); max-width: calc(100% - 20px); min-height: calc(100% - 20px); max-height: calc(100% - 20px);
       box-sizing: border-box; margin: 0; padding: 0; }
     .ask_message_input,
-    .hashtag_highlights { font-size: 14px; line-height: 18px; @include font-regular; }
+    .hashtag_highlights { line-height: 18px; @include font-regular; @include font-normal; }
     .ask_message_input { background-color: #fff; -webkit-overflow-scrolling: initial; }
     .hashtag_backdrop { background-color: transparent; overflow: hidden; pointer-events: none;
       &.iOS { padding: 0 3px; }
