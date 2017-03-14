@@ -1,0 +1,52 @@
+<div class="jumbotron clearfix">
+  <h1><kbd><%= @event.id %>번</kbd> 이벤트</h1>
+  <p>이벤트를 생성하거나 수정, 삭제할 수 있습니다</p>
+  <%= link_to '목록으로',
+              admin_events_path,
+              { class: 'btn btn-default btn-lg' } %>
+  <div class="pull-right">
+    <%= link_to '수정하기',
+                edit_admin_event_path(@event.id),
+                { class: 'btn btn-warning btn-lg' } %>
+    <%= link_to '삭제하기',
+                admin_event_path(@event.id),
+                { class: 'btn btn-danger btn-lg', method: :delete, data: { confirm: '정말로 삭제하시겠어요?', disable_with: '삭제중...' } } %>
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">이벤트 내용</div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th style="width: 100px;">제목</th>
+        <td><%= @event.title %></td>
+      </tr>
+      <tr>
+        <th>설명</th>
+        <td><%= tagging_keywords(@event.description) %></td>
+      </tr>
+      <tr>
+        <th>시작일</th>
+        <td><%= format_datetime(@event.started_at, :date) %></td>
+      </tr>
+      <tr>
+        <th>종료일</th>
+        <td><%= format_datetime(@event.ended_at, :date) %></td>
+      </tr>
+      <tr>
+        <th>이미지</th>
+        <td><%= image_tag @event.image.url(:original),
+                          { width: '100%' } %></td>
+      </tr>
+      <tr>
+        <th>질문</th>
+        <td>
+          <%= render '/admin/asks/thumbnail', ask: @event.ask %>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
