@@ -1107,6 +1107,7 @@ body {
     }
     .search_preview_list { margin: 0; padding: 0; list-style: none;
       .search_preview_item { background-color: #fff; overflow: hidden; transition: background-color .1s; cursor: pointer;
+        &.search_focus { background-color: #ffe4a9; }
         .search_preveiw_link { position: relative; display: block; padding: 0 50px 0 40px; height: 50px; line-height: 50px; border-bottom: 1px solid #eee; box-sizing: border-box; color: #666; @include ellipsis;
           .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; margin: 17px 7px; background-position-y: -56px;
             &.collection_icon { background-position-x: 0; }
@@ -1117,7 +1118,6 @@ body {
             &.none_icon { background-position-x: -80px; }
           }
           .search_date { position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
-          &.search_focus { background-color: #ffe4a9; }
         }
       }
     }

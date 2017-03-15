@@ -55,24 +55,22 @@
                                     class: 'required_form',
                                     placeholder: '이벤트 설명을 입력하세요'
                                   } %>
-          <%= f.input :started_at,
-                      as: :date,
-                      label: '3. 이벤트 시작일자 입력',
-                      hint: '시작일자를 현재일자 이후로 등록하면 예약 이벤트 생성이 가능합니다',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '이벤트 시작일을 입력하세요'
-                                  } %>
-          <%= f.input :ended_at,
-                      as: :date,
-                      label: '4. 이벤트 종료일자 입력',
-                      hint: '종료일자는 종료를 원하는 해당일자의 다음날을 입력하세요 (매일 자정 기준) 종료일자가 지나면 자동으로 상단 고정이 해제됩니다',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '이벤트 종료일을 입력하세요'
-                                  } %>
+          <div class="row form-group">
+            <%= f.input :started_at,
+                        as: :date,
+                        label: '3. 이벤트 시작일자 입력',
+                        hint: '시작일자를 현재일자 이후로 등록하면 예약 이벤트 생성이 가능합니다',
+                        error: '',
+                        wrapper_html: { class: ' col-lg-6 col-md-6 col-sm-6 col-xs-12' },
+                        input_html: { class: 'required_form' } %>
+            <%= f.input :ended_at,
+                        as: :date,
+                        label: '4. 이벤트 종료일자 입력',
+                        hint: '종료일자는 종료를 원하는 해당일자의 다음날을 입력하세요 (매일 자정 기준) 종료일자가 지나면 자동으로 상단 고정이 해제됩니다',
+                        error: '',
+                        wrapper_html: { class: ' col-lg-6 col-md-6 col-sm-6 col-xs-12' },
+                        input_html: { class: 'required_form' } %>
+          </div>
           <%= f.input :image,
                       label: '5. 썸네일 입력',
                       error: '' do %>
@@ -117,6 +115,11 @@
 <% end %>
 
 <script>
+  $.each($('#event_started_at_1i option'), function( index, value ) { if (value.value !== '') value.text += '년'; });
+  $.each($('#event_started_at_3i option'), function( index, value ) { if (value.value !== '') value.text += '일'; });
+  $.each($('#event_ended_at_1i option'), function( index, value ) { if (value.value !== '') value.text += '년'; });
+  $.each($('#event_ended_at_3i option'), function( index, value ) { if (value.value !== '') value.text += '일'; });
+
   function ask_link_preview() {
     var input = $("#event_ask_id");
     var ask_id = input.val();

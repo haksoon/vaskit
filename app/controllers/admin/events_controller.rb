@@ -27,6 +27,10 @@ class Admin::EventsController < Admin::HomeController
   # POST /admin/events
   def create
     @event = Event.new(event_params)
+    unless Time.new(event_params['ended_at(1i)'], event_params['ended_at(2i)'], event_params['ended_at(3i)']) > Time.new(event_params['started_at(1i)'], event_params['started_at(2i)'], event_params['started_at(3i)'])
+      flash['error'] = '종료일자는 시작일자보다 이후여야만 합니다'
+      render :new and return
+    end
     if @event.save
       @event.ask.update(event_id: @event.id)
       flash['success'] = "<#{@event.title}> 이벤트를 성공적으로 생성하였습니다"
@@ -43,6 +47,10 @@ class Admin::EventsController < Admin::HomeController
 
   # PATCH /admin/events/:id
   def update
+    unless Time.new(event_params['ended_at(1i)'], event_params['ended_at(2i)'], event_params['ended_at(3i)']) > Time.new(event_params['started_at(1i)'], event_params['started_at(2i)'], event_params['started_at(3i)'])
+      flash['error'] = '종료일자는 시작일자보다 이후여야만 합니다'
+      render :edit and return
+    end
     if @event.update(event_params)
       flash['success'] = "<#{@event.title}> 이벤트를 성공적으로 수정하였습니다"
       redirect_to admin_events_path

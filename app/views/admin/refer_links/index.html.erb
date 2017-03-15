@@ -44,7 +44,7 @@
             <td><%= "#{number_with_precision(refer_link.commerce_expense, delimiter: ',', precision: 0)}원" %></td>
             <td><%= "#{number_with_precision(refer_link.commerce_budget, delimiter: ',', precision: 0)}원" %></td>
             <td><%= refer_link.commerce_started_at.nil? ? '-' : "#{format_datetime(refer_link.commerce_started_at, :date)} ~ #{format_datetime(refer_link.commerce_ended_at, :date)}" %></td>
-            <td><%= "#{CONFIG['host']}#{refer_link.url}?ref=#{refer_link.id}" %></td>
+            <td><%= "#{refer_link.url}?ref=#{refer_link.id}" %></td>
             <td><%= refer_link.connect_to_store ? 'Y' : 'N' %></td>
             <td class="text-center"><%= format_datetime(refer_link.created_at, 'past') %></td>
             <td>

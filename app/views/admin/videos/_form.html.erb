@@ -55,6 +55,7 @@
             <%= f.input_field :image,
                               as: :file,
                               class: 'hidden',
+                              accept: 'image/*',
                               onclick: 'this.nextElementSibling.checked = true;',
                               onchange: 'preview_thumbnail(this);' %>
             <%= check_box_tag 'image_attached', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
@@ -70,48 +71,67 @@
                              onload: 'drag_n_drop_img(this);' } %>
             </div>
           <% end %>
+
           <%= f.input :fb_id,
-                      as: :select,
-                      collection: @facebook_video_list.collect { |video| [video['description'].truncate(100), video['id']] },
-                      include_blank: '페이스북 영상을 선택해주세요',
                       label: '4. 페이스북 영상 입력',
-                      hint: '페이스북 영상을 선택해주세요',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    onchange: 'fb_link_preview();'
-                                  } %>
+                      error: '' do %>
+            <p class="help-block">페이스북 영상을 선택해주세요</p>
+            <%= f.input_field :fb_id,
+                              as: :select,
+                              collection: @facebook_video_list.collect { |video| [video['description'].truncate(100), video['id']] },
+                              prompt: '페이스북 영상을 선택해주세요',
+                              class: 'form-control',
+                              placeholder: '페이스북 영상을 선택해주세요',
+                              onchange: "$('#fb_preview_link_btn').click();" %>
+            <button id="fb_preview_link_btn" class="btn btn-success hidden" type="button" onclick="preview_link('facebook', $('#video_fb_id'), null, $('#fb_link_preview'), $('#fb_preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+            <%= check_box_tag 'fb_preview_completed', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
+          <% end %>
           <div id="fb_link_preview" class="well <%= 'hidden' if @video.fb_id.blank? %>">
             <div class="embed-responsive embed-responsive-16by9">
               <iframe class="embed-responsive-item" src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.fb_id}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" unless @video.fb_id.blank? %>"></iframe>
             </div>
           </div>
+
           <%= f.input :yt_id,
-                      as: :string,
-                      error: '',
-                      hint: '유튜브 영상 ID를 입력한 뒤 tab 키를 누르세요',
                       label: '5. 유튜브 영상 입력',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '유튜브 영상 ID를 입력해주세요 (11자리)',
-                                    onchange: 'yt_link_preview();'
-                                  } %>
+                      error: '' do %>
+              <p class="help-block">유튜브 영상 ID를 입력한 뒤 미리보기 버튼을 누르세요</p>
+              <div class="input-group">
+              <%= f.input_field :yt_id,
+                                as: :string,
+                                class: 'form-control',
+                                placeholder: '유튜브 영상 ID를 입력해주세요 (11자리)',
+                                onchange: "$('#yt_preview_link_btn').click();" %>
+              <span class="input-group-btn">
+                <button id="yt_preview_link_btn" class="btn btn-success" type="button" onclick="preview_link('youtube', $('#video_yt_id'), null, $('#yt_link_preview'), $('#yt_preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+              </span>
+            </div>
+            <%= check_box_tag 'yt_preview_completed', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
+          <% end %>
           <div id="yt_link_preview" class="well <%= 'hidden' if @video.yt_id.blank? %>">
             <div class="embed-responsive embed-responsive-16by9">
               <iframe class="embed-responsive-item" src="<%= "https://www.youtube.com/embed/#{@video.yt_id}" unless @video.yt_id.blank? %>"></iframe>
             </div>
           </div>
+
           <%= f.input :ask_id,
-                      as: :integer,
                       label: '6. 질문 입력',
-                      hint: '질문 컨텐츠 ID를 입력한 뒤 tab 키를 누르세요',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '질문 ID를 입력해주세요',
-                                    pattern: '[0-9]*',
-                                    onchange: 'ask_link_preview();'
-                                  } %>
+                      error: '' do %>
+              <p class="help-block">질문 컨텐츠 ID를 입력한 뒤 미리보기 버튼을 누르세요</p>
+              <div class="input-group">
+              <%= f.input_field :ask_id,
+                                as: :integer,
+                                class: 'form-control',
+                                placeholder: '질문 ID를 입력해주세요',
+                                pattern: '[0-9]*',
+                                min: '1',
+                                onchange: "$('#ask_preview_link_btn').click();" %>
+              <span class="input-group-btn">
+                <button id="ask_preview_link_btn" class="btn btn-success" type="button" onclick="preview_link('ask_id', $('#video_ask_id'), null, $('#ask_link_preview'), $('#ask_preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+              </span>
+            </div>
+            <%= check_box_tag 'ask_preview_completed', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
+          <% end %>
           <div id="ask_link_preview" class="well <%= 'hidden' if @video.ask_id.blank? %>">
             <div class="embed-responsive embed-responsive-16by9">
               <iframe class="embed-responsive-item" src="<%= "#{CONFIG["host"]}/asks/#{@video.ask_id}" unless @video.ask_id.blank? %>"></iframe>
@@ -122,56 +142,3 @@
       </div>
     </div>
 <% end %>
-
-<script>
-  function ask_link_preview() {
-    var input = $("#video_ask_id");
-    var ask_id = input.val();
-    var preview = $("#ask_link_preview");
-    var preview_frame = preview.find("iframe");
-
-    if (ask_id.match(new RegExp(/^[\d]+$/))) {
-      var link = "<%= "#{CONFIG["host"]}/asks/" %>" + ask_id;
-      preview.removeClass("hidden");
-      preview_frame.attr("src", link);
-    } else {
-      preview.addClass("hidden");
-      preview_frame.attr("src", "");
-      input.val("").focus();
-    }
-  }
-
-  function fb_link_preview() {
-    var input = $("#video_fb_id");
-    var fb_id = input.val();
-    var preview = $("#fb_link_preview");
-    var preview_frame = preview.find("iframe");
-
-    if (fb_id !== "") {
-      var link = "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F" + fb_id + "%2F&width=500&height=280&show_text=false&appId=<%= Facebook::CONFIG['app_id'] %>";
-      preview.removeClass("hidden");
-      preview_frame.attr("src", link);
-    } else {
-      preview.addClass("hidden");
-      preview_frame.attr("src", "");
-      input.focus().select();
-    }
-  }
-
-  function yt_link_preview() {
-    var input = $("#video_yt_id");
-    var yt_id = input.val();
-    var preview = $("#yt_link_preview");
-    var preview_frame = preview.find("iframe");
-
-    if (yt_id !== "") {
-      var link = "https://www.youtube.com/embed/" + yt_id;
-      preview.removeClass("hidden");
-      preview_frame.attr("src", link);
-    } else {
-      preview.addClass("hidden");
-      preview_frame.attr("src", "");
-      input.focus().select();
-    }
-  }
-</script>

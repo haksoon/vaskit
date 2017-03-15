@@ -30,7 +30,7 @@
           <label for="type">1. 푸시 종류 선택</label>
           <%= select_tag :type,
                          '
-                          <option value="" disabled selected>푸쉬 종류를 선택해주세요</option>
+                          <option value disabled selected>푸쉬 종류를 선택해주세요</option>
                           <optgroup label="컨텐츠 생성">
                             <option value="collection">컬렉션 발행</option>
                             <option value="video">비교영상 발행</option>
@@ -46,7 +46,24 @@
                          } %>
         </div>
         <div class="form-group">
-          <label for="msg">2. 푸쉬알림 내용 입력</label>
+          <label for="target">2. 대상 선택</label>
+          <div class="form-group">
+            <%= select_tag :target,
+                           '
+                            <option value disabled selected>대상을 선택해주세요</option>
+                            <option value="all">전체 유저</option>
+                            <option value="filter">필터 적용</option>
+                            <option value="user">특정 유저</option>
+                           '.html_safe,
+                           {
+                             class: 'form-control required_form',
+                             onchange: 'push_target_changed($(this));'
+                           } %>
+          </div>
+          <div id="push_target_preview" class="well hidden"></div>
+        </div>
+        <div class="form-group">
+          <label for="msg">3. 푸쉬알림 내용 입력</label>
           <%= text_area_tag :msg,
                             '',
                             {
@@ -56,32 +73,22 @@
                             } %>
         </div>
         <div class="form-group">
-          <label for="filter">3. 대상 선택</label>
-          <div class="form-group">
-            <%= select_tag :filter,
-                           '
-                            <option value="" disabled selected>대상을 선택해주세요</option>
-                            <option value="all">전체 유저</option>
-                            <option value="filter">필터 적용</option>
-                            <option value="specific">특정 유저</option>
-                           '.html_safe,
-                           {
-                             class: 'form-control required_form',
-                             onchange: 'push_filter_changed($(this));'
-                           } %>
-          </div>
-          <div id="push_filter_preview" class="form-group"></div>
-        </div>
-        <div class="form-group">
           <label for="link">4. 푸쉬알림 연결 링크 입력</label>
-          <p class="help-block">연결할 링크를 입력한 뒤 tab 키를 누르세요</p>
-          <%= text_field_tag :link,
-                             '',
-                             {
-                               class: 'form-control required_form',
-                               placeholder: '연결할 링크를 입력해주세요',
-                               onchange: 'push_link_preview($(this));'
-                             } %>
+          <p class="help-block">연결할 링크를 입력한 뒤 미리보기 버튼을 누르세요</p>
+          <div class="input-group">
+            <%= text_field_tag :link,
+                               "#{CONFIG['host']}",
+                               {
+                                 class: 'form-control required_form',
+                                 placeholder: '연결할 링크를 입력해주세요',
+                                 onchange: "$('#preview_link_btn').click();"
+                               } %>
+             <span class="input-group-btn">
+               <button class="btn btn-default" type="button" onclick="preview_link_reset('VASKIT', $('#link'), $('#js'), $('#push_link_preview'), $('#preview_completed'));"><i class="fa fa-home"></i> 초기화</button>
+               <button id="preview_link_btn" class="btn btn-success" type="button" onclick="preview_link('VASKIT', $('#link'), $('#js'), $('#push_link_preview'), $('#preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+             </span>
+          </div>
+          <%= check_box_tag 'preview_completed', '', false, class: 'hidden required_form' %>
         </div>
         <div class="form-group">
           <%= text_field_tag :js,
@@ -103,77 +110,7 @@
   </div>
 <% end %>
 
-
-<script type="text/template" id="pushTypeAllTemplate">
-  <div class="alert alert-warning" role="alert"><%= "등록된 #{UserGcmKey.all.count}개의 디바이스에 전송됩니다" %></div>
-</script>
-
-<script type="text/template" id="pushTypeFilterTemplate">
-  <div class="well">
-    <p class="help-block" style="margin-top: 0; margin-bottom: 20px; line-height: 20px;">
-      여러 항목을 선택할 경우 <kbd>shift</kbd> 또는 <kbd>command</kbd> 키와 함께 클릭해주세요<br>
-      특정 항목을 해제하기 원하면 <kbd>command</kbd> 키를 누르고 클릭해주세요
-    </p>
-    <div class="form-group">
-      <label for="">성별</label>
-      <%= select_tag :filter_gender,
-                     '
-                      <option value="male">남성</option>
-                      <option value="female">여성</option>
-                     '.html_safe,
-                     {
-                       class: 'form-control',
-                       multiple: true
-                     } %>
-    </div>
-    <div class="form-group">
-      <label for="">연령</label>
-      <%= select_tag :filter_age,
-                     '
-                      <option value="early_20">20대 초반</option>
-                      <option value="middle_20">20대 중반</option>
-                      <option value="latter_20">20대 후반</option>
-                      <option value="early_30">30대 초반</option>
-                      <option value="middle_30">30대 중반</option>
-                      <option value="latter_30">30대 후반</option>
-                      <option value="etc">기타</option>
-                     '.html_safe,
-                     {
-                       class: 'form-control',
-                       multiple: true
-                     } %>
-    </div>
-    <div class="form-group">
-      <label for="">기기</label>
-      <%= select_tag :filter_device,
-                     '
-                      <option value="ios">아이폰</option>
-                      <option value="aos">안드로이드</option>
-                     '.html_safe,
-                     {
-                       class: 'form-control',
-                       multiple: true
-                     } %>
-    </div>
-  </div>
-</script>
-
-<script type="text/template" id="pushTypeSpecificTemplate">
-  <div class="well">
-    <%= select_tag :filter_user_id,
-                   options_for_select(UserGcmKey.where.not(user_id: nil).collect{ |key| [key.user.string_id, key.user.id] }),
-                   {
-                     include_blank: '유저를 선택해주세요',
-                     class: 'form-control required_form'
-                   } %>
-  </div>
-</script>
-
 <script>
-  var pushTypeAllTemplate = _.template($('#pushTypeAllTemplate').html());
-  var pushTypeFilterTemplate = _.template($('#pushTypeFilterTemplate').html());
-  var pushTypeSpecificTemplate = _.template($('#pushTypeSpecificTemplate').html());
-
   function push_test_send() {
     var msg = encodeURIComponent($('#msg').val());
     var link = encodeURIComponent($('#link').val());
@@ -183,10 +120,8 @@
 
   function push_type_changed() {
     var type_input = $('#type');
-    var type = type_input.val();
-    var filter_input = $('#filter');
     var link_input = $('#link');
-    filter_input.val('all');
+    var type = type_input.val();
     if (type == 'collection') {
       link_input.val('<%= "#{collections_url}/#{Collection.last.id}" %>');
     } else if (type == 'video') {
@@ -196,50 +131,16 @@
     } else if (type == 'notice') {
       link_input.val('<%= "#{root_url}" %>');
     }
-    push_filter_changed();
-    push_link_preview();
   }
 
-  function push_filter_changed() {
-    var filter_input = $('#filter');
-    var filter = filter_input.val();
-    var preview = $('#push_filter_preview');
-    if (filter == 'all') {
-      preview.html(pushTypeAllTemplate());
-    } else if (filter == 'filter') {
-      preview.html(pushTypeFilterTemplate());
-    } else if (filter == 'specific') {
-      preview.html(pushTypeSpecificTemplate());
-    } else {
-      preview.empty();
-    }
-  }
-
-  function push_link_preview() {
-    var link_input = $('#link');
-    var link = link_input.val();
-    var js_input = $('#js');
-    var preview = $('#push_link_preview');
-    var preview_frame = preview.find('iframe');
-
-    if (link === "<%= CONFIG['host'] %>/" || link.match("<%= CONFIG['host'] %>") !== null) {
-      if (link !== "<%= CONFIG['host'] %>/") {
-        link_input.attr('readonly', true);
-      } else {
-        link_input.removeAttr('readonly');
+  function push_target_changed() {
+    $.ajax({
+      url: '<%= target_admin_notices_path %>',
+      type: 'GET',
+      data: { target: $('#target').val() },
+      beforeSend: function() {
+        $('#push_target_preview').removeClass('hidden').html('갱신중...');
       }
-      preview.removeClass('hidden');
-      js_input.removeClass('hidden').val('로딩중...');
-      preview_frame.attr('src', link).load(function(){
-        var odjDoc = this.contentWindow || this.contentDocument;
-        js_input.val('로딩완료!');
-        setTimeout(function(){
-          js_input.val(odjDoc.get_js_function());
-        }, 1000);
-      });
-    } else {
-      link_input.val("<%= CONFIG['host'] %>/").focus();
-      alert('내부 링크를 입력해주세요');
-    }
+    });
   }
 </script>

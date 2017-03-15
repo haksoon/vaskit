@@ -38,85 +38,164 @@
                       error: '',
                       input_html: {
                                     class: 'required_form',
-                                    placeholder: '레퍼런스 링크 이름을 입력하세요'
+                                    placeholder: '레퍼런스 링크 이름을 입력해주세요'
                                   } %>
+
           <%= f.input :channel,
-                      as: :string,
                       label: '2. 채널 입력',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '레퍼런스 링크 채널을 입력하세요'
-                                  } %>
+                      error: '' do %>
+            <p class="help-block">레퍼런스 링크를 게시할 채널을 기존 데이터에서 선택하거나 새롭게 입력하세요</p>
+            <div class="input-group" style="margin-bottom: 5px;">
+              <%= text_field_tag :add_channel,
+                                 '',
+                                 {
+                                   class: 'form-control',
+                                   placeholder: '새로운 게시 채널 추가'
+                                 } %>
+               <span class="input-group-btn">
+                 <button id="add_channel_btn" class="btn btn-success" type="button" onclick="add_select_option($('#add_channel'), $('#refer_link_channel'));"><i class="fa fa-plus"></i> 추가하기</button>
+               </span>
+            </div>
+            <%= f.input_field :channel,
+                              as: :select,
+                              collection: @channels.collect { |channel| [channel, channel] },
+                              prompt: '기존의 게시 채널 선택',
+                              class: 'required_form' %>
+          <% end %>
+
           <%= f.input :commerce_type,
-                      as: :string,
                       label: '3. 광고 타입 입력',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '광고 타입을 입력하세요'
-                                  } %>
-          <%= f.input :commerce_budget,
-                      as: :integer,
-                      label: '4. 광고 예산 입력',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    step: '10000',
-                                    pattern: '[0-9]*',
-                                    placeholder: '광고 예산을 입력하세요'
-                                  } %>
-          <%= f.input :commerce_expense,
-                      as: :integer,
-                      label: '5. 광고 비용 입력',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    step: '10000',
-                                    pattern: '[0-9]*',
-                                    placeholder: '광고 비용을 입력하세요'
-                                  } %>
-          <%= f.input :commerce_started_at,
-                      as: :date,
-                      label: '6. 광고 시작일자 입력',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '광고 시작일자를 입력하세요'
-                                  } %>
-          <%= f.input :commerce_ended_at,
-                      as: :date,
-                      label: '7. 광고 종료일자 입력',
-                      hint: '종료일자는 종료 예정 해당일자의 다음날을 입력하세요 (매일 자정 기준)',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '광고 종료일자를 입력하세요'
-                                  } %>
+                      error: '' do %>
+            <p class="help-block">광고 타입을 기존 데이터에서 선택하거나 새롭게 입력하세요</p>
+            <div class="input-group" style="margin-bottom: 5px;">
+              <%= text_field_tag :add_commerce_type,
+                                 '',
+                                 {
+                                   class: 'form-control',
+                                   placeholder: '새로운 광고 타입 추가'
+                                 } %>
+               <span class="input-group-btn">
+                 <button id="add_commerce_type_btn" class="btn btn-success" type="button" onclick="add_select_option($('#add_commerce_type'), $('#refer_link_commerce_type'));"><i class="fa fa-plus"></i> 추가하기</button>
+               </span>
+            </div>
+            <%= f.input_field :commerce_type,
+                              as: :select,
+                              collection: @commerce_types.collect { |type| [type, type] },
+                              prompt: '기존의 광고 타입 선택',
+                              class: 'required_form' %>
+          <% end %>
+
+          <div class="row form-group">
+            <%= f.input :commerce_budget,
+                        as: :integer,
+                        label: '4. 광고 예산 입력',
+                        error: '',
+                        wrapper_html: {
+                                        class: 'col-lg-6 col-md-6 col-sm-6 col-xs-12'
+                                      },
+                        input_html: {
+                                      class: 'required_form',
+                                      step: '10000',
+                                      pattern: '[0-9]*',
+                                      min: '0',
+                                      style: 'text-align: right;',
+                                      placeholder: '광고 예산을 입력하세요'
+                                    } %>
+            <%= f.input :commerce_expense,
+                        as: :integer,
+                        label: '5. 광고 비용 입력',
+                        hint: '광고 예산 및 비용을 숫자로 입력하세요',
+                        error: '',
+                        wrapper_html: {
+                                        class: 'col-lg-6 col-md-6 col-sm-6 col-xs-12'
+                                      },
+                        input_html: {
+                                      class: 'required_form',
+                                      step: '10000',
+                                      pattern: '[0-9]*',
+                                      min: '0',
+                                      style: 'text-align: right;',
+                                      placeholder: '광고 비용을 입력하세요'
+                                    } %>
+          </div>
+          <div class="row form-group">
+            <%= f.input :commerce_started_at,
+                        as: :date,
+                        label: '6. 광고 시작일자 입력',
+                        error: '',
+                        wrapper_html: { class: ' col-lg-6 col-md-6 col-sm-6 col-xs-12' },
+                        input_html: { class: 'required_form' } %>
+            <%= f.input :commerce_ended_at,
+                        as: :date,
+                        label: '7. 광고 종료일자 입력',
+                        hint: '종료일자는 종료 예정 해당일자의 다음날을 입력하세요 (매일 자정 기준)',
+                        error: '',
+                        wrapper_html: { class: ' col-lg-6 col-md-6 col-sm-6 col-xs-12' },
+                        input_html: { class: 'required_form' } %>
+          </div>
           <%= f.input :url,
-                      as: :string,
                       label: '8. 연결 링크 입력',
-                      hint: '연결 링크를 입력한 뒤 tab 키를 누르세요',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '연결 링크를 입력하세요'
-                                  } %>
+                      error: '' do %>
+            <p class="help-block">연결할 링크를 입력한 뒤 미리보기 버튼을 누르세요</p>
+            <div class="input-group">
+              <%= f.input_field :url,
+                                as: :string,
+                                value: "#{@refer_link.url}",
+                                class: 'form-control',
+                                placeholder: '연결 링크를 입력하세요',
+                                onchange: "$('#preview_link_btn').click();" %>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onclick="preview_link_reset('VASKIT', $('#refer_link_url'), $('#refer_link_js'), $('#link_preview'), $('#preview_completed'));"><i class="fa fa-home"></i> 초기화</button>
+                <button id="preview_link_btn" class="btn btn-success" type="button" onclick="preview_link('VASKIT', $('#refer_link_url'), $('#refer_link_js'), $('#link_preview'), $('#preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+              </span>
+            </div>
+            <%= check_box_tag 'preview_completed', '', @refer_link.id.nil? ? false : true, class: 'hidden required_form' %>
+          <% end %>
           <%= f.input :js,
                       as: :string,
-                      label: '9. 연결 자바스크립트 입력',
-                      hint: '위 주소에서 콘솔창을 열고 "get_js_function();"을 명령했을때의 반환값을 입력해주세요',
+                      label: false,
                       error: '',
                       input_html: {
-                                    class: 'required_form',
-                                    placeholder: '연결 자바스크립트를 입력하세요'
+                                    class: 'hidden',
+                                    readonly: true
                                   } %>
+          <div id="link_preview" class="well hidden">
+            <div class="embed-responsive embed-responsive-4by3">
+              <iframe class="embed-responsive-item" src=""></iframe>
+              <div class="iframe_cover" onclick="window.open($(this).prev('iframe').attr('src'));"></div>
+            </div>
+          </div>
           <%= f.input :connect_to_store,
-                      as: :boolean,
-                      label: '10. 스토어 연결 우선 여부',
-                      hint: '스토어로 연결을 우선시하려면 체크하세요',
+                      as: :select,
+                      collection: [['앱이 설치되지 않은 경우 웹페이지로 우선 연결합니다', false], ['앱이 설치되지 않은 경우 스토어로 우선 연결합니다', true]],
+                      prompt: false,
+                      label: '9. 스토어 연결 우선 여부',
+                      hint: '앱이 설치된 모바일 디바이스에서는 앱으로 실행됩니다',
                       error: '' %>
         </div>
       </div>
     </div>
 <% end %>
+
+<script>
+  $.each($('#refer_link_commerce_started_at_1i option'), function( index, value ) { if (value.value !== '') value.text += '년'; });
+  $.each($('#refer_link_commerce_started_at_3i option'), function( index, value ) { if (value.value !== '') value.text += '일'; });
+  $.each($('#refer_link_commerce_ended_at_1i option'), function( index, value ) { if (value.value !== '') value.text += '년'; });
+  $.each($('#refer_link_commerce_ended_at_3i option'), function( index, value ) { if (value.value !== '') value.text += '일'; });
+
+  function add_select_option(input, select) {
+    var value = input.val();
+    var selectedIndex = select.find('option').length;
+    if (value) {
+      input.val('');
+      select
+        .append('<option value="' + value + '">' + value + '</option>')
+        .prop('selectedIndex', selectedIndex)
+        .selectric('refresh')
+        .selectric('open');
+    } else {
+      alert('추가하실 내용을 입력하세요');
+      input.focus();
+    }
+  }
+</script>

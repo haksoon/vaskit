@@ -1,0 +1,6 @@
+<%= select_tag :target_user_id,
+               options_for_select(UserGcmKey.where.not(user_id: nil).collect{ |key| [key.user.string_id, key.user.id] }),
+               {
+                 prompt: '유저를 선택해주세요',
+                 class: 'form-control required_form'
+               } %>

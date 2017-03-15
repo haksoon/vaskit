@@ -1,0 +1,10 @@
+<% if params[:target] == 'all' %>
+  $('#push_target_preview').html("<%= escape_javascript(render 'target_all') %>");
+<% elsif params[:target] == 'filter' %>
+  $('#push_target_preview').html("<%= escape_javascript(render 'target_filter') %>");
+  $('#filter_gender').selectric();
+  $('#filter_age').selectric();
+  $('#filter_device').selectric();
+<% elsif params[:target] == 'user' %>
+  $('#push_target_preview').html("<%= escape_javascript(render 'target_user') %>");
+<% end %>

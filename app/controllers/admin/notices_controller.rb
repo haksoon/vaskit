@@ -9,31 +9,9 @@ class Admin::NoticesController < Admin::HomeController
   def new
   end
 
-  # GET /admin/notices/test
-  def test
-    return if params[:msg].blank? || params[:link].blank?
-    params[:js] = '' if params[:js].nil? || params[:js] == 'false'
-    payload = { msg: "#{params[:msg]}\n[테스트 푸쉬 by #{current_user.string_id}]",
-                type: 'true',
-                count: nil,
-                id: 1,
-                link: params[:link],
-                js: params[:js] }
-    registration_ids_ios = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
-    registration_ids_aos = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
-
-    response_ios = push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
-    response_aos = push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?
-
-    count = 0
-    count += JSON.parse(response_ios[:body])['success'].to_i unless response_ios.nil?
-    count += JSON.parse(response_aos[:body])['success'].to_i unless response_aos.nil?
-    @string = "#{count}대의 기기에 테스트 알림을 전송하였습니다"
-  end
-
   # POST /admin/notices
   def create
-    if params[:type].blank? || params[:filter].blank? || params[:msg].blank? || params[:link].blank?
+    if params[:type].blank? || params[:target].blank? || params[:msg].blank? || params[:link].blank?
       flash['error'] = '필수 입력값을 모두 입력해주세요'
       redirect_to new_admin_notice_path and return
     end
@@ -47,7 +25,7 @@ class Admin::NoticesController < Admin::HomeController
                 link: params[:link],
                 js: params[:js] }
 
-    if params[:filter] == 'all'
+    if params[:target] == 'all'
       if Rails.env == 'development'
         admin_user_ids = User.where(user_role: 'admin').pluck(:id)
         registration_ids_ios = UserGcmKey.where(user_id: admin_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
@@ -56,8 +34,8 @@ class Admin::NoticesController < Admin::HomeController
         registration_ids_ios = UserGcmKey.where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
         registration_ids_aos = UserGcmKey.where('device_id LIKE ?', 'android%').pluck(:gcm_key)
       end
-    elsif params[:filter] == 'filter'
-      filter_users =
+    elsif params[:target] == 'filter'
+      target_users =
         if Rails.env == 'development'
           User.where(user_role: 'admin')
         else
@@ -66,9 +44,9 @@ class Admin::NoticesController < Admin::HomeController
 
       unless params[:filter_gender].nil?
         if params[:filter_gender].length == 1 && params[:filter_gender][0] == 'male'
-          filter_users = filter_users.where(gender: true)
+          target_users = target_users.where(gender: true)
         elsif params[:filter_gender].length == 1 && params[:filter_gender][0] == 'female'
-          filter_users = filter_users.where(gender: false)
+          target_users = target_users.where(gender: false)
         end
       end
 
@@ -91,7 +69,7 @@ class Admin::NoticesController < Admin::HomeController
             age_filter << "users.birthday < '#{age_30_2_end}' AND users.birthday > '#{age_30_3_end}'" if age == 'latter_30'
             age_filter << "users.birthday IS NULL OR (users.birthday > '#{age_20}' OR users.birthday < '#{age_30_3_end}')" if age == 'etc'
           end
-          filter_users = filter_users.where(age_filter.join(' OR '))
+          target_users = target_users.where(age_filter.join(' OR '))
         end
       end
 
@@ -106,13 +84,13 @@ class Admin::NoticesController < Admin::HomeController
         end
       end
 
-      filter_user_ids = filter_users.pluck(:id)
-      registration_ids_ios = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key) if ios_checked
-      registration_ids_aos = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key) if aos_checked
-    elsif params[:filter] == 'specific'
-      filter_user_ids = params[:filter_user_id]
-      registration_ids_ios = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
-      registration_ids_aos = UserGcmKey.where(user_id: filter_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
+      target_user_ids = target_users.pluck(:id)
+      registration_ids_ios = UserGcmKey.where(user_id: target_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key) if ios_checked
+      registration_ids_aos = UserGcmKey.where(user_id: target_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key) if aos_checked
+    elsif params[:target] == 'user'
+      target_user_ids = params[:target_user_id]
+      registration_ids_ios = UserGcmKey.where(user_id: target_user_ids).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
+      registration_ids_aos = UserGcmKey.where(user_id: target_user_ids).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
     end
 
     response_ios = push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
@@ -151,5 +129,33 @@ class Admin::NoticesController < Admin::HomeController
 
     flash['success'] = "총 #{success_count}개의 푸시알림을 성공적으로 전송하였습니다"
     redirect_to admin_notices_path
+  end
+
+  private
+
+  # GET /admin/notices/target
+  def target
+  end
+
+  # GET /admin/notices/test
+  def test
+    return if params[:msg].blank? || params[:link].blank?
+    params[:js] = '' if params[:js].nil? || params[:js] == 'false'
+    payload = { msg: "#{params[:msg]}\n[테스트 푸쉬 by #{current_user.string_id}]",
+                type: 'true',
+                count: nil,
+                id: 1,
+                link: params[:link],
+                js: params[:js] }
+    registration_ids_ios = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
+    registration_ids_aos = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
+
+    response_ios = push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
+    response_aos = push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?
+
+    count = 0
+    count += JSON.parse(response_ios[:body])['success'].to_i unless response_ios.nil?
+    count += JSON.parse(response_aos[:body])['success'].to_i unless response_aos.nil?
+    @string = "#{count}대의 기기에 테스트 알림을 전송하였습니다"
   end
 end

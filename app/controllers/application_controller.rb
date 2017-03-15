@@ -144,7 +144,7 @@ class ApplicationController < ActionController::Base
 
     return if ref.nil?
     return unless device == 'iPhone' || device == 'Android'
-    app_url = params[:app_url].blank? ? "#{CONFIG['host']}#{ref.url}" : params[:app_url]
+    app_url = params[:app_url].blank? ? ref.url : params[:app_url]
     app_js = params[:app_js].blank? ? ref.js : params[:app_js]
     connect_to_store = ref.connect_to_store
     redirect_to controller: :home, action: :open_app, browser: browser, device: device, app_url: app_url, app_js: app_js, connect_to_store: connect_to_store

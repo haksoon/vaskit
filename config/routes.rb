@@ -109,7 +109,10 @@ Rails.application.routes.draw do
     resources :collection_to_asks, only: [:create]
     resources :videos
     resources :notices, only: [:index, :new, :create] do
-      get '/test', to: 'notices#test', on: :collection
+      collection do
+        get 'target'
+        get 'test'
+      end
     end
     resources :refer_links, except: [:delete]
     resources :tables, only: [:index] do

@@ -1,22 +1,22 @@
 <% if @ask.nil? %>
-  alert("존재하지 않는 질문입니다");
+  alert('존재하지 않는 질문입니다');
 <% elsif @ask_count > 0 %>
-  if ($("#collection_asks").val().split(" ").indexOf("<%= @ask.id %>") != -1) {
-    alert("이미 추가한 질문입니다");
+  if ($('#collection_asks').val().split(' ').indexOf('<%= @ask.id %>') != -1) {
+    alert('이미 추가한 질문입니다');
   } else {
-    if (confirm("이미 다른 컬렉션에 추가된 질문입니다\n진행하시겠어요?")) {
-      add_ask("<%= @ask.id %>");
-      $("#asks_list").append("<%= escape_javascript(render 'collection_ask') %>");
+    if (confirm('이미 다른 컬렉션에 추가된 질문입니다\n진행하시겠어요?')) {
+      add_ask('<%= @ask.id %>');
+      $('#asks_list').append("<%= escape_javascript(render 'collection_ask') %>");
     }
   };
 <% else %>
-  if ($("#collection_asks").val().split(" ").indexOf("<%= @ask.id %>") != -1) {
-    alert("이미 추가한 질문입니다");
+  if ($('#collection_asks').val().split(' ').indexOf('<%= @ask.id %>') != -1) {
+    alert('이미 추가한 질문입니다');
   } else {
-    add_ask("<%= @ask.id %>");
-    $("#asks_list").append("<%= escape_javascript(render 'collection_ask') %>");
+    add_ask('<%= @ask.id %>');
+    $('#asks_list').append("<%= escape_javascript(render 'collection_ask') %>");
   }
 <% end %>
 
-$("#ask_id").val("").focus();
-$("#ask_id_submit").attr("disabled", true);
+$('#ask_id').val('').focus();
+$('#ask_id_submit').attr('disabled', true);

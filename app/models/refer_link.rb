@@ -5,5 +5,4 @@ class ReferLink < ActiveRecord::Base
   validates :name, presence: true
   validates :commerce_type, presence: true
   validates :url, presence: true
-  validates :js, presence: true
 end
