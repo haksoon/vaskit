@@ -7,4 +7,5 @@
   $('#filter_device').selectric();
 <% elsif params[:target] == 'user' %>
   $('#push_target_preview').html("<%= escape_javascript(render 'target_user') %>");
+  $('#target_user_id').selectric();
 <% end %>

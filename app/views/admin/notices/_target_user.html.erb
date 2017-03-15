@@ -2,5 +2,6 @@
                options_for_select(UserGcmKey.where.not(user_id: nil).collect{ |key| [key.user.string_id, key.user.id] }),
                {
                  prompt: '유저를 선택해주세요',
+                 multiple: true,
                  class: 'form-control required_form'
                } %>

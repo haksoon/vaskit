@@ -3,6 +3,7 @@
 // ======================================
 
 .selectric-wrapper { position: relative; cursor: pointer; margin-bottom: 10px;
+  &:only-of-type { margin-bottom: 0; }
   &.selectric-responsive { width: 100%; }
 
   .selectric { position: relative; background: #fff; border: 1px solid #ccc; border-radius: 4px; box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
