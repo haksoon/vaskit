@@ -1,0 +1,56 @@
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <% if type == 'total' %><div class="panel-heading">전체 검색 키워드 동향</div><% end %>
+  <% if type == 'weekly' %><div class="panel-heading">최근 1주간 검색 키워드 동향</div><% end %>
+
+  <% if search_logs.blank? %>
+    <div class="panel-body">해당 조건에 맞는 결과가 없습니다</div>
+  <% else %>
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>키워드</th>
+            <th>타입</th>
+            <th>검색량</th>
+            <th>미리보기</th>
+            <th>인기등록</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% search_logs.each_with_index do |search_log, index| %>
+            <tr>
+              <% if params[:page] && params[:page].to_i > 1 && index == 9 %>
+                <% page = "#{(params[:page] && params[:page].to_i > 1) ? params[:page].to_i : ''}#{0}" %>
+              <% else %>
+                <% page = "#{(params[:page] && params[:page].to_i > 1) ? params[:page].to_i - 1 : ''}#{index + 1}" %>
+              <% end %>
+              <th><kbd><%= page %></kbd></th>
+              <td><%= search_log.keyword %></td>
+              <td><%= format_search_type(search_log.search_type) %></td>
+              <td><%= search_log.search_count %>회</td>
+              <td><%= link_to '<i class="fa fa-search"></i>'.html_safe,
+                              search_index_path(keyword: search_log.keyword, type: search_log.search_type),
+                              target: '_blank',
+                              class: 'btn btn-default' %></td>
+              <td><%= link_to '<i class="fa fa-plus"></i>'.html_safe,
+                              admin_search_keywords_path(search_keyword: { keyword: search_log.keyword, search_type: search_log.search_type }),
+                              method: :post,
+                              onclick: 'window.onbeforeunload = null;',
+                              class: 'btn btn-success' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+
+<% if type == 'total' %>
+  <!-- Table Pagination -->
+  <div class="text-center">
+    <%= paginate search_logs %>
+  </div>
+<% end %>

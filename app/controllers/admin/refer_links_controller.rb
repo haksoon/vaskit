@@ -1,5 +1,5 @@
 class Admin::ReferLinksController < Admin::HomeController
-  before_action :set_refer_link, only: [:show, :edit, :update, :destroy]
+  before_action :set_refer_link, only: [:show, :edit, :update]
   before_action :set_refer_link_options, only: [:new, :create, :edit, :update]
 
   # GET /admin/refer_links

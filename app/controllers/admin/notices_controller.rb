@@ -1,5 +1,4 @@
 class Admin::NoticesController < Admin::HomeController
-
   # GET /admin/notices
   def index
     @notices = LogPushAdmin.page(params[:page]).per(10).order(id: :desc)
@@ -7,6 +6,28 @@ class Admin::NoticesController < Admin::HomeController
 
   # GET /admin/notices/new
   def new
+  end
+
+  # GET /admin/notices/test
+  def test
+    return if params[:msg].blank? || params[:link].blank?
+    params[:js] = '' if params[:js].nil? || params[:js] == 'false'
+    payload = { msg: "#{params[:msg]}\n[테스트 푸쉬 by #{current_user.string_id}]",
+                type: 'true',
+                count: nil,
+                id: 1,
+                link: params[:link],
+                js: params[:js] }
+    registration_ids_ios = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
+    registration_ids_aos = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
+
+    response_ios = push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
+    response_aos = push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?
+
+    count = 0
+    count += JSON.parse(response_ios[:body])['success'].to_i unless response_ios.nil?
+    count += JSON.parse(response_aos[:body])['success'].to_i unless response_aos.nil?
+    @string = "#{count}대의 기기에 테스트 알림을 전송하였습니다"
   end
 
   # POST /admin/notices
@@ -135,27 +156,5 @@ class Admin::NoticesController < Admin::HomeController
 
   # GET /admin/notices/target
   def target
-  end
-
-  # GET /admin/notices/test
-  def test
-    return if params[:msg].blank? || params[:link].blank?
-    params[:js] = '' if params[:js].nil? || params[:js] == 'false'
-    payload = { msg: "#{params[:msg]}\n[테스트 푸쉬 by #{current_user.string_id}]",
-                type: 'true',
-                count: nil,
-                id: 1,
-                link: params[:link],
-                js: params[:js] }
-    registration_ids_ios = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'ios%').pluck(:gcm_key)
-    registration_ids_aos = UserGcmKey.where(user_id: 1).where('device_id LIKE ?', 'android%').pluck(:gcm_key)
-
-    response_ios = push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
-    response_aos = push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?
-
-    count = 0
-    count += JSON.parse(response_ios[:body])['success'].to_i unless response_ios.nil?
-    count += JSON.parse(response_aos[:body])['success'].to_i unless response_aos.nil?
-    @string = "#{count}대의 기기에 테스트 알림을 전송하였습니다"
   end
 end

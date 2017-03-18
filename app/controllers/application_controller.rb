@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   # protect_from_forgery with: :exception
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
+  before_action :www_domain, unless: -> { request.format.json? }
   before_action :set_visitor, unless: -> { request.format.json? }
   before_action :auth_app, unless: -> { request.format.json? }
   before_action :user_visits, unless: -> { request.format.json? }
@@ -11,6 +12,11 @@ class ApplicationController < ActionController::Base
   include PushSend
 
   private
+
+  def www_domain
+    return if request.url.match('http://www.').nil?
+    redirect_to request.url.gsub('http://www.', 'http://')
+  end
 
   def set_visitor
     @uniq_key = cookies['visitor_key']
@@ -33,7 +39,7 @@ class ApplicationController < ActionController::Base
   end
 
   def remote_ip
-    ret = !request.env['HTTP_X_FORWARDED_FOR'].nil? ? request.env['HTTP_X_FORWARDED_FOR'] : request.env['REMOTE_ADDR']
+    ret = request.env['HTTP_X_FORWARDED_FOR'].nil? ? request.env['REMOTE_ADDR'] : request.env['HTTP_X_FORWARDED_FOR']
     ret.split(',')[0]
   end
 

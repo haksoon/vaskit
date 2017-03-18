@@ -108,13 +108,14 @@ Rails.application.routes.draw do
     resources :collection_to_collection_keywords, only: [:index]
     resources :collection_to_asks, only: [:create]
     resources :videos
+    resource :search_keywords, only: [:show, :create, :update, :destroy]
+    resources :refer_links, except: [:delete]
     resources :notices, only: [:index, :new, :create] do
       collection do
         get 'target'
         get 'test'
       end
     end
-    resources :refer_links, except: [:delete]
     resources :tables, only: [:index] do
       get ':table_name', to: 'tables#index', on: :collection
     end

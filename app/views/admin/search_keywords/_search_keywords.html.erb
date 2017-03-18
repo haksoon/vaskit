@@ -1,0 +1,37 @@
+<% @search_keywords.each_with_index do |search_keyword, index| %>
+  <tr>
+    <td><kbd><%= search_keyword.list_order %>번째</kbd></td>
+    <td><%= search_keyword.keyword %></td>
+    <td><%= format_search_type(search_keyword.search_type) %></td>
+    <td><%= link_to '<i class="fa fa-search"></i>'.html_safe,
+                    search_index_path(keyword: search_keyword.keyword, type: search_keyword.search_type),
+                    target: '_blank',
+                    class: 'btn btn-default' %></td>
+    <td>
+      <span class="btn-group">
+        <%= link_to '<i class="fa fa-caret-up"></i>'.html_safe,
+                    admin_search_keywords_path(id: search_keyword.id, is_up: true),
+                    {
+                      class: 'btn btn-info',
+                      method: :patch,
+                      onclick: 'window.onbeforeunload = null;'
+                    } %>
+        <%= link_to '<i class="fa fa-caret-down"></i>'.html_safe,
+                    admin_search_keywords_path(id: search_keyword.id, is_up: false),
+                    {
+                      class: 'btn btn-info',
+                      method: :patch,
+                      onclick: 'window.onbeforeunload = null;'
+                    } %>
+        <%= link_to '<i class="fa fa-trash"></i>'.html_safe,
+                    admin_search_keywords_path(id: search_keyword.id),
+                    {
+                      class: 'btn btn-danger',
+                      method: :delete,
+                      onclick: 'window.onbeforeunload = null;',
+                      data: { confirm: '정말로 제거하시겠어요?', disable_with: '제거중...' }
+                    } %>
+      </span>
+    </td>
+  </tr>
+<% end %>

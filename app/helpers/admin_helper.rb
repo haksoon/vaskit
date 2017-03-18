@@ -68,4 +68,20 @@ module AdminHelper
       return tag.html_safe
     end
   end
+
+  def format_search_type(type)
+    return '' unless type
+    case type
+    when 'hash_tag'
+      return '해시태그'
+    when 'ask_deal'
+      return '제품명'
+    when 'brand'
+      return '브랜드'
+    when 'none'
+      return '통합검색'
+    when 'user'
+      return '사용자명'
+    end
+  end
 end

@@ -7,7 +7,7 @@
       <span class="header_btn left" onclick="back_button();">취소</span>
       <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음 <i class='fa fa-caret-right'></i></span>
     </div>
-    <div class="container main">
+    <div class="container main has_inner">
       <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.left_ask_deal, is_left: true, is_blank: ask.id == null ? true : false }) }}</div>
       <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.right_ask_deal, is_left: false, is_blank: ask.id == null ? true : false }) }}</div>
       <div class="inner step_3 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardResultTemplate({ ask: ask }) }}</div>

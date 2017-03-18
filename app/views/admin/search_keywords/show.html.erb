@@ -1,0 +1,66 @@
+<div class="jumbotron clearfix">
+  <h1>인기검색어 목록</h1>
+  <p>인기검색어를 설정할 수 있습니다</p>
+</div>
+
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">현재 설정된 인기검색어 목록 (최소 5개 ~ 최대 10개)</div>
+  <!-- Table -->
+  <% if @search_keywords.blank? %>
+    <div class="panel-body">현재 설정된 인기검색어가 없습니다</div>
+  <% else %>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped table-hover">
+        <thead>
+          <tr>
+            <th>순위</th>
+            <th>키워드</th>
+            <th>타입</th>
+            <th>미리보기</th>
+            <th>편집</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= render 'search_keywords' %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+</div>
+
+<div class="panel panel-success">
+  <!-- Default panel contents -->
+  <div class="panel-heading">신규 인기검색어 등록</div>
+  <div class="panel-body">
+    <%= simple_form_for @new_search_keyword,
+                        url: admin_search_keywords_path,
+                        html: { oninput: "form_check($(this));", onchange: "form_check($(this));" } do |f| %>
+      <%= f.input :search_type,
+                  as: :select,
+                  collection: @search_type_label,
+                  prompt: '검색어 타입을 선택해주세요',
+                  label: '1. 검색어 타입',
+                  error: '',
+                  input_html: {
+                                class: 'required_form'
+                              } %>
+      <%= f.input :keyword,
+                  as: :string,
+                  label: '2. 키워드',
+                  error: '',
+                  input_html: {
+                                class: 'required_form',
+                                placeholder: '키워드를 입력하세요'
+                              } %>
+      <%= f.button :submit, '신규등록',
+                   class: 'btn btn-success',
+                   disabled: true,
+                   onclick: 'window.onbeforeunload = null;',
+                   data: { disable_with: '등록중...' } %>
+    <% end %>
+  </div>
+</div>
+
+<%= render 'search_logs', search_logs: @weekly_search_logs, type: 'weekly' %>
+<%= render 'search_logs', search_logs: @all_search_logs, type: 'total' %>

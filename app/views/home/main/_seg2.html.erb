@@ -7,8 +7,14 @@
       <span class="input btn_field text_btn right search_input_reset hidden"><i class="fa fa-times-circle"></i></span>
     </form>
   </div>
-  <div class="container main search_preview" ontouchstart="removeIOSRubberEffect($(this));" index="-1">
-    {{= searchPreviewListTemplate({ result: 'recent_list' }) }}
+  <div class="container main has_inner search_result">
+    <div id="search_preview_inner" class="inner" ontouchstart="removeIOSRubberEffect($(this));" index="-1">
+      {{= searchPreviewListTemplate({ result: 'no_result' }) }}
+    </div>
+    <div id="recent_search_inner" class="inner" ontouchstart="removeIOSRubberEffect($(this));">
+      <div id="popular_search_list">{{= searchPreviewListTemplate({ result: 'popular_search_list' }) }}</div>
+      <div id="recent_search_list">{{= searchPreviewListTemplate({ result: 'recent_search_list' }) }}</div>
+    </div>
   </div>
 </script>
 
@@ -17,24 +23,14 @@
     <div class="no_result"><div class="align_middle">검색어를 입력해주세요</div></div>
   {{ } else if (result == 'no_result') { }}
     <div class="no_result"><div class="align_middle">일치하는 검색 결과가 없습니다</div></div>
-  {{ } else if (result == 'recent_list') { }}
+  {{ } else if (result == 'popular_search_list') { }}
     <div class="search_preview_div">
       <div class="search_preview_title">
         <i class="fa fa-caret-right"></i> 인기 검색어
       </div>
-      <ul class="search_preview_list">
-        <li class="search_preview_item" onclick="ga('send', 'event', '검색탭', '인기검색어 선택', '1번', 1); return false;">
-          {{= searchPreviewTemplate({ type: 'ask_deal', keyword: '쿠션', time: null }) }}</li>
-        <li class="search_preview_item" onclick="ga('send', 'event', '검색탭', '인기검색어 선택', '2번', 1); return false;">
-          {{= searchPreviewTemplate({ type: 'hash_tag', keyword: '겨울', time: null }) }}</li>
-        <li class="search_preview_item" onclick="ga('send', 'event', '검색탭', '인기검색어 선택', '3번', 1); return false;">
-          {{= searchPreviewTemplate({ type: 'hash_tag', keyword: '촉촉', time: null }) }}</li>
-        <li class="search_preview_item" onclick="ga('send', 'event', '검색탭', '인기검색어 선택', '4번', 1); return false;">
-          {{= searchPreviewTemplate({ type: 'hash_tag', keyword: '여행', time: null }) }}</li>
-        <li class="search_preview_item" onclick="ga('send', 'event', '검색탭', '인기검색어 선택', '5번', 1); return false;">
-          {{= searchPreviewTemplate({ type: 'hash_tag', keyword: '남친선물', time: null }) }}</li>
-      </ul>
+      <ul id="search_keyword_seg" class="search_preview_list"></ul>
     </div>
+  {{ } else if (result == 'recent_search_list') { }}
     <div class="search_preview_div">
       {{ var localStorageAvailable = check_localStorage() }}
       {{ var recent_search_list = $.cookie('recent_search_list') }}
@@ -54,37 +50,32 @@
           {{ recent_search_list = recent_search_list.split('.') }}
           {{ for (var i=recent_search_list.length; i > 0; i--) { }}
             {{ var search = JSON.parse(recent_search_list[i-1]) }}
-            {{ var keyword = search.keyword.replace(new RegExp(/[_][d][o][t][_]/g), '.') }}
+            {{ var result_number = recent_search_list.length - i + 1 }}
             {{ var type = search.type }}
+            {{ var keyword = search.keyword.replace(new RegExp(/[_][d][o][t][_]/g), '.') }}
             {{ var time = search.time }}
-            <li class="search_preview_item" onclick="ga('send', 'event', '검색탭', '최근검색어 선택', '{{= recent_search_list.length - i + 1 }}번', 1); return false;">
-              {{= searchPreviewTemplate({ type: type, keyword: keyword, time: time }) }}</li>
+            {{= searchPreviewTemplate({ result: result, result_number: result_number, type: type, keyword: keyword, time: time }) }}
           {{ } }}
         </ul>
       {{ } }}
     </div>
-  {{ } else if (result == 'preview_list') { }}
+  {{ } else if (result == 'preview_search_list') { }}
     <div class="search_preview_div">
       <ul class="search_preview_list">
         {{ $.each(data.collections, function(index, collection) { }}
-          <li class="search_preview_item" onclick="return false;">
-          {{= searchPreviewTemplate({ type: 'collection', keyword: collection.name, time: null, id: collection.id }) }}</li>
+          {{= searchPreviewTemplate({ result: result, type: 'collection', keyword: collection.name, time: null, id: collection.id }) }}</li>
         {{ }) }}
         {{ $.each(data.hash_tags, function(index, hash_tag) { }}
-          <li class="search_preview_item" onclick="return false;">
-          {{= searchPreviewTemplate({ type: 'hash_tag', keyword: hash_tag.keyword, time: null }) }}</li>
+          {{= searchPreviewTemplate({ result: result, type: 'hash_tag', keyword: hash_tag.keyword, time: null }) }}</li>
         {{ }) }}
         {{ $.each(data.ask_deals, function(index, ask_deal) { }}
-          <li class="search_preview_item" onclick="return false;">
-          {{= searchPreviewTemplate({ type: 'ask_deal', keyword: ask_deal.title, time: null }) }}</li>
+          {{= searchPreviewTemplate({ result: result, type: 'ask_deal', keyword: ask_deal.title, time: null }) }}</li>
         {{ }) }}
         {{ $.each(data.brands, function(index, brand) { }}
-          <li class="search_preview_item" onclick="return false;">
-          {{= searchPreviewTemplate({ type: 'brand', keyword: brand.brand, time: null }) }}</li>
+          {{= searchPreviewTemplate({ result: result, type: 'brand', keyword: brand.brand, time: null }) }}</li>
         {{ }) }}
         {{ $.each(data.users, function(index, user) { }}
-          <li class="search_preview_item" onclick="return false;">
-          {{= searchPreviewTemplate({ type: 'user', keyword: user.string_id, time: null }) }}</li>
+          {{= searchPreviewTemplate({ result: result, type: 'user', keyword: user.string_id, time: null }) }}</li>
         {{ }) }}
       </ul>
     </div>
@@ -92,21 +83,30 @@
 </script>
 
 <script type="text/template" id="searchPreviewTemplate">
-  {{ if (type == 'collection') { }}
-    <a class="search_preveiw_link" href="{{= '/collections/' + id }}" onclick="ga('send', 'event', '검색탭', '검색 컬렉션 진입', {{= id }}, 1); go_url('collection', {{= id }}); return false;">
-      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
-      {{ if (time) { }}
-        <span class="search_date">{{= get_past_time(time) }}</span>
-      {{ } }}
-    </a>
-  {{ } else { }}
-    <a class="search_preveiw_link" href="{{= '/search?type=' + escape(type) + '&keyword=' + escape(keyword) }}" onclick="go_url('search_result', {type: '{{= type }}', keyword: '{{= escape(keyword) }}'}); window.event.cancelBubble = false;">
-      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
-      {{ if (time) { }}
-        <span class="search_date">{{= get_past_time(time) }}</span>
-      {{ } }}
-    </a>
+  {{ if (result == 'popular_search_list') { }}
+    {{ var ga_function = "ga('send', 'event', '검색탭', '인기검색어 선택', '" + result_number + "번', 1); return false;" }}
+  {{ } else if (result == 'recent_search_list') { }}
+    {{ var ga_function = "ga('send', 'event', '검색탭', '최근검색어 선택', '" + result_number + "번', 1); return false;" }}
+  {{ } else if (result == 'preview_search_list') { }}
+    {{ var ga_function = "return false;" }}
   {{ } }}
+  <li class="search_preview_item" onclick="{{= ga_function }}">
+    {{ if (type == 'collection') { }}
+      <a class="search_preview_link"
+         href="{{= '/collections/' + id }}"
+         onclick="ga('send', 'event', '검색탭', '검색 컬렉션 진입', {{= id }}, 1); go_url('collection', {{= id }}); window.event.cancelBubble = false;"
+         time="{{= get_past_time(time) }}">
+        <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
+      </a>
+    {{ } else { }}
+      <a class="search_preview_link"
+         href="{{= '/search?type=' + escape(type) + '&keyword=' + escape(keyword) }}"
+         onclick="go_url('search_result', {type: '{{= type }}', keyword: '{{= escape(keyword) }}'}); window.event.cancelBubble = false;"
+         time="{{= get_past_time(time) }}">
+        <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
+      </a>
+    {{ } }}
+  </li>
 </script>
 
 <script>
@@ -114,9 +114,28 @@
   var searchPreviewListTemplate = _.template($('#searchPreviewListTemplate').html());
   var searchPreviewTemplate = _.template($('#searchPreviewTemplate').html());
 
+  function set_search_keywords() {
+    var search_keyword_seg = $('#search_keyword_seg');
+    $.ajax({
+      url: '/search?search_keywords=true',
+      dataType: 'json',
+      type: 'GET',
+      error: function() {
+        notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+      },
+      success: function(data) {
+        search_keyword_seg.html('');
+        $.each(data.search_keywords, function(index, search_keyword) {
+          search_keyword_seg.append(searchPreviewTemplate({ result: 'popular_search_list', result_number: index + 1, type: search_keyword.search_type, keyword: search_keyword.keyword, time: null }));
+        });
+      }
+    });
+  }
+
   function search_input_init(target) {
-    var search_wrapper = target.parentsUntil(this, '.wrapper');
-    var search_preview_container = search_wrapper.find('.search_preview');
+    var search_wrapper = $('#search');
+    var recent_search_container = $('#recent_search_inner');
+    var search_preview_container = $('#search_preview_inner');
     var search_input = target.find('.search_input');
     var search_input_submit = target.find('.search_input_submit');
     var search_input_reset = target.find('.search_input_reset');
@@ -147,20 +166,29 @@
         if (keyword.length === 0) {
           search_input_reset.addClass('hidden');
           search_input_submit.removeClass('ready');
+          recent_search_container.removeClass('bottom');
           search_preview_container.html(searchPreviewListTemplate({ result: 'blank' }));
         } else {
           search_input_reset.removeClass('hidden');
           search_input_submit.addClass('ready');
+          recent_search_container.addClass('bottom');
           var keys = [13, 27, 40, 39, 38, 37];
-          if ($.inArray(e.keyCode, keys) == -1) _.throttle(preview_search_list(keyword), 1000);
+          if ($.inArray(e.keyCode, keys) == -1) _.throttle(preview_search_list($(this).val()), 500);
         }
       })
       .on('focus', function() {
         target.addClass('on');
+        if (search_preview_container.find('.search_preview_item').length > 0) {
+          // search_preview_container.removeClass('next');
+          recent_search_container.addClass('bottom');
+        }
     	})
       .on('blur', function() {
         target.removeClass('on');
-        if ($(this).val().length === 0) search_preview_container.html(searchPreviewListTemplate({ result: 'recent_list' }));
+        if (search_preview_container.find('.search_preview_item').length === 0) {
+          // search_preview_container.addClass('next');
+          recent_search_container.removeClass('bottom');
+        }
         $(this).attr('disabled', true);
       })
       .removeAttr('disabled').focus();
@@ -180,7 +208,7 @@
           if (data.is_empty_result) {
             search_preview_container.html(searchPreviewListTemplate({ result: 'no_result' }));
           } else {
-            search_preview_container.html(searchPreviewListTemplate({ result: 'preview_list', data: data })).highlight(keyword);
+            search_preview_container.html(searchPreviewListTemplate({ result: 'preview_search_list', data: data })).highlight(keyword);
             navigate_by_mouse();
           }
         }
@@ -189,12 +217,12 @@
 
     function search_by_key() {
       var keyword = search_input.val();
-      var search_focus = search_preview_container.find('.search_preview_item.search_focus');
+      var search_focus = search_preview_container.find('.search_preview_link.search_focus');
       if (keyword === '' || keyword === undefined) {
         notify('검색어를 입력해주세요');
         target.click();
       } else if ( search_focus.length == 1 ) {
-        search_focus.click();
+        search_focus.children().click();
       } else {
         var search_options = { type: 'none', keyword: keyword };
         go_url('search_result', search_options);
@@ -202,6 +230,7 @@
     }
 
     function search_keyword_reset() {
+      recent_search_container.removeClass('bottom');
       search_preview_container.html(searchPreviewListTemplate({ result: 'blank' })).attr('index', -1);
       search_input_reset.addClass('hidden');
   		search_input.val('');
@@ -209,7 +238,7 @@
   	}
 
     function navigate_by_key(is_down) {
-      var search_results = search_preview_container.find('.search_preview_item');
+      var search_results = search_preview_container.find('.search_preview_link');
   		var search_result_length = search_results.length;
       var search_result_height = search_results.outerHeight();
   		var vp_height = search_preview_container.innerHeight();
@@ -226,7 +255,7 @@
         search_focus_index = Number(search_preview_container.attr('index'));
   			search_results.removeClass('search_focus');
   			search_results.eq(search_focus_index).addClass('search_focus');
-        search_focus = search_preview_container.find('.search_preview_item.search_focus');
+        search_focus = search_preview_container.find('.search_preview_link.search_focus');
   			focus_bottom = search_result_height * (search_focus_index + 1);
   			vp_top = search_preview_container.scrollTop();
   			if (focus_bottom > vp_top + vp_height) {
@@ -243,7 +272,7 @@
         search_focus_index = Number(search_preview_container.attr('index'));
   			search_results.removeClass('search_focus');
   			search_results.eq(search_focus_index).addClass('search_focus');
-        search_focus = search_preview_container.find('.search_preview_item.search_focus');
+        search_focus = search_preview_container.find('.search_preview_link.search_focus');
   			focus_top = search_result_height * search_focus_index;
   			vp_top = search_preview_container.scrollTop();
   			if (focus_top < vp_top) {
@@ -256,7 +285,7 @@
   	}
 
     function navigate_by_mouse() {
-      var search_results = search_preview_container.find('.search_preview_item');
+      var search_results = search_preview_container.find('.search_preview_link');
       search_results.off('mouseover')
                     .on('mouseover', function() {
                       search_results.removeClass('search_focus');
@@ -297,7 +326,9 @@
               var html = searchResultTemplate({ type: type, keyword: keyword, asks: data.asks, url: url });
               create_wrapper(html);
               save_recent_search(type, keyword);
-              $('.search_preview').html(searchPreviewListTemplate({ result: 'recent_list' }));
+              // $('#search_preview_inner').addClass('next');
+              $('#recent_search_inner').removeClass('bottom');
+              $('#recent_search_list').html(searchPreviewListTemplate({ result: 'recent_search_list' }));
               ga('send', 'event', '검색탭', '검색 실행', type + '/' + keyword, 1);
             },
             beforeSend: function() {
@@ -347,6 +378,6 @@
     } else {
       $.cookie('recent_search_list', null);
     }
-    $('.search_preview').html(searchPreviewListTemplate({ result: 'recent_list' }));
+    $('#recent_search_list').animateCssEmpty('fadeOutDownBig');
   }
 </script>

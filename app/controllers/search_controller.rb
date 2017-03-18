@@ -1,4 +1,6 @@
 class SearchController < ApplicationController
+  after_action :search_logging, only: :index
+
   # GET /search
   # GET /search?type=___&keyword=___
   def index
@@ -8,46 +10,51 @@ class SearchController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        @asks =
-          case @type
-          when 'hash_tag'
-            hash_tags = HashTag.where('keyword LIKE ?', "%#{@keyword}%")
-            Ask.where(id: hash_tags.map(&:ask_id))
-          when 'ask_deal'
-            ask_deals = AskDeal.where('title LIKE ?', "%#{@keyword}%")
-            Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
-                      ask_deals.map(&:id),
-                      ask_deals.map(&:id)) unless ask_deals.blank?
-          when 'brand'
-            ask_deals = AskDeal.where('brand LIKE ?', "%#{@keyword}%")
-            Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
-                      ask_deals.map(&:id),
-                      ask_deals.map(&:id)) unless ask_deals.blank?
-          when 'user'
-            users = User.where('string_id LIKE ?', "%#{@keyword}%")
-            Ask.where(user_id: users.map(&:id))
-          when 'none'
-            ask_ids = []
-            hash_tags = HashTag.where('keyword LIKE ?', "%#{@keyword}%")
-            title_ask_deals = AskDeal.where('title LIKE ?', "%#{@keyword}%")
-            brand_ask_deals = AskDeal.where('brand LIKE ?', "%#{@keyword}%")
-            users = User.where('string_id LIKE ?', "%#{@keyword}%")
+        if params[:search_keywords]
+          search_keywords = SearchKeyword.order(list_order: :asc)
+          render json: { search_keywords: search_keywords }
+        else
+          @asks =
+            case @type
+            when 'hash_tag'
+              hash_tags = HashTag.where('keyword LIKE ?', "%#{@keyword}%")
+              Ask.where(id: hash_tags.map(&:ask_id))
+            when 'ask_deal'
+              ask_deals = AskDeal.where('title LIKE ?', "%#{@keyword}%")
+              Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
+                        ask_deals.map(&:id),
+                        ask_deals.map(&:id)) unless ask_deals.blank?
+            when 'brand'
+              ask_deals = AskDeal.where('brand LIKE ?', "%#{@keyword}%")
+              Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
+                        ask_deals.map(&:id),
+                        ask_deals.map(&:id)) unless ask_deals.blank?
+            when 'user'
+              users = User.where('string_id LIKE ?', "%#{@keyword}%")
+              Ask.where(user_id: users.map(&:id))
+            when 'none'
+              ask_ids = []
+              hash_tags = HashTag.where('keyword LIKE ?', "%#{@keyword}%")
+              title_ask_deals = AskDeal.where('title LIKE ?', "%#{@keyword}%")
+              brand_ask_deals = AskDeal.where('brand LIKE ?', "%#{@keyword}%")
+              users = User.where('string_id LIKE ?', "%#{@keyword}%")
 
-            ask_ids << Ask.where(user_id: users.map(&:id)).pluck(:id)
-            ask_ids << Ask.where(id: hash_tags.map(&:ask_id)).pluck(:id)
-            ask_ids << Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
-                                 title_ask_deals.map(&:id),
-                                 title_ask_deals.map(&:id)).pluck(:id)
-            ask_ids << Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
-                                 brand_ask_deals.map(&:id),
-                                 brand_ask_deals.map(&:id)).pluck(:id)
-            Ask.where(id: ask_ids)
-          end
-        @asks = @asks.page(params[:page])
-                     .per(Ask::ASK_PER)
-                     .order(id: :desc)
-                     .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
-        render json: { asks: @asks }
+              ask_ids << Ask.where(user_id: users.map(&:id)).pluck(:id)
+              ask_ids << Ask.where(id: hash_tags.map(&:ask_id)).pluck(:id)
+              ask_ids << Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
+                                   title_ask_deals.map(&:id),
+                                   title_ask_deals.map(&:id)).pluck(:id)
+              ask_ids << Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
+                                   brand_ask_deals.map(&:id),
+                                   brand_ask_deals.map(&:id)).pluck(:id)
+              Ask.where(id: ask_ids)
+            end
+          @asks = @asks.page(params[:page])
+                       .per(Ask::ASK_PER)
+                       .order(id: :desc)
+                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
+          render json: { asks: @asks }
+        end
       end
     end
   end
@@ -79,5 +86,12 @@ class SearchController < ApplicationController
                    brands: brands,
                    users: users,
                    is_empty_result: is_empty_result }
+  end
+
+  private
+
+  def search_logging
+    return if params[:type].nil? || params[:keyword].nil? || (current_user && current_user.user_role == 'admin')
+    SearchLog.create(search_type: params[:type], keyword: params[:keyword])
   end
 end

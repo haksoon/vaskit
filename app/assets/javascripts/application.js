@@ -747,40 +747,41 @@ function get_user_ages(birthday) {
 }
 
 function get_past_time(time) {
-    var start = new Date(time),
-        end = new Date(),
-        diff = new Date(end - start),
-        month = Math.floor(diff / 1000 / 60 / 60 / 24 / 30),
-        week = Math.floor(diff / 1000 / 60 / 60 / 24 / 7),
-        day = Math.floor(diff / 1000 / 60 / 60 / 24),
-        hour = Math.floor(diff / 1000 / 60 / 60),
-        min = Math.floor(diff / 1000 / 60);
+  if (time === null) return '';
+  var start = new Date(time),
+      end = new Date(),
+      diff = new Date(end - start),
+      month = Math.floor(diff / 1000 / 60 / 60 / 24 / 30),
+      week = Math.floor(diff / 1000 / 60 / 60 / 24 / 7),
+      day = Math.floor(diff / 1000 / 60 / 60 / 24),
+      hour = Math.floor(diff / 1000 / 60 / 60),
+      min = Math.floor(diff / 1000 / 60);
 
-    if (month !== 0) {
-        return month + '개월 전';
-    } else if (week !== 0) {
-        return week + '주 전';
-    } else if (day !== 0) {
-        return day + '일 전';
-    } else if (hour !== 0) {
-        return hour + '시간 전';
-    } else if (min !== 0) {
-        if (min < 60 && min >= 50) {
-            return '50분 전';
-        } else if (min < 50 && min >= 40) {
-            return '40분 전';
-        } else if (min < 40 && min >= 30) {
-            return '30분 전';
-        } else if (min < 30 && min >= 20) {
-            return '20분 전';
-        } else if (min < 20 && min >= 10) {
-            return '10분 전';
-        } else {
-            return '방금 전';
-        }
-    } else {
-        return '방금 전';
-    }
+  if (month !== 0) {
+      return month + '개월 전';
+  } else if (week !== 0) {
+      return week + '주 전';
+  } else if (day !== 0) {
+      return day + '일 전';
+  } else if (hour !== 0) {
+      return hour + '시간 전';
+  } else if (min !== 0) {
+      if (min < 60 && min >= 50) {
+          return '50분 전';
+      } else if (min < 50 && min >= 40) {
+          return '40분 전';
+      } else if (min < 40 && min >= 30) {
+          return '30분 전';
+      } else if (min < 30 && min >= 20) {
+          return '20분 전';
+      } else if (min < 20 && min >= 10) {
+          return '10분 전';
+      } else {
+          return '방금 전';
+      }
+  } else {
+      return '방금 전';
+  }
 }
 
 // AJS추가 : just for fun...
@@ -788,62 +789,62 @@ function get_past_time(time) {
 
 // animateCSS
 $.fn.extend({
-    animateCss: function (animationName, callback) {
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).removeClass('animated ' + animationName);
-            if (typeof callback === 'function') callback();
-        });
-    },
-    animateCssColor: function (animationName, color) {
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-        var origin_color = $(this).css('color');
-        $(this).css('color',color).addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).css('color',origin_color).removeClass('animated ' + animationName);
-        });
-    },
-    animateCssHide: function (animationName, callback) {
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).hide().off(animationEnd).removeClass('animated ' + animationName);
-            if (typeof callback === 'function') callback();
-        });
-    },
-    animateCssEmpty: function (animationName, callback) {
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).empty().off(animationEnd).removeClass('animated ' + animationName);
-            if (typeof callback === 'function') callback();
-        });
-    },
-    animateCssRemove: function (animationName, callback) {
-        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-        $(this).addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).remove();
-            if (typeof callback === 'function') callback();
-        });
-    },
-    transitionHide: function (callback) {
-        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
-        $(this).one(transitionEnd, function() {
-            $(this).hide().off(transitionEnd);
-            if (typeof callback === 'function') callback();
-        });
-    },
-    transitionEmpty: function (callback) {
-        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
-        $(this).one(transitionEnd, function() {
-            $(this).empty().off(transitionEnd);
-            if (typeof callback === 'function') callback();
-        });
-    },
-    transitionRemove: function (callback) {
-        var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
-        $(this).one(transitionEnd, function() {
-            $(this).remove();
-            if (typeof callback === 'function') callback();
-        });
-    }
+  animateCss: function (animationName, callback) {
+      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+      $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+          $(this).removeClass('animated ' + animationName);
+          if (typeof callback === 'function') callback();
+      });
+  },
+  animateCssColor: function (animationName, color) {
+      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+      var origin_color = $(this).css('color');
+      $(this).css('color',color).addClass('animated ' + animationName).one(animationEnd, function() {
+          $(this).css('color',origin_color).removeClass('animated ' + animationName);
+      });
+  },
+  animateCssHide: function (animationName, callback) {
+      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+      $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+          $(this).hide().off(animationEnd).removeClass('animated ' + animationName);
+          if (typeof callback === 'function') callback();
+      });
+  },
+  animateCssEmpty: function (animationName, callback) {
+      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+      $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+          $(this).empty().off(animationEnd).removeClass('animated ' + animationName);
+          if (typeof callback === 'function') callback();
+      });
+  },
+  animateCssRemove: function (animationName, callback) {
+      var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+      $(this).addClass('animated ' + animationName).one(animationEnd, function() {
+          $(this).remove();
+          if (typeof callback === 'function') callback();
+      });
+  },
+  transitionHide: function (callback) {
+      var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+      $(this).one(transitionEnd, function() {
+          $(this).hide().off(transitionEnd);
+          if (typeof callback === 'function') callback();
+      });
+  },
+  transitionEmpty: function (callback) {
+      var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+      $(this).one(transitionEnd, function() {
+          $(this).empty().off(transitionEnd);
+          if (typeof callback === 'function') callback();
+      });
+  },
+  transitionRemove: function (callback) {
+      var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+      $(this).one(transitionEnd, function() {
+          $(this).remove();
+          if (typeof callback === 'function') callback();
+      });
+  }
 });
 
 // textarea 내부 선택하기

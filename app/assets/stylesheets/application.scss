@@ -310,6 +310,7 @@ body {
     -webkit-overflow-scrolling: touch;
     z-index: 1;
     &.full { height: calc(100% - 100px); }
+    &.has_inner { overflow: hidden; }
     .loading_icon {
       padding: 30px 0 50px; height: 20px; line-height: 20px; text-align: center; color: #999; font-size: 12px;
       .fa-spinner { font-size: 15px; color: #ccc; }
@@ -1100,15 +1101,18 @@ body {
   }
 }
 
-.search_preview {
+.search_result {
+  .inner { background-color: #fff; }
   .search_preview_div { margin: 0 0 20px;
     .search_preview_title { width: 100%; height: 40px; line-height: 40px; padding: 0 10px; box-sizing: border-box; border-bottom: 1px solid #eee; background-color: #f2f0f0;
       .recent_search_reset { float: right; font-size: 12px; color: #999; }
     }
     .search_preview_list { margin: 0; padding: 0; list-style: none;
-      .search_preview_item { background-color: #fff; overflow: hidden; transition: background-color .1s; cursor: pointer;
-        &.search_focus { background-color: #ffe4a9; }
-        .search_preveiw_link { position: relative; display: block; padding: 0 50px 0 40px; height: 50px; line-height: 50px; border-bottom: 1px solid #eee; box-sizing: border-box; color: #666; @include ellipsis;
+      .search_preview_item { overflow: hidden; cursor: pointer;
+        .search_preview_link {
+          position: relative; display: block; padding: 0 50px 0 40px; height: 50px; line-height: 50px; border-bottom: 1px solid #eee; box-sizing: border-box;
+          background-color: #fff; color: #666; transition: background-color .2s; @include ellipsis;
+          &.search_focus { background-color: #ffe4a9; }
           .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; margin: 17px 7px; background-position-y: -56px;
             &.collection_icon { background-position-x: 0; }
             &.hash_tag_icon { background-position-x: -16px; }
@@ -1117,14 +1121,14 @@ body {
             &.user_icon { background-position-x: -64px; }
             &.none_icon { background-position-x: -80px; }
           }
-          .search_date { position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
+          &::before { content: attr(time); position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
         }
       }
     }
-  }
+}
 }
 
-.container.top .header_title .search_preview_icon { display: inline-block; width: 16px; height: 16px; margin: 17px 5px 17px -5px; vertical-align: top; background-position-y: -56px;
+.container.top .header_title .search_preview_icon { display: inline-block; width: 16px; height: 16px; margin: 17px 5px 17px 0; vertical-align: top; background-position-y: -56px;
   &.collection_icon { background-position-x: 0; }
   &.hash_tag_icon { background-position-x: -16px; }
   &.ask_deal_icon { background-position-x: -32px; }
