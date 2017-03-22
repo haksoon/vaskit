@@ -17,8 +17,8 @@
 
 // init Template
 _.templateSettings = {
-    interpolate: /\{\{\=(.+?)\}\}/g,
-    evaluate: /\{\{(.+?)\}\}/g
+  interpolate: /\{\{\=(.+?)\}\}/g,
+  evaluate: /\{\{(.+?)\}\}/g
 };
 
 // 안드로이드 브라우저 재접속시 AJAX 캐시로 인해 json 데이터가 렌더링되는 문제점 방지

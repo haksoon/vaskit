@@ -85,9 +85,16 @@ class Users::SessionsController < Devise::SessionsController
   def get_user_alarms
     if current_user
       alarms = Alarm.where(user_id: current_user.id)
-                    .order(updated_at: :desc).limit(20)
+                    .order(updated_at: :desc)
+                    .limit(20)
       alarm_count = alarms.pluck(:is_read).count(false)
-      alarms = alarms.as_json(include: [:user, :send_user, :ask_owner_user, :comment_owner_user, { ask: { include: [:left_ask_deal, :right_ask_deal] } }])
+      alarms = alarms.as_json(include: [:user,
+                                        :send_user,
+                                        :ask_owner_user,
+                                        :comment_owner_user,
+                                        { ask: { include: [:left_ask_deal, :right_ask_deal] } },
+                                        { comment: { include: [:user] } },
+                                        { original_comment: { include: [:user] } }])
     end
     render json: { alarms: alarms, alarm_count: alarm_count }
   end

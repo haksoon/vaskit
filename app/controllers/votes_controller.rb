@@ -20,10 +20,10 @@ class VotesController < ApplicationController
     render json: { ask: ask, vote: vote }
   end
 
-  # DELETE /votes/destroy.json
+  # DELETE /votes/:id.json
   def destroy
     vote = Vote.find(params[:id])
-    vote.destroy unless vote.nil? && vote.user_id != current_user.id
+    vote.update(is_deleted: true) unless vote.nil? && vote.user_id != current_user.id
     render json: {}
   end
 end

@@ -20,6 +20,7 @@ class Collection < ActiveRecord::Base
   # validates :collection_keywords, presence: true
   # validates :asks, presence: true
 
+  before_create :rename_file
   before_update :rename_file
 
   def rename_file

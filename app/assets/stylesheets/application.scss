@@ -165,6 +165,7 @@ body {
   line-height: 50px;
   text-align: center;
   background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
   color: #666;
   font-size: 18px;
   overflow: hidden;
@@ -753,9 +754,12 @@ body {
 
   &.ask_detail {
     .ask_table_row { position: relative; height: 40px; text-align: center; background-color: #fff; border-bottom: 1px solid #bdbdbd;
-      .ask_table_cell { width: 50%; height: 40px; line-height: 40px; background-color: #fff; box-sizing: border-box; word-break: break-word; transition: transform .25s;
+      .ask_table_cell { position: relative; width: 50%; height: 40px; line-height: 40px; background-color: #fff; box-sizing: border-box; word-break: break-word; transition: transform .25s;
         &.left { float: left; padding-left: 10px; padding-right: 20px; }
         &.right { float: right; padding-left: 20px; padding-right: 10px; }
+        a { position: relative; display: block; height: 100%; line-height: 30px;
+          &::before { content: '상품 보러가기'; position: absolute; bottom: 0; left: 50%; width: 100%; margin-left: -50%; line-height: 20px; color: #999; font-size: 11px; animation: pulse 2s infinite; }
+        }
       }
       &.title { font-size: 14px; border-top: 1px solid #bdbdbd; }
       &.brand { font-size: 14px; color: #999; }
@@ -870,7 +874,7 @@ body {
     &.right { &::before { border-left-width: 0; } }
     &.blank { &::before { top: 0; } }
 
-    .comment_box { margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s;
+    .comment_box { margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s; animation: bounceIn 1s 1;
       &.new_alarm::before { content: ''; position: absolute; top: 0; width: 2px; height: 100%; background-color: #ff7200; }
       .comment_reply_icon { position: absolute; top: 10px; color: #dbdbdb; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
@@ -1370,23 +1374,29 @@ body {
 }
 
 .alarm_list { height: calc(100% - 40px); overflow-x: hidden; overflow-y: scroll; -webkit-overflow-scrolling: touch;
-  .alarm_item { display: block; min-height: 52px; padding: 15px 140px 25px 50px; font-size: 13px; color: #666; background-color: #fff; border-bottom: 1px solid #dbdbdb; text-align: left; transition: background 1s;
-    .alarm_user_pic { position: absolute; top: 15px; left: 10px; width: 30px; height: 30px; border-radius: 50%; }
-    .alarm_highlight { color: #998674; }
-    .alarm_imgs { position: absolute; top: 15px; right: 10px; width: 120px; height: 60px; overflow: hidden; background-color: #fff; border: 1px solid #eee; transition: border .5s;
+  .alarm_item { display: block; min-height: 30px; padding: 16px; font-size: 13px; color: #666; background-color: #fff; border: 1px solid #eee; border-width: 1px 0; margin-bottom: -1px; text-align: left; transition: background 1s;
+    .alarm_msg { margin-left: 10px; margin-right: 70px; line-height: 15px;
+      i { color: #456; }
+      b { @include font-number; font-weight: normal; color: #456; }
+      &::after { content: attr(alarm-time); float: right; font-size: 10px; line-height: 10px; margin-top: 3px; color: #999; }
+    }
+    .alarm_imgs { position: absolute; bottom: 0; right: 0; width: 60px; height: 30px; overflow: hidden; background-color: #fff;
       .alarm_img_thumbnail { width: 50%; float: left; }
     }
-    .alarm_past_time { position: absolute; bottom: 10px; right: 145px; color: #999; font-size: 12px; }
-    &:last-child { border-bottom: none; }
-    &.new { background-color: rgba(255,228,169,0.4);
-      .alarm_imgs { border: 1px solid #999; }
+    .alarm_comment { position: relative; padding: 10px; margin-top: 10px; height: 30px; line-height: 30px; background-color: #f4f4f4; color: #666; border-bottom: 1px solid #dbdbdb; border-radius: 7px;
+      &::before { content: ''; position: absolute; top: -10px; right: 25px; border: 5px solid transparent; border-bottom-color: #f4f4f4; }
+      .alarm_user_pic { width: 30px; height: 30px; border-radius: 50%; margin-right: 5px; }
+      .alarm_comment_content { width: calc(100% - 35px); float: right; @include ellipsis; }
     }
+    &:first-child { border-top: none; }
+    &::after { content: ''; position: absolute; top: 10px; left: 10px; width: 10px; height: 10px; background-color: #ff7800; box-sizing: border-box; border-radius: 50%; transform: translateX(-30px); transition: transform .5s; }
+    &.new_alarm::after { transform: translateX(0); }
   }
 }
 .alarm_feed_title {
   width: 100%; height: 40px; line-height: 40px; text-align: left; padding-left: 20px; box-sizing: border-box;
   border-top: 1px solid #dbdbdb; border-bottom: 1px solid #dbdbdb; background-color: #f2f0f0; font-size: 13px; overflow: hidden;
-  .alarm_feed_count {  @include font-number; color: #ff7200; font-size: 12px; }
+  .alarm_feed_count { @include font-number; color: #ff7200; font-size: 12px; }
   .alarm_read_all { padding: 0 20px; float: right; text-align: right; font-size: 12px; color: #999; transform: translateY(0%); transition: transform .25s;
     &.on { transform: translateY(-50%); }
     .alarm_read_all_btn { color: #ff7200; }

@@ -433,7 +433,7 @@
       <span class="setting_menu"><i class="fa fa-check-circle-o"></i>&nbsp;득표수 알림
         <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_2');"class="setting_btn toggle_btn {{= current_user.alarm_2 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
       </span>
-      <span class="setting_menu"><i class="fa fa-send-o"></i>&nbsp;새로운 의견 알림
+      <span class="setting_menu"><i class="fa fa-comment-o"></i>&nbsp;새로운 의견 알림
         <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_3');"class="setting_btn toggle_btn {{= current_user.alarm_3 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
       </span>
     </div>
@@ -445,8 +445,14 @@
       <span class="setting_menu"><i class="fa fa-comments-o"></i>&nbsp;답글 알림
         <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_5');"class="setting_btn toggle_btn {{= current_user.alarm_5 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
       </span>
-      <span class="setting_menu"><i class="fa fa-comment-o"></i>&nbsp;다른 의견 알림
+      <span class="setting_menu"><i class="fa fa-comment-o"></i>&nbsp;새로운 의견 알림
         <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_6');"class="setting_btn toggle_btn {{= current_user.alarm_6 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
+      </span>
+    </div>
+    <div class="settings">
+      <span class="setting_title"><i class="fa fa-caret-right"></i> 내가 공감한 질문과 관련된 사항을 알려드려요</span>
+      <span class="setting_menu"><i class="fa fa-comment-o"></i>&nbsp;새로운 의견 알림
+        <span onclick="$(this).toggleClass('on'); toggle_alarm_option('alarm_7');"class="setting_btn toggle_btn {{= current_user.alarm_7 ? 'on' : '' }}"><span class="toggle_slider"></span></span>
       </span>
     </div>
   </div>

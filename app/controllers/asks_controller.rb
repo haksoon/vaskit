@@ -91,14 +91,14 @@ class AsksController < ApplicationController
   # POST /asks/:id/like.json
   def like
     ask_like = AskLike.find_by(user_id: current_user.id,
-                            ask_id: params[:id])
+                               ask_id: params[:id])
     if ask_like.nil?
       already_like = false
       AskLike.create(user_id: current_user.id, ask_id: params[:id])
       recent_user = current_user.string_id
     else
       already_like = true
-      ask_like.destroy
+      ask_like.update(is_deleted: true)
       last_ask_like = AskLike.where(ask_id: params[:id]).last
       recent_user = last_ask_like.user.string_id unless last_ask_like.nil?
     end

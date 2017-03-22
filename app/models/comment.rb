@@ -1,5 +1,8 @@
 class Comment < ActiveRecord::Base
   belongs_to :user
+  belongs_to :ask
+  belongs_to :ask_deal
+  belongs_to :original_comment, class_name: 'Comment', foreign_key: 'comment_id'
   has_many :comment_likes
   has_many :hash_tags
   has_many :alarms
@@ -17,9 +20,8 @@ class Comment < ActiveRecord::Base
   validates :content, presence: true
   validates :user_id, presence: true
 
-  after_create :reload_ask_deal_comment_count, :create_comment_alarm
-  after_update :reload_ask_deal_comment_count
-  after_destroy :reload_ask_deal_comment_count
+  after_create :reload_ask_deal_comment_count, :create_comment_alarm, :create_reply_comment_alarm, :create_sub_comment_alarm, :create_reply_sub_comment_alarm, :create_liked_ask_comment_alarm
+  after_update :reload_ask_deal_comment_count, :create_comment_alarm, :create_reply_comment_alarm, :create_sub_comment_alarm, :create_reply_sub_comment_alarm, :create_liked_ask_comment_alarm, if: :is_deleted
 
   def generate_hash_tags
     HashTag.destroy_all(ask_id: ask_id, comment_id: id)
@@ -33,124 +35,249 @@ class Comment < ActiveRecord::Base
   end
 
   def reload_ask_deal_comment_count
-    ask = Ask.find(ask_id)
-    ask_deal = ask_deal_id == ask.left_ask_deal_id ? ask.left_ask_deal : ask.right_ask_deal
-    comment_count = Comment.where(ask_deal_id: ask_deal_id,
-                                  is_deleted: false).count
-    ask_deal.update(comment_count: comment_count)
+    ask = self.ask
+    left_comment_count = Comment.where(ask_deal_id: ask.left_ask_deal_id, is_deleted: false).count
+    right_comment_count = Comment.where(ask_deal_id: ask.right_ask_deal_id, is_deleted: false).count
+    ask.left_ask_deal.update_columns(comment_count: left_comment_count)
+    ask.right_ask_deal.update_columns(comment_count: right_comment_count)
   end
 
+  # 본인의 질문에 대한 댓글 알림 (alarm_3, type: comment)
   def create_comment_alarm
-    ask = Ask.find(ask_id)
+    ask = self.ask
 
-    # 본인의 질문에 대한 댓글 알림 (type:comment)
-    if !ask.be_completed && user_id != ask.user_id && User.find(ask.user_id).alarm_3 == true
-      comment_count = Comment.where(ask_id: ask.id, is_deleted: false)
-                             .where.not(user_id: ask.user_id).count
-      alarm = Alarm.where(user_id: ask.user_id,
-                          ask_id: ask.id)
-                   .where('alarm_type LIKE ?', 'comment_%').first
-      if alarm
+    return if ask.be_completed || user_id == ask.user_id
+    return unless ask.user.alarm_3
+
+    comments = Comment.where(ask_id: ask.id,
+                             is_deleted: false)
+                      .where.not(user_id: ask.user_id)
+    comment_count = comments.count
+
+    alarm = Alarm.where(user_id: ask.user_id,
+                        ask_id: ask.id)
+                 .where('alarm_type LIKE ?', 'comment_%').first
+
+    if alarm
+      alarm_count = alarm.alarm_type.delete('comment_').to_i
+      if comment_count.zero?
+        alarm.update_columns(user_id: nil,
+                             alarm_type: "comment_#{comment_count}")
+      elsif comment_count <= alarm_count
+        last_comment = comments.last
+        alarm.update_columns(send_user_id: last_comment.user_id,
+                             comment_id: last_comment.id,
+                             alarm_type: "comment_#{comment_count}")
+      else
         alarm.update(is_read: false,
                      send_user_id: user_id,
-                     alarm_type: "comment_#{comment_count}")
-      else
-        Alarm.create(user_id: ask.user_id,
-                     send_user_id: user_id,
-                     ask_id: ask.id,
+                     comment_id: id,
                      alarm_type: "comment_#{comment_count}")
       end
-    end
-
-    if comment_id.nil?
-      # 본인이 댓글 단 질문에 추가 댓글 알림 (type:sub_comment)
-      # 과거에 달았던 애가 있는지 체크
-      sub_comments = Comment.where(ask_id: ask.id, is_deleted: false)
-                            .where("id < #{id}").uniq
-      sub_comments.each_with_index do |sub_comment|
-        next unless sub_comment.user_id != ask.user_id && sub_comment.user_id != user_id
-        next unless User.find(sub_comment.user_id).alarm_6 == true
-        sub_comment = Comment.where(ask_id: ask.id,
-                                    is_deleted: false,
-                                    user_id: sub_comment.user_id).first
-        user_count = Comment.where(ask_id: ask.id, is_deleted: false)
-                            .where("id > #{sub_comment.id}")
-                            .where.not(user_id: sub_comment.user_id).count
-        alarm = Alarm.where(user_id: sub_comment.user_id,
-                            ask_owner_user_id: ask.user_id,
-                            ask_id: ask.id)
-                     .where('alarm_type LIKE ?', 'sub_comment_%').first
-        if alarm
-          alarm.update(is_read: false,
-                       send_user_id: user_id,
-                       alarm_type: "sub_comment_#{user_count}")
-        else
-          Alarm.create(user_id: sub_comment.user_id,
-                       send_user_id: user_id,
-                       ask_owner_user_id: ask.user_id,
-                       ask_id: ask.id,
-                       alarm_type: "sub_comment_#{user_count}")
-        end
-      end
-
-    # 대댓글 작성시 알람 생성
     else
-      original_comment = Comment.find(comment_id)
-
-      # 본인의 댓글에 대한 대댓글 알림 (type:reply_comment)
-      if original_comment.user_id != user_id && User.find(original_comment.user_id).alarm_5 == true
-        comment_count = Comment.where(comment_id: comment_id,
-                                      is_deleted: false).count
-        alarm = Alarm.where(user_id: original_comment.user_id,
-                            ask_id: ask.id)
-                     .where('alarm_type LIKE ?', 'reply_comment_%').first
-        if alarm
-          alarm.update(is_read: false,
-                       send_user_id: user_id,
-                       alarm_type: "reply_comment_#{comment_count}")
-        else
-          Alarm.create(user_id: original_comment.user_id,
-                       send_user_id: user_id,
-                       ask_id: ask.id,
-                       alarm_type: "reply_comment_#{comment_count}")
-        end
-      end
-
-      # 본인이 대댓글 단 댓글에 대한 추가 대댓글 알림 (type:reply_sub_comment)
-      reply_sub_comments = Comment.where(ask_id: ask.id,
-                                         comment_id: original_comment.id,
-                                         is_deleted: false)
-                                  .where("id < #{id}").uniq
-      reply_sub_comments.each_with_index do |reply_sub_comment|
-        next unless user_id != reply_sub_comment.user_id
-        next unless User.find(reply_sub_comment.user_id).alarm_6 == true
-        reply_sub_comment = Comment.where(comment_id: original_comment.id,
-                                          is_deleted: false,
-                                          user_id: reply_sub_comment.user_id).first
-        user_count = Comment.where(comment_id: original_comment.id,
-                                   is_deleted: false)
-                            .where("id > #{reply_sub_comment.id}")
-                            .where.not(user_id: reply_sub_comment.user_id).count
-        alarm = Alarm.where(user_id: reply_sub_comment.user_id,
-                            ask_id: ask.id,
-                            comment_owner_user_id: original_comment.user_id,
-                            comment_id: original_comment.id)
-                     .where('alarm_type LIKE ?', 'reply_sub_comment_%').first
-        if alarm
-          alarm.update(is_read: false,
-                       send_user_id: user_id,
-                       alarm_type: "reply_sub_comment_#{user_count}")
-        else
-          Alarm.create(user_id: reply_sub_comment.user_id,
-                       send_user_id: user_id,
-                       ask_id: ask.id,
-                       comment_owner_user_id: original_comment.user_id,
-                       comment_id: original_comment.id,
-                       alarm_type: "reply_sub_comment_#{user_count}")
-        end
-      end
-
+      return if comment_count.zero?
+      Alarm.create(user_id: ask.user_id,
+                   ask_id: ask.id,
+                   send_user_id: user_id,
+                   comment_id: id,
+                   alarm_type: "comment_#{comment_count}")
     end
   end
   handle_asynchronously :create_comment_alarm
+
+  # 본인의 댓글에 대한 대댓글 알림 (alarm_5, type: reply_comment)
+  def create_reply_comment_alarm
+    return if comment_id.nil?
+
+    ask = self.ask
+
+    return if user_id == original_comment.user_id || original_comment.user_id == ask.user_id
+    return unless original_comment.user.alarm_5
+
+    reply_comments = Comment.where(comment_id: comment_id,
+                                   is_deleted: false)
+                            .where.not(user_id: original_comment.user_id)
+    comment_count = reply_comments.count
+
+    alarm = Alarm.where(user_id: original_comment.user_id,
+                        original_comment_id: original_comment.id)
+                 .where('alarm_type LIKE ?', 'reply_comment_%').first
+
+    if alarm
+      alarm_count = alarm.alarm_type.delete('reply_comment_').to_i
+      if comment_count.zero?
+        alarm.update_columns(user_id: nil,
+                             alarm_type: "reply_comment_#{comment_count}")
+      elsif comment_count <= alarm_count
+        last_comment = reply_comments.last
+        alarm.update_columns(send_user_id: last_comment.user_id,
+                             comment_id: last_comment.id,
+                             alarm_type: "reply_comment_#{comment_count}")
+      else
+        alarm.update(is_read: false,
+                     send_user_id: user_id,
+                     comment_id: id,
+                     alarm_type: "reply_comment_#{comment_count}")
+      end
+    else
+      return if comment_count.zero?
+      Alarm.create(user_id: original_comment.user_id,
+                   ask_id: ask.id,
+                   original_comment_id: original_comment.id,
+                   send_user_id: user_id,
+                   comment_id: id,
+                   alarm_type: "reply_comment_#{comment_count}")
+    end
+  end
+  handle_asynchronously :create_reply_comment_alarm
+
+  # 본인이 댓글을 작성한 질문에 대한 추가 댓글 알림 (alarm_6, type: sub_comment)
+  def create_sub_comment_alarm
+    ask = self.ask
+    prev_comments = Comment.where(ask_id: ask.id, is_deleted: false)
+                           .where.not(user_id: user_id)
+                           .where.not(user_id: ask.user_id)
+                           .where("id < #{id}")
+                           .uniq
+
+    prev_comments.each do |prev_comment|
+      next if !comment_id.nil? && comment_id == prev_comment.id
+      next unless prev_comment.user.alarm_6
+      sub_comments = Comment.where(ask_id: ask.id, is_deleted: false)
+                            .where.not(user_id: prev_comment.user_id)
+                            .where("id > #{prev_comment.id}")
+      comment_count = sub_comments.count
+
+      alarm = Alarm.where(user_id: prev_comment.user_id,
+                          ask_id: ask.id)
+                   .where('alarm_type LIKE ?', 'sub_comment_%').first
+
+      if alarm
+         alarm_count = alarm.alarm_type.delete('sub_comment_').to_i
+         if comment_count.zero?
+           alarm.update_columns(user_id: nil,
+                                alarm_type: "sub_comment_#{comment_count}")
+         elsif comment_count <= alarm_count
+           last_comment = sub_comments.last
+           alarm.update_columns(send_user_id: last_comment.user_id,
+                                comment_id: last_comment.id,
+                                alarm_type: "sub_comment_#{comment_count}")
+         else
+           alarm.update(is_read: false,
+                        send_user_id: user_id,
+                        comment_id: id,
+                        alarm_type: "sub_comment_#{comment_count}")
+         end
+      else
+         next if comment_count.zero?
+         Alarm.create(user_id: prev_comment.user_id,
+                      ask_id: ask.id,
+                      ask_owner_user_id: ask.user_id,
+                      send_user_id: user_id,
+                      comment_id: id,
+                      alarm_type: "sub_comment_#{comment_count}")
+      end
+    end
+  end
+  handle_asynchronously :create_sub_comment_alarm
+
+  # 본인이 대댓글을 작성한 댓글에 대한 추가 대댓글 알림 (alarm_6, type: reply_sub_comment)
+  def create_reply_sub_comment_alarm
+    return if comment_id.nil?
+
+    ask = self.ask
+    prev_reply_comments = Comment.where(ask_id: ask.id, comment_id: comment_id, is_deleted: false)
+                                 .where.not(user_id: user_id)
+                                 .where.not(user_id: ask.user_id)
+                                 .where.not(user_id: original_comment.user_id)
+                                 .where("id < #{id}")
+                                 .uniq
+
+    prev_reply_comments.each do |prev_reply_comment|
+      next unless prev_reply_comment.user.alarm_6
+      reply_sub_comments = Comment.where(ask_id: ask.id, comment_id: comment_id, is_deleted: false)
+                                  .where.not(user_id: prev_reply_comment.user_id)
+                                  .where("id > #{prev_reply_comment.id}")
+      comment_count = reply_sub_comments.count
+
+      alarm = Alarm.where(user_id: prev_reply_comment.user_id,
+                          original_comment_id: original_comment.id)
+                   .where('alarm_type LIKE ?', 'reply_sub_comment_%').first
+
+      if alarm
+        alarm_count = alarm.alarm_type.delete('reply_sub_comment_').to_i
+        if comment_count.zero?
+          alarm.update_columns(user_id: nil,
+                               alarm_type: "reply_sub_comment_#{comment_count}")
+        elsif comment_count <= alarm_count
+          last_comment = reply_sub_comments.last
+          alarm.update_columns(send_user_id: last_comment.user_id,
+                               comment_id: last_comment.id,
+                               alarm_type: "reply_sub_comment_#{comment_count}")
+        else
+          alarm.update(is_read: false,
+                       send_user_id: user_id,
+                       comment_id: id,
+                       alarm_type: "reply_sub_comment_#{comment_count}")
+        end
+      else
+        next if comment_count.zero?
+        Alarm.create(user_id: prev_reply_comment.user_id,
+                     ask_id: ask.id,
+                     original_comment_id: original_comment.id,
+                     comment_owner_user_id: original_comment.user_id,
+                     send_user_id: user_id,
+                     comment_id: id,
+                     alarm_type: "reply_sub_comment_#{comment_count}")
+      end
+    end
+
+  end
+  handle_asynchronously :create_reply_sub_comment_alarm
+
+  # 본인이 공감한 질문에 추가 댓글 알림 (alarm_7, type: liked_ask_comment)
+  def create_liked_ask_comment_alarm
+    ask = self.ask
+    like_asks = AskLike.where(ask_id: ask_id)
+
+    like_asks.each do |like_ask|
+      next if user_id == like_ask.user_id
+      next unless like_ask.user.alarm_7
+      comments = Comment.where(ask_id: ask_id,
+                               is_deleted: false)
+                        .where.not(user_id: like_ask.user_id)
+      comment_count = comments.count
+
+      alarm = Alarm.where(user_id: like_ask.user_id,
+                          ask_id: ask_id)
+                   .where('alarm_type LIKE ?', 'liked_ask_comment_%').first
+
+      if alarm
+        alarm_count = alarm.alarm_type.delete('liked_ask_comment_').to_i
+        if comment_count.zero?
+          alarm.update_columns(user_id: nil,
+                               alarm_type: "liked_ask_comment_#{comment_count}")
+        elsif comment_count <= alarm_count
+          last_comment = comments.last
+          alarm.update_columns(send_user_id: last_comment.user_id,
+                               comment_id: last_comment.id,
+                               alarm_type: "liked_ask_comment_#{comment_count}")
+        else
+          alarm.update(is_read: false,
+                       send_user_id: user_id,
+                       comment_id: id,
+                       alarm_type: "liked_ask_comment_#{comment_count}")
+        end
+      else
+        return if comment_count.zero?
+        Alarm.create(user_id: like_ask.user_id,
+                     ask_id: ask.id,
+                     ask_owner_user_id: ask.user_id,
+                     send_user_id: user_id,
+                     comment_id: id,
+                     alarm_type: "liked_ask_comment_#{comment_count}")
+      end
+    end
+  end
+  handle_asynchronously :create_liked_ask_comment_alarm
 end

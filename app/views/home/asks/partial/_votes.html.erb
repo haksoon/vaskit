@@ -173,22 +173,31 @@
       var vote_direction = target.attr('vote-direction');
 
       if (mouseEndX - ask_image_box_left < (ask_image_box_width / 2) - vs_delta) {
-        if (vote_direction != 'left') vote(target, ask_id, true);
-        ask_box.addClass('is_voted');
+        if (vote_direction != 'left') {
+          vote(target, ask_id, true);
+        } else {
+          ask_box.addClass('is_voted');
+        }
         target.addClass('left').clearQueue().stop().animate({
           top: '50%',
           left: '25%'
         }, 250, 'easeOutBack');
       } else if (mouseEndX - ask_image_box_left > (ask_image_box_width / 2) + vs_delta) {
-        if (vote_direction != 'right') vote(target, ask_id, false);
-        ask_box.addClass('is_voted');
+        if (vote_direction != 'right') {
+          vote(target, ask_id, false);
+        } else {
+          ask_box.addClass('is_voted');
+        }
         target.addClass('right').clearQueue().stop().animate({
           top: '50%',
           left: '75%'
         }, 250, 'easeOutBack');
       } else {
-        if (vote_id) vote_cancel(target, ask_id, vote_id);
-        ask_box.removeClass('is_voted');
+        if (vote_id) {
+          vote_cancel(target, ask_id, vote_id);
+        } else {
+          ask_box.removeClass('is_voted');
+        }
         target.removeClass('left right').clearQueue().stop().animate({
           top: '50%',
           left: '50%'
@@ -201,7 +210,7 @@
   function vote(target, ask_id, is_left) {
     var vote_id;
     var all_ask_box = $('.ask.ask_' + ask_id);
-    var all_vs_btns = all_ask_box.find('.vs_btn').not(target);
+    var all_vs_btns = all_ask_box.find('.vs_btn');
     var all_vs_results = all_ask_box.find('.vs_result');
     var all_comment_toggles = all_ask_box.find('.comment_input_menu');
     if (current_user) {
@@ -219,23 +228,23 @@
                 var right_vote_count = data.ask.right_ask_deal.vote_count;
                 if (is_left) {
                   all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
-                                 .find('.vote_graph.left').find('.on');
+                                .find('.vote_graph.left').find('.on');
                   all_vs_btns.attr('vote-id', data.vote.id)
-                              .attr('vote-direction', 'left')
-                              .removeClass('right').addClass('left').clearQueue().stop().css({
-                                top: '50%',
-                                left: '25%'
-                              });
+                             .attr('vote-direction', 'left')
+                             .removeClass('right').addClass('left').clearQueue().stop().css({
+                               top: '50%',
+                               left: '25%'
+                             });
                   all_comment_toggles.attr('left', true).removeClass('right').addClass('left');
                 } else {
                   all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
-                                 .find('.vote_graph.right').find('.on');
+                                .find('.vote_graph.right').find('.on');
                   all_vs_btns.attr('vote-id', data.vote.id)
-                              .attr('vote-direction', 'right')
-                              .removeClass('left').addClass('right').clearQueue().stop().css({
-                                top: '50%',
-                                left: '75%'
-                              });
+                             .attr('vote-direction', 'right')
+                             .removeClass('left').addClass('right').clearQueue().stop().css({
+                               top: '50%',
+                               left: '75%'
+                             });
                   all_comment_toggles.removeAttr('left').removeClass('left').addClass('right');
                 }
               },
@@ -290,7 +299,7 @@
 
   function vote_cancel(target, ask_id, vote_id) {
     var all_ask_box = $('.ask.ask_' + ask_id);
-    var all_vs_btns = all_ask_box.find('.vs_btn').not(target);
+    var all_vs_btns = all_ask_box.find('.vs_btn');
     if (current_user) {
       $.ajax({
               url: '/votes/' + vote_id + '.json',
@@ -302,11 +311,11 @@
               success: function(data) {
                 all_ask_box.removeClass('is_voted');
                 all_vs_btns.removeAttr('vote-id')
-                            .removeAttr('vote-direction')
-                            .removeClass('left right').clearQueue().stop().css({
-                              top: '50%',
-                              left: '50%'
-                            });
+                           .removeAttr('vote-direction')
+                           .removeClass('left right').clearQueue().stop().css({
+                             top: '50%',
+                             left: '50%'
+                           });
               },
               beforeSend: function() {
                 loadingStart();
@@ -329,11 +338,11 @@
 
       all_ask_box.removeClass('is_voted');
       all_vs_btns.removeAttr('vote-id')
-                  .removeAttr('vote-direction')
-                  .removeClass('left right').clearQueue().stop().css({
-                    top: '50%',
-                    left: '50%'
-                  });
+                 .removeAttr('vote-direction')
+                 .removeClass('left right').clearQueue().stop().css({
+                   top: '50%',
+                   left: '50%'
+                 });
     }
   }
 </script>

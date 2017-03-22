@@ -91,12 +91,11 @@ class CommentsController < ApplicationController
                                        comment_id: params[:id])
     if comment_like.nil?
       already_like = false
-      comment_like = CommentLike.create(user_id: current_user.id,
-                                        comment_id: params[:id])
+      CommentLike.create(user_id: current_user.id, comment_id: params[:id])
       recent_user = current_user.string_id
     else
       already_like = true
-      comment_like.destroy
+      comment_like.update(is_deleted: true)
       last_comment_like = CommentLike.where(comment_id: params[:id]).last
       recent_user = last_comment_like.user.string_id unless last_comment_like.nil?
     end

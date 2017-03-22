@@ -25,7 +25,7 @@
   {{ var direction = ask.left_ask_deal_id == comment.ask_deal_id ? 'left' : 'right' }}
   {{ var gender = comment.user.gender ? 'male' : 'female' }}
   {{ var reply = comment.comment_id == null ? 'original' : 'reply' }}
-  <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} {{= comment.is_deleted ? 'deleted' : '' }} {{= comment.user.id == 1 ? 'vaskit' : '' }} clearfix animated bounceIn" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" comment-user-id="{{= comment.user.id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}" onanimationend="$(this).removeClass('animated bounceIn');">
+  <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} {{= comment.is_deleted ? 'deleted' : '' }} {{= comment.user.id == 1 ? 'vaskit' : '' }} clearfix" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" comment-user-id="{{= comment.user.id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}">
     {{ if (reply == "reply") { }}
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}
