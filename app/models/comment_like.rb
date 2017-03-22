@@ -1,5 +1,5 @@
 class CommentLike < ActiveRecord::Base
-  default_scope { where(is_deleted: false) }
+  # default_scope { where(is_deleted: false) }
 
   belongs_to :user
   belongs_to :comment
