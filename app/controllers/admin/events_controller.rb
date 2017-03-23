@@ -80,6 +80,7 @@ class Admin::EventsController < Admin::HomeController
                                   :ask_id,
                                   :started_at,
                                   :ended_at,
+                                  :label,
                                   :image)
   end
 end

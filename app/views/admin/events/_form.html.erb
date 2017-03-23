@@ -55,24 +55,31 @@
                                     class: 'required_form',
                                     placeholder: '이벤트 설명을 입력하세요'
                                   } %>
+          <%= f.input :label,
+                      as: :select,
+                      collection: [['이벤트 라벨을 강조하여 표시합니다', true], ['이벤트 라벨을 표시하지 않습니다', false]],
+                      prompt: false,
+                      label: '3. 이벤트 라벨 표시 여부',
+                      hint: '이벤트 라벨을 강조하여 표시할지 여부를 선택합니다',
+                      error: '' %>
           <div class="row form-group">
             <%= f.input :started_at,
                         as: :date,
-                        label: '3. 이벤트 시작일자 입력',
+                        label: '4. 이벤트 시작일자 입력',
                         hint: '시작일자를 현재일자 이후로 등록하면 예약 이벤트 생성이 가능합니다',
                         error: '',
                         wrapper_html: { class: ' col-lg-6 col-md-6 col-sm-6 col-xs-12' },
                         input_html: { class: 'required_form' } %>
             <%= f.input :ended_at,
                         as: :date,
-                        label: '4. 이벤트 종료일자 입력',
+                        label: '5. 이벤트 종료일자 입력',
                         hint: '종료일자는 종료를 원하는 해당일자의 다음날을 입력하세요 (매일 자정 기준) 종료일자가 지나면 자동으로 상단 고정이 해제됩니다',
                         error: '',
                         wrapper_html: { class: ' col-lg-6 col-md-6 col-sm-6 col-xs-12' },
                         input_html: { class: 'required_form' } %>
           </div>
           <%= f.input :image,
-                      label: '5. 썸네일 입력',
+                      label: '6. 썸네일 입력',
                       error: '' do %>
             <%= f.input_field :image,
                               as: :file,
@@ -94,7 +101,7 @@
           <% end %>
           <%= f.input :ask_id,
                       as: :integer,
-                      label: '6. 질문 입력',
+                      label: '7. 질문 입력',
                       hint: '질문 컨텐츠 ID를 입력한 뒤 tab 키를 누르세요',
                       error: '',
                       input_html: {

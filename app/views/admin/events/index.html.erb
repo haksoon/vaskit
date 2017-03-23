@@ -18,19 +18,21 @@
         <thead>
           <tr>
             <th style="width: 5%;">순번</th>
+            <th style="width: 7.5%;">라벨</th>
             <th style="width: 20%;">이미지</th>
             <th style="width: 15%;">제목</th>
             <th style="width: 10%;">시작일</th>
             <th style="width: 20%;">기간</th>
-            <th style="width: 10%;">조회</th>
-            <th style="width: 10%;">수정</th>
-            <th style="width: 10%;">삭제</th>
+            <th style="width: 7.5%;">조회</th>
+            <th style="width: 7.5%;">수정</th>
+            <th style="width: 7.5%;">삭제</th>
           </tr>
         </thead>
         <tbody>
           <% @schedules.each_with_index do |event, index| %>
             <tr>
               <th><kbd><%= index + 1 %>번째</kbd></th>
+              <td><%= event.label ? '<i class="fa fa-check text-success"></i>'.html_safe : '<i class="fa fa-remove text-danger"></i>'.html_safe %></td>
               <td><%= image_tag event.image.url(:original), width: '100%' %></td>
               <td><%= event.title %></td>
               <td class="text-center"><%= "#{format_datetime(event.started_at, 'past').delete('-').delete(' 전')} 후 게시 예정" %></td>
@@ -57,19 +59,21 @@
         <thead>
           <tr>
             <th style="width: 5%;">순번</th>
+            <th style="width: 7.5%;">라벨</th>
             <th style="width: 20%;">이미지</th>
             <th style="width: 15%;">제목</th>
             <th style="width: 20%;">기간</th>
             <th style="width: 10%;">종료일</th>
-            <th style="width: 10%;">조회</th>
-            <th style="width: 10%;">수정</th>
-            <th style="width: 10%;">삭제</th>
+            <th style="width: 7.5%;">조회</th>
+            <th style="width: 7.5%;">수정</th>
+            <th style="width: 7.5%;">삭제</th>
           </tr>
         </thead>
         <tbody>
           <% @ongoings.each_with_index do |event, index| %>
             <tr>
               <th><kbd><%= index + 1 %>번째</kbd></th>
+              <td><%= event.label ? '<i class="fa fa-check text-success"></i>'.html_safe : '<i class="fa fa-remove text-danger"></i>'.html_safe %></td>
               <td><%= image_tag event.image.url(:original), width: '100%' %></td>
               <td><%= event.title %></td>
               <td class="text-center"><%= "#{((event.ended_at - event.started_at) / 60 / 60 / 24).to_i}일간 진행중" %><br><%= "#{format_datetime(event.started_at, :date)} ~ #{format_datetime(event.ended_at, :date)}" %></td>
@@ -95,19 +99,21 @@
       <thead>
         <tr>
           <th style="width: 5%;">ID</th>
+          <th style="width: 7.5%;">라벨</th>
           <th style="width: 20%;">이미지</th>
           <th style="width: 15%;">제목</th>
           <th style="width: 20%;">기간</th>
           <th style="width: 10%;">종료일</th>
-          <th style="width: 10%;">조회</th>
-          <th style="width: 10%;">수정</th>
-          <th style="width: 10%;">삭제</th>
+          <th style="width: 7.5%;">조회</th>
+          <th style="width: 7.5%;">수정</th>
+          <th style="width: 7.5%;">삭제</th>
         </tr>
       </thead>
       <tbody>
         <% @events.each do |event| %>
           <tr>
             <th><kbd><%= event.id %></kbd></th>
+            <td><%= event.label ? '<i class="fa fa-check text-success"></i>'.html_safe : '<i class="fa fa-remove text-danger"></i>'.html_safe %></td>
             <td><%= image_tag event.image.url(:original), width: '100%' %></td>
             <td><%= event.title %></td>
             <td class="text-center"><%= "#{((event.ended_at - event.started_at) / 60 / 60 / 24).to_i}일간 진행됨" %><br><%= "#{format_datetime(event.started_at, :date)} ~ #{format_datetime(event.ended_at, :date)}" %></td>

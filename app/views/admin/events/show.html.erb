@@ -21,7 +21,11 @@
   <div class="table-responsive">
     <table class="table table-bordered">
       <tr>
-        <th style="width: 100px;">제목</th>
+        <th style="width: 100px;">라벨 표시여부</th>
+        <td><%= @event.label ? '<i class="fa fa-check text-success"></i>'.html_safe : '<i class="fa fa-remove text-danger"></i>'.html_safe %></td>
+      </tr>
+      <tr>
+        <th>제목</th>
         <td><%= @event.title %></td>
       </tr>
       <tr>

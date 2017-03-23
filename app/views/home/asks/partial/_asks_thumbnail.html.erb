@@ -58,8 +58,8 @@
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
-  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail {{= ask.event ? 'event_ask' : '' }} contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
-    {{ if (ask.event) { }}
+  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail {{= ask.event && ask.event.label ? 'event_ask' : '' }} contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+    {{ if (ask.event && ask.event.label) { }}
       <div class="event_info">
         <span class="event_title">{{= ask.event.title }}</span>
         <span class="event_d_day"><i class="fa fa-clock-o"></i>
