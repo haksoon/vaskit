@@ -100,16 +100,23 @@
             </div>
           <% end %>
           <%= f.input :ask_id,
-                      as: :integer,
                       label: '7. 질문 입력',
-                      hint: '질문 컨텐츠 ID를 입력한 뒤 tab 키를 누르세요',
-                      error: '',
-                      input_html: {
-                                    class: 'required_form',
-                                    placeholder: '질문 ID를 입력해주세요',
-                                    pattern: '[0-9]*',
-                                    onchange: 'ask_link_preview();'
-                                  } %>
+                      error: '' do %>
+              <p class="help-block">질문 컨텐츠 ID를 입력한 뒤 미리보기 버튼을 누르세요</p>
+              <div class="input-group">
+              <%= f.input_field :ask_id,
+                                as: :integer,
+                                class: 'form-control',
+                                placeholder: '질문 ID를 입력해주세요',
+                                pattern: '[0-9]*',
+                                min: '1',
+                                onchange: "$('#ask_preview_link_btn').click();" %>
+              <span class="input-group-btn">
+                <button id="ask_preview_link_btn" class="btn btn-success" type="button" onclick="preview_link('ask_id', $('#event_ask_id'), null, $('#ask_link_preview'), $('#ask_preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+              </span>
+            </div>
+            <%= check_box_tag 'ask_preview_completed', '', @event.id.nil? ? false : true, class: 'hidden required_form' %>
+          <% end %>
           <div id="ask_link_preview" class="well <%= 'hidden' if @event.ask_id.blank? %>">
             <div class="embed-responsive embed-responsive-16by9">
               <iframe class="embed-responsive-item" src="<%= "#{CONFIG["host"]}/asks/#{@event.ask_id}" unless @event.ask_id.blank? %>"></iframe>
@@ -126,21 +133,4 @@
   $.each($('#event_started_at_3i option'), function( index, value ) { if (value.value !== '') value.text += '일'; });
   $.each($('#event_ended_at_1i option'), function( index, value ) { if (value.value !== '') value.text += '년'; });
   $.each($('#event_ended_at_3i option'), function( index, value ) { if (value.value !== '') value.text += '일'; });
-
-  function ask_link_preview() {
-    var input = $("#event_ask_id");
-    var ask_id = input.val();
-    var preview = $("#ask_link_preview");
-    var preview_frame = preview.find("iframe");
-
-    if (ask_id.match(new RegExp(/^[\d]+$/))) {
-      var link = "<%= "#{CONFIG["host"]}/asks/" %>" + ask_id;
-      preview.removeClass("hidden");
-      preview_frame.attr("src", link);
-    } else {
-      preview.addClass("hidden");
-      preview_frame.attr("src", "");
-      input.val("").focus();
-    }
-  }
 </script>
