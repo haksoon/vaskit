@@ -1,6 +1,6 @@
 class DailySummary
   include SlackNotifier
-  def send
+  def self.send
     SlackNotifier.slack_notifier_daily_summary
   end
 end
