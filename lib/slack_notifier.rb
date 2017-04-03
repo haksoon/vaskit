@@ -30,14 +30,14 @@ module SlackNotifier
     channel = YAML.load_file(Rails.root.join('config/slack.yml'))[Rails.env]['daily_channel']
     notifier = Slack::Notifier.new WEBHOOK_URL, channel: channel
 
-    now = Time.now - 3600 # 1시간 빼줌
+    now = Time.now - 3600 * 9 # 9시간 빼줌
     date = now.strftime('%Y년 %m월 %d일')
     start_time = DateTime.new(now.year, now.month, now.day - 1, 15, 0, 0)
     end_time = DateTime.new(now.year, now.month, now.day, 15, 0, 0)
 
     active_user_count = UserVisit.joins(:user).where('users.user_role = "user"').where('user_visits.created_at > ? AND user_visits.created_at < ?', start_time, end_time).pluck('user_visits.user_id').uniq.count
-    visit_count = UserVisit.where('created_at > ? AND created_at < ?', start_time, end_time).pluck(:visitor_id).uniq.count
-    signup_count = User.where('created_at > ? AND created_at < ?', start_time, end_time).count
+    visit_count = UserVisit.joins(:user).where('users.user_role = "user"').where('user_visits.created_at > ? AND user_visits.created_at < ?', start_time, end_time).pluck('user_visits.visitor_id').uniq.count
+    signup_count = User.where(user_role: 'user').where('created_at > ? AND created_at < ?', start_time, end_time).count
     vote_count = Vote.joins(:user).where('users.user_role = "user"').where('votes.created_at > ? AND votes.created_at < ?', start_time, end_time).count
     comment_count = Comment.joins(:user).where('users.user_role = "user"').where('comments.created_at > ? AND comments.created_at < ?', start_time, end_time).count
     ask_count = Ask.joins(:user).where('users.user_role = "user"').where('asks.created_at > ? AND asks.created_at < ?', start_time, end_time).count
