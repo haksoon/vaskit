@@ -22,7 +22,7 @@ set :bundler_path, '/home/darammg/.rvm/gems/ruby-2.2.3/bin/bundle'
 set :output, error: 'log/error.log', standard: 'log/cron.log'
 
 every 1.day, at: '12:00 am' do
-  runner 'SlackNotifier.daily_summary'
+  runner 'DailySummary.send'
 end
 
 # Learn more: http://github.com/javan/whenever
