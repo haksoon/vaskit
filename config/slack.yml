@@ -1,7 +1,16 @@
 # config/slack.yml
+webhook_url: "https://hooks.slack.com/services/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"
 development:
-  webhook_url: "https://hooks.slack.com/services/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"
-  channel: "#test"
+  daily_channel: "#test"
+  ask_channel: "#test"
+  signup_channel: "#test"
+  error_channel: "#test"
+  etc_channel: "#test"
+  alba_channel: "#test"
 production:
-  webhook_url: "https://hooks.slack.com/services/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"
-  channel: "#97_app_notifier"
+  daily_channel: "#81_daily_notifier"
+  ask_channel: "#82_ask_notifier"
+  signup_channel: "#83_signup_notifier"
+  error_channel: "#88_error_notifier"
+  etc_channel: "#89_etc_notifier"
+  alba_channel: "#97_new_asks"

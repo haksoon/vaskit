@@ -23,7 +23,7 @@ Rails.application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   # config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
-  config.serve_static_files = true;
+  config.serve_static_files = true
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
@@ -65,15 +65,15 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
 
-  config.action_mailer.default_url_options = { :host => 'vaskit.kr' }
+  config.action_mailer.default_url_options = { host: 'vaskit.kr' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => 'smtp.worksmobile.com',
-    :port => 587,
-    :authentication => :plain,
-    :user_name => 'notice@vaskit.kr',#email 주소
-    :password => 'vaskit1234',#password
-    :enable_starttls_auto => true
+    address: 'smtp.worksmobile.com',
+    port: 587,
+    authentication: :plain,
+    user_name: 'notice@vaskit.kr',
+    password: 'vaskit1234',
+    enable_starttls_auto: true
   }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.raise_delivery_errors = true

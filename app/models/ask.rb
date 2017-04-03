@@ -69,6 +69,7 @@ class Ask < ActiveRecord::Base
 
   def ask_notifier(type)
     return unless user.user_role == 'user'
+    noti_channel = YAML.load_file(Rails.root.join('config/slack.yml'))[Rails.env]['ask_channel']
     noti_title = "[#{id}번](#{CONFIG['host']}/asks/#{id})"
     noti_message = "- 작성자 : #{user.string_id} (#{(user.gender == true ? '남성' : '여성')}, #{(Time.now.year - user.birthday.year + 1)}세)"
     if type == 'new'
@@ -90,14 +91,15 @@ class Ask < ActiveRecord::Base
     end
     noti_message += "\n- 내용\n#{message}"
 
-    slack_notifier(noti_title, noti_message, noti_color)
+    slack_notifier(noti_channel, noti_title, noti_message, noti_color)
 
-    return unless type == 'new' && Rails.env == 'production'
+    return unless type == 'new'
+    noti_channel = YAML.load_file(Rails.root.join('config/slack.yml'))[Rails.env]['alba_channel']
     noti_title = '새로운 질문이 작성되었습니다! 댓글을 작성해주세요 :)'
     noti_title += "\n[질문으로 이동](#{CONFIG['host']}/asks/#{id})"
     noti_message = message.to_s
     noti_color = '#FF7200'
-    slack_notifier_alba(noti_title, noti_message, noti_color)
+    slack_notifier_alba(noti_channel, noti_title, noti_message, noti_color)
   end
   handle_asynchronously :ask_notifier
 end

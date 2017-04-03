@@ -13,8 +13,7 @@ class AskDeal < ActiveRecord::Base
   has_many :comments
   has_one :ask_complete
 
-  before_create :rename_file
-  before_update :rename_file
+  before_post_process :rename_file
 
   def rename_file
     return if image.blank?

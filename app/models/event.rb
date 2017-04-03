@@ -15,8 +15,7 @@ class Event < ActiveRecord::Base
   validates :ended_at, presence: true
   validates :image, presence: true
 
-  before_create :rename_file
-  before_update :rename_file
+  before_post_process :rename_file
 
   def rename_file
     return if image.blank?

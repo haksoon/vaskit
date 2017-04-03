@@ -865,7 +865,7 @@ body {
     .comment_title_right { width: 50%; height: 50px; float: right; text-align: right; }
     .comment_title_img { padding: 10px; width: 30px; height: 30px; border-radius: 25px; }
   }
-  .comment_list { position: relative; margin: 0; padding: 10px 0; min-height: 50vh; list-style: none;  background-color: #f2f0f0; overflow: hidden;
+  .comment_list { position: relative; margin: 0; padding: 10px 0; min-height: 50vh; list-style: none; background-color: #f2f0f0; overflow: hidden;
     &::before {
       content: '첫 댓글을 달아주세요!'; position: absolute; top: -150px; left: 25px; width: calc(100% - 50px); height: calc(100% + 150px); box-sizing: border-box;
       line-height: 150px; text-align: center; transition: top .5s;

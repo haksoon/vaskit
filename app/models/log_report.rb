@@ -29,10 +29,11 @@ class LogReport < ActiveRecord::Base
     report_user = User.find(user_id)
     report_user_id = report_user.nil? ? '비회원' : report_user.string_id
 
+    noti_channel = YAML.load_file(Rails.root.join('config/slack.yml'))[Rails.env]['etc_channel']
     noti_title = "신고가 접수되었습니다\n#{target_url}"
     noti_message = "- 신고자 : #{report_user_id}\n- 신고내용 : #{report_message}\n- 신고대상 : \n#{target_content}"
     noti_color = '#999999'
-    slack_notifier(noti_title, noti_message, noti_color)
+    slack_notifier(noti_channel, noti_title, noti_message, noti_color)
   end
   handle_asynchronously :report_submit_notifier
 end

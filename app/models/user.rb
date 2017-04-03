@@ -4,6 +4,8 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  include SlackNotifier
+
   has_many :alarms
   has_many :asks
   has_many :ask_deals
@@ -29,10 +31,7 @@ class User < ActiveRecord::Base
   validates_attachment_size :avatar, less_than: 20.megabytes
   validates_attachment_content_type :avatar, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
 
-  before_create :rename_file
-  before_update :rename_file
-
-  include SlackNotifier
+  before_post_process :rename_file
   after_create :signup_submit_notifier
 
   def rename_file
@@ -61,6 +60,7 @@ class User < ActiveRecord::Base
 
   def signup_submit_notifier
     user_count = User.where(user_role: 'user').count
+    noti_channel = YAML.load_file(Rails.root.join('config/slack.yml'))[Rails.env]['signup_channel']
     noti_title = ''
     noti_title += ":metal: 가입자 #{user_count.to_s.gsub(/(\d)(?=(?:\d\d\d)+(?!\d))/, '\1,')}명 돌파!!!!!\n" if (user_count % 50).zero?
     noti_title += '새로운 사용자가 회원가입하였습니다'
@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
       noti_message += "\n이메일 가입 유저입니다"
     end
     noti_color = '#FFCC5A'
-    slack_notifier(noti_title, noti_message, noti_color)
+    slack_notifier(noti_channel, noti_title, noti_message, noti_color)
   end
   handle_asynchronously :signup_submit_notifier
 end

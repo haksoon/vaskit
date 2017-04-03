@@ -33,9 +33,9 @@ module Vaskit
                           email: {
                             # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
                             deliver_with: :deliver_now,
-                            email_prefix: '[ERROR] ',
-                            sender_address: %('Error notifier' <notice@vaskit.kr>),
-                            exception_recipients: %w(junsikahn@vaskit.kr)
+                            email_prefix: '[Server ERROR] ',
+                            sender_address: %('Server ERROR' <notice@vaskit.kr>),
+                            exception_recipients: ['junsikahn@vaskit.kr', 'sunghomoon@vaskit.kr']
                           }
   end
 end

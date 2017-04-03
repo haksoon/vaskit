@@ -18,11 +18,11 @@
 # end
 
 set :environment, :production
-set :bundler_path, "/home/darammg/.rvm/gems/ruby-2.2.3/bin/bundle"
-set :output, {:error => 'log/error.log', :standard => 'log/cron.log'}
+set :bundler_path, '/home/darammg/.rvm/gems/ruby-2.2.3/bin/bundle'
+set :output, error: 'log/error.log', standard: 'log/cron.log'
 
-every 1.day, :at => '12:00 am' do
-  runner "SummaryMailer.daily_summary"
+every 1.day, at: '12:00 am' do
+  runner 'SlackNotifier.daily_summary'
 end
 
 # Learn more: http://github.com/javan/whenever
