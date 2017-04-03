@@ -36,7 +36,7 @@ module SlackNotifier
     end_time = DateTime.new(now.year, now.month, now.day, 15, 0, 0)
 
     active_user_count = UserVisit.joins(:user).where('users.user_role = "user"').where('user_visits.created_at > ? AND user_visits.created_at < ?', start_time, end_time).pluck('user_visits.user_id').uniq.count
-    visit_count = UserVisit.joins(:user).where('users.user_role = "user"').where('user_visits.created_at > ? AND user_visits.created_at < ?', start_time, end_time).pluck('user_visits.visitor_id').uniq.count
+    visit_count = UserVisit.joins(:user).where('users.user_role = "user"').where('user_visits.created_at > ? AND user_visits.created_at < ?', start_time, end_time).pluck('user_visits.user_id').count
     signup_count = User.where(user_role: 'user').where('created_at > ? AND created_at < ?', start_time, end_time).count
     vote_count = Vote.joins(:user).where('users.user_role = "user"').where('votes.created_at > ? AND votes.created_at < ?', start_time, end_time).count
     comment_count = Comment.joins(:user).where('users.user_role = "user"').where('comments.created_at > ? AND comments.created_at < ?', start_time, end_time).count
@@ -47,8 +47,8 @@ module SlackNotifier
 
     title = "*#{date} 일일 리포트*"
     message = ''
-    message += "오늘의 신규 가입자는 `#{signup_count}명`이고, 활성 회원수는 `#{active_user_count}명`입니다"
-    message += "\n비회원 등을 포함한 전체 방문자는 총 `#{visit_count}명`입니다"
+    message += "오늘의 신규 가입자는 `#{signup_count}명`이고,"
+    message += "\n어드민, 비회원 등을 제외한 전체 방문횟수는 `#{visit_count}회`, 순 방문자는 `#{active_user_count}명`입니다"
     message += "\n투표 `#{vote_count}회`, 댓글 `#{comment_count}개`, 질문 `#{ask_count}개`,"
     message += "\n공감해요 `#{ask_like_count}회`, 댓글 좋아요 `#{comment_like_count}회`, 공유 `#{share_count}회`의 활동이력이 있습니다"
     message += "\n[어드민 페이지로 이동](http://vaskit.kr/admin/analysis)"
