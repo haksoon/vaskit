@@ -213,6 +213,8 @@
     var all_vs_btns = all_ask_box.find('.vs_btn');
     var all_vs_results = all_ask_box.find('.vs_result');
     var all_comment_toggles = all_ask_box.find('.comment_input_menu');
+    var vs_result_detail = all_ask_box.find('.vs_result_detail');
+    var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
     if (current_user) {
       $.ajax({
               url: '/votes.json',
@@ -247,6 +249,9 @@
                              });
                   all_comment_toggles.removeAttr('left').removeClass('left').addClass('right');
                 }
+                vs_result_detail.addClass('is_voted').one(transitionEnd, function() {
+                  vs_result_detail.removeClass('is_voted');
+                });
               },
               beforeSend: function() {
               },
@@ -292,6 +297,10 @@
       if (votes_array.length > 4) {
         visitor_check();
         ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 투표 5개 초과', 1);
+      } else {
+        vs_result_detail.addClass('is_voted').one(transitionEnd, function() {
+          vs_result_detail.removeClass('is_voted');
+        });
       }
     }
   }

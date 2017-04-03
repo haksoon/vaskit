@@ -5,7 +5,7 @@
     if (loading && nearBottomOfContainer(target)) {
       var url = target.attr('url');
       var page = Number(loading_icon.attr('page'));
-      var date = Date(loading_icon.attr('date'));
+      var date = loading_icon.attr('date');
       $.ajax({
               url: url,
               dataType: 'json',

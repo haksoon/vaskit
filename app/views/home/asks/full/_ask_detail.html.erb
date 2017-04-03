@@ -105,6 +105,10 @@
       {{= askResultTemplate({ type: "전체", left_count: left_count, right_count: right_count, total_count: total_count }) }}
     </div>
     <div class="vs_result_detail">
+      <div>
+        <div>{{= askResultTemplate({ type: '남성', left_count: 0, right_count: 0, total_count: 0 }) }}</div>
+        <div>{{= askResultTemplate({ type: '여성', left_count: 0, right_count: 0, total_count: 0 }) }}</div>
+      </div>
     </div>
     <div class="vs_result_detail_btn" onclick="toggle_vote_detail($(this));">
       <span>투표결과 상세보기 <i class="fa fa-caret-down"></i></span>
@@ -420,8 +424,8 @@
                     notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
                   },
                   success: function(data) {
-                    var detail_vote_count = data.detail_vote_count;
                     var html = '';
+                    var detail_vote_count = data.detail_vote_count;
                     var gender_total_count = detail_vote_count.left.male_count + detail_vote_count.right.male_count;
                         gender_total_count += detail_vote_count.left.female_count + detail_vote_count.right.female_count;
                     var age_total_count = detail_vote_count.left.age_20_1_count + detail_vote_count.right.age_20_1_count;
@@ -432,11 +436,11 @@
                         age_total_count += detail_vote_count.left.age_30_3_count + detail_vote_count.right.age_30_3_count;
                         age_total_count += detail_vote_count.left.etc_count + detail_vote_count.right.etc_count;
 
-                    html += '<div style="border-top: 1px dashed #eee;">';
+                    html += '<div>';
                     html += '<div>' + askResultTemplate({ type: '남성', left_count: detail_vote_count.left.male_count, right_count: detail_vote_count.right.male_count, total_count: gender_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '여성', left_count: detail_vote_count.left.female_count, right_count: detail_vote_count.right.female_count, total_count: gender_total_count }) + '</div>';
                     html += '</div>';
-                    html += '<div style="border-top: 1px dashed #eee;">';
+                    html += '<div>';
                     html += '<div>' + askResultTemplate({ type: '20초', left_count: detail_vote_count.left.age_20_1_count, right_count: detail_vote_count.right.age_20_1_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '20중', left_count: detail_vote_count.left.age_20_2_count, right_count: detail_vote_count.right.age_20_2_count, total_count: age_total_count }) + '</div>';
                     html += '<div>' + askResultTemplate({ type: '20후', left_count: detail_vote_count.left.age_20_3_count, right_count: detail_vote_count.right.age_20_3_count, total_count: age_total_count }) + '</div>';
