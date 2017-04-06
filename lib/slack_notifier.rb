@@ -2,27 +2,15 @@ module SlackNotifier
   require 'slack-notifier'
   WEBHOOK_URL = YAML.load_file(Rails.root.join('config/slack.yml'))['webhook_url']
 
-  def slack_notifier(channel, title, message, color)
+  def slack_notifier(channel, title, message, color = 'good')
     notifier = Slack::Notifier.new WEBHOOK_URL, channel: channel
-    color = 'good' if color.nil?
     notifier.post text: title,
                   fallback: title,
                   attachments: [{
-                    fallback: title,
+                    fallback: message,
+                    color: color,
                     text: message,
-                    color: color
-                  }]
-  end
-
-  def slack_notifier_alba(channel, title, message, color)
-    notifier = Slack::Notifier.new WEBHOOK_URL, channel: channel
-    color = 'good' if color.nil?
-    notifier.post text: title,
-                  fallback: title,
-                  attachments: [{
-                    fallback: title,
-                    text: message,
-                    color: color
+                    mrkdwn_in: ['text']
                   }]
   end
 
@@ -54,7 +42,9 @@ module SlackNotifier
     message += "\n[어드민 페이지로 이동](http://vaskit.kr/admin/analysis)"
     color = 'good'
     notifier.post text: title,
+                  fallback: title,
                   attachments: [{
+                    fallback: message,
                     color: color,
                     text: message,
                     mrkdwn_in: ['text']

@@ -51,11 +51,12 @@ class Users::SessionsController < Devise::SessionsController
   # GET /users/alarm_check.json
   def alarm_check
     if current_user
+      ask_tmp = !AskTmp.find_by(user_id: current_user.id).nil?
       alarms = Alarm.where(user_id: current_user.id)
                     .order(updated_at: :desc).limit(20)
       alarm_count = alarms.pluck(:is_read).count(false)
     end
-    render json: { current_user: current_user, alarm_count: alarm_count }
+    render json: { current_user: current_user, ask_tmp: ask_tmp, alarm_count: alarm_count }
   end
 
   # GET /users
@@ -103,7 +104,7 @@ class Users::SessionsController < Devise::SessionsController
   def get_my_recent_ask
     if current_user
       my_ask = Ask.where(user_id: current_user.id, be_completed: false)
-                  .order(updated_at: :desc).limit(1)
+                  .order(updated_at: :desc).first
                   .as_json(include: [:left_ask_deal, :right_ask_deal])
     end
     render json: { my_ask: my_ask }

@@ -29,7 +29,7 @@
               error: function() {
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
-              success: function (data){
+              success: function (data) {
                 open_full_view(imageCropTemplate({ preview_image_url: data.preview_image_url }));
                 init_image_cropper();
               },
@@ -71,20 +71,11 @@
         ready: function(e) {
           if (is_circle) $('.cropper-view-box').addClass('circle');
         },
-        cropstart: function(e) {
-          // 한손 터치 시작시 1회 발생
-        },
-        cropmove: function(e) {
-          // 한손 터치 이동시 연속적으로 발생
-        },
-        cropend: function(e) {
-          // 한손 터치 종료시 1회 발생
-        },
-        zoom: function(e) {
-          // zoom 조절시 연속적으로 발생
-        },
-        crop: function(e) {
-          // 모든 행위에서 연속적으로 발생 (끝판왕임, 시작시 autoCrop 포함)
+        // cropstart: function(e) {}, // 한손 터치 시작시 1회 발생
+        // cropmove: function(e) {},  // 한손 터치 이동시 연속적으로 발생
+        // cropend: function(e) {},   // 한손 터치 종료시 1회 발생
+        // zoom: function(e) {},      // zoom 조절시 연속적으로 발생
+        crop: function(e) {        // 모든 행위에서 연속적으로 발생 (끝판왕임, 시작시 autoCrop 포함)
           set_image_crop_data(e);
         }
       };

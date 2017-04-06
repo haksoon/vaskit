@@ -118,7 +118,7 @@
       <div id="footer" class="layout footer" ontouchmove="return false;">
         <a href="/collections" class="tab seg1" onclick="go_seg(1); return false;"><i class="tab_icon vaskit_icon"></i></a>
         <a href="/search" class="tab seg2" onclick="go_seg(2); return false;"><i class="tab_icon vaskit_icon"></i></a>
-        <a href="/asks/new" class="tab seg3" onclick="if (visitor_check()) { ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 질문작성탭 진입', 1); } else { go_url('ask_form'); } return false;"><i class="tab_icon vaskit_icon"></i></a>
+        <a href="/asks/new" class="tab seg3" onclick="if (visitor_check()) { ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 질문작성탭 진입', 1); } else { go_url('ask_form'); } return false;"><i class="tab_icon vaskit_icon"></i><i id="ask_tmp_badge" class="tab_badge animated swing"></i></a>
         <a id="my_tab" href="/users" class="tab seg4" onclick="go_seg(4); return false;"><i class="tab_icon vaskit_icon"></i><i id="my_badge" class="tab_badge animated swing"></i></a>
         <a id="login_tab" href="/landing" class="tab login" onclick="ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 로그인탭 클릭', 1); go_url('landing'); return false;"><i class="tab_icon vaskit_icon"></i></a>
       </div>
@@ -141,6 +141,7 @@
       <%= render partial: 'home/asks/full/ask_detail' %>
       <%= render partial: 'home/asks/partial/votes' %>
       <%= render partial: 'home/asks/partial/comments' %>
+      <%= render partial: 'home/asks/partial/comment_input' %>
       <%= render partial: 'home/asks/partial/ask_image' %>
       <%= render partial: 'home/common/partial/endless_loading' %>
       <%= render partial: 'home/common/full/menu' %>

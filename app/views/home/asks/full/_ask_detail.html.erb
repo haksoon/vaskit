@@ -133,9 +133,9 @@
     <div class="ask_message">
       {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
     </div>
-    <div class="ask_likes">
+    <div class="ask_like_span">
       {{ if (ask.ask_likes && ask.ask_likes.length > 0) { }}
-        {{= askLikeTemplate({ recent_user: ask.ask_likes[ask.ask_likes.length-1].user.string_id, ask_like_count: ask.ask_likes.length }) }}
+        {{= askLikeTemplate({ recent_user: ask.ask_likes[ask.ask_likes.length-1].user, ask_like_count: ask.ask_likes.length }) }}
       {{ } }}
     </div>
     <div class="ask_message_menu">
@@ -148,7 +148,8 @@
           <div class="ask_menu_btn" onclick="$(this).prev().removeClass('fa-rotate-90'); $(this).removeClass('on');">
             <span onclick="go_url('ask_form', {{= ask.id }});">질문 수정</span>
             &middot;
-            <span onclick="show_ask_complete('{{= escape(JSON.stringify(ask)) }}');">질문 종료</span>
+            {{ var ask_to_be_completed = { ask_id: ask.id, left_ask_deal_id: ask.left_ask_deal_id, right_ask_deal_id: ask.right_ask_deal_id, left_ask_deal_img_src: get_image_url(ask.left_ask_deal, 'ask_deals', 'normal'), right_ask_deal_img_src: get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') } }}
+            <span onclick="show_ask_complete('{{= escape(JSON.stringify(ask_to_be_completed)) }}');">질문 종료</span>
           </div>
         {{ } }}
       {{ } else { }}
@@ -234,82 +235,20 @@
 
 <script type="text/template" id="askLikeTemplate">
   {{ if (recent_user !== null) { }}
-    <div class="animated slideInUp">
+    {{ var string_id }}
+    {{ if (current_user && current_user.id === recent_user.id) { }}
+      {{ string_id = '회원' }}
+    {{ } else { }}
+      {{ string_id = recent_user.string_id }}
+    {{ } }}
+    <div class="animated fadeInUp">
       {{ if (ask_like_count == 1) { }}
-        <i class="fa fa-heart animated tada"></i> <span>{{= recent_user }}님</span>이 이 질문에 공감합니다
+        <i class="fa fa-heart animated tada"></i> <span>{{= string_id }}님</span>이 이 질문에 공감합니다
       {{ } else { }}
-        <i class="fa fa-heart animated tada"></i> <span>{{= recent_user }}님</span>님 외 <span>{{= ask_like_count - 1 }}명</span>이 이 질문에 공감합니다
+        <i class="fa fa-heart animated tada"></i> <span>{{= string_id }}님 외 {{= ask_like_count - 1 }}명</span>이 이 질문에 공감합니다
       {{ } }}
     </div>
   {{ } }}
-</script>
-
-<script type="text/template" id="commentListTemplate">
-  <div class="comment ask_{{= ask.id }}">
-    <div class="comment_title">
-      <div class="comment_title_left">
-        <img class="comment_title_img left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-        A제품
-      </div>
-      <div class="comment_title_right">
-        B제품
-        <img class="comment_title_img right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-      </div>
-    </div>
-    {{ var show_comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false }) }}
-    <ul class="comment_list {{= show_comments.length === 0 ? 'blank' : '' }}">
-      {{= commentsTemplate({ ask: ask, comments: ask.comments, like_comments: like_comments }) }}
-    </ul>
-  </div>
-</script>
-
-<script type="text/template" id="commentInputTemplate">
-  {{ var vote_direction = 'left' }}
-  {{ if (current_user && current_user.id == ask.user_id) { }}
-  {{ } else if (current_user) { }}
-    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
-      {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
-    {{ } }}
-  {{ } else { }}
-    {{ var my_votes = [] }}
-    {{ var visitor_votes = $.cookie('visitor_votes') }}
-    {{ var votes_array = (visitor_votes == null || visitor_votes == '') ? [] : visitor_votes.split('.') }}
-    {{ for (var i=0; i < votes_array.length; i++) { }}
-      {{ var vote = votes_array[i] }}
-      {{ vote = JSON.parse(vote) }}
-      {{ my_votes.push(vote) }}
-    {{ } }}
-    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
-      {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
-    {{ } }}
-  {{ } }}
-  <div class="container bottom comment_input_box ask ask_{{= ask.id }}" ontouchmove="return false;">
-      <div class="comment_input_init" onclick="new_comment();">
-        <div class="comment_input_bubble">
-          <div class="hashtag_container">
-            <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;" onscroll="window.event.cancelBubble = true;"></textarea>
-            <div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}" onclick="window.event.cancelBubble = false;" ontouchstart="window.event.cancelBubble = false;" ontouchmove="window.event.cancelBubble = false;">
-              <div class="hashtag_highlights"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="comment_input_btn comment_input_counter"></div>
-      <div class="comment_input_btn comment_input_menu {{= vote_direction == 'right' ? 'right' : 'left' }}" onclick="toggle_comment($(this));" left="{{= vote_direction == 'right' ? '' : 'true' }}">
-        <div class="toggle_btn_background">
-          <span class="toggle_btn_on"></span>
-          <span class="toggle_btn_text left">A</span>
-          <span class="toggle_btn_text right">B</span>
-        </div>
-      </div>
-      <div class="comment_input_btn comment_input_submit">
-        <div class="submit_btn">
-          <span class="submit_btn_text">전송</span>
-        </div>
-      </div>
-  </div>
 </script>
 
 <script>
@@ -317,8 +256,6 @@
   var askDetailBodyTemplate = _.template($('#askDetailBodyTemplate').html());
   var askDealsTableTemplate = _.template($('#askDealsTableTemplate').html());
   var askLikeTemplate = _.template($('#askLikeTemplate').html());
-  var commentListTemplate = _.template($('#commentListTemplate').html());
-  var commentInputTemplate = _.template($('#commentInputTemplate').html());
 
   function show_ask(ask_id) {
     var url = '/asks/' + ask_id;
@@ -362,8 +299,8 @@
       var all_ask_like_texts = all_ask_divs.find('.ask_like_text').not(current_ask_like_texts);
       var all_ask_like_counts = all_ask_divs.find('.ask_like_count').not(current_ask_like_counts);
 
-      var current_ask_likes = current_ask_divs.find('.ask_likes');
-      var all_ask_likes = all_ask_divs.find('.ask_likes').not(current_ask_likes);
+      var current_ask_like_spans = current_ask_divs.find('.ask_like_span');
+      var all_ask_like_spans = all_ask_divs.find('.ask_like_span').not(current_ask_like_spans);
 
       $.ajax({
               url: '/asks/' + ask_id + '/like.json',
@@ -387,8 +324,13 @@
                 }
                 current_ask_like_counts.html(data.ask_like_count);
                 all_ask_like_counts.html(data.ask_like_count);
-                current_ask_likes.html(askLikeTemplate({ recent_user: data.recent_user, ask_like_count: data.ask_like_count }));
-                all_ask_likes.html(askLikeTemplate({ recent_user: data.recent_user, ask_like_count: data.ask_like_count }));
+                if (data.ask_like_count === 0) {
+                  current_ask_like_spans.animateCssEmpty('fadeOutDown');
+                  all_ask_like_spans.empty();
+                } else {
+                  current_ask_like_spans.html(askLikeTemplate({ recent_user: data.recent_user, ask_like_count: data.ask_like_count }));
+                  all_ask_like_spans.html(askLikeTemplate({ recent_user: data.recent_user, ask_like_count: data.ask_like_count }));
+                }
               }
       });
     }
@@ -468,14 +410,14 @@
     }
   }
 
-  function show_ask_complete(ask) {
-    ask = JSON.parse(unescape(ask));
+  function show_ask_complete(ask_to_be_completed) {
+    ask_to_be_completed = JSON.parse(unescape(ask_to_be_completed));
     var options = {
                 menus: [
                   {
                     description: '어떤 제품을 선택하셨나요?',
-                    name: '<div><img src="' + get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') + '" ask-deal-id="' + ask.left_ask_deal_id + '" direction="true"></div>' +
-                          '<div><img src="' + get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') + '" ask-deal-id="' + ask.right_ask_deal_id + '"></div>' +
+                    name: '<div><img src="' + ask_to_be_completed.left_ask_deal_img_src + '" ask-deal-id="' + ask_to_be_completed.left_ask_deal_id + '" direction="true"></div>' +
+                          '<div><img src="' + ask_to_be_completed.right_ask_deal_img_src + '" ask-deal-id="' + ask_to_be_completed.right_ask_deal_id + '"></div>' +
                           '<span></span>',
                     id: 'ask_complete_ask_deal_select'
                   },
@@ -494,7 +436,7 @@
                 bottoms: [
                   {
                     name: '질문 종료하기',
-                    func: 'submit_ask_complete(' + ask.id + ');',
+                    func: 'submit_ask_complete(' + ask_to_be_completed.ask_id + ');',
                     id: 'submit_ask_complete',
                     class: 'confirmation not_ready'
                   },
@@ -635,6 +577,8 @@
     } else if (star_point === '' || star_point === '0') {
       notify('투표의 만족도를 알려주세요');
     } else {
+      var all_ask_thumbnails = $('#main_view').find('.ask.ask_thumbnail.ask_' + ask_id);
+      var all_ask_details = $('#main_view').find('.ask.ask_detail.ask_' + ask_id);
       $.ajax({
             url: '/asks/' + ask_id,
             dataType: 'json',
@@ -645,11 +589,8 @@
             },
             success: function(data) {
               notify('질문이 종료되었습니다');
-              var all_ask_thumbnails = $('#main_view').find('.ask.ask_thumbnail.ask_' + ask_id);
-              var all_ask_details = $('#main_view').find('.ask.ask_detail.ask_' + ask_id);
               all_ask_thumbnails.replaceWith(askThumbnailTemplate({ ask: data.ask }));
               all_ask_details.replaceWith(askDetailTemplate({ ask: data.ask, already_like: data.already_like, like_comments: data.like_comments }));
-              history.back();
             },
             beforeSend: function() {
               loadingStart();

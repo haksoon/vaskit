@@ -261,7 +261,7 @@ function seg_init(seg_id) {
     ga('send', 'event', '검색탭', '검색탭 진입', 1);
   } else if (seg_id === 4) {
     user_profile_on();
-    ga('send', 'event', '마이탭', '마이탭 진입', current_user.string_id, 1);
+    if (current_user) ga('send', 'event', '마이탭', '마이탭 진입', current_user.string_id, 1);
   }
 }
 
@@ -410,11 +410,11 @@ function removeIOSKeyPadEffectOnFocus(e) {
       if (st > 0) {
         th = wh - st;
         if (!userApp) th += 10;
-        $('html, body').css({ height: th });
-        window.scrollTo(0, 0);
       }
-    }, 1);
+    }, 10);
     setTimeout(function() {
+      $('html, body').stop().animate({ height: th }, 150);
+      window.scrollTo(0, 0);
       clearInterval(iOSKeypadCheck);
     }, 500);
   }
@@ -425,7 +425,7 @@ function removeIOSKeyPadEffectOnBlur(e) {
     clearInterval(iOSKeypadCheck);
     setTimeout(function() {
       var th = window.innerHeight;
-      $('html, body').css({ height: th });
+      $('html, body').stop().animate({ height: th }, 50);
       window.scrollTo(0, 0);
     }, 50);
   }
@@ -527,6 +527,8 @@ function loadingProgress() {
 var alarm_check_counter;
 function alarm_check(last_alarm_count) {
   var alarm_count = last_alarm_count === undefined ? 0 : last_alarm_count;
+  var ask_badge = $('#ask_tmp_badge');
+  var alarm_badge = $('#my_badge');
   $.ajax({
     url: '/users/alarm_check.json',
     dataType: 'json',
@@ -542,7 +544,8 @@ function alarm_check(last_alarm_count) {
       } else {
         $('#login_tab').removeClass('visitor');
       }
-      if (alarm_count > 0) { $('.tab_badge').addClass('on').animateCss('wobble'); } else { $('.tab_badge').removeClass('on'); }
+      if (data.ask_tmp) { ask_badge.addClass('on').animateCss('wobble'); } else { ask_badge.removeClass('on'); }
+      if (alarm_count > 0) { alarm_badge.addClass('on').animateCss('wobble'); } else { alarm_badge.removeClass('on'); }
       if (last_alarm_count !== undefined && alarm_count > last_alarm_count) {
         user_alarms_on();
         if (!window.HybridApp) { notify('새로운 알림이 도착했습니다!', "go_seg(4); $('#footer').removeClass('hide'); open_user_alarms();"); }

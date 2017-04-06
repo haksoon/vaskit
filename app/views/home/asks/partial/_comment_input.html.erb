@@ -1,0 +1,422 @@
+<script type="text/template" id="commentInputTemplate">
+  {{ var vote_direction = 'left' }}
+  {{ if (current_user && current_user.id == ask.user_id) { }}
+  {{ } else if (current_user) { }}
+    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
+    {{ } }}
+  {{ } else { }}
+    {{ var my_votes = [] }}
+    {{ var visitor_votes = $.cookie('visitor_votes') }}
+    {{ var votes_array = (visitor_votes == null || visitor_votes == '') ? [] : visitor_votes.split('.') }}
+    {{ for (var i=0; i < votes_array.length; i++) { }}
+      {{ var vote = votes_array[i] }}
+      {{ vote = JSON.parse(vote) }}
+      {{ my_votes.push(vote) }}
+    {{ } }}
+    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
+    {{ if (my_vote !== undefined) { }}
+      {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
+    {{ } }}
+  {{ } }}
+  <div class="container bottom comment_input_box ask ask_{{= ask.id }}" ontouchmove="return false;">
+      <div class="comment_input_init" onclick="new_comment();">
+        <div class="comment_input_bubble">
+          <div class="hashtag_container">
+            <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;" onscroll="window.event.cancelBubble = true;"></textarea>
+            <div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}" onclick="window.event.cancelBubble = false;" ontouchstart="window.event.cancelBubble = false;" ontouchmove="window.event.cancelBubble = false;">
+              <div class="hashtag_highlights"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment_input_btn comment_input_counter"></div>
+      <div class="comment_input_btn comment_input_menu {{= vote_direction == 'right' ? 'right' : 'left' }}" onclick="toggle_comment($(this));" left="{{= vote_direction == 'right' ? '' : 'true' }}">
+        <div class="toggle_btn_background">
+          <span class="toggle_btn_on"></span>
+          <span class="toggle_btn_text left">A</span>
+          <span class="toggle_btn_text right">B</span>
+        </div>
+      </div>
+      <div class="comment_input_btn comment_input_submit">
+        <div class="submit_btn">
+          <span class="submit_btn_text">전송</span>
+        </div>
+      </div>
+  </div>
+</script>
+
+<script type="text/template" id="commentWritingSignTemplate">
+  {{ var direction = is_left ? 'left' : 'right' }}
+  {{ var reply = is_reply ? 'reply' : '' }}
+  <li class="comment_box is_writing {{= direction }} {{= reply }} clearfix" onclick="cancle_comment_writing();">
+    {{ if (is_reply) { }}
+      <i class="fa fa-reply comment_reply_icon"></i>
+    {{ } }}
+    <div class="comment_writing_sign">
+      <img class="comment_writing_pic" src="{{= get_avatar(current_user) }}">
+      <span class="comment_writing_arrow"></span>
+      <span class="comment_writing_user_id">{{= current_user ? current_user.string_id : '' }}</span>
+      <span class="comment_writing_label">{{= label }}</span>
+      <span class="comment_writing_cancle">&times; 취소</span>
+    </div>
+  </li>
+</script>
+
+<script>
+  var commentInputTemplate = _.template($('#commentInputTemplate').html());
+  var commentWritingSignTemplate = _.template($('#commentWritingSignTemplate').html());
+
+  function new_comment() {
+    var current_wrapper = $('#main_view').find('.seg.on').find('.wrapper').last();
+    var current_comment_container = current_wrapper.find('.container.bottom');
+    var current_comment_input_init = current_comment_container.find('.comment_input_init');
+    var current_comment_input = current_comment_container.find('.comment_input');
+
+    current_comment_input.val('');
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('new'); }).click();
+  }
+
+  function reply_comment(comment_id) {
+    var current_wrapper = $('#main_view').find('.seg.on').find('.wrapper').last();
+    var current_comment_container = current_wrapper.find('.container.bottom');
+    var current_comment_input_init = current_comment_container.find('.comment_input_init');
+    var current_comment_input = current_comment_container.find('.comment_input');
+
+    current_comment_input.val('');
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('reply', comment_id); }).click();
+  }
+
+  function edit_comment(comment_id) {
+    var current_wrapper = $('#main_view').find('.seg.on').find('.wrapper').last();
+    var current_comment_container = current_wrapper.find('.container.bottom');
+    var current_comment_input_init = current_comment_container.find('.comment_input_init');
+    var current_comment_input = current_comment_container.find('.comment_input');
+
+    var current_comment_box = current_wrapper.find('.comment_box.' + comment_id).last();
+    var current_comment_html = current_comment_box.find('.comment_content').html().trim().replace(new RegExp('<br>', 'g'), '\n');
+    var current_comment_content = $(document.createElement('div')).html(current_comment_html).text();
+
+    current_comment_input.val(current_comment_content);
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('edit', comment_id); }).click();
+  }
+
+  function cancle_comment_writing() {
+    var current_wrapper = $('#main_view').find('.seg.on').find('.wrapper').last();
+    var current_comment_container = current_wrapper.find('.container.bottom');
+    var current_comment_input_init = current_comment_container.find('.comment_input_init');
+    var hashtag_highlights = current_comment_container.find('.hashtag_highlights');
+    var current_comment_input = current_comment_container.find('.comment_input');
+    var current_comment_lists = current_wrapper.find('.comment_list');
+    var is_writing_box = current_wrapper.find('.comment_box.is_writing');
+    var current_comment_input_submit = current_comment_container.find('.comment_input_submit');
+    var current_comment_input_submit_btn_text = current_comment_input_submit.find('.submit_btn_text');
+
+    current_comment_lists.find('.comment_box.hidden').removeClass('hidden');
+    is_writing_box.remove();
+    hashtag_highlights.html('');
+    current_comment_input.val('').removeClass('filled');
+    current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('new'); });
+    current_comment_input_submit.removeClass('ready').off('click');
+    current_comment_input_submit_btn_text.html('전송');
+  }
+
+  function comment_input_activate(comment_type, comment_id) {
+    var current_wrapper = $('#main_view').find('.seg.on').find('.wrapper').last();
+    var current_ask_container = current_wrapper.find('.container.main');
+    var ask_box = current_ask_container.find('.ask');
+    var ask_id = Number(ask_box.attr('ask-id'));
+    var ask_user_id = Number(ask_box.attr('ask-user-id'));
+    var current_comment_container = current_wrapper.find('.container.bottom');
+    var current_comment_input_init = current_comment_container.find('.comment_input_init');
+    var current_comment_input = current_comment_container.find('.comment_input');
+    var current_comment_input_menu = current_comment_container.find('.comment_input_menu');
+    var current_comment_input_counter = current_comment_container.find('.comment_input_counter');
+    var current_comment_input_submit = current_comment_container.find('.comment_input_submit');
+    var current_comment_input_submit_btn_text = current_comment_input_submit.find('.submit_btn_text');
+    var current_comment_lists = current_wrapper.find('.comment_list');
+    var ask_comment_count = parseInt(current_ask_container.find('.ask_comment_count').html());
+    var is_vote = ask_box.hasClass('is_voted');
+    var is_writing_box = current_wrapper.find('.comment_box.is_writing');
+    var is_writing = is_writing_box.length > 0;
+
+    if (!is_vote) {
+      notify('먼저 투표에 참여해주세요!');
+      current_ask_container.scroll_to(0);
+    } else {
+      if (visitor_check()) {
+        ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 댓글 작성 시도', 1);
+      } else {
+        scroll_init(comment_type, comment_id);
+        bubble_init(comment_type, comment_id);
+        toggle_init(comment_type, comment_id);
+        send_init(comment_type, comment_id);
+        input_init(comment_type, comment_id);
+      }
+    }
+
+    function scroll_init(comment_type, comment_id) {
+      setTimeout(function() {
+        var st_now, target_comment_box, target_comment_box_top, target_comment_box_height, st_destination;
+        if (comment_type == 'new') {
+          st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
+          target_comment_box = current_ask_container.find('.comment_box').last();
+          target_comment_box_top = target_comment_box.offset().top;
+          target_comment_box_height = target_comment_box.height();
+          st_destination = st_now + target_comment_box_top + target_comment_box_height - 35;
+          current_ask_container.scroll_to(st_destination);
+        } else if (comment_type == 'edit') {
+          st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
+          target_comment_box = current_ask_container.find('.comment_box.' + comment_id).last();
+          target_comment_box_top = target_comment_box.offset().top;
+          target_comment_box_top = target_comment_box_top === 0 ? target_comment_box.next().offset().top : target_comment_box_top;
+          st_destination = st_now + target_comment_box_top - 10;
+          current_ask_container.scroll_to(st_destination);
+        } else if(comment_type == 'reply') {
+          st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
+          target_comment_box = current_ask_container.find('.comment_box.' + comment_id).last();
+          while (true) {
+            if (target_comment_box.next().hasClass('reply')) {
+              target_comment_box = target_comment_box.next();
+            } else {
+              break;
+            }
+          }
+          target_comment_box_top = target_comment_box.offset().top;
+          target_comment_box_height = target_comment_box.height();
+          st_destination = st_now + target_comment_box_top - 10;
+          current_ask_container.scroll_to(st_destination);
+        }
+      }, 750);
+    }
+
+    function bubble_init(comment_type, comment_id) {
+      var target_comment_lists, target_comment_boxes, is_left, is_reply;
+      current_comment_lists.find('.comment_box.hidden').removeClass('hidden');
+      is_writing_box.remove();
+      if (comment_type == 'new') {
+        is_left = Boolean(current_comment_input_menu.attr('left'));
+        target_comment_lists = is_left ? current_comment_lists.not('.right') : current_comment_lists.not('.left');
+        target_comment_lists.append(commentWritingSignTemplate({ label: '작성중', is_left: is_left, is_reply: false }));
+      } else if (comment_type == 'edit') {
+        target_comment_boxes = current_comment_lists.find('.comment_box.' + comment_id);
+        is_left = target_comment_boxes.hasClass('left');
+        is_reply = target_comment_boxes.hasClass('reply');
+        target_comment_boxes.addClass('hidden');
+        target_comment_boxes.after(commentWritingSignTemplate({ label: '수정중', is_left: is_left, is_reply: is_reply }));
+      } else if (comment_type == 'reply') {
+        target_comment_boxes = current_comment_lists.find('.comment_box.' + comment_id);
+        is_left = target_comment_boxes.hasClass('left');
+        while (true) {
+          if (target_comment_boxes.last().next().length > 0 && target_comment_boxes.last().next().hasClass('reply')) {
+            target_comment_boxes = target_comment_boxes.next();
+          } else {
+            break;
+          }
+        }
+        target_comment_boxes.after(commentWritingSignTemplate({ label: '답글 작성중', is_left: is_left, is_reply: true }));
+      }
+    }
+
+    function toggle_init(comment_type, comment_id) {
+      if (comment_type == 'edit' || comment_type == 'reply') {
+        var toggle_btn_is_left = Boolean(current_comment_input_menu.attr('left'));
+        var target_comment_boxes = current_comment_lists.find('.comment_box.' + comment_id);
+        var original_comment_is_left = target_comment_boxes.hasClass('left');
+        if (toggle_btn_is_left != original_comment_is_left) toggle_comment(current_comment_input_menu);
+      }
+    }
+
+    function send_init(comment_type, comment_id) {
+      if (comment_type == 'new') {
+        current_comment_input_submit_btn_text.html('전송');
+      } else if (comment_type == 'edit') {
+        current_comment_input_submit_btn_text.html('수정');
+      } else if (comment_type == 'reply') {
+        current_comment_input_submit_btn_text.html('답글');
+      }
+      current_comment_input_submit.off('click')
+                                  .on('click', function() {
+                                    send_comment(comment_type, comment_id);
+                                  });
+
+      function send_comment(comment_type, comment_id) {
+        var content = current_comment_input.val().replace(/\s*$/, ''); // 뒤 공백문자 제거
+        var is_left = Boolean(current_comment_input_menu.attr('left'));
+
+        var is_writing_box = current_wrapper.find('.comment_box.is_writing');
+
+        var all_ask_divs = $('#main_view').find('.ask.ask_' + ask_id);
+        var all_ask_comment_count_spans = all_ask_divs.find('.ask_comment_count');
+        var all_ask_comment_divs = $('#main_view').find('.comment.ask_' + ask_id);
+        var all_ask_comment_lists = is_left ? all_ask_comment_divs.find('.comment_list').not('.right') : all_ask_comment_divs.find('.comment_list').not('.left');
+
+        if (content === '' || content === null) {
+          notify('의견을 입력해주세요');
+        } else if (content.length > 250) {
+          notify('250자 이상은 입력이 불가능합니다');
+        } else {
+          $.ajax({
+            url: comment_type == 'edit' ? '/comments/' + comment_id + '.json' : '/comments.json',
+            dataType: 'json',
+            type: comment_type == 'edit' ? 'PUT' : 'POST',
+            data: { content: content, ask_id: ask_id, is_left: is_left, comment_id: comment_id },
+            // async: false,  // 코멘트 중복 전송을 방지
+            error: function() {
+              notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+            },
+            success: function(data) {
+              if (data.status == 'success') {
+                current_comment_input_init.attr('onclick', 'new_comment();');
+                current_comment_input.val('').blur();
+                current_comment_input_submit.removeClass('ready').off('click');
+                current_comment_input_submit_btn_text.html('전송');
+                if (ask_comment_count === 0) all_ask_comment_lists.removeClass('blank');
+                if (comment_type == 'edit') {
+                  current_comment_lists.find('.comment_box.' + comment_id).remove();
+                } else {
+                  ask_comment_count += 1;
+                  all_ask_comment_count_spans.html(ask_comment_count);
+                }
+                is_writing_box.replaceWith(commentTemplate({ ask: data.ask, comment: data.comment, already_like: false }));
+
+                // 첨부 이미지 관련
+              }
+            },
+            beforeSend: function() {
+              loadingStart();
+            },
+            complete: function() {
+              loadingEnd();
+            }
+          });
+        }
+      }
+    }
+
+    function input_init(comment_type, comment_id) {
+      var keyPressed = [];
+      var hashtag_container = current_comment_container.find('.hashtag_container');
+      var hashtag_highlights = current_comment_container.find('.hashtag_highlights');
+      var hashtag_backdrop = current_comment_container.find('.hashtag_backdrop');
+      current_comment_input.off('keydown keyup input scroll focus blur')
+                           .on('keydown', _.throttle(function(e) {
+                             keyPressed[e.keyCode] = true;
+                             if (keyPressed[13] && (keyPressed[17] || keyPressed[91])) {
+                               e.preventDefault();
+                               current_comment_input_submit.click();
+                             }
+                           }, 250))
+                           .on('keyup', _.throttle(function(e) {
+                             keyPressed[e.keyCode] = false;
+                             if ($(this).val().length === 0) { current_comment_input_submit.removeClass('ready'); } else { current_comment_input_submit.addClass('ready'); }
+                           }, 250))
+                           .on('input', _.throttle(function() {
+                             if (this.scrollHeight < $(window).height() / 2) {
+                               $(this).css({ height: 'auto', overflowY: 'hidden' }).height(this.scrollHeight);
+                             } else {
+                               $(this).css({ height: 'auto', overflowY: 'scroll' }).height(this.scrollHeight);
+                             }
+                             current_comment_container.height(this.scrollHeight + 32);
+                             hashtagInput($(this));
+                             var comment_input_count = $(this).val().length;
+                             current_comment_input_counter.html(comment_input_count);
+                             if (comment_input_count > 200) {
+                               if (comment_input_count > 250) { current_comment_input_counter.addClass('over'); } else { current_comment_input_counter.removeClass('over'); }
+                               current_comment_input_counter.addClass('on');
+                             } else {
+                               current_comment_input_counter.removeClass('on');
+                             }
+                           }, 100))
+                           .on('scroll', function() {
+                             $(this).css({ overflowY: 'scroll' });
+                             hashtagScroll($(this));
+                           })
+                           .on('focus', function(e) {
+                             removeIOSKeyPadEffectOnFocus(e);
+                             current_comment_lists.css({ paddingBottom: '150px' });
+                             if ($(this).height() == (50 - 32)) $(this).selectRange($(this).val().length, $(this).val().length);
+                             $(this).height(this.scrollHeight);
+                             current_comment_container.height(this.scrollHeight + 32);
+                             if ($(this).val().length > 250) current_comment_input_counter.addClass('over');
+                             $(this).removeClass('filled');
+                             hashtagInput($(this));
+                           })
+                           .on('blur', function(e) {
+                             removeIOSKeyPadEffectOnBlur(e);
+                             current_comment_lists.css({ paddingBottom: '10px' });
+                             $(this).height(50 - 32);
+                             current_comment_container.height(50);
+                             if ($(this).val().length > 250) current_comment_input_counter.removeClass('over');
+                             if ($(this).val().length === 0) {
+                               hashtag_highlights.html('');
+                               $(this).removeClass('filled');
+                             } else {
+                               $(this).addClass('filled');
+                             }
+                             $(this).attr('disabled', true);
+                           }).removeAttr('disabled').focus();
+
+      function hashtagInput(target) {
+        var text = target.val();
+        var highlightedText = applyHashtag(text);
+        hashtag_highlights.html(highlightedText);
+      }
+
+      function hashtagScroll(target) {
+        var scrollTop = target.scrollTop();
+        var scrollLeft = target.scrollLeft();
+        hashtag_backdrop.scrollTop(scrollTop);
+        hashtag_backdrop.scrollLeft(scrollLeft);
+      }
+    }
+
+  }  // end of comment_input_activate()
+
+  // function open_new_comment_menu(target) {
+  //   var ask_wrapper = target.parentsUntil(this, '.wrapper');
+  //   var comment_container = ask_wrapper.find('.container.bottom');
+  //   var comment_input = comment_container.find('.comment_input');
+  //
+  //   var is_left = Boolean(target.attr('left'));
+  //
+  //   var options = {
+  //                   menus: [
+  //                     {
+  //                       name: is_left ? '오른쪽에 댓글 달기' : '왼쪽에 댓글 달기',
+  //                       func: 'history.back(); toggle_comment();'
+  //                     },
+  //                     {
+  //                       name: '이미지 첨부하기',
+  //                       func: 'history.back(); attach_comment_image();'
+  //                     }
+  //                   ]
+  //                 };
+  //   go_url('menu', options);
+  // };
+  //
+  // function attach_comment_image() {
+  //   notify('이미지 첨부 - 준비중');
+  //   history.back();
+  // };
+
+  function toggle_comment(target) {
+    var is_left = Boolean(target.attr('left'));
+    var current_wrapper = target.parentsUntil(this, '.wrapper');
+    var current_comment_lists = current_wrapper.find('.comment_list');
+    var target_comment_lists = is_left ? current_comment_lists.not('.right') : current_comment_lists.not('.left');
+    var is_writing_box = target_comment_lists.find('.comment_box.is_writing');
+    var is_writing = is_writing_box.length > 0;
+    var is_writing_direction_left = is_writing_box.hasClass('left');
+    var is_reply = is_writing_box.hasClass('reply');
+
+    if (is_left) {
+      target.removeAttr('left').removeClass('left').addClass('right');
+      if (is_writing && is_writing_direction_left && !is_reply) is_writing_box.removeClass('left').addClass('right');
+    } else {
+      target.attr('left', true).removeClass('right').addClass('left');
+      if (is_writing && !is_writing_direction_left && !is_reply) is_writing_box.removeClass('right').addClass('left');
+    }
+  }
+</script>

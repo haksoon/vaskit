@@ -2,14 +2,14 @@
   {{ if (check_tutorial('ask')) go_url('tutorial_ask') }}
   <%= form_for(:ask, remote: true, html: {id: 'ask_form', class: 'ask_form', style: 'height: 100%;', onkeyup: 'ask_progress_check();', onchange: 'ask_progress_check();'}) do |f| %>
     <div class="container top dark" ontouchmove="return false;">
-      <span class="header_title" onclick="$(this).scroll_to();">{{= ask.id == null ? '질문 작성하기' : '질문 수정하기' }}</span>
+      <span class="header_title" onclick="$(this).scroll_to();">{{= ask.id === null ? '질문 작성하기' : '질문 수정하기' }}</span>
       <span class="ask_form_step">1 / 3 STEP</span>
-      <span class="header_btn left" onclick="back_button();">취소</span>
+      <span class="header_btn left" onclick="back_button();">종료</span>
       <span class="header_btn right submit_btn" onclick="go_url('next_ask_form', $(this));" step="1" ask-id="{{= ask.id }}">다음 <i class='fa fa-caret-right'></i></span>
     </div>
     <div class="container main has_inner">
-      <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.left_ask_deal, is_left: true, is_blank: ask.id == null ? true : false }) }}</div>
-      <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.right_ask_deal, is_left: false, is_blank: ask.id == null ? true : false }) }}</div>
+      <div class="inner step_1" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.left_ask_deal, is_left: true }) }}</div>
+      <div class="inner step_2 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardTemplate({ ask_deal: ask.right_ask_deal, is_left: false }) }}</div>
       <div class="inner step_3 next" ontouchstart="removeIOSRubberEffect($(this));">{{= askFormCardResultTemplate({ ask: ask }) }}</div>
       <div class="card_search_input_init" onclick="card_search_input_init($(this));" is-left="true" ontouchmove="return false;">
         <input class="input text_field left right card_search_input" type="text" placeholder="제품명을 검색해서 입력해보세요!" disabled>
@@ -57,10 +57,11 @@
           }
         },
         beforeSend: function() {
-          if (ask_id !== undefined) loadingStart();
+          loadingStart();
         },
         complete: function() {
-          if (ask_id !== undefined) loadingEnd();
+          loadingEnd();
+          if (ask_id === undefined) $('#ask_tmp_badge').removeClass('on');
         }
       });
     }
@@ -68,21 +69,85 @@
     return url;
   }
 
-  function hide_ask_form() {
-    history.go(1);
-    var options = {
-                description: '작성중인 내용이 삭제됩니다. 종료하시겠어요?',
-                menus: [
-                  {
-                    name: '질문 작성 종료',
-                    func: 'close_ask_form();',
-                    class: 'confirmation'
-                  }
-                ]
-              };
-    setTimeout(function() {
-      go_url('menu', options);
-    }, 50);
+  function hide_ask_form(ask_id) {
+    var options = {};
+    if (ask_id === undefined) {
+      var ask_form = $('#ask_form');
+      ask_form.find('.form_data').removeAttr('disabled');
+      var data = ask_form.serializeArray();
+      data = $.grep(data, function(obj) { return obj.value !== ''; });
+      ask_form.find('.form_data').attr('disabled', true);
+
+      if (data.length == 1) {
+        close_full_view();
+        window.onbeforeunload = null;
+        if (userApp) setAppStatusBar();
+      } else {
+        history.go(1);
+        options = {
+                    description: '작성중인 내용이 삭제됩니다. 종료하시겠어요?',
+                    menus: [
+                      {
+                        name: '작성중인 내용을 저장해둘래요',
+                        func: 'save_ask_tmp();',
+                        class: 'confirmation'
+                      },
+                      {
+                        name: '그냥 삭제할래요',
+                        func: 'close_ask_form();'
+                      }
+                    ]
+                  };
+        setTimeout(function() {
+          go_url('menu', options);
+        }, 50);
+      }
+    } else {
+      history.go(1);
+      options = {
+                  description: '수정한 내용이 반영되지 않습니다. 종료하시겠어요?',
+                  menus: [
+                    {
+                      name: '네, 그대로 놔주세요',
+                      func: 'close_ask_form();',
+                      class: 'confirmation'
+                    }
+                  ]
+                };
+      setTimeout(function() {
+        go_url('menu', options);
+      }, 50);
+    }
+  }
+
+  function save_ask_tmp() {
+    var ask_form = $('#ask_form');
+    ask_form.find('.form_data').removeAttr('disabled');
+    var data = ask_form.serializeArray();
+    data = $.grep(data, function(obj) { return obj.value !== ''; });
+    data = data.reduce(function(obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+    $.ajax({
+      url: '/ask_tmps',
+      dataType: 'json',
+      type: 'POST',
+      data: data,
+      error: function() {
+        notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+      },
+      success: function(data) {
+        close_ask_form();
+        $('#ask_tmp_badge').addClass('on').animateCss('wobble');
+      },
+      beforeSend: function() {
+        loadingStart();
+      },
+      complete: function() {
+        loadingEnd();
+      }
+    });
   }
 
   function close_ask_form() {
@@ -282,6 +347,7 @@
               }
   					},
   					beforeSend: function() {
+              ask_form.find('.form_data').attr('disabled', true);
   						loadingStart();
   					},
   					complete: function() {
@@ -314,7 +380,7 @@
       step_2_inner.addClass('next');
       step_1_inner.removeClass('prev').scrollTop(0);
       submit_btn.html('다음 <i class="fa fa-caret-right"></i>').attr('step', 1);
-      back_btn.html('취소');
+      back_btn.html('종료');
       ask_form_step.html('1 / 3 STEP');
       card_search_input_init.attr('is-left', true).removeClass('hide');
     }
@@ -335,6 +401,8 @@
       {{ } }}
     </div>
   </div>
+  {{ console.log(ask_deal) }}
+  {{ var is_blank = ask_deal.id === null ? true : false }}
   {{ if (is_blank) { }}
     <div class="ask_form_btn_div">
       <div class="ask_form_btn" onclick="$('.card_search_input_init').click();">
@@ -355,9 +423,15 @@
   {{ var deal_direction = is_left ? 'left_deal' : 'right_deal' }}
   <div class="input_container {{= is_blank ? 'hidden' : '' }}">
     <div class="ask_image_seg" onclick="ask_form_card_image_upload_click($(this));">
-      <img src="{{= get_image_url(ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-      <span class="ask_image_upload_btn {{= is_blank? '' : 'hidden' }}">이미지 업로드</span>
-      <span class="ask_image_crop_btn {{= is_left? 'left' : 'right' }}" onclick="go_url('image_edit', $(this));" img-id="" cropping-type="ask_form"><i class="fa fa-crop"></i></span>
+      {{ var img_src = '' }}
+      {{ if (ask_deal.preview_image) { }}
+        {{ img_src = get_image_url(ask_deal.preview_image, 'preview_images', 'square') }}
+      {{ } else { }}
+        {{ img_src = get_image_url(ask_deal, 'ask_deals', 'normal') }}
+      {{ } }}
+      <img src="{{= img_src }}" onerror="imgError(this);">
+      <span class="ask_image_upload_btn {{= is_blank ? '' : 'hidden' }}">이미지 업로드</span>
+      <span class="ask_image_crop_btn {{= is_left ? 'left' : 'right' }} {{= ask_deal.preview_image_id ? 'on' : '' }}" onclick="ga('send', 'event', '질문작성탭', '이미지 편집 버튼', 1); go_url('image_edit', $(this));" img-id="{{= ask_deal.preview_image_id }}" cropping-type="ask_form"><i class="fa fa-crop"></i></span>
     </div>
     <div class="input_div title" onclick="ask_form_card_input_init($(this));">
       <input class="input text_field {{= is_left? 'left' : 'right' }} form_data" type="text"
@@ -390,7 +464,7 @@
   </div>
   <div class="hidden">
     <input class="form_data image_file" type="file" name="{{= deal_direction }}[image]" value="{{= ask_deal.image }}" accept="image/*" onclick="ask_form_card_image_upload($(this));">
-    <input class="form_data preview_img_id" type="hidden" name="{{= deal_direction }}[image_id]" value="" {{= ask_deal.deal_id ? '' : 'required' }}>
+    <input class="form_data preview_img_id" type="hidden" name="{{= deal_direction }}[image_id]" value="{{= ask_deal.preview_image_id }}" {{= ask_deal.deal_id ? '' : 'required' }}>
     <input class="form_data deal_id" type="hidden" name="{{= deal_direction }}[deal_id]" value="{{= ask_deal.deal_id }}">
   </div>
 </script>
@@ -669,7 +743,7 @@
     var card_search_input_reset = ask_form.find('.card_search_input_reset');
     var card_search_input = ask_form.find('.card_search_input');
     ask_form_header_title.html('질문 작성하기');
-    if (current_step == 1) { ask_form_back_btn.html('취소'); } else { ask_form_back_btn.html('<i class="fa fa-caret-left"></i> 이전'); }
+    if (current_step == 1) { ask_form_back_btn.html('종료'); } else { ask_form_back_btn.html('<i class="fa fa-caret-left"></i> 이전'); }
     ask_form_submit_btn.removeClass('hidden');
     card_search_result_div.addClass('top').transitionEmpty();
   }
@@ -702,7 +776,7 @@
 	        },
 	        success: function(data) {
 	        	if (is_left) {
-              step_1_inner.html(askFormCardTemplate({ ask_deal: data.deal, is_left: is_left, is_blank: false }));
+              step_1_inner.html(askFormCardTemplate({ ask_deal: data.deal, is_left: is_left }));
               step_1_inner.find('.deal_id').val(data.deal.id);
               step_1_inner.find('.preview_img_id').val(data.preview_img_id);
               step_1_inner.find('img').attr('src', data.image_url).animateCss('pulse');
@@ -715,7 +789,7 @@
               step_3_inner.find('.ask_table_row.link').find('.ask_table_cell.left').html(fieldWithLink(data.deal.link));
               ga('send', 'event', '질문작성탭', 'A 상품선택 완료', 1);
 	        	} else {
-              step_2_inner.html(askFormCardTemplate({ ask_deal: data.deal, is_left: is_left, is_blank: false }));
+              step_2_inner.html(askFormCardTemplate({ ask_deal: data.deal, is_left: is_left }));
               step_2_inner.find('.deal_id').val(data.deal.id);
               step_2_inner.find('.preview_img_id').val(data.preview_img_id);
               step_2_inner.find('img').attr('src', data.image_url).animateCss('pulse');
@@ -759,30 +833,30 @@
     </div>
     <div class="clearfix">
       <div class="ask_table_row title">
-        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.title != "" && ask.left_ask_deal.title != null) ? ask.left_ask_deal.title : '입력해주세요' }}</span>
-        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.title != "" && ask.right_ask_deal.title != null) ? ask.right_ask_deal.title : '입력해주세요' }}</span>
+        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.title != "" && ask.left_ask_deal.title !== null) ? ask.left_ask_deal.title : '입력해주세요' }}</span>
+        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.title != "" && ask.right_ask_deal.title !== null) ? ask.right_ask_deal.title : '입력해주세요' }}</span>
         <i class="ask_table_icon vaskit_icon title"></i>
       </div>
       <div class="ask_table_row brand">
-        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.brand != "" && ask.left_ask_deal.brand != null) ? ask.left_ask_deal.brand : '입력해주세요' }}</span>
-        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.brand != "" && ask.right_ask_deal.brand != null) ? ask.right_ask_deal.brand : '입력해주세요' }}</span>
+        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.brand != "" && ask.left_ask_deal.brand !== null) ? ask.left_ask_deal.brand : '입력해주세요' }}</span>
+        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.brand != "" && ask.right_ask_deal.brand !== null) ? ask.right_ask_deal.brand : '입력해주세요' }}</span>
         <i class="ask_table_icon vaskit_icon brand"></i>
       </div>
       <div class="ask_table_row price">
-        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.price != "" && ask.left_ask_deal.price != null) ? numberWithCommas(ask.left_ask_deal.price) + '원' : '입력해주세요' }}</span>
-        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.price != "" && ask.right_ask_deal.price != null) ? numberWithCommas(ask.right_ask_deal.price) + '원' : '입력해주세요' }}</span>
+        <span class="ask_table_cell left text_box_short">{{= (ask.left_ask_deal.price != "" && ask.left_ask_deal.price !== null) ? numberWithCommas(ask.left_ask_deal.price) + '원' : '입력해주세요' }}</span>
+        <span class="ask_table_cell right text_box_short">{{= (ask.right_ask_deal.price != "" && ask.right_ask_deal.price !== null) ? numberWithCommas(ask.right_ask_deal.price) + '원' : '입력해주세요' }}</span>
         <i class="ask_table_icon vaskit_icon price"></i>
       </div>
       <div class="ask_table_row link">
         {{ var aLink = document.createElement('a') }}
-        {{ if (ask.left_ask_deal.link != '' && ask.left_ask_deal.link != null) { }}
+        {{ if (ask.left_ask_deal.link != '' && ask.left_ask_deal.link !== null) { }}
           {{ aLink.href = ask.left_ask_deal.link }}
           <span class="ask_table_cell left text_box_short"><a href="{{= aLink.href }}" target="_blank">{{= fieldWithBlank(aLink.host) }}</a></span>
         {{ } else { }}
           <span class="ask_table_cell left text_box_short">{{= '입력해주세요' }}</span>
         {{ } }}
         {{ var bLink = document.createElement('a') }}
-        {{ if (ask.right_ask_deal.link != '' && ask.right_ask_deal.link != null) { }}
+        {{ if (ask.right_ask_deal.link != '' && ask.right_ask_deal.link !== null) { }}
           {{ bLink.href = ask.right_ask_deal.link }}
           <span class="ask_table_cell right text_box_short"><a href="{{= bLink.href }}" target="_blank">{{= fieldWithBlank(bLink.host) }}</a></span>
         {{ } else { }}
@@ -794,19 +868,19 @@
   </div>
   <div class="input_container spec">
     <div class="clearfix">
-      <div class="input_div spec spec_1 {{= ask.spec1 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_1 {{= ask.spec1 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field left right center form_data" type="text"
                   name="ask[spec1]"
                   value="{{= ask.spec1 }}"
                   placeholder="추가입력1" disabled>
       </div>
-      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_1 sub {{= ask.spec1 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="left_deal[spec1]"
                   value="{{= ask.left_ask_deal.spec1 }}"
                   placeholder="추가입력" disabled>
       </div>
-      <div class="input_div spec spec_1 sub {{= ask.spec1 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_1 sub {{= ask.spec1 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="right_deal[spec1]"
                   value="{{= ask.right_ask_deal.spec1 }}"
@@ -815,19 +889,19 @@
       <i class="ask_table_icon vaskit_icon spec"></i>
     </div>
     <div class="clearfix">
-      <div class="input_div spec spec_2 {{= ask.spec2 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_2 {{= ask.spec2 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field left right center form_data" type="text"
                   name="ask[spec2]"
                   value="{{= ask.spec2 }}"
                   placeholder="추가입력2" disabled>
       </div>
-      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_2 sub {{= ask.spec2 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="left_deal[spec2]"
                   value="{{= ask.left_ask_deal.spec2 }}"
                   placeholder="추가입력" disabled>
       </div>
-      <div class="input_div spec spec_2 sub {{= ask.spec2 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_2 sub {{= ask.spec2 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="right_deal[spec2]"
                   value="{{= ask.right_ask_deal.spec2 }}"
@@ -836,19 +910,19 @@
       <i class="ask_table_icon vaskit_icon spec"></i>
     </div>
     <div class="clearfix">
-      <div class="input_div spec spec_3 {{= ask.spec3 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_3 {{= ask.spec3 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field left right center form_data" type="text"
                   name="ask[spec3]"
                   value="{{= ask.spec3 }}"
                   placeholder="추가입력3" disabled>
       </div>
-      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_3 sub {{= ask.spec3 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="left_deal[spec3]"
                   value="{{= ask.left_ask_deal.spec3 }}"
                   placeholder="추가입력" disabled>
       </div>
-      <div class="input_div spec spec_3 sub {{= ask.spec3 != null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
+      <div class="input_div spec spec_3 sub {{= ask.spec3 !== null ? '' : 'hidden' }}" onclick="ask_form_card_input_init($(this));">
         <input class="input text_field center form_data" type="text"
                   name="right_deal[spec3]"
                   value="{{= ask.right_ask_deal.spec3 }}"
@@ -856,7 +930,7 @@
       </div>
       <i class="ask_table_icon vaskit_icon spec"></i>
     </div>
-    {{ if (ask.spec3 == null) { }}
+    {{ if (ask.spec3 === null) { }}
       <div class="add_more_spec_btn" onclick="add_more_spec($(this));"><i class="fa fa-angle-down"></i> 추가 정보 입력하기</div>
     {{ } }}
   </div>

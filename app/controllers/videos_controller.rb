@@ -21,37 +21,17 @@ class VideosController < ApplicationController
       format.html
       format.json do
         video = @video
-        ask = Ask.find(video.ask_id)
+        ask = video.ask
 
         already_like = false
-        if current_user
-          ask_like = AskLike.where(user_id: current_user.id,
-                                   ask_id: video.ask_id)
-                            .first
-          already_like = ask_like ? true : false
-        end
-
         like_comments = []
         if current_user
-          ask_comments = ask.comments.pluck(:id)
-          like_comments = CommentLike.where(user_id: current_user.id,
-                                            comment_id: ask_comments)
+          already_like = ask.fetch_ask_likes(current_user.id)
+          like_comments = ask.fetch_comment_likes(current_user.id)
+          ask.alarm_read(current_user.id)
         end
 
-        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, { ask_likes: { include: :user } }, :ask_complete, { comments: { include: [:user, { comment_likes: { include: :user } }] } }])
-
-        if current_user
-          new_alarms = Alarm.where(ask_id: video.ask_id,
-                                   user_id: current_user.id,
-                                   is_read: false)
-          unless new_alarms.blank?
-            last_alarm = new_alarms.last
-            new_alarms.update_all(is_read: true)
-            last_alarm.record_timestamps = false
-            last_alarm.update(is_read: true)
-            last_alarm.record_timestamps = true
-          end
-        end
+        ask = ask.fetch_ask_detail
 
         render json: {
           video: video,

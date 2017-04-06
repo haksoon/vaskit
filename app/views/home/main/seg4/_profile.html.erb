@@ -76,7 +76,7 @@
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
         success: function(data) {
-          var my_ask = data.my_ask[0];
+          var my_ask = data.my_ask;
           if (my_ask !== null && my_ask !== undefined) {
             my_ask.ask_likes = [];
             my_ask.votes = [];

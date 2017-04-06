@@ -8,7 +8,6 @@ class CommentLike < ActiveRecord::Base
   after_update :reload_comment_like_count, :create_comment_like_alarm, if: :is_deleted
 
   def reload_comment_like_count
-    comment = Comment.find(comment_id)
     like_count = CommentLike.where(comment_id: comment_id)
                             .where.not(user_id: comment.user_id).count
     comment.update_columns(like_count: like_count)
@@ -16,8 +15,6 @@ class CommentLike < ActiveRecord::Base
 
   # 본인의 댓글에 대한 좋아요 알림 (alarm_4, type: like_comment)
   def create_comment_like_alarm
-    comment = Comment.find(comment_id)
-
     return if user_id == comment.user_id
     return unless comment.user.alarm_4
 

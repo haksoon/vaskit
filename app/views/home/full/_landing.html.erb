@@ -6,6 +6,7 @@
           <span class="placeholder"></span>
         </div>
       </div>
+      <div class="login_close_btn" onclick="back_button();">닫기</div>
       <div class="login_btn_area">
         <a class="login_btn facebook" href="https://www.facebook.com/dialog/oauth?client_id=<%=Facebook::CONFIG['app_id']%>&redirect_uri=<%=CONFIG['host']%>/users/facebook&scope=email,public_profile,user_birthday" onclick="login_with_FB($(this)); return false;">페이스북으로 계속하기</a>
         <a class="login_btn sign_in" href="/users/sign_in" onclick="go_url('sign_in'); return false;">로그인</a>
@@ -149,7 +150,7 @@
       signInTemplate = _.template($('#signInTemplate').html()),
       forgotPasswordTemplate = _.template($('#forgotPasswordTemplate').html());
 
-  function show_landing() {
+  function show_landing(is_logout) {
     if ($('#landing_page').length === 0) {
       open_full_view(landingTemplate());
       $('#landing_page .placeholder').unityping({
@@ -165,9 +166,14 @@
     return url;
   }
 
-  function hide_landing() {
-    notify('더 진행하시려면 로그인을 해주세요!');
-    history.go(1);
+  function hide_landing(is_logout) {
+    if (is_logout) {
+      notify('로그인을 해주세요!');
+      history.go(1);
+    } else {
+      close_full_view();
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 닫기', 1);
+    }
   }
 
   function login_success(length) {

@@ -44,34 +44,14 @@ class AsksController < ApplicationController
         ask = @ask
 
         already_like = false
-        if current_user
-          ask_like = AskLike.where(user_id: current_user.id,
-                                   ask_id: params[:id])
-                            .first
-          already_like = ask_like ? true : false
-        end
-
         like_comments = []
         if current_user
-          ask_comments = ask.comments.pluck(:id)
-          like_comments = CommentLike.where(user_id: current_user.id,
-                                            comment_id: ask_comments)
+          already_like = ask.fetch_ask_likes(current_user.id)
+          like_comments = ask.fetch_comment_likes(current_user.id)
+          ask.alarm_read(current_user.id)
         end
 
-        ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, { ask_likes: { include: :user } }, :ask_complete, { comments: { include: [:user, { comment_likes: { include: :user } }] } }])
-
-        if current_user
-          new_alarms = Alarm.where(ask_id: params[:id],
-                                   user_id: current_user.id,
-                                   is_read: false)
-          unless new_alarms.blank?
-            last_alarm = new_alarms.last
-            new_alarms.update_all(is_read: true)
-            last_alarm.record_timestamps = false
-            last_alarm.update(is_read: true)
-            last_alarm.record_timestamps = true
-          end
-        end
+        ask = ask.fetch_ask_detail
 
         render json: {
           ask: ask,
@@ -95,12 +75,12 @@ class AsksController < ApplicationController
     if ask_like.nil?
       already_like = false
       AskLike.create(user_id: current_user.id, ask_id: params[:id])
-      recent_user = current_user.string_id
+      recent_user = current_user
     else
       already_like = true
       ask_like.update(is_deleted: true)
       last_ask_like = AskLike.where(ask_id: params[:id]).last
-      recent_user = last_ask_like.user.string_id unless last_ask_like.nil?
+      recent_user = last_ask_like.user unless last_ask_like.nil?
     end
     ask_like_count = AskLike.where(ask_id: params[:id]).count
 
@@ -116,8 +96,15 @@ class AsksController < ApplicationController
       format.html
       format.json do
         if current_user
-          ask = Ask.new.as_json
-          ask['left_ask_deal'] = ask['right_ask_deal'] = AskDeal.new.as_json
+          ask_tmp = AskTmp.find_by(user_id: current_user.id)
+          if ask_tmp
+            ask = ask_tmp.as_json(include: [{ left_ask_deal: { include: :preview_image } } , { right_ask_deal: { include: :preview_image } } ])
+            ask['id'] = nil
+            ask_tmp.destroy
+          else
+            ask = Ask.new.as_json
+            ask['left_ask_deal'] = ask['right_ask_deal'] = AskDeal.new.as_json
+          end
           status = 'success'
         else
           status = 'not_authorized'
@@ -153,16 +140,16 @@ class AsksController < ApplicationController
     else
       # left_ask_deal
       left_image = PreviewImage.find(left_deal_params[:image_id]).image.styles[:square]
+      left_deal_is_modify = false
       if left_deal_params[:deal_id].blank?
         left_deal = Deal.create(title: left_deal_params[:title],
                                 brand: left_deal_params[:brand],
                                 price: left_deal_params[:price],
                                 link: left_deal_params[:link],
-                                image: left_image,
                                 spec1: left_deal_params[:spec1],
                                 spec2: left_deal_params[:spec2],
-                                spec3: left_deal_params[:spec3])
-        left_deal_is_modify = false
+                                spec3: left_deal_params[:spec3],
+                                image: left_image)
       else
         left_deal = Deal.find(left_deal_params[:deal_id])
         left_deal_is_modify = true unless left_deal.title == left_deal_params[:title] && left_deal.brand == left_deal_params[:brand] && left_deal.price == left_deal_params[:price].to_i
@@ -174,24 +161,24 @@ class AsksController < ApplicationController
                                      brand: left_deal_params[:brand],
                                      price: left_deal_params[:price],
                                      link: left_deal_params[:link],
-                                     image: left_image,
                                      spec1: left_deal_params[:spec1],
                                      spec2: left_deal_params[:spec2],
                                      spec3: left_deal_params[:spec3],
+                                     image: left_image,
                                      is_modify: left_deal_is_modify)
 
       # right_ask_deal
       right_image = PreviewImage.find(right_deal_params[:image_id]).image.styles[:square]
+      right_deal_is_modify = false
       if right_deal_params[:deal_id].blank?
         right_deal = Deal.create(title: right_deal_params[:title],
                                  brand: right_deal_params[:brand],
                                  price: right_deal_params[:price],
                                  link: right_deal_params[:link],
-                                 image: right_image,
                                  spec1: right_deal_params[:spec1],
                                  spec2: right_deal_params[:spec2],
-                                 spec3: right_deal_params[:spec3])
-        right_deal_is_modify = false
+                                 spec3: right_deal_params[:spec3],
+                                 image: right_image)
       else
         right_deal = Deal.find(right_deal_params[:deal_id])
         right_deal_is_modify = true unless right_deal.title == right_deal_params[:title] && right_deal.brand == right_deal_params[:brand] && right_deal.price == right_deal_params[:price].to_i
@@ -203,10 +190,10 @@ class AsksController < ApplicationController
                                       brand: right_deal_params[:brand],
                                       price: right_deal_params[:price],
                                       link: right_deal_params[:link],
-                                      image: right_image,
                                       spec1: right_deal_params[:spec1],
                                       spec2: right_deal_params[:spec2],
                                       spec3: right_deal_params[:spec3],
+                                      image: right_image,
                                       is_modify: right_deal_is_modify)
 
       # ask
@@ -230,7 +217,7 @@ class AsksController < ApplicationController
       format.html
       format.json do
         if current_user && current_user.id == @ask.user_id
-          if @ask.be_completed == true
+          if @ask.be_completed
             status = 'already_completed'
           else
             ask = @ask.as_json(include: [:left_ask_deal, :right_ask_deal])
@@ -339,30 +326,23 @@ class AsksController < ApplicationController
   def destroy
     ask = @ask
     ask.update(be_completed: true)
-    ask_complete = AskComplete.create(user_id: current_user.id,
-                                      ask_id: ask.id,
-                                      ask_deal_id: params[:ask_deal_id],
-                                      star_point: params[:star_point],
-                                      left_vote_count: ask.left_ask_deal.vote_count,
-                                      right_vote_count: ask.right_ask_deal.vote_count)
+    AskComplete.create(user_id: current_user.id,
+                       ask_id: ask.id,
+                       ask_deal_id: params[:ask_deal_id],
+                       star_point: params[:star_point],
+                       left_vote_count: ask.left_ask_deal.vote_count,
+                       right_vote_count: ask.right_ask_deal.vote_count)
     ask.ask_notifier('complete')
 
     already_like = false
-    if current_user
-      ask_like = AskLike.where(user_id: current_user.id,
-                               ask_id: params[:id])
-                        .first
-      already_like = ask_like ? true : false
-    end
-
     like_comments = []
     if current_user
-      ask_comments = ask.comments.pluck(:id)
-      like_comments = CommentLike.where(user_id: current_user.id,
-                                        comment_id: ask_comments)
+      already_like = ask.fetch_ask_likes(current_user.id)
+      like_comments = ask.fetch_comment_likes(current_user.id)
+      ask.alarm_read(current_user.id)
     end
 
-    ask = ask.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, { ask_likes: { include: :user } }, :ask_complete, { comments: { include: [:user, { comment_likes: { include: :user } }] } }])
+    ask = ask.fetch_ask_detail
 
     render json: {
       ask: ask,

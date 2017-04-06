@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :ask_tmps, only: [:create]
+
   resources :votes, only: [:create, :destroy]
 
   resources :comments, only: [:create, :update, :destroy] do
@@ -30,6 +32,8 @@ Rails.application.routes.draw do
   end
 
   resources :collections, only: [:index, :show]
+
+  resources :videos, only: [:index, :show]
 
   resources :search, only: [:index] do
     collection do
@@ -72,8 +76,6 @@ Rails.application.routes.draw do
     get 'users/settings/edit_email_alarm', to: 'users/sessions#edit_email_alarm'
     put 'users/toggle_alarm_option', to: 'users/sessions#toggle_alarm_option'
   end
-
-  resources :videos, only: [:index, :show]
 
   resources :log_errors, only: [:create]
   resources :log_inquiries, only: [:create]

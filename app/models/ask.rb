@@ -18,6 +18,42 @@ class Ask < ActiveRecord::Base
   has_many :collection_to_asks
   has_many :collections, through: :collection_to_asks
 
+  def fetch_ask_detail
+    comment_lists =
+      comments
+      .where(comment_id: nil)#.order(like_count: :desc, id: :asc)
+      .as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                         { comment_likes: { include: { user: { only: [:id, :string_id] } } } },
+                         { reply_comments: { include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                                       { comment_likes: { include: { user: { only: [:id, :string_id] } } } }] } }])
+    as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                      :left_ask_deal,
+                      :right_ask_deal,
+                      :votes,
+                      { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
+                      :ask_complete])
+      .merge(comments: comment_lists)
+  end
+
+  def fetch_ask_likes(user_id)
+    !ask_likes.find_by(user_id: user_id).nil?
+  end
+
+  def fetch_comment_likes(user_id)
+    ask_comments = comments.pluck(:id)
+    CommentLike.where(user_id: user_id, comment_id: ask_comments)
+  end
+
+  def alarm_read(user_id)
+    new_alarms = alarms.where(user_id: user_id, is_read: false)
+    return if new_alarms.blank?
+    last_alarm = new_alarms.last
+    new_alarms.update_all(is_read: true)
+    last_alarm.record_timestamps = false
+    last_alarm.update(is_read: true)
+    last_alarm.record_timestamps = true
+  end
+
   def detail_vote_count
     age_20 = Date.new(Time.now.year - 18, 1, 1)
     age_20_1_end = Date.new(Time.now.year - 22, 1, 1)
@@ -99,7 +135,7 @@ class Ask < ActiveRecord::Base
     noti_title += "\n[질문으로 이동](#{CONFIG['host']}/asks/#{id})"
     noti_message = message.to_s
     noti_color = '#FF7200'
-    slack_notifier_alba(noti_channel, noti_title, noti_message, noti_color)
+    slack_notifier(noti_channel, noti_title, noti_message, noti_color)
   end
   handle_asynchronously :ask_notifier
 end

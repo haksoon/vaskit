@@ -158,7 +158,7 @@
               alarm_check();
               user_profile_on();
               user_alarms_on();
-              go_url('landing');
+              go_url('landing', true);
               if (userApp) getUserToken();
               ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '로그아웃', 1);
             },

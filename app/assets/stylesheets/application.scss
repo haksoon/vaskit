@@ -628,9 +628,9 @@ body {
       &.cancel { left: 50%; margin-left: -5vw; }
       &.fa-angle-right { right: 0; }
     }
-    .ask_title_label { position: absolute; max-width: 75%; font-size: 11px; font-weight: 300; color: #fff; background-color: rgba(0,0,0,0.5); transition: left .25s, right .25s;
-      &.left { top: 10%; left: -100%; padding: 5px 10px 5px 5px; border-radius: 0 10px 10px 0; }
-      &.right { bottom: 10%; right: -100%; padding: 5px 5px 5px 10px; border-radius: 10px 0 0 10px; }
+    .ask_title_label { position: absolute; max-width: 75%; font-size: 11px; font-weight: 300; color: #fff; background-color: rgba(0,0,0,0.5); transition: transform .25s;
+      &.left { top: 10%; left: 0; padding: 5px 10px 5px 5px; transform: translateX(-120%); border-radius: 0 10px 10px 0; }
+      &.right { bottom: 10%; right: 0; padding: 5px 5px 5px 10px; transform: translateX(120%); border-radius: 10px 0 0 10px; }
     }
     .ask_completed {  position: absolute; bottom: 0; width: 100%; height: 0; line-height: 30px; text-align: center; background-color: rgba(0,0,0,0.25); color: #fff; font-size: 12px; transition: height .25s;
       &.on { height: 30px; }
@@ -639,11 +639,15 @@ body {
 
   .vs_btn {
     position: absolute; top: 50%; left: 50%; margin-left: -30px; margin-top: -30px; border-radius: 50%; width: 60px; height: 60px; line-height: 60px; text-align: center;
-    color: #fff; background-color: #ff7200; box-shadow: 0 5px 10px #999;
+    color: #fff; background-color: #ff7800; box-shadow: 0 5px 10px #999;
     @include font-number; font-size: 20px; letter-spacing: 1px; text-indent: 1px;
-    animation-delay: .5s; transition: background-color .25s, color .25s, transform .25s; cursor: pointer; cursor: -webkit-grab; z-index: 10; -webkit-tap-highlight-color: transparent;
+    animation-delay: .5s; cursor: pointer; cursor: -webkit-grab; z-index: 10; opacity: 1; -webkit-tap-highlight-color: transparent;
+    transition: background-color .25s, color .25s, transform .25s, opacity .1s;
     &.left { left: 25%; }
     &.right { left: 75%; }
+    &::before, &::after { position: absolute; top: 0; width: 10px; height: 100%; font-size: 10px; font-family: "FontAwesome"; color: #ffe4a9; opacity: .5; animation-delay: 1.5s; }
+    &::before { content: '\f0d9'; left: 5px; animation: fadeInRight 1.5s 3; }
+    &::after { content: '\f0da'; right: 5px; animation: fadeInLeft 1.5s 3; }
   }
 
   .vs_help { position: absolute; bottom: -40px; width: 100%; height: 40px; text-align: center; font-size: 11px; overflow: hidden;
@@ -729,7 +733,7 @@ body {
       .ask_user_pic { top: 10px; left: 10px; width: 20px; height: 20px; }
     }
     .ask_message { padding: 0 30px 0 10px; height: 30px; line-height: 30px; }
-    .ask_message_more { position: absolute; bottom: 0; right: 0; display: block; width: 40px; height: 30px; line-height: 30px; text-align: center; font-size: 12px; color: #999; background-color: #fff; }
+    .ask_message_more { position: absolute; bottom: 0; right: 0; display: block; width: 20px; padding-right: 10px; height: 30px; line-height: 30px; text-align: center; font-size: 12px; color: #999; background-color: #fff; }
   }
 
   &.ask_detail {
@@ -737,7 +741,8 @@ body {
       .ask_user_pic { top: 16px; left: 16px; width: 30px; height: 30px; }
     }
     .ask_message { padding: 0 20px 0 60px; margin: 5px 0; line-height: 1.6; }
-    .ask_likes { padding: 0 20px 0 60px; margin: 5px 0; font-size: 11px; white-space: nowrap;
+    .ask_like_span { padding: 0 20px 0 60px; font-size: 11px; white-space: nowrap;
+      div { margin: 5px 0; }
       i { color: #ccc; }
       span { color: #999; }
     }
@@ -764,7 +769,9 @@ body {
       &.title { font-size: 14px; border-top: 1px solid #bdbdbd; }
       &.brand { font-size: 14px; color: #999; }
       &.price { font-size: 14px; color: #999; }
-      &.link { font-size: 13px; color: #ff7200; }
+      &.link { font-size: 13px; color: #ff7200;
+        .ask_table_cell a { @include ellipsis; }
+      }
       &.spec { font-size: 12px; color: #999; height: 70px;
         .ask_table_cell.center { display: block; width: 100%; height: 30px; line-height: 30px; background-color: #f9f9f9; color: #999; border-bottom: 1px solid #ccc; }
       }
@@ -794,12 +801,15 @@ body {
   }
 
   &.is_voting {
-    .ask_image_box { background-color: #ff7200;
-      .ask_title_label.left { left: 0; }
-      .ask_title_label.right { right: 0; }
+    .ask_image_box { background-color: #ccc;
+      .ask_title_label.left { transform: translateX(0); }
+      .ask_title_label.right { transform: translateX(0); }
     }
-    .ask_image { transform: scale(0.9); }
-    .vs_btn { transform: scale(1.5); cursor: -webkit-grabbing; z-index: 20; }
+    .ask_image { transform: scale(0.9); box-shadow: 0 10px 10px #999; }
+    .vs_btn { transform: scale(1.5); cursor: -webkit-grabbing; z-index: 20; opacity: .9;
+      &::before { opacity: 1; animation: fadeInRight 1s infinite; }
+      &::after { opacity: 1; animation: fadeInLeft 1s infinite; }
+    }
     .vs_help {
       .vs_before_text { top: -30px; }
       .vs_help_text { top: 0; }
@@ -828,11 +838,14 @@ body {
     }
     .ask_image { filter: brightness(50%); }
     .vs_btn {
-      background-color: #fff; color: transparent;
+      background-color: #fff;
       background: #fff url('/images/logo/logo_symbol.png') no-repeat center center;
       background-image: linear-gradient(transparent, transparent), url('/images/logo/logo_symbol.svg');
       background-size: auto 20px;
-      animation: bounce .75s 1; animation-delay: .2s;
+       color: transparent; font-size: 0;
+      animation: flip .75s 1; animation-delay: 0s; opacity: 1;
+      &::before { display: none; }
+      &::after { display: none; }
     }
     .vs_help {
       .vs_before_text { top: -30px; }
@@ -862,7 +875,7 @@ body {
 }
 
 .comment {
-  .comment_title { position: relative; height: 50px; line-height: 50px; background-color: #f9f9f9; border-top: 1px solid #bdbdbd; font-size: 11px;
+  .comment_title { position: relative; height: 50px; line-height: 50px; background-color: #f9f9f9; border-top: 1px solid #bdbdbd; border-bottom: 1px solid #ddd; font-size: 11px;
     .comment_title_left { width: 50%; height: 50px; float: left; text-align: left; }
     .comment_title_right { width: 50%; height: 50px; float: right; text-align: right; }
     .comment_title_img { padding: 10px; width: 30px; height: 30px; border-radius: 25px; }
@@ -876,9 +889,9 @@ body {
     &.right { &::before { border-left-width: 0; } }
     &.blank { &::before { top: 0; } }
 
-    .comment_box { margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s; animation: bounceIn 1s 1;
+    .comment_box { margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s;
       &.new_alarm::before { content: ''; position: absolute; top: 0; width: 2px; height: 100%; background-color: #ff7200; }
-      .comment_reply_icon { position: absolute; top: 10px; color: #dbdbdb; font-size: 10px; }
+      .comment_reply_icon { position: absolute; top: 10px; color: #ccc; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
       .comment_user { position: relative; height: 14px; margin: 4px 5px 2px; font-size: 11px; color: #999; @include font-number;
         .comment_user_profile { font-size: 10px;
@@ -889,21 +902,21 @@ body {
         .comment_user_id {
           &.vaskit { color: #ff7200; }
         }
-        .comment_menu_btn { font-size: 10px; color: #ccc;
-          .comment_like_count { color: #666; }
+        .comment_menu_btn { position: absolute; top: -10px; height: 25px; line-height: 35px; padding: 0 10px; font-size: 10px; color: #999; transform-origin: bottom center; transition: transform .25s; -webkit-tap-highlight-color: transparent;
+          &:active { transform: scale(1.2); }
         }
       }
       .comment_bubble { position: relative; display: block; line-height: 20px; padding: 10px; box-sizing: border-box; border-radius: 7px; word-break: break-all; transition: background-color .25s, color .25s, margin .25s, padding .25s;
-        .comment_bubble_arrow { position: absolute; display: inline-block; content: ''; top: 7px; border-width: 5px; border-style: solid; border-color: transparent; transition: border-color .25s; }
-        .comment_date { position: absolute; top: 10px; width: 50px; text-align: center; color: #ccc; font-size: 10px; }
+        &::before { content: ''; position: absolute; display: inline-block; top: 7px; border-width: 4px; border-style: solid; border-color: transparent; transition: border-color .25s; }
+        &::after { content: attr(date); position: absolute; top: 10px; width: 50px; text-align: center; color: #ccc; font-size: 10px; }
       }
-      .comment_likes { margin: 5px 0; font-size: 11px; white-space: nowrap;
+      .comment_like_span { font-size: 11px; white-space: nowrap;
+        div { margin: 5px 0 0; }
         i { color: #ccc; }
         span { color: #999; }
       }
 
       &.reply { margin-top: -5px; }
-      // &:last-of-type { margin-bottom: 150px; }
       &.left { text-align: left; margin-right: 45px;
         &.new_alarm::before { left: -5px; }
         &.reply { margin-left: 35px; margin-right: 45px; }
@@ -912,16 +925,16 @@ body {
         .comment_user { margin-left: 45px;
           .comment_user_profile { float: left; margin-right: 5px; margin-top: 1px; }
           .comment_user_id { float: left; }
-          .comment_menu_btn { float: right; margin-top: 1px;
+          .comment_menu_btn { right: -10px;
             .comment_like_count { float: left; }
             .comment_like_icon { margin-left: 3px; }
           }
         }
         .comment_bubble { margin-left: 40px; background-color: #fff;
-          .comment_bubble_arrow { left: -7px; border-right-color: #fff; border-top-color: #fff; }
-          .comment_date { left: -50px; }
+          &::before { left: -7px; border-right-color: #fff; border-top-color: #fff; }
+          &::after { left: -50px; }
         }
-        .comment_likes { padding-right: 10px; margin-left: 45px; text-align: right; }
+        .comment_like_span { padding-right: 10px; margin-left: 45px; text-align: right; }
       }
       &.right { text-align: right; margin-left: 45px;
         &.new_alarm::before { right: -5px; }
@@ -931,22 +944,23 @@ body {
         .comment_user { margin-right: 45px;
           .comment_user_profile { float: right; margin-left: 5px; margin-top: 1px; }
           .comment_user_id { float: right; }
-          .comment_menu_btn { float: left; margin-top: 1px;
+          .comment_menu_btn { left: -10px;
             .comment_like_count { float: right; }
             .comment_like_icon { margin-right: 3px; }
           }
         }
         .comment_bubble { margin-right: 40px; background-color: #dfdfdf;
-          .comment_bubble_arrow { right: -7px; border-left-color: #dfdfdf; border-top-color: #dfdfdf; }
-          .comment_date { right: -50px; }
+          &::before { right: -7px; border-left-color: #dfdfdf; border-top-color: #dfdfdf; }
+          &::after { right: -50px; }
         }
-        .comment_likes { padding-left: 10px; margin-right: 45px; text-align: left; }
+        .comment_like_span { padding-left: 10px; margin-right: 45px; text-align: left; }
       }
       &.vaskit {
-        .comment_bubble { background-color: #ff7200 !important; color: #fff !important; }
-        .comment_bubble_arrow { border-top-color: #ff7200 !important; }
-        &.left { .comment_bubble_arrow { border-right-color: #ff7200 !important; } }
-        &.right { .comment_bubble_arrow { border-left-color: #ff7200 !important; } }
+        .comment_bubble { background-color: #ff7200 !important; color: #fff !important;
+          &::before { border-top-color: #ff7200 !important; }
+        }
+        &.left { .comment_bubble::before { border-right-color: #ff7200 !important; } }
+        &.right { .comment_bubble::before { border-left-color: #ff7200 !important; } }
         .hash_tag { color: #ff7200 !important; background-color: #ffe4a9 !important;
           &:active { background-color: #fff !important; }
         }
@@ -954,14 +968,14 @@ body {
           &:active { background-color: #ffe4a9 !important; }
         }
       }
-      &.deleted { padding: 0 5px; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 0; transform: rotateX(720deg);
+      &.deleted { padding: 0 5px; margin-bottom: 10px; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 0; transform: rotateX(720deg);
         .comment_user_pic { display: none; }
         .comment_user { display: none; }
         .comment_bubble { background-color: transparent; color: #999; margin: 0; padding: 10px 5px;
-          .comment_bubble_arrow { border-color: transparent; }
-          .comment_date { display: none; }
+          &::before { border-color: transparent; }
+          &::after { display: none; }
         }
-        .comment_likes { display: none; }
+        .comment_like_span { display: none; }
       }
 
       &.is_writing { height: 30px; margin-top: 5px;
@@ -1306,7 +1320,7 @@ body {
 #my_page {
   .container.top { border-bottom: none; }
 }
-.user_tab { width: 50%; height: 50px; line-height: 50px; float: left; color: #999; box-sizing: border-box; border-bottom: 1px solid #bdbdbd; transition: color .5s, font-weight .5s;
+.user_tab { position: relative; width: 50%; height: 50px; line-height: 50px; float: left; color: #999; box-sizing: border-box; border-bottom: 1px solid #bdbdbd; transition: color .5s, font-weight .5s;
   &.on { color: #666; @include font-bold; }
 }
 .user_tab_active { display: block; position: absolute; top: 47px; left: 0; width: 50%; height: 3px; background-color: #ff7200; content: ''; transition: left .25s ease-in;
@@ -1503,6 +1517,7 @@ body {
     .landing_background { position: absolute; top: 0; left: 0; width: 100%; height: calc(100% - 120px); background: url('/images/logo/logo_landing.png') no-repeat center center; background-size: 200px;
       .landing_description { position: absolute; bottom: calc(50% - 60px); width: 100%; text-align: center; overflow: hidden; }
     }
+    .login_close_btn { position: absolute; top: 0; right: 0; width: 50px; height: 50px; line-height: 50px; text-align: center; font-size: 12px; }
     .login_btn_area { position: absolute; bottom: 0px; left: 0; width: 100%; height: 150px; overflow: hidden; padding: 0 10px; box-sizing: border-box; z-index: 10;
       .login_btn { display: block; height: 50px; line-height: 50px; text-align: center; border-radius: 2px; border: 1px solid #fff; box-sizing: border-box;
                     transition: background-color .1s, color .1s; -webkit-tap-highlight-color: transparent;

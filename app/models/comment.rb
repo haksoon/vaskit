@@ -1,4 +1,6 @@
 class Comment < ActiveRecord::Base
+  scope :is_show_only, -> { where(is_deleted: false) }
+
   belongs_to :user
   belongs_to :ask
   belongs_to :ask_deal
@@ -6,6 +8,7 @@ class Comment < ActiveRecord::Base
   has_many :comment_likes
   has_many :hash_tags
   has_many :alarms
+  has_many :reply_comments, -> { is_show_only }, class_name: 'Comment', foreign_key: 'comment_id'
 
   has_attached_file :image,
                     styles: { normal: '300>x' },

@@ -8,7 +8,6 @@ class AskLike < ActiveRecord::Base
   after_update :reload_ask_like_count, :create_ask_like_alarm, if: :is_deleted
 
   def reload_ask_like_count
-    ask = Ask.find(ask_id)
     like_count = AskLike.where(ask_id: ask_id)
                         .where.not(user_id: ask.user_id).count
     ask.update_columns(like_count: like_count)
@@ -16,8 +15,6 @@ class AskLike < ActiveRecord::Base
 
   # 본인의 질문에 대한 공감해요 알림 (alarm_1, type: like_ask)
   def create_ask_like_alarm
-    ask = Ask.find(ask_id)
-
     return if user_id == ask.user_id || ask.be_completed
     return unless ask.user.alarm_1
 
