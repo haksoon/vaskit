@@ -1,37 +1,23 @@
 <script type="text/template" id="commentListTemplate">
   <div class="comment ask_{{= ask.id }}">
     <div class="comment_title">
-      <div class="comment_title_left">
-        <img class="comment_title_img left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-        A제품
-      </div>
-      <div class="comment_title_right">
-        B제품
-        <img class="comment_title_img right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">
-      </div>
+      <div class="comment_title_left"><img class="comment_title_img left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">A 제품</div>
+      <div class="comment_title_right"><img class="comment_title_img right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">B 제품</div>
     </div>
-    {{ var show_comments = $.grep(ask.comments, function(obj) { return obj.is_deleted === false }) }}
-    <ul class="comment_list {{= show_comments.length === 0 ? 'blank' : '' }}">
-      {{= commentsTemplate({ ask: ask, comments: ask.comments, like_comments: like_comments }) }}
+    <ul class="comment_list {{= ask.comments.length === 0 ? 'blank' : '' }}">
+      {{= commentsTemplate({ ask: ask, comments: ask.comments }) }}
     </ul>
   </div>
 </script>
 
 <script type="text/template" id="commentsTemplate">
-  {{ var end_line_check = true }}
   {{ for (var i=0; i < comments.length; i++) { }}
     {{ var original_comment = comments[i] }}
-    {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === original_comment.id}).length === 0 ? false : true }}
-    {{ if (end_line_check && ask.be_completed && current_user && current_user.id == ask.user_id && original_comment.created_at > ask.ask_complete.created_at) { }}
-      <li class="comment_box end_line"><i class="fa fa-caret-down"></i> 여기서부터는 투표를 종료하신 이후에 작성된 댓글입니다</li>
-      {{ end_line_check = false }}
-    {{ } }}
     {{ if (original_comment.is_deleted == false || (original_comment.is_deleted && original_comment.reply_comments.length > 0)) { }}
-      {{= commentTemplate({ ask: ask, comment: original_comment, already_like: already_like }) }}
+      {{= commentTemplate({ ask: ask, comment: original_comment }) }}
       {{ for (var j=0; j < original_comment.reply_comments.length; j++) { }}
         {{ var reply_comment = original_comment.reply_comments[j] }}
-        {{ var already_like = $.grep(like_comments, function(obj) { return obj.comment_id === reply_comment.id}).length === 0 ? false : true }}
-        {{= commentTemplate({ ask: ask, comment: reply_comment, already_like: already_like }) }}
+        {{= commentTemplate({ ask: ask, comment: reply_comment }) }}
       {{ } }}
     {{ } }}
   {{ } }}
@@ -40,8 +26,12 @@
 <script type="text/template" id="commentTemplate">
   {{ var direction = ask.left_ask_deal_id == comment.ask_deal_id ? 'left' : 'right' }}
   {{ var gender = comment.user.gender ? 'male' : 'female' }}
-  {{ var reply = comment.comment_id == null ? 'original' : 'reply' }}
-  <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} {{= comment.is_deleted ? 'deleted' : '' }} {{= comment.user.id == 1 ? 'vaskit' : '' }} clearfix animated bounceIn" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" comment-user-id="{{= comment.user.id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}">
+  {{ var reply = comment.comment_id === null ? 'original' : 'reply' }}
+  {{ var is_liked_comment = false }}
+  {{ if (current_user) { }}
+    {{ is_liked_comment = $.grep(comment.comment_likes, function(obj) { return obj.user_id === current_user.id}).length === 0 ? false : true }}
+  {{ } }}
+  <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} {{= comment.is_deleted ? 'deleted' : '' }} {{= comment.user.id == 1 ? 'vaskit' : '' }} clearfix animated bounceIn" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" ask-user-id="{{= ask.user_id }}" comment-user-id="{{= comment.user_id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}">
     {{ if (reply == "reply") { }}
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}
@@ -68,7 +58,7 @@
       {{ } else { }}
         <div class="comment_menu_btn" onclick="window.event.cancelBubble = true; like_comment({{= comment.id }});">
           <span class="comment_like_count">{{= comment.like_count == 0 ? '' : numberWithCommas(comment.like_count) }}</span>
-          <i class="fa {{= already_like ? 'fa-heart' : 'fa-heart-o' }} comment_like_icon"></i>
+          <i class="fa {{= is_liked_comment ? 'fa-heart' : 'fa-heart-o' }} comment_like_icon"></i>
         </div>
       {{ } }}
     </div>
@@ -118,6 +108,38 @@
   var commentTemplate = _.template($('#commentTemplate').html());
   var commentLikeTemplate = _.template($('#commentLikeTemplate').html());
 
+  function load_ask_comments(target) {
+    var comment_list = target.parentsUntil(this, '.comment_list');
+    var read_line = comment_list.find('.read_line');
+    var ask_id = Number(target.attr('ask-id'));
+    var page = Number(target.attr('page'));
+    var date = target.attr('date');
+    $.ajax({
+              url: '/comments.json',
+              dataType: 'json',
+              type: 'GET',
+              data: { ask_id: ask_id, page: page, date: date },
+              success: function(data) {
+                read_line.remove();
+                target.after('<div class="read_line"></div>');
+                if (data.is_more_load) {
+                  target.removeClass('is_loading');
+                } else {
+                  target.remove();
+                }
+                target.after(commentsTemplate({ ask: data.ask, comments: data.comments }));
+                target.attr('page', page += 1);
+              },
+              beforeSend: function() {
+                loadingStart();
+                target.addClass('is_loading');
+  		        },
+              complete: function() {
+                loadingEnd();
+              }
+    });
+  }
+
   function open_comment_menu(target) {
     window.event.cancelBubble = true;
     var options;
@@ -131,6 +153,7 @@
       } else {
         var comment_id = target.attr('comment-id');
         var original_comment_id = target.attr('original-comment-id');
+        var ask_user_id = target.attr('ask-user-id');
         var comment_user_id = target.attr('comment-user-id');
         var comment_user_string_id = target.find('.comment_user_id').text();
         var comment_content = target.find('.comment_content').text();
@@ -150,6 +173,29 @@
                         {
                           name: '댓글 삭제',
                           func: 'history.back(); delete_comment(' + comment_id + ');'
+                        }
+                      ]
+                    };
+        } else if (ask_user_id == current_user.id) {
+          options = {
+                      description: '<b>' + comment_user_string_id + '님의 댓글</b><br>' + comment_content,
+                      menus: [
+                        {
+                          name: '채택하기',
+                          class: 'confirmation',
+                          func: 'history.back(); noitfy("준비중입니다");'
+                        },
+                        {
+                          name: already_like ? '좋아요 취소' : '좋아요',
+                          func: 'history.back(); like_comment(' + comment_id + ');'
+                        },
+                        {
+                          name: '답글 달기',
+                          func: 'history.back(); reply_comment(' + original_comment_id + ');'
+                        },
+                        {
+                          name: '신고하기',
+                          func: "history.back(); report_content('comment', " + comment_id + ');'
                         }
                       ]
                     };

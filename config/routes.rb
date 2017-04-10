@@ -16,7 +16,7 @@ Rails.application.routes.draw do
 
   resources :votes, only: [:create, :destroy]
 
-  resources :comments, only: [:create, :update, :destroy] do
+  resources :comments, only: [:index, :create, :update, :destroy] do
     member do
       post 'like'
     end

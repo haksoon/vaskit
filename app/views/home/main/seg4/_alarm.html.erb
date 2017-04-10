@@ -1,13 +1,15 @@
 <script type="text/template" id="userAlarmTemplate">
-  {{ if (alarms.length == 0) { }}
-    <div class="no_result" ontouchstart="removeIOSRubberEffect($(this));"><span class="align_middle">새로운 알림피드가 없습니다</span></div>
-  {{ } else { }}
-    <div id="alarm_list" class="alarm_list" ontouchstart="removeIOSRubberEffect($(this));">
-    {{ for (var i=0; i < alarms.length; i++) { }}
-      {{ var alarm = alarms[i] }}
-      {{= alarmCommentTemplate({alarm: alarm}) }}
+  <div id="alarm_list" class="alarm_list" ontouchstart="removeIOSRubberEffect($(this));">
+    {{ if (alarms && alarms.length > 0) { }}
+      {{ for (var i=0; i < alarms.length; i++) { }}
+        {{ var alarm = alarms[i] }}
+        {{= alarmCommentTemplate({ alarm: alarm }) }}
+      {{ } }}
+    {{ } else { }}
+      <div class="no_result"><span class="align_middle">새로운 알림피드가 없습니다</span></div>
     {{ } }}
-    </div>
+  </div>
+  {{ if (alarm_count !== null) { }}
     <div class="alarm_feed_title" ontouchmove="return false;">
       <i class="fa fa-caret-right"></i> 알림피드 <span id="alarm_feed_count" class="alarm_feed_count">{{= alarm_count == 0 ? '-' : alarm_count }}</span>
       <div id="alarm_read_all" class="alarm_read_all {{= alarm_count == 0 ? '' : 'on' }}">
@@ -93,11 +95,7 @@
           notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
         },
 		    success: function(data) {
-          if (data.alarms === null) {
-            $('#user_alarm').html('');
-          } else {
-            $('#user_alarm').html(userAlarmTemplate({ alarms: data.alarms, alarm_count: data.alarm_count }));
-          }
+          $('#user_alarm').html(userAlarmTemplate({ alarms: data.alarms, alarm_count: data.alarm_count }));
         }
     });
   }

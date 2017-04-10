@@ -11,6 +11,8 @@ class AsksController < ApplicationController
                   .per(Ask::ASK_PER)
                   .order(id: :desc)
 
+        is_more_load = asks.total_pages > params[:page].to_i
+
         if current_user
           my_votes = Vote.where(user_id: current_user.id)
           my_votes = my_votes.where('updated_at < ?', params[:date].to_datetime) unless params[:date].nil?
@@ -22,15 +24,22 @@ class AsksController < ApplicationController
         # Event Ask
         events = Event.where('started_at <= ? AND ended_at >= ?', Time.now, Time.now).order(ended_at: :desc)
         asks = asks.where.not(id: events.map(&:ask_id))
-        if params[:page].nil? || params[:page] == '1'
+        if params[:page].nil? || params[:page].to_i == 1
           events.each do |event|
             event_ask = event.ask
             asks.unshift(event_ask)
           end
         end
 
-        asks = asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
-        render json: { asks: asks }
+        asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                      { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] } ] } }] } },
+                                      { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] } ] } }] } },
+                                      :votes,
+                                      { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
+                                      :ask_complete,
+                                      :event])
+
+        render json: { asks: asks, is_more_load: is_more_load }
       end
     end
   end
@@ -42,22 +51,9 @@ class AsksController < ApplicationController
       format.html
       format.json do
         ask = @ask
-
-        already_like = false
-        like_comments = []
-        if current_user
-          already_like = ask.fetch_ask_likes(current_user.id)
-          like_comments = ask.fetch_comment_likes(current_user.id)
-          ask.alarm_read(current_user.id)
-        end
-
+        ask.alarm_read(current_user.id) if current_user
         ask = ask.fetch_ask_detail
-
-        render json: {
-          ask: ask,
-          already_like: already_like,
-          like_comments: like_comments
-        }
+        render json: { ask: ask }
       end
     end
   end
@@ -334,21 +330,11 @@ class AsksController < ApplicationController
                        right_vote_count: ask.right_ask_deal.vote_count)
     ask.ask_notifier('complete')
 
-    already_like = false
-    like_comments = []
-    if current_user
-      already_like = ask.fetch_ask_likes(current_user.id)
-      like_comments = ask.fetch_comment_likes(current_user.id)
-      ask.alarm_read(current_user.id)
-    end
+    ask.alarm_read(current_user.id) if current_user
 
     ask = ask.fetch_ask_detail
 
-    render json: {
-      ask: ask,
-      already_like: already_like,
-      like_comments: like_comments
-    }
+    render json: { ask: ask }
   end
 
   private

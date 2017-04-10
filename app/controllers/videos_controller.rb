@@ -10,7 +10,8 @@ class VideosController < ApplicationController
                       .page(params[:page])
                       .per(Video::VIDEO_PER)
                       .order(id: :desc)
-        render json: { videos: videos }
+        is_more_load = videos.total_pages > params[:page].to_i
+        render json: { videos: videos, is_more_load: is_more_load }
       end
     end
   end
@@ -22,22 +23,11 @@ class VideosController < ApplicationController
       format.json do
         video = @video
         ask = video.ask
-
-        already_like = false
-        like_comments = []
-        if current_user
-          already_like = ask.fetch_ask_likes(current_user.id)
-          like_comments = ask.fetch_comment_likes(current_user.id)
-          ask.alarm_read(current_user.id)
-        end
-
+        ask.alarm_read(current_user.id) if current_user
         ask = ask.fetch_ask_detail
-
         render json: {
           video: video,
-          ask: ask,
-          already_like: already_like,
-          like_comments: like_comments
+          ask: ask
         }
       end
     end

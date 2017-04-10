@@ -141,7 +141,7 @@
       ask_box.removeClass('is_voted').addClass('is_voting');
       vs_result_detail.removeClass('is_opened');
       vs_result_detail_btn.removeClass('is_opened');
-      target.removeClass('left right').css({
+      target.css({
         top: mouseStartY - ask_image_box_top,
         left: mouseStartX - ask_image_box_left
       });
@@ -178,7 +178,7 @@
         } else {
           ask_box.addClass('is_voted');
         }
-        target.addClass('left').clearQueue().stop().animate({
+        target.clearQueue().stop().animate({
           top: '50%',
           left: '25%'
         }, 250, 'easeOutBack');
@@ -188,7 +188,7 @@
         } else {
           ask_box.addClass('is_voted');
         }
-        target.addClass('right').clearQueue().stop().animate({
+        target.clearQueue().stop().animate({
           top: '50%',
           left: '75%'
         }, 250, 'easeOutBack');
@@ -198,7 +198,7 @@
         } else {
           ask_box.removeClass('is_voted');
         }
-        target.removeClass('left right').clearQueue().stop().animate({
+        target.clearQueue().stop().animate({
           top: '50%',
           left: '50%'
         }, 250, 'easeInOutBack');
@@ -225,37 +225,29 @@
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function(data) {
-                all_ask_box.addClass('is_voted');
                 var left_vote_count = data.ask.left_ask_deal.vote_count;
                 var right_vote_count = data.ask.right_ask_deal.vote_count;
+                var vote_id = data.vote.id;
                 if (is_left) {
+                  all_ask_box.removeClass('left right').addClass('is_voted left');
                   all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
                                 .find('.vote_graph.left').find('.on');
-                  all_vs_btns.attr('vote-id', data.vote.id)
+                  all_vs_btns.attr('vote-id', vote_id)
                              .attr('vote-direction', 'left')
-                             .removeClass('right').addClass('left').clearQueue().stop().css({
-                               top: '50%',
-                               left: '25%'
-                             });
+                             .clearQueue().stop().css({ top: '', left: '' });
                   all_comment_toggles.attr('left', true).removeClass('right').addClass('left');
                 } else {
+                  all_ask_box.removeClass('left right').addClass('is_voted right');
                   all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
                                 .find('.vote_graph.right').find('.on');
-                  all_vs_btns.attr('vote-id', data.vote.id)
+                  all_vs_btns.attr('vote-id', vote_id)
                              .attr('vote-direction', 'right')
-                             .removeClass('left').addClass('right').clearQueue().stop().css({
-                               top: '50%',
-                               left: '75%'
-                             });
+                             .clearQueue().stop().css({ top: '', left: '' });
                   all_comment_toggles.removeAttr('left').removeClass('left').addClass('right');
                 }
                 vs_result_detail.addClass('is_voted').one(transitionEnd, function() {
                   vs_result_detail.removeClass('is_voted');
                 });
-              },
-              beforeSend: function() {
-              },
-              complete: function() {
               }
       });
     } else {
@@ -277,21 +269,16 @@
       votes = votes_array.join('.');
       $.cookie('visitor_votes', votes, { expires : 30000, path : '/' });
 
-      all_ask_box.addClass('is_voted');
       if (is_left) {
+        all_ask_box.removeClass('left right').addClass('is_voted left');
         all_vs_btns.attr('vote-id', vote_id)
-                    .attr('vote-direction', 'left')
-                    .removeClass('right').addClass('left').clearQueue().stop().css({
-                      top: '50%',
-                      left: '25%'
-                    });
+                   .attr('vote-direction', 'left')
+                   .clearQueue().stop().css({ top: '', left: '' });
       } else {
+        all_ask_box.removeClass('left right').addClass('is_voted right');
         all_vs_btns.attr('vote-id', vote_id)
-                    .attr('vote-direction', 'right')
-                    .removeClass('left').addClass('right').clearQueue().stop().css({
-                      top: '50%',
-                      left: '75%'
-                    });
+                   .attr('vote-direction', 'right')
+                   .clearQueue().stop().css({ top: '', left: '' });
       }
 
       if (votes_array.length > 4) {
@@ -318,13 +305,7 @@
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function(data) {
-                all_ask_box.removeClass('is_voted');
-                all_vs_btns.removeAttr('vote-id')
-                           .removeAttr('vote-direction')
-                           .removeClass('left right').clearQueue().stop().css({
-                             top: '50%',
-                             left: '50%'
-                           });
+                update_vote();
               },
               beforeSend: function() {
                 loadingStart();
@@ -345,13 +326,14 @@
       votes = votes_array.join('.');
       $.cookie('visitor_votes', votes, { expires : 30000, path : '/' });
 
-      all_ask_box.removeClass('is_voted');
+      update_vote();
+    }
+
+    function update_vote() {
+      all_ask_box.removeClass('is_voted left right');
       all_vs_btns.removeAttr('vote-id')
                  .removeAttr('vote-direction')
-                 .removeClass('left right').clearQueue().stop().css({
-                   top: '50%',
-                   left: '50%'
-                 });
+                 .clearQueue().stop().css({ top: '', left: '' });
     }
   }
 </script>

@@ -11,7 +11,8 @@ class CollectionsController < ApplicationController
                                 .page(params[:page])
                                 .per(Collection::COLLECTION_PER)
                                 .order(id: :desc)
-        render json: { collections: collections }
+        is_more_load = collections.total_pages > params[:page].to_i
+        render json: { collections: collections, is_more_load: is_more_load }
       end
     end
   end
@@ -22,24 +23,34 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        @related_collections = @collection.find_related_collections.limit(5)
-        if @related_collections.blank?
-          @recent_asks = Ask.page(params[:page])
-                            .per(Ask::ASK_PER)
-                            .order(id: :desc)
+        collection = @collection
+        related_collections = collection.find_related_collections.limit(5)
+        if related_collections.blank?
+          recent_asks = Ask.page(params[:page])
+                           .per(Ask::ASK_PER)
+                           .order(id: :desc)
 
           if current_user
             my_votes = Vote.where(user_id: current_user.id).map(&:ask_id)
-            @recent_asks = @recent_asks.where.not(user_id: current_user.id)
-            @recent_asks = @recent_asks.where.not(id: my_votes) unless my_votes.empty?
+            recent_asks = recent_asks.where.not(user_id: current_user.id)
+            recent_asks = recent_asks.where.not(id: my_votes) unless my_votes.empty?
           end
         end
 
+        asks = collection.asks
+                         .as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                            { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                            { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                            :votes,
+                                            { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
+                                            :ask_complete,
+                                            :event])
+
         render json: {
-          collection: @collection,
-          asks: @collection.asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event]),
-          related_collections: @related_collections,
-          recent_asks: @recent_asks
+          collection: collection,
+          asks: asks,
+          related_collections: related_collections,
+          recent_asks: recent_asks
         }
       end
     end

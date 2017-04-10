@@ -302,7 +302,7 @@
       <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }} 검색결과</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
   </div>
-  {{= asksListTemplate({ asks: asks, url: url }) }}
+  {{= asksListTemplate({ asks: asks, url: url, is_more_load: is_more_load }) }}
 </script>
 
 <script>
@@ -316,12 +316,12 @@
             url: url,
             dataType: 'json',
             type: 'GET',
-            data: { type: type, keyword: keyword },
+            data: { type: type, keyword: keyword, page: 1 },
             error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
-              var html = searchResultTemplate({ type: type, keyword: keyword, asks: data.asks, url: url });
+              var html = searchResultTemplate({ type: type, keyword: keyword, asks: data.asks, url: url, is_more_load: data.is_more_load });
               create_wrapper(html);
               save_recent_search(type, keyword);
               $('#recent_search_list').html(searchPreviewListTemplate({ result: 'recent_search_list' }));

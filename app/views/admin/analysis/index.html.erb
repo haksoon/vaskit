@@ -194,16 +194,16 @@
             active_user_list = [];
 
         $.each(summaries, function(index, summary) {
-          label_list.push(summary.period);
-          visit_list.push({meta: '방문', value: summary.visit_count});
-          vote_list.push({meta: '투표', value: summary.vote_count});
-          comment_list.push({meta: '댓글', value: summary.comment_count});
-          ask_list.push({meta: '질문', value: summary.ask_count});
-          comment_like_list.push({meta: '좋아요', value: summary.comment_like_count});
-          ask_like_list.push({meta: '공감해요', value: summary.ask_like_count});
-          share_list.push({meta: '공유', value: summary.share_count});
-          signup_list.push({meta: '가입', value: summary.signup_count});
-          active_user_list.push({meta: 'Active', value: summary.active_user});
+          label_list.unshift(summary.period);
+          visit_list.unshift({meta: '방문', value: summary.visit_count});
+          vote_list.unshift({meta: '투표', value: summary.vote_count});
+          comment_list.unshift({meta: '댓글', value: summary.comment_count});
+          ask_list.unshift({meta: '질문', value: summary.ask_count});
+          comment_like_list.unshift({meta: '좋아요', value: summary.comment_like_count});
+          ask_like_list.unshift({meta: '공감해요', value: summary.ask_like_count});
+          share_list.unshift({meta: '공유', value: summary.share_count});
+          signup_list.unshift({meta: '가입', value: summary.signup_count});
+          active_user_list.unshift({meta: 'Active', value: summary.active_user});
         });
 
         var chart_options = {

@@ -632,7 +632,20 @@ body {
       &.left { top: 10%; left: 0; padding: 5px 10px 5px 5px; transform: translateX(-120%); border-radius: 0 10px 10px 0; }
       &.right { bottom: 10%; right: 0; padding: 5px 5px 5px 10px; transform: translateX(120%); border-radius: 10px 0 0 10px; }
     }
-    .ask_completed {  position: absolute; bottom: 0; width: 100%; height: 0; line-height: 30px; text-align: center; background-color: rgba(0,0,0,0.25); color: #fff; font-size: 12px; transition: height .25s;
+    .ask_deal_recent_comment {
+      position: absolute; top: 0; width: 50%; height: 100%; padding: 10px; box-sizing: border-box; display: none; align-items: center; justify-content: center; text-align: center; color: #fff; overflow: auto; animation: bounceInUp 1s 1;
+      &.left { left: 0; }
+      &.right { right: 0; }
+      .recent_comment_container { display: flex; width: 100%; max-height: 100%;
+        .recent_comment_inner { width: 100%; max-height: 100%;
+          .recent_comment_title { text-align: center; height: 15px; line-height: 15px;  margin-bottom: 5px; color: #ffe4a9; font-size: 12px; }
+          .recent_comment_content { text-align: left; height: calc(100% - 35px); line-height: 20px; font-size: 14px; overflow: scroll; }
+          .recent_comment_user_id { text-align: right; height: 15px; line-height: 15px; padding: 0 5px; color: #f4f4f4; font-size: 11px; @include font-number; }
+        }
+      }
+      .blank_recent_comment { font-size: 20px; animation: zoomIn 5s 1; }
+    }
+    .ask_completed { position: absolute; bottom: 0; width: 100%; height: 0; line-height: 30px; text-align: center; background-color: rgba(0,0,0,0.25); color: #fff; font-size: 12px; transition: height .25s;
       &.on { height: 30px; }
     }
   }
@@ -643,8 +656,6 @@ body {
     @include font-number; font-size: 20px; letter-spacing: 1px; text-indent: 1px;
     animation-delay: .5s; cursor: pointer; cursor: -webkit-grab; z-index: 10; opacity: 1; -webkit-tap-highlight-color: transparent;
     transition: background-color .25s, color .25s, transform .25s, opacity .1s;
-    &.left { left: 25%; }
-    &.right { left: 75%; }
     &::before, &::after { position: absolute; top: 0; width: 10px; height: 100%; font-size: 10px; font-family: "FontAwesome"; color: #ffe4a9; opacity: .5; animation-delay: 1.5s; }
     &::before { content: '\f0d9'; left: 5px; animation: fadeInRight 1.5s 3; }
     &::after { content: '\f0da'; right: 5px; animation: fadeInLeft 1.5s 3; }
@@ -837,6 +848,20 @@ body {
       small { font-size: 16px; }
     }
     .ask_image { filter: brightness(50%); }
+    &.left {
+      .vs_btn { left: 25%; }
+      .ask_deal_recent_comment {
+        &.left { display: none; }
+        &.right { display: flex; }
+      }
+    }
+    &.right {
+      .vs_btn { left: 75%; }
+      .ask_deal_recent_comment {
+        &.left { display: flex; }
+        &.right { display: none; }
+      }
+    }
     .vs_btn {
       background-color: #fff;
       background: #fff url('/images/logo/logo_symbol.png') no-repeat center center;
@@ -878,7 +903,10 @@ body {
   .comment_title { position: relative; height: 50px; line-height: 50px; background-color: #f9f9f9; border-top: 1px solid #bdbdbd; border-bottom: 1px solid #ddd; font-size: 11px;
     .comment_title_left { width: 50%; height: 50px; float: left; text-align: left; }
     .comment_title_right { width: 50%; height: 50px; float: right; text-align: right; }
-    .comment_title_img { padding: 10px; width: 30px; height: 30px; border-radius: 25px; }
+    .comment_title_img { padding: 10px; width: 30px; height: 30px; border-radius: 25px;
+      &.left { float: left; }
+      &.right { float: right; }
+    }
   }
   .comment_list { position: relative; margin: 0; padding: 10px 0; min-height: 50vh; list-style: none; background-color: #f2f0f0; overflow: hidden;
     &::before {
@@ -888,8 +916,12 @@ body {
     &.left { &::before { border-right-width: 0; } }
     &.right { &::before { border-left-width: 0; } }
     &.blank { &::before { top: 0; } }
+    .load_more_comments { position: relative; height: 30px; line-height: 30px; text-align: center; font-size: 12px; overflow: hidden; background-color: rgba(150, 150, 150, .5); color: #fff; margin: 5px 10px 10px; border-radius: 15px;
+      span { display: block; height: 100%; overflow: hidden; transition: transform .25s; transform: translateY(0%); }
+      &.is_loading { span { transform: translateY(-100%); } }
+    }
 
-    .comment_box { margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s;
+    .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s;
       &.new_alarm::before { content: ''; position: absolute; top: 0; width: 2px; height: 100%; background-color: #ff7200; }
       .comment_reply_icon { position: absolute; top: 10px; color: #ccc; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
@@ -999,8 +1031,11 @@ body {
           .comment_writing_arrow {margin-left: -3px; border-left-color: #ff7200; }
         }
       }
-      &.end_line { font-size: 11px; text-align: center; color: #666; }
     }
+    .read_line { height: 14px; margin-bottom: 15px; line-height: 30px; border-bottom: 1px dashed #dbdbdb; text-align: center; color: #ccc; font-size: 11px;
+      &::before { content: '\f0d7  여기까지 읽었습니다'; background-color: #f2f0f0; padding: 5px 10px; border: 1px dashed #dbdbdb; border-radius: 5px; color: #999; font-family: "FontAwesome"; }
+    }
+    .end_line { font-size: 11px; text-align: center; color: #666; border-bottom: 1px dashed #999; border-radius: 0; }
   }
 }
 
@@ -1349,9 +1384,10 @@ body {
     &.my_completed_asks, &.my_votes { width: calc(50% - 5px); float: left; }
     &.my_likes, &.my_comments { width: calc(50% - 5px); float: right; }
     &:active { background-color: #ddd; }
-    .my_history_type { display: inline-block; position: absolute; left: 10px; color: #999; }
-    .my_history_count { display: inline-block; position: absolute; right: 10px; color: #666; @include font-number;
+    .my_history_type { display: inline-block; position: absolute; left: 10px; height: 100%; color: #999; }
+    .my_history_count { display: inline-block; position: absolute; right: 10px; height: 100%; color: #666; @include font-number;
        small { color: #999; @include font-light; }
+       &::after { content: attr(count)' 개'; display: inline-block; animation: bounceInUp 1s 1; }
     }
   }
   #my_asks_in_progress {

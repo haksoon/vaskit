@@ -262,7 +262,6 @@
             dataType: 'json',
             type: comment_type == 'edit' ? 'PUT' : 'POST',
             data: { content: content, ask_id: ask_id, is_left: is_left, comment_id: comment_id },
-            // async: false,  // 코멘트 중복 전송을 방지
             error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
@@ -279,7 +278,7 @@
                   ask_comment_count += 1;
                   all_ask_comment_count_spans.html(ask_comment_count);
                 }
-                is_writing_box.replaceWith(commentTemplate({ ask: data.ask, comment: data.comment, already_like: false }));
+                is_writing_box.replaceWith(commentTemplate({ ask: data.ask, comment: data.comment }));
 
                 // 첨부 이미지 관련
               }

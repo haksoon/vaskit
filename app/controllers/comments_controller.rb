@@ -1,6 +1,25 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: [:update, :destroy]
 
+  # GET /comments.json
+  def index
+    ask = Ask.find(params[:ask_id])
+    comments =
+      ask.original_comments
+         .where('created_at < ?', params[:date].to_datetime)
+         .order(id: :desc)
+         .page(params[:page].to_i)
+         .per(Comment::COMMENT_PER)
+    is_more_load = comments.total_pages > params[:page].to_i
+    comments =
+      comments
+        .as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                   { comment_likes: { include: { user: { only: [:id, :string_id] } } } },
+                                   { reply_comments: { include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                                                 { comment_likes: { include: { user: { only: [:id, :string_id] } } } }] } }]).reverse
+    render json: { ask: ask, comments: comments, is_more_load: is_more_load }
+  end
+
   # POST /comments.json
   def create
     if current_user
@@ -13,7 +32,8 @@ class CommentsController < ApplicationController
                                content: params[:content],
                                comment_id: params[:comment_id])
       comment.generate_hash_tags
-      comment = comment.as_json(include: { user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } })
+      comment = comment.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                          { comment_likes: { include: { user: { only: [:id, :string_id] } } } }])
       status = 'success'
     else
       status = 'not_authorized'
@@ -42,7 +62,8 @@ class CommentsController < ApplicationController
       ask = comment.ask
       comment.update(content: params[:content])
       comment.generate_hash_tags
-      comment = comment.as_json(include: { user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } })
+      comment = comment.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                          { comment_likes: { include: { user: { only: [:id, :string_id] } } } }])
       status = 'success'
     else
       status = 'not_authorized'

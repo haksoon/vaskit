@@ -10,7 +10,7 @@
           {{ var ask = asks[i] }}
           {{= askThumbnailTemplate({ ask: ask }) }}
         {{ } }}
-        {{ if (l >= <%= Ask::ASK_PER %>) { }}
+        {{ if (is_more_load) { }}
           <div class="loading_icon" page="2" loading="true" date="{{= new Date() }}"><i class="fa fa-spinner fa-spin"></i></div>
         {{ } else { }}
           <div class="loading_icon" page="2">- End of Contents -</i></div>
@@ -18,10 +18,6 @@
       </div>
     {{ } }}
   </div>
-</script>
-
-<script>
-  var abc;
 </script>
 
 <script type="text/template" id="askThumbnailTemplate">
@@ -58,7 +54,7 @@
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
-  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail {{= ask.event && ask.event.label ? 'event_ask' : '' }} contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
+  <div href="/asks/{{= ask.id }}" class="ask ask_thumbnail {{= ask.event && ask.event.label ? 'event_ask' : '' }} contents_box ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }} {{= vote_direction }}" onclick="go_url('ask', {{= ask.id }}); return false;" ask-id="{{= ask.id }}">
     {{ if (ask.event && ask.event.label) { }}
       <div class="event_info">
         <span class="event_title">{{= ask.event.title }}</span>
@@ -139,7 +135,10 @@
           {{ var right_ratio = total_count == 0 ? '0' : (right_count / ( left_count + right_count ) * 100).toFixed() }}
           {{ if (!ask.be_completed && total_count == 0) { }}
             <span class="my_ask_vote_count blank"><small>이제 곧 투표가 시작됩니다 😬</small></span>
-          {{ } else if (ask.be_completed) { }}
+          {{ } else if (!ask.be_completed) { }}
+            <span class="my_ask_vote_count left">{{= left_ratio }}<small>%</small></span>
+            <span class="my_ask_vote_count right">{{= right_ratio }}<small>%</small></span>
+          {{ } else { }}
             {{ var is_select_left = ask.ask_complete.ask_deal_id == ask.left_ask_deal_id }}
             {{ var is_select_right = ask.ask_complete.ask_deal_id == ask.right_ask_deal_id }}
             {{ left_count = ask.ask_complete.left_vote_count }}
@@ -160,23 +159,43 @@
             {{ } }}
             <span class="my_ask_vote_count left {{= is_select_left ? 'on' : '' }}" star="{{= star_point }}">{{= left_ratio }}<small>%</small></span>
             <span class="my_ask_vote_count right {{= is_select_right ? 'on' : '' }}" star="{{= star_point }}">{{= right_ratio }}<small>%</small></span>
-          {{ } else { }}
-            <span class="my_ask_vote_count left">{{= left_ratio }}<small>%</small></span>
-            <span class="my_ask_vote_count right">{{= right_ratio }}<small>%</small></span>
           {{ } }}
           <div class="ask_completed {{= ask.be_completed ? 'on' : '' }}">종료한 투표입니다</div>
+        {{ } else { }}
+          <span class="ask_title_label text_box_short left">{{= ask.left_ask_deal.title }}</span>
+          <span class="ask_title_label text_box_short right">{{= ask.right_ask_deal.title }}</span>
+          {{= recentCommentTemplate({recent_comment: ask.left_ask_deal.recent_comment, direction: 'left' }) }}
+          {{= recentCommentTemplate({recent_comment: ask.right_ask_deal.recent_comment, direction: 'right' }) }}
         {{ } }}
-        <span class="ask_title_label text_box_short left">{{= ask.left_ask_deal.title }}</span>
-        <span class="ask_title_label text_box_short right">{{= ask.right_ask_deal.title }}</span>
       </div>
       {{ if (current_user == null || current_user.id != ask.user_id) { }}
-        <div class="vs_btn {{= is_voted ? '' : 'animated rubberBand' }} {{= vote_direction }}" onanimationstart="vs_init($(this));" onmouseover="vs_init($(this));" onanimationend="$(this).removeClass('animated rubberBand');" vote-id="{{= vote_id }}" vote-direction="{{= vote_direction }}">vs</div>
+        <div class="vs_btn {{= is_voted ? '' : 'animated rubberBand' }}" onanimationstart="vs_init($(this));" onmouseover="vs_init($(this));" onanimationend="$(this).removeClass('animated rubberBand');" vote-id="{{= vote_id }}" vote-direction="{{= vote_direction }}">vs</div>
       {{ } }}
     </div>
   </div>
 </script>
 
+<script type="text/template" id="recentCommentTemplate">
+  {{ if (recent_comment) { }}
+    <div class="ask_deal_recent_comment {{= direction }}">
+      <div class="recent_comment_container">
+        <div class="recent_comment_inner">
+          <div class="recent_comment_title"><i class="fa fa-commenting"></i> 반대 의견이 있네요?</div>
+          <div class="recent_comment_content">{{= recent_comment.content }}</div>
+          <div class="recent_comment_user_id">{{= recent_comment.user.string_id }}</div>
+        </div>
+      </div>
+    </div>
+  {{ } else { }}
+    <div class="ask_deal_recent_comment {{= direction }}">
+      {{ var random_string = ['🤔 음, 왜죠?', '정말요? 🤔', '왜 그렇게<br>생각하세요?', '왜 그쪽에<br>투표했나요?', '당신의 의견을<br>알려주세요!', '<i class="fa fa-hand-pointer-o"></i> 이건<br>별론가요?'] }}
+      <div class="blank_recent_comment">{{= random_string[Math.floor(Math.random() * random_string.length)] }}</div>
+    </div>
+  {{ } }}
+</script>
+
 <script>
   var asksListTemplate = _.template($('#asksListTemplate').html());
   var askThumbnailTemplate = _.template($('#askThumbnailTemplate').html());
+  var recentCommentTemplate = _.template($('#recentCommentTemplate').html());
 </script>

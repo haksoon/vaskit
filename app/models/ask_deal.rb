@@ -11,6 +11,7 @@ class AskDeal < ActiveRecord::Base
   belongs_to :deal
   has_many :votes
   has_many :comments
+  has_one :recent_comment, -> (ask_deal) { recent_comment(ask_deal.user_id) }, class_name: 'Comment', foreign_key: 'ask_deal_id'
   has_one :ask_complete
 
   before_post_process :rename_file

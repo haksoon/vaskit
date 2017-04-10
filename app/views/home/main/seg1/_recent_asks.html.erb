@@ -39,9 +39,8 @@
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">새로운 질문들</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
-    <span class="header_btn right new_btn" onclick="if (visitor_check()) { ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '비회원 질문작성탭 진입', 1); } else { go_url('ask_form'); } return false;">&plus;</span>
   </div>
-  {{= asksListTemplate({ asks: asks, url: url }) }}
+  {{= asksListTemplate({ asks: asks, url: url, is_more_load: is_more_load }) }}
 </script>
 
 <script>
@@ -80,7 +79,7 @@
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
-              var html = recentAsksShowTemplate({ asks: data.asks, url: url });
+              var html = recentAsksShowTemplate({ asks: data.asks, url: url, is_more_load: data.is_more_load });
               create_wrapper(html);
               if (currentSeg === 1 && segHistory[currentSeg] === 1) ga('send', 'event', '컬렉션탭', '새로운 질문들', 1);
             },

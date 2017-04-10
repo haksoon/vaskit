@@ -35,7 +35,7 @@
         <div class="comment">
           {{ var left_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.left_ask_deal.id && obj.is_deleted === false }) }}
           <ul class="comment_list left {{= left_comments.length == 0 ? 'blank' : '' }}">
-            {{= commentsTemplate({ ask: ask, comments: left_comments, like_comments: like_comments }) }}
+            {{= commentsTemplate({ ask: ask, comments: left_comments }) }}
           </ul>
         </div>
       </div>
@@ -75,7 +75,7 @@
         <div class="comment">
           {{ var right_comments = $.grep(ask.comments, function(obj) { return obj.ask_deal_id === ask.right_ask_deal.id && obj.is_deleted === false }) }}
           <ul class="comment_list right {{= right_comments.length == 0 ? 'blank' : '' }}">
-            {{= commentsTemplate({ ask: ask, comments: right_comments, like_comments: like_comments }) }}
+            {{= commentsTemplate({ ask: ask, comments: right_comments }) }}
           </ul>
         </div>
       </div>

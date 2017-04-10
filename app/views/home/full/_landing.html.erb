@@ -150,7 +150,7 @@
       signInTemplate = _.template($('#signInTemplate').html()),
       forgotPasswordTemplate = _.template($('#forgotPasswordTemplate').html());
 
-  function show_landing(is_logout) {
+  function show_landing() {
     if ($('#landing_page').length === 0) {
       open_full_view(landingTemplate());
       $('#landing_page .placeholder').unityping({
@@ -166,14 +166,10 @@
     return url;
   }
 
-  function hide_landing(is_logout) {
-    if (is_logout) {
-      notify('로그인을 해주세요!');
-      history.go(1);
-    } else {
-      close_full_view();
-      ga('send', 'event', '랜딩페이지', '랜딩페이지 닫기', 1);
-    }
+  function hide_landing() {
+    close_full_view();
+    if (userApp) setAppStatusBar();
+    ga('send', 'event', '랜딩페이지', '랜딩페이지 닫기', 1);
   }
 
   function login_success(length) {

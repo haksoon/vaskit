@@ -13,35 +13,27 @@ class Ask < ActiveRecord::Base
   has_many :ask_likes
   has_many :hash_tags
   has_many :comments
+  has_many :original_comments, -> { original_comments }, class_name: 'Comment', foreign_key: 'ask_id'
   has_many :share_logs
   has_many :alarms
   has_many :collection_to_asks
   has_many :collections, through: :collection_to_asks
 
   def fetch_ask_detail
-    comment_lists =
-      comments
-      .where(comment_id: nil)#.order(like_count: :desc, id: :asc)
+    comments =
+      original_comments
+      .order(id: :desc)
       .as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                          { comment_likes: { include: { user: { only: [:id, :string_id] } } } },
                          { reply_comments: { include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
-                                                       { comment_likes: { include: { user: { only: [:id, :string_id] } } } }] } }])
+                                                       { comment_likes: { include: { user: { only: [:id, :string_id] } } } }] } }]).reverse
     as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                       :left_ask_deal,
                       :right_ask_deal,
                       :votes,
                       { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
                       :ask_complete])
-      .merge(comments: comment_lists)
-  end
-
-  def fetch_ask_likes(user_id)
-    !ask_likes.find_by(user_id: user_id).nil?
-  end
-
-  def fetch_comment_likes(user_id)
-    ask_comments = comments.pluck(:id)
-    CommentLike.where(user_id: user_id, comment_id: ask_comments)
+      .merge(comments: comments)
   end
 
   def alarm_read(user_id)

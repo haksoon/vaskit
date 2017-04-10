@@ -117,45 +117,57 @@ class Users::SessionsController < Devise::SessionsController
     respond_to do |format|
       format.html {}
       format.json do
-        @asks = []
+        asks = []
         if current_user
-          @asks =
             case @type
             when 'my_asks_in_progress'
-              Ask.where(user_id: current_user.id, be_completed: false)
-                 .page(params[:page]).per(Ask::ASK_PER)
-                 .order(updated_at: :desc)
+              asks = Ask.where(user_id: current_user.id, be_completed: false)
+                        .order(updated_at: :desc)
+                        .page(params[:page]).per(Ask::ASK_PER)
+              is_more_load = asks.total_pages > params[:page].to_i
             when 'my_completed_asks'
               my_completed_asks = AskComplete.where(user_id: current_user.id)
+                                             .order(id: :desc)
                                              .page(params[:page]).per(Ask::ASK_PER)
-                                             .order(id: :desc).map(&:ask_id).uniq
-              Ask.where(id: my_completed_asks)
-                 .order("FIELD(id,#{my_completed_asks.join(',')})") unless my_completed_asks.blank?
+              is_more_load = my_completed_asks.total_pages > params[:page].to_i
+              my_completed_asks = my_completed_asks.map(&:ask_id).uniq
+              asks = Ask.where(id: my_completed_asks)
+                        .order("FIELD(id,#{my_completed_asks.join(',')})") unless my_completed_asks.blank?
             when 'my_likes'
               my_likes = AskLike.where(user_id: current_user.id)
+                                .order(id: :desc)
                                 .page(params[:page]).per(Ask::ASK_PER)
-                                .order(id: :desc).map(&:ask_id).uniq
-              Ask.where(id: my_likes)
-                 .order("FIELD(id,#{my_likes.join(',')})") unless my_likes.blank?
+              is_more_load = my_likes.total_pages > params[:page].to_i
+              my_likes = my_likes.map(&:ask_id).uniq
+              asks = Ask.where(id: my_likes)
+                        .order("FIELD(id,#{my_likes.join(',')})") unless my_likes.blank?
             when 'my_votes'
               my_votes = Vote.where(user_id: current_user.id)
+                             .order(id: :desc)
                              .page(params[:page]).per(Ask::ASK_PER)
-                             .order(id: :desc).map(&:ask_id).uniq
-              Ask.where(id: my_votes)
-                 .order("FIELD(id,#{my_votes.join(',')})") unless my_votes.blank?
+              is_more_load = my_votes.total_pages > params[:page].to_i
+              my_votes = my_votes.map(&:ask_id).uniq
+              asks = Ask.where(id: my_votes)
+                        .order("FIELD(id,#{my_votes.join(',')})") unless my_votes.blank?
             when 'my_comments'
               # 다른 타입은 ask와 1:1 관계이기 때문에 문제 없으나 댓글의 경우 1:다 관계이므로 연속으로 중복된 댓글의 경우 ask 갯수가 ASK_PER에 미달할 가능성이 있어 page/per를 ASK에 적용함
               my_comments = Comment.where(user_id: current_user.id, is_deleted: false)
                                    .order(id: :desc).map(&:ask_id).uniq
-              Ask.where(id: my_comments)
-                 .page(params[:page]).per(Ask::ASK_PER)
-                 .order("FIELD(id,#{my_comments.join(',')})") unless my_comments.blank?
+              asks = Ask.where(id: my_comments)
+                        .order("FIELD(id,#{my_comments.join(',')})")
+                        .page(params[:page]).per(Ask::ASK_PER) unless my_comments.blank?
+              is_more_load = asks.total_pages > params[:page].to_i
             end
-          unless @asks.nil?
-            @asks = @asks.as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
-          end
+
+            asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                          { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                          { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                          :votes,
+                                          { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
+                                          :ask_complete,
+                                          :event]) unless asks.nil?
         end
-        render json: { asks: @asks }
+        render json: { asks: asks, is_more_load: is_more_load }
       end
     end
   end

@@ -14,7 +14,7 @@ class SearchController < ApplicationController
           search_keywords = SearchKeyword.order(list_order: :asc)
           render json: { search_keywords: search_keywords }
         else
-          @asks =
+          asks =
             case @type
             when 'hash_tag'
               hash_tags = HashTag.where('keyword LIKE ?', "%#{@keyword}%")
@@ -49,11 +49,19 @@ class SearchController < ApplicationController
                                    brand_ask_deals.map(&:id)).pluck(:id)
               Ask.where(id: ask_ids)
             end
-          @asks = @asks.page(params[:page])
-                       .per(Ask::ASK_PER)
-                       .order(id: :desc)
-                       .as_json(include: [:user, :left_ask_deal, :right_ask_deal, :votes, :ask_likes, :ask_complete, :event])
-          render json: { asks: @asks }
+          asks = asks.order(id: :desc)
+                     .page(params[:page]).per(Ask::ASK_PER)
+
+          is_more_load = asks.total_pages > params[:page].to_i
+
+          asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                        { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                        { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                        :votes,
+                                        { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
+                                        :ask_complete,
+                                        :event])
+          render json: { asks: asks, is_more_load: is_more_load }
         end
       end
     end

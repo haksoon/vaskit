@@ -70,8 +70,8 @@
         {{= taggingKeywords(video.description) }}
       </div>
     </div>
-    {{= askDetailBodyTemplate({ ask: ask, already_like: already_like }) }}
-    {{= commentListTemplate({ ask: ask, like_comments: like_comments }) }}
+    {{= askDetailBodyTemplate({ ask: ask }) }}
+    {{= commentListTemplate({ ask: ask }) }}
   </div>
   {{= commentInputTemplate({ ask: ask }) }}
 </script>
@@ -136,7 +136,7 @@
         notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
       success: function(data) {
-        var html = videoAskShowTemplate({ video: data.video, ask: data.ask, already_like: data.already_like, like_comments: data.like_comments });
+        var html = videoAskShowTemplate({ video: data.video, ask: data.ask });
         create_wrapper(html, true);
         ga('send', 'event', '컨텐츠', '비교영상', video_id, 1);
       },

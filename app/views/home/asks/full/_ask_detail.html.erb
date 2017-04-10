@@ -1,4 +1,8 @@
 <script type="text/template" id="askDetailTemplate">
+  {{ var is_liked_ask = false }}
+  {{ if (current_user) { }}
+    {{ is_liked_ask = $.grep(ask.ask_likes, function(obj) { return obj.user_id === current_user.id}).length === 0 ? false : true }}
+  {{ } }}
   <div class="container top ask ask_detail ask_{{= ask.id }}" ontouchmove="return false;">
     <span class="header_title right" onclick="$(this).scroll_to();">{{= (current_user && ask.user_id == current_user.id) ? '나' : ask.user.string_id + "님" }}의 질문</span>
     <span class="header_btn left close_btn" onclick="back_button();">&times;</span>
@@ -8,21 +12,25 @@
         <span class="header_btn right ask_edit_btn" onclick="go_url('ask_form', {{= ask.id }});"><i class="fa fa-edit"></i></span>
       {{ } }}
     {{ } else { }}
-      <span class="header_btn right ask_like_btn" onclick="like_ask({{= ask.id }});"><i class="vaskit_icon {{= already_like ? 'is_liked' : '' }} ask_like_icon"></i></span>
+      <span class="header_btn right ask_like_btn" onclick="like_ask({{= ask.id }});"><i class="vaskit_icon {{= is_liked_ask ? 'is_liked' : '' }} ask_like_icon"></i></span>
     {{ } }}
   </div>
   <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
-    {{= askDetailBodyTemplate({ ask: ask, already_like: already_like }) }}
-    {{= commentListTemplate({ ask: ask, like_comments: like_comments }) }}
+    {{= askDetailBodyTemplate({ ask: ask }) }}
+    {{= commentListTemplate({ ask: ask }) }}
   </div>
   {{= commentInputTemplate({ ask: ask }) }}
-  {{= askImgViewTemplate({ ask: ask, like_comments: like_comments }) }}
+  {{= askImgViewTemplate({ ask: ask }) }}
 </script>
 
 <script type="text/template" id="askDetailBodyTemplate">
   {{ var is_voted = false }}
   {{ var vote_id = '' }}
   {{ var vote_direction = '' }}
+  {{ var is_liked_ask = false }}
+  {{ if (current_user) { }}
+    {{ is_liked_ask = $.grep(ask.ask_likes, function(obj) { return obj.user_id === current_user.id}).length === 0 ? false : true }}
+  {{ } }}
   {{ if (current_user && current_user.id == ask.user_id) { }}
     {{ is_voted = true }}
     {{ vote_id = '' }}
@@ -53,7 +61,7 @@
   {{ var left_count = ask.left_ask_deal.vote_count }}
   {{ var right_count = ask.right_ask_deal.vote_count }}
   {{ var total_count = left_count + right_count }}
-  <div class="ask ask_detail ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }}" ask-id="{{= ask.id }}" ask-user-id="{{= ask.user_id }}">
+  <div class="ask ask_detail ask_{{= ask.id }} {{= is_voted ? 'is_voted' : '' }} {{= vote_direction }}" ask-id="{{= ask.id }}" ask-user-id="{{= ask.user_id }}">
     <div class="clearfix">
       <div class="ask_image_box clearfix">
         <i class="fa fa-angle-left ask_image_background"></i>
@@ -66,7 +74,10 @@
           {{ var right_ratio = total_count == 0 ? '0' : (right_count / ( left_count + right_count ) * 100).toFixed() }}
           {{ if (!ask.be_completed && total_count == 0) { }}
             <span class="my_ask_vote_count blank"><small>이제 곧 투표가 시작됩니다 😬</small></span>
-          {{ } else if (ask.be_completed) { }}
+          {{ } else if (!ask.be_completed) { }}
+            <span class="my_ask_vote_count left">{{= left_ratio }}<small>%</small></span>
+            <span class="my_ask_vote_count right">{{= right_ratio }}<small>%</small></span>
+          {{ } else { }}
             {{ var is_select_left = ask.ask_complete.ask_deal_id == ask.left_ask_deal_id }}
             {{ var is_select_right = ask.ask_complete.ask_deal_id == ask.right_ask_deal_id }}
             {{ left_count = ask.ask_complete.left_vote_count }}
@@ -87,15 +98,12 @@
             {{ } }}
             <span class="my_ask_vote_count left {{= is_select_left ? 'on' : '' }}" star="{{= star_point }}">{{= left_ratio }}<small>%</small></span>
             <span class="my_ask_vote_count right {{= is_select_right ? 'on' : '' }}" star="{{= star_point }}">{{= right_ratio }}<small>%</small></span>
-          {{ } else { }}
-            <span class="my_ask_vote_count left">{{= left_ratio }}<small>%</small></span>
-            <span class="my_ask_vote_count right">{{= right_ratio }}<small>%</small></span>
           {{ } }}
           <div class="ask_completed {{= ask.be_completed ? 'on' : '' }}">종료한 투표입니다</div>
         {{ } }}
       </div>
       {{ if (current_user == null || current_user.id != ask.user_id) { }}
-        <div class="vs_btn {{= is_voted ? '' : 'animated rubberBand' }} {{= vote_direction }}" onanimationstart="vs_init($(this));" onmouseover="vs_init($(this));" onanimationend="$(this).removeClass('animated rubberBand');" vote-id="{{= vote_id }}" vote-direction="{{= vote_direction }}">vs</div>
+        <div class="vs_btn {{= is_voted ? '' : 'animated rubberBand' }}" onanimationstart="vs_init($(this));" onmouseover="vs_init($(this));" onanimationend="$(this).removeClass('animated rubberBand');" vote-id="{{= vote_id }}" vote-direction="{{= vote_direction }}">vs</div>
       {{ } }}
     </div>
     <div class="clearfix">
@@ -128,7 +136,7 @@
         <span class="ask_user_profile {{= gender }}">{{= get_user_ages(ask.user.birthday) }}</span>
       {{ } }}
       <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
-      <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : '' }} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
+      <div class="ask_count_span"><i class="vaskit_icon {{= is_liked_ask ? 'is_liked' : '' }} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
     </div>
     <div class="ask_message">
       {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
@@ -267,7 +275,7 @@
         notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
       },
       success: function(data) {
-        var html = askDetailTemplate({ ask: data.ask, already_like: data.already_like, like_comments: data.like_comments });
+        var html = askDetailTemplate({ ask: data.ask });
         create_wrapper(html, true);
         ga('send', 'event', '컨텐츠', '질문', ask_id, 1);
       },
@@ -590,7 +598,7 @@
             success: function(data) {
               notify('질문이 종료되었습니다');
               all_ask_thumbnails.replaceWith(askThumbnailTemplate({ ask: data.ask }));
-              all_ask_details.replaceWith(askDetailTemplate({ ask: data.ask, already_like: data.already_like, like_comments: data.like_comments }));
+              all_ask_details.replaceWith(askDetailTemplate({ ask: data.ask }));
             },
             beforeSend: function() {
               loadingStart();

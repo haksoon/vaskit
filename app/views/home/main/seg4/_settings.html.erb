@@ -37,10 +37,14 @@
   var settingsTemplate = _.template($('#settingsTemplate').html());
 
   function show_settings() {
-    var html = settingsTemplate();
-    create_wrapper(html);
-    var url = '/users/settings';
-    return url;
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '유저 메뉴 접근 시도', 1);
+    } else {
+      var html = settingsTemplate();
+      create_wrapper(html);
+      var url = '/users/settings';
+      return url;
+    }
   }
 
   function hide_settings() {
@@ -48,40 +52,56 @@
   }
 
   function show_edit_profile() {
-    var html = editProfileTemplate();
-    create_wrapper(html);
-    var url = '/users/settings/edit_profile';
-    return url;
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '유저 메뉴 접근 시도', 1);
+    } else {
+      var html = editProfileTemplate();
+      create_wrapper(html);
+      var url = '/users/settings/edit_profile';
+      return url;
+    }
   }
   function hide_edit_profile() {
     remove_wrapper();
   }
 
   function show_edit_password() {
-    var html = editPasswordTemplate();
-    create_wrapper(html);
-    var url = '/users/settings/edit_password';
-    return url;
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '유저 메뉴 접근 시도', 1);
+    } else {
+      var html = editPasswordTemplate();
+      create_wrapper(html);
+      var url = '/users/settings/edit_password';
+      return url;
+    }
   }
   function hide_edit_password() {
     remove_wrapper();
   }
 
   function show_edit_push_alarm() {
-    var html = editPushAlarmTemplate();
-    create_wrapper(html);
-    var url = '/users/settings/edit_push_alarm';
-    return url;
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '유저 메뉴 접근 시도', 1);
+    } else {
+      var html = editPushAlarmTemplate();
+      create_wrapper(html);
+      var url = '/users/settings/edit_push_alarm';
+      return url;
+    }
   }
   function hide_edit_push_alarm() {
     remove_wrapper();
   }
 
   function show_edit_email_alarm() {
-    var html = editEmailAlarmTemplate();
-    create_wrapper(html);
-    var url = '/users/settings/edit_email_alarm';
-    return url;
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '유저 메뉴 접근 시도', 1);
+    } else {
+      var html = editEmailAlarmTemplate();
+      create_wrapper(html);
+      var url = '/users/settings/edit_email_alarm';
+      return url;
+    }
   }
   function hide_edit_email_alarm() {
     remove_wrapper();
@@ -134,17 +154,21 @@
   }
 
   function open_sign_out_menu() {
-    var options = {
-                description: '로그아웃 하시겠어요?',
-                menus: [
-                  {
-                    name: '로그아웃',
-                    func: 'history.back(); sign_out();',
-                    class: 'confirmation'
-                  }
-                ]
-              };
-    go_url('menu', options);
+    if (visitor_check()) {
+      ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '유저 메뉴 접근 시도', 1);
+    } else {
+      var options = {
+                  description: '로그아웃 하시겠어요?',
+                  menus: [
+                    {
+                      name: '로그아웃',
+                      func: 'history.back(); sign_out();',
+                      class: 'confirmation'
+                    }
+                  ]
+                };
+      go_url('menu', options);
+    }
   }
 
   function sign_out() {
@@ -158,7 +182,7 @@
               alarm_check();
               user_profile_on();
               user_alarms_on();
-              go_url('landing', true);
+              go_url('landing');
               if (userApp) getUserToken();
               ga('send', 'event', '랜딩페이지', '랜딩페이지 진입', '로그아웃', 1);
             },

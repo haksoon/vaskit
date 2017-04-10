@@ -1,5 +1,9 @@
 class Comment < ActiveRecord::Base
   scope :is_show_only, -> { where(is_deleted: false) }
+  scope :original_comments, -> { where(comment_id: nil) }
+  scope :recent_comment, -> (user_id) { where(is_deleted: false).where.not(user_id: user_id).order(like_count: :desc, id: :desc).limit(1).select(:content, :user_id) }
+
+  COMMENT_PER = 1000
 
   belongs_to :user
   belongs_to :ask
