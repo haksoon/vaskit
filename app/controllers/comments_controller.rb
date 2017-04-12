@@ -7,16 +7,17 @@ class CommentsController < ApplicationController
     comments =
       ask.original_comments
          .where('created_at < ?', params[:date].to_datetime)
-         .order(id: :desc)
+         .order(like_count: :desc, id: :desc)
          .page(params[:page].to_i)
          .per(Comment::COMMENT_PER)
     is_more_load = comments.total_pages > params[:page].to_i
     comments =
       comments
-        .as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
-                                   { comment_likes: { include: { user: { only: [:id, :string_id] } } } },
-                                   { reply_comments: { include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
-                                                                 { comment_likes: { include: { user: { only: [:id, :string_id] } } } }] } }]).reverse
+      .as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                         { comment_likes: { include: { user: { only: [:id, :string_id] } } } },
+                         { reply_comments: { include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                                       { comment_likes: { include: { user: { only: [:id, :string_id] } } } }] } }])
+
     render json: { ask: ask, comments: comments, is_more_load: is_more_load }
   end
 
@@ -31,6 +32,7 @@ class CommentsController < ApplicationController
                                ask_deal_id: ask_deal_id,
                                content: params[:content],
                                comment_id: params[:comment_id])
+
       comment.generate_hash_tags
       comment = comment.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                                           { comment_likes: { include: { user: { only: [:id, :string_id] } } } }])
@@ -93,14 +95,14 @@ class CommentsController < ApplicationController
   def destroy
     comment = @comment
     if current_user && comment.user_id == current_user.id
-      status = 'success'
       comment.update(is_deleted: true)
+      comment.update_columns(ask_deal_id: nil) if comment.reply_comments.count.zero?
+      comment.original_comment.update_columns(ask_deal_id: nil) if comment.original_comment && comment.original_comment.is_deleted && comment.original_comment.reply_comments.count.zero?
       comment.generate_hash_tags
-      status = 'reply_exist' unless comment.reply_comments.where(is_deleted: false).blank?
+      status = 'success'
     else
       status = 'not_authorized'
     end
-
     render json: { status: status }
   end
 

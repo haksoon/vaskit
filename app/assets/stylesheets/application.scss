@@ -73,6 +73,7 @@
 @mixin font-bold { font-family: 'NanumSquareB', 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif; }
 @mixin font-extra-bold { font-family: 'NanumSquareEB', 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif; }
 @mixin font-number { font-family: 'Montserrat', 'NanumSquareR', 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif; }
+@mixin font-icon { font-family: 'FontAwesome', 'NanumSquareR', 'Apple SD Gothic Neo', '나눔고딕', NanumGothic, 'Nanum Gothic', Applegothic, '맑은 고딕', 'Malgun Gothic', '돋움', Dotum, '굴림', Gulim, Helvetica, sans-serif; }
 @mixin font-small { font-size: 11px; }
 @mixin font-normal { font-size: 14px; }
 @mixin font-large { font-size: 16px; }
@@ -656,7 +657,7 @@ body {
     @include font-number; font-size: 20px; letter-spacing: 1px; text-indent: 1px;
     animation-delay: .5s; cursor: pointer; cursor: -webkit-grab; z-index: 10; opacity: 1; -webkit-tap-highlight-color: transparent;
     transition: background-color .25s, color .25s, transform .25s, opacity .1s;
-    &::before, &::after { position: absolute; top: 0; width: 10px; height: 100%; font-size: 10px; font-family: "FontAwesome"; color: #ffe4a9; opacity: .5; animation-delay: 1.5s; }
+    &::before, &::after { position: absolute; top: 0; width: 10px; height: 100%; font-size: 10px; @include font-icon; color: #ffe4a9; opacity: .5; animation-delay: 1.5s; }
     &::before { content: '\f0d9'; left: 5px; animation: fadeInRight 1.5s 3; }
     &::after { content: '\f0da'; right: 5px; animation: fadeInLeft 1.5s 3; }
   }
@@ -758,7 +759,7 @@ body {
       span { color: #999; }
     }
     .ask_message_menu { position: relative; display: block; height: 30px; line-height: 20px; text-align: right;
-                        padding: 0 20px 10px 60px; margin-top: 5px; box-sizing: border-box; font-size: 12px; color: #999; background-color: #fff;
+                        padding: 0 20px 10px 60px; margin-top: 5px; box-sizing: border-box; font-size: 12px; color: #999; background-color: #fff; overflow: hidden;
       .ask_created_at { float: left; }
       .fa-navicon { transition: transform .25s; }
       .ask_menu_btn { position: absolute; top: 0; right: 0; display: inline-block; padding-right: 20px; background-color: #fff; transform: translateX(100%); transition: transform .25s;
@@ -840,7 +841,7 @@ body {
       &.on { animation: zoomIn 1.2s 1; transform: translateY(-10px) scale(1.5);
         &::before {
           content: attr(star); position: absolute; bottom: -25px; left: 0; text-indent: 3px; letter-spacing: 3px;
-          display: block; width: 100%; padding: 5px 0; line-height: 10px; font-size: 10px; border-top: 2px solid #ff7200; font-family: 'FontAwesome'; }
+          display: block; width: 100%; padding: 5px 0; line-height: 10px; font-size: 10px; border-top: 2px solid #ff7200; @include font-icon; }
         &::after {
           content: '나의 선택'; position: absolute; top: -25px; left: 0; text-indent: 3px; letter-spacing: 3px;
           display: block; width: 100%; padding: 5px 0; line-height: 10px; font-size: 10px; border-bottom: 2px solid #ff7200; }
@@ -910,20 +911,25 @@ body {
   }
   .comment_list { position: relative; margin: 0; padding: 10px 0; min-height: 50vh; list-style: none; background-color: #f2f0f0; overflow: hidden;
     &::before {
-      content: '첫 댓글을 달아주세요!'; position: absolute; top: -150px; left: 25px; width: calc(100% - 50px); height: calc(100% + 150px); box-sizing: border-box;
+      content: '첫 댓글을 달아주세요!'; position: absolute; top: -150px; left: 25px; width: calc(100% - 50px); height: calc(100% + 300px); box-sizing: border-box;
       line-height: 150px; text-align: center; transition: top .5s;
-      border: 1px dashed #dbdbdb; border-width: 0 1px; }
+      color: #999; border: 1px dashed #dbdbdb; border-width: 0 1px; }
     &.left { &::before { border-right-width: 0; } }
     &.right { &::before { border-left-width: 0; } }
-    &.blank { &::before { top: 0; } }
-    .load_more_comments { position: relative; height: 30px; line-height: 30px; text-align: center; font-size: 12px; overflow: hidden; background-color: rgba(150, 150, 150, .5); color: #fff; margin: 5px 10px 10px; border-radius: 15px;
-      span { display: block; height: 100%; overflow: hidden; transition: transform .25s; transform: translateY(0%); }
-      &.is_loading { span { transform: translateY(-100%); } }
+    &[comment-count = '0'] { &::before { top: 0; } }
+    &[is-writing] { &::before { top: -150px; } }
+    .loading_icon {
+      &::after { content: attr(remain-count)'개의 댓글이 더 있어요! 불러오는 중...'; display: block; line-height: 30px; color: #ccc; @include font-number; }
+      &[load-complete] { display: block;
+        &::after { content: '준비된 댓글은 여기까지 : )\A당신의 의견도 알려주세요!'; white-space: pre; line-height: 15px; }
+        i { display: none; }
+      }
+      &[comment-count = '0'] { display: none; }
     }
 
     .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s;
       &.new_alarm::before { content: ''; position: absolute; top: 0; width: 2px; height: 100%; background-color: #ff7200; }
-      .comment_reply_icon { position: absolute; top: 10px; color: #ccc; font-size: 10px; }
+      .comment_reply_icon { position: absolute; top: 5px; padding: 5px; color: #ccc; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 50%; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
       .comment_user { position: relative; height: 14px; margin: 4px 5px 2px; font-size: 11px; color: #999; @include font-number;
         .comment_user_profile { font-size: 10px;
@@ -949,10 +955,10 @@ body {
       }
 
       &.reply { margin-top: -5px; }
-      &.left { text-align: left; margin-right: 45px;
+      &.left { text-align: left; margin-right: 45px; transform-origin: center left;
         &.new_alarm::before { left: -5px; }
-        &.reply { margin-left: 35px; margin-right: 45px; }
-        .comment_reply_icon { left: -10px; transform: rotate(180deg); }
+        &.reply { margin-left: 45px; }
+        .comment_reply_icon { left: -30px; transform: rotate(180deg); }
         .comment_user_pic { float: left; }
         .comment_user { margin-left: 45px;
           .comment_user_profile { float: left; margin-right: 5px; margin-top: 1px; }
@@ -968,10 +974,10 @@ body {
         }
         .comment_like_span { padding-right: 10px; margin-left: 45px; text-align: right; }
       }
-      &.right { text-align: right; margin-left: 45px;
+      &.right { text-align: right; margin-left: 45px; transform-origin: center right;
         &.new_alarm::before { right: -5px; }
-        &.reply { margin-left: 45px; margin-right: 35px; }
-        .comment_reply_icon { right: -10px; transform: scale(1, -1); }
+        &.reply { margin-right: 45px; }
+        .comment_reply_icon { right: -30px; transform: scale(1, -1); }
         .comment_user_pic { float: right; }
         .comment_user { margin-right: 45px;
           .comment_user_profile { float: right; margin-left: 5px; margin-top: 1px; }
@@ -1000,7 +1006,7 @@ body {
           &:active { background-color: #ffe4a9 !important; }
         }
       }
-      &.deleted { padding: 0 5px; margin-bottom: 10px; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 0; transform: rotateX(720deg);
+      &.deleted { padding: 0 5px; margin-top: 5px; margin-bottom: 10px; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 0; transform: rotateX(720deg);
         .comment_user_pic { display: none; }
         .comment_user { display: none; }
         .comment_bubble { background-color: transparent; color: #999; margin: 0; padding: 10px 5px;
@@ -1033,25 +1039,26 @@ body {
       }
     }
     .read_line { height: 14px; margin-bottom: 15px; line-height: 30px; border-bottom: 1px dashed #dbdbdb; text-align: center; color: #ccc; font-size: 11px;
-      &::before { content: '\f0d7  여기까지 읽었습니다'; background-color: #f2f0f0; padding: 5px 10px; border: 1px dashed #dbdbdb; border-radius: 5px; color: #999; font-family: "FontAwesome"; }
+      &::before { content: '\f0d7  여기까지 읽었습니다'; background-color: #f2f0f0; padding: 5px 10px; border: 1px dashed #dbdbdb; border-radius: 5px; color: #999; @include font-icon; }
     }
     .end_line { font-size: 11px; text-align: center; color: #666; border-bottom: 1px dashed #999; border-radius: 0; }
   }
 }
 
-.comment_input_box { background-color: #fff; outline: 1px solid #ddd; min-height: 50px; max-height: 200px; transition: height .1s;
+.comment_input_box { background-color: #fff; border-top: 1px solid #ddd; min-height: 50px; max-height: calc(100% - 50px); transition: height .1s;
   .comment_input_init { width: calc(100% - 100px); height: 100%; min-height: 50px; padding: 9px 0; margin: 0 50px; box-sizing: border-box;
-    .comment_input_bubble { background-color: #f2f0f0; padding: 7px 10px; border-radius: 5px 0 0 5px; box-shadow: 1px 1px 1px lightgrey;
-      .hashtag_container { position: relative; width: 100%;
+    .comment_input_bubble { height: 100%; box-sizing: border-box; background-color: #f2f0f0; padding: 7px 10px; border-radius: 5px 0 0 5px; box-shadow: 1px 1px 1px lightgrey;
+      .hashtag_container { position: relative; width: 100%; height: 100%;
         .comment_input, .hashtag_highlights { line-height: 18px; @include font-regular; @include font-normal; }
-        .comment_input, .hashtag_backdrop { display: block; width: 100%; max-height: 168px; height: 18px; background-color: #f2f0f0; color: #666;
-          &.filled { -webkit-text-fill-color: #666 !important; }
+        .comment_input, .hashtag_backdrop { display: block; width: 100%; max-height: 100%; height: 18px; background-color: #f2f0f0; color: #666; }
+        .comment_input { -webkit-text-fill-color: #ccc;
+          &:focus { -webkit-text-fill-color: transparent !important; }
         }
         .hashtag_backdrop { position: absolute; top: 0; height: 100%; background-color: transparent; overflow: hidden; pointer-events: none; box-sizing: border-box; margin: 0; padding: 0;
           &.iOS { padding: 0 3px; }
         }
-        .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: transparent;
-          mark { background-color: #f2f0f0;
+        .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: #666;
+          mark { background-color: transparent;
             &.hash_tag_in { color: #ff7200; }
             &.link_url_in { color: cornflowerblue; }
           }
@@ -1083,7 +1090,7 @@ body {
       &::after { content: ' /250'; position: absolute; bottom: 15px; left: 0; width: 100%; color: #ff7200; }
       &.on { left: 0; }
       &.over { color: #ff7200;
-        &::before { content: '\f071'; font-family: 'FontAwesome'; color: #ffcc5a; position: absolute; top: 2px; left: 0; width: 100%; animation: fadeIn 1.5s infinite; }
+        &::before { content: '\f071'; @include font-icon; color: #ffcc5a; position: absolute; top: 2px; left: 0; width: 100%; animation: fadeIn 1.5s infinite; }
       }
     }
     &.comment_input_submit { position: absolute; top: 0; right: 0; width: 50px; height: 100%; line-height: 50px; text-align: center; padding: 9px 10px 9px 0; box-sizing: border-box;
@@ -1097,40 +1104,22 @@ body {
   }
 }
 
-
-
-
-.img_layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 25; transform: translateY(100%); transition: transform .25s;
-  .inner { background-color: rgba(0, 0, 0, .75); transition: none !important; -webkit-tap-highlight-color: transparent; }
-  .close_btn { position: absolute; top: 0; width: 100%; height: 50px; padding: 10px; box-sizing: border-box; background: #333; opacity: 0; transition: opacity .25s; z-index: 30;
-    &.visible { opacity: 1; }
-    &.left { text-align: left; }
-    &.right { transform: translateX(100%); text-align: right; }
-    span { display: inline-block; width: 30px; height: 30px; line-height: 30px; text-align: center; vertical-align: middle; color: #fff;
-      &.text_box_short { width: calc(100% - 70px); }
-    }
-    img { width: 30px; height: 30px; }
-  }
-  .ask_deal_image { position: absolute; width: 100vw; height: 100vw;
-    @media screen and (min-width: $layout-width + 1px) { max-width: $layout-width; max-height: $layout-width; }
-    @media screen and (max-width: $layout-width) { max-width: 100vh; max-height: 100vh; left: 50%; transform: translateX(-50%); }
-  }
-  .ask_deal_info { position: relative; width: 100%; height: 100%; overflow-y: scroll; -webkit-overflow-scrolling: touch;
-    .blank_div { position: relative; width: 100vw; height: 100vw; transition: background-color .25s;
-      @media screen and (min-width: $layout-width + 1px) { max-width: $layout-width; max-height: $layout-width; }
-      @media screen and (max-width: $layout-width) { max-width: 100vw; max-height: 100vh; }
-      &.visible { background-color: rgba(0, 0, 0, .75) }
-      .fa { position: absolute; width: 100%; height: 50px; line-height: 50px; padding: 0 20px; box-sizing: border-box;
-        &.left { width: 50px; left: 0; }
-        &.right { width: 50px; right: 0; }
-        &.fa-angle-double-up { bottom: 0; text-align: center; }
-        &.fa-angle-double-right { top: 0; text-align: right; }
-        &.fa-angle-double-left { top: 0; text-align: left; }
+.img_layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, .75); z-index: 25; transform: translateY(100%); transition: transform .25s;
+  &::before { content: '\f0d7  닫기'; display: block; width: 100%; height: 50px; line-height: 50px; text-align: center; color: #fff; @include font-icon; }
+  &.opened { transform: translateY(0); }
+  .inner { overflow-x: scroll; -webkit-overflow-scrolling: initial;
+    .img_container { position: relative; display: flex; width: calc(200% + 100px); overflow-y: scroll; -webkit-overflow-scrolling: initial; }
+    .ask_deal_info { position: relative; padding: 10px; padding-top: 60px; box-sizing: border-box;
+      &.left { margin-left: 50px; }
+      &.right { margin-right: 50px; }
+      .ask_deal_image { position: relative; width: calc(100vw - 20px); height: auto; border-radius: 5px 5px 0 0;
+        @media screen and (min-width: $layout-width + 1px) { max-width: #{$layout-width - 20px}; }
       }
-    }
-    .ask_table_row { background-color: #fff;
-      &.title { height: auto !important; padding: 10px;
-        .ask_table_cell { line-height: 1 !important; }
+      .ask_table_row { background-color: #fff; border-bottom-style: dotted;
+        &.title { height: auto !important; padding: 16px 10px;
+          .ask_table_cell { line-height: 1 !important; }
+        }
+        &:last-of-type { border-radius: 0 0 5px 5px; border-bottom-style: solid; border-bottom-width: 4px; }
       }
     }
   }
@@ -1324,19 +1313,19 @@ body {
     .ask_message_arrow {
       position: absolute; display: inline-block; content: ''; top: 7px; left: -7px; border-width: 5px; border-style: solid; border-color: transparent; transition: border-color .25s;
       border-right-color: #fff; border-top-color: #fff; }
-    .ask_message_input,
-    .hashtag_backdrop {
+    .ask_message_input, .hashtag_highlights { line-height: 18px; @include font-regular; @include font-normal; }
+    .ask_message_input, .hashtag_backdrop {
       position: absolute;
       min-width: calc(100% - 20px); max-width: calc(100% - 20px); min-height: calc(100% - 20px); max-height: calc(100% - 20px);
       box-sizing: border-box; margin: 0; padding: 0; }
-    .ask_message_input,
-    .hashtag_highlights { line-height: 18px; @include font-regular; @include font-normal; }
-    .ask_message_input { background-color: #fff; -webkit-overflow-scrolling: initial; }
+    .ask_message_input { background-color: #fff; -webkit-overflow-scrolling: initial; -webkit-text-fill-color: #ccc;
+      &:focus { -webkit-text-fill-color: transparent !important; }
+    }
     .hashtag_backdrop { background-color: transparent; overflow: hidden; pointer-events: none;
       &.iOS { padding: 0 3px; }
     }
-    .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: transparent;
-      mark { background-color: #fff;
+    .hashtag_highlights { white-space: pre-wrap; word-wrap: break-word; color: #666;
+      mark { background-color: transparent;
         &.hash_tag_in { color: #ff7200; }
         &.link_url_in { color: cornflowerblue; }
       }

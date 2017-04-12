@@ -62,18 +62,13 @@
         return false;
       };
 
-      window.addEventListener('resize', _.debounce(function() {
-        var th = window.innerHeight;
-        $('html, body').css({ height: th });
-        window.scrollTo(0, 0);
-      }, 50));
-
       // init VASKIT Frame
       var current_user = '<%= current_user ? current_user.to_json : nil %>';
       $(window).ready(function() {
         loadingStart();
         setUserDevice();
         alarm_check();
+        fixViewportHeightFB();
         history.replaceState({ pageHistory:currentHistory }, null, null);
         $(window).unbind('popstate').bind('popstate', go_popstate);
         $('#collections').html(collectionsTemplate());   // seg1 초기화

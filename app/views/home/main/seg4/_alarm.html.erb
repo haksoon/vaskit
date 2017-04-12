@@ -21,47 +21,9 @@
 </script>
 
 <script type="text/template" id="alarmCommentTemplate">
-  {{ if (alarm.alarm_type.match(/^vote_/)) { }}
-    {{ var alarm_msg = '<i class="fa fa-check-circle-o"></i>&nbsp;회원님의 질문에 <b>' + alarm.alarm_type.replace('vote_', '') + '명</b>이 투표했습니다. 중간점검 해보세요!' }}
-  {{ } else if (alarm.alarm_type.match(/^like_ask_/)) { }}
-    {{ var ask_like_count = alarm.alarm_type.replace('like_ask_', '') }}
-    {{ var alarm_msg = '<i class="fa fa-heart-o"></i>&nbsp;회원님의 질문에 <b>' + alarm.send_user.string_id + '님</b>' }}
-    {{ if (ask_like_count > 1) alarm_msg += ' <b>외 ' + (ask_like_count - 1) + '명</b>' }}
-    {{ alarm_msg += '이 공감합니다' }}
-  {{ } else if (alarm.alarm_type.match(/^comment_/)) { }}
-    {{ var comment_count = alarm.alarm_type.replace('comment_', '') }}
-    {{ var alarm_msg = '<i class="fa fa-send-o"></i>&nbsp;회원님의 질문에 <b>' + alarm.send_user.string_id + '님</b>' }}
-    {{ if (comment_count > 1) alarm_msg += ' <b>외 ' + (comment_count - 1) + '명</b>' }}
-    {{ alarm_msg += '이 의견을 남겼습니다:' }}
-  {{ } else if (alarm.alarm_type.match(/^like_comment_/)) { }}
-    {{ var comment_like_count = alarm.alarm_type.replace('like_comment_', '') }}
-    {{ var alarm_msg = '<i class="fa fa-heart-o"></i>&nbsp;회원님의 의견을 <b>' + alarm.send_user.string_id + '님</b>' }}
-    {{ if (comment_like_count > 1) alarm_msg += ' <b>외 ' + (comment_like_count - 1) + '명</b>' }}
-    {{ alarm_msg += '이 좋아합니다:' }}
-  {{ } else if (alarm.alarm_type.match(/^reply_comment_/)) { }}
-    {{ var reply_comment_count = alarm.alarm_type.replace('reply_comment_', '') }}
-    {{ var alarm_msg = '<i class="fa fa-comments-o"></i>&nbsp;회원님의 의견에 <b>' + alarm.send_user.string_id + '님</b>' }}
-    {{ if (reply_comment_count > 1) alarm_msg += ' <b>외 ' + (reply_comment_count - 1) + '명</b>' }}
-    {{ alarm_msg += '이 댓글을 남겼습니다:' }}
-  {{ } else if (alarm.alarm_type.match(/^sub_comment_/)) { }}
-    {{ var sub_comment_count = alarm.alarm_type.replace('sub_comment_', '') }}
-    {{ var alarm_msg = '<i class="fa fa-comment-o"></i>&nbsp;회원님이 의견을 남긴 <b>' + alarm.ask_owner_user.string_id + '님</b>의 질문에 <b>' + alarm.send_user.string_id + '님</b>' }}
-    {{ if (sub_comment_count > 1) alarm_msg += ' <b>외 ' + (sub_comment_count - 1) + '명</b>' }}
-    {{ alarm_msg += '도 의견을 남겼습니다:' }}
-  {{ } else if (alarm.alarm_type.match(/^reply_sub_comment_/)) { }}
-    {{ var reply_sub_comment_count = alarm.alarm_type.replace('reply_sub_comment_', '') }}
-    {{ var alarm_msg = '<i class="fa fa-comments-o"></i>&nbsp;회원님이 댓글을 남긴 <b>' + alarm.comment_owner_user.string_id + '님</b>의 의견에 <b>' + alarm.send_user.string_id + '님</b>' }}
-    {{ if (reply_sub_comment_count > 1) alarm_msg += ' <b>외 ' + (reply_sub_comment_count - 1) + '명</b>' }}
-    {{ alarm_msg += '도 댓글을 남겼습니다:' }}
-  {{ } else if (alarm.alarm_type.match(/^liked_ask_comment_/)) { }}
-    {{ var liked_ask_comment_count = alarm.alarm_type.replace('liked_ask_comment_', '') }}
-    {{ var alarm_msg = '<i class="fa fa-comments-o"></i>&nbsp;회원님이 공감한 <b>' + alarm.ask_owner_user.string_id + '</b>님의 질문에 <b>' + alarm.send_user.string_id + '님</b>' }}
-    {{ if (liked_ask_comment_count > 1) alarm_msg += ' <b>외 ' + (liked_ask_comment_count - 1) + '명</b>' }}
-    {{ alarm_msg += '이 의견을 남겼습니다:' }}
-  {{ } }}
   <a href="/asks/{{= alarm.ask_id }}" onclick="alarm_read($(this)); return false;" ask-id="{{= alarm.ask_id }}" class="clearfix alarm_item {{= alarm.is_read ? '' : 'new_alarm' }} alarm_ask_{{= alarm.ask_id }}">
     <div class="clearfix">
-      <div class="alarm_msg" alarm-time="{{= get_past_time(alarm.updated_at) }}">{{= alarm_msg }}</div>
+      <div class="alarm_msg" alarm-time="{{= get_past_time(alarm.updated_at) }}">{{= fetch_alarm_msg(alarm) }}</div>
       <div class="alarm_imgs">
         <img src="{{= get_image_url(alarm.ask.left_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
         <img src="{{= get_image_url(alarm.ask.right_ask_deal, 'ask_deals', 'normal') }}" class="alarm_img_thumbnail" onerror="imgError(this);">
@@ -98,6 +60,49 @@
           $('#user_alarm').html(userAlarmTemplate({ alarms: data.alarms, alarm_count: data.alarm_count }));
         }
     });
+  }
+
+  function fetch_alarm_msg(alarm) {
+    var alarm_msg = '';
+    if (alarm.alarm_type.match(/^vote_/)) {
+      alarm_msg = '<i class="fa fa-check-circle-o"></i> 회원님의 질문에 <b>' + alarm.alarm_type.replace('vote_', '') + '명</b>이 투표했습니다. 중간점검 해보세요!';
+    } else if (alarm.alarm_type.match(/^like_ask_/)) {
+      var ask_like_count = alarm.alarm_type.replace('like_ask_', '');
+      alarm_msg = '<i class="fa fa-heart-o"></i> 회원님의 질문에 <b>' + alarm.send_user.string_id + '님</b>';
+      if (ask_like_count > 1) alarm_msg += ' <b>외 ' + (ask_like_count - 1) + '명</b>';
+      alarm_msg += '이 공감합니다';
+    } else if (alarm.alarm_type.match(/^comment_/)) {
+      var comment_count = alarm.alarm_type.replace('comment_', '');
+      alarm_msg = '<i class="fa fa-send-o"></i> 회원님의 질문에 <b>' + alarm.send_user.string_id + '님</b>';
+      if (comment_count > 1) alarm_msg += ' <b>외 ' + (comment_count - 1) + '명</b>';
+      alarm_msg += '이 의견을 남겼습니다';
+    } else if (alarm.alarm_type.match(/^like_comment_/)) {
+      var comment_like_count = alarm.alarm_type.replace('like_comment_', '');
+      alarm_msg = '<i class="fa fa-heart-o"></i> 회원님의 의견을 <b>' + alarm.send_user.string_id + '님</b>';
+      if (comment_like_count > 1) alarm_msg += ' <b>외 ' + (comment_like_count - 1) + '명</b>';
+      alarm_msg += '이 좋아합니다';
+    } else if (alarm.alarm_type.match(/^reply_comment_/)) {
+      var reply_comment_count = alarm.alarm_type.replace('reply_comment_', '');
+      alarm_msg = '<i class="fa fa-comments-o"></i> 회원님의 의견에 <b>' + alarm.send_user.string_id + '님</b>';
+      if (reply_comment_count > 1) alarm_msg += ' <b>외 ' + (reply_comment_count - 1) + '명</b>';
+      alarm_msg += '이 댓글을 남겼습니다';
+    } else if (alarm.alarm_type.match(/^sub_comment_/)) {
+      var sub_comment_count = alarm.alarm_type.replace('sub_comment_', '');
+      alarm_msg = '<i class="fa fa-comment-o"></i> 회원님이 의견을 남긴 <b>' + alarm.ask_owner_user.string_id + '님</b>의 질문에 <b>' + alarm.send_user.string_id + '님</b>';
+      if (sub_comment_count > 1) alarm_msg += ' <b>외 ' + (sub_comment_count - 1) + '명</b>';
+      alarm_msg += '도 의견을 남겼습니다';
+    } else if (alarm.alarm_type.match(/^reply_sub_comment_/)) {
+      var reply_sub_comment_count = alarm.alarm_type.replace('reply_sub_comment_', '');
+      alarm_msg = '<i class="fa fa-comments-o"></i> 회원님이 댓글을 남긴 <b>' + alarm.comment_owner_user.string_id + '님</b>의 의견에 <b>' + alarm.send_user.string_id + '님</b>';
+      if (reply_sub_comment_count > 1) alarm_msg += ' <b>외 ' + (reply_sub_comment_count - 1) + '명</b>';
+      alarm_msg += '도 댓글을 남겼습니다';
+    } else if (alarm.alarm_type.match(/^liked_ask_comment_/)) {
+      var liked_ask_comment_count = alarm.alarm_type.replace('liked_ask_comment_', '');
+      alarm_msg = '<i class="fa fa-comments-o"></i> 회원님이 공감한 <b>' + alarm.ask_owner_user.string_id + '</b>님의 질문에 <b>' + alarm.send_user.string_id + '님</b>';
+      if (liked_ask_comment_count > 1) alarm_msg += ' <b>외 ' + (liked_ask_comment_count - 1) + '명</b>';
+      alarm_msg += '이 의견을 남겼습니다';
+    }
+    return alarm_msg;
   }
 
   function alarm_read(target) {

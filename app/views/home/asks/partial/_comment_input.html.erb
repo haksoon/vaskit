@@ -21,36 +21,36 @@
     {{ } }}
   {{ } }}
   <div class="container bottom comment_input_box ask ask_{{= ask.id }}" ontouchmove="return false;">
-      <div class="comment_input_init" onclick="new_comment();">
-        <div class="comment_input_bubble">
-          <div class="hashtag_container">
-            <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;" onscroll="window.event.cancelBubble = true;"></textarea>
-            <div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}" onclick="window.event.cancelBubble = false;" ontouchstart="window.event.cancelBubble = false;" ontouchmove="window.event.cancelBubble = false;">
-              <div class="hashtag_highlights"></div>
-            </div>
+    <div class="comment_input_init" onclick="new_comment();">
+      <div class="comment_input_bubble">
+        <div class="hashtag_container">
+          <textarea class="comment_input" placeholder="어떻게 생각하는지 이야기해주세요" rows="1" disabled ontouchstart="removeIOSRubberEffect($(this));" ontouchmove="window.event.cancelBubble = true;" onscroll="window.event.cancelBubble = true;"></textarea>
+          <div class="hashtag_backdrop {{= userDevice.isIOS ? 'iOS' : '' }}" onclick="window.event.cancelBubble = false;" ontouchstart="window.event.cancelBubble = false;" ontouchmove="window.event.cancelBubble = false;">
+            <div class="hashtag_highlights"></div>
           </div>
         </div>
       </div>
-      <div class="comment_input_btn comment_input_counter"></div>
-      <div class="comment_input_btn comment_input_menu {{= vote_direction == 'right' ? 'right' : 'left' }}" onclick="toggle_comment($(this));" left="{{= vote_direction == 'right' ? '' : 'true' }}">
-        <div class="toggle_btn_background">
-          <span class="toggle_btn_on"></span>
-          <span class="toggle_btn_text left">A</span>
-          <span class="toggle_btn_text right">B</span>
-        </div>
+    </div>
+    <div class="comment_input_btn comment_input_counter"></div>
+    <div class="comment_input_btn comment_input_menu {{= vote_direction == 'right' ? 'right' : 'left' }}" onclick="toggle_comment($(this));" left="{{= vote_direction == 'right' ? '' : 'true' }}">
+      <div class="toggle_btn_background">
+        <span class="toggle_btn_on"></span>
+        <span class="toggle_btn_text left">A</span>
+        <span class="toggle_btn_text right">B</span>
       </div>
-      <div class="comment_input_btn comment_input_submit">
-        <div class="submit_btn">
-          <span class="submit_btn_text">전송</span>
-        </div>
+    </div>
+    <div class="comment_input_btn comment_input_submit">
+      <div class="submit_btn">
+        <span class="submit_btn_text">전송</span>
       </div>
+    </div>
   </div>
 </script>
 
 <script type="text/template" id="commentWritingSignTemplate">
   {{ var direction = is_left ? 'left' : 'right' }}
   {{ var reply = is_reply ? 'reply' : '' }}
-  <li class="comment_box is_writing {{= direction }} {{= reply }} clearfix" onclick="cancle_comment_writing();">
+  <li class="comment_box is_writing {{= direction }} {{= reply }} clearfix animated bounceIn" onclick="cancle_comment_writing();">
     {{ if (is_reply) { }}
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}
@@ -113,10 +113,11 @@
     var current_comment_input_submit = current_comment_container.find('.comment_input_submit');
     var current_comment_input_submit_btn_text = current_comment_input_submit.find('.submit_btn_text');
 
+    current_comment_lists.removeAttr('is-writing');
     current_comment_lists.find('.comment_box.hidden').removeClass('hidden');
     is_writing_box.remove();
     hashtag_highlights.html('');
-    current_comment_input.val('').removeClass('filled');
+    current_comment_input.val('');
     current_comment_input_init.removeAttr('onclick').off('click').on('click', function() { comment_input_activate('new'); });
     current_comment_input_submit.removeClass('ready').off('click');
     current_comment_input_submit_btn_text.html('전송');
@@ -161,10 +162,10 @@
         var st_now, target_comment_box, target_comment_box_top, target_comment_box_height, st_destination;
         if (comment_type == 'new') {
           st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
-          target_comment_box = current_ask_container.find('.comment_box').last();
+          target_comment_box = current_ask_container.find('.comment_box').first();
           target_comment_box_top = target_comment_box.offset().top;
           target_comment_box_height = target_comment_box.height();
-          st_destination = st_now + target_comment_box_top + target_comment_box_height - 35;
+          st_destination = st_now + target_comment_box_top + target_comment_box_height - 35 - 60 + 1;
           current_ask_container.scroll_to(st_destination);
         } else if (comment_type == 'edit') {
           st_now = current_ask_container.scrollTop() - current_ask_container.offset().top;
@@ -197,8 +198,7 @@
       is_writing_box.remove();
       if (comment_type == 'new') {
         is_left = Boolean(current_comment_input_menu.attr('left'));
-        target_comment_lists = is_left ? current_comment_lists.not('.right') : current_comment_lists.not('.left');
-        target_comment_lists.append(commentWritingSignTemplate({ label: '작성중', is_left: is_left, is_reply: false }));
+        current_comment_lists.prepend(commentWritingSignTemplate({ label: '작성중', is_left: is_left, is_reply: false }));
       } else if (comment_type == 'edit') {
         target_comment_boxes = current_comment_lists.find('.comment_box.' + comment_id);
         is_left = target_comment_boxes.hasClass('left');
@@ -245,12 +245,11 @@
         var content = current_comment_input.val().replace(/\s*$/, ''); // 뒤 공백문자 제거
         var is_left = Boolean(current_comment_input_menu.attr('left'));
 
-        var is_writing_box = current_wrapper.find('.comment_box.is_writing');
-
         var all_ask_divs = $('#main_view').find('.ask.ask_' + ask_id);
         var all_ask_comment_count_spans = all_ask_divs.find('.ask_comment_count');
         var all_ask_comment_divs = $('#main_view').find('.comment.ask_' + ask_id);
-        var all_ask_comment_lists = is_left ? all_ask_comment_divs.find('.comment_list').not('.right') : all_ask_comment_divs.find('.comment_list').not('.left');
+        var all_ask_comment_lists = all_ask_comment_divs.find('.comment_list');
+        var is_writing_box = all_ask_comment_lists.find('.comment_box.is_writing');
 
         if (content === '' || content === null) {
           notify('의견을 입력해주세요');
@@ -267,17 +266,18 @@
             },
             success: function(data) {
               if (data.status == 'success') {
-                current_comment_input_init.attr('onclick', 'new_comment();');
+                current_comment_input_init.off('click').attr('onclick', 'new_comment();');
                 current_comment_input.val('').blur();
                 current_comment_input_submit.removeClass('ready').off('click');
                 current_comment_input_submit_btn_text.html('전송');
-                if (ask_comment_count === 0) all_ask_comment_lists.removeClass('blank');
                 if (comment_type == 'edit') {
                   current_comment_lists.find('.comment_box.' + comment_id).remove();
                 } else {
                   ask_comment_count += 1;
                   all_ask_comment_count_spans.html(ask_comment_count);
+                  all_ask_comment_lists.attr('comment-count', ask_comment_count);
                 }
+                current_comment_lists.removeAttr('is-writing');
                 is_writing_box.replaceWith(commentTemplate({ ask: data.ask, comment: data.comment }));
 
                 // 첨부 이미지 관련
@@ -334,26 +334,19 @@
                            })
                            .on('focus', function(e) {
                              removeIOSKeyPadEffectOnFocus(e);
-                             current_comment_lists.css({ paddingBottom: '150px' });
                              if ($(this).height() == (50 - 32)) $(this).selectRange($(this).val().length, $(this).val().length);
                              $(this).height(this.scrollHeight);
                              current_comment_container.height(this.scrollHeight + 32);
                              if ($(this).val().length > 250) current_comment_input_counter.addClass('over');
-                             $(this).removeClass('filled');
                              hashtagInput($(this));
+                             current_comment_lists.attr('is-writing', true);
                            })
                            .on('blur', function(e) {
                              removeIOSKeyPadEffectOnBlur(e);
-                             current_comment_lists.css({ paddingBottom: '10px' });
                              $(this).height(50 - 32);
                              current_comment_container.height(50);
                              if ($(this).val().length > 250) current_comment_input_counter.removeClass('over');
-                             if ($(this).val().length === 0) {
-                               hashtag_highlights.html('');
-                               $(this).removeClass('filled');
-                             } else {
-                               $(this).addClass('filled');
-                             }
+                             if ($(this).val().length === 0) hashtag_highlights.html('');
                              $(this).attr('disabled', true);
                            }).removeAttr('disabled').focus();
 
@@ -404,8 +397,7 @@
     var is_left = Boolean(target.attr('left'));
     var current_wrapper = target.parentsUntil(this, '.wrapper');
     var current_comment_lists = current_wrapper.find('.comment_list');
-    var target_comment_lists = is_left ? current_comment_lists.not('.right') : current_comment_lists.not('.left');
-    var is_writing_box = target_comment_lists.find('.comment_box.is_writing');
+    var is_writing_box = current_comment_lists.find('.comment_box.is_writing');
     var is_writing = is_writing_box.length > 0;
     var is_writing_direction_left = is_writing_box.hasClass('left');
     var is_reply = is_writing_box.hasClass('reply');

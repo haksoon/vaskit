@@ -276,7 +276,8 @@
       },
       success: function(data) {
         var html = askDetailTemplate({ ask: data.ask });
-        create_wrapper(html, true);
+        var wrapper = create_wrapper(html, true);
+        load_ask_comments(wrapper);
         ga('send', 'event', '컨텐츠', '질문', ask_id, 1);
       },
       beforeSend: function() {

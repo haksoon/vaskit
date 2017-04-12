@@ -1,9 +1,9 @@
 class Comment < ActiveRecord::Base
   scope :is_show_only, -> { where(is_deleted: false) }
-  scope :original_comments, -> { where(comment_id: nil) }
+  scope :original_comments, -> { where(comment_id: nil).where.not(ask_deal_id: nil) }
   scope :recent_comment, -> (user_id) { where(is_deleted: false).where.not(user_id: user_id).order(like_count: :desc, id: :desc).limit(1).select(:content, :user_id) }
 
-  COMMENT_PER = 1000
+  COMMENT_PER = 20
 
   belongs_to :user
   belongs_to :ask
@@ -23,12 +23,23 @@ class Comment < ActiveRecord::Base
   validates_attachment_content_type :image, content_type: ['image/jpeg', 'image/pjpeg', 'image/pjpeg', 'image/png', 'image/jpg', 'image/gif', 'application/octet-stream']
 
   validates :ask_id, presence: true
-  validates :ask_deal_id, presence: true
+  validates :ask_deal_id, presence: { unless: :is_deleted }
   validates :content, presence: true
   validates :user_id, presence: true
 
   after_create :reload_ask_deal_comment_count, :create_comment_alarm, :create_reply_comment_alarm, :create_sub_comment_alarm, :create_reply_sub_comment_alarm, :create_liked_ask_comment_alarm
   after_update :reload_ask_deal_comment_count, :create_comment_alarm, :create_reply_comment_alarm, :create_sub_comment_alarm, :create_reply_sub_comment_alarm, :create_liked_ask_comment_alarm, if: :is_deleted
+
+  def self.delete_blank_comment
+    where(is_deleted: true).each do |comment|
+      if comment.comment_id.nil?
+        comment.update_columns(ask_deal_id: nil) if comment.reply_comments.count.zero?
+      else
+        comment.update_columns(ask_deal_id: nil)
+        comment.original_comment.update_columns(ask_deal_id: nil) if comment.original_comment.is_deleted
+      end
+    end
+  end
 
   def generate_hash_tags
     HashTag.destroy_all(ask_id: ask_id, comment_id: id)
@@ -40,6 +51,7 @@ class Comment < ActiveRecord::Base
       HashTag.create(ask_id: ask_id, comment_id: id, user_id: user_id, keyword: hash_tag)
     end
   end
+  handle_asynchronously :generate_hash_tags
 
   def reload_ask_deal_comment_count
     ask = self.ask

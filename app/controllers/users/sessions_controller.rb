@@ -55,8 +55,12 @@ class Users::SessionsController < Devise::SessionsController
       alarms = Alarm.where(user_id: current_user.id)
                     .order(updated_at: :desc).limit(20)
       alarm_count = alarms.pluck(:is_read).count(false)
+      last_alarm = alarms.first.as_json(include: [{ user: { only: [:id, :string_id] } },
+                                                  { send_user: { only: [:id, :string_id] } },
+                                                  { ask_owner_user: { only: [:id, :string_id] } },
+                                                  { comment_owner_user: { only: [:id, :string_id] } }])
     end
-    render json: { current_user: current_user, ask_tmp: ask_tmp, alarm_count: alarm_count }
+    render json: { current_user: current_user, ask_tmp: ask_tmp, alarm_count: alarm_count, last_alarm: last_alarm }
   end
 
   # GET /users
@@ -89,13 +93,13 @@ class Users::SessionsController < Devise::SessionsController
                     .order(updated_at: :desc)
                     .limit(20)
       alarm_count = alarms.pluck(:is_read).count(false)
-      alarms = alarms.as_json(include: [:user,
-                                        :send_user,
-                                        :ask_owner_user,
-                                        :comment_owner_user,
+      alarms = alarms.as_json(include: [{ user: { only: [:id, :string_id] } },
+                                        { send_user: { only: [:id, :string_id] } },
+                                        { ask_owner_user: { only: [:id, :string_id] } },
+                                        { comment_owner_user: { only: [:id, :string_id] } },
                                         { ask: { include: [:left_ask_deal, :right_ask_deal] } },
-                                        { comment: { include: [:user] } },
-                                        { original_comment: { include: [:user] } }])
+                                        { comment: { include: [user: { only: [:id, :string_id, :avatar_file_name] }] } },
+                                        { original_comment: { include: [user: { only: [:id, :string_id, :avatar_file_name] }] } }])
     end
     render json: { alarms: alarms, alarm_count: alarm_count }
   end

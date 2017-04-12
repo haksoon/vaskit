@@ -20,20 +20,12 @@ class Ask < ActiveRecord::Base
   has_many :collections, through: :collection_to_asks
 
   def fetch_ask_detail
-    comments =
-      original_comments
-      .order(id: :desc)
-      .as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
-                         { comment_likes: { include: { user: { only: [:id, :string_id] } } } },
-                         { reply_comments: { include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
-                                                       { comment_likes: { include: { user: { only: [:id, :string_id] } } } }] } }]).reverse
     as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                       :left_ask_deal,
                       :right_ask_deal,
                       :votes,
                       { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
                       :ask_complete])
-      .merge(comments: comments)
   end
 
   def alarm_read(user_id)
@@ -94,6 +86,7 @@ class Ask < ActiveRecord::Base
       HashTag.create(ask_id: id, user_id: user_id, keyword: hash_tag)
     end
   end
+  handle_asynchronously :generate_hash_tags
 
   def ask_notifier(type)
     return unless user.user_role == 'user'

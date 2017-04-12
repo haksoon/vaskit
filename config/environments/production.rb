@@ -72,7 +72,7 @@ Rails.application.configure do
     port: 587,
     authentication: :plain,
     user_name: 'notice@vaskit.kr',
-    password: 'vaskit1234',
+    password: 'Vaskit!@34',
     enable_starttls_auto: true
   }
   config.action_mailer.perform_deliveries = true

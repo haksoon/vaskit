@@ -4,8 +4,9 @@
       <div class="comment_title_left"><img class="comment_title_img left" src="{{= get_image_url(ask.left_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">A 제품</div>
       <div class="comment_title_right"><img class="comment_title_img right" src="{{= get_image_url(ask.right_ask_deal, 'ask_deals', 'normal') }}" onerror="imgError(this);">B 제품</div>
     </div>
-    <ul class="comment_list {{= ask.comments.length === 0 ? 'blank' : '' }}">
-      {{= commentsTemplate({ ask: ask, comments: ask.comments }) }}
+    {{ var comment_count = ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}
+    <ul class="comment_list" ask-id="{{= ask.id }}" comment-count="{{= comment_count }}" page="1" date="{{= new Date() }}" loading="true">
+      <div class="loading_icon" comment-count="{{= comment_count }}" remain-count="{{= comment_count }}"><i class="fa fa-spinner fa-spin"></i></div>
     </ul>
   </div>
 </script>
@@ -13,12 +14,10 @@
 <script type="text/template" id="commentsTemplate">
   {{ for (var i=0; i < comments.length; i++) { }}
     {{ var original_comment = comments[i] }}
-    {{ if (original_comment.is_deleted == false || (original_comment.is_deleted && original_comment.reply_comments.length > 0)) { }}
-      {{= commentTemplate({ ask: ask, comment: original_comment }) }}
-      {{ for (var j=0; j < original_comment.reply_comments.length; j++) { }}
-        {{ var reply_comment = original_comment.reply_comments[j] }}
-        {{= commentTemplate({ ask: ask, comment: reply_comment }) }}
-      {{ } }}
+    {{= commentTemplate({ ask: ask, comment: original_comment }) }}
+    {{ for (var j=0; j < original_comment.reply_comments.length; j++) { }}
+      {{ var reply_comment = original_comment.reply_comments[j] }}
+      {{= commentTemplate({ ask: ask, comment: reply_comment }) }}
     {{ } }}
   {{ } }}
 </script>
@@ -108,36 +107,44 @@
   var commentTemplate = _.template($('#commentTemplate').html());
   var commentLikeTemplate = _.template($('#commentLikeTemplate').html());
 
-  function load_ask_comments(target) {
-    var comment_list = target.parentsUntil(this, '.comment_list');
-    var read_line = comment_list.find('.read_line');
-    var ask_id = Number(target.attr('ask-id'));
-    var page = Number(target.attr('page'));
-    var date = target.attr('date');
+  function load_ask_comments(current_wrapper) {
+    var current_ask_container = current_wrapper.find('.container.main');
+    var current_comment_list = current_ask_container.find('.comment_list');
+    var loading_icon = current_comment_list.find('.loading_icon');
+    var ask_id = Number(current_comment_list.attr('ask-id'));
+    var page = Number(current_comment_list.attr('page'));
+    var date = current_comment_list.attr('date');
     $.ajax({
               url: '/comments.json',
               dataType: 'json',
               type: 'GET',
               data: { ask_id: ask_id, page: page, date: date },
+              error: function() {
+                notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
+              },
               success: function(data) {
-                read_line.remove();
-                target.after('<div class="read_line"></div>');
+                var current_loaded_comment_count = Number(loading_icon.attr('remain-count'));
+                var loaded_comment_count = data.comments.length;
+                loading_icon.attr('remain-count', current_loaded_comment_count - loaded_comment_count);
+                loading_icon.before(commentsTemplate({ ask: data.ask, comments: data.comments }));
                 if (data.is_more_load) {
-                  target.removeClass('is_loading');
+                  current_ask_container.on('scroll', endless_loading_ask_comments);
+                  current_comment_list.attr('page', page += 1).attr('loading', true);
                 } else {
-                  target.remove();
+                  loading_icon.attr('load-complete', true);
                 }
-                target.after(commentsTemplate({ ask: data.ask, comments: data.comments }));
-                target.attr('page', page += 1);
               },
               beforeSend: function() {
-                loadingStart();
-                target.addClass('is_loading');
-  		        },
-              complete: function() {
-                loadingEnd();
+                current_ask_container.off('scroll');
+                current_comment_list.removeAttr('loading');
               }
     });
+
+    function endless_loading_ask_comments() {
+      if (Boolean(current_comment_list.attr('loading')) && nearBottomOfContainer(current_ask_container)) {
+        load_ask_comments(current_wrapper);
+      }
+    }
   }
 
   function open_comment_menu(target) {
@@ -183,7 +190,7 @@
                         {
                           name: '채택하기',
                           class: 'confirmation',
-                          func: 'history.back(); noitfy("준비중입니다");'
+                          func: "history.back(); notify('준비중입니다');"
                         },
                         {
                           name: already_like ? '좋아요 취소' : '좋아요',
@@ -292,19 +299,14 @@
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
-              if (data.status == 'success') {
-                all_comment_boxes.animateCssRemove('bounceOutDown');
-                ask_comment_count -= 1;
-                all_ask_comment_count_spans.html(ask_comment_count);
-                if (ask_comment_count === 0) all_ask_comment_lists.addClass('blank');
-              } else if (data.status == 'reply_exist') {
-                all_comment_boxes.addClass('deleted').attr('is-deleted', true);
-                all_comment_boxes.find('.comment_content').html('삭제된 댓글입니다');
-                ask_comment_count -= 1;
-                all_ask_comment_count_spans.html(ask_comment_count);
-                if (ask_comment_count === 0) all_ask_comment_lists.addClass('blank');
-              } else if (data.status == 'not_authorized') {
+              if (data.status == 'not_authorized') {
                 notify('권한이 없습니다');
+              } else {
+                all_comment_boxes.addClass('deleted').attr('is-deleted', true);
+                all_comment_boxes.find('.comment_content').html('댓글이 삭제되었습니다');
+                ask_comment_count -= 1;
+                all_ask_comment_count_spans.html(ask_comment_count);
+                all_ask_comment_lists.attr('comment-count', ask_comment_count);
               }
             },
             beforeSend: function() {
@@ -312,5 +314,4 @@
 		        }
     });
   }
-
 </script>

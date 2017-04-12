@@ -378,6 +378,16 @@ function removeIOSRubberEffect(element) {
   }
 }
 
+function fixViewportHeightFB() {
+  if (userDevice.isIOS && userBrowser.isFacebook) {
+    window.addEventListener('resize', _.debounce(function() {
+      var th = window.innerHeight;
+      $('html, body').css({ height: th });
+      window.scrollTo(0, 0);
+    }, 50));
+  }
+}
+
 function fixViewportHeight() {
   var event;
 
@@ -548,7 +558,7 @@ function alarm_check(last_alarm_count) {
       if (alarm_count > 0) { alarm_badge.addClass('on').animateCss('wobble'); } else { alarm_badge.removeClass('on'); }
       if (last_alarm_count !== undefined && alarm_count > last_alarm_count) {
         user_alarms_on();
-        if (!window.HybridApp) { notify('새로운 알림이 도착했습니다!', "go_seg(4); $('#footer').removeClass('hide'); open_user_alarms();"); }
+        if (!window.HybridApp) notify(fetch_alarm_msg(data.last_alarm), "go_url('ask', " + data.last_alarm.ask_id + ");");
       }
     },
     beforeSend: function() {
@@ -824,6 +834,13 @@ $.fn.extend({
       var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
       $(this).addClass('animated ' + animationName).one(animationEnd, function() {
           $(this).remove();
+          if (typeof callback === 'function') callback();
+      });
+  },
+  transitionEnd: function (callback) {
+      var transitionEnd = 'webkitTransitionEnd mozTransitionEnd MSTransitionEnd oTransitionEnd transitionend';
+      $(this).one(transitionEnd, function() {
+          $(this).off(transitionEnd);
           if (typeof callback === 'function') callback();
       });
   },

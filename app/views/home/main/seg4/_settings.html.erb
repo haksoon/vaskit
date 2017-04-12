@@ -427,7 +427,6 @@
                 $('#edit_password_form #user_current_password').val('').focus();
               } else if (data.status === 'success') {
                 notify('비밀번호가 변경되었습니다!');
-                alarm_check();
                 $('#edit_password_form #user_current_password').val('').blur();
                 $('#edit_password_form #user_new_password').val('').blur();
                 $('#edit_password_form #user_new_password_confirmation').val('').blur();

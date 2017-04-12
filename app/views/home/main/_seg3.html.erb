@@ -985,7 +985,7 @@
       })
       .on('focus', function(e) {
         removeIOSKeyPadEffectOnFocus(e);
-        current_inner.scroll_to(false);
+        setTimeout(function(){ current_inner.scroll_to(false); }, 500);
         hashtag_container.addClass('on');
       }).on('blur', function(e) {
         removeIOSKeyPadEffectOnBlur(e);
