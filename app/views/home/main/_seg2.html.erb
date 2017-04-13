@@ -62,6 +62,9 @@
   {{ } else if (result == 'preview_search_list') { }}
     <div class="search_preview_div">
       <ul class="search_preview_list">
+        {{ $.each(data.videos, function(index, video) { }}
+          {{= searchPreviewTemplate({ result: result, type: 'video', keyword: video.title, time: null, id: video.id }) }}</li>
+        {{ }) }}
         {{ $.each(data.collections, function(index, collection) { }}
           {{= searchPreviewTemplate({ result: result, type: 'collection', keyword: collection.name, time: null, id: collection.id }) }}</li>
         {{ }) }}
@@ -91,18 +94,25 @@
     {{ var ga_function = "return false;" }}
   {{ } }}
   <li class="search_preview_item" onclick="{{= ga_function }}">
-    {{ if (type == 'collection') { }}
+    {{ if (type == 'video') { }}
+      <a class="search_preview_link"
+         href="{{= '/videos/' + id }}"
+         onclick="ga('send', 'event', '검색탭', '검색 비교영상 진입', {{= id }}, 1); go_url('video_ask', {{= id }}); window.event.cancelBubble = false;"
+         search-info="비교영상">
+        <i class="search_preview_icon fa fa-tv"></i>{{= unescape(keyword) }}
+      </a>
+    {{ } else if (type == 'collection') { }}
       <a class="search_preview_link"
          href="{{= '/collections/' + id }}"
          onclick="ga('send', 'event', '검색탭', '검색 컬렉션 진입', {{= id }}, 1); go_url('collection', {{= id }}); window.event.cancelBubble = false;"
-         time="{{= get_past_time(time) }}">
+         search-info="컬렉션">
         <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
       </a>
     {{ } else { }}
       <a class="search_preview_link"
          href="{{= '/search?type=' + escape(type) + '&keyword=' + escape(keyword) }}"
          onclick="go_url('search_result', {type: '{{= type }}', keyword: '{{= escape(keyword) }}'}); window.event.cancelBubble = false;"
-         time="{{= get_past_time(time) }}">
+         search-info="{{= get_past_time(time) }}">
         <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }}
       </a>
     {{ } }}
@@ -173,7 +183,7 @@
           search_input_submit.addClass('ready');
           recent_search_container.addClass('bottom');
           var keys = [13, 27, 40, 39, 38, 37];
-          if ($.inArray(e.keyCode, keys) == -1) _.throttle(preview_search_list($(this).val()), 500);
+          if ($.inArray(e.keyCode, keys) == -1) _.throttle(preview_search_list(keyword), 500);
         }
       })
       .on('focus', function() {
@@ -302,7 +312,30 @@
       <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }} 검색결과</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
   </div>
-  {{= asksListTemplate({ asks: asks, url: url, is_more_load: is_more_load }) }}
+  <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'asks');" url="{{= url }}">
+    {{ var search_result_count = videos.length + collections.length + asks.length }}
+    {{ if (search_result_count == 0) { }}
+      <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
+    {{ } else { }}
+      {{ for (var i=0; i < videos.length; i++) { }}
+        {{ var video = videos[i] }}
+        {{= videoThumbnailTemplate({ video: video }) }}
+      {{ } }}
+      {{ for (var j=0; j < collections.length; j++) { }}
+        {{ var collection = collections[j] }}
+        {{= collectionTemplate({ collection: collection }) }}
+      {{ } }}
+      {{ for (var k=0; k < asks.length; k++) { }}
+        {{ var ask = asks[k] }}
+        {{= askThumbnailTemplate({ ask: ask }) }}
+      {{ } }}
+      {{ if (is_more_load) { }}
+        <div class="loading_icon" page="2" loading="true" date="{{= new Date() }}"><i class="fa fa-spinner fa-spin"></i></div>
+      {{ } else { }}
+        <div class="loading_icon" page="2">- End of Contents -</i></div>
+      {{ } }}
+    {{ } }}
+  </div>
 </script>
 
 <script>
@@ -321,7 +354,7 @@
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
-              var html = searchResultTemplate({ type: type, keyword: keyword, asks: data.asks, url: url, is_more_load: data.is_more_load });
+              var html = searchResultTemplate({ type: type, keyword: keyword, videos: data.videos, collections: data.collections, asks: data.asks, url: url, is_more_load: data.is_more_load });
               create_wrapper(html);
               save_recent_search(type, keyword);
               $('#recent_search_list').html(searchPreviewListTemplate({ result: 'recent_search_list' }));

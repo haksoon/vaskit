@@ -14,6 +14,8 @@ class SearchController < ApplicationController
           search_keywords = SearchKeyword.order(list_order: :asc)
           render json: { search_keywords: search_keywords }
         else
+          videos = []
+          collections = []
           asks =
             case @type
             when 'hash_tag'
@@ -33,6 +35,12 @@ class SearchController < ApplicationController
               users = User.where('string_id LIKE ?', "%#{@keyword}%")
               Ask.where(user_id: users.map(&:id))
             when 'none'
+              videos = Video.where(show: true).where('title LIKE ?', "%#{@keyword}%").order(id: :desc).distinct(:title)
+
+              collection_keyword_ids = CollectionKeyword.where('keyword LIKE ?', "%#{@keyword}%").order(refer_count: :desc).map(&:id)
+              collection_ids = CollectionToCollectionKeyword.where(collection_keyword_id: collection_keyword_ids).map(&:collection_id)
+              collections = Collection.where('id IN (?) OR name LIKE ?', collection_ids, "%#{@keyword}%").distinct(:name)
+
               ask_ids = []
               hash_tags = HashTag.where('keyword LIKE ?', "%#{@keyword}%")
               title_ask_deals = AskDeal.where('title LIKE ?', "%#{@keyword}%")
@@ -47,7 +55,7 @@ class SearchController < ApplicationController
               ask_ids << Ask.where('left_ask_deal_id IN (?) OR right_ask_deal_id IN (?)',
                                    brand_ask_deals.map(&:id),
                                    brand_ask_deals.map(&:id)).pluck(:id)
-              Ask.where(id: ask_ids)
+              Ask.where(id: ask_ids.flatten.uniq)
             end
           asks = asks.order(id: :desc)
                      .page(params[:page]).per(Ask::ASK_PER)
@@ -61,7 +69,8 @@ class SearchController < ApplicationController
                                         { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
                                         :ask_complete,
                                         :event])
-          render json: { asks: asks, is_more_load: is_more_load }
+
+          render json: { videos: videos, collections: collections, asks: asks, is_more_load: is_more_load }
         end
       end
     end
@@ -76,9 +85,11 @@ class SearchController < ApplicationController
     users = []
     is_empty_result = false
     unless keyword.blank?
-      collection_keywords = CollectionKeyword.where('keyword LIKE ?', "%#{keyword}%").order(refer_count: :desc)
-      related_collections = CollectionToCollectionKeyword.where(collection_keyword_id: collection_keywords.map(&:id))
-      collections = Collection.where(id: related_collections.map(&:collection_id)).select(:id, :name).distinct(:name)
+      videos = Video.where(show: true).where('title LIKE ?', "%#{keyword}%").order(id: :desc).distinct(:title).select(:id, :title)
+
+      collection_keyword_ids = CollectionKeyword.where('keyword LIKE ?', "%#{keyword}%").order(refer_count: :desc).map(&:id)
+      collection_ids = CollectionToCollectionKeyword.where(collection_keyword_id: collection_keyword_ids).map(&:collection_id)
+      collections = Collection.where('id IN (?) OR name LIKE ?', collection_ids, "%#{keyword}%").distinct(:name).select(:id, :name)
 
       hash_tags = HashTag.where('keyword LIKE ?', "%#{keyword}%").select(:keyword).distinct(:keyword)
       ask_deals = AskDeal.where('title LIKE ?', "%#{keyword}%").select(:title).distinct(:title)
@@ -87,8 +98,9 @@ class SearchController < ApplicationController
       users = User.where('string_id LIKE ?', "%#{keyword}%")
                   .where(id: asks.map(&:user_id)).select(:string_id).distinct(:string_id)
     end
-    is_empty_result = true if users.blank? && hash_tags.blank? && ask_deals.blank? && brands.blank?
-    render json: { collections: collections,
+    is_empty_result = true if videos.blank? && collections.blank? && users.blank? && hash_tags.blank? && ask_deals.blank? && brands.blank?
+    render json: { videos: videos,
+                   collections: collections,
                    hash_tags: hash_tags,
                    ask_deals: ask_deals,
                    brands: brands,

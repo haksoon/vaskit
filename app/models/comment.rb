@@ -30,17 +30,6 @@ class Comment < ActiveRecord::Base
   after_create :reload_ask_deal_comment_count, :create_comment_alarm, :create_reply_comment_alarm, :create_sub_comment_alarm, :create_reply_sub_comment_alarm, :create_liked_ask_comment_alarm
   after_update :reload_ask_deal_comment_count, :create_comment_alarm, :create_reply_comment_alarm, :create_sub_comment_alarm, :create_reply_sub_comment_alarm, :create_liked_ask_comment_alarm, if: :is_deleted
 
-  def self.delete_blank_comment
-    where(is_deleted: true).each do |comment|
-      if comment.comment_id.nil?
-        comment.update_columns(ask_deal_id: nil) if comment.reply_comments.count.zero?
-      else
-        comment.update_columns(ask_deal_id: nil)
-        comment.original_comment.update_columns(ask_deal_id: nil) if comment.original_comment.is_deleted
-      end
-    end
-  end
-
   def generate_hash_tags
     HashTag.destroy_all(ask_id: ask_id, comment_id: id)
     # 업데이트의 경우 기존 해시태그를 모두 삭제한 후 재설정

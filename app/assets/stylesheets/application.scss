@@ -493,7 +493,7 @@ body {
 }
 
 #loading_init {
-  position: absolute; top: 0; width: 100%; height: calc(100% - 50px); z-index: 5;
+  position: absolute; top: 0; width: 100%; height: 100%; z-index: 5;
   display: table; background-color: #fff; line-height: 40px; @include font-number; box-shadow: none !important;
   #loading_spinner { margin: 0 auto; width: 35px; height: 20px;
     div {
@@ -927,8 +927,8 @@ body {
       &[comment-count = '0'] { display: none; }
     }
 
-    .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s;
-      &.new_alarm::before { content: ''; position: absolute; top: 0; width: 2px; height: 100%; background-color: #ff7200; }
+    .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s; -webkit-tap-highlight-color: transparent;
+      &.new_alarm::before { content: ''; position: absolute; top: 0; width: 20px; height: 100%; background-color: #ff7200; border-radius: 2px; }
       .comment_reply_icon { position: absolute; top: 5px; padding: 5px; color: #ccc; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 50%; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
       .comment_user { position: relative; height: 14px; margin: 4px 5px 2px; font-size: 11px; color: #999; @include font-number;
@@ -940,13 +940,14 @@ body {
         .comment_user_id {
           &.vaskit { color: #ff7200; }
         }
-        .comment_menu_btn { position: absolute; top: -10px; height: 25px; line-height: 35px; padding: 0 10px; font-size: 10px; color: #999; transform-origin: bottom center; transition: transform .25s; -webkit-tap-highlight-color: transparent;
+        .comment_menu_btn { position: absolute; top: -10px; height: 25px; line-height: 35px; padding: 0 10px; font-size: 10px; color: #999; transform-origin: bottom center; transition: transform .25s;
           &:active { transform: scale(1.2); }
         }
       }
       .comment_bubble { position: relative; display: block; line-height: 20px; padding: 10px; box-sizing: border-box; border-radius: 7px; word-break: break-all; transition: background-color .25s, color .25s, margin .25s, padding .25s;
         &::before { content: ''; position: absolute; display: inline-block; top: 7px; border-width: 4px; border-style: solid; border-color: transparent; transition: border-color .25s; }
         &::after { content: attr(date); position: absolute; top: 10px; width: 50px; text-align: center; color: #ccc; font-size: 10px; }
+        .comment_content.after_completed::after { content: '투표 종료 이후에 작성된 댓글입니다'; display: block; margin-top: 5px; text-align: center; font-size: 11px; color: #999; background-color: #f2f0f0; border: 1px dashed #999; border-radius: 5px; }
       }
       .comment_like_span { font-size: 11px; white-space: nowrap;
         div { margin: 5px 0 0; }
@@ -956,8 +957,11 @@ body {
 
       &.reply { margin-top: -5px; }
       &.left { text-align: left; margin-right: 45px; transform-origin: center left;
-        &.new_alarm::before { left: -5px; }
-        &.reply { margin-left: 45px; }
+        &:active { margin-left: 10px; margin-right: 40px; }
+        &.new_alarm::before { left: -22px; }
+        &.reply { margin-left: 45px;
+          &:active { margin-left: 50px; margin-right: 40px; }
+        }
         .comment_reply_icon { left: -30px; transform: rotate(180deg); }
         .comment_user_pic { float: left; }
         .comment_user { margin-left: 45px;
@@ -975,8 +979,11 @@ body {
         .comment_like_span { padding-right: 10px; margin-left: 45px; text-align: right; }
       }
       &.right { text-align: right; margin-left: 45px; transform-origin: center right;
-        &.new_alarm::before { right: -5px; }
-        &.reply { margin-right: 45px; }
+        &:active { margin-left: 40px; margin-right: 10px; }
+        &.new_alarm::before { right: -22px; }
+        &.reply { margin-right: 45px;
+          &:active { margin-left: 40px; margin-right: 50px; }
+        }
         .comment_reply_icon { right: -30px; transform: scale(1, -1); }
         .comment_user_pic { float: right; }
         .comment_user { margin-right: 45px;
@@ -1038,10 +1045,6 @@ body {
         }
       }
     }
-    .read_line { height: 14px; margin-bottom: 15px; line-height: 30px; border-bottom: 1px dashed #dbdbdb; text-align: center; color: #ccc; font-size: 11px;
-      &::before { content: '\f0d7  여기까지 읽었습니다'; background-color: #f2f0f0; padding: 5px 10px; border: 1px dashed #dbdbdb; border-radius: 5px; color: #999; @include font-icon; }
-    }
-    .end_line { font-size: 11px; text-align: center; color: #666; border-bottom: 1px dashed #999; border-radius: 0; }
   }
 }
 
@@ -1157,7 +1160,7 @@ body {
           position: relative; display: block; padding: 0 50px 0 40px; height: 50px; line-height: 50px; border-bottom: 1px solid #eee; box-sizing: border-box;
           background-color: #fff; color: #666; transition: background-color .2s; @include ellipsis;
           &.search_focus { background-color: #ffe4a9; }
-          .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; margin: 17px 7px; background-position-y: -56px;
+          .search_preview_icon { position: absolute; left: 10px; width: 16px; height: 16px; line-height: 16px; text-align: center; margin: 17px 7px; background-position-y: -56px; color: #999;
             &.collection_icon { background-position-x: 0; }
             &.hash_tag_icon { background-position-x: -16px; }
             &.ask_deal_icon { background-position-x: -32px; }
@@ -1165,7 +1168,7 @@ body {
             &.user_icon { background-position-x: -64px; }
             &.none_icon { background-position-x: -80px; }
           }
-          &::before { content: attr(time); position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
+          &::before { content: attr(search-info); position: absolute; top: 0; right: 0; margin: 0 10px; font-size: 10px; color: #999; }
         }
       }
     }

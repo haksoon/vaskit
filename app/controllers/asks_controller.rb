@@ -329,11 +329,8 @@ class AsksController < ApplicationController
                        left_vote_count: ask.left_ask_deal.vote_count,
                        right_vote_count: ask.right_ask_deal.vote_count)
     ask.ask_notifier('complete')
-
     ask.alarm_read(current_user.id) if current_user
-
     ask = ask.fetch_ask_detail
-
     render json: { ask: ask }
   end
 

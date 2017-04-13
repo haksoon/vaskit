@@ -114,4 +114,5 @@ class Alarm < ActiveRecord::Base
     push_send_IOS(registration_ids_ios, payload) unless registration_ids_ios.blank?
     push_send_AOS(registration_ids_aos, payload) unless registration_ids_aos.blank?
   end
+  handle_asynchronously :alarm_push_send
 end

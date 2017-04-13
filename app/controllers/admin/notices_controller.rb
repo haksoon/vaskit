@@ -8,6 +8,10 @@ class Admin::NoticesController < Admin::HomeController
   def new
   end
 
+  # GET /admin/notices/target
+  def target
+  end
+
   # GET /admin/notices/test
   def test
     return if params[:msg].blank? || params[:link].blank?
@@ -150,11 +154,5 @@ class Admin::NoticesController < Admin::HomeController
 
     flash['success'] = "총 #{success_count}개의 푸시알림을 성공적으로 전송하였습니다"
     redirect_to admin_notices_path
-  end
-
-  private
-
-  # GET /admin/notices/target
-  def target
   end
 end

@@ -75,17 +75,26 @@
           <%= f.input :fb_id,
                       label: '4. 페이스북 영상 입력',
                       error: '' do %>
-            <p class="help-block">페이스북 영상을 선택해주세요</p>
-            <%= f.input_field :fb_id,
-                              as: :select,
-                              collection: @facebook_video_list.collect { |video| [video['description'].truncate(100), video['id']] },
-                              prompt: '페이스북 영상을 선택해주세요',
-                              class: 'form-control',
-                              placeholder: '페이스북 영상을 선택해주세요',
-                              onchange: "$('#fb_preview_link_btn').click();" %>
-            <button id="fb_preview_link_btn" class="btn btn-success hidden" type="button" onclick="preview_link('facebook', $('#video_fb_id'), null, $('#fb_link_preview'), $('#fb_preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+            <p class="help-block">페이스북 영상 ID를 입력한 뒤 미리보기 버튼을 누르세요</p>
+            <div class="input-group">
+              <%= f.input_field :fb_id,
+                                as: :string,
+                                class: 'form-control',
+                                placeholder: '페이스북 영상 ID를 입력해주세요',
+                                onchange: "$('#fb_preview_link_btn').click();" %>
+              <span class="input-group-btn">
+                <button id="fb_preview_link_btn" class="btn btn-success" type="button" onclick="preview_link('facebook', $('#video_fb_id'), null, $('#fb_link_preview'), $('#fb_preview_completed'));"><i class="fa fa-search"></i> 미리보기</button>
+              </span>
+            </div>
             <%= check_box_tag 'fb_preview_completed', '', @video.id.nil? ? false : true, class: 'hidden required_form' %>
           <% end %>
+          <%= select_tag :fb_video_list,
+                          options_for_select(@facebook_video_list.collect { |video| [video['description'], video['id']] }),
+                          {
+                            class: 'form-control',
+                            prompt: '또는 최근 업로드 영상 목록에서 선택해주세요',
+                            onchange: "$('#video_fb_id').val($(this).val()); $('#fb_preview_link_btn').click();"
+                          } %>
           <div id="fb_link_preview" class="well <%= 'hidden' if @video.fb_id.blank? %>">
             <div class="embed-responsive embed-responsive-16by9">
               <iframe class="embed-responsive-item" src="<%= "https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fvaskit.kr%2Fvideos%2F#{@video.fb_id}%2F&width=500&height=280&show_text=false&appId=#{Facebook::CONFIG['app_id']}" unless @video.fb_id.blank? %>"></iframe>
@@ -95,8 +104,8 @@
           <%= f.input :yt_id,
                       label: '5. 유튜브 영상 입력',
                       error: '' do %>
-              <p class="help-block">유튜브 영상 ID를 입력한 뒤 미리보기 버튼을 누르세요</p>
-              <div class="input-group">
+            <p class="help-block">유튜브 영상 ID를 입력한 뒤 미리보기 버튼을 누르세요</p>
+            <div class="input-group">
               <%= f.input_field :yt_id,
                                 as: :string,
                                 class: 'form-control',
