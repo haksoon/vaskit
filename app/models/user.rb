@@ -22,6 +22,7 @@ class User < ActiveRecord::Base
   has_many :log_reports
   has_many :log_inquiries
   has_many :user_categories
+  has_one :user_activity_score
 
   has_attached_file :avatar,
                     styles: { original: '200x200#' },

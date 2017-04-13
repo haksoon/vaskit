@@ -37,6 +37,21 @@ class CommentsController < ApplicationController
       comment = comment.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                                           { comment_likes: { include: { user: { only: [:id, :string_id] } } } }])
       status = 'success'
+      if current_user.id != ask.user_id
+        if content.length < 50
+          UserActivityScore.update_user_grade(current_user.id, "comment")
+        elsif content.length < 100
+          UserActivityScore.update_user_grade(current_user.id, "comment_50")
+        else
+          UserActivityScore.update_user_grade(current_user.id, "comment_100")
+        end
+      end
+      if original_comment_id
+        original_comment_user_id = Comment.find_by_id(original_comment_id).user_id
+        if original_comment_user_id != current_user.id && original_comment_user_id != ask.user_id
+          UserActivityScore.update_user_grade(original_comment_user_id, "original_comment")
+        end
+      end
     else
       status = 'not_authorized'
     end
@@ -61,6 +76,22 @@ class CommentsController < ApplicationController
   def update
     comment = @comment
     if current_user && current_user.id == comment.user_id
+      if current_user.id != ASK.find_by_id(comment.ask_id).user_id
+        if comment.content.length < 50
+          UserActivityScore.update_user_grade(current_user.id, "comment_deleted")
+        elsif content.length < 100
+          UserActivityScore.update_user_grade(current_user.id, "comment_50_deleted")
+        else
+          UserActivityScore.update_user_grade(current_user.id, "comment_100_deleted")
+        end
+        if content.length < 50
+          UserActivityScore.update_user_grade(current_user.id, "comment")
+        elsif length < 100
+          UserActivityScore.update_user_grade(current_user.id, "comment_50")
+        else
+          UserActivityScore.update_user_grade(current_user.id, "comment_100")
+        end
+      end
       ask = comment.ask
       comment.update(content: params[:content])
       comment.generate_hash_tags
@@ -100,6 +131,16 @@ class CommentsController < ApplicationController
       comment.original_comment.update_columns(ask_deal_id: nil) if comment.original_comment && comment.original_comment.is_deleted && comment.original_comment.reply_comments.count.zero?
       comment.generate_hash_tags
       status = 'success'
+
+      if current_user.id != ASK.find_by_id(comment.ask_id).user_id
+        if comment.content.length < 50
+          UserActivityScore.update_user_grade(current_user.id, "comment_deleted")
+        elsif content.length < 100
+          UserActivityScore.update_user_grade(current_user.id, "comment_50_deleted")
+        else
+          UserActivityScore.update_user_grade(current_user.id, "comment_100_deleted")
+        end
+      end
     else
       status = 'not_authorized'
     end
@@ -114,11 +155,15 @@ class CommentsController < ApplicationController
       already_like = false
       CommentLike.create(user_id: current_user.id, comment_id: params[:id])
       recent_user = current_user
+      UserActivityScore.update_user_grade(current_user.id, "comment_like")
+      UserActivityScore.update_user_grade(Comment.find_by_id(params[:id]).user_id, "original_comment_like")
     else
       already_like = true
       comment_like.update(is_deleted: true)
       last_comment_like = CommentLike.where(comment_id: params[:id]).last
       recent_user = last_comment_like.user unless last_comment_like.nil?
+      UserActivityScore.update_user_grade(current_user.id, "comment_like_deleted")
+      UserActivityScore.update_user_grade(Comment.find_by_id(params[:id]).user_id, "original_comment_like_deleted")
     end
     comment_like_count = CommentLike.where(comment_id: params[:id]).count
 

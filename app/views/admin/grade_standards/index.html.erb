@@ -1,0 +1,115 @@
+<div class="jumbotron clearfix">
+  <h1>등급 목록</h1>
+  <p>등급을 설정할 수 있습니다</p>
+  <%= link_to '새로운 등급 생성하기',
+              new_admin_grade_standard_path,
+              { class: 'btn btn-success btn-lg pull-right' } %>
+</div>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">등급 전체목록</div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width: 7%;">순서</th>
+          <th style="width: 7%;">ID</th>
+          <th style="width: 16%;">이미지</th>
+          <th style="width: 10%;">이름</th>
+          <th style="width: 10%;">기준 (%)</th>
+          <th style="width: 10%;">기준 점수</th>
+          <th style="width: 20%;">수정</th>
+          <th style="width: 20%;">삭제</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @grade_standards.each do |grade_standard| %>
+          <tr>
+            <th><kbd><%= grade_standard.grade_order %></kbd></th>
+            <td><%= grade_standard.id %></td>
+            <td><%= image_tag grade_standard.image.url(:original), width: '100%' %></td>
+            <td><%= grade_standard.name %></td>
+            <td><%= grade_standard.percent_standard %> %</td>
+            <td><%= grade_standard.score_standard %> 점</td>
+            <td><%= link_to '수정', edit_admin_grade_standard_path(grade_standard.id), class: 'btn btn-warning btn-block' %></td>
+            <td><%= link_to '삭제', admin_grade_standard_path(grade_standard.id), { class: 'btn btn-danger btn-block', method: :delete, data: { confirm: '정말로 해당 등급을 삭제하시겠어요?', disable_with: '취소중...' } } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">수정 될 등급 목록</div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width: 14%;">등급 ID</th>
+          <th style="width: 16%;">이미지</th>
+          <th style="width: 23%;">이름</th>
+          <th style="width: 23%;">기준 (%)</th>
+          <th style="width: 23%;">삭제</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @grade_standard_will_be_modifieds.each do |grade_standard_will_be_modified| %>
+          <tr>
+            <th><%= grade_standard_will_be_modified.grade_standard_id %></th>
+            <td><%= image_tag grade_standard_will_be_modified.image.url(:original), width: '100%' %></td>
+            <td><%= grade_standard_will_be_modified.name %></td>
+            <td><%= grade_standard_will_be_modified.percent_standard %> %</td>
+            <td><%= link_to '취소', cancel_modifiy_admin_grade_standard_path(grade_standard_will_be_modified.id), { class: 'btn btn-danger btn-block', method: :patch, data: { confirm: '정말로 해당 등급을 삭제하시겠어요?', disable_with: '취소중...' } } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">상위 10명</div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width: 5%;">등수</th>
+          <th style="width: 5%;">ID</th>
+          <th style="width: 10%;">이번주 점수</th>
+          <th style="width: 10%;">1주전 점수</th>
+          <th style="width: 10%;">2주전 점수</th>
+          <th style="width: 10%;">3주전 점수</th>
+          <th style="width: 10%;">총 점수</th>
+          <th style="width: 10%;">등급</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% i = 1 %>
+        <% @top_10_users.each do |top_10_user| %>
+          <tr>
+            <th><kbd><%= i %></kbd></th>
+            <td><%= top_10_user.user.email %></td>
+            <td><%= top_10_user.cycle_1_score %> 점</td>
+            <td><%= top_10_user.cycle_2_score %> 점</td>
+            <td><%= top_10_user.cycle_3_score %> 점</td>
+            <td><%= top_10_user.cycle_4_score %> 점</td>
+            <td><%= top_10_user.total_score %> 점</td>
+            <% if top_10_user.grade_standard_id %>
+              <td><%= top_10_user.grade_standard.name %></td>
+            <% else %>
+              <td></td>
+            <% end %>
+          </tr>
+          <% i += 1 %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
