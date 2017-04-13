@@ -50,7 +50,7 @@
 <script type="text/template" id="commentWritingSignTemplate">
   {{ var direction = is_left ? 'left' : 'right' }}
   {{ var reply = is_reply ? 'reply' : '' }}
-  <li class="comment_box is_writing {{= direction }} {{= reply }} clearfix animated bounceIn" onclick="cancle_comment_writing();">
+  <li class="comment_box is_writing {{= direction }} {{= reply }} clearfix" onclick="cancle_comment_writing();">
     {{ if (is_reply) { }}
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}

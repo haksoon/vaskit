@@ -927,7 +927,7 @@ body {
       &[comment-count = '0'] { display: none; }
     }
 
-    .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: transform .1s; -webkit-tap-highlight-color: transparent; animation: bounceIn .75s 1;
+    .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: transform .25s; -webkit-tap-highlight-color: transparent; animation: bounceIn .75s 1;
       &.new_alarm::before { content: ''; position: absolute; top: 0; width: 20px; height: 100%; background-color: #ff7200; border-radius: 2px; }
       .comment_reply_icon { position: absolute; top: 5px; padding: 5px; color: #ccc; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 50%; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
@@ -959,9 +959,7 @@ body {
       &.left { text-align: left; margin-right: 45px; transform-origin: center left;
         &:active { transform: translateX(5px); }
         &.new_alarm::before { left: -22px; }
-        &.reply { margin-left: 45px;
-          &:active { margin-left: 50px; margin-right: 40px; }
-        }
+        &.reply { margin-left: 45px; }
         .comment_reply_icon { left: -30px; transform: rotate(180deg); }
         .comment_user_pic { float: left; }
         .comment_user { margin-left: 45px;
@@ -981,9 +979,7 @@ body {
       &.right { text-align: right; margin-left: 45px; transform-origin: center right;
         &:active { transform: translateX(-5px); }
         &.new_alarm::before { right: -22px; }
-        &.reply { margin-right: 45px;
-          &:active { margin-left: 40px; margin-right: 50px; }
-        }
+        &.reply { margin-right: 45px; }
         .comment_reply_icon { right: -30px; transform: scale(1, -1); }
         .comment_user_pic { float: right; }
         .comment_user { margin-right: 45px;
