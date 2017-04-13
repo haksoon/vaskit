@@ -927,7 +927,7 @@ body {
       &[comment-count = '0'] { display: none; }
     }
 
-    .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .5s; -webkit-tap-highlight-color: transparent;
+    .comment_box { position: relative; margin: 5px; padding: 5px; border-radius: 10px; transition: background-color .25s, margin .25s, padding .25s, transform .25s; -webkit-tap-highlight-color: transparent; animation: bounceIn .75s 1;
       &.new_alarm::before { content: ''; position: absolute; top: 0; width: 20px; height: 100%; background-color: #ff7200; border-radius: 2px; }
       .comment_reply_icon { position: absolute; top: 5px; padding: 5px; color: #ccc; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 50%; font-size: 10px; }
       .comment_user_pic { width: 30px; height: 30px; border-radius: 15px; }
@@ -957,7 +957,7 @@ body {
 
       &.reply { margin-top: -5px; }
       &.left { text-align: left; margin-right: 45px; transform-origin: center left;
-        &:active { margin-left: 10px; margin-right: 40px; }
+        &:active { transform: translateX(5px); }
         &.new_alarm::before { left: -22px; }
         &.reply { margin-left: 45px;
           &:active { margin-left: 50px; margin-right: 40px; }
@@ -979,7 +979,7 @@ body {
         .comment_like_span { padding-right: 10px; margin-left: 45px; text-align: right; }
       }
       &.right { text-align: right; margin-left: 45px; transform-origin: center right;
-        &:active { margin-left: 40px; margin-right: 10px; }
+        &:active { transform: translateX(-5px); }
         &.new_alarm::before { right: -22px; }
         &.reply { margin-right: 45px;
           &:active { margin-left: 40px; margin-right: 50px; }
@@ -1013,7 +1013,7 @@ body {
           &:active { background-color: #ffe4a9 !important; }
         }
       }
-      &.deleted { padding: 0 5px; margin-top: 5px; margin-bottom: 10px; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 0; transform: rotateX(720deg);
+      &.deleted { padding: 0 5px; margin-top: 5px; margin-bottom: 10px; background-color: #f2f0f0; border: 1px dashed #dbdbdb; border-radius: 0; transition: transform 1s; transform: rotateX(720deg);
         .comment_user_pic { display: none; }
         .comment_user { display: none; }
         .comment_bubble { background-color: transparent; color: #999; margin: 0; padding: 10px 5px;

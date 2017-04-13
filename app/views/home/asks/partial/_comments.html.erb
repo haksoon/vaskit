@@ -30,7 +30,7 @@
   {{ if (current_user) { }}
     {{ is_liked_comment = $.grep(comment.comment_likes, function(obj) { return obj.user_id === current_user.id}).length === 0 ? false : true }}
   {{ } }}
-  <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} {{= comment.is_deleted ? 'deleted' : '' }} {{= comment.user.id == 1 ? 'vaskit' : '' }} clearfix animated bounceIn" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" ask-user-id="{{= ask.user_id }}" comment-user-id="{{= comment.user_id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}">
+  <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} {{= comment.is_deleted ? 'deleted' : '' }} {{= comment.user.id == 1 ? 'vaskit' : '' }} clearfix" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" ask-user-id="{{= ask.user_id }}" comment-user-id="{{= comment.user_id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}">
     {{ if (reply == "reply") { }}
       <i class="fa fa-reply comment_reply_icon"></i>
     {{ } }}
