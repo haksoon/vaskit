@@ -2,22 +2,6 @@ class UserActivityScore < ActiveRecord::Base
   belongs_to :user
   belongs_to :grade_standard
 
-  def self.daily_update_user_grade
-    all.each do |u|
-      total_score = u.total_score
-      grade_standard_count = GradeStandard.all.count
-      user_grade_standard_id = nil
-      for i in 0..grade_standard_count-1
-        next_grade_standard = GradeStandard.find_by(grade_order: grade_standard_count-i)
-        if total_score < next_grade_standard.score_standard
-          break
-        end
-        user_grade_standard_id = next_grade_standard.id
-      end
-      u.update(grade_standard_id: user_grade_standard_id)
-    end
-  end
-
   def self.update_user_grade(user_id, action)
     score = 0
     did_upgrade = false
@@ -85,7 +69,7 @@ class UserActivityScore < ActiveRecord::Base
       end
     else
       next_grade = GradeStandard.find_by(grade_order: GradeStandard.all.count)
-      if total_score >= next_grade.score_standard
+      if next_grade != nil && total_score >= next_grade.score_standard
         grade_standard_id = next_grade.id
       end
     end
@@ -96,11 +80,28 @@ class UserActivityScore < ActiveRecord::Base
   end
 
   def self.weekly_update_user_grade
-    if Date.today.wday == 2
+    if Date.today.wday == 1
       all.each do |u|
-        u.update(cycle_1_score: 0, cycle_2_score: u.cycle_1_score, cycle_3_score: u.cycle_2_score, cycle_4_score: u.cycle_3_score, total_score: u.cycle_1_score + u.cycle_2_score + u.cycle_3_score)
+        if u.cycle_1_score + u.cycle_2_score + u.cycle_3_score == 0
+          u.destroy
+        else
+          u.update(cycle_1_score: 0, cycle_2_score: u.cycle_1_score, cycle_3_score: u.cycle_2_score, cycle_4_score: u.cycle_3_score, total_score: u.cycle_1_score + u.cycle_2_score + u.cycle_3_score)
+        end
       end
     end
     GradeStandard.daily_update_grade_standard
+  end
+
+  def self.daily_update_user_grade
+    grade_standard_count = GradeStandard.all.count
+    all.each do |u|
+      user_grade_standard_id = nil
+      for i in 0..grade_standard_count-1
+        next_grade_standard = GradeStandard.find_by(grade_order: grade_standard_count-i)
+        break if u.total_score < next_grade_standard.score_standard
+        user_grade_standard_id = next_grade_standard.id
+      end
+      u.update(grade_standard_id: user_grade_standard_id)
+    end
   end
 end

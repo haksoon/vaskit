@@ -23,6 +23,8 @@ class CommentsController < ApplicationController
 
   # POST /comments.json
   def create
+    content = params[:content]
+    original_comment_id = params[:comment_id]
     if current_user
       ask = Ask.find(params[:ask_id])
       ask_deal_id = params[:is_left] == 'true' ? ask.left_ask_deal_id : ask.right_ask_deal_id
@@ -30,13 +32,14 @@ class CommentsController < ApplicationController
       comment = Comment.create(user_id: current_user.id,
                                ask_id: ask.id,
                                ask_deal_id: ask_deal_id,
-                               content: params[:content],
-                               comment_id: params[:comment_id])
+                               content: content,
+                               comment_id: original_comment_id)
 
       comment.generate_hash_tags
       comment = comment.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                                           { comment_likes: { include: { user: { only: [:id, :string_id] } } } }])
       status = 'success'
+      
       if current_user.id != ask.user_id
         if content.length < 50
           UserActivityScore.update_user_grade(current_user.id, "comment")

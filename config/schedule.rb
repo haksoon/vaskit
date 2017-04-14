@@ -25,7 +25,7 @@ every 1.day, at: '12:00 am' do
   runner 'SlackNotifier.slack_notifier_daily_summary'
 end
 
-every 1.day, at: '12:02 am' do
+every 1.day, at: '06:00 am' do
   runner 'UserActivityScore.weekly_update_user_grade'
 end
 

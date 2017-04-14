@@ -110,7 +110,7 @@ Rails.application.routes.draw do
     resources :collection_to_collection_keywords, only: [:index]
     resources :collection_to_asks, only: [:create]
     resources :videos
-    resources :grade_standards, only: [:index, :new, :edit, :create, :update, :destroy] do
+    resources :grade_standards, except: [:show] do
       member do
         patch :cancel_modifiy
       end

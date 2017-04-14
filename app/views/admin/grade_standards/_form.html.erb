@@ -34,7 +34,7 @@
     </div>
     <div class="panel panel-warning">
       <!-- Default panel contents -->
-      <div class="panel-heading"><kbd><%= @grade_standard.id %>번</kbd> 등급 수정</div>
+      <div class="panel-heading"><kbd><%= @grade_standard.grade_standard_id %>번</kbd> 등급 수정</div>
   <% end %>
       <div class="panel-body">
         <div class="form-inputs">
@@ -52,7 +52,9 @@
                       error: '',
                       input_html: {
                                     class: 'required_form',
-                                    placeholder: '등급 퍼센트 기준을 입력하세요'
+                                    placeholder: '등급 퍼센트 기준을 입력하세요',
+                                    min: '1',
+                                    max: '100'
                                   } %>
           <%= f.input :image,
                       label: '3. 이미지 입력',
