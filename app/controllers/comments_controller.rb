@@ -39,7 +39,7 @@ class CommentsController < ApplicationController
       comment = comment.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                                           { comment_likes: { include: { user: { only: [:id, :string_id] } } } }])
       status = 'success'
-      
+
       if current_user.id != ask.user_id
         if content.length < 50
           UserActivityScore.update_user_grade(current_user.id, "comment")
@@ -79,24 +79,25 @@ class CommentsController < ApplicationController
   def update
     comment = @comment
     if current_user && current_user.id == comment.user_id
-      if current_user.id != ASK.find_by_id(comment.ask_id).user_id
+      content = params[:content]
+      if current_user.id != Ask.find_by_id(comment.ask_id).user_id
         if comment.content.length < 50
           UserActivityScore.update_user_grade(current_user.id, "comment_deleted")
-        elsif content.length < 100
+        elsif comment.content.length < 100
           UserActivityScore.update_user_grade(current_user.id, "comment_50_deleted")
         else
           UserActivityScore.update_user_grade(current_user.id, "comment_100_deleted")
         end
         if content.length < 50
           UserActivityScore.update_user_grade(current_user.id, "comment")
-        elsif length < 100
+        elsif content.length < 100
           UserActivityScore.update_user_grade(current_user.id, "comment_50")
         else
           UserActivityScore.update_user_grade(current_user.id, "comment_100")
         end
       end
       ask = comment.ask
-      comment.update(content: params[:content])
+      comment.update(content: content)
       comment.generate_hash_tags
       comment = comment.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
                                           { comment_likes: { include: { user: { only: [:id, :string_id] } } } }])
@@ -135,10 +136,10 @@ class CommentsController < ApplicationController
       comment.generate_hash_tags
       status = 'success'
 
-      if current_user.id != ASK.find_by_id(comment.ask_id).user_id
+      if current_user.id != Ask.find_by_id(comment.ask_id).user_id
         if comment.content.length < 50
           UserActivityScore.update_user_grade(current_user.id, "comment_deleted")
-        elsif content.length < 100
+        elsif comment.content.length < 100
           UserActivityScore.update_user_grade(current_user.id, "comment_50_deleted")
         else
           UserActivityScore.update_user_grade(current_user.id, "comment_100_deleted")

@@ -18,11 +18,11 @@ class UserActivityScore < ActiveRecord::Base
     when "comment_100" #댓글, 대댓글달기(100자 이상)
       score = 20
     when "comment_deleted" #댓글, 대댓글삭제(50자 미만)
-      score = 10
+      score = -10
     when "comment_50_deleted" #댓글, 대댓글삭제(100자 미만)
-      score = 15
+      score = -15
     when "comment_100_deleted" #댓글, 대댓글삭제(100자 이상)
-      score = 20
+      score = -20
     when "original_comment" #대댓글이 달렸을떄
       score = 3
     when "comment_like" #댓글 좋아요
