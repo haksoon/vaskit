@@ -4,9 +4,11 @@ class Admin::GradeStandardsController < Admin::HomeController
   def index
     @grade_standards = GradeStandard.all.includes(:grade_standard_will_be_modified)
     @new_grade_standards = GradeStandardWillBeModified.where(grade_standard_id: nil)
-    @user_count = UserActivityScore.all.count
-    @user_scores = UserActivityScore.order(total_score: :desc).map(&:total_score)
-    @top_10_users = UserActivityScore.order(total_score: :desc).limit(10)
+    @user_scores = UserActivityScore.includes(:user)
+                                    .order(total_score: :desc)
+                                    .select(:user_id, :total_score)
+                                    .as_json(include: [user: { only: [:string_id] }])
+    @top_10_users = UserActivityScore.includes(:user).order(total_score: :desc).limit(10)
   end
 
   # GET /admin/grade_standards/:id

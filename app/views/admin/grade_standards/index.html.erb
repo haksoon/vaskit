@@ -9,7 +9,7 @@
 
 <div class="panel panel-info">
   <!-- Default panel contents -->
-  <div class="panel-heading">전체 사용자 점수 현황 (총 <%= @user_count %>명)</div>
+  <div class="panel-heading">전체 사용자 점수 현황 (총 <%= @user_scores.count %>명)</div>
 
   <div class="panel-body">
     <div id="user_score_chart" class="ct-chart ct-perfect-fourth"></div>
@@ -55,13 +55,18 @@
 
 <script>
   $(window).ready(function(){
+    var user_scores = <%= raw @user_scores.to_json %>;
+    var label_list = [];
+    var score_list = [];
+
+    $.each(user_scores, function(index, user_score) {
+      label_list.unshift(user_score.user_id);
+      score_list.unshift({meta: user_score.user.string_id, value: user_score.total_score});
+    });
+
     var chart_options = {
       showArea: true,
       fullWidth: true,
-      reverseData: true,
-      axisX: {
-        showGrid: false
-      },
       axisY: {
         labelInterpolationFnc: function(value) {
           return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -71,8 +76,8 @@
     };
 
     new Chartist.Line('#user_score_chart', {
-      labels: [],
-      series: [<%= @user_scores %>]
+      labels: [label_list],
+      series: [score_list]
     }, chart_options);
   });
 </script>
