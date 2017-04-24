@@ -1,0 +1,7 @@
+<% if params[:title].blank? %>
+  alert('제목을 입력해주세요!');
+<% elsif params[:message].blank? %>
+  alert('내용을 입력해주세요!');
+<% else %>
+  alert('테스트 메일 전송 완료!');
+<% end %>

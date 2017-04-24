@@ -14,7 +14,7 @@ module SlackNotifier
                   }]
   end
 
-  def self.slack_notifier_daily_summary
+  def self.daily_summary
     channel = YAML.load_file(Rails.root.join('config/slack.yml'))[Rails.env]['daily_channel']
     notifier = Slack::Notifier.new WEBHOOK_URL, channel: channel
 

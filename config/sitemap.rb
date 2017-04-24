@@ -1,5 +1,5 @@
 # Set the host name for URL creation
-SitemapGenerator::Sitemap.default_host = "http://vaskit.kr"
+SitemapGenerator::Sitemap.default_host = CONFIG['host']
 
 SitemapGenerator::Sitemap.create do
   # Put links creation logic here.
@@ -29,12 +29,12 @@ SitemapGenerator::Sitemap.create do
 
   add collections_path
   Collection.find_each do |collection|
-    add collection_path(collection.id), :lastmod => collection.updated_at
+    add collection_path(collection.id), lastmod: collection.updated_at
   end
 
   add asks_path
   Ask.find_each do |ask|
-    add ask_path(ask.id), :lastmod => ask.updated_at
+    add ask_path(ask.id), lastmod: ask.updated_at
   end
   add new_ask_path
 

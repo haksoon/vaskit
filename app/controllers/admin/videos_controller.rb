@@ -4,7 +4,12 @@ class Admin::VideosController < Admin::HomeController
 
   # GET /admin/videos
   def index
-    @videos = Video.page(params[:page]).per(10).order(id: :desc)
+    @videos = Video.where.not(published_at: nil)
+                   .order(published_at: :desc)
+                   .page(params[:page])
+                   .per(10)
+    @unpublished_videos = Video.where(published_at: nil)
+                               .order(created_at: :desc)
   end
 
   # GET /admin/videos/:id
@@ -45,9 +50,9 @@ class Admin::VideosController < Admin::HomeController
 
   # DELETE /admin/videos/:id
   def destroy
-    @video.toggle(:show)
+    @video.published_at = @video.published_at.nil? ? Time.now : nil
     if @video.save
-      if @video.show
+      unless @video.published_at.nil?
         flash['success'] = "#{@video.id}번 비교영상을 성공적으로 발행하였습니다 <a href='#{video_path(@video.id)}' target='_blank' class='alert-link'>링크</a>"
       else
         flash['warning'] = "#{@video.id}번 비교영상을 발행 취소하였습니다"

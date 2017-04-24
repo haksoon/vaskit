@@ -3,9 +3,7 @@ class Users::SessionsController < Devise::SessionsController
   def new
     respond_to do |format|
       format.html {}
-      format.json do
-        render json: {}
-      end
+      format.json { render json: {} }
     end
   end
 
@@ -69,21 +67,25 @@ class Users::SessionsController < Devise::SessionsController
 
   # GET /users/get_user_profile.json
   def get_user_profile
+    my_count = {}
     if current_user
-      my_asks_in_progress_count = Ask.where(user_id: current_user.id, be_completed: false).count
-      my_completed_asks_count = AskComplete.where(user_id: current_user.id).count
-      my_likes_count = AskLike.where(user_id: current_user.id).count
-      my_votes_count = Vote.where(user_id: current_user.id).count
-      my_comments_count = Comment.where(user_id: current_user.id, is_deleted: false).count
+      my_count[:asks] = Ask.where(user_id: current_user.id, be_completed: false).count
+      my_count[:ask_complete] = AskComplete.where(user_id: current_user.id).count
+      my_count[:ask_like] = AskLike.where(user_id: current_user.id).count
+      my_count[:vote] = Vote.where(user_id: current_user.id).count
+      my_count[:comment] = Comment.where(user_id: current_user.id, is_deleted: false).count
     end
-    render json: {
-      current_user: current_user,
-      my_asks_in_progress_count: my_asks_in_progress_count,
-      my_completed_asks_count: my_completed_asks_count,
-      my_likes_count: my_likes_count,
-      my_votes_count: my_votes_count,
-      my_comments_count: my_comments_count
-    }
+    render json: { current_user: current_user, my_count: my_count }
+  end
+
+  # GET /users/get_my_recent_ask.json
+  def get_my_recent_ask
+    if current_user
+      my_ask = Ask.where(user_id: current_user.id, be_completed: false)
+                  .order(updated_at: :desc).first
+                  .as_json(include: [:left_ask_deal, :right_ask_deal])
+    end
+    render json: { my_ask: my_ask }
   end
 
   # GET /users/get_user_alarms.json
@@ -104,16 +106,6 @@ class Users::SessionsController < Devise::SessionsController
     render json: { alarms: alarms, alarm_count: alarm_count }
   end
 
-  # GET /users/get_my_recent_ask.json
-  def get_my_recent_ask
-    if current_user
-      my_ask = Ask.where(user_id: current_user.id, be_completed: false)
-                  .order(updated_at: :desc).first
-                  .as_json(include: [:left_ask_deal, :right_ask_deal])
-    end
-    render json: { my_ask: my_ask }
-  end
-
   # GET /users/history?type=___
   def history
     @type = params[:type]
@@ -128,12 +120,12 @@ class Users::SessionsController < Devise::SessionsController
               asks = Ask.where(user_id: current_user.id, be_completed: false)
                         .order(updated_at: :desc)
                         .page(params[:page]).per(Ask::ASK_PER)
-              is_more_load = asks.total_pages > params[:page].to_i
+              is_more_load = asks.total_pages > params[:page].to_i  unless asks.blank?
             when 'my_completed_asks'
               my_completed_asks = AskComplete.where(user_id: current_user.id)
                                              .order(id: :desc)
                                              .page(params[:page]).per(Ask::ASK_PER)
-              is_more_load = my_completed_asks.total_pages > params[:page].to_i
+              is_more_load = my_completed_asks.total_pages > params[:page].to_i  unless my_completed_asks.blank?
               my_completed_asks = my_completed_asks.map(&:ask_id).uniq
               asks = Ask.where(id: my_completed_asks)
                         .order("FIELD(id,#{my_completed_asks.join(',')})") unless my_completed_asks.blank?
@@ -141,7 +133,7 @@ class Users::SessionsController < Devise::SessionsController
               my_likes = AskLike.where(user_id: current_user.id)
                                 .order(id: :desc)
                                 .page(params[:page]).per(Ask::ASK_PER)
-              is_more_load = my_likes.total_pages > params[:page].to_i
+              is_more_load = my_likes.total_pages > params[:page].to_i  unless my_likes.blank?
               my_likes = my_likes.map(&:ask_id).uniq
               asks = Ask.where(id: my_likes)
                         .order("FIELD(id,#{my_likes.join(',')})") unless my_likes.blank?
@@ -149,7 +141,7 @@ class Users::SessionsController < Devise::SessionsController
               my_votes = Vote.where(user_id: current_user.id)
                              .order(id: :desc)
                              .page(params[:page]).per(Ask::ASK_PER)
-              is_more_load = my_votes.total_pages > params[:page].to_i
+              is_more_load = my_votes.total_pages > params[:page].to_i unless my_votes.blank?
               my_votes = my_votes.map(&:ask_id).uniq
               asks = Ask.where(id: my_votes)
                         .order("FIELD(id,#{my_votes.join(',')})") unless my_votes.blank?
@@ -160,7 +152,7 @@ class Users::SessionsController < Devise::SessionsController
               asks = Ask.where(id: my_comments)
                         .order("FIELD(id,#{my_comments.join(',')})")
                         .page(params[:page]).per(Ask::ASK_PER) unless my_comments.blank?
-              is_more_load = asks.total_pages > params[:page].to_i
+              is_more_load = asks.total_pages > params[:page].to_i unless asks.blank?
             end
 
             asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },

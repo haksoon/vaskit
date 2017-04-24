@@ -1,0 +1,42 @@
+<div class="jumbotron clearfix">
+  <h1>메일알림 목록</h1>
+  <p>메일 전송 목록입니다</p>
+  <%= link_to '새로운 메일 전송하기',
+              new_admin_mail_path,
+              { class: 'btn btn-success btn-lg pull-right' } %>
+</div>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">메일알림 히스토리</div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width: 10%;">ID</th>
+          <th style="width: 20%;">전송일</th>
+          <th style="width: 60%;">제목</th>
+          <th style="width: 10%;">보기</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @mails.each do |mail| %>
+          <tr>
+            <td><kbd><%= mail.id %></kbd></td>
+            <td><%= format_datetime(mail.created_at, :datetime) %></td>
+            <td><%= mail.title %></td>
+            <td>
+              <%= link_to '보기',
+                          admin_mail_path(mail.id),
+                          { class: 'btn btn-info btn-block' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- Table Pagination -->
+<div class="text-center">
+  <%= paginate @mails %>
+</div>

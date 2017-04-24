@@ -12,28 +12,26 @@
     <div class="my_history_div clearfix">
       <a class="my_history_btn my_asks_in_progress" href="/users/history?type=my_asks_in_progress" onclick="go_url('user_history', 'my_asks_in_progress'); return false;">
         <span class="my_history_type"><i class="fa fa-caret-right"></i> 진행중인 질문</span>
-        <span class="my_history_count" count="{{= numberWithCommas(my_asks_in_progress_count) }}"><small>전체보기</small> </span>
+        <span class="my_history_count" count="{{= numberWithCommas(my_count.asks) }}"><small>전체보기</small> </span>
       </a>
-      <div id="my_asks_in_progress">
-        <div class="no_result"><p class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></p></div>
-      </div>
+      <div id="my_asks_in_progress">{{= askThumbnailLoadingTemplate() }}</div>
     </div>
     <div class="my_history_div clearfix">
       <a class="my_history_btn my_completed_asks" href="/users/history?type=my_completed_asks" onclick="go_url('user_history', 'my_completed_asks'); return false;">
         <span class="my_history_type"><i class="fa fa-caret-right"></i> 종료한 질문</span>
-        <span class="my_history_count" count="{{= numberWithCommas(my_completed_asks_count) }}"></span>
+        <span class="my_history_count" count="{{= numberWithCommas(my_count.ask_complete) }}"></span>
       </a>
       <a class="my_history_btn my_likes" href="/users/history?type=my_likes" onclick="go_url('user_history', 'my_likes'); return false;">
         <span class="my_history_type"><i class="fa fa-caret-right"></i> 공감한 질문</span>
-        <span class="my_history_count" count="{{= numberWithCommas(my_likes_count) }}"></span>
+        <span class="my_history_count" count="{{= numberWithCommas(my_count.ask_like) }}"></span>
       </a>
       <a class="my_history_btn my_votes" href="/users/history?type=my_votes" onclick="go_url('user_history', 'my_votes'); return false;">
         <span class="my_history_type"><i class="fa fa-caret-right"></i> 참여한 투표</span>
-        <span class="my_history_count" count="{{= numberWithCommas(my_votes_count) }}"></span>
+        <span class="my_history_count" count="{{= numberWithCommas(my_count.vote) }}"></span>
       </a>
       <a class="my_history_btn my_comments" href="/users/history?type=my_comments" onclick="go_url('user_history', 'my_comments'); return false;">
         <span class="my_history_type"><i class="fa fa-caret-right"></i> 제시한 의견</span>
-        <span class="my_history_count" count="{{= numberWithCommas(my_comments_count) }}"></span>
+        <span class="my_history_count" count="{{= numberWithCommas(my_count.comment) }}"></span>
       </a>
     </div>
   {{ } else { }}
@@ -41,8 +39,23 @@
   {{ } }}
 </script>
 
+<script type="text/template" id="askThumbnailLoadingTemplate">
+  <div class="no_result"><div class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></div></div>
+</script>
+
+<script type="text/template" id="emptyAskThumbnailTemplate">
+  <div class="no_result">
+    <div class="align_middle">
+      <div><i class="fa fa-search"></i> 현재 진행중인 질문 목록이 없습니다</div>
+      <a class="new_ask_btn" href="/asks/new">질문 작성하러 가기 <i class="fa fa-forward"></i></a>
+    </div>
+  </div>
+</script>
+
 <script>
   var userProfileTemplate = _.template($('#userProfileTemplate').html());
+  var emptyAskThumbnailTemplate = _.template($('#emptyAskThumbnailTemplate').html());
+  var askThumbnailLoadingTemplate = _.template($('#askThumbnailLoadingTemplate').html());
 
   function user_profile_on() {
     $.ajax({
@@ -54,21 +67,12 @@
         },
         success: function(data) {
           current_user = data.current_user;
-          $('#user_profile').html(userProfileTemplate({
-            user: current_user,
-            my_asks_in_progress_count: data.my_asks_in_progress_count,
-            my_completed_asks_count: data.my_completed_asks_count,
-            my_likes_count: data.my_likes_count,
-            my_votes_count: data.my_votes_count,
-            my_comments_count: data.my_comments_count
-          }));
-          get_my_recent_ask();
+          $('#user_profile').html(userProfileTemplate({ user: current_user, my_count: data.my_count }));
+          if (current_user) get_my_recent_ask();
         }
     });
-  }
 
-  function get_my_recent_ask() {
-    if (current_user) {
+    function get_my_recent_ask() {
       $.ajax({
           url: '/users/get_my_recent_ask.json',
           dataType: 'json',
@@ -82,19 +86,17 @@
               my_ask.ask_likes = [];
               my_ask.votes = [];
               my_ask.user = current_user;
-              $('#my_asks_in_progress').html(askThumbnailTemplate({ ask: my_ask })).children().on("click", function() {
+              $('#my_asks_in_progress').html(askThumbnailTemplate({ ask: my_ask })).on("click", function() {
                 ga('send', 'event', '마이탭', '나의 최근 질문', current_user.string_id, 1);
               });
             } else {
-              var empty_html = '<div class="no_result"><p class="align_middle"><i class="fa fa-search"></i> 현재 진행중인 질문 목록이 없습니다<a class="new_ask_btn" href="/asks/new">질문 작성하러 가기 <i class="fa fa-forward"></i></a></p></div>';
-              $('#my_asks_in_progress').html(empty_html).children().on('click', function() {
+              $('#my_asks_in_progress').html(emptyAskThumbnailTemplate()).on('click', function() {
                 go_url('ask_form'); return false;
               });
             }
           },
           beforeSend: function() {
-            var loading_html = '<div class="no_result"><p class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></p></div>';
-            $('#my_asks_in_progress').html(loading_html);
+            $('#my_asks_in_progress').html(askThumbnailLoadingTemplate());
           }
       });
     }

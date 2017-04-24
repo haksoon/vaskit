@@ -2,7 +2,7 @@
   <h1>푸쉬알림 목록</h1>
   <p>푸쉬알림 전송 목록입니다</p>
   <%= link_to '새로운 푸쉬알림 전송하기',
-              new_admin_notice_path,
+              new_admin_push_path,
               { class: 'btn btn-success btn-lg pull-right' } %>
 </div>
 <div class="panel panel-primary">
@@ -24,23 +24,22 @@
         </tr>
       </thead>
       <tbody>
-        <% @notices.each do |notice| %>
+        <% @pushes.each do |push| %>
           <tr>
-            <td><kbd><%= notice.id %></kbd></td>
-            <td><%= notice.push_type %></td>
-            <td><%= simple_format(notice.message, {}, wrapper_tag: 'div') %></td>
-            <td><%= notice.total_count %>개</td>
-            <td><%= notice.success_count %>개</td>
-            <td><%= notice.failure_count %>개</td>
-            <td><%= format_datetime(notice.created_at, :datetime) %></td>
+            <td><kbd><%= push.id %></kbd></td>
+            <td><%= push.push_type %></td>
+            <td><%= simple_format(push.message, {}, wrapper_tag: 'div') %></td>
+            <td><%= push.total_count %>개</td>
+            <td><%= push.success_count %>개</td>
+            <td><%= push.failure_count %>개</td>
+            <td><%= format_datetime(push.created_at, :datetime) %></td>
           </tr>
         <% end %>
       </tbody>
     </table>
   </div>
-
-  <!-- Table Pagination -->
-  <div class="panel-footer text-center">
-    <%= paginate @notices %>
-  </div>
+</div>
+<!-- Table Pagination -->
+<div class="text-center">
+  <%= paginate @pushes %>
 </div>

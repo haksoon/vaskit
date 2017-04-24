@@ -15,6 +15,7 @@
 <% if @records.blank? %>
   <div class="panel panel-primary">
     <div class="panel-heading">DB를 선택해주세요</div>
+  </div>
 <% else %>
   <div class="panel panel-info">
 		<!-- Default panel contents -->
@@ -69,13 +70,12 @@
   			</tbody>
   		</table>
     </div>
-
-		<!-- Table Pagination -->
-		<div class="panel-footer text-center">
-			<%= paginate @records %>
-		</div>
+  </div>
+  <!-- Table Pagination -->
+	<div class="text-center">
+		<%= paginate @records %>
+	</div>
 <% end %>
-</div>
 
 <script>
 	$('#table_select').val(window.location.pathname.replace('/admin/tables', '').replace(/\//g, '')).on('change', function(){

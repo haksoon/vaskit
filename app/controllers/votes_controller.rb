@@ -12,21 +12,23 @@ class VotesController < ApplicationController
         vote = Vote.create(ask_id: ask.id,
                            ask_deal_id: ask_deal_id,
                            user_id: current_user.id)
+        UserActivityScore.update_by(vote)
       end
-
-      UserActivityScore.update_user_grade(current_user.id, "vote")
     end
 
-    ask = ask.as_json(include: [:left_ask_deal, :right_ask_deal])
+    left_vote_count = ask.left_ask_deal.vote_count
+    right_vote_count = ask.right_ask_deal.vote_count
 
-    render json: { ask: ask, vote: vote }
+    render json: { left_vote_count: left_vote_count, right_vote_count: right_vote_count, vote: vote }
   end
 
   # DELETE /votes/:id.json
   def destroy
     vote = Vote.find(params[:id])
-    vote.update(is_deleted: true) unless vote.nil? && vote.user_id != current_user.id
-    UserActivityScore.update_user_grade(current_user.id, "vote_deleted")
+    unless vote.nil? && vote.user_id != current_user.id
+      vote.update(is_deleted: true)
+      UserActivityScore.update_by(vote)
+    end
     render json: {}
   end
 end

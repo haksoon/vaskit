@@ -73,7 +73,7 @@
             <% description = "#{controller.request.params[:keyword]} - VASKIT 통합 검색결과입니다" %>
         <% end %>
         <% url = "#{search_index_url}?type=#{controller.request.params[:type]}&keyword=#{controller.request.params[:keyword]}" %>
-    <% else  %>
+    <% else %>
         <% title = 'VASKIT | 검색하기' %>
         <% description = '지금까지와는 또다른 쇼핑검색! 소비자들의 선택을 검색해보세요!' %>
         <% url = search_index_url %>
@@ -115,8 +115,8 @@
         <% description = '비밀번호를 변경하시겠어요?' %>
         <% url = users_settings_edit_password_url %>
     <% elsif (controller.action_name == 'edit_push_alarm') %>
-        <% title = 'VASKIT | 푸시 알림 설정' %>
-        <% description = '푸시 알림을 설정할 수 있어요' %>
+        <% title = 'VASKIT | 알림 설정' %>
+        <% description = '알림을 설정할 수 있어요' %>
         <% url = users_settings_edit_push_alarm_url %>
     <% elsif (controller.action_name == 'edit_email_alarm') %>
         <% title = 'VASKIT | 이메일 알림 설정' %>

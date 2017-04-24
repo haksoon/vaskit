@@ -1,0 +1,43 @@
+<% if params[:type] == 'image' %>
+  <% content = content_tag(:td, class: 'inner contents main') do %>
+    <div class="div image form-group" type="이미지">
+      <%= url_field_tag :image_url,
+                        '',
+                        { style: 'width: calc(100% - 20px); margin: 10px auto;',
+                          class: 'form-control required_form',
+                          accept: 'image/*',
+                          placeholder: '이미지 URL을 입력한 뒤 Tab키를 눌러주세요',
+                          onchange: 'mail_image_preview($(this));' } %>
+      <%= image_tag '/images/custom/card_image_preview.png', class: 'image hidden' %>
+    </div>
+  <% end %>
+<% elsif params[:type] == 'title' %>
+  <% content = content_tag(:td, class: 'inner contents main') do %>
+    <div class="div title" contenteditable="true" type="제목"></div>
+  <% end %>
+<% elsif params[:type] == 'sub' %>
+  <% content = content_tag(:td, class: 'inner contents main') do %>
+    <div class="div sub-title" contenteditable="true" type="부제목"></div>
+  <% end %>
+<% elsif params[:type] == 'body' %>
+  <% content = content_tag(:td, class: 'inner contents main') do %>
+    <div class="div substance left" contenteditable="true" type="본문"></div>
+  <% end %>
+<% elsif params[:type] == 'cancel' %>
+  <% content = content_tag(:td, class: 'inner contents main') do %>
+    <div class="div cancel left" contenteditable="true" type="취소선"></div>
+  <% end %>
+<% else %>
+  <% return %>
+<% end %>
+
+<tr>
+    <td class="one-column">
+      <span class="layout-delete-btn btn btn-danger btn-xs"><i class="fa fa-trash"></i></span>
+      <table width="100%">
+        <tr>
+          <%= content %>
+        </tr>
+      </table>
+    </td>
+</tr>

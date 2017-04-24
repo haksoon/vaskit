@@ -11,6 +11,7 @@ class AsksController < ApplicationController
                   .per(Ask::ASK_PER)
                   .order(id: :desc)
 
+
         is_more_load = asks.total_pages > params[:page].to_i
 
         if current_user
@@ -31,13 +32,18 @@ class AsksController < ApplicationController
           end
         end
 
-        asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
-                                      { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] } ] } }] } },
-                                      { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] } ] } }] } },
-                                      :votes,
-                                      { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
-                                      :ask_complete,
-                                      :event])
+        if params[:page].nil?
+          asks = asks.as_json(include: [{ left_ask_deal: { only: [:id, :image_file_name] } },
+                                        { right_ask_deal: { only: [:id, :image_file_name] } }])
+        else
+          asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                        { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] } ] } }] } },
+                                        { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] } ] } }] } },
+                                        :votes,
+                                        { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
+                                        :ask_complete,
+                                        :event])
+        end
 
         render json: { asks: asks, is_more_load: is_more_load }
       end

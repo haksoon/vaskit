@@ -1,0 +1,161 @@
+<link href="/css/user_mailer.css" rel="stylesheet" type="text/css">
+
+<%= form_tag({ controller: :mails, action: :create },
+             oninput: 'form_check($(this));', onchange: 'form_check($(this));') do %>
+  <div class="jumbotron clearfix">
+    <h1>메일알림 전송하기</h1>
+    <p>메일을 전송할 수 있습니다</p>
+    <%= link_to '목록으로',
+                admin_mails_path,
+                { class: 'btn btn-default btn-lg' } %>
+    <div class="pull-right">
+      <%= link_to '메일 테스트',
+                  test_admin_mails_path,
+                  remote: true,
+                  id: 'mail_test_btn',
+                  class: 'btn btn-success btn-lg',
+                  onclick: 'mail_test_send(); return false;',
+                  data: { disable_with: '<i class="fa fa-spinner fa-spin"></i>' } %>
+      <%= submit_tag '메일 전송하기',
+                     id: 'mail_submit_btn',
+                     class: 'btn btn-danger btn-lg',
+                     disabled: true,
+                     onclick: 'mail_send(); window.onbeforeunload = null;',
+                     data: { confirm: '정말로 전송하시겠어요?', disable_with: '전송중...' } %>
+    </div>
+  </div>
+  <div class="panel panel-danger">
+    <div class="panel-heading">메일 전송하기</div>
+    <div class="panel-body">
+      <div class="form-inputs">
+        <div class="form-group">
+          <label for="type">1. 메일 제목 입력</label>
+          <%= text_field_tag :title,
+                             ''.html_safe,
+                             {
+                               class: 'form-control required_form',
+                               placeholder: '전송될 메일의 제목을 입력해주세요'
+                             } %>
+        </div>
+        <div class="form-group">
+          <label for="target">2. 발송 대상 선택</label>
+          <div class="form-group">
+            <%= select_tag :target,
+                           '
+                            <option value disabled selected>대상을 선택해주세요</option>
+                            <option value="all">전체 유저</option>
+                            <option value="filter">필터 적용</option>
+                            <option value="user">직접 입력</option>
+                           '.html_safe,
+                           {
+                             class: 'form-control required_form',
+                             onchange: 'mail_target_changed($(this));'
+                           } %>
+          </div>
+          <div id="mail_target_preview" class="well hidden"></div>
+        </div>
+        <div class="form-group">
+          <label for="msg">3. 메일 내용 입력</label>
+          <%= text_area_tag :message,
+                            '',
+                            { class: 'hidden form-control' } %>
+          <div class="text-center">
+            <button onclick="mail_template_load('title'); return false;" class="btn btn-default">제목</button>
+            <button onclick="mail_template_load('sub'); return false;" class="btn btn-default">부제목</button>
+            <button onclick="mail_template_load('body'); return false;" class="btn btn-default">본문</button>
+            <button onclick="mail_template_load('cancel'); return false;" class="btn btn-default">취소선</button>
+            <button onclick="mail_template_load('image'); return false;" class="btn btn-default">이미지</button>
+          </div>
+          <div class="mail_template_preview">
+            <center class="wrapper">
+              <%= render '/user_mailer/template/letter_header' %>
+              <div class="webkit letter">
+                <table id="mail_template_preview" class="outer" align="center">
+                  <tr id="mail_template_blank">
+                      <td class="one-column">
+                        <table width="100%">
+                          <tr>
+                            <%= content_tag(:td, class: 'inner contents main') do %>
+                              <div class="div center">
+                                <div>먼저 위에서</div>
+                                <div>레이아웃을 선택하세요</div>
+                              </div>
+                            <% end %>
+                          </tr>
+                        </table>
+                      </td>
+                  </tr>
+                </table>
+                <table  class="outer" align="center">
+                  <%= render '/user_mailer/template/letter_footer' %>
+                </table>
+              </div>
+              <%= render '/user_mailer/template/letter_sns' %>
+            </center>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+  $(window).ready(function(){
+    // mail_template_load('title');
+    // mail_template_load('body');
+  });
+
+  function mail_target_changed() {
+    $.ajax({
+      url: '<%= target_admin_mails_path %>',
+      type: 'GET',
+      data: { target: $('#target').val() },
+      beforeSend: function() {
+        $('#mail_target_preview').removeClass('hidden').html('갱신중...');
+      }
+    });
+  }
+
+  function mail_template_load(type) {
+    $.ajax({
+      url: '<%= template_admin_mails_path %>',
+      type: 'GET',
+      data: { type: type }
+    });
+  }
+
+  function layout_delete(target) {
+    if (confirm('레이아웃을 삭제하시겠어요?')) target.parent().parent().remove();
+  }
+
+  function mail_image_preview(target) {
+    var url = target.val();
+    var form = target.parent();
+    var img = form.find('img');
+    img.removeClass('hidden').attr('src', url).unwrap();
+    target.remove();
+  }
+
+  function mail_test_send() {
+    var title = $('#title').val();
+    var buttons = $('.layout-delete-btn');
+    buttons.hide();
+    var message = $('#mail_template_preview').html();
+    $.ajax({
+      url: '<%= test_admin_mails_path %>',
+      type: 'POST',
+      data: { title: title, message: message },
+      complete: function() {
+        buttons.show();
+      }
+    });
+  }
+
+  function mail_send() {
+    var buttons = $('.layout-delete-btn');
+    buttons.remove();
+    var message = $('#mail_template_preview').html();
+    var input = $('#message');
+    input.val(message);
+  }
+</script>

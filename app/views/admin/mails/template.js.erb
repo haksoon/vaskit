@@ -1,0 +1,5 @@
+var html = '<%= escape_javascript(render "template_column_1") %>';
+$('#mail_template_blank').remove();
+$('#mail_template_preview').append(html).find('.layout-delete-btn').off('click').on('click', function() {
+  layout_delete($(this));
+});

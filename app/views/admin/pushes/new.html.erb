@@ -1,20 +1,20 @@
-<%= form_tag({ controller: :notices, action: :create },
-            oninput: 'form_check($(this));', onchange: 'form_check($(this));') do %>
+<%= form_tag({ controller: :pushes, action: :create },
+             oninput: 'form_check($(this));', onchange: 'form_check($(this));') do %>
   <div class="jumbotron clearfix">
     <h1>푸쉬알림 전송하기</h1>
     <p>푸쉬알림을 전송할 수 있습니다</p>
     <%= link_to '목록으로',
-                admin_notices_path,
+                admin_pushes_path,
                 { class: 'btn btn-default btn-lg' } %>
     <div class="pull-right">
-      <%= link_to '푸시알림 테스트',
-                  test_admin_notices_path,
+      <%= link_to '푸쉬알림 테스트',
+                  test_admin_pushes_path,
                   remote: true,
                   id: 'push_test_btn',
                   class: 'btn btn-success btn-lg',
                   onclick: 'push_test_send();',
                   data: { disable_with: '<i class="fa fa-spinner fa-spin"></i>' } %>
-      <%= submit_tag '푸시알림 전송하기',
+      <%= submit_tag '푸쉬알림 전송하기',
                      id: 'push_submit_btn',
                      class: 'btn btn-danger btn-lg',
                      disabled: true,
@@ -27,7 +27,7 @@
     <div class="panel-body">
       <div class="form-inputs">
         <div class="form-group">
-          <label for="type">1. 푸시 종류 선택</label>
+          <label for="type">1. 푸쉬 종류 선택</label>
           <%= select_tag :type,
                          '
                           <option value disabled selected>푸쉬 종류를 선택해주세요</option>
@@ -46,7 +46,7 @@
                          } %>
         </div>
         <div class="form-group">
-          <label for="target">2. 대상 선택</label>
+          <label for="target">2. 푸쉬 대상 선택</label>
           <div class="form-group">
             <%= select_tag :target,
                            '
@@ -115,7 +115,7 @@
     var msg = encodeURIComponent($('#msg').val());
     var link = encodeURIComponent($('#link').val());
     var js = encodeURIComponent($('#js').val());
-    $('#push_test_btn').attr('href', '<%= test_admin_notices_path %>?msg=' + msg + '&link=' + link + '&js=' + js);
+    $('#push_test_btn').attr('href', '<%= test_admin_pushes_path %>?msg=' + msg + '&link=' + link + '&js=' + js);
   }
 
   function push_type_changed() {
@@ -135,7 +135,7 @@
 
   function push_target_changed() {
     $.ajax({
-      url: '<%= target_admin_notices_path %>',
+      url: '<%= target_admin_pushes_path %>',
       type: 'GET',
       data: { target: $('#target').val() },
       beforeSend: function() {

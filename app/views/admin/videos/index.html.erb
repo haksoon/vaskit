@@ -5,71 +5,23 @@
               new_admin_video_path,
               { class: 'btn btn-success btn-lg pull-right' } %>
 </div>
-<div class="panel panel-primary">
+
+<% unless @unpublished_videos.blank? %>
+  <div class="panel panel-primary">
+    <!-- Default panel contents -->
+    <div class="panel-heading">미발행된 비교영상 목록</div>
+    <!-- Table -->
+    <%= render 'table', videos: @unpublished_videos %>
+  </div>
+<% end %>
+
+<div class="panel panel-info">
   <!-- Default panel contents -->
-  <div class="panel-heading">비교영상 전체목록</div>
-
+  <div class="panel-heading">비교영상 전체 목록</div>
   <!-- Table -->
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-        <tr>
-          <th style="width: 10%;">ID</th>
-          <th style="width: 10%;">생성일</th>
-          <th style="width: 10%;">VASKIT</th>
-          <th style="width: 10%;">페이스북</th>
-          <th style="width: 10%;">유튜브</th>
-          <th style="width: 15%;">조회</th>
-          <th style="width: 15%;">수정</th>
-          <th style="width: 20%;">발행</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @videos.each do |video| %>
-          <tr>
-            <th><kbd><%= video.id %>번</kbd></th>
-            <td class="text-center"><%= format_datetime(video.created_at, 'past') %></td>
-            <td>
-              <%= link_to 'VASKIT',
-                          video_path(video.id),
-                          { class: 'btn btn-default btn-block', target: '_blank' } %></td>
-            <td>
-              <%= link_to '페이스북',
-                          "http://www.facebook.com/vaskit.kr/videos/#{video.fb_id}",
-                          { class: 'btn btn-default btn-block', target: '_blank' } %></td>
-            <td>
-              <%= link_to '유튜브',
-                          "http://www.youtube.com/watch?v=#{video.yt_id}",
-                          { class: 'btn btn-default btn-block', target: '_blank' } %></td>
-            <td>
-              <%= link_to '조회',
-                          admin_video_path(video.id),
-                          { class: 'btn btn-info btn-block' } %></td>
-            <td>
-              <%= link_to '수정',
-                          edit_admin_video_path(video.id),
-                          { class: 'btn btn-warning btn-block' } %></td>
-            <td>
-              <% if video.show %>
-                <%= link_to '발행취소', admin_video_path(video.id), { class: 'btn btn-danger btn-block', method: :delete, data: { confirm: '정말로 발행을 취소하시겠어요?', disable_with: '취소중...' } } %>
-              <% else %>
-                <%= link_to '발행하기', admin_video_path(video.id), { class: 'btn btn-success btn-block', method: :delete, data: { confirm: '정말로 발행하시겠어요?', disable_with: '발행중...' } } %>
-              <% end %>
-            </td>
-          </tr>
-          <tr>
-            <th></th>
-            <td colspan="2"><%= image_tag video.image.url(:original), width: '100%' %></td>
-            <td colspan="2"><%= video.title %></td>
-            <td colspan="3"><%= tagging_keywords(video.description) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Table Pagination -->
-  <div class="panel-footer text-center">
-    <%= paginate @videos %>
-  </div>
+  <%= render 'table', videos: @videos %>
+</div>
+<!-- Table Pagination -->
+<div class="text-center">
+  <%= paginate @videos %>
 </div>

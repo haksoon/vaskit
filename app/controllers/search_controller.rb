@@ -35,11 +35,14 @@ class SearchController < ApplicationController
               users = User.where('string_id LIKE ?', "%#{@keyword}%")
               Ask.where(user_id: users.map(&:id))
             when 'none'
-              videos = Video.where(show: true).where('title LIKE ?', "%#{@keyword}%").order(id: :desc).distinct(:title)
+              videos = Video.where.not(published_at: nil)
+                            .where('title LIKE ?', "%#{@keyword}%")
+                            .order(id: :desc).distinct(:title)
 
               collection_keyword_ids = CollectionKeyword.where('keyword LIKE ?', "%#{@keyword}%").order(refer_count: :desc).map(&:id)
               collection_ids = CollectionToCollectionKeyword.where(collection_keyword_id: collection_keyword_ids).map(&:collection_id)
-              collections = Collection.where('id IN (?) OR name LIKE ?', collection_ids, "%#{@keyword}%").distinct(:name)
+              collections = Collection.where.not(published_at: nil)
+                                      .where('id IN (?) OR name LIKE ?', collection_ids, "%#{@keyword}%").distinct(:name)
 
               ask_ids = []
               hash_tags = HashTag.where('keyword LIKE ?', "%#{@keyword}%")
@@ -57,18 +60,23 @@ class SearchController < ApplicationController
                                    brand_ask_deals.map(&:id)).pluck(:id)
               Ask.where(id: ask_ids.flatten.uniq)
             end
-          asks = asks.order(id: :desc)
-                     .page(params[:page]).per(Ask::ASK_PER)
 
-          is_more_load = asks.total_pages > params[:page].to_i
+          if asks.nil?
+            asks = []
+          else
+            asks = asks.order(id: :desc)
+                       .page(params[:page]).per(Ask::ASK_PER)
 
-          asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
-                                        { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
-                                        { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
-                                        :votes,
-                                        { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
-                                        :ask_complete,
-                                        :event])
+            is_more_load = asks.total_pages > params[:page].to_i
+
+            asks = asks.as_json(include: [{ user: { only: [:id, :string_id, :birthday, :gender, :avatar_file_name] } },
+                                          { left_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                          { right_ask_deal: { include: [{ recent_comment: { include: [user: { only: [:id, :string_id] }] } } ] } },
+                                          :votes,
+                                          { ask_likes: { include: { user: { only: [:id, :string_id] } } } },
+                                          :ask_complete,
+                                          :event])
+          end
 
           render json: { videos: videos, collections: collections, asks: asks, is_more_load: is_more_load }
         end
@@ -85,11 +93,14 @@ class SearchController < ApplicationController
     users = []
     is_empty_result = false
     unless keyword.blank?
-      videos = Video.where(show: true).where('title LIKE ?', "%#{keyword}%").order(id: :desc).distinct(:title).select(:id, :title)
+      videos = Video.where.not(published_at: nil)
+                    .where('title LIKE ?', "%#{keyword}%")
+                    .order(id: :desc).distinct(:title).select(:id, :title)
 
       collection_keyword_ids = CollectionKeyword.where('keyword LIKE ?', "%#{keyword}%").order(refer_count: :desc).map(&:id)
       collection_ids = CollectionToCollectionKeyword.where(collection_keyword_id: collection_keyword_ids).map(&:collection_id)
-      collections = Collection.where('id IN (?) OR name LIKE ?', collection_ids, "%#{keyword}%").distinct(:name).select(:id, :name)
+      collections = Collection.where.not(published_at: nil)
+                              .where('id IN (?) OR name LIKE ?', collection_ids, "%#{keyword}%").distinct(:name).select(:id, :name)
 
       hash_tags = HashTag.where('keyword LIKE ?', "%#{keyword}%").select(:keyword).distinct(:keyword)
       ask_deals = AskDeal.where('title LIKE ?', "%#{keyword}%").select(:title).distinct(:title)

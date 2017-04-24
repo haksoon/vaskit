@@ -1,12 +1,11 @@
 <script type="text/template" id="asksListTemplate">
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'asks');" url="{{= url }}">
-    {{ if (asks == null || asks.length == 0) { }}
+    {{ if (asks === null || asks.length == 0) { }}
       <div class="no_result"><span class="align_middle">일치하는 결과가 없습니다</span></div>
     {{ } else { }}
       {{ if (check_tutorial('vote')) go_url('tutorial_vote') }}
       <div class="clearfix">
-        {{ var l = asks.length }}
-        {{ for (var i=0; i < l; i++) { }}
+        {{ for (var i=0; i < asks.length; i++) { }}
           {{ var ask = asks[i] }}
           {{= askThumbnailTemplate({ ask: ask }) }}
         {{ } }}
@@ -29,10 +28,10 @@
     {{ vote_id = '' }}
     {{ vote_direction = '' }}
   {{ } else if (current_user) { }}
-    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
-      {{ vote_id = my_vote.id }}
+    {{ var my_vote = _.filter(ask.votes, function(obj) { return obj.user_id == current_user.id })[0] }}
+    {{ if (my_vote) { }}
       {{ is_voted = true }}
+      {{ vote_id = my_vote.id }}
       {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
     {{ } }}
   {{ } else { }}
@@ -44,10 +43,10 @@
       {{ vote = JSON.parse(vote) }}
       {{ my_votes.push(vote) }}
     {{ } }}
-    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
-      {{ vote_id = my_vote.id }}
+    {{ var my_vote = _.filter(my_votes, function(obj) { return obj.ask_id == ask.id })[0] }}
+    {{ if (my_vote) { }}
       {{ is_voted = true }}
+      {{ vote_id = my_vote.id }}
       {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
     {{ } }}
   {{ } }}
@@ -73,10 +72,8 @@
       </div>
     {{ } }}
     <div class="clearfix">
-      {{ var already_like = false }}
-      {{ if (current_user) { }}
-        {{ var already_like = $.grep(ask.ask_likes, function(obj) { return (obj.user_id == current_user.id) }).length > 0 ? true : false }}
-      {{ } }}
+      {{ var is_liked = false }}
+      {{ if (current_user) is_liked = _.indexOf(_.pluck(ask.ask_likes, 'user_id'), current_user.id) < 0 ? false : true }}
       <div class="ask_user">
         <img class="ask_user_pic" src="{{= get_avatar(ask.user) }}">
         {{ var gender = ask.user.gender ? 'male' : 'female' }}
@@ -90,7 +87,7 @@
           <span class="ask_user_profile {{= gender }}">{{= get_user_ages(ask.user.birthday) }}</span>
         {{ } }}
         <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
-        <div class="ask_count_span"><i class="vaskit_icon {{= already_like ? 'is_liked' : '' }} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
+        <div class="ask_count_span"><i class="vaskit_icon {{= is_liked ? 'is_liked' : '' }} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
       </div>
       <div class="ask_message text_box_short">
         {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}
@@ -110,7 +107,7 @@
         </div>
         <div class="vs_help_menu">
           {{ if (current_user == null || current_user.id != ask.user_id) { }}
-            <div class="vs_help_menu_left ask_like_btn ask_like_text {{= already_like ? 'is_liked' : '' }}" onclick="window.event.cancelBubble = true; like_ask({{= ask.id }});">공감해요 <i class="vaskit_icon {{= already_like ? 'is_liked' : '' }} ask_like_icon"></i></div>
+            <div class="vs_help_menu_left ask_like_btn ask_like_text {{= is_liked ? 'is_liked' : '' }}" onclick="window.event.cancelBubble = true; like_ask({{= ask.id }});">공감해요 <i class="vaskit_icon {{= is_liked ? 'is_liked' : '' }} ask_like_icon"></i></div>
             <div class="vs_help_menu_center" onclick="go_url('ask', {{= ask.id }});">댓글달기 <i class="vaskit_icon comment_icon"></i></div>
             <div class="vs_help_menu_right" onclick="go_url('share', 'ask, {{= ask.id }}');">공유하기 <i class="vaskit_icon share_icon"></i></div>
           {{ } else { }}

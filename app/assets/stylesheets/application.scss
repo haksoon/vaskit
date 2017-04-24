@@ -593,21 +593,24 @@ body {
   content: ''; position: relative; display: block;
   width: 100vw; height: 75vw; max-width: $layout-width; max-height: #{$layout-width / 4 * 3}; border-bottom: 1px solid #bdbdbd; box-sizing: border-box;
 }
-.related_collections_title { width: 100%; height: 50px; line-height: 60px; text-align: center; background: #fff;
-  .title { font-size: 16px; @include font-bold; color: #666; }
-  .description { font-size: 13px; @include font-light; color: #999; }
-}
-.related_collections_list { background-color: #f9f9f9; padding: 16px 16px 30px; border-top: 1px solid #dfdfdf;
-  .collection_thumbnail { padding: 16px 0 0; margin-bottom: 0;
-    .collection_description { padding: 0 10px; @include ellipsis; }
-    .collection_name { padding: 5px 10px 7px; @include ellipsis; }
+.related_collections_seg { position: relative;
+  .no_result { min-height: 200px; }
+  .related_collections_title { width: 100%; height: 50px; line-height: 60px; text-align: center; background: #fff;
+    .title { font-size: 16px; @include font-bold; color: #666; }
+    .description { font-size: 13px; @include font-light; color: #999; }
   }
-  .bx-viewport { border: 0; left: 0; border-radius: 3px; }
-  .bx-wrapper { margin-bottom: 0; }
-  .bx-pager { bottom: -25px; padding-top: 0;
-    .bx-pager-item a {
-      background: #ccc; width: 8px; height: 8px; margin: 0 3px;
-      &:active { background: #333; }
+  .related_collections_list { background-color: #f9f9f9; padding: 16px 16px 30px; border-top: 1px solid #dfdfdf;
+    .collection_thumbnail { padding: 16px 0 0; margin-bottom: 0;
+      .collection_description { padding: 0 10px; @include ellipsis; }
+      .collection_name { padding: 5px 10px 7px; @include ellipsis; }
+    }
+    .bx-viewport { border: 0; left: 0; border-radius: 3px; }
+    .bx-wrapper { margin-bottom: 0; }
+    .bx-pager { bottom: -25px; padding-top: 0;
+      .bx-pager-item a {
+        background: #ccc; width: 8px; height: 8px; margin: 0 3px;
+        &:active { background: #333; }
+      }
     }
   }
 }
@@ -683,7 +686,8 @@ body {
         .vaskit_icon { width: 11px; height: 11px; margin: 14px 0; vertical-align: top;
           &.share_icon { background-position: -36px -73px; }
         }
-        &:active { background-color: #ccc; }  }
+        &:active { background-color: #ccc; }
+      }
     }
   }
 
@@ -1380,7 +1384,7 @@ body {
   }
   #my_asks_in_progress {
     position: relative; margin-bottom: 10px;
-    height: calc(50vw - 10px + 100px); max-height: #{$layout-width / 2 - 10px + 100px};
+    height: calc(50vw - 10px + 100px); max-height: #{$layout-width / 2 - 10px + 100px}; cursor: pointer;
     .ask.ask_thumbnail.contents_box { padding: 0 0 40px 0; border: 1px solid #dbdbdb; border-bottom: none; border-radius: 3px; overflow: hidden; }
     .no_result { background-color: #f9f9f9; border: 1px solid #ccc; border-radius: 3px; overflow: hidden; box-sizing: border-box;
       .new_ask_btn { display: inline-block; padding: 5px 10px; margin-top: 10px; background-color: #ff7200; color: #fff; border-radius: 3px; }

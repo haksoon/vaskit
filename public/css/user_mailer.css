@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css?family=Rationale');
+
+/* Basics */
+body { margin: 0 !important; padding: 0; background-color: #ffffff; }
+.hidden { display: none; }
+.wrapper { width: 100%; table-layout: fixed; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background-color: #f4f4f4; font-size: 14px; text-align: center; }
+.wrapper table { border-spacing: 0; font-family: sans-serif; color: #333; }
+.wrapper td { position: relative; padding: 0; }
+.wrapper div[style*="margin: 16px 0"] { margin:0 !important; }
+.wrapper p { Margin: 0; }
+.wrapper a { color: #ff7200; text-decoration: underline; }
+.wrapper img { border: 0; }
+
+.wrapper .webkit { max-width: 600px; margin: 0 auto; }
+.wrapper .outer { Margin: 0 auto; width: 100%; max-width: 600px; }
+
+/* Image layout */
+.wrapper .one-column img.image { display: block; width: 100%; max-width: 600px; height: auto; }
+.wrapper .two-column img.image { display: block; width: 100%; max-width: 280px; height: auto; }
+.wrapper .three-column img.image { display: block; width: 100%; max-width: 180px; height: auto; }
+.wrapper .left-sidebar img.image { display: block; width: 100%; max-width: 80px; height: auto; }
+.wrapper .right-sidebar img.image { display: block; width: 100%; max-width: 80px; height: auto; }
+
+/*Two column layout*/
+.wrapper .two-column { text-align: center; font-size: 0; }
+.wrapper .two-column .column { width: 100%; max-width: 300px; display: inline-block; vertical-align: top; }
+.wrapper .two-column .contents { width: 100%; font-size: 14px; text-align: left; }
+.wrapper .two-column .text { padding-top: 10px; }
+
+/*Three column layout*/
+.wrapper .three-column .column { width: 100%; max-width: 200px; padding: 10px; margin: -5px; box-sizing: border-box; display: inline-block; vertical-align: top; }
+.wrapper .three-column .contents { width: 100%; font-size: 14px; text-align: center; }
+.wrapper .three-column .text { padding-top: 10px; }
+
+/* Left sidebar layout */
+.wrapper .left-sidebar { text-align: center; font-size: 0; }
+.wrapper .left-sidebar .column { width: 100%; display: inline-block; vertical-align: middle; }
+.wrapper .left-sidebar .left { max-width: 100px; }
+.wrapper .left-sidebar .right { max-width: 500px; }
+.wrapper .left-sidebar .contents { font-size: 14px; text-align: center; }
+.wrapper .left-sidebar a { color: #85ab70; }
+
+/* Right sidebar layout */
+.wrapper .right-sidebar { text-align: center; font-size: 0; }
+.wrapper .right-sidebar .column { width: 100%; display: inline-block; vertical-align: middle; }
+.wrapper .right-sidebar .left { max-width: 100px; }
+.wrapper .right-sidebar .right { max-width: 500px; }
+.wrapper .right-sidebar .contents { font-size: 14px; text-align: center; }
+.wrapper .right-sidebar a { color: #70bbd9; }
+
+/* Custom */
+.wrapper .letter { background-color: #fff; border: 1px solid #dbdbdb; border-width: 1px 3px 3px 1px; border-radius: 10px; overflow: hidden; }
+.wrapper .inner .div { Margin: 0; margin: 0; padding: 10px 20px; line-height: 1.5; }
+.wrapper .inner .div.left { text-align: left; }
+.wrapper .inner .div.center { text-align: center; }
+.wrapper .inner .div.right { text-align: right; }
+.wrapper .inner .title { font-size: 24px; font-weight: bold; }
+.wrapper .inner .sub-title { font-size: 16px; font-weight: bold; font-style: italic; }
+.wrapper .inner .substance { font-size: 14px; font-weight: normal; }
+.wrapper .inner .cancel { font-size: 14px; font-weight: lighter; text-decoration: line-through; }
+
+.wrapper .inner.main { background-color: #fff; }
+.wrapper .inner.main .title { color: #ff7200; }
+.wrapper .inner.main .sub-title { color: #666; }
+.wrapper .inner.main .substance { color: #666; }
+.wrapper .inner.main .cancel { color: #9d9ea1; }
+
+.wrapper .inner.sub { background-color: #666; background-color: rgba(102,102,102,0.7); }
+.wrapper .inner.sub .title { color: #fff; }
+.wrapper .inner.sub .sub-title { color: #fff; }
+.wrapper .inner.sub .substance { color: #fff; }
+
+.wrapper .inner.header { padding: 40px 0 20px; }
+.wrapper .inner.footer .div { padding: 20px; line-height: 20px; color: #fff; }
+.wrapper .inner.footer .team { color: #ffcc5a; font-weight: bold; }
+.wrapper .inner.footer a.email { color: #fff; }
+.wrapper .inner.sns { padding: 20px 0; color: #9d9ea1; font-size: 13px; }
+.wrapper .inner.sns a { color: #666; font-size: 14px; padding: 5px; line-height: 2; }
+
+.wrapper .string-id { color: #998674; font-weight: bold; }
+.wrapper .vaskit-logo { color: #ff7200; font-weight: bold; }

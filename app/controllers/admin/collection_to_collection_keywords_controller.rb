@@ -13,10 +13,9 @@ class Admin::CollectionToCollectionKeywordsController < Admin::HomeController
                                                  .map(&:collection_id)
     @related_collections =
       if related_collections_ids.blank?
-        []
+        Collection.none
       else
         Collection.where(id: related_collections_ids)
-                  .order(show: :desc)
                   .order("FIELD(id,#{related_collections_ids.join(',')})")
       end
   end

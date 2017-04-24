@@ -27,6 +27,13 @@
         {{= askThumbnailTemplate({ ask: ask }) }}
       {{ } }}
     </div>
+    <div class="related_collections_seg">
+      <div class="no_result"><div class="align_middle">불러오는 중 <i class="fa fa-spinner fa-spin"></i></div></div>
+    </div>
+  </div>
+</script>
+
+<script type="text/template" id="relatedCollectionsTemplate">
     {{ if (related_collections.length > 0) { }}
       <div class="related_collections_title"><span class="title">추천 컬렉션</span> <span class="description">이건 어떻게 생각하시나요?</span></div>
       <div class="related_collections_list">
@@ -40,12 +47,14 @@
     {{ } else { }}
       {{= recentAsksTemplate({ asks: recent_asks }) }}
     {{ } }}
-  </div>
 </script>
+
+
 
 <script>
   var collectionTemplate = _.template($('#collectionTemplate').html());
   var collectionShowTemplate = _.template($('#collectionShowTemplate').html());
+  var relatedCollectionsTemplate = _.template($('#relatedCollectionsTemplate').html());
 
   function set_collections() {
     $.ajax({
@@ -72,16 +81,13 @@
             url: url,
             dataType: 'json',
             type: 'GET',
-            data: { id: collection_id },
             error: function() {
               notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
             },
             success: function(data) {
-              var html = collectionShowTemplate({ collection: data.collection, asks: data.asks, related_collections: data.related_collections, recent_asks: data.recent_asks });
+              var html = collectionShowTemplate({ collection: data.collection, asks: data.asks });
               var new_wrapper = create_wrapper(html);
-              new_wrapper.find('.bxslider').bxSlider({
-                controls: false
-              });
+              show_related_collections(new_wrapper);
               if (currentSeg === 1 && segHistory[currentSeg] === 1) ga('send', 'event', '컬렉션탭', '컬렉션', 1);
               ga('send', 'event', '컨텐츠', '컬렉션', collection_id, 1);
             },
@@ -93,6 +99,22 @@
             }
     });
     return url;
+
+    function show_related_collections(target) {
+      $.ajax({
+              url: url,
+              dataType: 'json',
+              type: 'GET',
+              data: { related: true },
+              success: function(data) {
+                var html = relatedCollectionsTemplate({ related_collections: data.related_collections, recent_asks: data.recent_asks });
+                var new_wrapper = target.find('.related_collections_seg').html(html);
+                new_wrapper.find('.bxslider').bxSlider({
+                  controls: false
+                });
+              }
+      });
+    }
   }
 
   function hide_collection() {

@@ -11,7 +11,7 @@
     <%= link_to '수정하기',
                 edit_admin_collection_path(@collection.id),
                 { class: 'btn btn-warning btn-lg' } %>
-    <% if @collection.show %>
+    <% unless @collection.published_at.nil? %>
       <%= link_to '발행취소', admin_collection_path(@collection.id), { class: 'btn btn-danger btn-lg', method: :delete, data: { confirm: '정말로 발행을 취소하시겠어요?', disable_with: '취소중...' } } %>
     <% else %>
       <%= link_to '발행하기', admin_collection_path(@collection.id), { class: 'btn btn-success btn-lg', method: :delete, data: { confirm: '정말로 발행하시겠어요?', disable_with: '발행중...' } } %>
@@ -28,7 +28,7 @@
       </a>
     </div>
     <!-- Table -->
-    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel">
+    <div id="collapseOne" class="panel panel-collapse collapse in" role="tabpanel">
       <div class="table-responsive">
         <table class="table table-bordered">
           <tr>
@@ -53,7 +53,7 @@
           </tr>
           <tr>
             <th>게시일</th>
-            <td><%= format_datetime(@collection.created_at, :date) %></td>
+            <td><%= @collection.published_at ? format_datetime(@collection.published_at, :date) : '아직 게시하지 않았습니다' %></td>
           </tr>
           <tr>
             <th>이미지</th>
@@ -73,7 +73,7 @@
     </div>
 
     <!-- Table -->
-    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel">
+    <div id="collapseTwo" class="panel panel-collapse collapse" role="tabpanel">
       <div class="table-responsive">
         <table class="table table-bordered">
           <% if @related_collections.blank? %>
@@ -111,7 +111,7 @@
     </div>
 
     <!-- Table -->
-    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel">
+    <div id="collapseThree" class="panel panel-collapse collapse" role="tabpanel">
       <div class="table-responsive">
         <table class="table table-bordered">
           <% if @collection.asks.blank? %>

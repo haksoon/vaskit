@@ -1,0 +1,23 @@
+<div class="webkit">
+  <!--[if (gte mso 9)|(IE)]>
+  <table width="600" align="center">
+  <tr>
+  <td>
+  <![endif]-->
+  <table class="outer" align="center">
+    <% content = content_tag(:td, class: 'inner sns') do %>
+      <div class="div">
+        &#9733;&nbsp;다양한 소식을 준비할게요, 날 보러와요!
+        <br>
+        <a href="https://www.facebook.com/vaskit.kr/" target="_blank">facebook</a>
+        <a href="http://vaskit.me/" target="_blank">blog</a>
+      </div>
+    <% end %>
+    <%= render '/user_mailer/template/template_column_1', content: content %>
+  </table>
+  <!--[if (gte mso 9)|(IE)]>
+  </td>
+  </tr>
+  </table>
+  <![endif]-->
+</div>

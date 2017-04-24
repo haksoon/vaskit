@@ -26,10 +26,8 @@
   {{ var direction = ask.left_ask_deal_id == comment.ask_deal_id ? 'left' : 'right' }}
   {{ var gender = comment.user.gender ? 'male' : 'female' }}
   {{ var reply = comment.comment_id === null ? 'original' : 'reply' }}
-  {{ var is_liked_comment = false }}
-  {{ if (current_user) { }}
-    {{ is_liked_comment = $.grep(comment.comment_likes, function(obj) { return obj.user_id === current_user.id}).length === 0 ? false : true }}
-  {{ } }}
+  {{ var is_liked = false }}
+  {{ if (current_user) is_liked = _.indexOf(_.pluck(comment.comment_likes, 'user_id'), current_user.id) < 0 ? false : true }}
   <li class="comment_box {{= comment.id }} {{= direction }} {{= reply }} {{= comment.is_deleted ? 'deleted' : '' }} {{= comment.user.id == 1 ? 'vaskit' : '' }} clearfix" onclick="open_comment_menu($(this));" comment-id="{{= comment.id }}" original-comment-id="{{= reply == 'reply' ? comment.comment_id : comment.id }}" ask-user-id="{{= ask.user_id }}" comment-user-id="{{= comment.user_id }}" is-deleted="{{= comment.is_deleted ? 'true' : '' }}">
     {{ if (reply == "reply") { }}
       <i class="fa fa-reply comment_reply_icon"></i>
@@ -57,7 +55,7 @@
       {{ } else { }}
         <div class="comment_menu_btn" onclick="window.event.cancelBubble = true; like_comment({{= comment.id }});">
           <span class="comment_like_count">{{= comment.like_count == 0 ? '' : numberWithCommas(comment.like_count) }}</span>
-          <i class="fa {{= is_liked_comment ? 'fa-heart' : 'fa-heart-o' }} comment_like_icon"></i>
+          <i class="fa {{= is_liked ? 'fa-heart' : 'fa-heart-o' }} comment_like_icon"></i>
         </div>
       {{ } }}
     </div>
@@ -148,7 +146,6 @@
   }
 
   function open_comment_menu(target) {
-    window.event.cancelBubble = true;
     var options;
     var is_deleted = Boolean(target.attr('is-deleted'));
 

@@ -6,11 +6,16 @@ class VideosController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        videos = Video.where(show: true)
-                      .page(params[:page])
-                      .per(Video::VIDEO_PER)
-                      .order(id: :desc)
-        is_more_load = videos.total_pages > params[:page].to_i
+        videos = Video.where.not(published_at: nil)
+                      .order(published_at: :desc)
+
+        if params[:page].nil?
+          videos = videos.limit(1)
+        else
+          videos = videos.page(params[:page])
+                         .per(Video::VIDEO_PER)
+          is_more_load = videos.total_pages > params[:page].to_i
+        end
         render json: { videos: videos, is_more_load: is_more_load }
       end
     end
@@ -25,10 +30,7 @@ class VideosController < ApplicationController
         ask = video.ask
         ask.alarm_read(current_user.id) if current_user
         ask = ask.fetch_ask_detail
-        render json: {
-          video: video,
-          ask: ask
-        }
+        render json: { video: video, ask: ask }
       end
     end
   end

@@ -1,10 +1,82 @@
 <div class="jumbotron clearfix">
-  <h1>등급 목록</h1>
-  <p>등급을 설정할 수 있습니다</p>
+  <h1>사용자 등급 목록</h1>
+  <p>사용자 등급을 생성하거나 수정, 삭제할 수 있습니다<br>
+     단, 변경사항은 즉시 반영되지 않고 다음 오전 6시에 반영됩니다</p>
   <%= link_to '새로운 등급 생성하기',
               new_admin_grade_standard_path,
               { class: 'btn btn-success btn-lg pull-right' } %>
 </div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">전체 사용자 점수 현황 (총 <%= @user_count %>명)</div>
+
+  <div class="panel-body">
+    <div id="user_score_chart" class="ct-chart ct-perfect-fourth"></div>
+  </div>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">상위 10 사용자 목록</div>
+
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+        <tr>
+          <th style="width: 10%;">등수</th>
+          <th style="width: 25%;">유저 ID</th>
+          <th style="width: 10%;">이번주 점수</th>
+          <th style="width: 10%;">1주전 점수</th>
+          <th style="width: 10%;">2주전 점수</th>
+          <th style="width: 10%;">3주전 점수</th>
+          <th style="width: 10%;">총 점수</th>
+          <th style="width: 15%;">등급</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @top_10_users.each_with_index do |user, index| %>
+          <tr>
+            <th><kbd><%= index + 1 %>위</kbd></th>
+            <td><%= user.user.string_id %></td>
+            <td><%= user.cycle_1_score %> 점</td>
+            <td><%= user.cycle_2_score %> 점</td>
+            <td><%= user.cycle_3_score %> 점</td>
+            <td><%= user.cycle_4_score %> 점</td>
+            <td><b><%= user.total_score %> 점</b></td>
+            <td><%= user.grade_standard.name if user.grade_standard_id %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  $(window).ready(function(){
+    var chart_options = {
+      showArea: true,
+      fullWidth: true,
+      reverseData: true,
+      axisX: {
+        showGrid: false
+      },
+      axisY: {
+        labelInterpolationFnc: function(value) {
+          return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+      },
+      plugins: [ Chartist.plugins.tooltip({ currency: " " }) ]
+    };
+
+    new Chartist.Line('#user_score_chart', {
+      labels: [],
+      series: [<%= @user_scores %>]
+    }, chart_options);
+  });
+</script>
+
 <div class="panel panel-primary">
   <!-- Default panel contents -->
   <div class="panel-heading">등급 전체목록</div>
@@ -14,102 +86,79 @@
     <table class="table table-bordered table-striped table-hover">
       <thead>
         <tr>
-          <th style="width: 7%;">순서</th>
-          <th style="width: 7%;">ID</th>
-          <th style="width: 16%;">이미지</th>
-          <th style="width: 10%;">이름</th>
-          <th style="width: 10%;">기준 (%)</th>
-          <th style="width: 10%;">기준 점수</th>
-          <th style="width: 20%;">수정</th>
-          <th style="width: 20%;">삭제</th>
+          <th style="width: 10%;">순서</th>
+          <th style="width: 15%;">이미지</th>
+          <th style="width: 15%;">이름</th>
+          <th style="width: 10%;">기준퍼센트</th>
+          <th style="width: 10%;">기준점수</th>
+          <th style="width: 10%;">조회</th>
+          <th style="width: 10%;">수정</th>
+          <th style="width: 10%;">삭제</th>
+          <th style="width: 10%;">취소</th>
         </tr>
       </thead>
       <tbody>
-        <% @grade_standards.each do |grade_standard| %>
-          <tr>
-            <th><kbd><%= grade_standard.grade_order %></kbd></th>
-            <td><%= grade_standard.id %></td>
-            <td><%= image_tag grade_standard.image.url(:original), width: '100%' %></td>
-            <td><%= grade_standard.name %></td>
-            <td><%= grade_standard.percent_standard %> %</td>
-            <td><%= grade_standard.score_standard %> 점</td>
-            <td><%= link_to '수정', edit_admin_grade_standard_path(grade_standard.id), class: 'btn btn-warning btn-block' %></td>
-            <td><%= link_to '삭제', admin_grade_standard_path(grade_standard.id), { class: 'btn btn-danger btn-block', method: :delete, data: { confirm: '정말로 해당 등급을 삭제하시겠어요?', disable_with: '취소중...' } } %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-<div class="panel panel-primary">
-  <!-- Default panel contents -->
-  <div class="panel-heading">수정 될 등급 목록</div>
-
-  <!-- Table -->
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-        <tr>
-          <th style="width: 14%;">등급 ID</th>
-          <th style="width: 16%;">이미지</th>
-          <th style="width: 23%;">이름</th>
-          <th style="width: 23%;">기준 (%)</th>
-          <th style="width: 23%;">삭제</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @grade_standard_will_be_modifieds.each do |grade_standard_will_be_modified| %>
-          <tr>
-            <th><%= grade_standard_will_be_modified.grade_standard_id %></th>
-            <td><%= image_tag grade_standard_will_be_modified.image.url(:original), width: '100%' %></td>
-            <td><%= grade_standard_will_be_modified.name %></td>
-            <td><%= grade_standard_will_be_modified.percent_standard %> %</td>
-            <td><%= link_to '취소', cancel_modifiy_admin_grade_standard_path(grade_standard_will_be_modified.id), { class: 'btn btn-danger btn-block', method: :patch, data: { confirm: '정말로 해당 등급을 삭제하시겠어요?', disable_with: '취소중...' } } %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-  </div>
-</div>
-<div class="panel panel-primary">
-  <!-- Default panel contents -->
-  <div class="panel-heading">상위 10명</div>
-
-  <!-- Table -->
-  <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover">
-      <thead>
-        <tr>
-          <th style="width: 5%;">등수</th>
-          <th style="width: 5%;">ID</th>
-          <th style="width: 10%;">이번주 점수</th>
-          <th style="width: 10%;">1주전 점수</th>
-          <th style="width: 10%;">2주전 점수</th>
-          <th style="width: 10%;">3주전 점수</th>
-          <th style="width: 10%;">총 점수</th>
-          <th style="width: 10%;">등급</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% i = 1 %>
-        <% @top_10_users.each do |top_10_user| %>
-          <tr>
-            <th><kbd><%= i %></kbd></th>
-            <td><%= top_10_user.user.email %></td>
-            <td><%= top_10_user.cycle_1_score %> 점</td>
-            <td><%= top_10_user.cycle_2_score %> 점</td>
-            <td><%= top_10_user.cycle_3_score %> 점</td>
-            <td><%= top_10_user.cycle_4_score %> 점</td>
-            <td><%= top_10_user.total_score %> 점</td>
-            <% if top_10_user.grade_standard_id %>
-              <td><%= top_10_user.grade_standard.name %></td>
+        <% @grade_standards.each do |g| %>
+          <% was_edited = g.grade_standard_will_be_modified && g.grade_standard_will_be_modified.percent_standard ? true : false %>
+          <% was_deleted = g.grade_standard_will_be_modified && g.grade_standard_will_be_modified.percent_standard.nil? ? true : false %>
+          <tr class="<%= 'warning' if was_edited %><%= 'danger' if was_deleted %>">
+            <th>
+              <kbd><%= g.grade_order %>번</kbd>
+              <%= '<br>수정 예정'.html_safe if was_edited %>
+              <%= '<br>삭제 예정'.html_safe if was_deleted %>
+            </th>
+            <td><%= image_tag g.image.url(:original), width: '100%' %></td>
+            <td><%= g.name %></td>
+            <td><%= "#{g.percent_standard}%" %></td>
+            <td><%= "#{g.score_standard}점" %></td>
+            <td><%= link_to '조회', admin_grade_standard_path(g.id), class: 'btn btn-info btn-block' %></td>
+            <td><%= link_to '수정', edit_admin_grade_standard_path(g.id), class: 'btn btn-warning btn-block' %></td>
+            <td><%= link_to '삭제', admin_grade_standard_path(g.id), { class: 'btn btn-danger btn-block', method: :delete, data: { confirm: '정말로 해당 등급을 삭제하시겠어요?', disable_with: '삭제중...' } } %></td>
+            <% if was_edited %>
+              <td><%= link_to '수정 취소', cancel_modify_admin_grade_standard_path(g.grade_standard_will_be_modified.id), { class: 'btn btn-primary btn-block', method: :patch, data: { confirm: '정말로 해당 변경내용을 취소하시겠어요?', disable_with: '취소중...' } } %></td>
+            <% elsif was_deleted %>
+              <td><%= link_to '삭제 취소', cancel_modify_admin_grade_standard_path(g.grade_standard_will_be_modified.id), { class: 'btn btn-primary btn-block', method: :patch, data: { confirm: '정말로 해당 변경내용을 취소하시겠어요?', disable_with: '취소중...' } } %></td>
             <% else %>
-              <td></td>
+              <td><a class="btn btn-block btn-link disabled" href="#">변경 없음</a></td>
             <% end %>
           </tr>
-          <% i += 1 %>
+          <% if was_edited %>
+            <tr class="warning">
+              <th style="border-top: 0;"></th>
+              <td style="border-top-style: dashed;"><%= image_tag g.grade_standard_will_be_modified.image.url(:original), width: '100%' %></td>
+              <td style="border-top-style: dashed;"><%= g.grade_standard_will_be_modified.name %></td>
+              <td style="border-top-style: dashed;"><%= "#{g.grade_standard_will_be_modified.percent_standard}%" %></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+              <td style="border-top: 0;"></td>
+            </tr>
+          <% end %>
+        <% end %>
+
+        <% @new_grade_standards.each do |g| %>
+          <tr class="success">
+            <th><kbd>신규</kbd><br>생성 예정</th>
+            <td><%= image_tag g.image.url(:original), width: '100%' %></td>
+            <td><%= g.name %></td>
+            <td><%= g.percent_standard %>%</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><%= link_to '생성 취소', cancel_modify_admin_grade_standard_path(g.id), { class: 'btn btn-primary btn-block', method: :patch, data: { confirm: '정말로 해당 변경내용을 취소하시겠어요?', disable_with: '취소중...' } } %></td>
+          </tr>
         <% end %>
       </tbody>
     </table>
+  </div>
+
+  <div class="panel-footer">
+    <%= link_to '강제 업데이트',
+                force_update_admin_grade_standards_path,
+                { class: 'btn btn-danger btn-lg btn-block',
+                  method: :put,
+                  data: { confirm: "매일 새벽 6시에 자동 업데이트가 반영됩니다\n이 작업은 시간이 오래 걸릴 수 있으며 실서버의 성능에 영향을 미칠 수 있습니다\n\n정말로 강제 업데이트를 실행하시겠어요?", disable_with: '실행중...' } } %>
   </div>
 </div>

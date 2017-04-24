@@ -1,0 +1,20 @@
+<div class="webkit">
+  <!--[if (gte mso 9)|(IE)]>
+  <table width="600" align="center">
+  <tr>
+  <td>
+  <![endif]-->
+  <table class="outer" align="center">
+    <% content = content_tag(:td, class: 'inner header') do %>
+      <div class="div">
+        <img src="http://vaskit.kr/images/logo/logo.png" width="150" height="auto" alt="" />
+      </div>
+    <% end %>
+    <%= render '/user_mailer/template/template_column_1', content: content %>
+  </table>
+  <!--[if (gte mso 9)|(IE)]>
+  </td>
+  </tr>
+  </table>
+  <![endif]-->
+</div>

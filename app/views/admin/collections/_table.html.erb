@@ -1,0 +1,42 @@
+<div class="table-responsive">
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th style="width: 5%;">ID</th>
+        <th style="width: 5%;">이미지</th>
+        <th style="width: 10%;">제목</th>
+        <th style="width: 10%;">설명</th>
+        <th style="width: 10%;">게시일</th>
+        <th style="width: 10%;">컨텐츠</th>
+        <th style="width: 10%;">키워드</th>
+        <th style="width: 10%;">연관컬렉션</th>
+        <th style="width: 10%;">조회</th>
+        <th style="width: 10%;">수정</th>
+        <th style="width: 10%;">발행</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% collections.each do |collection| %>
+        <tr>
+          <th><kbd><%= collection.id %></kbd></th>
+          <td><%= image_tag collection.image.url(:original), width: '100%' %></td>
+          <td><%= collection.name %></td>
+          <td><%= tagging_keywords(collection.description) %></td>
+          <td class="text-center"><%= collection.published_at ? format_datetime(collection.published_at, 'past') : '미게시' %></td>
+          <td><%= link_to "#{collection.asks.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
+          <td><%= link_to "#{collection.collection_keywords.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
+          <td><%= link_to "#{collection.fetch_related_collections.count}개", admin_collection_path(collection.id), class: 'btn btn-default btn-block' %></td>
+          <td><%= link_to '조회', admin_collection_path(collection.id), class: 'btn btn-info btn-block' %></td>
+          <td><%= link_to '수정', edit_admin_collection_path(collection.id), class: 'btn btn-warning btn-block' %></td>
+          <td>
+            <% if collection.published_at %>
+              <%= link_to '발행취소', admin_collection_path(collection.id), { class: 'btn btn-danger btn-block', method: :delete, data: { confirm: '정말로 발행을 취소하시겠어요?', disable_with: '취소중...' } } %>
+            <% else %>
+              <%= link_to '발행하기', admin_collection_path(collection.id), { class: 'btn btn-success btn-block', method: :delete, data: { confirm: '정말로 발행하시겠어요?', disable_with: '발행중...' } } %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

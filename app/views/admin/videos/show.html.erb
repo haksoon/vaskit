@@ -11,7 +11,7 @@
     <%= link_to '수정하기',
                 edit_admin_video_path(@video.id),
                 { class: 'btn btn-warning btn-lg' } %>
-    <% if @video.show %>
+    <% unless @video.published_at.nil? %>
       <%= link_to '발행취소', admin_video_path(@video.id), { class: 'btn btn-danger btn-lg', method: :delete, data: { confirm: '정말로 발행을 취소하시겠어요?', disable_with: '취소중...' } } %>
     <% else %>
       <%= link_to '발행하기', admin_video_path(@video.id), { class: 'btn btn-success btn-lg', method: :delete, data: { confirm: '정말로 발행하시겠어요?', disable_with: '발행중...' } } %>
@@ -35,7 +35,7 @@
       </tr>
       <tr>
         <th>게시일</th>
-        <td><%= format_datetime(@video.created_at, :date) %></td>
+        <td><%= @video.published_at ? format_datetime(@video.published_at, :date) : '아직 게시하지 않았습니다' %></td>
       </tr>
       <tr>
         <th>이미지</th>

@@ -309,7 +309,12 @@
 <script type="text/template" id="searchResultTemplate">
   <div class="container top" ontouchmove="return false;">
     <span class="header_title" onclick="$(this).scroll_to();">
-      <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }} 검색결과</span>
+      {{ if (type) { }}
+        <i class="search_preview_icon vaskit_icon {{= type }}_icon"></i>{{= unescape(keyword) }} 검색결과
+      {{ } else  { }}
+        검색결과가 없습니다
+      {{ } }}
+    </span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'asks');" url="{{= url }}">

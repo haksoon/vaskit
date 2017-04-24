@@ -1,18 +1,18 @@
-class Admin::NoticesController < Admin::HomeController
-  # GET /admin/notices
+class Admin::PushesController < Admin::HomeController
+  # GET /admin/pushes
   def index
-    @notices = LogPushAdmin.page(params[:page]).per(10).order(id: :desc)
+    @pushes = LogPushAdmin.page(params[:page]).per(10).order(id: :desc)
   end
 
-  # GET /admin/notices/new
+  # GET /admin/pushes/new
   def new
   end
 
-  # GET /admin/notices/target
+  # GET /admin/pushes/target
   def target
   end
 
-  # GET /admin/notices/test
+  # GET /admin/pushes/test
   def test
     return if params[:msg].blank? || params[:link].blank?
     params[:js] = '' if params[:js].nil? || params[:js] == 'false'
@@ -34,11 +34,11 @@ class Admin::NoticesController < Admin::HomeController
     @string = "#{count}대의 기기에 테스트 알림을 전송하였습니다"
   end
 
-  # POST /admin/notices
+  # POST /admin/pushes
   def create
     if params[:type].blank? || params[:target].blank? || params[:msg].blank? || params[:link].blank?
       flash['error'] = '필수 입력값을 모두 입력해주세요'
-      redirect_to new_admin_notice_path and return
+      redirect_to new_admin_push_path and return
     end
 
     push_type = params[:type]
@@ -152,7 +152,7 @@ class Admin::NoticesController < Admin::HomeController
       message: payload[:msg]
     )
 
-    flash['success'] = "총 #{success_count}개의 푸시알림을 성공적으로 전송하였습니다"
-    redirect_to admin_notices_path
+    flash['success'] = "총 #{success_count}개의 푸쉬알림을 성공적으로 전송하였습니다"
+    redirect_to admin_pushes_path
   end
 end

@@ -29,7 +29,7 @@ class Collection < ActiveRecord::Base
     self.image_file_name = "collection.#{extension}"
   end
 
-  def find_related_collections
+  def fetch_related_collections
     keyword_ids = CollectionToCollectionKeyword.where(collection_id: id)
                                                .pluck(:collection_keyword_id)
     keyword_collections = CollectionToCollectionKeyword.where(collection_keyword_id: keyword_ids)
@@ -41,7 +41,8 @@ class Collection < ActiveRecord::Base
     if related_collections_ids.empty?
       Collection.none
     else
-      Collection.where(show: true, id: related_collections_ids)
+      Collection.where(id: related_collections_ids)
+                .where.not(published_at: nil)
                 .order("FIELD(id,#{related_collections_ids.join(',')})")
     end
   end

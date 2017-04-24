@@ -1,19 +1,31 @@
 class Admin::GradeStandardsController < Admin::HomeController
 
+  # GET /admin/grade_standards
   def index
-    @grade_standards = GradeStandard.order(grade_order: :asc)
-    @grade_standard_will_be_modifieds = GradeStandardWillBeModified.all
-    @top_10_users = UserActivityScore.page(params[:page]).per(10).order(total_score: :desc)
+    @grade_standards = GradeStandard.all.includes(:grade_standard_will_be_modified)
+    @new_grade_standards = GradeStandardWillBeModified.where(grade_standard_id: nil)
+    @user_count = UserActivityScore.all.count
+    @user_scores = UserActivityScore.order(total_score: :desc).map(&:total_score)
+    @top_10_users = UserActivityScore.order(total_score: :desc).limit(10)
   end
 
+  # GET /admin/grade_standards/:id
+  def show
+    @grade_standard = GradeStandard.find(params[:id])
+    @grade_users = UserActivityScore.where(grade_standard_id: params[:id])
+                                    .order(total_score: :desc).page(params[:page]).per(10)
+  end
+
+  # GET /admin/grade_standards/new
   def new
     @grade_standard = GradeStandardWillBeModified.new
   end
 
+  # POST /admin/grade_standards
   def create
     @grade_standard = GradeStandardWillBeModified.new(grade_standard_params)
     if @grade_standard.save
-      flash['success'] = "<#{@grade_standard.name}> 등급을 성공적으로 생성하였습니다"
+      flash['success'] = '등급 생성이 예약되었습니다'
       redirect_to admin_grade_standards_path
     else
       flash['error'] = '필수 입력값을 모두 입력해주세요'
@@ -21,17 +33,22 @@ class Admin::GradeStandardsController < Admin::HomeController
     end
   end
 
+  # GET /admin/grade_standards/:id/edit
   def edit
     @grade_standard = GradeStandardWillBeModified.find_by(grade_standard_id: params[:id])
     return unless @grade_standard.nil?
-    original_grade_standard = GradeStandard.find_by_id(params[:id])
-    @grade_standard = GradeStandardWillBeModified.create(grade_standard_id: params[:id], image: original_grade_standard.image, name: original_grade_standard.name, percent_standard: original_grade_standard.percent_standard)
+    original_grade_standard = GradeStandard.find(params[:id])
+    @grade_standard = GradeStandardWillBeModified.create(grade_standard_id: params[:id],
+                                                         name: original_grade_standard.name,
+                                                         percent_standard: original_grade_standard.percent_standard,
+                                                         image: original_grade_standard.image)
   end
 
+  # PATCH /admin/grade_standards/:id
   def update
-    @grade_standard = GradeStandardWillBeModified.find_by_id(params[:id])
+    @grade_standard = GradeStandardWillBeModified.find(params[:id])
     if @grade_standard.update(grade_standard_params)
-      flash['success'] = "<#{@grade_standard.name}> 등급을 성공적으로 수정하였습니다"
+      flash['success'] = '등급 수정이 예약되었습니다'
       redirect_to admin_grade_standards_path
     else
       flash['error'] = '필수 입력값을 모두 입력해주세요'
@@ -39,6 +56,7 @@ class Admin::GradeStandardsController < Admin::HomeController
     end
   end
 
+  # DELETE /admin/grade_standards/:id
   def destroy
     @grade_standard = GradeStandardWillBeModified.find_by(grade_standard_id: params[:id])
     if @grade_standard
@@ -46,15 +64,24 @@ class Admin::GradeStandardsController < Admin::HomeController
     else
       GradeStandardWillBeModified.create(grade_standard_id: params[:id])
     end
-    flash['warning'] = '등급을 삭제하였습니다'
+    flash['warning'] = '등급 삭제가 예약되었습니다'
     redirect_to :back
   end
 
-  def cancel_modifiy
-    @grade_standard = GradeStandardWillBeModified.find_by_id(params[:id])
-    @grade_standard.destroy
-    flash['warning'] = '변경 사항을 취소하였습니다'
+  # PATCH /admin/grade_standards/:id/cancel_modify
+  def cancel_modify
+    GradeStandardWillBeModified.find(params[:id]).destroy
+    flash['warning'] = '예약된 변경 사항을 취소하였습니다'
     redirect_to :back
+  end
+
+  # PUT /admin/grade_standards/:id/cancel_modify
+  def force_update
+    GradeStandardWillBeModified.update_by_daily
+    GradeStandard.update_by_daily
+    UserActivityScore.update_by_daily
+    flash['success'] = '강제 업데이트를 완료하였습니다'
+    redirect_to admin_grade_standards_path
   end
 
   private

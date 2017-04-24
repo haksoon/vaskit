@@ -1,0 +1,29 @@
+<div class="jumbotron clearfix">
+  <h1><kbd><%= @mail.id %>번</kbd> 메일</h1>
+  <p>메일 상세화면입니다</p>
+  <%= link_to '목록으로',
+              admin_mails_path,
+              { class: 'btn btn-default btn-lg' } %>
+</div>
+
+<div class="panel panel-info">
+  <!-- Default panel contents -->
+  <div class="panel-heading">메일 내용</div>
+  <!-- Table -->
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <tr>
+        <th style="width: 100px;">제목</th>
+        <td><%= @mail.title %></td>
+      </tr>
+      <tr>
+        <th>전송일</th>
+        <td><%= format_datetime(@mail.created_at, :datetime) %></td>
+      </tr>
+      <tr>
+        <th>내용</th>
+        <td><%= render '/user_mailer/template/letter', message: @mail.message.html_safe %></td>
+      </tr>
+    </table>
+  </div>
+</div>

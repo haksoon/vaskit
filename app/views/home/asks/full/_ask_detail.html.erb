@@ -1,8 +1,6 @@
 <script type="text/template" id="askDetailTemplate">
-  {{ var is_liked_ask = false }}
-  {{ if (current_user) { }}
-    {{ is_liked_ask = $.grep(ask.ask_likes, function(obj) { return obj.user_id === current_user.id}).length === 0 ? false : true }}
-  {{ } }}
+  {{ var is_liked = false }}
+  {{ if (current_user) is_liked = _.indexOf(_.pluck(ask.ask_likes, 'user_id'), current_user.id) < 0 ? false : true }}
   <div class="container top ask ask_detail ask_{{= ask.id }}" ontouchmove="return false;">
     <span class="header_title right" onclick="$(this).scroll_to();">{{= (current_user && ask.user_id == current_user.id) ? '나' : ask.user.string_id + "님" }}의 질문</span>
     <span class="header_btn left close_btn" onclick="back_button();">&times;</span>
@@ -12,7 +10,7 @@
         <span class="header_btn right ask_edit_btn" onclick="go_url('ask_form', {{= ask.id }});"><i class="fa fa-edit"></i></span>
       {{ } }}
     {{ } else { }}
-      <span class="header_btn right ask_like_btn" onclick="like_ask({{= ask.id }});"><i class="vaskit_icon {{= is_liked_ask ? 'is_liked' : '' }} ask_like_icon"></i></span>
+      <span class="header_btn right ask_like_btn" onclick="like_ask({{= ask.id }});"><i class="vaskit_icon {{= is_liked ? 'is_liked' : '' }} ask_like_icon"></i></span>
     {{ } }}
   </div>
   <div class="container main full" ontouchstart="removeIOSRubberEffect($(this));">
@@ -27,19 +25,17 @@
   {{ var is_voted = false }}
   {{ var vote_id = '' }}
   {{ var vote_direction = '' }}
-  {{ var is_liked_ask = false }}
-  {{ if (current_user) { }}
-    {{ is_liked_ask = $.grep(ask.ask_likes, function(obj) { return obj.user_id === current_user.id}).length === 0 ? false : true }}
-  {{ } }}
+  {{ var is_liked = false }}
+  {{ if (current_user) is_liked = _.indexOf(_.pluck(ask.ask_likes, 'user_id'), current_user.id) < 0 ? false : true }}
   {{ if (current_user && current_user.id == ask.user_id) { }}
     {{ is_voted = true }}
     {{ vote_id = '' }}
     {{ vote_direction = '' }}
   {{ } else if (current_user) { }}
-    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
-      {{ vote_id = my_vote.id }}
+    {{ var my_vote = _.filter(ask.votes, function(obj) { return obj.user_id == current_user.id })[0] }}
+    {{ if (my_vote) { }}
       {{ is_voted = true }}
+      {{ vote_id = my_vote.id }}
       {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
     {{ } }}
   {{ } else { }}
@@ -51,10 +47,10 @@
       {{ vote = JSON.parse(vote) }}
       {{ my_votes.push(vote) }}
     {{ } }}
-    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
-      {{ vote_id = my_vote.id }}
+    {{ var my_vote = _.filter(my_votes, function(obj) { return obj.ask_id == ask.id })[0] }}
+    {{ if (my_vote) { }}
       {{ is_voted = true }}
+      {{ vote_id = my_vote.id }}
       {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
     {{ } }}
   {{ } }}
@@ -136,7 +132,7 @@
         <span class="ask_user_profile {{= gender }}">{{= get_user_ages(ask.user.birthday) }}</span>
       {{ } }}
       <div class="ask_count_span"><i class="vaskit_icon comment_icon"></i> <span class="ask_comment_count">{{= ask.left_ask_deal.comment_count + ask.right_ask_deal.comment_count }}</span></div>
-      <div class="ask_count_span"><i class="vaskit_icon {{= is_liked_ask ? 'is_liked' : '' }} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
+      <div class="ask_count_span"><i class="vaskit_icon {{= is_liked ? 'is_liked' : '' }} ask_like_icon"></i> <span class="ask_like_count">{{= ask.like_count }}</span></div>
     </div>
     <div class="ask_message">
       {{= ask.message.length > 0 ? taggingKeywords(ask.message, true) : '도와주세요!' }}

@@ -110,18 +110,20 @@ Rails.application.routes.draw do
     resources :collection_to_collection_keywords, only: [:index]
     resources :collection_to_asks, only: [:create]
     resources :videos
-    resources :grade_standards, except: [:show] do
-      member do
-        patch :cancel_modifiy
-      end
+    resources :grade_standards do
+      put :force_update, on: :collection
+      patch :cancel_modify, on: :member
     end
     resource :search_keywords, only: [:show, :create, :update, :destroy]
     resources :refer_links, except: [:delete]
-    resources :notices, only: [:index, :new, :create] do
-      collection do
-        get 'target'
-        get 'test'
-      end
+    resources :pushes, only: [:index, :new, :create] do
+      get :target, on: :collection
+      get :test, on: :collection
+    end
+    resources :mails, except: [:edit, :update, :destroy] do
+      get :target, on: :collection
+      get :template, on: :collection
+      post :test, on: :collection
     end
     resources :tables, only: [:index] do
       get ':table_name', to: 'tables#index', on: :collection

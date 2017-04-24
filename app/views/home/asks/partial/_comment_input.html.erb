@@ -2,8 +2,8 @@
   {{ var vote_direction = 'left' }}
   {{ if (current_user && current_user.id == ask.user_id) { }}
   {{ } else if (current_user) { }}
-    {{ var my_vote = $.grep(ask.votes, function(obj) { return (obj.user_id == current_user.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
+    {{ var my_vote = _.filter(ask.votes, function(obj) { return obj.user_id == current_user.id })[0] }}
+    {{ if (my_vote) { }}
       {{ vote_direction = ask.left_ask_deal_id == my_vote.ask_deal_id ? 'left' : 'right' }}
     {{ } }}
   {{ } else { }}
@@ -15,8 +15,8 @@
       {{ vote = JSON.parse(vote) }}
       {{ my_votes.push(vote) }}
     {{ } }}
-    {{ var my_vote = $.grep(my_votes, function(obj) { return (obj.ask_id == ask.id) })[0] }}
-    {{ if (my_vote !== undefined) { }}
+    {{ var my_vote = _.filter(my_votes, function(obj) { return obj.ask_id == ask.id })[0] }}
+    {{ if (my_vote) { }}
       {{ vote_direction = my_vote.is_left ? 'left' : 'right' }}
     {{ } }}
   {{ } }}

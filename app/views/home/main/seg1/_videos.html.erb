@@ -16,8 +16,7 @@
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));" onscroll="endless_loading($(this), 'videos');" url="/videos">
     <div class="clearfix">
-      {{ var l = videos.length }}
-      {{ for (var i=0; i < l; i++) { }}
+      {{ for (var i=0; i < videos.length; i++) { }}
         {{ var video = videos[i] }}
         {{= videoThumbnailTemplate({ video: video }) }}
       {{ } }}

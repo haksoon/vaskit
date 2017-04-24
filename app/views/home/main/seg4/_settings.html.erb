@@ -11,7 +11,7 @@
     </div>
     <div class="settings">
       <span class="setting_title">알림 설정</span>
-      <a class="setting_menu" href="/users/settings/edit_push_alarm" onclick="ga('send', 'event', '마이탭', '푸시 알림 설정', '{{= current_user.string_id }}', 1); go_url('edit_push_alarm'); return false;">푸시 알림 설정 <i class="fa fa-angle-right setting_btn"></i></a>
+      <a class="setting_menu" href="/users/settings/edit_push_alarm" onclick="ga('send', 'event', '마이탭', '푸시 알림 설정', '{{= current_user.string_id }}', 1); go_url('edit_push_alarm'); return false;">알림 설정 <i class="fa fa-angle-right setting_btn"></i></a>
       <a class="setting_menu" href="/users/settings/edit_email_alarm" onclick="ga('send', 'event', '마이탭', '이메일 수신 설정', '{{= current_user.string_id }}', 1); go_url('edit_email_alarm'); return false;">이메일 수신 설정  <i class="fa fa-angle-right setting_btn"></i></a>
     </div>
     <div class="settings">
@@ -444,7 +444,7 @@
 
 <script type="text/template" id="editPushAlarmTemplate">
   <div class="container top" ontouchmove="return false;">
-    <span class="header_title" onclick="$(this).scroll_to();">푸시 알림 설정</span>
+    <span class="header_title" onclick="$(this).scroll_to();">알림 설정</span>
     <span class="header_btn left back_btn" onclick="back_button();"><i class="fa fa-angle-left"></i></span>
   </div>
   <div class="container main" ontouchstart="removeIOSRubberEffect($(this));">

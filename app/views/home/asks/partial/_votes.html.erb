@@ -225,26 +225,14 @@
                 notify('<i class="fa fa-exclamation-triangle"></i> 네트워크 오류');
               },
               success: function(data) {
-                var left_vote_count = data.ask.left_ask_deal.vote_count;
-                var right_vote_count = data.ask.right_ask_deal.vote_count;
                 var vote_id = data.vote.id;
-                if (is_left) {
-                  all_ask_box.removeClass('left right').addClass('is_voted left');
-                  all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
-                                .find('.vote_graph.left').find('.on');
-                  all_vs_btns.attr('vote-id', vote_id)
-                             .attr('vote-direction', 'left')
-                             .clearQueue().stop().css({ top: '', left: '' });
-                  all_comment_toggles.attr('left', true).removeClass('right').addClass('left');
-                } else {
-                  all_ask_box.removeClass('left right').addClass('is_voted right');
-                  all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_vote_count, right_count: right_vote_count, total_count: left_vote_count + right_vote_count }))
-                                .find('.vote_graph.right').find('.on');
-                  all_vs_btns.attr('vote-id', vote_id)
-                             .attr('vote-direction', 'right')
-                             .clearQueue().stop().css({ top: '', left: '' });
-                  all_comment_toggles.removeAttr('left').removeClass('left').addClass('right');
-                }
+                var left_count = data.left_vote_count;
+                var right_count = data.right_vote_count;
+                var total_count = left_count + right_count;
+
+                update_vote(vote_id);
+
+                all_vs_results.html(askResultTemplate({ type: '전체', left_count: left_count, right_count: right_count, total_count: total_count }));
                 vs_result_detail.addClass('is_voted').one(transitionEnd, function() {
                   vs_result_detail.removeClass('is_voted');
                 });
@@ -269,17 +257,7 @@
       votes = votes_array.join('.');
       $.cookie('visitor_votes', votes, { expires : 30000, path : '/' });
 
-      if (is_left) {
-        all_ask_box.removeClass('left right').addClass('is_voted left');
-        all_vs_btns.attr('vote-id', vote_id)
-                   .attr('vote-direction', 'left')
-                   .clearQueue().stop().css({ top: '', left: '' });
-      } else {
-        all_ask_box.removeClass('left right').addClass('is_voted right');
-        all_vs_btns.attr('vote-id', vote_id)
-                   .attr('vote-direction', 'right')
-                   .clearQueue().stop().css({ top: '', left: '' });
-      }
+      update_vote(vote_id);
 
       if (votes_array.length > 4) {
         visitor_check();
@@ -289,6 +267,19 @@
           vs_result_detail.removeClass('is_voted');
         });
       }
+    }
+
+    function update_vote(vote_id) {
+      if (is_left) {
+        all_ask_box.removeClass('left right').addClass('is_voted left');
+        all_vs_btns.attr('vote-direction', 'left');
+        all_comment_toggles.attr('left', true).removeClass('right').addClass('left');
+      } else {
+        all_ask_box.removeClass('left right').addClass('is_voted right');
+        all_vs_btns.attr('vote-direction', 'right');
+        all_comment_toggles.removeAttr('left').removeClass('left').addClass('right');
+      }
+      all_vs_btns.attr('vote-id', vote_id).clearQueue().stop().css({ top: '', left: '' });
     }
   }
 
