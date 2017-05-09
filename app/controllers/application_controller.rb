@@ -113,8 +113,9 @@ class ApplicationController < ActionController::Base
         'unknown'
       end
 
-    referer_host = request.referer ? URI.parse(URI.encode(request.referer.strip)).host.to_s : 'None'
-    referer = request.referer ? URI.parse(URI.encode(request.referer.strip)).to_s : 'None'
+    referer_uri = URI.parse(URI.encode(request.referer.strip.slice(URI.regexp))) if request.referer
+    referer_host = referer_uri ? referer_uri.host.to_s : 'None'
+    referer = referer_uri ? referer_uri.to_s : 'None'
 
     set_visitor
     user_id = current_user.id unless current_user.blank?
