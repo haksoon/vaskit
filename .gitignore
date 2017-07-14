@@ -12,6 +12,7 @@ Gemfile.lock
 /config/database.yml
 /config/unicorn.rb
 
+/shared
 vaskit.pem
 
 # Ignore the default SQLite database.
@@ -29,3 +30,4 @@ vaskit.pem
 /public/assets/*
 .byebug_history
 .DS_Store
+.ruby-version
