@@ -1,4 +1,0 @@
-development:
-  host: 'http://dev.vaskit.kr:3000'
-production:
-  host: 'http://vaskit.kr'
