@@ -10,6 +10,9 @@
 Gemfile.lock
 /config/config.yml
 /config/database.yml
+/config/unicorn.rb
+
+vaskit.pem
 
 # Ignore the default SQLite database.
 /db/*.sqlite3
