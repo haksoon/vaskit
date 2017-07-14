@@ -12,9 +12,6 @@ Gemfile.lock
 /config/database.yml
 /config/unicorn.rb
 
-/shared
-vaskit.pem
-
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -26,8 +23,11 @@ vaskit.pem
 /log/*
 !/log/.keep
 /tmp
+/shared
 /public/paperclip/*
 /public/assets/*
 .byebug_history
 .DS_Store
 .ruby-version
+
+vaskit.pem
