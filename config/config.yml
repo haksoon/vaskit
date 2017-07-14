@@ -1,4 +1,4 @@
 development:
   host: 'http://120.142.32.13:3000'
 production:
-  host: 'http://vaskit.kr'
+  host: 'http://52.78.6.126'
